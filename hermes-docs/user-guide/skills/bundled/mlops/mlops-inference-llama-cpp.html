@@ -1,0 +1,417 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Llama Cpp — llama - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Llama Cpp — llama</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Llama Cpp</h1>
+<p>llama.cpp 本地 GGUF 推理 + HF Hub 模型发现。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>内置（默认安装）</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>skills/mlops/inference/llama-cpp</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>2.1.2</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Orchestra Research</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>依赖</td>
+<td><code>llama-cpp-python&gt;=0.2.0</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>llama.cpp</code>, <code>GGUF</code>, <code>Quantization</code>, <code>Hugging Face Hub</code>, <code>CPU Inference</code>, <code>Apple Silicon</code>, <code>Edge Deployment</code>, <code>AMD GPUs</code>, <code>Intel GPUs</code>, <code>NVIDIA</code>, <code>URL-first</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>llama.cpp + GGUF</h1>
+<p>本 skill 用于本地 GGUF 推理、量化（Quantization）选择，以及 Hugging Face 仓库发现（用于 llama.cpp）。</p>
+<h2>使用场景</h2>
+<ul>
+<li>在 CPU、Apple Silicon、CUDA、ROCm 或 Intel GPU 上运行本地模型</li>
+<li>为特定 Hugging Face 仓库找到合适的 GGUF 文件</li>
+<li>从 Hub 构建 <code>llama-server</code> 或 <code>llama-cli</code> 命令</li>
+<li>在 Hub 上搜索已支持 llama.cpp 的模型</li>
+<li>枚举某个仓库中可用的 <code>.gguf</code> 文件及其大小</li>
+<li>根据用户的 RAM 或 VRAM 在 Q4/Q5/Q6/IQ 变体之间做出选择</li>
+</ul>
+<h2>模型发现工作流</h2>
+<p>优先使用 URL 工作流，再考虑 <code>hf</code>、Python 或自定义脚本。</p>
+<ol>
+<li>在 Hub 上搜索候选仓库：
+<ul>
+<li>基础地址：<code>https://huggingface.co/models?apps=llama.cpp&amp;sort=trending</code></li>
+<li>添加 <code>search=&lt;term&gt;</code> 以搜索特定模型系列</li>
+<li>当用户有参数量限制时，添加 <code>num_parameters=min:0,max:24B</code> 或类似参数</li>
+</ul>
+</li>
+<li>使用 llama.cpp 本地应用视图打开仓库：
+<ul>
+<li><code>https://huggingface.co/&lt;repo&gt;?local-app=llama.cpp</code></li>
+</ul>
+</li>
+<li>当 local-app 代码片段可见时，将其作为权威来源：
+<ul>
+<li>复制完整的 <code>llama-server</code> 或 <code>llama-cli</code> 命令</li>
+<li>严格按照 HF 显示的推荐量化标签进行报告</li>
+</ul>
+</li>
+<li>将同一 <code>?local-app=llama.cpp</code> URL 作为页面文本或 HTML 读取，并提取 <code>Hardware compatibility</code> 部分：
+<ul>
+<li>优先使用其中的精确量化标签和大小，而非通用表格</li>
+<li>保留仓库特有的标签，如 <code>UD-Q4_K_M</code> 或 <code>IQ4_NL_XL</code></li>
+<li>如果该部分在获取的页面源码中不可见，请说明并回退到 tree API 加通用量化指导</li>
+</ul>
+</li>
+<li>查询 tree API 以确认实际存在的文件：
+<ul>
+<li><code>https://huggingface.co/api/models/&lt;repo&gt;/tree/main?recursive=true</code></li>
+<li>保留 <code>type</code> 为 <code>file</code> 且 <code>path</code> 以 <code>.gguf</code> 结尾的条目</li>
+<li>以 <code>path</code> 和 <code>size</code> 作为文件名和字节大小的权威来源</li>
+<li>将量化检查点与 <code>mmproj-*.gguf</code> 投影文件及 <code>BF16/</code> 分片文件分开处理</li>
+<li>仅将 <code>https://huggingface.co/&lt;repo&gt;/tree/main</code> 作为人工备用方案</li>
+</ul>
+</li>
+<li>如果 local-app 代码片段不可见，则从仓库和所选量化重建命令：
+<ul>
+<li>简写量化选择：<code>llama-server -hf &lt;repo&gt;:&lt;QUANT&gt;</code></li>
+<li>精确文件备用：<code>llama-server --hf-repo &lt;repo&gt; --hf-file &lt;filename.gguf&gt;</code></li>
+</ul>
+</li>
+<li>仅当仓库未暴露 GGUF 文件时，才建议从 Transformers 权重进行转换。</li>
+</ol>
+<h2>快速开始</h2>
+<h3>安装 llama.cpp</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# macOS / Linux（最简方式）
+brew install llama.cpp
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+winget install llama.cpp
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+git clone https://github.com/ggml-org/llama.cpp
+cd llama.cpp
+cmake -B build
+cmake --build build --config Release
+</div>
+<h3>直接从 Hugging Face Hub 运行</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+llama-cli -hf bartowski/Llama-3.2-3B-Instruct-GGUF:Q8_0
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+llama-server -hf bartowski/Llama-3.2-3B-Instruct-GGUF:Q8_0
+</div>
+<h3>从 Hub 运行精确的 GGUF 文件</h3>
+<p>当 tree API 显示自定义文件命名或缺少精确 HF 代码片段时使用此方式。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+llama-server \
+    --hf-repo microsoft/Phi-3-mini-4k-instruct-gguf \
+    --hf-file Phi-3-mini-4k-instruct-q4.gguf \
+    -c 4096
+</div>
+<h3>OpenAI 兼容服务器检查</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl http://localhost:8080/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "messages": [
+      {"role": "user", "content": "Write a limerick about Python exceptions"}
+    ]
+  }'
+</div>
+<h2>Python 绑定（llama-cpp-python）</h2>
+<p><code>pip install llama-cpp-python</code>（CUDA：<code>CMAKE_ARGS=&quot;-DGGML_CUDA=on&quot; pip install llama-cpp-python --force-reinstall --no-cache-dir</code>；Metal：<code>CMAKE_ARGS=&quot;-DGGML_METAL=on&quot; ...</code>）。</p>
+<h3>基础生成</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from llama_cpp import Llama
+<p>llm = Llama(
+model_path=&quot;./model-q4_k_m.gguf&quot;,
+n_ctx=4096,
+n_gpu_layers=35,     # 0 为 CPU，99 为全部卸载到 GPU
+n_threads=8,
+)</p>
+<p>out = llm(&quot;What is machine learning?&quot;, max_tokens=256, temperature=0.7)
+print(out[&quot;choices&quot;][0][&quot;text&quot;])</p>
+</div>
+<h3>对话 + 流式输出</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+llm = Llama(
+    model_path="./model-q4_k_m.gguf",
+    n_ctx=4096,
+    n_gpu_layers=35,
+    chat_format="llama-3",   # 或 "chatml"、"mistral" 等
+)
+<p>resp = llm.create_chat_completion(
+messages=[
+{&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are a helpful assistant.&quot;},
+{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;What is Python?&quot;},
+],
+max_tokens=256,
+)
+print(resp[&quot;choices&quot;][0][&quot;message&quot;][&quot;content&quot;])</p>
+<h1>流式输出</h1>
+<p>for chunk in llm(&quot;Explain quantum computing:&quot;, max_tokens=256, stream=True):
+print(chunk[&quot;choices&quot;][0][&quot;text&quot;], end=&quot;&quot;, flush=True)</p>
+</div>
+<h3>Embedding（嵌入向量）</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+llm = Llama(model_path="./model-q4_k_m.gguf", embedding=True, n_gpu_layers=35)
+vec = llm.embed("This is a test sentence.")
+print(f"Embedding dimension: {len(vec)}")
+</div>
+<p>也可以直接从 Hub 加载 GGUF：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+llm = Llama.from_pretrained(
+    repo_id="bartowski/Llama-3.2-3B-Instruct-GGUF",
+    filename="*Q4_K_M.gguf",
+    n_gpu_layers=35,
+)
+</div>
+<h2>选择量化方案</h2>
+<p>优先参考 Hub 页面，其次使用通用启发式规则。</p>
+<ul>
+<li>优先使用 HF 标记为与用户硬件配置兼容的精确量化方案。</li>
+<li>一般对话场景，从 <code>Q4_K_M</code> 开始。</li>
+<li>代码或技术工作，若内存允许，优先选择 <code>Q5_K_M</code> 或 <code>Q6_K</code>。</li>
+<li>RAM 非常紧张时，仅在用户明确将适配性置于质量之上时，才考虑 <code>Q3_K_M</code>、<code>IQ</code> 变体或 <code>Q2</code> 变体。</li>
+<li>对于多模态仓库，单独说明 <code>mmproj-*.gguf</code>。投影文件不是主模型文件。</li>
+<li>不要规范化仓库原生标签。如果页面显示 <code>UD-Q4_K_M</code>，就报告 <code>UD-Q4_K_M</code>。</li>
+</ul>
+<h2>从仓库提取可用的 GGUF 文件</h2>
+<p>当用户询问存在哪些 GGUF 时，返回：</p>
+<ul>
+<li>文件名</li>
+<li>文件大小</li>
+<li>量化标签</li>
+<li>是否为主模型或辅助投影文件</li>
+</ul>
+<p>除非被要求，否则忽略：</p>
+<ul>
+<li>README</li>
+<li>BF16 分片文件</li>
+<li>imatrix blob 或校准产物</li>
+</ul>
+<p>此步骤使用 tree API：</p>
+<ul>
+<li><code>https://huggingface.co/api/models/&lt;repo&gt;/tree/main?recursive=true</code></li>
+</ul>
+<p>对于 <code>unsloth/Qwen3.6-35B-A3B-GGUF</code> 这样的仓库，local-app 页面可显示 <code>UD-Q4_K_M</code>、<code>UD-Q5_K_M</code>、<code>UD-Q6_K</code> 和 <code>Q8_0</code> 等量化标签，而 tree API 则暴露精确文件路径（如 <code>Qwen3.6-35B-A3B-UD-Q4_K_M.gguf</code> 和 <code>Qwen3.6-35B-A3B-Q8_0.gguf</code>）及字节大小。使用 tree API 将量化标签转换为精确文件名。</p>
+<h2>搜索模式</h2>
+<p>直接使用以下 URL 格式：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+https://huggingface.co/models?apps=llama.cpp&amp;sort=trending
+https://huggingface.co/models?search=&lt;term&gt;&amp;apps=llama.cpp&amp;sort=trending
+https://huggingface.co/models?search=&lt;term&gt;&amp;apps=llama.cpp&amp;num_parameters=min:0,max:24B&amp;sort=trending
+https://huggingface.co/&lt;repo&gt;?local-app=llama.cpp
+https://huggingface.co/api/models/&lt;repo&gt;/tree/main?recursive=true
+https://huggingface.co/&lt;repo&gt;/tree/main
+</div>
+<h2>输出格式</h2>
+<p>回答发现请求时，优先使用如下紧凑结构化结果：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Repo: &lt;repo&gt;
+Recommended quant from HF: &lt;label&gt; (&lt;size&gt;)
+llama-server: &lt;command&gt;
+Other GGUFs:
+- &lt;filename&gt; - &lt;size&gt;
+- &lt;filename&gt; - &lt;size&gt;
+Source URLs:
+- &lt;local-app URL&gt;
+- &lt;tree API URL&gt;
+</div>
+<h2>参考资料</h2>
+<ul>
+<li><strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/mlops/inference/llama-cpp/references/hub-discovery.html">hub-discovery.md</a></strong> — 纯 URL Hugging Face 工作流、搜索模式、GGUF 提取及命令重建</li>
+<li><strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/mlops/inference/llama-cpp/references/advanced-usage.html">advanced-usage.md</a></strong> — 推测解码、批量推理、语法约束生成、LoRA、多 GPU、自定义构建、基准脚本</li>
+<li><strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/mlops/inference/llama-cpp/references/quantization.html">quantization.md</a></strong> — 量化质量权衡、何时使用 Q4/Q5/Q6/IQ、模型大小缩放、imatrix</li>
+<li><strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/mlops/inference/llama-cpp/references/server.html">server.md</a></strong> — 直接从 Hub 启动服务器、OpenAI API 端点、Docker 部署、NGINX 负载均衡、监控</li>
+<li><strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/mlops/inference/llama-cpp/references/optimization.html">optimization.md</a></strong> — CPU 线程、BLAS、GPU 卸载启发式、批处理调优、基准测试</li>
+<li><strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/mlops/inference/llama-cpp/references/troubleshooting.html">troubleshooting.md</a></strong> — 安装/转换/量化/推理/服务器问题、Apple Silicon、调试</li>
+</ul>
+<h2>资源</h2>
+<ul>
+<li><strong>GitHub</strong>：https://github.com/ggml-org/llama.cpp</li>
+<li><strong>Hugging Face GGUF + llama.cpp 文档</strong>：https://huggingface.co/docs/hub/gguf-llamacpp</li>
+<li><strong>Hugging Face 本地应用文档</strong>：https://huggingface.co/docs/hub/main/local-apps</li>
+<li><strong>Hugging Face 本地 Agent 文档</strong>：https://huggingface.co/docs/hub/agents-local</li>
+<li><strong>local-app 页面示例</strong>：https://huggingface.co/unsloth/Qwen3.6-35B-A3B-GGUF?local-app=llama.cpp</li>
+<li><strong>tree API 示例</strong>：https://huggingface.co/api/models/unsloth/Qwen3.6-35B-A3B-GGUF/tree/main?recursive=true</li>
+<li><strong>llama.cpp 搜索示例</strong>：https://huggingface.co/models?num_parameters=min:0,max:24B&amp;apps=llama.cpp&amp;sort=trending</li>
+<li><strong>许可证</strong>：MIT</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

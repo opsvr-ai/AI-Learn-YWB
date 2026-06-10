@@ -1,0 +1,262 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apple Notes — 通过 memo CLI 管理 Apple Notes：创建、搜索、编辑 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Apple Notes — 通过 memo CLI 管理 Apple Notes：创建、搜索、编辑</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Apple Notes</h1>
+<p>通过 memo CLI 管理 Apple Notes：创建、搜索、编辑。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>内置（默认安装）</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>skills/apple/apple-notes</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Hermes Agent</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>macos</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Notes</code>, <code>Apple</code>, <code>macOS</code>, <code>note-taking</code></td>
+</tr>
+<tr>
+<td>相关 skill</td>
+<td><a href="/user-guide/skills/bundled/note-taking/note-taking-obsidian"><code>obsidian</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 skill 激活时 agent 所看到的指令内容。
+</div>
+<h1>Apple Notes</h1>
+<p>使用 <code>memo</code> 直接从终端管理 Apple Notes。笔记通过 iCloud 在所有 Apple 设备间同步。</p>
+<h2>前置条件</h2>
+<ul>
+<li><strong>macOS</strong> 并安装 Notes.app</li>
+<li>安装：<code>brew tap antoniorodr/memo &amp;&amp; brew install antoniorodr/memo/memo</code></li>
+<li>在提示时授予 Notes.app 的自动化访问权限（系统设置 → 隐私 → 自动化）</li>
+</ul>
+<h2>使用时机</h2>
+<ul>
+<li>用户要求创建、查看或搜索 Apple Notes</li>
+<li>将信息保存到 Notes.app 以实现跨设备访问</li>
+<li>将笔记整理到文件夹中</li>
+<li>将笔记导出为 Markdown/HTML</li>
+</ul>
+<h2>不适用时机</h2>
+<ul>
+<li>Obsidian vault 管理 → 使用 <code>obsidian</code> skill</li>
+<li>Bear Notes → 独立应用（此处不支持）</li>
+<li>仅供 agent 内部使用的快速笔记 → 改用 <code>memory</code> 工具</li>
+</ul>
+<h2>快速参考</h2>
+<h3>查看笔记</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+memo notes                        # 列出所有笔记
+memo notes -f "Folder Name"       # 按文件夹筛选
+memo notes -s "query"             # 搜索笔记（模糊匹配）
+</div>
+<h3>创建笔记</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+memo notes -a                     # 交互式编辑器
+memo notes -a "Note Title"        # 快速添加并指定标题
+</div>
+<h3>编辑笔记</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+memo notes -e                     # 交互式选择并编辑
+</div>
+<h3>删除笔记</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+memo notes -d                     # 交互式选择并删除
+</div>
+<h3>移动笔记</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+memo notes -m                     # 将笔记移动到文件夹（交互式）
+</div>
+<h3>导出笔记</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+memo notes -ex                    # 导出为 HTML/Markdown
+</div>
+<h2>限制</h2>
+<ul>
+<li>无法编辑包含图片或附件的笔记</li>
+<li>交互式提示需要终端访问权限（如有需要请使用 pty=true）</li>
+<li>仅限 macOS — 需要 Apple Notes.app</li>
+</ul>
+<h2>规则</h2>
+<ol>
+<li>当用户需要跨设备同步（iPhone/iPad/Mac）时，优先使用 Apple Notes</li>
+<li>对不需要同步的 agent 内部笔记，使用 <code>memory</code> 工具</li>
+<li>对以 Markdown 为核心的知识管理，使用 <code>obsidian</code> skill</li>
+</ol>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

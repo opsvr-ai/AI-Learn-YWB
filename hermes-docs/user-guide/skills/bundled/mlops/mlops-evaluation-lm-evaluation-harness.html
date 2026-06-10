@@ -1,0 +1,600 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evaluating Llms Harness — lm-eval-harness: benchmark LLMs (MMLU, GSM8K, etc - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Evaluating Llms Harness — lm-eval-harness: benchmark LLMs (MMLU, GSM8K, etc</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Evaluating Llms Harness</h1>
+<p>lm-eval-harness：对 LLM 进行基准测试（MMLU、GSM8K 等）。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>内置（默认安装）</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>skills/mlops/evaluation/lm-evaluation-harness</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Orchestra Research</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>依赖项</td>
+<td><code>lm-eval</code>, <code>transformers</code>, <code>vllm</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Evaluation</code>, <code>LM Evaluation Harness</code>, <code>Benchmarking</code>, <code>MMLU</code>, <code>HumanEval</code>, <code>GSM8K</code>, <code>EleutherAI</code>, <code>Model Quality</code>, <code>Academic Benchmarks</code>, <code>Industry Standard</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>lm-evaluation-harness - LLM 基准测试</h1>
+<h2>内容概览</h2>
+<p>在 60+ 个学术基准（MMLU、HumanEval、GSM8K、TruthfulQA、HellaSwag）上评估 LLM。适用于基准测试模型质量、比较模型、报告学术结果或跟踪训练进度。行业标准工具，被 EleutherAI、HuggingFace 及各大实验室广泛使用。支持 HuggingFace、vLLM 及 API。</p>
+<h2>快速开始</h2>
+<p>lm-evaluation-harness 使用标准化 prompt（提示词）和指标，在 60+ 个学术基准上评估 LLM。</p>
+<p><strong>安装</strong>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install lm-eval
+</div>
+<p><strong>评估任意 HuggingFace 模型</strong>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+lm_eval --model hf \
+  --model_args pretrained=meta-llama/Llama-2-7b-hf \
+  --tasks mmlu,gsm8k,hellaswag \
+  --device cuda:0 \
+  --batch_size 8
+</div>
+<p><strong>查看可用任务</strong>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+lm_eval --tasks list
+</div>
+<h2>常用工作流</h2>
+<h3>工作流 1：标准基准评估</h3>
+<p>在核心基准（MMLU、GSM8K、HumanEval）上评估模型。</p>
+<p>复制此检查清单：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+基准评估：
+- [ ] 步骤 1：选择基准套件
+- [ ] 步骤 2：配置模型
+- [ ] 步骤 3：运行评估
+- [ ] 步骤 4：分析结果
+</div>
+<p><strong>步骤 1：选择基准套件</strong></p>
+<p><strong>核心推理基准</strong>：</p>
+<ul>
+<li><strong>MMLU</strong>（Massive Multitask Language Understanding）- 57 个科目，多项选择</li>
+<li><strong>GSM8K</strong> - 小学数学应用题</li>
+<li><strong>HellaSwag</strong> - 常识推理</li>
+<li><strong>TruthfulQA</strong> - 真实性与事实性</li>
+<li><strong>ARC</strong>（AI2 Reasoning Challenge）- 科学题目</li>
+</ul>
+<p><strong>代码基准</strong>：</p>
+<ul>
+<li><strong>HumanEval</strong> - Python 代码生成（164 道题）</li>
+<li><strong>MBPP</strong>（Mostly Basic Python Problems）- Python 编程</li>
+</ul>
+<p><strong>标准套件</strong>（推荐用于模型发布）：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+--tasks mmlu,gsm8k,hellaswag,truthfulqa,arc_challenge
+</div>
+<p><strong>步骤 2：配置模型</strong></p>
+<p><strong>HuggingFace 模型</strong>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+lm_eval --model hf \
+  --model_args pretrained=meta-llama/Llama-2-7b-hf,dtype=bfloat16 \
+  --tasks mmlu \
+  --device cuda:0 \
+  --batch_size auto  # Auto-detect optimal batch size
+</div>
+<p><strong>量化模型（4-bit/8-bit）</strong>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+lm_eval --model hf \
+  --model_args pretrained=meta-llama/Llama-2-7b-hf,load_in_4bit=True \
+  --tasks mmlu \
+  --device cuda:0
+</div>
+<p><strong>自定义 checkpoint</strong>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+lm_eval --model hf \
+  --model_args pretrained=/path/to/my-model,tokenizer=/path/to/tokenizer \
+  --tasks mmlu \
+  --device cuda:0
+</div>
+<p><strong>步骤 3：运行评估</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Full MMLU evaluation (57 subjects)
+lm_eval --model hf \
+  --model_args pretrained=meta-llama/Llama-2-7b-hf \
+  --tasks mmlu \
+  --num_fewshot 5 \  # 5-shot evaluation (standard)
+  --batch_size 8 \
+  --output_path results/ \
+  --log_samples  # Save individual predictions
+<h1>Multiple benchmarks at once</h1>
+<p>lm_eval --model hf \
+--model_args pretrained=meta-llama/Llama-2-7b-hf \
+--tasks mmlu,gsm8k,hellaswag,truthfulqa,arc_challenge \
+--num_fewshot 5 \
+--batch_size 8 \
+--output_path results/llama2-7b-eval.json</p>
+</div>
+<p><strong>步骤 4：分析结果</strong></p>
+<p>结果保存至 <code>results/llama2-7b-eval.json</code>：</p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{
+  "results": {
+    "mmlu": {
+      "acc": 0.459,
+      "acc_stderr": 0.004
+    },
+    "gsm8k": {
+      "exact_match": 0.142,
+      "exact_match_stderr": 0.006
+    },
+    "hellaswag": {
+      "acc_norm": 0.765,
+      "acc_norm_stderr": 0.004
+    }
+  },
+  "config": {
+    "model": "hf",
+    "model_args": "pretrained=meta-llama/Llama-2-7b-hf",
+    "num_fewshot": 5
+  }
+}
+</div>
+<h3>工作流 2：跟踪训练进度</h3>
+<p>在训练过程中评估 checkpoint。</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+训练进度跟踪：
+- [ ] 步骤 1：设置定期评估
+- [ ] 步骤 2：选择快速基准
+- [ ] 步骤 3：自动化评估
+- [ ] 步骤 4：绘制学习曲线
+</div>
+<p><strong>步骤 1：设置定期评估</strong></p>
+<p>每 N 个训练步骤评估一次：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+#!/bin/bash
+# eval_checkpoint.sh
+<p>CHECKPOINT_DIR=$1
+STEP=$2</p>
+<p>lm_eval --model hf \
+--model_args pretrained=$CHECKPOINT_DIR/checkpoint-$STEP \
+--tasks gsm8k,hellaswag \
+--num_fewshot 0 \  # 0-shot for speed
+--batch_size 16 \
+--output_path results/step-$STEP.json</p>
+</div>
+<p><strong>步骤 2：选择快速基准</strong></p>
+<p>适合频繁评估的快速基准：</p>
+<ul>
+<li><strong>HellaSwag</strong>：单 GPU 约 10 分钟</li>
+<li><strong>GSM8K</strong>：约 5 分钟</li>
+<li><strong>PIQA</strong>：约 2 分钟</li>
+</ul>
+<p>不适合频繁评估（耗时过长）：</p>
+<ul>
+<li><strong>MMLU</strong>：约 2 小时（57 个科目）</li>
+<li><strong>HumanEval</strong>：需要执行代码</li>
+</ul>
+<p><strong>步骤 3：自动化评估</strong></p>
+<p>集成到训练脚本中：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# In training loop
+if step % eval_interval == 0:
+    model.save_pretrained(f"checkpoints/step-{step}")
+<pre><code># Run evaluation
+os.system(f&quot;./eval_checkpoint.sh checkpoints step-{step}&quot;)
+</code></pre>
+</div>
+<p>或使用 PyTorch Lightning callback：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from pytorch_lightning import Callback
+<p>class EvalHarnessCallback(Callback):
+def on_validation_epoch_end(self, trainer, pl_module):
+step = trainer.global_step
+checkpoint_path = f&quot;checkpoints/step-{step}&quot;</p>
+<pre><code>    # Save checkpoint
+    trainer.save_checkpoint(checkpoint_path)
+
+    # Run lm-eval
+    os.system(f&quot;lm_eval --model hf --model_args pretrained={checkpoint_path} ...&quot;)
+</code></pre>
+</div>
+<p><strong>步骤 4：绘制学习曲线</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import json
+import matplotlib.pyplot as plt
+<h1>Load all results</h1>
+<p>steps = []
+mmlu_scores = []</p>
+<p>for file in sorted(glob.glob(&quot;results/step-*.json&quot;)):
+with open(file) as f:
+data = json.load(f)
+step = int(file.split(&quot;-&quot;)[1].split(&quot;.&quot;)[0])
+steps.append(step)
+mmlu_scores.append(data[&quot;results&quot;][&quot;mmlu&quot;][&quot;acc&quot;])</p>
+<h1>Plot</h1>
+<p>plt.plot(steps, mmlu_scores)
+plt.xlabel(&quot;Training Step&quot;)
+plt.ylabel(&quot;MMLU Accuracy&quot;)
+plt.title(&quot;Training Progress&quot;)
+plt.savefig(&quot;training_curve.png&quot;)</p>
+</div>
+<h3>工作流 3：比较多个模型</h3>
+<p>用于模型比较的基准套件。</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+模型比较：
+- [ ] 步骤 1：定义模型列表
+- [ ] 步骤 2：运行评估
+- [ ] 步骤 3：生成对比表格
+</div>
+<p><strong>步骤 1：定义模型列表</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# models.txt
+meta-llama/Llama-2-7b-hf
+meta-llama/Llama-2-13b-hf
+mistralai/Mistral-7B-v0.1
+microsoft/phi-2
+</div>
+<p><strong>步骤 2：运行评估</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+#!/bin/bash
+# eval_all_models.sh
+<p>TASKS=&quot;mmlu,gsm8k,hellaswag,truthfulqa&quot;</p>
+<p>while read model; do
+echo &quot;Evaluating $model&quot;</p>
+<pre><code># Extract model name for output file
+model_name=$(echo $model | sed 's/\//-/g')
+
+lm_eval --model hf \
+  --model_args pretrained=$model,dtype=bfloat16 \
+  --tasks $TASKS \
+  --num_fewshot 5 \
+  --batch_size auto \
+  --output_path results/$model_name.json
+</code></pre>
+<p>done &amp;lt; models.txt</p>
+</div>
+<p><strong>步骤 3：生成对比表格</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import json
+import pandas as pd
+<p>models = [
+&quot;meta-llama-Llama-2-7b-hf&quot;,
+&quot;meta-llama-Llama-2-13b-hf&quot;,
+&quot;mistralai-Mistral-7B-v0.1&quot;,
+&quot;microsoft-phi-2&quot;
+]</p>
+<p>tasks = [&quot;mmlu&quot;, &quot;gsm8k&quot;, &quot;hellaswag&quot;, &quot;truthfulqa&quot;]</p>
+<p>results = []
+for model in models:
+with open(f&quot;results/{model}.json&quot;) as f:
+data = json.load(f)
+row = {&quot;Model&quot;: model.replace(&quot;-&quot;, &quot;/&quot;)}
+for task in tasks:
+# Get primary metric for each task
+metrics = data[&quot;results&quot;][task]
+if &quot;acc&quot; in metrics:
+row[task.upper()] = f&quot;{metrics['acc']:.3f}&quot;
+elif &quot;exact_match&quot; in metrics:
+row[task.upper()] = f&quot;{metrics['exact_match']:.3f}&quot;
+results.append(row)</p>
+<p>df = pd.DataFrame(results)
+print(df.to_markdown(index=False))</p>
+</div>
+<p>输出：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+| Model                  | MMLU  | GSM8K | HELLASWAG | TRUTHFULQA |
+|------------------------|-------|-------|-----------|------------|
+| meta-llama/Llama-2-7b  | 0.459 | 0.142 | 0.765     | 0.391      |
+| meta-llama/Llama-2-13b | 0.549 | 0.287 | 0.801     | 0.430      |
+| mistralai/Mistral-7B   | 0.626 | 0.395 | 0.812     | 0.428      |
+| microsoft/phi-2        | 0.560 | 0.613 | 0.682     | 0.447      |
+</div>
+<h3>工作流 4：使用 vLLM 评估（更快的推理）</h3>
+<p>使用 vLLM 后端可获得 5-10 倍的评估速度提升。</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+vLLM 评估：
+- [ ] 步骤 1：安装 vLLM
+- [ ] 步骤 2：配置 vLLM 后端
+- [ ] 步骤 3：运行评估
+</div>
+<p><strong>步骤 1：安装 vLLM</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install vllm
+</div>
+<p><strong>步骤 2：配置 vLLM 后端</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+lm_eval --model vllm \
+  --model_args pretrained=meta-llama/Llama-2-7b-hf,tensor_parallel_size=1,dtype=auto,gpu_memory_utilization=0.8 \
+  --tasks mmlu \
+  --batch_size auto
+</div>
+<p><strong>步骤 3：运行评估</strong></p>
+<p>vLLM 比标准 HuggingFace 快 5-10 倍：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Standard HF: ~2 hours for MMLU on 7B model
+lm_eval --model hf \
+  --model_args pretrained=meta-llama/Llama-2-7b-hf \
+  --tasks mmlu \
+  --batch_size 8
+<h1>vLLM: ~15-20 minutes for MMLU on 7B model</h1>
+<p>lm_eval --model vllm \
+--model_args pretrained=meta-llama/Llama-2-7b-hf,tensor_parallel_size=2 \
+--tasks mmlu \
+--batch_size auto</p>
+</div>
+<h2>何时使用及替代方案</h2>
+<p><strong>在以下情况使用 lm-evaluation-harness：</strong></p>
+<ul>
+<li>为学术论文进行模型基准测试</li>
+<li>在标准任务上比较模型质量</li>
+<li>跟踪训练进度</li>
+<li>报告标准化指标（所有人使用相同 prompt）</li>
+<li>需要可复现的评估结果</li>
+</ul>
+<p><strong>改用以下替代方案：</strong></p>
+<ul>
+<li><strong>HELM</strong>（Stanford）：更广泛的评估（公平性、效率、校准）</li>
+<li><strong>AlpacaEval</strong>：使用 LLM 作为评判的指令跟随评估</li>
+<li><strong>MT-Bench</strong>：多轮对话评估</li>
+<li><strong>自定义脚本</strong>：特定领域评估</li>
+</ul>
+<h2>常见问题</h2>
+<p><strong>问题：评估速度过慢</strong></p>
+<p>使用 vLLM 后端：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+lm_eval --model vllm \
+  --model_args pretrained=model-name,tensor_parallel_size=2
+</div>
+<p>或减少 few-shot 示例数：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+--num_fewshot 0  # Instead of 5
+</div>
+<p>或评估 MMLU 子集：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+--tasks mmlu_stem  # Only STEM subjects
+</div>
+<p><strong>问题：显存不足</strong></p>
+<p>减小 batch size：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+--batch_size 1  # Or --batch_size auto
+</div>
+<p>使用量化：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+--model_args pretrained=model-name,load_in_8bit=True
+</div>
+<p>启用 CPU offloading：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+--model_args pretrained=model-name,device_map=auto,offload_folder=offload
+</div>
+<p><strong>问题：结果与已报告数值不一致</strong></p>
+<p>检查 few-shot 数量：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+--num_fewshot 5  # Most papers use 5-shot
+</div>
+<p>检查确切任务名称：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+--tasks mmlu  # Not mmlu_direct or mmlu_fewshot
+</div>
+<p>验证模型与 tokenizer 匹配：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+--model_args pretrained=model-name,tokenizer=same-model-name
+</div>
+<p><strong>问题：HumanEval 未执行代码</strong></p>
+<p>安装执行依赖：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install human-eval
+</div>
+<p>启用代码执行：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+lm_eval --model hf \
+  --model_args pretrained=model-name \
+  --tasks humaneval \
+  --allow_code_execution  # Required for HumanEval
+</div>
+<h2>进阶主题</h2>
+<p><strong>基准描述</strong>：参见 <a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/mlops/evaluation/lm-evaluation-harness/references/benchmark-guide.html">references/benchmark-guide.md</a>，了解所有 60+ 个任务的详细说明、测量内容及结果解读。</p>
+<p><strong>自定义任务</strong>：参见 <a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/mlops/evaluation/lm-evaluation-harness/references/custom-tasks.html">references/custom-tasks.md</a>，了解如何创建特定领域的评估任务。</p>
+<p><strong>API 评估</strong>：参见 <a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/mlops/evaluation/lm-evaluation-harness/references/api-evaluation.html">references/api-evaluation.md</a>，了解如何评估 OpenAI、Anthropic 及其他 API 模型。</p>
+<p><strong>多 GPU 策略</strong>：参见 <a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/mlops/evaluation/lm-evaluation-harness/references/distributed-eval.html">references/distributed-eval.md</a>，了解数据并行与张量并行评估方案。</p>
+<h2>硬件要求</h2>
+<ul>
+<li><strong>GPU</strong>：NVIDIA（CUDA 11.8+），支持 CPU 运行（速度极慢）</li>
+<li><strong>显存</strong>：
+<ul>
+<li>7B 模型：16GB（bf16）或 8GB（8-bit）</li>
+<li>13B 模型：28GB（bf16）或 14GB（8-bit）</li>
+<li>70B 模型：需要多 GPU 或量化</li>
+</ul>
+</li>
+<li><strong>耗时</strong>（7B 模型，单张 A100）：
+<ul>
+<li>HellaSwag：10 分钟</li>
+<li>GSM8K：5 分钟</li>
+<li>MMLU（完整）：2 小时</li>
+<li>HumanEval：20 分钟</li>
+</ul>
+</li>
+</ul>
+<h2>资源</h2>
+<ul>
+<li>GitHub：https://github.com/EleutherAI/lm-evaluation-harness</li>
+<li>文档：https://github.com/EleutherAI/lm-evaluation-harness/tree/main/docs</li>
+<li>任务库：60+ 个任务，包括 MMLU、GSM8K、HumanEval、TruthfulQA、HellaSwag、ARC、WinoGrande 等</li>
+<li>排行榜：https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard（使用本工具）</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

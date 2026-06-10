@@ -1,0 +1,422 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fastmcp — 使用 FastMCP 在 Python 中构建、测试、检查、安装和部署 MCP 服务器 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Fastmcp — 使用 FastMCP 在 Python 中构建、测试、检查、安装和部署 MCP 服务器</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Fastmcp</h1>
+<p>使用 FastMCP 在 Python 中构建、测试、检查、安装和部署 MCP 服务器。适用于创建新的 MCP 服务器、将 API 或数据库封装为 MCP 工具、暴露资源或 prompt（提示词）、或为 Claude Code、Cursor 或 HTTP 部署准备 FastMCP 服务器。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/mcp/fastmcp</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/mcp/fastmcp</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Hermes Agent</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>MCP</code>, <code>FastMCP</code>, <code>Python</code>, <code>Tools</code>, <code>Resources</code>, <code>Prompts</code>, <code>Deployment</code></td>
+</tr>
+<tr>
+<td>相关 skill</td>
+<td><a href="/user-guide/skills/bundled/mcp/mcp-native-mcp"><code>native-mcp</code></a>, <a href="/user-guide/skills/optional/mcp/mcp-mcporter"><code>mcporter</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>FastMCP</h1>
+<p>使用 FastMCP 在 Python 中构建 MCP 服务器，在本地验证，安装到 MCP 客户端，并部署为 HTTP 端点。</p>
+<h2>使用时机</h2>
+<p>在以下任务中使用此 skill：</p>
+<ul>
+<li>在 Python 中创建新的 MCP 服务器</li>
+<li>将 API、数据库、CLI 或文件处理工作流封装为 MCP 工具</li>
+<li>除工具外还需暴露资源或 prompt</li>
+<li>在接入 Hermes 或其他客户端之前，使用 FastMCP CLI 对服务器进行冒烟测试</li>
+<li>将服务器安装到 Claude Code、Claude Desktop、Cursor 或类似的 MCP 客户端</li>
+<li>为 HTTP 部署准备 FastMCP 服务器仓库</li>
+</ul>
+<p>若服务器已存在且只需连接到 Hermes，请使用 <code>native-mcp</code>。若目标是对现有 MCP 服务器进行临时 CLI 访问而非构建新服务器，请使用 <code>mcporter</code>。</p>
+<h2>前置条件</h2>
+<p>首先在工作环境中安装 FastMCP：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install fastmcp
+fastmcp version
+</div>
+<p>如需使用 API 模板，且 <code>httpx</code> 尚未安装，请先安装：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install httpx
+</div>
+<h2>包含文件</h2>
+<h3>模板</h3>
+<ul>
+<li><code>templates/api_wrapper.py</code> - 支持 auth header 的 REST API 封装</li>
+<li><code>templates/database_server.py</code> - 只读 SQLite 查询服务器</li>
+<li><code>templates/file_processor.py</code> - 文本文件检查与搜索服务器</li>
+</ul>
+<h3>脚本</h3>
+<ul>
+<li><code>scripts/scaffold_fastmcp.py</code> - 复制入门模板并替换服务器名称占位符</li>
+</ul>
+<h3>参考资料</h3>
+<ul>
+<li><code>references/fastmcp-cli.md</code> - FastMCP CLI 工作流、安装目标及部署检查</li>
+</ul>
+<h2>工作流</h2>
+<h3>1. 选择最小可行的服务器形态</h3>
+<p>优先选择最窄的有用接口：</p>
+<ul>
+<li>API 封装：从 1-3 个高价值端点开始，而非整个 API</li>
+<li>数据库服务器：暴露只读自省能力和受约束的查询路径</li>
+<li>文件处理器：暴露带有明确路径参数的确定性操作</li>
+<li>prompt/资源：仅在客户端需要可复用 prompt 模板或可发现文档时添加</li>
+</ul>
+<p>优先选择接口精简、名称清晰、有 docstring 和 schema 的服务器，而非工具繁多但含义模糊的服务器。</p>
+<h3>2. 从模板脚手架生成</h3>
+<p>直接复制模板或使用脚手架辅助工具：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python ~/.hermes/skills/mcp/fastmcp/scripts/scaffold_fastmcp.py \
+  --template api_wrapper \
+  --name "Acme API" \
+  --output ./acme_server.py
+</div>
+<p>可用模板：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python ~/.hermes/skills/mcp/fastmcp/scripts/scaffold_fastmcp.py --list
+</div>
+<p>如手动复制，请将 <code>__SERVER_NAME__</code> 替换为实际服务器名称。</p>
+<h3>3. 优先实现工具</h3>
+<p>在添加资源或 prompt 之前，先实现 <code>@mcp.tool</code> 函数。</p>
+<p>工具设计规则：</p>
+<ul>
+<li>为每个工具起一个具体的动词式名称</li>
+<li>将 docstring 作为面向用户的工具描述</li>
+<li>保持参数明确且有类型注解</li>
+<li>尽可能返回结构化的 JSON 安全数据</li>
+<li>尽早验证不安全的输入</li>
+<li>第一版默认采用只读行为</li>
+</ul>
+<p>良好的工具示例：</p>
+<ul>
+<li><code>get_customer</code></li>
+<li><code>search_tickets</code></li>
+<li><code>describe_table</code></li>
+<li><code>summarize_text_file</code></li>
+</ul>
+<p>不佳的工具示例：</p>
+<ul>
+<li><code>run</code></li>
+<li><code>process</code></li>
+<li><code>do_thing</code></li>
+</ul>
+<h3>4. 仅在有帮助时添加资源和 Prompt</h3>
+<p>当客户端需要获取稳定的只读内容（如 schema、策略文档或生成的报告）时，添加 <code>@mcp.resource</code>。</p>
+<p>当服务器应为已知工作流提供可复用 prompt 模板时，添加 <code>@mcp.prompt</code>。</p>
+<p>不要将每个文档都变成 prompt。优先原则：</p>
+<ul>
+<li>工具用于操作</li>
+<li>资源用于数据/文档检索</li>
+<li>prompt 用于可复用的 LLM 指令</li>
+</ul>
+<h3>5. 集成前先测试服务器</h3>
+<p>使用 FastMCP CLI 进行本地验证：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+fastmcp inspect acme_server.py:mcp
+fastmcp list acme_server.py --json
+fastmcp call acme_server.py search_resources query=router limit=5 --json
+</div>
+<p>如需快速迭代调试，在本地运行服务器：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+fastmcp run acme_server.py:mcp
+</div>
+<p>如需在本地测试 HTTP transport：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+fastmcp run acme_server.py:mcp --transport http --host 127.0.0.1 --port 8000
+fastmcp list http://127.0.0.1:8000/mcp --json
+fastmcp call http://127.0.0.1:8000/mcp search_resources query=router --json
+</div>
+<p>在声明服务器可用之前，务必对每个新工具至少执行一次真实的 <code>fastmcp call</code>。</p>
+<h3>6. 本地验证通过后安装到客户端</h3>
+<p>FastMCP 可将服务器注册到支持的 MCP 客户端：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+fastmcp install claude-code acme_server.py
+fastmcp install claude-desktop acme_server.py
+fastmcp install cursor acme_server.py -e .
+</div>
+<p>使用 <code>fastmcp discover</code> 检查机器上已配置的命名 MCP 服务器。</p>
+<p>若目标是集成到 Hermes，可选择：</p>
+<ul>
+<li>使用 <code>native-mcp</code> skill，在 <code>~/.hermes/config.yaml</code> 中配置服务器，或</li>
+<li>在接口稳定之前，在开发阶段继续使用 FastMCP CLI 命令</li>
+</ul>
+<h3>7. 本地契约稳定后再部署</h3>
+<p>对于托管部署，Prefect Horizon 是 FastMCP 文档中最直接的路径。部署前执行：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+fastmcp inspect acme_server.py:mcp
+</div>
+<p>确保仓库包含：</p>
+<ul>
+<li>含有 FastMCP 服务器对象的 Python 文件</li>
+<li><code>requirements.txt</code> 或 <code>pyproject.toml</code></li>
+<li>部署所需的环境变量文档</li>
+</ul>
+<p>对于通用 HTTP 托管，先在本地验证 HTTP transport，然后在任何能暴露服务器端口的 Python 兼容平台上部署。</p>
+<h2>常见模式</h2>
+<h3>API 封装模式</h3>
+<p>适用于将 REST 或 HTTP API 暴露为 MCP 工具。</p>
+<p>推荐的第一个切片：</p>
+<ul>
+<li>一个读取路径</li>
+<li>一个列表/搜索路径</li>
+<li>可选的健康检查</li>
+</ul>
+<p>实现注意事项：</p>
+<ul>
+<li>将认证信息保存在环境变量中，不要硬编码</li>
+<li>将请求逻辑集中在一个辅助函数中</li>
+<li>以简洁的上下文暴露 API 错误</li>
+<li>在返回前对上游不一致的 payload 进行规范化</li>
+</ul>
+<p>从 <code>templates/api_wrapper.py</code> 开始。</p>
+<h3>数据库模式</h3>
+<p>适用于暴露安全的查询和自省能力。</p>
+<p>推荐的第一个切片：</p>
+<ul>
+<li><code>list_tables</code></li>
+<li><code>describe_table</code></li>
+<li>一个受约束的只读查询工具</li>
+</ul>
+<p>实现注意事项：</p>
+<ul>
+<li>默认使用只读数据库访问</li>
+<li>早期版本拒绝非 <code>SELECT</code> SQL</li>
+<li>限制返回行数</li>
+<li>同时返回行数据和列名</li>
+</ul>
+<p>从 <code>templates/database_server.py</code> 开始。</p>
+<h3>文件处理器模式</h3>
+<p>适用于服务器需要按需检查或转换文件的场景。</p>
+<p>推荐的第一个切片：</p>
+<ul>
+<li>汇总文件内容</li>
+<li>在文件中搜索</li>
+<li>提取确定性元数据</li>
+</ul>
+<p>实现注意事项：</p>
+<ul>
+<li>接受明确的文件路径</li>
+<li>检查文件缺失和编码失败</li>
+<li>限制预览和结果数量</li>
+<li>除非需要特定外部工具，否则避免调用 shell</li>
+</ul>
+<p>从 <code>templates/file_processor.py</code> 开始。</p>
+<h2>质量标准</h2>
+<p>在交付 FastMCP 服务器之前，验证以下所有内容：</p>
+<ul>
+<li>服务器可以干净地导入</li>
+<li><code>fastmcp inspect &lt;file.py:mcp&gt;</code> 成功</li>
+<li><code>fastmcp list &lt;server spec&gt; --json</code> 成功</li>
+<li>每个新工具至少有一次真实的 <code>fastmcp call</code></li>
+<li>环境变量已有文档说明</li>
+<li>工具接口足够精简，无需猜测即可理解</li>
+</ul>
+<h2>故障排查</h2>
+<h3>FastMCP 命令缺失</h3>
+<p>在当前激活的环境中安装该包：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install fastmcp
+fastmcp version
+</div>
+<h3><code>fastmcp inspect</code> 失败</h3>
+<p>检查：</p>
+<ul>
+<li>文件导入时不存在导致崩溃的副作用</li>
+<li>FastMCP 实例在 <code>&lt;file.py:object&gt;</code> 中命名正确</li>
+<li>模板所需的可选依赖已安装</li>
+</ul>
+<h3>工具在 Python 中正常但通过 CLI 不工作</h3>
+<p>运行：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+fastmcp list server.py --json
+fastmcp call server.py your_tool_name --json
+</div>
+<p>这通常会暴露命名不匹配、缺少必填参数或返回值无法序列化等问题。</p>
+<h3>Hermes 无法看到已部署的服务器</h3>
+<p>服务器构建部分可能正确，但 Hermes 配置有误。加载 <code>native-mcp</code> skill 并在 <code>~/.hermes/config.yaml</code> 中配置服务器，然后重启 Hermes。</p>
+<h2>参考资料</h2>
+<p>有关 CLI 详情、安装目标和部署检查，请阅读 <code>references/fastmcp-cli.md</code>。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

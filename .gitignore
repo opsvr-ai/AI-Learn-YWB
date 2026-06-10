@@ -1,0 +1,25 @@
+# 数据库
+.visit_stats.db
+__pycache__/
+*.pyc
+
+# 安装包
+packages/
+
+# 原始素材（临时存放，不纳入版本控制）
+素材/
+
+# 编辑器 / IDE
+.vscode/
+.idea/
+
+# 构建工具缓存
+.playwright-mcp/
+.reasonix/
+.understand-anything/
+.codegraph/
+
+# 系统文件
+Thumbs.db
+.DS_Store
+*.log

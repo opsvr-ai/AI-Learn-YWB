@@ -1,0 +1,368 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photon iMessage - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Photon iMessage</div><p>通过 <a href="https://photon.codes/">Photon</a> 管理服务将 Hermes 连接到 <strong>iMessage</strong>，Photon 负责处理苹果线路分配和滥用防护层，无需你自己运行 Mac 中继。</p>
+<p>免费套餐使用 Photon 的共享 iMessage 线路池——不同收件人可能看到不同的发送号码，但每个对话保持稳定。付费商业套餐为每位用户提供相同的专属号码；插件同时支持两者，免费套餐是推荐的起点。</p>
+<div class="tip"><strong>ℹ️ 免费开始使用</strong>
+Photon 的共享线路池是免费的。无需订阅即可从 Hermes 发送第一条 iMessage——只需一个可以绑定到你账户的手机号。
+</div>
+<h2>架构</h2>
+<p>入站消息以<strong>签名 Webhook</strong> 形式到达：Photon 将带有 <code>X-Spectrum-Signature</code> 头的 JSON 通过 POST 发送到你注册的 URL，Hermes 的 aiohttp 监听器在将事件分发到 Agent 之前验证 HMAC-SHA256 签名。</p>
+<p>出站回复通过一个受监督的小型 <strong>Node sidecar</strong> 进行，该 sidecar 在回环地址上运行 <code>spectrum-ts</code> SDK。Photon 目前尚未暴露公共的 HTTP 发送消息端点——这在其路线图中——因此在此之前 sidecar 是调用 <code>Space.send(...)</code> 的唯一方式。Python 插件自动启动、监督和关闭 sidecar。当 Photon 推出 HTTP 发送端点后，我们将在后续版本中移除 sidecar。</p>
+<h2>前提条件</h2>
+<ul>
+<li>Photon 账户——在 <a href="https://app.photon.codes/">app.photon.codes</a> 注册</li>
+<li><strong>Node.js 18.17 或更新版本</strong> 在 PATH 中可用（<code>node --version</code>）</li>
+<li>一个可接收 iMessage 的手机号（用于绑定你的账户）</li>
+<li>一个可公开访问的 Webhook 接收器 URL——Cloudflare Tunnel、ngrok 或你自己的 Gateway 主机名均可</li>
+</ul>
+<h2>首次设置</h2>
+<p>运行统一的 Gateway 向导并选择 <strong>Photon iMessage</strong>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway setup
+</div>
+<p>……或直接运行 Photon 设置（向导调用的是同一流程）：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 设备码登录 + 项目 + 用户 + sidecar 依赖，一步完成
+hermes photon setup --phone +15551234567
+</div>
+<p>设置过程：</p>
+<ol>
+<li>打开 <code>https://app.photon.codes/</code> 进行设备授权</li>
+<li>在你的账户下创建 Spectrum 项目</li>
+<li>调用 Spectrum 的 <code>create-user</code> 端点，使用 <code>type: shared</code> 让 Photon 从免费池分配 iMessage 线路</li>
+<li>在插件的 sidecar 目录中运行 <code>npm install</code></li>
+</ol>
+<p>凭据存储在 <code>~/.hermes/auth.json</code> 中的 <code>credential_pool.photon</code>（bearer token）和 <code>credential_pool.photon_project</code>（项目 ID + 密钥）。</p>
+<h2>授权用户</h2>
+<p>Photon 使用与所有其他 Hermes 通道相同的授权模型。选择一种方式：</p>
+<p><strong>DM 配对（默认）。</strong> 当未知号码给你的 Photon 线路发送消息时，Hermes 回复一个配对码。通过以下命令批准：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes pairing approve photon &lt;CODE&gt;
+</div>
+<p>使用 <code>hermes pairing list</code> 查看待处理的配对码和已批准用户。</p>
+<p><strong>预授权特定号码</strong>（在 <code>~/.hermes/.env</code> 中）：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+PHOTON_ALLOWED_USERS=+15551234567,+15559876543
+</div>
+<p><strong>开放访问</strong>（仅开发环境，在 <code>~/.hermes/.env</code> 中）：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+PHOTON_ALLOW_ALL_USERS=true
+</div>
+<p>当设置了 <code>PHOTON_ALLOWED_USERS</code> 时，未知发送者会被静默忽略而非提供配对码（白名单信号表明你有意限制了访问）。</p>
+<h3>群聊中需要提及</h3>
+<p>默认情况下，Hermes 会回复所有已授权的私聊和群聊消息。如需让群聊改为选择加入模式，启用提及门控（私聊始终正常工作）：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+gateway:
+  platforms:
+    photon:
+      enabled: true
+      require_mention: true
+</div>
+<p>设置 <code>require_mention: true</code> 后，群聊消息除非匹配唤醒词模式，否则被忽略。默认模式匹配 <code>Hermes</code> 和 <code>@Hermes agent</code> 变体。如需自定义 Agent 名称，设置正则表达式模式：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+gateway:
+  platforms:
+    photon:
+      require_mention: true
+      mention_patterns:
+        - '(?&lt;![\w@])@?amos\b[,:\-]?'
+</div>
+<p>两个键也接受环境变量（<code>PHOTON_REQUIRE_MENTION</code>、<code>PHOTON_MENTION_PATTERNS</code>）。这与 BlueBubbles iMessage 通道使用的提及门控模型相同。</p>
+<h2>注册 Webhook</h2>
+<p>Photon 需要一个可以 POST 的公共 URL。通过 Cloudflare Tunnel 或 ngrok 暴露你的本地监听器（默认端口 8788，路径 <code>/photon/webhook</code>），然后：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes photon webhook register https://YOUR-PUBLIC-URL/photon/webhook
+</div>
+<p>响应中包含一个 <code>signingSecret</code>——<strong>Photon 仅返回一次。</strong> 保存到 <code>~/.hermes/.env</code>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+PHOTON_WEBHOOK_SECRET=v0_64-char-hex...
+</div>
+<p>插件验证每个入站 <code>POST</code> 请求是否包含此密钥，并拒绝时间戳偏移超过 5 分钟的投递。</p>
+<h2>启动 Gateway</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway start --platform photon
+</div>
+<p>你会看到类似以下输出：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+[photon] connected — webhook at 0.0.0.0:8788/photon/webhook, sidecar on 127.0.0.1:8789
+</div>
+<p>向你分配的手机号发送一条 iMessage，Hermes 就会回复。</p>
+<h2>状态与故障排查</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes photon status
+</div>
+<p>输出：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Photon iMessage status
+──────────────────────
+  device token        : ✓ stored
+  project id          : 3c90c3cc-0d44-4b50-...
+  project key         : ✓ stored
+  webhook key         : ✓ set
+  node binary         : /usr/bin/node
+  sidecar deps        : ✓ installed
+</div>
+<p>常见问题：</p>
+<ul>
+<li><strong><code>sidecar deps : ✗ run hermes photon install-sidecar</code></strong> — Node 已安装但 <code>spectrum-ts</code> 未安装。运行建议的命令。</li>
+<li><strong><code>webhook key : ⚠ unset — verification disabled</code></strong> — 插件将接受任何发送到 Webhook URL 的 POST 请求，这是不安全的。重新运行 <code>hermes photon webhook register</code> 并保存密钥。</li>
+<li><strong><code>PHOTON_WEBHOOK_PORT</code> 已被占用</strong> — 通过 <code>~/.hermes/.env</code> 设置其他端口。</li>
+<li><strong>Webhook 可从 localhost 访问但 Photon 无法投递</strong> — Photon 需要公共主机名。Cloudflare Tunnel 是最简单的免费方案。</li>
+</ul>
+<h2>Webhook 管理</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes photon webhook list                  # 显示已注册的 webhook
+hermes photon webhook delete &lt;webhook-id&gt;   # 删除一个
+</div>
+<h2>当前限制</h2>
+<ul>
+<li><strong>入站附件仅含元数据。</strong> 入站 Webhook 包含文件名和 MIME 类型，但没有下载 URL——Photon 将附件检索端点列为路线图项目。</li>
+<li><strong>出站附件已支持。</strong> Hermes 通过 spectrum-ts 的 <code>attachment()</code>/<code>voice()</code> 内容构建器经由 sidecar 的 <code>/send-attachment</code> 端点发送图片、语音消息、视频和文档。说明文字作为单独的 iMessage 气泡在媒体后发送。</li>
+<li><strong>Photon 免费配额：</strong> 每台服务器每天 5,000 条消息，每条共享线路每天 50 次新对话启动。如需增加配额，联系 <code>help@photon.codes</code>。</li>
+</ul>
+<h2>环境变量</h2>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PHOTON_PROJECT_ID</code></td>
+<td>来自 <code>auth.json</code></td>
+<td>由 <code>hermes photon setup</code> 设置</td>
+</tr>
+<tr>
+<td><code>PHOTON_PROJECT_SECRET</code></td>
+<td>来自 <code>auth.json</code></td>
+<td>由 <code>hermes photon setup</code> 设置</td>
+</tr>
+<tr>
+<td><code>PHOTON_WEBHOOK_SECRET</code></td>
+<td>（未设置）</td>
+<td>来自 <code>hermes photon webhook register</code></td>
+</tr>
+<tr>
+<td><code>PHOTON_WEBHOOK_PORT</code></td>
+<td><code>8788</code></td>
+<td>aiohttp 监听器的本地端口</td>
+</tr>
+<tr>
+<td><code>PHOTON_WEBHOOK_PATH</code></td>
+<td><code>/photon/webhook</code></td>
+<td>监听器挂载的路径</td>
+</tr>
+<tr>
+<td><code>PHOTON_WEBHOOK_BIND</code></td>
+<td><code>0.0.0.0</code></td>
+<td>监听器的绑定地址</td>
+</tr>
+<tr>
+<td><code>PHOTON_SIDECAR_PORT</code></td>
+<td><code>8789</code></td>
+<td>sidecar 控制的回环端口</td>
+</tr>
+<tr>
+<td><code>PHOTON_SIDECAR_AUTOSTART</code></td>
+<td><code>true</code></td>
+<td>适配器是否自动启动 sidecar</td>
+</tr>
+<tr>
+<td><code>PHOTON_NODE_BIN</code></td>
+<td><code>which node</code></td>
+<td>覆盖 Node 二进制文件路径</td>
+</tr>
+<tr>
+<td><code>PHOTON_HOME_CHANNEL</code></td>
+<td>（未设置）</td>
+<td>Cron/通知的默认 Space ID</td>
+</tr>
+<tr>
+<td><code>PHOTON_HOME_CHANNEL_NAME</code></td>
+<td>（未设置）</td>
+<td>主通道的人类可读标签</td>
+</tr>
+<tr>
+<td><code>PHOTON_ALLOWED_USERS</code></td>
+<td>（未设置）</td>
+<td>逗号分隔的 E.164 白名单</td>
+</tr>
+<tr>
+<td><code>PHOTON_ALLOW_ALL_USERS</code></td>
+<td><code>false</code></td>
+<td>仅开发环境——接受任何发送者</td>
+</tr>
+<tr>
+<td><code>PHOTON_REQUIRE_MENTION</code></td>
+<td><code>false</code></td>
+<td>在群聊中需要唤醒词才回复</td>
+</tr>
+<tr>
+<td><code>PHOTON_MENTION_PATTERNS</code></td>
+<td>Hermes 唤醒词</td>
+<td>群聊提及的 JSON 列表/逗号/换行正则表达式模式</td>
+</tr>
+<tr>
+<td><code>PHOTON_API_HOST</code></td>
+<td><code>spectrum.photon.codes</code></td>
+<td>覆盖 Spectrum 管理 API 主机</td>
+</tr>
+<tr>
+<td><code>PHOTON_DASHBOARD_HOST</code></td>
+<td><code>app.photon.codes</code></td>
+<td>覆盖 Dashboard/设备登录主机</td>
+</tr>
+</tbody>
+</table>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,673 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Webhooks - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Webhooks</div><p>接收来自外部服务（GitHub、GitLab、JIRA、Stripe 等）的事件，并自动触发 Hermes agent 运行。Webhook 适配器运行一个 HTTP 服务器，接受 POST 请求、验证 HMAC 签名、将 payload（载荷）转换为 agent prompt（提示词），并将响应路由回来源或其他已配置的平台。</p>
+<p>agent 处理事件后，可通过在 PR 上发布评论、向 Telegram/Discord 发送消息或记录结果来响应。</p>
+<h2>视频教程</h2>
+<div style={{position: 'relative', width: '100%', aspectRatio: '16 / 9', marginBottom: '1.5rem'}}>
+  <iframe
+    src="https://www.youtube.com/embed/WNYe5mD4fY8"
+    title="Hermes Agent — Webhooks Tutorial"
+    style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0}}
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    allowFullScreen
+  />
+</div>
+<hr />
+<h2>快速开始</h2>
+<ol>
+<li>通过 <code>hermes gateway setup</code> 或环境变量启用</li>
+<li>在 <code>config.yaml</code> 中定义路由，<strong>或</strong>使用 <code>hermes webhook subscribe</code> 动态创建</li>
+<li>将你的服务指向 <code>http://your-server:8644/webhooks/&lt;route-name&gt;</code></li>
+</ol>
+<hr />
+<h2>设置</h2>
+<p>有两种方式启用 webhook 适配器。</p>
+<h3>通过设置向导</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway setup
+</div>
+<p>按照提示启用 webhooks、设置端口和全局 HMAC secret。</p>
+<h3>通过环境变量</h3>
+<p>添加到 <code>~/.hermes/.env</code>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+WEBHOOK_ENABLED=true
+WEBHOOK_PORT=8644        # default
+WEBHOOK_SECRET=your-global-secret
+</div>
+<h3>验证服务器</h3>
+<p>gateway 运行后：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl http://localhost:8644/health
+</div>
+<p>预期响应：</p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{"status": "ok", "platform": "webhook"}
+</div>
+<hr />
+<h2>配置路由 {#configuring-routes}</h2>
+<p>路由定义了不同 webhook 来源的处理方式。每个路由是 <code>config.yaml</code> 中 <code>platforms.webhook.extra.routes</code> 下的一个命名条目。</p>
+<h3>路由属性</h3>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>是否必填</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>events</code></td>
+<td>否</td>
+<td>要接受的事件类型列表（例如 <code>[&quot;pull_request&quot;]</code>）。若为空，则接受所有事件。事件类型从 <code>X-GitHub-Event</code>、<code>X-GitLab-Event</code> 或 payload 中的 <code>event_type</code> 读取。</td>
+</tr>
+<tr>
+<td><code>secret</code></td>
+<td><strong>是</strong></td>
+<td>用于签名验证的 HMAC secret。若路由未设置，则回退到全局 <code>secret</code>。仅用于测试时可设为 <code>&quot;INSECURE_NO_AUTH&quot;</code>（跳过验证）。</td>
+</tr>
+<tr>
+<td><code>prompt</code></td>
+<td>否</td>
+<td>使用点号表示法访问 payload 字段的模板字符串（例如 <code>{pull_request.title}</code>）。若省略，则将完整 JSON payload 转储到 prompt 中。</td>
+</tr>
+<tr>
+<td><code>skills</code></td>
+<td>否</td>
+<td>agent 运行时加载的 skill 名称列表。</td>
+</tr>
+<tr>
+<td><code>deliver</code></td>
+<td>否</td>
+<td>响应发送目标：<code>github_comment</code>、<code>telegram</code>、<code>discord</code>、<code>slack</code>、<code>signal</code>、<code>sms</code>、<code>whatsapp</code>、<code>matrix</code>、<code>mattermost</code>、<code>homeassistant</code>、<code>email</code>、<code>dingtalk</code>、<code>feishu</code>、<code>wecom</code>、<code>weixin</code>、<code>bluebubbles</code>、<code>qqbot</code>，或 <code>log</code>（默认）。</td>
+</tr>
+<tr>
+<td><code>deliver_extra</code></td>
+<td>否</td>
+<td>额外的投递配置——键取决于 <code>deliver</code> 类型（例如 <code>repo</code>、<code>pr_number</code>、<code>chat_id</code>）。值支持与 <code>prompt</code> 相同的 <code>{dot.notation}</code> 模板语法。</td>
+</tr>
+<tr>
+<td><code>deliver_only</code></td>
+<td>否</td>
+<td>若为 <code>true</code>，完全跳过 agent——渲染后的 <code>prompt</code> 模板直接作为消息体投递。零 LLM token 消耗，亚秒级投递。参见<a href="#direct-delivery-mode">直接投递模式</a>了解使用场景。要求 <code>deliver</code> 为真实目标（非 <code>log</code>）。</td>
+</tr>
+</tbody>
+</table>
+<h3>完整示例</h3>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+platforms:
+  webhook:
+    enabled: true
+    extra:
+      port: 8644
+      secret: "global-fallback-secret"
+      routes:
+        github-pr:
+          events: ["pull_request"]
+          secret: "github-webhook-secret"
+          prompt: |
+            Review this pull request:
+            Repository: {repository.full_name}
+            PR #{number}: {pull_request.title}
+            Author: {pull_request.user.login}
+            URL: {pull_request.html_url}
+            Diff URL: {pull_request.diff_url}
+            Action: {action}
+          skills: ["github-code-review"]
+          deliver: "github_comment"
+          deliver_extra:
+            repo: "{repository.full_name}"
+            pr_number: "{number}"
+        deploy-notify:
+          events: ["push"]
+          secret: "deploy-secret"
+          prompt: "New push to {repository.full_name} branch {ref}: {head_commit.message}"
+          deliver: "telegram"
+</div>
+<h3>Prompt 模板</h3>
+<p>Prompt 使用点号表示法访问 webhook payload 中的嵌套字段：</p>
+<ul>
+<li><code>{pull_request.title}</code> 解析为 <code>payload[&quot;pull_request&quot;][&quot;title&quot;]</code></li>
+<li><code>{repository.full_name}</code> 解析为 <code>payload[&quot;repository&quot;][&quot;full_name&quot;]</code></li>
+<li><code>{__raw__}</code> — 特殊 token，将<strong>整个 payload</strong> 以缩进 JSON 格式转储（截断至 4000 个字符）。适用于监控告警或通用 webhook，agent 需要完整上下文时使用。</li>
+<li>缺失的键保留为字面量 <code>{key}</code> 字符串（不报错）</li>
+<li>嵌套的 dict 和 list 会被 JSON 序列化并截断至 2000 个字符</li>
+</ul>
+<p>可以将 <code>{__raw__}</code> 与常规模板变量混合使用：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+prompt: "PR #{pull_request.number} by {pull_request.user.login}: {__raw__}"
+</div>
+<p>若路由未配置 <code>prompt</code> 模板，则将整个 payload 以缩进 JSON 格式转储（截断至 4000 个字符）。</p>
+<p><code>deliver_extra</code> 的值中同样支持点号表示法模板。</p>
+<h3>论坛话题投递</h3>
+<p>向 Telegram 投递 webhook 响应时，可通过在 <code>deliver_extra</code> 中包含 <code>message_thread_id</code>（或 <code>thread_id</code>）来指定特定论坛话题：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+webhooks:
+  routes:
+    alerts:
+      events: ["alert"]
+      prompt: "Alert: {__raw__}"
+      deliver: "telegram"
+      deliver_extra:
+        chat_id: "-1001234567890"
+        message_thread_id: "42"
+</div>
+<p>若 <code>deliver_extra</code> 中未提供 <code>chat_id</code>，则回退到目标平台配置的主频道。</p>
+<hr />
+<h2>GitHub PR 审查（分步说明） {#github-pr-review}</h2>
+<p>本演练将为每个 pull request 设置自动代码审查。</p>
+<h3>1. 在 GitHub 中创建 webhook</h3>
+<ol>
+<li>进入你的仓库 → <strong>Settings</strong> → <strong>Webhooks</strong> → <strong>Add webhook</strong></li>
+<li>将 <strong>Payload URL</strong> 设为 <code>http://your-server:8644/webhooks/github-pr</code></li>
+<li>将 <strong>Content type</strong> 设为 <code>application/json</code></li>
+<li>将 <strong>Secret</strong> 设为与路由配置匹配的值（例如 <code>github-webhook-secret</code>）</li>
+<li>在 <strong>Which events?</strong> 下，选择 <strong>Let me select individual events</strong> 并勾选 <strong>Pull requests</strong></li>
+<li>点击 <strong>Add webhook</strong></li>
+</ol>
+<h3>2. 添加路由配置</h3>
+<p>按照上方示例，将 <code>github-pr</code> 路由添加到 <code>~/.hermes/config.yaml</code>。</p>
+<h3>3. 确保 <code>gh</code> CLI 已认证</h3>
+<p><code>github_comment</code> 投递类型使用 GitHub CLI 发布评论：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+gh auth login
+</div>
+<h3>4. 测试</h3>
+<p>在仓库中打开一个 pull request。webhook 触发后，Hermes 处理事件并在 PR 上发布审查评论。</p>
+<hr />
+<h2>GitLab Webhook 设置 {#gitlab-webhook-setup}</h2>
+<p>GitLab webhook 的工作方式类似，但使用不同的认证机制。GitLab 通过 <code>X-Gitlab-Token</code> 请求头以明文字符串匹配（非 HMAC）发送 secret。</p>
+<h3>1. 在 GitLab 中创建 webhook</h3>
+<ol>
+<li>进入你的项目 → <strong>Settings</strong> → <strong>Webhooks</strong></li>
+<li>将 <strong>URL</strong> 设为 <code>http://your-server:8644/webhooks/gitlab-mr</code></li>
+<li>输入你的 <strong>Secret token</strong></li>
+<li>选择 <strong>Merge request events</strong>（以及其他你需要的事件）</li>
+<li>点击 <strong>Add webhook</strong></li>
+</ol>
+<h3>2. 添加路由配置</h3>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+platforms:
+  webhook:
+    enabled: true
+    extra:
+      routes:
+        gitlab-mr:
+          events: ["merge_request"]
+          secret: "your-gitlab-secret-token"
+          prompt: |
+            Review this merge request:
+            Project: {project.path_with_namespace}
+            MR !{object_attributes.iid}: {object_attributes.title}
+            Author: {object_attributes.last_commit.author.name}
+            URL: {object_attributes.url}
+            Action: {object_attributes.action}
+          deliver: "log"
+</div>
+<hr />
+<h2>投递选项 {#delivery-options}</h2>
+<p><code>deliver</code> 字段控制 agent 处理 webhook 事件后响应的发送目标。</p>
+<table>
+<thead>
+<tr>
+<th>投递类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>log</code></td>
+<td>将响应记录到 gateway 日志输出。这是默认值，适合测试使用。</td>
+</tr>
+<tr>
+<td><code>github_comment</code></td>
+<td>通过 <code>gh</code> CLI 将响应作为 PR/issue 评论发布。需要 <code>deliver_extra.repo</code> 和 <code>deliver_extra.pr_number</code>。<code>gh</code> CLI 必须安装并在 gateway 主机上完成认证（<code>gh auth login</code>）。</td>
+</tr>
+<tr>
+<td><code>telegram</code></td>
+<td>将响应路由到 Telegram。使用主频道，或在 <code>deliver_extra</code> 中指定 <code>chat_id</code>。</td>
+</tr>
+<tr>
+<td><code>discord</code></td>
+<td>将响应路由到 Discord。使用主频道，或在 <code>deliver_extra</code> 中指定 <code>chat_id</code>。</td>
+</tr>
+<tr>
+<td><code>slack</code></td>
+<td>将响应路由到 Slack。使用主频道，或在 <code>deliver_extra</code> 中指定 <code>chat_id</code>。</td>
+</tr>
+<tr>
+<td><code>signal</code></td>
+<td>将响应路由到 Signal。使用主频道，或在 <code>deliver_extra</code> 中指定 <code>chat_id</code>。</td>
+</tr>
+<tr>
+<td><code>sms</code></td>
+<td>通过 Twilio 将响应路由到 SMS。使用主频道，或在 <code>deliver_extra</code> 中指定 <code>chat_id</code>。</td>
+</tr>
+<tr>
+<td><code>whatsapp</code></td>
+<td>将响应路由到 WhatsApp。使用主频道，或在 <code>deliver_extra</code> 中指定 <code>chat_id</code>。</td>
+</tr>
+<tr>
+<td><code>matrix</code></td>
+<td>将响应路由到 Matrix。使用主频道，或在 <code>deliver_extra</code> 中指定 <code>chat_id</code>。</td>
+</tr>
+<tr>
+<td><code>mattermost</code></td>
+<td>将响应路由到 Mattermost。使用主频道，或在 <code>deliver_extra</code> 中指定 <code>chat_id</code>。</td>
+</tr>
+<tr>
+<td><code>homeassistant</code></td>
+<td>将响应路由到 Home Assistant。使用主频道，或在 <code>deliver_extra</code> 中指定 <code>chat_id</code>。</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td>将响应路由到 Email。使用主频道，或在 <code>deliver_extra</code> 中指定 <code>chat_id</code>。</td>
+</tr>
+<tr>
+<td><code>dingtalk</code></td>
+<td>将响应路由到 DingTalk。使用主频道，或在 <code>deliver_extra</code> 中指定 <code>chat_id</code>。</td>
+</tr>
+<tr>
+<td><code>feishu</code></td>
+<td>将响应路由到 Feishu/Lark。使用主频道，或在 <code>deliver_extra</code> 中指定 <code>chat_id</code>。</td>
+</tr>
+<tr>
+<td><code>wecom</code></td>
+<td>将响应路由到 WeCom。使用主频道，或在 <code>deliver_extra</code> 中指定 <code>chat_id</code>。</td>
+</tr>
+<tr>
+<td><code>weixin</code></td>
+<td>将响应路由到 Weixin（微信）。使用主频道，或在 <code>deliver_extra</code> 中指定 <code>chat_id</code>。</td>
+</tr>
+<tr>
+<td><code>bluebubbles</code></td>
+<td>将响应路由到 BlueBubbles（iMessage）。使用主频道，或在 <code>deliver_extra</code> 中指定 <code>chat_id</code>。</td>
+</tr>
+</tbody>
+</table>
+<p>跨平台投递时，目标平台也必须在 gateway 中启用并连接。若 <code>deliver_extra</code> 中未提供 <code>chat_id</code>，响应将发送到该平台配置的主频道。</p>
+<hr />
+<h2>直接投递模式 {#direct-delivery-mode}</h2>
+<p>默认情况下，每次 webhook POST 都会触发一次 agent 运行——payload 成为 prompt，agent 处理后投递响应。这会在每次事件时消耗 LLM token。</p>
+<p>对于只需<strong>推送纯文本通知</strong>的场景——无需推理、无需 agent 循环，只需投递消息——可在路由上设置 <code>deliver_only: true</code>。渲染后的 <code>prompt</code> 模板直接作为消息体，适配器将其直接分发到配置的投递目标。</p>
+<h3>何时使用直接投递</h3>
+<ul>
+<li><strong>外部服务推送</strong> — Supabase/Firebase webhook 在数据库变更时触发 → 即时通知 Telegram 用户</li>
+<li><strong>监控告警</strong> — Datadog/Grafana 告警 webhook → 推送到 Discord 频道</li>
+<li><strong>agent 间通知</strong> — Agent A 通知 Agent B 的用户某个长时任务已完成</li>
+<li><strong>后台任务完成</strong> — Cron 任务完成 → 将结果发布到 Slack</li>
+</ul>
+<p>优势：</p>
+<ul>
+<li><strong>零 LLM token</strong> — agent 从不被调用</li>
+<li><strong>亚秒级投递</strong> — 单次适配器调用，无推理循环</li>
+<li><strong>与 agent 模式相同的安全性</strong> — HMAC 认证、速率限制、幂等性和请求体大小限制均正常生效</li>
+<li><strong>同步响应</strong> — 投递成功后 POST 返回 <code>200 OK</code>，若目标拒绝则返回 <code>502</code>，便于上游服务智能重试</li>
+</ul>
+<h3>示例：从 Supabase 推送到 Telegram</h3>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+platforms:
+  webhook:
+    enabled: true
+    extra:
+      port: 8644
+      secret: "global-secret"
+      routes:
+        antenna-matches:
+          secret: "antenna-webhook-secret"
+          deliver: "telegram"
+          deliver_only: true
+          prompt: "🎉 New match: {match.user_name} matched with you!"
+          deliver_extra:
+            chat_id: "{match.telegram_chat_id}"
+</div>
+<p>你的 Supabase edge function 使用 HMAC-SHA256 对 payload 签名并 POST 到 <code>https://your-server:8644/webhooks/antenna-matches</code>。webhook 适配器验证签名、从 payload 渲染模板、投递到 Telegram，并返回 <code>200 OK</code>。</p>
+<h3>示例：通过 CLI 动态订阅</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes webhook subscribe antenna-matches \
+  --deliver telegram \
+  --deliver-chat-id "123456789" \
+  --deliver-only \
+  --prompt "🎉 New match: {match.user_name} matched with you!" \
+  --description "Antenna match notifications"
+</div>
+<h3>响应状态码</h3>
+<table>
+<thead>
+<tr>
+<th>状态码</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>200 OK</code></td>
+<td>投递成功。响应体：<code>{&quot;status&quot;: &quot;delivered&quot;, &quot;route&quot;: &quot;...&quot;, &quot;target&quot;: &quot;...&quot;, &quot;delivery_id&quot;: &quot;...&quot;}</code></td>
+</tr>
+<tr>
+<td><code>200 OK</code>（status=duplicate）</td>
+<td>在幂等性 TTL（1 小时）内重复的 <code>X-GitHub-Delivery</code> ID。不重复投递。</td>
+</tr>
+<tr>
+<td><code>401 Unauthorized</code></td>
+<td>HMAC 签名无效或缺失。</td>
+</tr>
+<tr>
+<td><code>400 Bad Request</code></td>
+<td>JSON 请求体格式错误。</td>
+</tr>
+<tr>
+<td><code>404 Not Found</code></td>
+<td>未知路由名称。</td>
+</tr>
+<tr>
+<td><code>413 Payload Too Large</code></td>
+<td>请求体超过 <code>max_body_bytes</code>。</td>
+</tr>
+<tr>
+<td><code>429 Too Many Requests</code></td>
+<td>路由速率限制已超出。</td>
+</tr>
+<tr>
+<td><code>502 Bad Gateway</code></td>
+<td>目标适配器拒绝消息或抛出异常。错误记录在服务端日志中；响应体为通用的 <code>Delivery failed</code>，避免泄露适配器内部信息。</td>
+</tr>
+</tbody>
+</table>
+<h3>配置注意事项</h3>
+<ul>
+<li><code>deliver_only: true</code> 要求 <code>deliver</code> 为真实目标。<code>deliver: log</code>（或省略 <code>deliver</code>）在启动时会被拒绝——适配器发现路由配置错误时拒绝启动。</li>
+<li>直接投递模式下 <code>skills</code> 字段被忽略（不运行 agent，无处注入 skill）。</li>
+<li>模板渲染使用与 agent 模式相同的 <code>{dot.notation}</code> 语法，包括 <code>{__raw__}</code> token。</li>
+<li>幂等性使用相同的 <code>X-GitHub-Delivery</code> / <code>X-Request-ID</code> 请求头——携带相同 ID 的重试返回 <code>status=duplicate</code> 且<strong>不</strong>重复投递。</li>
+</ul>
+<hr />
+<h2>动态订阅（CLI） {#dynamic-subscriptions}</h2>
+<p>除了 <code>config.yaml</code> 中的静态路由，还可以使用 <code>hermes webhook</code> CLI 命令动态创建 webhook 订阅。当 agent 本身需要设置事件驱动触发器时，这尤为有用。</p>
+<h3>创建订阅</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes webhook subscribe github-issues \
+  --events "issues" \
+  --prompt "New issue #{issue.number}: {issue.title}\nBy: {issue.user.login}\n\n{issue.body}" \
+  --deliver telegram \
+  --deliver-chat-id "-100123456789" \
+  --description "Triage new GitHub issues"
+</div>
+<p>此命令返回 webhook URL 和自动生成的 HMAC secret。将你的服务配置为 POST 到该 URL。</p>
+<h3>列出订阅</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes webhook list
+</div>
+<h3>删除订阅</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes webhook remove github-issues
+</div>
+<h3>测试订阅</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes webhook test github-issues
+hermes webhook test github-issues --payload '{"issue": {"number": 42, "title": "Test"}}'
+</div>
+<h3>动态订阅的工作原理</h3>
+<ul>
+<li>订阅存储在 <code>~/.hermes/webhook_subscriptions.json</code></li>
+<li>webhook 适配器在每次收到请求时热重载该文件（基于 mtime 检测，开销可忽略不计）</li>
+<li><code>config.yaml</code> 中的静态路由始终优先于同名的动态订阅</li>
+<li>动态订阅与静态路由使用相同的格式和功能（events、prompt 模板、skills、delivery）</li>
+<li>无需重启 gateway——订阅后立即生效</li>
+</ul>
+<h3>agent 驱动的订阅</h3>
+<p>agent 可通过 terminal 工具在 <code>webhook-subscriptions</code> skill 的引导下创建订阅。向 agent 请求&quot;为 GitHub issues 设置 webhook&quot;，它将运行相应的 <code>hermes webhook subscribe</code> 命令。</p>
+<hr />
+<h2>安全性 {#security}</h2>
+<p>webhook 适配器包含多层安全机制：</p>
+<h3>HMAC 签名验证</h3>
+<p>适配器使用适合各来源的方式验证传入的 webhook 签名：</p>
+<ul>
+<li><strong>GitHub</strong>：<code>X-Hub-Signature-256</code> 请求头——以 <code>sha256=</code> 为前缀的 HMAC-SHA256 十六进制摘要</li>
+<li><strong>GitLab</strong>：<code>X-Gitlab-Token</code> 请求头——明文 secret 字符串匹配</li>
+<li><strong>通用</strong>：<code>X-Webhook-Signature</code> 请求头——原始 HMAC-SHA256 十六进制摘要</li>
+</ul>
+<p>若已配置 secret 但请求中不存在已识别的签名请求头，则请求被拒绝。</p>
+<h3>Secret 为必填项</h3>
+<p>每个路由必须有 secret——直接设置在路由上或从全局 <code>secret</code> 继承。没有 secret 的路由会导致适配器在启动时报错退出。仅用于开发/测试时，可将 secret 设为 <code>&quot;INSECURE_NO_AUTH&quot;</code> 以完全跳过验证。</p>
+<p><code>INSECURE_NO_AUTH</code> 仅在 gateway 绑定到回环地址（<code>127.0.0.1</code>、<code>localhost</code>、<code>::1</code>）时被接受。若与非回环绑定（如 <code>0.0.0.0</code> 或局域网 IP）组合使用，适配器拒绝启动——这可防止在公共接口上意外暴露未认证的端点。</p>
+<h3>速率限制</h3>
+<p>每个路由默认限制为<strong>每分钟 30 次请求</strong>（固定窗口）。可全局配置：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+platforms:
+  webhook:
+    extra:
+      rate_limit: 60  # requests per minute
+</div>
+<p>超出限制的请求收到 <code>429 Too Many Requests</code> 响应。</p>
+<h3>幂等性</h3>
+<p>投递 ID（来自 <code>X-GitHub-Delivery</code>、<code>X-Request-ID</code> 或时间戳回退）缓存 <strong>1 小时</strong>。重复投递（例如 webhook 重试）会被静默跳过并返回 <code>200</code> 响应，防止重复触发 agent 运行。</p>
+<h3>请求体大小限制</h3>
+<p>超过 <strong>1 MB</strong> 的 payload 在读取请求体之前即被拒绝。可配置：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+platforms:
+  webhook:
+    extra:
+      max_body_bytes: 2097152  # 2 MB
+</div>
+<h3>Prompt 注入风险</h3>
+<div class="tip warning"><strong>⚠️ 警告</strong>
+Webhook payload 包含攻击者可控的数据——PR 标题、commit 消息、issue 描述等均可能包含恶意指令。在暴露于互联网时，请在沙箱环境（Docker、VM）中运行 gateway。考虑使用 Docker 或 SSH terminal 后端进行隔离。
+</div>
+<hr />
+<h2>故障排查 {#troubleshooting}</h2>
+<h3>Webhook 未到达</h3>
+<ul>
+<li>验证端口已暴露且可从 webhook 来源访问</li>
+<li>检查防火墙规则——端口 <code>8644</code>（或你配置的端口）必须开放</li>
+<li>验证 URL 路径是否匹配：<code>http://your-server:8644/webhooks/&lt;route-name&gt;</code></li>
+<li>使用 <code>/health</code> 端点确认服务器正在运行</li>
+</ul>
+<h3>签名验证失败</h3>
+<ul>
+<li>确保路由配置中的 secret 与 webhook 来源中配置的 secret 完全一致</li>
+<li>对于 GitHub，secret 基于 HMAC——检查 <code>X-Hub-Signature-256</code></li>
+<li>对于 GitLab，secret 为明文 token 匹配——检查 <code>X-Gitlab-Token</code></li>
+<li>检查 gateway 日志中的 <code>Invalid signature</code> 警告</li>
+</ul>
+<h3>事件被忽略</h3>
+<ul>
+<li>检查事件类型是否在路由的 <code>events</code> 列表中</li>
+<li>GitHub 事件使用如 <code>pull_request</code>、<code>push</code>、<code>issues</code> 等值（<code>X-GitHub-Event</code> 请求头的值）</li>
+<li>GitLab 事件使用如 <code>merge_request</code>、<code>push</code> 等值（<code>X-GitLab-Event</code> 请求头的值）</li>
+<li>若 <code>events</code> 为空或未设置，则接受所有事件</li>
+</ul>
+<h3>Agent 未响应</h3>
+<ul>
+<li>在前台运行 gateway 以查看日志：<code>hermes gateway run</code></li>
+<li>检查 prompt 模板是否正确渲染</li>
+<li>验证投递目标已配置并连接</li>
+</ul>
+<h3>重复响应</h3>
+<ul>
+<li>幂等性缓存应能防止此问题——检查 webhook 来源是否发送了投递 ID 请求头（<code>X-GitHub-Delivery</code> 或 <code>X-Request-ID</code>）</li>
+<li>投递 ID 缓存 1 小时</li>
+</ul>
+<h3><code>gh</code> CLI 错误（GitHub 评论投递）</h3>
+<ul>
+<li>在 gateway 主机上运行 <code>gh auth login</code></li>
+<li>确保已认证的 GitHub 用户对该仓库有写权限</li>
+<li>检查 <code>gh</code> 是否已安装并在 PATH 中</li>
+</ul>
+<hr />
+<h2>环境变量 {#environment-variables}</h2>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>描述</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>WEBHOOK_ENABLED</code></td>
+<td>启用 webhook 平台适配器</td>
+<td><code>false</code></td>
+</tr>
+<tr>
+<td><code>WEBHOOK_PORT</code></td>
+<td>接收 webhook 的 HTTP 服务器端口</td>
+<td><code>8644</code></td>
+</tr>
+<tr>
+<td><code>WEBHOOK_SECRET</code></td>
+<td>全局 HMAC secret（路由未指定自身 secret 时作为回退）</td>
+<td><em>（无）</em></td>
+</tr>
+</tbody>
+</table>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,594 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modal Serverless Gpu — 用于运行 ML 工作负载的无服务器 GPU 云平台 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Modal Serverless Gpu — 用于运行 ML 工作负载的无服务器 GPU 云平台</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Modal Serverless Gpu</h1>
+<p>用于运行 ML 工作负载的无服务器 GPU 云平台。适用于需要按需 GPU 访问而无需管理基础设施、将 ML 模型部署为 API，或运行具有自动扩缩容的批处理作业的场景。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/mlops/modal</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/mlops/modal</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Orchestra Research</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>依赖</td>
+<td><code>modal&gt;=0.64.0</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Infrastructure</code>, <code>Serverless</code>, <code>GPU</code>, <code>Cloud</code>, <code>Deployment</code>, <code>Modal</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>Modal Serverless GPU</h1>
+<p>在 Modal 无服务器 GPU 云平台上运行 ML 工作负载的完整指南。</p>
+<h2>何时使用 Modal</h2>
+<p><strong>在以下情况下使用 Modal：</strong></p>
+<ul>
+<li>运行 GPU 密集型 ML 工作负载而无需管理基础设施</li>
+<li>将 ML 模型部署为自动扩缩容 API</li>
+<li>运行批处理作业（训练、推理、数据处理）</li>
+<li>需要按秒计费的 GPU 定价，无空闲成本</li>
+<li>快速原型化 ML 应用</li>
+<li>运行定时作业（类 cron 工作负载）</li>
+</ul>
+<p><strong>主要特性：</strong></p>
+<ul>
+<li><strong>无服务器 GPU</strong>：按需提供 T4、L4、A10G、L40S、A100、H100、H200、B200</li>
+<li><strong>Python 原生</strong>：用 Python 代码定义基础设施，无需 YAML</li>
+<li><strong>自动扩缩容</strong>：缩容至零，或瞬间扩容至 100+ 个 GPU</li>
+<li><strong>亚秒级冷启动</strong>：基于 Rust 的基础设施，实现快速容器启动</li>
+<li><strong>容器缓存</strong>：镜像层缓存，支持快速迭代</li>
+<li><strong>Web 端点</strong>：将函数部署为 REST API，支持零停机更新</li>
+</ul>
+<p><strong>以下情况请使用替代方案：</strong></p>
+<ul>
+<li><strong>RunPod</strong>：适用于需要持久状态的长时间运行 pod</li>
+<li><strong>Lambda Labs</strong>：适用于预留 GPU 实例</li>
+<li><strong>SkyPilot</strong>：适用于多云编排和成本优化</li>
+<li><strong>Kubernetes</strong>：适用于复杂的多服务架构</li>
+</ul>
+<h2>快速开始</h2>
+<h3>安装</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install modal
+modal setup  # Opens browser for authentication
+</div>
+<h3>GPU Hello World</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import modal
+<p>app = modal.App(&quot;hello-gpu&quot;)</p>
+<p>@app.function(gpu=&quot;T4&quot;)
+def gpu_info():
+import subprocess
+return subprocess.run([&quot;nvidia-smi&quot;], capture_output=True, text=True).stdout</p>
+<p>@app.local_entrypoint()
+def main():
+print(gpu_info.remote())</p>
+</div>
+<p>运行：<code>modal run hello_gpu.py</code></p>
+<h3>基础推理端点</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import modal
+<p>app = modal.App(&quot;text-generation&quot;)
+image = modal.Image.debian_slim().pip_install(&quot;transformers&quot;, &quot;torch&quot;, &quot;accelerate&quot;)</p>
+<p>@app.cls(gpu=&quot;A10G&quot;, image=image)
+class TextGenerator:
+@modal.enter()
+def load_model(self):
+from transformers import pipeline
+self.pipe = pipeline(&quot;text-generation&quot;, model=&quot;gpt2&quot;, device=0)</p>
+<pre><code>@modal.method()
+def generate(self, prompt: str) -&amp;gt; str:
+    return self.pipe(prompt, max_length=100)[0][&quot;generated_text&quot;]
+</code></pre>
+<p>@app.local_entrypoint()
+def main():
+print(TextGenerator().generate.remote(&quot;Hello, world&quot;))</p>
+</div>
+<h2>核心概念</h2>
+<h3>关键组件</h3>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>App</code></td>
+<td>函数和资源的容器</td>
+</tr>
+<tr>
+<td><code>Function</code></td>
+<td>带计算规格的无服务器函数</td>
+</tr>
+<tr>
+<td><code>Cls</code></td>
+<td>带生命周期 hook 的基于类的函数</td>
+</tr>
+<tr>
+<td><code>Image</code></td>
+<td>容器镜像定义</td>
+</tr>
+<tr>
+<td><code>Volume</code></td>
+<td>用于模型/数据的持久存储</td>
+</tr>
+<tr>
+<td><code>Secret</code></td>
+<td>安全凭证存储</td>
+</tr>
+</tbody>
+</table>
+<h3>执行模式</h3>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>modal run script.py</code></td>
+<td>执行后退出</td>
+</tr>
+<tr>
+<td><code>modal serve script.py</code></td>
+<td>开发模式，支持热重载</td>
+</tr>
+<tr>
+<td><code>modal deploy script.py</code></td>
+<td>持久化云端部署</td>
+</tr>
+</tbody>
+</table>
+<h2>GPU 配置</h2>
+<h3>可用 GPU</h3>
+<table>
+<thead>
+<tr>
+<th>GPU</th>
+<th>显存</th>
+<th>最适用于</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>T4</code></td>
+<td>16GB</td>
+<td>经济型推理、小型模型</td>
+</tr>
+<tr>
+<td><code>L4</code></td>
+<td>24GB</td>
+<td>推理，Ada Lovelace 架构</td>
+</tr>
+<tr>
+<td><code>A10G</code></td>
+<td>24GB</td>
+<td>训练/推理，比 T4 快 3.3 倍</td>
+</tr>
+<tr>
+<td><code>L40S</code></td>
+<td>48GB</td>
+<td>推荐用于推理（最佳性价比）</td>
+</tr>
+<tr>
+<td><code>A100-40GB</code></td>
+<td>40GB</td>
+<td>大型模型训练</td>
+</tr>
+<tr>
+<td><code>A100-80GB</code></td>
+<td>80GB</td>
+<td>超大型模型</td>
+</tr>
+<tr>
+<td><code>H100</code></td>
+<td>80GB</td>
+<td>最快，支持 FP8 + Transformer Engine</td>
+</tr>
+<tr>
+<td><code>H200</code></td>
+<td>141GB</td>
+<td>从 H100 自动升级，4.8TB/s 带宽</td>
+</tr>
+<tr>
+<td><code>B200</code></td>
+<td>最新</td>
+<td>Blackwell 架构</td>
+</tr>
+</tbody>
+</table>
+<h3>GPU 规格配置模式</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Single GPU
+@app.function(gpu="A100")
+<h1>Specific memory variant</h1>
+<p>@app.function(gpu=&quot;A100-80GB&quot;)</p>
+<h1>Multiple GPUs (up to 8)</h1>
+<p>@app.function(gpu=&quot;H100:4&quot;)</p>
+<h1>GPU with fallbacks</h1>
+<p>@app.function(gpu=[&quot;H100&quot;, &quot;A100&quot;, &quot;L40S&quot;])</p>
+<h1>Any available GPU</h1>
+<p>@app.function(gpu=&quot;any&quot;)</p>
+</div>
+<h2>容器镜像</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Basic image with pip
+image = modal.Image.debian_slim(python_version="3.11").pip_install(
+    "torch==2.1.0", "transformers==4.36.0", "accelerate"
+)
+<h1>From CUDA base</h1>
+<p>image = modal.Image.from_registry(
+&quot;nvidia/cuda:12.1.0-cudnn8-devel-ubuntu22.04&quot;,
+add_python=&quot;3.11&quot;
+).pip_install(&quot;torch&quot;, &quot;transformers&quot;)</p>
+<h1>With system packages</h1>
+<p>image = modal.Image.debian_slim().apt_install(&quot;git&quot;, &quot;ffmpeg&quot;).pip_install(&quot;whisper&quot;)</p>
+</div>
+<h2>持久存储</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+volume = modal.Volume.from_name("model-cache", create_if_missing=True)
+<p>@app.function(gpu=&quot;A10G&quot;, volumes={&quot;/models&quot;: volume})
+def load_model():
+import os
+model_path = &quot;/models/llama-7b&quot;
+if not os.path.exists(model_path):
+model = download_model()
+model.save_pretrained(model_path)
+volume.commit()  # Persist changes
+return load_from_path(model_path)</p>
+</div>
+<h2>Web 端点</h2>
+<h3>FastAPI 端点装饰器</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+@app.function()
+@modal.fastapi_endpoint(method="POST")
+def predict(text: str) -&gt; dict:
+    return {"result": model.predict(text)}
+</div>
+<h3>完整 ASGI 应用</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from fastapi import FastAPI
+web_app = FastAPI()
+<p>@web_app.post(&quot;/predict&quot;)
+async def predict(text: str):
+return {&quot;result&quot;: await model.predict.remote.aio(text)}</p>
+<p>@app.function()
+@modal.asgi_app()
+def fastapi_app():
+return web_app</p>
+</div>
+<h3>Web 端点类型</h3>
+<table>
+<thead>
+<tr>
+<th>装饰器</th>
+<th>使用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>@modal.fastapi_endpoint()</code></td>
+<td>简单函数 → API</td>
+</tr>
+<tr>
+<td><code>@modal.asgi_app()</code></td>
+<td>完整 FastAPI/Starlette 应用</td>
+</tr>
+<tr>
+<td><code>@modal.wsgi_app()</code></td>
+<td>Django/Flask 应用</td>
+</tr>
+<tr>
+<td><code>@modal.web_server(port)</code></td>
+<td>任意 HTTP 服务器</td>
+</tr>
+</tbody>
+</table>
+<h2>动态批处理</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+@app.function()
+@modal.batched(max_batch_size=32, wait_ms=100)
+async def batch_predict(inputs: list[str]) -&gt; list[dict]:
+    # Inputs automatically batched
+    return model.batch_predict(inputs)
+</div>
+<h2>密钥管理</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Create secret
+modal secret create huggingface HF_TOKEN=hf_xxx
+</div>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+@app.function(secrets=[modal.Secret.from_name("huggingface")])
+def download_model():
+    import os
+    token = os.environ["HF_TOKEN"]
+</div>
+<h2>定时任务</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+@app.function(schedule=modal.Cron("0 0 * * *"))  # Daily midnight
+def daily_job():
+    pass
+<p>@app.function(schedule=modal.Period(hours=1))
+def hourly_job():
+pass</p>
+</div>
+<h2>性能优化</h2>
+<h3>冷启动缓解</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+@app.function(
+    container_idle_timeout=300,  # Keep warm 5 min
+    allow_concurrent_inputs=10,  # Handle concurrent requests
+)
+def inference():
+    pass
+</div>
+<h3>模型加载最佳实践</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+@app.cls(gpu="A100")
+class Model:
+    @modal.enter()  # Run once at container start
+    def load(self):
+        self.model = load_model()  # Load during warm-up
+<pre><code>@modal.method()
+def predict(self, x):
+    return self.model(x)
+</code></pre>
+</div>
+<h2>并行处理</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+@app.function()
+def process_item(item):
+    return expensive_computation(item)
+<p>@app.function()
+def run_parallel():
+items = list(range(1000))
+# Fan out to parallel containers
+results = list(process_item.map(items))
+return results</p>
+</div>
+<h2>常用配置</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+@app.function(
+    gpu="A100",
+    memory=32768,              # 32GB RAM
+    cpu=4,                     # 4 CPU cores
+    timeout=3600,              # 1 hour max
+    container_idle_timeout=120,# Keep warm 2 min
+    retries=3,                 # Retry on failure
+    concurrency_limit=10,      # Max concurrent containers
+)
+def my_function():
+    pass
+</div>
+<h2>调试</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Test locally
+if __name__ == "__main__":
+    result = my_function.local()
+<h1>View logs</h1>
+<h1>modal app logs my-app</h1>
+</div>
+<h2>常见问题</h2>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>冷启动延迟</td>
+<td>增大 <code>container_idle_timeout</code>，使用 <code>@modal.enter()</code></td>
+</tr>
+<tr>
+<td>GPU 内存溢出</td>
+<td>使用更大 GPU（<code>A100-80GB</code>），启用梯度检查点</td>
+</tr>
+<tr>
+<td>镜像构建失败</td>
+<td>固定依赖版本，检查 CUDA 兼容性</td>
+</tr>
+<tr>
+<td>超时错误</td>
+<td>增大 <code>timeout</code>，添加检查点</td>
+</tr>
+</tbody>
+</table>
+<h2>参考资料</h2>
+<ul>
+<li><strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/modal/references/advanced-usage.html">高级用法</a></strong> - 多 GPU、分布式训练、成本优化</li>
+<li><strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/modal/references/troubleshooting.html">故障排查</a></strong> - 常见问题与解决方案</li>
+</ul>
+<h2>资源</h2>
+<ul>
+<li><strong>文档</strong>：https://modal.com/docs</li>
+<li><strong>示例</strong>：https://github.com/modal-labs/modal-examples</li>
+<li><strong>定价</strong>：https://modal.com/pricing</li>
+<li><strong>Discord</strong>：https://discord.gg/modal</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,422 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subagent Driven Development — Execute plans via delegate_task subagents (2-stage review) - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 命令</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & Skills</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">docs</a> / <a href="/hermes-docs/user-guide/">user-guide</a> / <a href="/hermes-docs/user-guide/skills/">skills</a> / <a href="/hermes-docs/user-guide/skills/bundled/">bundled</a> / <a href="/hermes-docs/user-guide/skills/bundled/software-development/">software-development</a> / Subagent Driven Development — Execute plans 通过 delegate_task subagents (2-stage review)</div><p>{/<em> 本页面由 website/scripts/generate-skill-docs.py 从技能的 SKILL.md 自动生成。请编辑源 SKILL.md，而非本页面。 </em>/}</p>
+<h1>Subagent Driven Development</h1>
+<p>Execute plans via delegate_task subagents (2-stage review).</p>
+<h2>技能元数据</h2>
+<table><thead><tr><th>---</th><th>---</th></tr></thead><tbody>
+<tr><td>来源</td><td>内置（默认安装）</td></tr>
+<tr><td>路径</td><td><code>skills/software-development/subagent-driven-development</code></td></tr>
+<tr><td>版本</td><td><code>1.1.0</code></td></tr>
+<tr><td>作者</td><td>Hermes Agent (adapted from obra/superpowers)</td></tr>
+<tr><td>许可证</td><td>MIT</td></tr>
+<tr><td>平台</td><td>linux, macos, windows</td></tr>
+<tr><td>标签</td><td><code>delegation</code>, <code>subagent</code>, <code>implementation</code>, <code>workflow</code>, <code>parallel</code></td></tr>
+<tr><td>相关技能</td><td><a href="/hermes-docs/user-guide/skills/bundled/software-development/software-development-writing-plans"><code>writing-plans</code></a>, <a href="/hermes-docs/user-guide/skills/bundled/software-development/software-development-requesting-code-review"><code>requesting-code-review</code></a>, <a href="/hermes-docs/user-guide/skills/bundled/software-development/software-development-test-driven-development"><code>test-driven-development</code></a></td></tr>
+</tbody></table>
+<h2>参考：完整 SKILL.md</h2>
+<p>:::info</p>
+<p>以下是 Hermes 在此技能被触发时加载的完整技能定义。这是技能激活时代理所看到的指令。</p>
+<p>:::</p>
+<h1>Subagent-Driven Development</h1>
+<h2>概述</h2>
+<p>Execute implementation plans by dispatching fresh subagents per task with systematic two-stage review.</p>
+<p><strong>Core principle:</strong> Fresh subagent per task + two-stage review (spec then quality) = high quality, fast iteration.</p>
+<h2>何时使用</h2>
+<p>Use this skill when:</p>
+<p>- You have an implementation plan (from writing-plans skill or user requirements)</p>
+<p>- Tasks are mostly independent</p>
+<p>- Quality and spec compliance are important</p>
+<p>- You want automated review between tasks</p>
+<p><strong>vs. manual execution:</strong></p>
+<p>- Fresh context per task (no confusion from accumulated state)</p>
+<p>- Automated review process catches issues early</p>
+<p>- Consistent quality checks across all tasks</p>
+<p>- Subagents can ask questions before starting work</p>
+<h2>The Process</h2>
+<h3>1. Read and Parse Plan</h3>
+<p>Read the plan file. Extract ALL tasks with their full text and context upfront. Create a todo list:</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Read the plan
+read_file("docs/plans/feature-plan.md")
+
+# Create todo list with all tasks
+todo([
+    {"id": "task-1", "content": "Create User model with email field", "status": "pending"},
+    {"id": "task-2", "content": "Add password hashing utility", "status": "pending"},
+    {"id": "task-3", "content": "Create login endpoint", "status": "pending"},
+])
+</div>
+<p><strong>Key:</strong> Read the plan ONCE. Extract everything. Don't make subagents read the plan file — provide the full task text directly in context.</p>
+<h3>2. Per-Task Workflow</h3>
+<p>For EACH task in the plan:</p>
+<h4>Step 1: Dispatch Implementer Subagent</h4>
+<p>Use <code>delegate_task</code> with complete context:</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+delegate_task(
+    goal="Implement Task 1: Create User model with email and password_hash fields",
+    context="""
+    TASK FROM PLAN:
+    - Create: src/models/user.py
+    - Add User class with email (str) and password_hash (str) fields
+    - Use bcrypt for password hashing
+    - Include __repr__ for debugging
+
+    FOLLOW TDD:
+    1. Write failing test in tests/models/test_user.py
+    2. Run: pytest tests/models/test_user.py -v (verify FAIL)
+    3. Write minimal implementation
+    4. Run: pytest tests/models/test_user.py -v (verify PASS)
+    5. Run: pytest tests/ -q (verify no regressions)
+    6. Commit: git add -A && git commit -m "feat: add User model with password hashing"
+
+    PROJECT CONTEXT:
+    - Python 3.11, Flask app in src/app.py
+    - Existing models in src/models/
+    - Tests use pytest, run from project root
+    - bcrypt already in requirements.txt
+    """,
+    toolsets=['terminal', 'file']
+)
+</div>
+<h4>Step 2: Dispatch Spec Compliance Reviewer</h4>
+<p>After the implementer completes, verify against the original spec:</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+delegate_task(
+    goal="Review if implementation matches the spec from the plan",
+    context="""
+    ORIGINAL TASK SPEC:
+    - Create src/models/user.py with User class
+    - Fields: email (str), password_hash (str)
+    - Use bcrypt for password hashing
+    - Include __repr__
+
+    CHECK:
+    - [ ] All requirements from spec implemented?
+    - [ ] File paths match spec?
+    - [ ] Function signatures match spec?
+    - [ ] Behavior matches expected?
+    - [ ] Nothing extra added (no scope creep)?
+
+    OUTPUT: PASS or list of specific spec gaps to fix.
+    """,
+    toolsets=['file']
+)
+</div>
+<p><strong>If spec issues found:</strong> Fix gaps, then re-run spec review. Continue only when spec-compliant.</p>
+<h4>Step 3: Dispatch Code Quality Reviewer</h4>
+<p>After spec compliance passes:</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+delegate_task(
+    goal="Review code quality for Task 1 implementation",
+    context="""
+    FILES TO REVIEW:
+    - src/models/user.py
+    - tests/models/test_user.py
+
+    CHECK:
+    - [ ] Follows project conventions and style?
+    - [ ] Proper error handling?
+    - [ ] Clear variable/function names?
+    - [ ] Adequate test coverage?
+    - [ ] No obvious bugs or missed edge cases?
+    - [ ] No security issues?
+
+    OUTPUT FORMAT:
+    - Critical Issues: [must fix before proceeding]
+    - Important Issues: [should fix]
+    - Minor Issues: [optional]
+    - Verdict: APPROVED or REQUEST_CHANGES
+    """,
+    toolsets=['file']
+)
+</div>
+<p><strong>If quality issues found:</strong> Fix issues, re-review. Continue only when approved.</p>
+<h4>Step 4: Mark Complete</h4>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+todo([{"id": "task-1", "content": "Create User model with email field", "status": "completed"}], merge=True)
+</div>
+<h3>3. Final Review</h3>
+<p>After ALL tasks are complete, dispatch a final integration reviewer:</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+delegate_task(
+    goal="Review the entire implementation for consistency and integration issues",
+    context="""
+    All tasks from the plan are complete. Review the full implementation:
+    - Do all components work together?
+    - Any inconsistencies between tasks?
+    - All tests passing?
+    - Ready for merge?
+    """,
+    toolsets=['terminal', 'file']
+)
+</div>
+<h3>4. Verify and Commit</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Run full test suite
+pytest tests/ -q
+
+# Review all changes
+git diff --stat
+
+# Final commit if needed
+git add -A && git commit -m "feat: complete [feature name] implementation"
+</div>
+<h2>Task Granularity</h2>
+<p><strong>Each task = 2-5 minutes of focused work.</strong></p>
+<p><strong>Too big:</strong></p>
+<p>- "Implement user authentication system"</p>
+<p><strong>Right size:</strong></p>
+<p>- "Create User model with email and password fields"</p>
+<p>- "Add password hashing function"</p>
+<p>- "Create login endpoint"</p>
+<p>- "Add JWT token generation"</p>
+<p>- "Create registration endpoint"</p>
+<h2>Red Flags — Never Do These</h2>
+<p>- Start implementation without a plan</p>
+<p>- Skip reviews (spec compliance OR code quality)</p>
+<p>- Proceed with unfixed critical/important issues</p>
+<p>- Dispatch multiple implementation subagents for tasks that touch the same files</p>
+<p>- Make subagent read the plan file (provide full text in context instead)</p>
+<p>- Skip scene-setting context (subagent needs to understand where the task fits)</p>
+<p>- Ignore subagent questions (answer before letting them proceed)</p>
+<p>- Accept "close enough" on spec compliance</p>
+<p>- Skip review loops (reviewer found issues → implementer fixes → review again)</p>
+<p>- Let implementer self-review replace actual review (both are needed)</p>
+<p>- <strong>Start code quality review before spec compliance is PASS</strong> (wrong order)</p>
+<p>- Move to next task while either review has open issues</p>
+<h2>Handling Issues</h2>
+<h3>If Subagent Asks Questions</h3>
+<p>- Answer clearly and completely</p>
+<p>- Provide additional context if needed</p>
+<p>- Don't rush them into implementation</p>
+<h3>If Reviewer Finds Issues</h3>
+<p>- Implementer subagent (or a new one) fixes them</p>
+<p>- Reviewer reviews again</p>
+<p>- Repeat until approved</p>
+<p>- Don't skip the re-review</p>
+<h3>If Subagent Fails a Task</h3>
+<p>- Dispatch a new fix subagent with specific instructions about what went wrong</p>
+<p>- Don't try to fix manually in the controller session (context pollution)</p>
+<h2>Efficiency 备注</h2>
+<p><strong>Why fresh subagent per task:</strong></p>
+<p>- Prevents context pollution from accumulated state</p>
+<p>- Each subagent gets clean, focused context</p>
+<p>- No confusion from prior tasks' code or reasoning</p>
+<p><strong>Why two-stage review:</strong></p>
+<p>- Spec review catches under/over-building early</p>
+<p>- Quality review ensures the implementation is well-built</p>
+<p>- Catches issues before they compound across tasks</p>
+<p><strong>Cost trade-off:</strong></p>
+<p>- More subagent invocations (implementer + 2 reviewers per task)</p>
+<p>- But catches issues early (cheaper than debugging compounded problems later)</p>
+<h2>Integration with Other Skills</h2>
+<h3>With writing-plans</h3>
+<p>This skill EXECUTES plans created by the writing-plans skill:</p>
+<p>1. User requirements → writing-plans → implementation plan</p>
+<p>2. Implementation plan → subagent-driven-development → working code</p>
+<h3>With test-driven-development</h3>
+<p>Implementer subagents should follow TDD:</p>
+<p>1. Write failing test first</p>
+<p>2. Implement minimal code</p>
+<p>3. Verify test passes</p>
+<p>4. Commit</p>
+<p>Include TDD instructions in every implementer context.</p>
+<h3>With requesting-code-review</h3>
+<p>The two-stage review process IS the code review. For final integration review, use the requesting-code-review skill's review dimensions.</p>
+<h3>With systematic-debugging</h3>
+<p>If a subagent encounters bugs during implementation:</p>
+<p>1. Follow systematic-debugging process</p>
+<p>2. Find root cause before fixing</p>
+<p>3. Write regression test</p>
+<p>4. Resume implementation</p>
+<h2>Example Workflow</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+[Read plan: docs/plans/auth-feature.md]
+[Create todo list with 5 tasks]
+
+--- Task 1: Create User model ---
+[Dispatch implementer subagent]
+  Implementer: "Should email be unique?"
+  You: "Yes, email must be unique"
+  Implementer: Implemented, 3/3 tests passing, committed.
+
+[Dispatch spec reviewer]
+  Spec reviewer: ✅ PASS — all requirements met
+
+[Dispatch quality reviewer]
+  Quality reviewer: ✅ APPROVED — clean code, good tests
+
+[Mark Task 1 complete]
+
+--- Task 2: Password hashing ---
+[Dispatch implementer subagent]
+  Implementer: No questions, implemented, 5/5 tests passing.
+
+[Dispatch spec reviewer]
+  Spec reviewer: ❌ Missing: password strength validation (spec says "min 8 chars")
+
+[Implementer fixes]
+  Implementer: Added validation, 7/7 tests passing.
+
+[Dispatch spec reviewer again]
+  Spec reviewer: ✅ PASS
+
+[Dispatch quality reviewer]
+  Quality reviewer: Important: Magic number 8, extract to constant
+  Implementer: Extracted MIN_PASSWORD_LENGTH constant
+  Quality reviewer: ✅ APPROVED
+
+[Mark Task 2 complete]
+
+... (continue for all tasks)
+
+[After all tasks: dispatch final integration reviewer]
+[Run full test suite: all passing]
+[Done!]
+</div>
+<h2>Remember</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Fresh subagent per task
+Two-stage review every time
+Spec compliance FIRST
+Code quality SECOND
+Never skip reviews
+Catch issues early
+</div>
+<p><strong>Quality is not an accident. It's the result of systematic process.</strong></p>
+<h2>Further reading (load when relevant)</h2>
+<p>When the orchestration involves significant context usage, long review loops, or complex validation checkpoints, load these references for the specific discipline:</p>
+<p>- <strong><code>references/context-budget-discipline.md</code></strong> — Four-tier context degradation model (PEAK / GOOD / DEGRADING / POOR), read-depth rules that scale with context window size, and early warning signs of silent degradation. Load when a run will clearly consume significant context (multi-phase plans, many subagents, large artifacts).</p>
+<p>- <strong><code>references/gates-taxonomy.md</code></strong> — The four canonical gate types (Pre-flight, Revision, Escalation, Abort) with behavior, recovery, and examples. Load when designing or reviewing any workflow that has validation checkpoints — use the vocabulary explicitly so each gate has defined entry, failure behavior, and resumption rules.</p>
+<p>Both references adapted from gsd-build/get-shit-done (MIT © 2025 Lex Christopherson).</p>  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

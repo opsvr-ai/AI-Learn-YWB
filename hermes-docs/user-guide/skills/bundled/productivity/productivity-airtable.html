@@ -1,0 +1,435 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Airtable — 通过 curl 调用 Airtable REST API - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Airtable — 通过 curl 调用 Airtable REST API</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Airtable</h1>
+<p>通过 curl 调用 Airtable REST API。支持记录的增删改查、过滤和 upsert 操作。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>内置（默认安装）</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>skills/productivity/airtable</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.1.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>community</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Airtable</code>, <code>Productivity</code>, <code>Database</code>, <code>API</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 skill 激活时 agent 所看到的指令内容。
+</div>
+<h1>Airtable — Bases、Tables 与 Records</h1>
+<p>通过 <code>terminal</code> 工具，使用 <code>curl</code> 直接调用 Airtable 的 REST API。无需 MCP server，无需 OAuth 流程，无需 Python SDK——只需 <code>curl</code> 和一个个人访问令牌（PAT）。</p>
+<h2>前置条件</h2>
+<ol>
+<li>在 https://airtable.com/create/tokens 创建一个<strong>个人访问令牌（PAT）</strong>（令牌以 <code>pat...</code> 开头）。</li>
+<li>授予以下权限范围（最低要求）：
+<ul>
+<li><code>data.records:read</code> — 读取行</li>
+<li><code>data.records:write</code> — 创建 / 更新 / 删除行</li>
+<li><code>schema.bases:read</code> — 列出 bases 和 tables</li>
+</ul>
+</li>
+<li><strong>重要：</strong> 在同一令牌 UI 中，将你需要访问的每个 base 添加到令牌的 <strong>Access</strong> 列表中。PAT 是按 base 划定范围的——有效令牌若未授权对应 base 会返回 <code>403</code>。</li>
+<li>将令牌存储在 <code>~/.hermes/.env</code> 中（或通过 <code>hermes setup</code> 配置）：<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+AIRTABLE_API_KEY=pat_your_token_here
+</li>
+</ol>
+</div>
+<blockquote>
+<p>注意：旧版 <code>key...</code> API 密钥已于 2024 年 2 月弃用。目前仅支持 PAT 和 OAuth 令牌。</p>
+</blockquote>
+<h2>API 基础</h2>
+<ul>
+<li><strong>端点：</strong> <code>https://api.airtable.com/v0</code></li>
+<li><strong>认证头：</strong> <code>Authorization: Bearer $AIRTABLE_API_KEY</code></li>
+<li><strong>所有请求</strong> 使用 JSON（POST/PATCH/PUT 请求体需设置 <code>Content-Type: application/json</code>）。</li>
+<li><strong>对象 ID：</strong> base 为 <code>app...</code>，table 为 <code>tbl...</code>，record 为 <code>rec...</code>，field 为 <code>fld...</code>。ID 永不变更；名称可能变更。自动化流程中优先使用 ID。</li>
+<li><strong>速率限制：</strong> 每个 base 每秒 5 次请求。收到 <code>429</code> 时需退避重试。单个 base 的突发请求会被限流。</li>
+</ul>
+<p>基础 curl 模式：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s "https://api.airtable.com/v0/$BASE_ID/$TABLE?maxRecords=5" \
+  -H "Authorization: Bearer $AIRTABLE_API_KEY" | python3 -m json.tool
+</div>
+<p><code>-s</code> 会抑制 curl 的进度条——每次调用都保持此设置，以确保工具输出对 Hermes 保持整洁。通过 <code>python3 -m json.tool</code>（始终可用）或 <code>jq</code>（若已安装）管道输出以获得可读的 JSON。</p>
+<h2>字段类型（请求体格式）</h2>
+<table>
+<thead>
+<tr>
+<th>字段类型</th>
+<th>写入格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单行文本</td>
+<td><code>&quot;Name&quot;: &quot;hello&quot;</code></td>
+</tr>
+<tr>
+<td>长文本</td>
+<td><code>&quot;Notes&quot;: &quot;multi\nline&quot;</code></td>
+</tr>
+<tr>
+<td>数字</td>
+<td><code>&quot;Score&quot;: 42</code></td>
+</tr>
+<tr>
+<td>复选框</td>
+<td><code>&quot;Done&quot;: true</code></td>
+</tr>
+<tr>
+<td>单选</td>
+<td><code>&quot;Status&quot;: &quot;Todo&quot;</code>（选项名必须已存在，除非设置 <code>typecast: true</code>）</td>
+</tr>
+<tr>
+<td>多选</td>
+<td><code>&quot;Tags&quot;: [&quot;urgent&quot;, &quot;bug&quot;]</code></td>
+</tr>
+<tr>
+<td>日期</td>
+<td><code>&quot;Due&quot;: &quot;2026-04-01&quot;</code></td>
+</tr>
+<tr>
+<td>日期时间（UTC）</td>
+<td><code>&quot;At&quot;: &quot;2026-04-01T14:30:00.000Z&quot;</code></td>
+</tr>
+<tr>
+<td>URL / 邮箱 / 电话</td>
+<td><code>&quot;Link&quot;: &quot;https://…&quot;</code></td>
+</tr>
+<tr>
+<td>附件</td>
+<td><code>&quot;Files&quot;: [{&quot;url&quot;: &quot;https://…&quot;}]</code>（Airtable 会抓取并重新托管）</td>
+</tr>
+<tr>
+<td>关联记录</td>
+<td><code>&quot;Owner&quot;: [&quot;recXXXXXXXXXXXXXX&quot;]</code>（record ID 数组）</td>
+</tr>
+<tr>
+<td>用户</td>
+<td><code>&quot;AssignedTo&quot;: {&quot;id&quot;: &quot;usrXXXXXXXXXXXXXX&quot;}</code></td>
+</tr>
+</tbody>
+</table>
+<p>在创建/更新请求体的顶层传入 <code>&quot;typecast&quot;: true</code>，可让 Airtable 自动强制转换值（例如动态创建新的单选选项，或将 <code>&quot;42&quot;</code> 转换为 <code>42</code>）。</p>
+<h2>常用查询</h2>
+<h3>列出令牌可访问的 bases</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s "https://api.airtable.com/v0/meta/bases" \
+  -H "Authorization: Bearer $AIRTABLE_API_KEY" | python3 -m json.tool
+</div>
+<h3>列出某个 base 的 tables 及 schema</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s "https://api.airtable.com/v0/meta/bases/$BASE_ID/tables" \
+  -H "Authorization: Bearer $AIRTABLE_API_KEY" | python3 -m json.tool
+</div>
+在执行任何变更操作前先调用此接口——可确认精确的字段名和 ID，查看单选字段的 `options.choices`，并获取主字段名称。
+<h3>列出记录（前 10 条）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s "https://api.airtable.com/v0/$BASE_ID/$TABLE?maxRecords=10" \
+  -H "Authorization: Bearer $AIRTABLE_API_KEY" | python3 -m json.tool
+</div>
+<h3>获取单条记录</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s "https://api.airtable.com/v0/$BASE_ID/$TABLE/$RECORD_ID" \
+  -H "Authorization: Bearer $AIRTABLE_API_KEY" | python3 -m json.tool
+</div>
+<h3>过滤记录（filterByFormula）</h3>
+<p>Airtable 公式必须经过 URL 编码。使用 Python 标准库处理——切勿手动编码：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+FORMULA="{Status}='Todo'"
+ENC=$(python3 -c 'import sys, urllib.parse; print(urllib.parse.quote(sys.argv[1], safe=""))' "$FORMULA")
+curl -s "https://api.airtable.com/v0/$BASE_ID/$TABLE?filterByFormula=$ENC&amp;maxRecords=20" \
+  -H "Authorization: Bearer $AIRTABLE_API_KEY" | python3 -m json.tool
+</div>
+<p>常用公式模式：</p>
+<ul>
+<li>精确匹配：<code>{Email}='user@example.com'</code></li>
+<li>包含：<code>FIND('bug', LOWER({Title}))</code></li>
+<li>多条件：<code>AND({Status}='Todo', {Priority}='High')</code></li>
+<li>或：<code>OR({Owner}='alice', {Owner}='bob')</code></li>
+<li>非空：<code>NOT({Assignee}='')</code></li>
+<li>日期比较：<code>IS_AFTER({Due}, TODAY())</code></li>
+</ul>
+<h3>排序并选择特定字段</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s "https://api.airtable.com/v0/$BASE_ID/$TABLE?sort%5B0%5D%5Bfield%5D=Priority&amp;sort%5B0%5D%5Bdirection%5D=asc&amp;fields%5B%5D=Name&amp;fields%5B%5D=Status" \
+  -H "Authorization: Bearer $AIRTABLE_API_KEY" | python3 -m json.tool
+</div>
+查询参数中的方括号必须进行 URL 编码（`%5B` / `%5D`）。
+<h3>使用命名视图</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s "https://api.airtable.com/v0/$BASE_ID/$TABLE?view=Grid%20view&amp;maxRecords=50" \
+  -H "Authorization: Bearer $AIRTABLE_API_KEY" | python3 -m json.tool
+</div>
+视图会在服务端应用其保存的过滤条件和排序规则。
+<h2>常用变更操作</h2>
+<h3>创建单条记录</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s -X POST "https://api.airtable.com/v0/$BASE_ID/$TABLE" \
+  -H "Authorization: Bearer $AIRTABLE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"fields":{"Name":"New task","Status":"Todo","Priority":"High"}}' | python3 -m json.tool
+</div>
+<h3>单次调用最多创建 10 条记录</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s -X POST "https://api.airtable.com/v0/$BASE_ID/$TABLE" \
+  -H "Authorization: Bearer $AIRTABLE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "typecast": true,
+    "records": [
+      {"fields": {"Name": "Task A", "Status": "Todo"}},
+      {"fields": {"Name": "Task B", "Status": "In progress"}}
+    ]
+  }' | python3 -m json.tool
+</div>
+批量端点每次请求上限为 **10 条记录**。对于更大批量的插入，需以 10 条为一批循环处理，并在每批之间短暂休眠，以遵守每 base 每秒 5 次的速率限制。
+<h3>更新记录（PATCH——合并更新，保留未修改字段）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s -X PATCH "https://api.airtable.com/v0/$BASE_ID/$TABLE/$RECORD_ID" \
+  -H "Authorization: Bearer $AIRTABLE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"fields":{"Status":"Done"}}' | python3 -m json.tool
+</div>
+<h3>按合并字段 upsert（无需 ID）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s -X PATCH "https://api.airtable.com/v0/$BASE_ID/$TABLE" \
+  -H "Authorization: Bearer $AIRTABLE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "performUpsert": {"fieldsToMergeOn": ["Email"]},
+    "records": [
+      {"fields": {"Email": "user@example.com", "Status": "Active"}}
+    ]
+  }' | python3 -m json.tool
+</div>
+`performUpsert` 会为合并字段值不存在的记录执行创建操作，为合并字段值已存在的记录执行更新操作。非常适合幂等同步场景。
+<h3>删除单条记录</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s -X DELETE "https://api.airtable.com/v0/$BASE_ID/$TABLE/$RECORD_ID" \
+  -H "Authorization: Bearer $AIRTABLE_API_KEY" | python3 -m json.tool
+</div>
+<h3>单次调用最多删除 10 条记录</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s -X DELETE "https://api.airtable.com/v0/$BASE_ID/$TABLE?records%5B%5D=rec1&amp;records%5B%5D=rec2" \
+  -H "Authorization: Bearer $AIRTABLE_API_KEY" | python3 -m json.tool
+</div>
+<h2>分页</h2>
+<p>列表端点每页最多返回 <strong>100 条记录</strong>。若响应中包含 <code>&quot;offset&quot;: &quot;...&quot;</code>，需在下一次请求中传回该值。循环直至该字段不再出现：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+OFFSET=""
+while :; do
+  URL="https://api.airtable.com/v0/$BASE_ID/$TABLE?pageSize=100"
+  [ -n "$OFFSET" ] &amp;&amp; URL="$URL&amp;offset=$OFFSET"
+  RESP=$(curl -s "$URL" -H "Authorization: Bearer $AIRTABLE_API_KEY")
+  echo "$RESP" | python3 -c 'import json,sys; d=json.load(sys.stdin); [print(r["id"], r["fields"].get("Name","")) for r in d["records"]]'
+  OFFSET=$(echo "$RESP" | python3 -c 'import json,sys; d=json.load(sys.stdin); print(d.get("offset",""))')
+  [ -z "$OFFSET" ] &amp;&amp; break
+done
+</div>
+<h2>Hermes 典型工作流</h2>
+<ol>
+<li><strong>确认认证。</strong> <code>curl -s -o /dev/null -w &quot;%{http_code}\n&quot; https://api.airtable.com/v0/meta/bases -H &quot;Authorization: Bearer $AIRTABLE_API_KEY&quot;</code> — 期望返回 <code>200</code>。</li>
+<li><strong>找到 base。</strong> 列出 bases（见上方步骤），或在令牌缺少 <code>schema.bases:read</code> 权限时直接向用户索取 <code>app...</code> ID。</li>
+<li><strong>检查 schema。</strong> <code>GET /v0/meta/bases/$BASE_ID/tables</code> — 在执行任何变更操作前，在会话中本地缓存精确的字段名和主字段名。</li>
+<li><strong>写前先读。</strong> 对于&quot;更新满足条件 Y 的 X&quot;类操作，先用 <code>filterByFormula</code> 解析出 <code>rec...</code> ID，再执行 <code>PATCH /v0/$BASE_ID/$TABLE/$RECORD_ID</code>。切勿猜测 record ID。</li>
+<li><strong>批量写入。</strong> 将相关的创建操作合并为一次 10 条记录的 POST 请求，以控制在每秒 5 次的速率预算内。</li>
+<li><strong>破坏性操作。</strong> 删除操作无法通过 API 撤销。若用户要求&quot;删除所有 X&quot;，先回显过滤条件和记录数量，确认后再执行。</li>
+</ol>
+<h2>注意事项</h2>
+<ul>
+<li><strong><code>filterByFormula</code> 必须进行 URL 编码。</strong> 包含空格或非 ASCII 字符的字段名也需要编码（<code>{My Field}</code> → <code>%7BMy%20Field%7D</code>）。使用 Python 标准库（见上方模式）——切勿手动转义。</li>
+<li><strong>空字段不会出现在响应中。</strong> 响应中缺少 <code>&quot;Assignee&quot;</code> 键并不意味着该字段不存在——而是表示该记录的值为空。在判断字段缺失之前，请先检查 schema（步骤 3）。</li>
+<li><strong>PATCH 与 PUT 的区别。</strong> <code>PATCH</code> 将提供的字段合并到记录中。<code>PUT</code> 会完全替换记录，并清除所有未包含的字段。默认使用 <code>PATCH</code>。</li>
+<li><strong>单选选项必须已存在。</strong> 若 <code>Shipping</code> 不在字段的选项列表中，写入 <code>&quot;Status&quot;: &quot;Shipping&quot;</code> 会报错 <code>INVALID_MULTIPLE_CHOICE_OPTIONS</code>，除非传入 <code>&quot;typecast&quot;: true</code>（会自动创建该选项）。</li>
+<li><strong>令牌的 base 范围限制。</strong> 某个 base 返回 <code>403</code> 而其他 base 正常，说明该 base 未添加到令牌的 Access 列表中——而非权限范围或认证问题。请引导用户前往 https://airtable.com/create/tokens 授权。</li>
+<li><strong>速率限制是按 base 计算的，而非按令牌。</strong> <code>baseA</code> 每秒 5 次、<code>baseB</code> 每秒 5 次是允许的；单独在 <code>baseA</code> 上每秒 6 次则会被限流。收到 <code>429</code> 时请监控 <code>Retry-After</code> 响应头。</li>
+</ul>
+<h2>Hermes 重要说明</h2>
+<ul>
+<li><strong>始终使用 <code>terminal</code> 工具配合 <code>curl</code>。</strong> 不要使用 <code>web_extract</code>（无法发送认证头）或 <code>browser_navigate</code>（需要 UI 认证且速度慢）。</li>
+<li><strong><code>AIRTABLE_API_KEY</code> 会在此 skill 加载时自动从 <code>~/.hermes/.env</code> 注入到子进程环境中</strong>——每次 <code>curl</code> 调用前无需重新导出。</li>
+<li><strong>在公式中谨慎转义花括号。</strong> 在 heredoc 请求体中，<code>{Status}</code> 是字面量。在 shell 参数中，<code>{Status}</code> 在 <code>{...}</code> 大括号展开上下文之外是安全的——但在拼接到 URL 之前，动态字符串应通过 <code>python3 urllib.parse.quote</code> 处理。</li>
+<li><strong>使用 <code>python3 -m json.tool</code> 格式化输出</strong>（始终可用），而非 <code>jq</code>（可选）。仅在需要过滤/投影时才使用 <code>jq</code>。</li>
+<li><strong>分页是按页计算的，而非全局。</strong> Airtable 的 100 条记录上限是硬性限制，无法调整。使用 <code>offset</code> 循环直至该字段不再出现。</li>
+<li><strong>读取非 2xx 响应中的 <code>errors</code> 数组</strong>——Airtable 会返回结构化错误码，如 <code>AUTHENTICATION_REQUIRED</code>、<code>INVALID_PERMISSIONS</code>、<code>MODEL_ID_NOT_FOUND</code>、<code>INVALID_MULTIPLE_CHOICE_OPTIONS</code>，可精确定位问题所在。</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,236 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spotify — Spotify: play, search, queue, manage playlists and devices - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 命令</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & Skills</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">docs</a> / <a href="/hermes-docs/user-guide/">user-guide</a> / <a href="/hermes-docs/user-guide/skills/">skills</a> / <a href="/hermes-docs/user-guide/skills/bundled/">bundled</a> / <a href="/hermes-docs/user-guide/skills/bundled/media/">media</a> / Spotify — Spotify: play, search, queue, manage playlists and devices</div><p>{/<em> 本页面由 website/scripts/generate-skill-docs.py 从技能的 SKILL.md 自动生成。请编辑源 SKILL.md，而非本页面。 </em>/}</p>
+<h1>Spotify</h1>
+<p>Spotify: play, search, queue, manage playlists and devices.</p>
+<h2>技能元数据</h2>
+<table><thead><tr><th>---</th><th>---</th></tr></thead><tbody>
+<tr><td>来源</td><td>内置（默认安装）</td></tr>
+<tr><td>路径</td><td><code>skills/media/spotify</code></td></tr>
+<tr><td>版本</td><td><code>1.0.0</code></td></tr>
+<tr><td>作者</td><td>Hermes Agent</td></tr>
+<tr><td>许可证</td><td>MIT</td></tr>
+<tr><td>平台</td><td>linux, macos, windows</td></tr>
+<tr><td>标签</td><td><code>spotify</code>, <code>music</code>, <code>playback</code>, <code>playlists</code>, <code>media</code></td></tr>
+<tr><td>相关技能</td><td><a href="/hermes-docs/user-guide/skills/bundled/media/media-gif-search"><code>gif-search</code></a></td></tr>
+</tbody></table>
+<h2>参考：完整 SKILL.md</h2>
+<p>:::info</p>
+<p>以下是 Hermes 在此技能被触发时加载的完整技能定义。这是技能激活时代理所看到的指令。</p>
+<p>:::</p>
+<h1>Spotify</h1>
+<p>Control the user's Spotify account via the Hermes Spotify toolset (7 tools). 设置 guide: https://hermes-agent.nousresearch.com/docs/user-guide/features/spotify</p>
+<h2>When to use this skill</h2>
+<p>The user says something like "play X", "pause", "skip", "queue up X", "what's playing", "search for X", "add to my X playlist", "make a playlist", "save this to my library", etc.</p>
+<h2>The 7 tools</h2>
+<p>- <code>spotify_playback</code> — play, pause, next, previous, seek, set_repeat, set_shuffle, set_volume, get_state, get_currently_playing, recently_played</p>
+<p>- <code>spotify_devices</code> — list, transfer</p>
+<p>- <code>spotify_queue</code> — get, add</p>
+<p>- <code>spotify_search</code> — search the catalog</p>
+<p>- <code>spotify_playlists</code> — list, get, create, add_items, remove_items, update_details</p>
+<p>- <code>spotify_albums</code> — get, tracks</p>
+<p>- <code>spotify_library</code> — list/save/remove with <code>kind: "tracks"|"albums"</code></p>
+<p>Playback-mutating actions require Spotify Premium; search/library/playlist ops work on Free.</p>
+<h2>Canonical patterns (minimize tool calls)</h2>
+<h3>"Play &lt;artist/track/album>"</h3>
+<p>One search, then play by URI. Do NOT loop through search results describing them unless the user asked for options.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+spotify_search({"query": "miles davis kind of blue", "types": ["album"], "limit": 1})
+→ got album URI spotify:album:1weenld61qoidwYuZ1GESA
+spotify_playback({"action": "play", "context_uri": "spotify:album:1weenld61qoidwYuZ1GESA"})
+</div>
+<p>For "play some &lt;artist>" (no specific song), prefer <code>types: ["artist"]</code> and play the artist context URI — Spotify handles smart shuffle. If the user says "the song" or "that track", search <code>types: ["track"]</code> and pass <code>uris: [track_uri]</code> to play.</p>
+<h3>"What's playing?" / "What am I listening to?"</h3>
+<p>Single call — don't chain get_state after get_currently_playing.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+spotify_playback({"action": "get_currently_playing"})
+</div>
+<p>If it returns 204/empty (<code>is_playing: false</code>), tell the user nothing is playing. Don't retry.</p>
+<h3>"Pause" / "Skip" / "Volume 50"</h3>
+<p>Direct action, no preflight inspection needed.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+spotify_playback({"action": "pause"})
+spotify_playback({"action": "next"})
+spotify_playback({"action": "set_volume", "volume_percent": 50})
+</div>
+<h3>"Add to my &lt;playlist name> playlist"</h3>
+<p>1. <code>spotify_playlists list</code> to find the playlist ID by name</p>
+<p>2. Get the track URI (from currently playing, or search)</p>
+<p>3. <code>spotify_playlists add_items</code> with the playlist_id and URIs</p>
+<div class="code-block"><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+spotify_playlists({"action": "list"})
+→ found "Late Night Jazz" = 37i9dQZF1DX4wta20PHgwo
+spotify_playback({"action": "get_currently_playing"})
+→ current track uri = spotify:track:0DiWol3AO6WpXZgp0goxAV
+spotify_playlists({"action": "add_items",
+                   "playlist_id": "37i9dQZF1DX4wta20PHgwo",
+                   "uris": ["spotify:track:0DiWol3AO6WpXZgp0goxAV"]})
+</div>
+<h3>"Create a playlist called X and add the last 3 songs I played"</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+spotify_playback({"action": "recently_played", "limit": 3})
+spotify_playlists({"action": "create", "name": "Focus 2026"})
+→ got playlist_id back in response
+spotify_playlists({"action": "add_items", "playlist_id": <id>, "uris": [<3 uris>]})
+</div>
+<h3>"Save / unsave / is this saved?"</h3>
+<p>Use <code>spotify_library</code> with the right <code>kind</code>.</p>
+<div class="code-block"><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+spotify_library({"kind": "tracks", "action": "save", "uris": ["spotify:track:..."]})
+spotify_library({"kind": "albums", "action": "list", "limit": 50})
+</div>
+<h3>"Transfer playback to my &lt;device>"</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+spotify_devices({"action": "list"})
+→ pick the device_id by matching name/type
+spotify_devices({"action": "transfer", "device_id": "<id>", "play": true})
+</div>
+<h2>Critical failure modes</h2>
+<p><strong><code>403 Forbidden — No active device found</code></strong> on any playback action means Spotify isn't running anywhere. Tell the user: "Open Spotify on your phone/desktop/web player first, start any track for a second, then retry." Don't retry the tool call blindly — it will fail the same way. You can call <code>spotify_devices list</code> to confirm; an empty list means no active device.</p>
+<p><strong><code>403 Forbidden — Premium required</code></strong> means the user is on Free and tried to mutate playback. Don't retry; tell them this action needs Premium. Reads still work (search, playlists, library, get_state).</p>
+<p><strong><code>204 No Content</code> on <code>get_currently_playing</code></strong> is NOT an error — it means nothing is playing. The tool returns <code>is_playing: false</code>. Just report that to the user.</p>
+<p><strong><code>429 Too Many Requests</code></strong> = rate limit. Wait and retry once. If it keeps happening, you're looping — stop.</p>
+<p><strong><code>401 Unauthorized</code> after a retry</strong> — refresh token revoked. Tell the user to run <code>hermes auth spotify</code> again.</p>
+<h2>URI and ID formats</h2>
+<p>Spotify uses three interchangeable ID formats. The tools accept all three and normalize:</p>
+<p>- URI: <code>spotify:track:0DiWol3AO6WpXZgp0goxAV</code> (preferred)</p>
+<p>- URL: <code>https://open.spotify.com/track/0DiWol3AO6WpXZgp0goxAV</code></p>
+<p>- Bare ID: <code>0DiWol3AO6WpXZgp0goxAV</code></p>
+<p>When in doubt, use full URIs. Search results return URIs in the <code>uri</code> field — pass those directly.</p>
+<p>Entity types: <code>track</code>, <code>album</code>, <code>artist</code>, <code>playlist</code>, <code>show</code>, <code>episode</code>. Use the right type for the action — <code>spotify_playback.play</code> with a <code>context_uri</code> expects album/playlist/artist; <code>uris</code> expects an array of track URIs.</p>
+<h2>What NOT to do</h2>
+<p>- <strong>Don't call <code>get_state</code> before every action.</strong> Spotify accepts play/pause/skip without preflight. Only inspect state when the user asked "what's playing" or you need to reason about device/track.</p>
+<p>- <strong>Don't describe search results unless asked.</strong> If the user said "play X", search, grab the top URI, play it. They'll hear it's wrong if it's wrong.</p>
+<p>- <strong>Don't retry on <code>403 Premium required</code> or <code>403 No active device</code>.</strong> Those are permanent until user action.</p>
+<p>- <strong>Don't use <code>spotify_search</code> to find a playlist by name</strong> — that searches the public Spotify catalog. User playlists come from <code>spotify_playlists list</code>.</p>
+<p>- <strong>Don't mix <code>kind: "tracks"</code> with album URIs</strong> in <code>spotify_library</code> (or vice versa). The tool normalizes IDs but the API endpoint differs.</p>  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

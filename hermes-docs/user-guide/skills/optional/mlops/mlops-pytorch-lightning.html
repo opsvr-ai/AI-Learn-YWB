@@ -1,0 +1,493 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pytorch Lightning - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Pytorch Lightning</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Pytorch Lightning</h1>
+<p>基于 PyTorch 的高层框架，提供 Trainer 类、自动分布式训练（DDP/FSDP/DeepSpeed）、回调（callbacks）系统及极简样板代码。同一套代码可从笔记本扩展至超级计算机。适用于希望以内置最佳实践编写整洁训练循环的场景。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/mlops/pytorch-lightning</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/mlops/pytorch-lightning</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Orchestra Research</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>依赖项</td>
+<td><code>lightning</code>, <code>torch</code>, <code>transformers</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>PyTorch Lightning</code>, <code>Training Framework</code>, <code>Distributed Training</code>, <code>DDP</code>, <code>FSDP</code>, <code>DeepSpeed</code>, <code>High-Level API</code>, <code>Callbacks</code>, <code>Best Practices</code>, <code>Scalable</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发该 skill 时加载的完整 skill 定义。这是 skill 激活时 agent 所看到的指令内容。
+</div>
+<h1>PyTorch Lightning - 高层训练框架</h1>
+<h2>快速开始</h2>
+<p>PyTorch Lightning 对 PyTorch 代码进行组织，在保持灵活性的同时消除样板代码。</p>
+<p><strong>安装</strong>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install lightning
+</div>
+<p><strong>将 PyTorch 转换为 Lightning</strong>（3 步）：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import lightning as L
+import torch
+from torch import nn
+from torch.utils.data import DataLoader, Dataset
+<h1>Step 1: Define LightningModule (organize your PyTorch code)</h1>
+<p>class LitModel(L.LightningModule):
+def <strong>init</strong>(self, hidden_size=128):
+super().<strong>init</strong>()
+self.model = nn.Sequential(
+nn.Linear(28 * 28, hidden_size),
+nn.ReLU(),
+nn.Linear(hidden_size, 10)
+)</p>
+<pre><code>def training_step(self, batch, batch_idx):
+    x, y = batch
+    y_hat = self.model(x)
+    loss = nn.functional.cross_entropy(y_hat, y)
+    self.log('train_loss', loss)  # Auto-logged to TensorBoard
+    return loss
+
+def configure_optimizers(self):
+    return torch.optim.Adam(self.parameters(), lr=1e-3)
+</code></pre>
+<h1>Step 2: Create data</h1>
+<p>train_loader = DataLoader(train_dataset, batch_size=32)</p>
+<h1>Step 3: Train with Trainer (handles everything else!)</h1>
+<p>trainer = L.Trainer(max_epochs=10, accelerator='gpu', devices=2)
+model = LitModel()
+trainer.fit(model, train_loader)</p>
+</div>
+<p><strong>就这些！</strong> Trainer 负责处理：</p>
+<ul>
+<li>GPU/TPU/CPU 切换</li>
+<li>分布式训练（DDP、FSDP、DeepSpeed）</li>
+<li>混合精度（FP16、BF16）</li>
+<li>梯度累积</li>
+<li>检查点保存</li>
+<li>日志记录</li>
+<li>进度条</li>
+</ul>
+<h2>常见工作流</h2>
+<h3>工作流 1：从 PyTorch 迁移到 Lightning</h3>
+<p><strong>原始 PyTorch 代码</strong>：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model = MyModel()
+optimizer = torch.optim.Adam(model.parameters())
+model.to('cuda')
+<p>for epoch in range(max_epochs):
+for batch in train_loader:
+batch = batch.to('cuda')
+optimizer.zero_grad()
+loss = model(batch)
+loss.backward()
+optimizer.step()</p>
+</div>
+<p><strong>Lightning 版本</strong>：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+class LitModel(L.LightningModule):
+    def __init__(self):
+        super().__init__()
+        self.model = MyModel()
+<pre><code>def training_step(self, batch, batch_idx):
+    loss = self.model(batch)  # No .to('cuda') needed!
+    return loss
+
+def configure_optimizers(self):
+    return torch.optim.Adam(self.parameters())
+</code></pre>
+<h1>Train</h1>
+<p>trainer = L.Trainer(max_epochs=10, accelerator='gpu')
+trainer.fit(LitModel(), train_loader)</p>
+</div>
+<p><strong>优势</strong>：40+ 行 → 15 行，无需设备管理，自动分布式</p>
+<h3>工作流 2：验证与测试</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+class LitModel(L.LightningModule):
+    def __init__(self):
+        super().__init__()
+        self.model = MyModel()
+<pre><code>def training_step(self, batch, batch_idx):
+    x, y = batch
+    y_hat = self.model(x)
+    loss = nn.functional.cross_entropy(y_hat, y)
+    self.log('train_loss', loss)
+    return loss
+
+def validation_step(self, batch, batch_idx):
+    x, y = batch
+    y_hat = self.model(x)
+    val_loss = nn.functional.cross_entropy(y_hat, y)
+    acc = (y_hat.argmax(dim=1) == y).float().mean()
+    self.log('val_loss', val_loss)
+    self.log('val_acc', acc)
+
+def test_step(self, batch, batch_idx):
+    x, y = batch
+    y_hat = self.model(x)
+    test_loss = nn.functional.cross_entropy(y_hat, y)
+    self.log('test_loss', test_loss)
+
+def configure_optimizers(self):
+    return torch.optim.Adam(self.parameters(), lr=1e-3)
+</code></pre>
+<h1>Train with validation</h1>
+<p>trainer = L.Trainer(max_epochs=10)
+trainer.fit(model, train_loader, val_loader)</p>
+<h1>Test</h1>
+<p>trainer.test(model, test_loader)</p>
+</div>
+<p><strong>自动功能</strong>：</p>
+<ul>
+<li>默认每个 epoch 运行验证</li>
+<li>指标自动记录到 TensorBoard</li>
+<li>基于 val_loss 保存最优模型检查点</li>
+</ul>
+<h3>工作流 3：分布式训练（DDP）</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Same code as single GPU!
+model = LitModel()
+<h1>8 GPUs with DDP (automatic!)</h1>
+<p>trainer = L.Trainer(
+accelerator='gpu',
+devices=8,
+strategy='ddp'  # Or 'fsdp', 'deepspeed'
+)</p>
+<p>trainer.fit(model, train_loader)</p>
+</div>
+<p><strong>启动</strong>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Single command, Lightning handles the rest
+python train.py
+</div>
+<p><strong>无需任何改动</strong>：</p>
+<ul>
+<li>自动数据分发</li>
+<li>梯度同步</li>
+<li>多节点支持（只需设置 <code>num_nodes=2</code>）</li>
+</ul>
+<h3>工作流 4：用于监控的回调（Callbacks）</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from lightning.pytorch.callbacks import ModelCheckpoint, EarlyStopping, LearningRateMonitor
+<h1>Create callbacks</h1>
+<p>checkpoint = ModelCheckpoint(
+monitor='val_loss',
+mode='min',
+save_top_k=3,
+filename='model-{epoch:02d}-{val_loss:.2f}'
+)</p>
+<p>early_stop = EarlyStopping(
+monitor='val_loss',
+patience=5,
+mode='min'
+)</p>
+<p>lr_monitor = LearningRateMonitor(logging_interval='epoch')</p>
+<h1>Add to Trainer</h1>
+<p>trainer = L.Trainer(
+max_epochs=100,
+callbacks=[checkpoint, early_stop, lr_monitor]
+)</p>
+<p>trainer.fit(model, train_loader, val_loader)</p>
+</div>
+<p><strong>效果</strong>：</p>
+<ul>
+<li>自动保存最优的 3 个模型</li>
+<li>若 5 个 epoch 内无改善则提前停止</li>
+<li>将学习率记录到 TensorBoard</li>
+</ul>
+<h3>工作流 5：学习率调度</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+class LitModel(L.LightningModule):
+    # ... (training_step, etc.)
+<pre><code>def configure_optimizers(self):
+    optimizer = torch.optim.Adam(self.parameters(), lr=1e-3)
+
+    # Cosine annealing
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+        optimizer,
+        T_max=100,
+        eta_min=1e-5
+    )
+
+    return {
+        'optimizer': optimizer,
+        'lr_scheduler': {
+            'scheduler': scheduler,
+            'interval': 'epoch',  # Update per epoch
+            'frequency': 1
+        }
+    }
+</code></pre>
+<h1>Learning rate auto-logged!</h1>
+<p>trainer = L.Trainer(max_epochs=100)
+trainer.fit(model, train_loader)</p>
+</div>
+<h2>何时使用与替代方案对比</h2>
+<p><strong>适合使用 PyTorch Lightning 的场景</strong>：</p>
+<ul>
+<li>希望代码整洁、结构清晰</li>
+<li>需要生产级训练循环</li>
+<li>在单 GPU、多 GPU、TPU 之间切换</li>
+<li>希望使用内置回调和日志记录</li>
+<li>团队协作（标准化结构）</li>
+</ul>
+<p><strong>核心优势</strong>：</p>
+<ul>
+<li><strong>有组织</strong>：将研究代码与工程代码分离</li>
+<li><strong>自动化</strong>：一行代码启用 DDP、FSDP、DeepSpeed</li>
+<li><strong>回调</strong>：模块化训练扩展</li>
+<li><strong>可复现</strong>：样板代码更少 = 更少 bug</li>
+<li><strong>经过验证</strong>：每月下载量 100 万+，久经考验</li>
+</ul>
+<p><strong>改用其他方案的场景</strong>：</p>
+<ul>
+<li><strong>Accelerate</strong>：对现有代码改动最小，灵活性更高</li>
+<li><strong>Ray Train</strong>：多节点编排、超参数调优</li>
+<li><strong>原生 PyTorch</strong>：最大控制权，适合学习目的</li>
+<li><strong>Keras</strong>：TensorFlow 生态系统</li>
+</ul>
+<h2>常见问题</h2>
+<p><strong>问题：损失不下降</strong></p>
+<p>检查数据和模型设置：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Add to training_step
+def training_step(self, batch, batch_idx):
+    if batch_idx == 0:
+        print(f"Batch shape: {batch[0].shape}")
+        print(f"Labels: {batch[1]}")
+    loss = ...
+    return loss
+</div>
+<p><strong>问题：内存不足</strong></p>
+<p>减小 batch size 或使用梯度累积：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+trainer = L.Trainer(
+    accumulate_grad_batches=4,  # Effective batch = batch_size × 4
+    precision='bf16'  # Or 'fp16', reduces memory 50%
+)
+</div>
+<p><strong>问题：验证未运行</strong></p>
+<p>确保传入了 val_loader：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# WRONG
+trainer.fit(model, train_loader)
+<h1>CORRECT</h1>
+<p>trainer.fit(model, train_loader, val_loader)</p>
+</div>
+<p><strong>问题：DDP 意外启动多个进程</strong></p>
+<p>Lightning 会自动检测 GPU。请显式设置 devices：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Test on CPU first
+trainer = L.Trainer(accelerator='cpu', devices=1)
+<h1>Then GPU</h1>
+<p>trainer = L.Trainer(accelerator='gpu', devices=1)</p>
+</div>
+<h2>进阶主题</h2>
+<p><strong>回调</strong>：参见 <a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/pytorch-lightning/references/callbacks.html">references/callbacks.md</a>，了解 EarlyStopping、ModelCheckpoint、自定义回调及回调钩子（hook）。</p>
+<p><strong>分布式策略</strong>：参见 <a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/pytorch-lightning/references/distributed.html">references/distributed.md</a>，了解 DDP、FSDP、DeepSpeed ZeRO 集成及多节点配置。</p>
+<p><strong>超参数调优</strong>：参见 <a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/pytorch-lightning/references/hyperparameter-tuning.html">references/hyperparameter-tuning.md</a>，了解与 Optuna、Ray Tune 及 WandB sweeps 的集成。</p>
+<h2>硬件要求</h2>
+<ul>
+<li><strong>CPU</strong>：支持（适合调试）</li>
+<li><strong>单 GPU</strong>：支持</li>
+<li><strong>多 GPU</strong>：DDP（默认）、FSDP 或 DeepSpeed</li>
+<li><strong>多节点</strong>：DDP、FSDP、DeepSpeed</li>
+<li><strong>TPU</strong>：支持（8 核）</li>
+<li><strong>Apple MPS</strong>：支持</li>
+</ul>
+<p><strong>精度选项</strong>：</p>
+<ul>
+<li>FP32（默认）</li>
+<li>FP16（V100 及较旧 GPU）</li>
+<li>BF16（A100/H100，推荐）</li>
+<li>FP8（H100）</li>
+</ul>
+<h2>资源</h2>
+<ul>
+<li>文档：https://lightning.ai/docs/pytorch/stable/</li>
+<li>GitHub：https://github.com/Lightning-AI/pytorch-lightning ⭐ 29,000+</li>
+<li>版本：2.5.5+</li>
+<li>示例：https://github.com/Lightning-AI/pytorch-lightning/tree/master/examples</li>
+<li>Discord：https://discord.gg/lightning-ai</li>
+<li>使用者：Kaggle 获奖者、科研实验室、生产团队</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

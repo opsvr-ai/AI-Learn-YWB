@@ -1,0 +1,569 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>使用 TRL 进行微调 — TRL：面向 LLM RLHF 的 SFT、DPO、PPO、GRPO 及奖励建模 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / 使用 TRL 进行微调 — TRL：面向 LLM RLHF 的 SFT、DPO、PPO、GRPO 及奖励建模</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>使用 TRL 进行微调</h1>
+<p>TRL：面向 LLM RLHF 的 SFT、DPO、PPO、GRPO 及奖励建模。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/mlops/trl-fine-tuning</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/mlops/training/trl-fine-tuning</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Orchestra Research</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>依赖项</td>
+<td><code>trl</code>, <code>transformers</code>, <code>datasets</code>, <code>peft</code>, <code>accelerate</code>, <code>torch</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Post-Training</code>, <code>TRL</code>, <code>Reinforcement Learning</code>, <code>Fine-Tuning</code>, <code>SFT</code>, <code>DPO</code>, <code>PPO</code>, <code>GRPO</code>, <code>RLHF</code>, <code>Preference Alignment</code>, <code>HuggingFace</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>TRL - Transformer Reinforcement Learning</h1>
+<h2>快速开始</h2>
+<p>TRL 提供用于将语言模型与人类偏好对齐的后训练（post-training）方法。</p>
+<p><strong>安装</strong>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install trl transformers datasets peft accelerate
+</div>
+<p><strong>监督微调（SFT）</strong>（指令微调）：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from trl import SFTTrainer
+<p>trainer = SFTTrainer(
+model=&quot;Qwen/Qwen2.5-0.5B&quot;,
+train_dataset=dataset,  # Prompt-completion pairs
+)
+trainer.train()</p>
+</div>
+<p><strong>DPO</strong>（偏好对齐）：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from trl import DPOTrainer, DPOConfig
+<p>config = DPOConfig(output_dir=&quot;model-dpo&quot;, beta=0.1)
+trainer = DPOTrainer(
+model=model,
+args=config,
+train_dataset=preference_dataset,  # chosen/rejected pairs
+processing_class=tokenizer
+)
+trainer.train()</p>
+</div>
+<h2>常见工作流</h2>
+<h3>工作流 1：完整 RLHF 流水线（SFT → 奖励模型 → PPO）</h3>
+<p>从基础模型到人类对齐模型的完整流水线。</p>
+<p>复制此检查清单：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+RLHF Training:
+- [ ] Step 1: Supervised fine-tuning (SFT)
+- [ ] Step 2: Train reward model
+- [ ] Step 3: PPO reinforcement learning
+- [ ] Step 4: Evaluate aligned model
+</div>
+<p><strong>第 1 步：监督微调</strong></p>
+<p>在指令跟随数据上训练基础模型：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from trl import SFTTrainer, SFTConfig
+from datasets import load_dataset
+<h1>Load model</h1>
+<p>model = AutoModelForCausalLM.from_pretrained(&quot;Qwen/Qwen2.5-0.5B&quot;)
+tokenizer = AutoTokenizer.from_pretrained(&quot;Qwen/Qwen2.5-0.5B&quot;)</p>
+<h1>Load instruction dataset</h1>
+<p>dataset = load_dataset(&quot;trl-lib/Capybara&quot;, split=&quot;train&quot;)</p>
+<h1>Configure training</h1>
+<p>training_args = SFTConfig(
+output_dir=&quot;Qwen2.5-0.5B-SFT&quot;,
+per_device_train_batch_size=4,
+num_train_epochs=1,
+learning_rate=2e-5,
+logging_steps=10,
+save_strategy=&quot;epoch&quot;
+)</p>
+<h1>Train</h1>
+<p>trainer = SFTTrainer(
+model=model,
+args=training_args,
+train_dataset=dataset,
+tokenizer=tokenizer
+)
+trainer.train()
+trainer.save_model()</p>
+</div>
+<p><strong>第 2 步：训练奖励模型</strong></p>
+<p>训练模型以预测人类偏好：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from transformers import AutoModelForSequenceClassification
+from trl import RewardTrainer, RewardConfig
+<h1>Load SFT model as base</h1>
+<p>model = AutoModelForSequenceClassification.from_pretrained(
+&quot;Qwen2.5-0.5B-SFT&quot;,
+num_labels=1  # Single reward score
+)
+tokenizer = AutoTokenizer.from_pretrained(&quot;Qwen2.5-0.5B-SFT&quot;)</p>
+<h1>Load preference data (chosen/rejected pairs)</h1>
+<p>dataset = load_dataset(&quot;trl-lib/ultrafeedback_binarized&quot;, split=&quot;train&quot;)</p>
+<h1>Configure training</h1>
+<p>training_args = RewardConfig(
+output_dir=&quot;Qwen2.5-0.5B-Reward&quot;,
+per_device_train_batch_size=2,
+num_train_epochs=1,
+learning_rate=1e-5
+)</p>
+<h1>Train reward model</h1>
+<p>trainer = RewardTrainer(
+model=model,
+args=training_args,
+processing_class=tokenizer,
+train_dataset=dataset
+)
+trainer.train()
+trainer.save_model()</p>
+</div>
+<p><strong>第 3 步：PPO 强化学习</strong></p>
+<p>使用奖励模型优化策略：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python -m trl.scripts.ppo \
+    --model_name_or_path Qwen2.5-0.5B-SFT \
+    --reward_model_path Qwen2.5-0.5B-Reward \
+    --dataset_name trl-internal-testing/descriptiveness-sentiment-trl-style \
+    --output_dir Qwen2.5-0.5B-PPO \
+    --learning_rate 3e-6 \
+    --per_device_train_batch_size 64 \
+    --total_episodes 10000
+</div>
+<p><strong>第 4 步：评估</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from transformers import pipeline
+<h1>Load aligned model</h1>
+<p>generator = pipeline(&quot;text-generation&quot;, model=&quot;Qwen2.5-0.5B-PPO&quot;)</p>
+<h1>Test</h1>
+<p>prompt = &quot;Explain quantum computing to a 10-year-old&quot;
+output = generator(prompt, max_length=200)[0][&quot;generated_text&quot;]
+print(output)</p>
+</div>
+<h3>工作流 2：使用 DPO 进行简单偏好对齐</h3>
+<p>无需奖励模型即可对齐模型偏好。</p>
+<p>复制此检查清单：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+DPO Training:
+- [ ] Step 1: Prepare preference dataset
+- [ ] Step 2: Configure DPO
+- [ ] Step 3: Train with DPOTrainer
+- [ ] Step 4: Evaluate alignment
+</div>
+<p><strong>第 1 步：准备偏好数据集</strong></p>
+<p>数据集格式：</p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{
+  "prompt": "What is the capital of France?",
+  "chosen": "The capital of France is Paris.",
+  "rejected": "I don't know."
+}
+</div>
+<p>加载数据集：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from datasets import load_dataset
+<p>dataset = load_dataset(&quot;trl-lib/ultrafeedback_binarized&quot;, split=&quot;train&quot;)</p>
+<h1>Or load your own</h1>
+<h1>dataset = load_dataset(&quot;json&quot;, data_files=&quot;preferences.json&quot;)</h1>
+</div>
+<p><strong>第 2 步：配置 DPO</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from trl import DPOConfig
+<p>config = DPOConfig(
+output_dir=&quot;Qwen2.5-0.5B-DPO&quot;,
+per_device_train_batch_size=4,
+num_train_epochs=1,
+learning_rate=5e-7,
+beta=0.1,  # KL penalty strength
+max_prompt_length=512,
+max_length=1024,
+logging_steps=10
+)</p>
+</div>
+<p><strong>第 3 步：使用 DPOTrainer 训练</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from transformers import AutoModelForCausalLM, AutoTokenizer
+from trl import DPOTrainer
+<p>model = AutoModelForCausalLM.from_pretrained(&quot;Qwen/Qwen2.5-0.5B-Instruct&quot;)
+tokenizer = AutoTokenizer.from_pretrained(&quot;Qwen/Qwen2.5-0.5B-Instruct&quot;)</p>
+<p>trainer = DPOTrainer(
+model=model,
+args=config,
+train_dataset=dataset,
+processing_class=tokenizer
+)</p>
+<p>trainer.train()
+trainer.save_model()</p>
+</div>
+<p><strong>CLI 替代方式</strong>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+trl dpo \
+    --model_name_or_path Qwen/Qwen2.5-0.5B-Instruct \
+    --dataset_name argilla/Capybara-Preferences \
+    --output_dir Qwen2.5-0.5B-DPO \
+    --per_device_train_batch_size 4 \
+    --learning_rate 5e-7 \
+    --beta 0.1
+</div>
+<h3>工作流 3：使用 GRPO 进行内存高效的在线 RL</h3>
+<p>以最小内存占用进行强化学习训练。</p>
+<p>关于深入的 GRPO 指导——奖励函数设计、关键训练洞察（损失行为、模式崩溃、调参）以及高级多阶段模式——请参阅 <strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/training/trl-fine-tuning/references/grpo-training.html">references/grpo-training.md</a></strong>。生产就绪的训练脚本位于 <strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/training/trl-fine-tuning/templates/basic_grpo_training.py">templates/basic_grpo_training.py</a></strong>。</p>
+<p>复制此检查清单：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+GRPO Training:
+- [ ] Step 1: Define reward function
+- [ ] Step 2: Configure GRPO
+- [ ] Step 3: Train with GRPOTrainer
+</div>
+<p><strong>第 1 步：定义奖励函数</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def reward_function(completions, **kwargs):
+    """
+    Compute rewards for completions.
+<pre><code>Args:
+    completions: List of generated texts
+
+Returns:
+    List of reward scores (floats)
+&quot;&quot;&quot;
+rewards = []
+for completion in completions:
+    # Example: reward based on length and unique words
+    score = len(completion.split())  # Favor longer responses
+    score += len(set(completion.lower().split()))  # Reward unique words
+    rewards.append(score)
+return rewards
+</code></pre>
+</div>
+<p>或使用奖励模型：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from transformers import pipeline
+<p>reward_model = pipeline(&quot;text-classification&quot;, model=&quot;reward-model-path&quot;)</p>
+<p>def reward_from_model(completions, prompts, **kwargs):
+# Combine prompt + completion
+full_texts = [p + c for p, c in zip(prompts, completions)]
+# Get reward scores
+results = reward_model(full_texts)
+return [r[&quot;score&quot;] for r in results]</p>
+</div>
+<p><strong>第 2 步：配置 GRPO</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from trl import GRPOConfig
+<p>config = GRPOConfig(
+output_dir=&quot;Qwen2-GRPO&quot;,
+per_device_train_batch_size=4,
+num_train_epochs=1,
+learning_rate=1e-5,
+num_generations=4,  # Generate 4 completions per prompt
+max_new_tokens=128
+)</p>
+</div>
+<p><strong>第 3 步：使用 GRPOTrainer 训练</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from datasets import load_dataset
+from trl import GRPOTrainer
+<h1>Load prompt-only dataset</h1>
+<p>dataset = load_dataset(&quot;trl-lib/tldr&quot;, split=&quot;train&quot;)</p>
+<p>trainer = GRPOTrainer(
+model=&quot;Qwen/Qwen2-0.5B-Instruct&quot;,
+reward_funcs=reward_function,  # Your reward function
+args=config,
+train_dataset=dataset
+)</p>
+<p>trainer.train()</p>
+</div>
+<p><strong>CLI</strong>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+trl grpo \
+    --model_name_or_path Qwen/Qwen2-0.5B-Instruct \
+    --dataset_name trl-lib/tldr \
+    --output_dir Qwen2-GRPO \
+    --num_generations 4
+</div>
+<h2>何时使用 TRL 及替代方案</h2>
+<p><strong>适合使用 TRL 的场景：</strong></p>
+<ul>
+<li>需要将模型与人类偏好对齐</li>
+<li>拥有偏好数据（chosen/rejected 对）</li>
+<li>希望使用强化学习（PPO、GRPO）</li>
+<li>需要训练奖励模型</li>
+<li>执行完整 RLHF 流水线</li>
+</ul>
+<p><strong>方法选择</strong>：</p>
+<ul>
+<li><strong>SFT</strong>：拥有 prompt-completion 对，需要基础指令跟随</li>
+<li><strong>DPO</strong>：拥有偏好数据，需要简单对齐（无需奖励模型）</li>
+<li><strong>PPO</strong>：拥有奖励模型，需要对 RL 进行最大程度的控制</li>
+<li><strong>GRPO</strong>：内存受限，需要在线 RL</li>
+<li><strong>奖励模型</strong>：构建 RLHF 流水线，需要对生成内容评分</li>
+</ul>
+<p><strong>改用替代方案的场景：</strong></p>
+<ul>
+<li><strong>HuggingFace Trainer</strong>：无需 RL 的基础微调</li>
+<li><strong>Axolotl</strong>：基于 YAML 的训练配置</li>
+<li><strong>LitGPT</strong>：教学用途、极简微调</li>
+<li><strong>Unsloth</strong>：快速 LoRA 训练</li>
+</ul>
+<h2>常见问题</h2>
+<p><strong>问题：DPO 训练时显存溢出（OOM）</strong></p>
+<p>减小批次大小和序列长度：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+config = DPOConfig(
+    per_device_train_batch_size=1,  # Reduce from 4
+    max_length=512,  # Reduce from 1024
+    gradient_accumulation_steps=8  # Maintain effective batch
+)
+</div>
+<p>或启用梯度检查点：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model.gradient_checkpointing_enable()
+</div>
+<p><strong>问题：对齐质量差</strong></p>
+<p>调整 beta 参数：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Higher beta = more conservative (stays closer to reference)
+config = DPOConfig(beta=0.5)  # Default 0.1
+<h1>Lower beta = more aggressive alignment</h1>
+<p>config = DPOConfig(beta=0.01)</p>
+</div>
+<p><strong>问题：奖励模型无法学习</strong></p>
+<p>检查损失类型和学习率：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+config = RewardConfig(
+    learning_rate=1e-5,  # Try different LR
+    num_train_epochs=3  # Train longer
+)
+</div>
+<p>确保偏好数据集有明确的优劣区分：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Verify dataset
+print(dataset[0])
+# Should have clear chosen &gt; rejected
+</div>
+<p><strong>问题：PPO 训练不稳定</strong></p>
+<p>调整 KL 系数：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+config = PPOConfig(
+    kl_coef=0.1,  # Increase from 0.05
+    cliprange=0.1  # Reduce from 0.2
+)
+</div>
+<h2>高级主题</h2>
+<p><strong>SFT 训练指南</strong>：参阅 <a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/training/trl-fine-tuning/references/sft-training.html">references/sft-training.md</a>，了解数据集格式、chat template、packing 策略及多 GPU 训练。</p>
+<p><strong>DPO 变体</strong>：参阅 <a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/training/trl-fine-tuning/references/dpo-variants.html">references/dpo-variants.md</a>，了解 IPO、cDPO、RPO 及其他 DPO 损失函数与推荐超参数。</p>
+<p><strong>奖励建模</strong>：参阅 <a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/training/trl-fine-tuning/references/reward-modeling.html">references/reward-modeling.md</a>，了解结果奖励与过程奖励、Bradley-Terry 损失及奖励模型评估。</p>
+<p><strong>在线 RL 方法</strong>：参阅 <a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/training/trl-fine-tuning/references/online-rl.html">references/online-rl.md</a>，了解 PPO、GRPO、RLOO 及 OnlineDPO 的详细配置。</p>
+<p><strong>GRPO 深度解析</strong>：参阅 <a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/training/trl-fine-tuning/references/grpo-training.html">references/grpo-training.md</a>，获取专家级 GRPO 模式——奖励函数设计理念、训练洞察（为何损失上升、模式崩溃检测）、超参数调优、多阶段训练及故障排查。生产就绪模板位于 <a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/training/trl-fine-tuning/templates/basic_grpo_training.py">templates/basic_grpo_training.py</a>。</p>
+<h2>硬件要求</h2>
+<ul>
+<li><strong>GPU</strong>：NVIDIA（需要 CUDA）</li>
+<li><strong>显存（VRAM）</strong>：取决于模型和方法
+<ul>
+<li>SFT 7B：16GB（使用 LoRA）</li>
+<li>DPO 7B：24GB（存储参考模型）</li>
+<li>PPO 7B：40GB（策略模型 + 奖励模型）</li>
+<li>GRPO 7B：24GB（内存效率更高）</li>
+</ul>
+</li>
+<li><strong>多 GPU</strong>：通过 <code>accelerate</code> 支持</li>
+<li><strong>混合精度</strong>：推荐 BF16（A100/H100）</li>
+</ul>
+<p><strong>内存优化</strong>：</p>
+<ul>
+<li>所有方法均可使用 LoRA/QLoRA</li>
+<li>启用梯度检查点</li>
+<li>使用更小的批次大小配合梯度累积</li>
+</ul>
+<h2>资源</h2>
+<ul>
+<li>文档：https://huggingface.co/docs/trl/</li>
+<li>GitHub：https://github.com/huggingface/trl</li>
+<li>论文：
+<ul>
+<li>&quot;Training language models to follow instructions with human feedback&quot;（InstructGPT，2022）</li>
+<li>&quot;Direct Preference Optimization: Your Language Model is Secretly a Reward Model&quot;（DPO，2023）</li>
+<li>&quot;Group Relative Policy Optimization&quot;（GRPO，2024）</li>
+</ul>
+</li>
+<li>示例：https://github.com/huggingface/trl/tree/main/examples/scripts</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,430 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Microsoft Teams - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Microsoft Teams</div><p>将 Hermes Agent 作为机器人接入 Microsoft Teams。与 Slack 的 Socket Mode 不同，Teams 通过调用<strong>公开 HTTPS webhook</strong>（钩子）来投递消息，因此你的实例需要一个可公开访问的端点——本地开发时使用开发隧道，生产环境使用真实域名。</p>
+<p>如果你需要的是来自 Microsoft Graph 事件的会议摘要，而非普通的机器人对话，请使用专用设置页面：<a href="/user-guide/messaging/teams-meetings">Teams 会议</a>。</p>
+<h2>机器人的响应方式</h2>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>个人聊天（私信）</strong></td>
+<td>机器人响应每一条消息，无需 @提及。</td>
+</tr>
+<tr>
+<td><strong>群聊</strong></td>
+<td>机器人仅在被 @提及时响应。</td>
+</tr>
+<tr>
+<td><strong>频道</strong></td>
+<td>机器人仅在被 @提及时响应。</td>
+</tr>
+</tbody>
+</table>
+<p>Teams 将 @提及作为普通消息投递，其中包含 <code>&lt;at&gt;BotName&lt;/at&gt;</code> 标签，Hermes 在处理前会自动去除这些标签。</p>
+<hr />
+<h2>第一步：安装 Teams CLI</h2>
+<p><code>@microsoft/teams.cli</code> 可自动完成机器人注册，无需进入 Azure 门户。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+npm install -g @microsoft/teams.cli@preview
+teams login
+</div>
+<p>验证登录状态并查找你自己的 AAD 对象 ID（<code>TEAMS_ALLOWED_USERS</code> 需要用到）：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+teams status --verbose
+</div>
+<hr />
+<h2>第二步：暴露 Webhook 端口</h2>
+<p>Teams 无法向 <code>localhost</code> 投递消息。本地开发时，使用任意隧道工具获取一个公开的 HTTPS URL。默认端口为 <code>3978</code>，如需更改可通过 <code>TEAMS_PORT</code> 设置。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# devtunnel（Microsoft 官方）
+devtunnel create hermes-bot --allow-anonymous
+devtunnel port create hermes-bot -p 3978 --protocol https  # 如已修改 TEAMS_PORT，请替换 3978
+devtunnel host hermes-bot
+
+# ngrok
+ngrok http 3978  # 如已修改 TEAMS_PORT，请替换 3978
+
+# cloudflared
+cloudflared tunnel --url http://localhost:3978  # 如已修改 TEAMS_PORT，请替换 3978
+</div>
+<p>从输出中复制 <code>https://</code> URL——下一步会用到。开发期间保持隧道运行。</p>
+<p>生产环境请将机器人端点指向服务器的公开域名（参见<a href="#production-deployment">生产部署</a>）。</p>
+<hr />
+<h2>第三步：创建机器人</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+teams app create \
+  --name "Hermes" \
+  --endpoint "https://&lt;your-tunnel-url&gt;/api/messages"
+</div>
+<p>CLI 会输出你的 <code>CLIENT_ID</code>、<code>CLIENT_SECRET</code> 和 <code>TENANT_ID</code>，以及第六步所需的安装链接。请保存客户端密钥——它不会再次显示。</p>
+<hr />
+<h2>第四步：配置环境变量</h2>
+<p>添加到 <code>~/.hermes/.env</code>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 必填
+TEAMS_CLIENT_ID=&lt;your-client-id&gt;
+TEAMS_CLIENT_SECRET=&lt;your-client-secret&gt;
+TEAMS_TENANT_ID=&lt;your-tenant-id&gt;
+
+# 限制特定用户访问（推荐）
+# 使用 `teams status --verbose` 获取 AAD 对象 ID
+TEAMS_ALLOWED_USERS=&lt;your-aad-object-id&gt;
+</div>
+<hr />
+<h2>第五步：启动 Gateway</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+HERMES_UID=$(id -u) HERMES_GID=$(id -g) docker compose up -d gateway
+</div>
+<p>此命令启动 gateway。默认 webhook 端口为 <code>3978</code>（可通过 <code>TEAMS_PORT</code> 覆盖）。检查运行状态：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl http://localhost:3978/health   # 应返回：ok
+docker logs -f hermes
+</div>
+<p>查找以下日志：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+[teams] Webhook server listening on 0.0.0.0:3978/api/messages
+</div>
+<hr />
+<h2>第六步：在 Teams 中安装应用</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+teams app get &lt;teamsAppId&gt; --install-link
+</div>
+<p>在浏览器中打开输出的链接——它会直接在 Teams 客户端中打开。安装完成后，向机器人发送一条私信，即可开始使用。</p>
+<hr />
+<h2>配置参考</h2>
+<h3>环境变量</h3>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>TEAMS_CLIENT_ID</code></td>
+<td>Azure AD 应用（客户端）ID</td>
+</tr>
+<tr>
+<td><code>TEAMS_CLIENT_SECRET</code></td>
+<td>Azure AD 客户端密钥</td>
+</tr>
+<tr>
+<td><code>TEAMS_TENANT_ID</code></td>
+<td>Azure AD 租户 ID</td>
+</tr>
+<tr>
+<td><code>TEAMS_ALLOWED_USERS</code></td>
+<td>允许使用机器人的 AAD 对象 ID，逗号分隔</td>
+</tr>
+<tr>
+<td><code>TEAMS_ALLOW_ALL_USERS</code></td>
+<td>设为 <code>true</code> 可跳过白名单，允许所有人使用</td>
+</tr>
+<tr>
+<td><code>TEAMS_HOME_CHANNEL</code></td>
+<td>用于 cron/主动消息投递的会话 ID</td>
+</tr>
+<tr>
+<td><code>TEAMS_HOME_CHANNEL_NAME</code></td>
+<td>主频道的显示名称</td>
+</tr>
+<tr>
+<td><code>TEAMS_PORT</code></td>
+<td>Webhook 端口（默认：<code>3978</code>）</td>
+</tr>
+</tbody>
+</table>
+<h3>config.yaml</h3>
+<p>也可通过 <code>~/.hermes/config.yaml</code> 进行配置：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+platforms:
+  teams:
+    enabled: true
+    extra:
+      client_id: "your-client-id"
+      client_secret: "your-secret"
+      tenant_id: "your-tenant-id"
+      port: 3978
+</div>
+<hr />
+<h2>功能特性</h2>
+<h3>交互式审批卡片</h3>
+<p>当 Agent 需要执行可能存在风险的命令时，它会发送一张带有四个按钮的 Adaptive Card，而不是要求你输入 <code>/approve</code>：</p>
+<ul>
+<li><strong>Allow Once</strong>——仅批准此次特定命令</li>
+<li><strong>Allow Session</strong>——在本次会话期间批准此模式</li>
+<li><strong>Always Allow</strong>——永久批准此模式</li>
+<li><strong>Deny</strong>——拒绝该命令</li>
+</ul>
+<p>点击按钮即可内联完成审批，卡片会被替换为决策结果。</p>
+<h3>会议摘要投递（Teams 会议 Pipeline）</h3>
+<p>当 <a href="/user-guide/messaging/msgraph-webhook">Teams 会议 pipeline 插件</a>启用后，此适配器同时负责会议摘要的出站投递——一个 Teams 集成面，而非两个。会议转录摘要生成后，写入器会将摘要发布到你指定的 Teams 目标。</p>
+<p>Pipeline 摘要投递在 <code>teams</code> 平台条目下与机器人配置并列配置：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+platforms:
+  teams:
+    enabled: true
+    extra:
+      # 现有机器人配置（client_id、client_secret、tenant_id、port）...
+
+      # 会议摘要投递（仅在 teams_pipeline 插件启用时生效）
+      delivery_mode: "graph"       # 或 "incoming_webhook"
+      # 对于 delivery_mode: graph — 选择其中一项：
+      chat_id: "19:meeting_..."    # 发布到 Teams 聊天
+      # team_id: "..."             # 或发布到频道
+      # channel_id: "..."
+      # access_token: "..."        # 可选；回退到 MSGRAPH_* 应用凭据
+      # 对于 delivery_mode: incoming_webhook：
+      # incoming_webhook_url: "https://outlook.office.com/webhook/..."
+</div>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>适用场景</th>
+<th>权衡</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>incoming_webhook</code></td>
+<td>使用 Teams 生成的静态 URL，简单地将摘要发布到某个频道。</td>
+<td>不支持回复线程和表情回应，显示为 webhook 配置的身份。</td>
+</tr>
+<tr>
+<td><code>graph</code></td>
+<td>通过 Microsoft Graph 以机器人身份发布带线程的频道帖子或 1:1/群聊消息。</td>
+<td>需要完成 <a href="/guides/microsoft-graph-app-registration">Graph 应用注册</a>，并具备 <code>ChannelMessage.Send</code>（频道）或 <code>Chat.ReadWrite.All</code>（聊天）应用权限。</td>
+</tr>
+</tbody>
+</table>
+<p>如果 <code>teams_pipeline</code> 插件<strong>未启用</strong>，这些设置不会生效——它们仅在 pipeline 运行时绑定到 Graph webhook 入口时才会激活。</p>
+<hr />
+<h2>生产部署</h2>
+<p>对于永久服务器，跳过 devtunnel，使用服务器的公开 HTTPS 端点注册机器人：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+teams app create \
+  --name "Hermes" \
+  --endpoint "https://your-domain.com/api/messages"
+</div>
+<p>如果机器人已创建，只需更新端点：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+teams app update --id &lt;teamsAppId&gt; --endpoint "https://your-domain.com/api/messages"
+</div>
+<p>确保你配置的端口（<code>TEAMS_PORT</code>，默认 <code>3978</code>）可从互联网访问，且 TLS 证书有效——Teams 会拒绝自签名证书。</p>
+<hr />
+<h2>故障排查</h2>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>health</code> 端点正常但机器人不响应</td>
+<td>检查隧道是否仍在运行，以及机器人的消息端点是否与隧道 URL 匹配</td>
+</tr>
+<tr>
+<td>日志中出现 <code>KeyError: 'teams'</code></td>
+<td>重启容器——此问题已在当前版本中修复</td>
+</tr>
+<tr>
+<td>机器人响应时出现认证错误</td>
+<td>验证 <code>TEAMS_CLIENT_ID</code>、<code>TEAMS_CLIENT_SECRET</code> 和 <code>TEAMS_TENANT_ID</code> 是否均已正确设置</td>
+</tr>
+<tr>
+<td><code>No inference provider configured</code></td>
+<td>检查 <code>~/.hermes/.env</code> 中是否设置了 <code>ANTHROPIC_API_KEY</code>（或其他提供商密钥）</td>
+</tr>
+<tr>
+<td>机器人收到消息但忽略它们</td>
+<td>你的 AAD 对象 ID 可能不在 <code>TEAMS_ALLOWED_USERS</code> 中。运行 <code>teams status --verbose</code> 查找</td>
+</tr>
+<tr>
+<td>隧道 URL 在重启后变更</td>
+<td>使用命名隧道（<code>devtunnel create hermes-bot</code>）时，devtunnel URL 是持久的。ngrok 和 cloudflared 每次运行都会生成新 URL（除非你有付费计划）——URL 变更时请用 <code>teams app update</code> 更新机器人端点</td>
+</tr>
+<tr>
+<td>Teams 显示&quot;此机器人未响应&quot;</td>
+<td>Webhook 返回了错误。检查 <code>docker logs hermes</code> 中的错误堆栈</td>
+</tr>
+<tr>
+<td>日志中出现 <code>[teams] Failed to connect</code></td>
+<td>SDK 认证失败。仔细检查凭据，并确认租户 ID 与 <code>teams login</code> 时使用的账户匹配</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>安全性</h2>
+<div class="tip warning"><strong>⚠️ 警告</strong>
+<p><strong>务必设置 <code>TEAMS_ALLOWED_USERS</code></strong>，填入授权用户的 AAD 对象 ID。否则，任何能找到或安装你的机器人的人都可以与其交互。</p>
+<p>将 <code>TEAMS_CLIENT_SECRET</code> 视同密码对待——定期通过 Azure 门户或 Teams CLI 进行轮换。</p>
+
+</div>
+<ul>
+<li>将凭据存储在权限为 <code>600</code> 的 <code>~/.hermes/.env</code> 中（<code>chmod 600 ~/.hermes/.env</code>）</li>
+<li>机器人仅接受 <code>TEAMS_ALLOWED_USERS</code> 中用户的消息；未授权的消息会被静默丢弃</li>
+<li>你的公开端点（<code>/api/messages</code>）由 Teams Bot Framework 进行认证——不含有效 JWT 的请求会被拒绝</li>
+</ul>
+<h2>相关文档</h2>
+<ul>
+<li><a href="/user-guide/messaging/teams-meetings">Teams 会议</a></li>
+<li><a href="/guides/operate-teams-meeting-pipeline">运营 Teams 会议 Pipeline</a></li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

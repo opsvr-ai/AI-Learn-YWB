@@ -1,0 +1,770 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audiocraft 音频生成 — AudioCraft：MusicGen 文本转音乐，AudioGen 文本转声音 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Audiocraft 音频生成 — AudioCraft：MusicGen 文本转音乐，AudioGen 文本转声音</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Audiocraft 音频生成</h1>
+<p>AudioCraft：MusicGen 文本转音乐，AudioGen 文本转声音。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>内置（默认安装）</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>skills/mlops/models/audiocraft</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Orchestra Research</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>依赖</td>
+<td><code>audiocraft</code>, <code>torch&gt;=2.0.0</code>, <code>transformers&gt;=4.30.0</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Multimodal</code>, <code>Audio Generation</code>, <code>Text-to-Music</code>, <code>Text-to-Audio</code>, <code>MusicGen</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>AudioCraft：音频生成</h1>
+<p>使用 Meta 的 AudioCraft 进行文本转音乐和文本转音频生成的完整指南，涵盖 MusicGen、AudioGen 和 EnCodec。</p>
+<h2>何时使用 AudioCraft</h2>
+<p><strong>在以下情况下使用 AudioCraft：</strong></p>
+<ul>
+<li>需要从文本描述生成音乐</li>
+<li>创建音效和环境音频</li>
+<li>构建音乐生成应用</li>
+<li>需要旋律条件化的音乐生成</li>
+<li>需要立体声音频输出</li>
+<li>需要可控的风格迁移音乐生成</li>
+</ul>
+<p><strong>核心功能：</strong></p>
+<ul>
+<li><strong>MusicGen</strong>：支持旋律条件化的文本转音乐生成</li>
+<li><strong>AudioGen</strong>：文本转音效生成</li>
+<li><strong>EnCodec</strong>：高保真神经音频编解码器</li>
+<li><strong>多种模型规格</strong>：从 Small（300M）到 Large（3.3B）</li>
+<li><strong>立体声支持</strong>：完整立体声音频生成</li>
+<li><strong>风格条件化</strong>：MusicGen-Style 支持基于参考的生成</li>
+</ul>
+<p><strong>以下情况请使用替代方案：</strong></p>
+<ul>
+<li><strong>Stable Audio</strong>：用于较长的商业音乐生成</li>
+<li><strong>Bark</strong>：用于带音乐/音效的文本转语音</li>
+<li><strong>Riffusion</strong>：用于基于频谱图的音乐生成</li>
+<li><strong>OpenAI Jukebox</strong>：用于带歌词的原始音频生成</li>
+</ul>
+<h2>快速开始</h2>
+<h3>安装</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 从 PyPI 安装
+pip install audiocraft
+<h1>从 GitHub 安装（最新版）</h1>
+<p>pip install git+https://github.com/facebookresearch/audiocraft.git</p>
+<h1>或使用 HuggingFace Transformers</h1>
+<p>pip install transformers torch torchaudio</p>
+</div>
+<h3>基础文本转音乐（AudioCraft）</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import torchaudio
+from audiocraft.models import MusicGen
+<h1>加载模型</h1>
+<p>model = MusicGen.get_pretrained('facebook/musicgen-small')</p>
+<h1>设置生成参数</h1>
+<p>model.set_generation_params(
+duration=8,  # 秒
+top_k=250,
+temperature=1.0
+)</p>
+<h1>从文本生成</h1>
+<p>descriptions = [&quot;happy upbeat electronic dance music with synths&quot;]
+wav = model.generate(descriptions)</p>
+<h1>保存音频</h1>
+<p>torchaudio.save(&quot;output.wav&quot;, wav[0].cpu(), sample_rate=32000)</p>
+</div>
+<h3>使用 HuggingFace Transformers</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from transformers import AutoProcessor, MusicgenForConditionalGeneration
+import scipy
+<h1>加载模型和处理器</h1>
+<p>processor = AutoProcessor.from_pretrained(&quot;facebook/musicgen-small&quot;)
+model = MusicgenForConditionalGeneration.from_pretrained(&quot;facebook/musicgen-small&quot;)
+model.to(&quot;cuda&quot;)</p>
+<h1>生成音乐</h1>
+<p>inputs = processor(
+text=[&quot;80s pop track with bassy drums and synth&quot;],
+padding=True,
+return_tensors=&quot;pt&quot;
+).to(&quot;cuda&quot;)</p>
+<p>audio_values = model.generate(
+**inputs,
+do_sample=True,
+guidance_scale=3,
+max_new_tokens=256
+)</p>
+<h1>保存</h1>
+<p>sampling_rate = model.config.audio_encoder.sampling_rate
+scipy.io.wavfile.write(&quot;output.wav&quot;, rate=sampling_rate, data=audio_values[0, 0].cpu().numpy())</p>
+</div>
+<h3>使用 AudioGen 进行文本转声音</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from audiocraft.models import AudioGen
+<h1>加载 AudioGen</h1>
+<p>model = AudioGen.get_pretrained('facebook/audiogen-medium')</p>
+<p>model.set_generation_params(duration=5)</p>
+<h1>生成音效</h1>
+<p>descriptions = [&quot;dog barking in a park with birds chirping&quot;]
+wav = model.generate(descriptions)</p>
+<p>torchaudio.save(&quot;sound.wav&quot;, wav[0].cpu(), sample_rate=16000)</p>
+</div>
+<h2>核心概念</h2>
+<h3>架构概览</h3>
+<!-- ascii-guard-ignore -->
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+AudioCraft Architecture:
+┌──────────────────────────────────────────────────────────────┐
+│                    Text Encoder (T5)                          │
+│                         │                                     │
+│                    Text Embeddings                            │
+└────────────────────────┬─────────────────────────────────────┘
+                         │
+┌────────────────────────▼─────────────────────────────────────┐
+│              Transformer Decoder (LM)                         │
+│     Auto-regressively generates audio tokens                  │
+│     Using efficient token interleaving patterns               │
+└────────────────────────┬─────────────────────────────────────┘
+                         │
+┌────────────────────────▼─────────────────────────────────────┐
+│                EnCodec Audio Decoder                          │
+│        Converts tokens back to audio waveform                 │
+└──────────────────────────────────────────────────────────────┘
+</div>
+<!-- ascii-guard-ignore-end -->
+<h3>模型变体</h3>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>规模</th>
+<th>描述</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>musicgen-small</code></td>
+<td>300M</td>
+<td>文本转音乐</td>
+<td>快速生成</td>
+</tr>
+<tr>
+<td><code>musicgen-medium</code></td>
+<td>1.5B</td>
+<td>文本转音乐</td>
+<td>均衡选择</td>
+</tr>
+<tr>
+<td><code>musicgen-large</code></td>
+<td>3.3B</td>
+<td>文本转音乐</td>
+<td>最佳质量</td>
+</tr>
+<tr>
+<td><code>musicgen-melody</code></td>
+<td>1.5B</td>
+<td>文本 + 旋律</td>
+<td>旋律条件化</td>
+</tr>
+<tr>
+<td><code>musicgen-melody-large</code></td>
+<td>3.3B</td>
+<td>文本 + 旋律</td>
+<td>最佳旋律效果</td>
+</tr>
+<tr>
+<td><code>musicgen-stereo-*</code></td>
+<td>不定</td>
+<td>立体声输出</td>
+<td>立体声生成</td>
+</tr>
+<tr>
+<td><code>musicgen-style</code></td>
+<td>1.5B</td>
+<td>风格迁移</td>
+<td>基于参考的生成</td>
+</tr>
+<tr>
+<td><code>audiogen-medium</code></td>
+<td>1.5B</td>
+<td>文本转声音</td>
+<td>音效生成</td>
+</tr>
+</tbody>
+</table>
+<h3>生成参数</h3>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>duration</code></td>
+<td>8.0</td>
+<td>时长（秒），范围 1-120</td>
+</tr>
+<tr>
+<td><code>top_k</code></td>
+<td>250</td>
+<td>Top-k 采样</td>
+</tr>
+<tr>
+<td><code>top_p</code></td>
+<td>0.0</td>
+<td>Nucleus 采样（0 = 禁用）</td>
+</tr>
+<tr>
+<td><code>temperature</code></td>
+<td>1.0</td>
+<td>采样温度</td>
+</tr>
+<tr>
+<td><code>cfg_coef</code></td>
+<td>3.0</td>
+<td>无分类器引导系数</td>
+</tr>
+</tbody>
+</table>
+<h2>MusicGen 用法</h2>
+<h3>文本转音乐生成</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from audiocraft.models import MusicGen
+import torchaudio
+<p>model = MusicGen.get_pretrained('facebook/musicgen-medium')</p>
+<h1>配置生成参数</h1>
+<p>model.set_generation_params(
+duration=30,          # 最长 30 秒
+top_k=250,            # 采样多样性
+top_p=0.0,            # 0 = 仅使用 top_k
+temperature=1.0,      # 创意度（越高越多样）
+cfg_coef=3.0          # 文本遵循度（越高越严格）
+)</p>
+<h1>生成多个样本</h1>
+<p>descriptions = [
+&quot;epic orchestral soundtrack with strings and brass&quot;,
+&quot;chill lo-fi hip hop beat with jazzy piano&quot;,
+&quot;energetic rock song with electric guitar&quot;
+]</p>
+<h1>生成（返回 [batch, channels, samples]）</h1>
+<p>wav = model.generate(descriptions)</p>
+<h1>逐个保存</h1>
+<p>for i, audio in enumerate(wav):
+torchaudio.save(f&quot;music_{i}.wav&quot;, audio.cpu(), sample_rate=32000)</p>
+</div>
+<h3>旋律条件化生成</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from audiocraft.models import MusicGen
+import torchaudio
+<h1>加载旋律模型</h1>
+<p>model = MusicGen.get_pretrained('facebook/musicgen-melody')
+model.set_generation_params(duration=30)</p>
+<h1>加载旋律音频</h1>
+<p>melody, sr = torchaudio.load(&quot;melody.wav&quot;)</p>
+<h1>使用旋律条件化生成</h1>
+<p>descriptions = [&quot;acoustic guitar folk song&quot;]
+wav = model.generate_with_chroma(descriptions, melody, sr)</p>
+<p>torchaudio.save(&quot;melody_conditioned.wav&quot;, wav[0].cpu(), sample_rate=32000)</p>
+</div>
+<h3>立体声生成</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from audiocraft.models import MusicGen
+<h1>加载立体声模型</h1>
+<p>model = MusicGen.get_pretrained('facebook/musicgen-stereo-medium')
+model.set_generation_params(duration=15)</p>
+<p>descriptions = [&quot;ambient electronic music with wide stereo panning&quot;]
+wav = model.generate(descriptions)</p>
+<h1>wav 形状：立体声为 [batch, 2, samples]</h1>
+<p>print(f&quot;Stereo shape: {wav.shape}&quot;)  # [1, 2, 480000]
+torchaudio.save(&quot;stereo.wav&quot;, wav[0].cpu(), sample_rate=32000)</p>
+</div>
+<h3>音频续写</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from transformers import AutoProcessor, MusicgenForConditionalGeneration
+<p>processor = AutoProcessor.from_pretrained(&quot;facebook/musicgen-medium&quot;)
+model = MusicgenForConditionalGeneration.from_pretrained(&quot;facebook/musicgen-medium&quot;)</p>
+<h1>加载待续写的音频</h1>
+<p>import torchaudio
+audio, sr = torchaudio.load(&quot;intro.wav&quot;)</p>
+<h1>同时处理文本和音频</h1>
+<p>inputs = processor(
+audio=audio.squeeze().numpy(),
+sampling_rate=sr,
+text=[&quot;continue with a epic chorus&quot;],
+padding=True,
+return_tensors=&quot;pt&quot;
+)</p>
+<h1>生成续写内容</h1>
+<p>audio_values = model.generate(**inputs, do_sample=True, guidance_scale=3, max_new_tokens=512)</p>
+</div>
+<h2>MusicGen-Style 用法</h2>
+<h3>风格条件化生成</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from audiocraft.models import MusicGen
+<h1>加载风格模型</h1>
+<p>model = MusicGen.get_pretrained('facebook/musicgen-style')</p>
+<h1>配置带风格的生成参数</h1>
+<p>model.set_generation_params(
+duration=30,
+cfg_coef=3.0,
+cfg_coef_beta=5.0  # 风格影响强度
+)</p>
+<h1>配置风格条件器参数</h1>
+<p>model.set_style_conditioner_params(
+eval_q=3,          # RVQ 量化器数量（1-6）
+excerpt_length=3.0  # 风格片段长度
+)</p>
+<h1>加载风格参考音频</h1>
+<p>style_audio, sr = torchaudio.load(&quot;reference_style.wav&quot;)</p>
+<h1>使用文本 + 风格生成</h1>
+<p>descriptions = [&quot;upbeat dance track&quot;]
+wav = model.generate_with_style(descriptions, style_audio, sr)</p>
+</div>
+<h3>仅风格生成（无文本）</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 不使用文本 prompt，仅匹配风格生成
+model.set_generation_params(
+    duration=30,
+    cfg_coef=3.0,
+    cfg_coef_beta=None  # 禁用双 CFG 以支持纯风格模式
+)
+<p>wav = model.generate_with_style([None], style_audio, sr)</p>
+</div>
+<h2>AudioGen 用法</h2>
+<h3>音效生成</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from audiocraft.models import AudioGen
+import torchaudio
+<p>model = AudioGen.get_pretrained('facebook/audiogen-medium')
+model.set_generation_params(duration=10)</p>
+<h1>生成各类声音</h1>
+<p>descriptions = [
+&quot;thunderstorm with heavy rain and lightning&quot;,
+&quot;busy city traffic with car horns&quot;,
+&quot;ocean waves crashing on rocks&quot;,
+&quot;crackling campfire in forest&quot;
+]</p>
+<p>wav = model.generate(descriptions)</p>
+<p>for i, audio in enumerate(wav):
+torchaudio.save(f&quot;sound_{i}.wav&quot;, audio.cpu(), sample_rate=16000)</p>
+</div>
+<h2>EnCodec 用法</h2>
+<h3>音频压缩</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from audiocraft.models import CompressionModel
+import torch
+import torchaudio
+<h1>加载 EnCodec</h1>
+<p>model = CompressionModel.get_pretrained('facebook/encodec_32khz')</p>
+<h1>加载音频</h1>
+<p>wav, sr = torchaudio.load(&quot;audio.wav&quot;)</p>
+<h1>确保采样率正确</h1>
+<p>if sr != 32000:
+resampler = torchaudio.transforms.Resample(sr, 32000)
+wav = resampler(wav)</p>
+<h1>编码为 token</h1>
+<p>with torch.no_grad():
+encoded = model.encode(wav.unsqueeze(0))
+codes = encoded[0]  # 音频编码</p>
+<h1>解码回音频</h1>
+<p>with torch.no_grad():
+decoded = model.decode(codes)</p>
+<p>torchaudio.save(&quot;reconstructed.wav&quot;, decoded[0].cpu(), sample_rate=32000)</p>
+</div>
+<h2>常见工作流</h2>
+<h3>工作流 1：音乐生成流水线</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import torch
+import torchaudio
+from audiocraft.models import MusicGen
+<p>class MusicGenerator:
+def <strong>init</strong>(self, model_name=&quot;facebook/musicgen-medium&quot;):
+self.model = MusicGen.get_pretrained(model_name)
+self.sample_rate = 32000</p>
+<pre><code>def generate(self, prompt, duration=30, temperature=1.0, cfg=3.0):
+    self.model.set_generation_params(
+        duration=duration,
+        top_k=250,
+        temperature=temperature,
+        cfg_coef=cfg
+    )
+
+    with torch.no_grad():
+        wav = self.model.generate([prompt])
+
+    return wav[0].cpu()
+
+def generate_batch(self, prompts, duration=30):
+    self.model.set_generation_params(duration=duration)
+
+    with torch.no_grad():
+        wav = self.model.generate(prompts)
+
+    return wav.cpu()
+
+def save(self, audio, path):
+    torchaudio.save(path, audio, sample_rate=self.sample_rate)
+</code></pre>
+<h1>使用示例</h1>
+<p>generator = MusicGenerator()
+audio = generator.generate(
+&quot;epic cinematic orchestral music&quot;,
+duration=30,
+temperature=1.0
+)
+generator.save(audio, &quot;epic_music.wav&quot;)</p>
+</div>
+<h3>工作流 2：音效批量处理</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import json
+from pathlib import Path
+from audiocraft.models import AudioGen
+import torchaudio
+<p>def batch_generate_sounds(sound_specs, output_dir):
+&quot;&quot;&quot;
+根据规格批量生成声音。</p>
+<pre><code>Args:
+    sound_specs: list of {&quot;name&quot;: str, &quot;description&quot;: str, &quot;duration&quot;: float}
+    output_dir: output directory path
+&quot;&quot;&quot;
+model = AudioGen.get_pretrained('facebook/audiogen-medium')
+output_dir = Path(output_dir)
+output_dir.mkdir(exist_ok=True)
+
+results = []
+
+for spec in sound_specs:
+    model.set_generation_params(duration=spec.get(&quot;duration&quot;, 5))
+
+    wav = model.generate([spec[&quot;description&quot;]])
+
+    output_path = output_dir / f&quot;{spec['name']}.wav&quot;
+    torchaudio.save(str(output_path), wav[0].cpu(), sample_rate=16000)
+
+    results.append({
+        &quot;name&quot;: spec[&quot;name&quot;],
+        &quot;path&quot;: str(output_path),
+        &quot;description&quot;: spec[&quot;description&quot;]
+    })
+
+return results
+</code></pre>
+<h1>使用示例</h1>
+<p>sounds = [
+{&quot;name&quot;: &quot;explosion&quot;, &quot;description&quot;: &quot;massive explosion with debris&quot;, &quot;duration&quot;: 3},
+{&quot;name&quot;: &quot;footsteps&quot;, &quot;description&quot;: &quot;footsteps on wooden floor&quot;, &quot;duration&quot;: 5},
+{&quot;name&quot;: &quot;door&quot;, &quot;description&quot;: &quot;wooden door creaking and closing&quot;, &quot;duration&quot;: 2}
+]</p>
+<p>results = batch_generate_sounds(sounds, &quot;sound_effects/&quot;)</p>
+</div>
+<h3>工作流 3：Gradio 演示</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import gradio as gr
+import torch
+import torchaudio
+from audiocraft.models import MusicGen
+<p>model = MusicGen.get_pretrained('facebook/musicgen-small')</p>
+<p>def generate_music(prompt, duration, temperature, cfg_coef):
+model.set_generation_params(
+duration=duration,
+temperature=temperature,
+cfg_coef=cfg_coef
+)</p>
+<pre><code>with torch.no_grad():
+    wav = model.generate([prompt])
+
+# 保存到临时文件
+path = &quot;temp_output.wav&quot;
+torchaudio.save(path, wav[0].cpu(), sample_rate=32000)
+return path
+</code></pre>
+<p>demo = gr.Interface(
+fn=generate_music,
+inputs=[
+gr.Textbox(label=&quot;Music Description&quot;, placeholder=&quot;upbeat electronic dance music&quot;),
+gr.Slider(1, 30, value=8, label=&quot;Duration (seconds)&quot;),
+gr.Slider(0.5, 2.0, value=1.0, label=&quot;Temperature&quot;),
+gr.Slider(1.0, 10.0, value=3.0, label=&quot;CFG Coefficient&quot;)
+],
+outputs=gr.Audio(label=&quot;Generated Music&quot;),
+title=&quot;MusicGen Demo&quot;
+)</p>
+<p>demo.launch()</p>
+</div>
+<h2>性能优化</h2>
+<h3>内存优化</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 使用较小的模型
+model = MusicGen.get_pretrained('facebook/musicgen-small')
+<h1>每次生成后清理缓存</h1>
+<p>torch.cuda.empty_cache()</p>
+<h1>生成较短的时长</h1>
+<p>model.set_generation_params(duration=10)  # 替代 30 秒</p>
+<h1>使用半精度</h1>
+<p>model = model.half()</p>
+</div>
+<h3>批处理效率</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 一次处理多个 prompt（更高效）
+descriptions = ["prompt1", "prompt2", "prompt3", "prompt4"]
+wav = model.generate(descriptions)  # 单次批处理
+<h1>而非</h1>
+<p>for desc in descriptions:
+wav = model.generate([desc])  # 多次批处理（较慢）</p>
+</div>
+<h3>GPU 显存需求</h3>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>FP32 显存</th>
+<th>FP16 显存</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>musicgen-small</td>
+<td>~4GB</td>
+<td>~2GB</td>
+</tr>
+<tr>
+<td>musicgen-medium</td>
+<td>~8GB</td>
+<td>~4GB</td>
+</tr>
+<tr>
+<td>musicgen-large</td>
+<td>~16GB</td>
+<td>~8GB</td>
+</tr>
+</tbody>
+</table>
+<h2>常见问题</h2>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CUDA 显存不足</td>
+<td>使用较小模型，缩短时长</td>
+</tr>
+<tr>
+<td>质量较差</td>
+<td>提高 cfg_coef，优化 prompt</td>
+</tr>
+<tr>
+<td>生成时长过短</td>
+<td>检查最大时长设置</td>
+</tr>
+<tr>
+<td>音频有杂音</td>
+<td>尝试不同的 temperature</td>
+</tr>
+<tr>
+<td>立体声不生效</td>
+<td>使用立体声模型变体</td>
+</tr>
+</tbody>
+</table>
+<h2>参考资料</h2>
+<ul>
+<li><strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/mlops/models/audiocraft/references/advanced-usage.html">高级用法</a></strong> - 训练、微调、部署</li>
+<li><strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/mlops/models/audiocraft/references/troubleshooting.html">故障排查</a></strong> - 常见问题与解决方案</li>
+</ul>
+<h2>资源</h2>
+<ul>
+<li><strong>GitHub</strong>：https://github.com/facebookresearch/audiocraft</li>
+<li><strong>论文（MusicGen）</strong>：https://arxiv.org/abs/2306.05284</li>
+<li><strong>论文（AudioGen）</strong>：https://arxiv.org/abs/2209.15352</li>
+<li><strong>HuggingFace</strong>：https://huggingface.co/facebook/musicgen-small</li>
+<li><strong>演示</strong>：https://huggingface.co/spaces/facebook/MusicGen</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,496 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>将 Hermes 作为 Python 库使用 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 实用指南 / 将 Hermes 作为 Python 库使用</div><p>Hermes 不仅仅是一个 CLI 工具。你可以直接导入 <code>AIAgent</code>，在自己的 Python 脚本、Web 应用或自动化流水线中以编程方式使用它。本指南将介绍具体方法。</p>
+<hr />
+<h2>安装</h2>
+<p>直接从仓库安装 Hermes：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install git+https://github.com/NousResearch/hermes-agent.git
+</div>
+<p>或使用 <a href="https://docs.astral.sh/uv/">uv</a>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+uv pip install git+https://github.com/NousResearch/hermes-agent.git
+</div>
+<p>也可以在 <code>requirements.txt</code> 中固定版本：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes-agent @ git+https://github.com/NousResearch/hermes-agent.git
+</div>
+<div class="tip"><strong>💡 提示</strong>
+将 Hermes 作为库使用时，CLI 所需的环境变量同样必须设置。至少需要设置 <code>OPENROUTER_API_KEY</code>（若直接访问提供商，则设置 <code>OPENAI_API_KEY</code> 或 <code>ANTHROPIC_API_KEY</code>）。
+</div>
+<hr />
+<h2>基本用法</h2>
+<p>使用 Hermes 最简单的方式是 <code>chat()</code> 方法——传入一条消息，返回一个字符串：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from run_agent import AIAgent
+
+agent = AIAgent(
+    model="anthropic/claude-sonnet-4",
+    quiet_mode=True,
+)
+response = agent.chat("What is the capital of France?")
+print(response)
+</div>
+<p><code>chat()</code> 在内部处理完整的对话循环——工具调用、重试等一切事务——并仅返回最终的文本响应。</p>
+<div class="tip warning"><strong>⚠️ 警告</strong>
+将 Hermes 嵌入自己的代码时，务必设置 <code>quiet_mode=True</code>。否则，agent 会打印 CLI 的加载动画、进度指示器及其他终端输出，从而干扰你的应用输出。
+</div>
+<hr />
+<h2>完整对话控制</h2>
+<p>如需对对话进行更精细的控制，可直接使用 <code>run_conversation()</code>。它返回一个包含完整响应、消息历史和元数据的字典：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+agent = AIAgent(
+    model="anthropic/claude-sonnet-4",
+    quiet_mode=True,
+)
+
+result = agent.run_conversation(
+    user_message="Search for recent Python 3.13 features",
+    task_id="my-task-1",
+)
+
+print(result["final_response"])
+print(f"Messages exchanged: {len(result['messages'])}")
+</div>
+<p>返回的字典包含：</p>
+<ul>
+<li><strong><code>final_response</code></strong> — agent 的最终文本回复</li>
+<li><strong><code>messages</code></strong> — 完整的消息历史（系统消息、用户消息、助手消息、工具调用）</li>
+</ul>
+<p>（传入的 <code>task_id</code> 存储在 agent 实例上用于 VM 隔离，不会在返回字典中回显。）</p>
+<p>你也可以传入自定义系统消息，覆盖该次调用的临时系统 prompt（提示词）：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+result = agent.run_conversation(
+    user_message="Explain quicksort",
+    system_message="You are a computer science tutor. Use simple analogies.",
+)
+</div>
+<hr />
+<h2>配置工具集</h2>
+<p>使用 <code>enabled_toolsets</code> 或 <code>disabled_toolsets</code> 控制 agent 可访问的工具集：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 仅启用 Web 工具（浏览、搜索）
+agent = AIAgent(
+    model="anthropic/claude-sonnet-4",
+    enabled_toolsets=["web"],
+    quiet_mode=True,
+)
+
+# 启用除终端访问外的所有功能
+agent = AIAgent(
+    model="anthropic/claude-sonnet-4",
+    disabled_toolsets=["terminal"],
+    quiet_mode=True,
+)
+</div>
+<div class="tip"><strong>💡 提示</strong>
+当你需要一个功能最小化、受限的 agent 时（例如，仅用于研究机器人的 Web 搜索），使用 <code>enabled_toolsets</code>。当你需要大部分功能但需限制特定能力时（例如，在共享环境中禁用终端访问），使用 <code>disabled_toolsets</code>。
+</div>
+<hr />
+<h2>多轮对话</h2>
+<p>通过将消息历史传回来维护多轮对话的状态：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+agent = AIAgent(
+    model="anthropic/claude-sonnet-4",
+    quiet_mode=True,
+)
+
+# 第一轮
+result1 = agent.run_conversation("My name is Alice")
+history = result1["messages"]
+
+# 第二轮——agent 记住了上下文
+result2 = agent.run_conversation(
+    "What's my name?",
+    conversation_history=history,
+)
+print(result2["final_response"])  # "Your name is Alice."
+</div>
+<p><code>conversation_history</code> 参数接受上一次结果的 <code>messages</code> 列表。agent 会在内部复制该列表，因此你的原始列表不会被修改。</p>
+<hr />
+<h2>保存轨迹数据</h2>
+<p>启用轨迹保存，以 ShareGPT 格式捕获对话——适用于生成训练数据或调试：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+agent = AIAgent(
+    model="anthropic/claude-sonnet-4",
+    save_trajectories=True,
+    quiet_mode=True,
+)
+
+agent.chat("Write a Python function to sort a list")
+# 以 ShareGPT 格式保存到 trajectory_samples.jsonl
+</div>
+<p>每次对话以单行 JSONL 的形式追加写入，便于从自动化运行中收集数据集。</p>
+<hr />
+<h2>自定义系统 Prompt</h2>
+<p>使用 <code>ephemeral_system_prompt</code> 设置自定义系统 prompt，用于引导 agent 的行为，但<strong>不会</strong>保存到轨迹文件中（保持训练数据的整洁）：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+agent = AIAgent(
+    model="anthropic/claude-sonnet-4",
+    ephemeral_system_prompt="You are a SQL expert. Only answer database questions.",
+    quiet_mode=True,
+)
+
+response = agent.chat("How do I write a JOIN query?")
+print(response)
+</div>
+<p>这非常适合构建专用 agent——代码审查员、文档撰写员、SQL 助手——全部使用相同的底层工具。</p>
+<hr />
+<h2>批量处理</h2>
+<p>如需并行运行大量 prompt，Hermes 提供了 <code>batch_runner.py</code>，它可管理并发的 <code>AIAgent</code> 实例并进行适当的资源隔离：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python batch_runner.py --input prompts.jsonl --output results.jsonl
+</div>
+<p>每个 prompt 都有自己的 <code>task_id</code> 和隔离环境。如果需要自定义批处理逻辑，可以直接使用 <code>AIAgent</code> 构建：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import concurrent.futures
+from run_agent import AIAgent
+
+prompts = [
+    "Explain recursion",
+    "What is a hash table?",
+    "How does garbage collection work?",
+]
+
+def process_prompt(prompt):
+    # 每个任务创建一个新的 agent 实例以保证线程安全
+    agent = AIAgent(
+        model="anthropic/claude-sonnet-4",
+        quiet_mode=True,
+        skip_memory=True,
+    )
+    return agent.chat(prompt)
+
+with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+    results = list(executor.map(process_prompt, prompts))
+
+for prompt, result in zip(prompts, results):
+    print(f"Q: {prompt}\nA: {result}\n")
+</div>
+<div class="tip warning"><strong>⚠️ 警告</strong>
+务必为<strong>每个线程或任务创建一个新的 <code>AIAgent</code> 实例</strong>。agent 维护着内部状态（对话历史、工具会话、迭代计数器），这些状态不是线程安全的，不能共享。
+</div>
+<hr />
+<h2>集成示例</h2>
+<h3>FastAPI 端点</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from fastapi import FastAPI
+from pydantic import BaseModel
+from run_agent import AIAgent
+
+app = FastAPI()
+
+class ChatRequest(BaseModel):
+    message: str
+    model: str = "anthropic/claude-sonnet-4"
+
+@app.post("/chat")
+async def chat(request: ChatRequest):
+    agent = AIAgent(
+        model=request.model,
+        quiet_mode=True,
+        skip_context_files=True,
+        skip_memory=True,
+    )
+    response = agent.chat(request.message)
+    return {"response": response}
+</div>
+<h3>Discord 机器人</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import discord
+from run_agent import AIAgent
+
+client = discord.Client(intents=discord.Intents.default())
+
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
+    if message.content.startswith("!hermes "):
+        query = message.content[8:]
+        agent = AIAgent(
+            model="anthropic/claude-sonnet-4",
+            quiet_mode=True,
+            skip_context_files=True,
+            skip_memory=True,
+            platform="discord",
+        )
+        response = agent.chat(query)
+        await message.channel.send(response[:2000])
+
+client.run("YOUR_DISCORD_TOKEN")
+</div>
+<h3>CI/CD 流水线步骤</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+#!/usr/bin/env python3
+"""CI step: auto-review a PR diff."""
+import subprocess
+from run_agent import AIAgent
+
+diff = subprocess.check_output(["git", "diff", "main...HEAD"]).decode()
+
+agent = AIAgent(
+    model="anthropic/claude-sonnet-4",
+    quiet_mode=True,
+    skip_context_files=True,
+    skip_memory=True,
+    disabled_toolsets=["terminal", "browser"],
+)
+
+review = agent.chat(
+    f"Review this PR diff for bugs, security issues, and style problems:\n\n{diff}"
+)
+print(review)
+</div>
+<hr />
+<h2>关键构造函数参数</h2>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>model</code></td>
+<td><code>str</code></td>
+<td><code>&quot;anthropic/claude-opus-4.6&quot;</code></td>
+<td>OpenRouter 格式的模型名称</td>
+</tr>
+<tr>
+<td><code>quiet_mode</code></td>
+<td><code>bool</code></td>
+<td><code>False</code></td>
+<td>抑制 CLI 输出</td>
+</tr>
+<tr>
+<td><code>enabled_toolsets</code></td>
+<td><code>List[str]</code></td>
+<td><code>None</code></td>
+<td>白名单指定工具集</td>
+</tr>
+<tr>
+<td><code>disabled_toolsets</code></td>
+<td><code>List[str]</code></td>
+<td><code>None</code></td>
+<td>黑名单指定工具集</td>
+</tr>
+<tr>
+<td><code>save_trajectories</code></td>
+<td><code>bool</code></td>
+<td><code>False</code></td>
+<td>将对话保存为 JSONL</td>
+</tr>
+<tr>
+<td><code>ephemeral_system_prompt</code></td>
+<td><code>str</code></td>
+<td><code>None</code></td>
+<td>自定义系统 prompt（不保存到轨迹文件）</td>
+</tr>
+<tr>
+<td><code>max_iterations</code></td>
+<td><code>int</code></td>
+<td><code>90</code></td>
+<td>每次对话的最大工具调用迭代次数</td>
+</tr>
+<tr>
+<td><code>skip_context_files</code></td>
+<td><code>bool</code></td>
+<td><code>False</code></td>
+<td>跳过加载 AGENTS.md 文件</td>
+</tr>
+<tr>
+<td><code>skip_memory</code></td>
+<td><code>bool</code></td>
+<td><code>False</code></td>
+<td>禁用持久化内存的读写</td>
+</tr>
+<tr>
+<td><code>api_key</code></td>
+<td><code>str</code></td>
+<td><code>None</code></td>
+<td>API 密钥（回退到环境变量）</td>
+</tr>
+<tr>
+<td><code>base_url</code></td>
+<td><code>str</code></td>
+<td><code>None</code></td>
+<td>自定义 API 端点 URL</td>
+</tr>
+<tr>
+<td><code>platform</code></td>
+<td><code>str</code></td>
+<td><code>None</code></td>
+<td>平台提示（<code>&quot;discord&quot;</code>、<code>&quot;telegram&quot;</code> 等）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>重要说明</h2>
+<div class="tip"><strong>💡 提示</strong>
+<ul>
+<li>如果不希望将工作目录中的 <code>AGENTS.md</code> 文件加载到系统 prompt 中，请设置 <strong><code>skip_context_files=True</code></strong>。</li>
+<li>设置 <strong><code>skip_memory=True</code></strong> 可阻止 agent 读写持久化内存——推荐用于无状态 API 端点。</li>
+<li><code>platform</code> 参数（如 <code>&quot;discord&quot;</code>、<code>&quot;telegram&quot;</code>）会注入平台特定的格式化提示，使 agent 适配其输出风格。</li>
+</ul>
+
+</div>
+<div class="tip warning"><strong>⚠️ 警告</strong>
+<ul>
+<li><strong>线程安全</strong>：每个线程或任务创建一个 <code>AIAgent</code> 实例。切勿在并发调用中共享同一实例。</li>
+<li><strong>资源清理</strong>：agent 在对话结束时会自动清理资源（终端会话、浏览器实例）。若在长期运行的进程中使用，请确保每次对话正常结束。</li>
+<li><strong>迭代限制</strong>：默认的 <code>max_iterations=90</code> 较为宽松。对于简单的问答场景，建议适当降低该值（如 <code>max_iterations=10</code>），以防止工具调用循环失控并控制成本。</li>
+</ul>
+
+</div>
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

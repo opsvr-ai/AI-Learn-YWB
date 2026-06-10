@@ -1,0 +1,323 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maps — 通过 OpenStreetMap/OSRM 进行地理编码、POI、路线、时区查询 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Maps — 通过 OpenStreetMap/OSRM 进行地理编码、POI、路线、时区查询</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Maps</h1>
+<p>通过 OpenStreetMap/OSRM 进行地理编码、POI、路线、时区查询。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>内置（默认安装）</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>skills/productivity/maps</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.2.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Mibayy</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>maps</code>, <code>geocoding</code>, <code>places</code>, <code>routing</code>, <code>distance</code>, <code>directions</code>, <code>nearby</code>, <code>location</code>, <code>openstreetmap</code>, <code>nominatim</code>, <code>overpass</code>, <code>osrm</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>Maps Skill</h1>
+<p>使用免费开放数据源的位置智能工具。8 个命令，44 个 POI（兴趣点）分类，零依赖（仅 Python 标准库），无需 API 密钥。</p>
+<p>数据来源：OpenStreetMap/Nominatim、Overpass API、OSRM、TimeAPI.io。</p>
+<p>本 skill 取代了旧版 <code>find-nearby</code> skill —— find-nearby 的所有功能均由下方的 <code>nearby</code> 命令覆盖，支持相同的 <code>--near &quot;&lt;place&gt;&quot;</code> 快捷方式和多分类查询。</p>
+<h2>使用场景</h2>
+<ul>
+<li>用户发送 Telegram 位置图钉（消息中包含经纬度）→ <code>nearby</code></li>
+<li>用户需要某地名的坐标 → <code>search</code></li>
+<li>用户有坐标并想获取地址 → <code>reverse</code></li>
+<li>用户询问附近的餐厅、医院、药店、酒店等 → <code>nearby</code></li>
+<li>用户需要驾车/步行/骑行距离或行程时间 → <code>distance</code></li>
+<li>用户需要两地之间的逐步导航 → <code>directions</code></li>
+<li>用户需要某位置的时区信息 → <code>timezone</code></li>
+<li>用户需要在某地理区域内搜索 POI → <code>area</code> + <code>bbox</code></li>
+</ul>
+<h2>前置条件</h2>
+<p>Python 3.8+（仅标准库，无需 pip 安装）。</p>
+<p>脚本路径：<code>~/.hermes/skills/maps/scripts/maps_client.py</code></p>
+<h2>命令</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+MAPS=~/.hermes/skills/maps/scripts/maps_client.py
+</div>
+<h3>search — 地理编码地名</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 $MAPS search "Eiffel Tower"
+python3 $MAPS search "1600 Pennsylvania Ave, Washington DC"
+</div>
+<p>返回：纬度、经度、显示名称、类型、边界框、重要性评分。</p>
+<h3>reverse — 坐标转地址</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 $MAPS reverse 48.8584 2.2945
+</div>
+<p>返回：完整地址分解（街道、城市、州/省、国家、邮政编码）。</p>
+<h3>nearby — 按分类查找地点</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 按坐标（例如来自 Telegram 位置图钉）
+python3 $MAPS nearby 48.8584 2.2945 restaurant --limit 10
+python3 $MAPS nearby 40.7128 -74.0060 hospital --radius 2000
+<h1>按地址/城市/邮编/地标 —— --near 自动进行地理编码</h1>
+<p>python3 $MAPS nearby --near &quot;Times Square, New York&quot; --category cafe
+python3 $MAPS nearby --near &quot;90210&quot; --category pharmacy</p>
+<h1>多个分类合并为一次查询</h1>
+<p>python3 $MAPS nearby --near &quot;downtown austin&quot; --category restaurant --category bar --limit 10</p>
+</div>
+<p>46 个分类：restaurant、cafe、bar、hospital、pharmacy、hotel、guest_house、
+camp_site、supermarket、atm、gas_station、parking、museum、park、school、
+university、bank、police、fire_station、library、airport、train_station、
+bus_stop、church、mosque、synagogue、dentist、doctor、cinema、theatre、gym、
+swimming_pool、post_office、convenience_store、bakery、bookshop、laundry、
+car_wash、car_rental、bicycle_rental、taxi、veterinary、zoo、playground、
+stadium、nightclub。</p>
+<p>每条结果包含：<code>name</code>、<code>address</code>、<code>lat</code>/<code>lon</code>、<code>distance_m</code>、
+<code>maps_url</code>（可点击的 Google Maps 链接）、<code>directions_url</code>（从搜索点出发的 Google Maps 导航链接），以及可用时的扩展标签 ——
+<code>cuisine</code>、<code>hours</code>（营业时间）、<code>phone</code>、<code>website</code>。</p>
+<h3>distance — 行程距离与时间</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 $MAPS distance "Paris" --to "Lyon"
+python3 $MAPS distance "New York" --to "Boston" --mode driving
+python3 $MAPS distance "Big Ben" --to "Tower Bridge" --mode walking
+</div>
+<p>模式：driving（驾车，默认）、walking（步行）、cycling（骑行）。返回道路距离、行程时长及直线距离以供对比。</p>
+<h3>directions — 逐步导航</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 $MAPS directions "Eiffel Tower" --to "Louvre Museum" --mode walking
+python3 $MAPS directions "JFK Airport" --to "Times Square" --mode driving
+</div>
+<p>返回带编号的步骤，包含指令、距离、时长、道路名称及操作类型（转弯、出发、到达等）。</p>
+<h3>timezone — 坐标对应时区</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 $MAPS timezone 48.8584 2.2945
+python3 $MAPS timezone 35.6762 139.6503
+</div>
+<p>返回时区名称、UTC 偏移量及当前本地时间。</p>
+<h3>area — 地点的边界框与面积</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 $MAPS area "Manhattan, New York"
+python3 $MAPS area "London"
+</div>
+<p>返回边界框坐标、宽度/高度（千米）及近似面积。可作为 bbox 命令的输入使用。</p>
+<h3>bbox — 在边界框内搜索</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 $MAPS bbox 40.75 -74.00 40.77 -73.98 restaurant --limit 20
+</div>
+<p>在地理矩形区域内查找 POI。可先使用 <code>area</code> 命令获取命名地点的边界框坐标。</p>
+<h2>处理 Telegram 位置图钉</h2>
+<p>当用户发送位置图钉时，消息中包含 <code>latitude:</code> 和 <code>longitude:</code> 字段。提取这些字段并直接传入 <code>nearby</code>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 用户在 36.17, -115.14 发送了图钉并询问"附近有哪些咖啡馆"
+python3 $MAPS nearby 36.17 -115.14 cafe --radius 1500
+</div>
+<p>以编号列表形式呈现结果，包含名称、距离及 <code>maps_url</code> 字段，使用户在聊天中获得可点击链接。对于&quot;现在是否营业？&quot;的问题，检查 <code>hours</code> 字段；若缺失或不明确，请通过 <code>web_search</code> 核实，因为 OSM 营业时间由社区维护，不一定是最新的。</p>
+<h2>工作流示例</h2>
+<p><strong>&quot;查找斗兽场附近的意大利餐厅&quot;：</strong></p>
+<ol>
+<li><code>nearby --near &quot;Colosseum Rome&quot; --category restaurant --radius 500</code>
+—— 一条命令，自动地理编码</li>
+</ol>
+<p><strong>&quot;用户发送了位置图钉，附近有什么？&quot;：</strong></p>
+<ol>
+<li>从 Telegram 消息中提取经纬度</li>
+<li><code>nearby LAT LON cafe --radius 1500</code></li>
+</ol>
+<p><strong>&quot;如何从酒店步行到会议中心？&quot;：</strong></p>
+<ol>
+<li><code>directions &quot;Hotel Name&quot; --to &quot;Conference Center&quot; --mode walking</code></li>
+</ol>
+<p><strong>&quot;西雅图市中心有哪些餐厅？&quot;：</strong></p>
+<ol>
+<li><code>area &quot;Downtown Seattle&quot;</code> → 获取边界框</li>
+<li><code>bbox S W N E restaurant --limit 30</code></li>
+</ol>
+<h2>注意事项</h2>
+<ul>
+<li>Nominatim 服务条款：最多 1 次请求/秒（脚本自动处理）</li>
+<li><code>nearby</code> 需要经纬度或 <code>--near &quot;&lt;address&gt;&quot;</code> —— 二者必须提供其一</li>
+<li>OSRM 路线规划在欧洲和北美覆盖最佳</li>
+<li>Overpass API 在高峰时段可能较慢；脚本会自动在镜像站之间切换（overpass-api.de → overpass.kumi.systems）</li>
+<li><code>distance</code> 和 <code>directions</code> 使用 <code>--to</code> 标志指定目的地（非位置参数）</li>
+<li>若单独使用邮政编码在全球范围内结果模糊，请附上国家/州信息</li>
+</ul>
+<h2>验证</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 ~/.hermes/skills/maps/scripts/maps_client.py search "Statue of Liberty"
+# 应返回纬度约 40.689，经度约 -74.044
+<p>python3 ~/.hermes/skills/maps/scripts/maps_client.py nearby --near &quot;Times Square&quot; --category restaurant --limit 3</p>
+<h1>应返回 Times Square 约 500 米范围内的餐厅列表</h1>
+</div>
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

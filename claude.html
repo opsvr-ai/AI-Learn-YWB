@@ -1,0 +1,1210 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Code — AI赋能日常工作</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <span class="icon">AI</span>
+      运维部AI学习平台
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">&#128172;</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">&#9000;</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">&#128218;</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">&#128214;</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">&#128273;</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">&#128214;</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">&#128172;</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">&#128202;</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="container">
+      <div class="breadcrumb"><a href="index.html">首页</a> / Claude Code</div>
+      <h1>Claude Code</h1>
+      <p class="subtitle">面向开发者的AI编程协作工具，让编码效率翻倍</p>
+    </div>
+  </div>
+
+  <!-- 概述 -->
+  <section class="section">
+    <div class="container">
+      <span class="section-label">Overview</span>
+      <h2 class="section-title">什么是 Claude Code？</h2>
+      <p class="section-desc">Claude Code 是 Anthropic 推出的AI编程助手，在终端命令行中运行。它能够理解你的整个代码仓库，帮你编写代码、修复Bug、进行代码审查、重构优化、编写测试等。</p>
+
+      <div class="highlight-box">
+        <h3>核心定位</h3>
+        <p>面向开发者的AI协作工具 — 不是替代开发者，而是作为超级搭档，理解代码上下文后进行深度协作。运行在终端中，与你的开发环境无缝集成。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 核心功能 -->
+  <section class="section section-gray">
+    <div class="container">
+      <span class="section-label">Features</span>
+      <h2 class="section-title">核心能力</h2>
+      <p class="section-desc">Claude Code 覆盖软件开发的完整流程，以下是最常用的开发场景。</p>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="tab-code">代码开发</button>
+        <button class="tab-btn" data-tab="tab-debug">调试排错</button>
+        <button class="tab-btn" data-tab="tab-review">代码审查</button>
+        <button class="tab-btn" data-tab="tab-refactor">重构优化</button>
+      </div>
+
+      <div class="tab-panel active" data-tab="tab-code">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-icon blue">&#128736;</div>
+            <h3>功能模块开发</h3>
+            <p>描述需求即可生成完整的代码实现，包括接口定义、业务逻辑和错误处理。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon blue">&#128220;</div>
+            <h3>样板代码生成</h3>
+            <p>快速生成CRUD、API路由、数据库模型等重复性样板代码，节省大量时间。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon blue">&#10004;</div>
+            <h3>单元测试编写</h3>
+            <p>输入函数或模块，自动生成全面的单元测试用例，包含边界情况覆盖。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon blue">&#128268;</div>
+            <h3>API对接</h3>
+            <p>提供API文档链接或描述，自动生成调用代码、错误处理和类型定义。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" data-tab="tab-debug">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-icon orange">&#128030;</div>
+            <h3>Bug定位</h3>
+            <p>描述Bug现象或粘贴错误日志，Claude Code 分析代码定位问题根因。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon orange">&#128295;</div>
+            <h3>错误修复</h3>
+            <p>不仅定位问题，还直接给出修复方案并修改代码，附带解释原因。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon orange">&#128225;</div>
+            <h3>日志分析</h3>
+            <p>将异常日志粘贴给AI，快速得到解读和排查建议，减少排查时间。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon orange">&#128064;</div>
+            <h3>运行时问题诊断</h3>
+            <p>描述奇怪的行为或性能问题，AI帮你分析可能的配置、环境或代码原因。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" data-tab="tab-review">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-icon green">&#128065;</div>
+            <h3>代码审查</h3>
+            <p>在提交前让AI review你的改动，发现潜在问题、安全风险和代码风格问题。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon green">&#128214;</div>
+            <h3>代码规范检查</h3>
+            <p>对照团队编码规范检查代码，确保提交质量符合团队标准。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon green">&#9733;</div>
+            <h3>最佳实践建议</h3>
+            <p>AI会根据语言和框架的社区最佳实践，提出优化建议和改进方向。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon green">&#128274;</div>
+            <h3>安全检查</h3>
+            <p>扫描代码中的常见安全漏洞（SQL注入、XSS等），给出修复方案。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" data-tab="tab-refactor">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-icon purple">&#128260;</div>
+            <h3>代码重构</h3>
+            <p>对遗留代码进行结构优化，提取公共逻辑，改善可读性和可维护性。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon purple">&#128266;</div>
+            <h3>性能优化</h3>
+            <p>分析代码中的性能瓶颈，提供优化建议（如缓存策略、查询优化、算法改进）。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon purple">&#128230;</div>
+            <h3>架构升级</h3>
+            <p>帮助进行技术栈迁移、框架版本升级、从单体到微服务的拆分规划。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon purple">&#128210;</div>
+            <h3>技术文档生成</h3>
+            <p>自动为现有代码生成API文档、README或架构说明文档。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 架构概览 -->
+  <section class="section">
+    <div class="container">
+      <span class="section-label">Architecture</span>
+      <h2 class="section-title">Claude Code 架构概览</h2>
+      <p class="section-desc">了解 Claude Code 的核心架构组件，有助于更好地利用其能力完成开发任务。</p>
+
+      <div class="accordion">
+        <div class="accordion-item">
+          <button class="accordion-trigger">Agent 核心循环（Plan → Execute → Verify） <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <p>Claude Code 在执行任务时遵循三阶段循环：<strong>Plan</strong>（分析需求、检索代码、制定方案）→ <strong>Execute</strong>（创建/修改文件、运行命令、调用工具）→ <strong>Verify</strong>（检查输出、运行测试、确认结果）。每一轮迭代的输出作为下一轮的输入，直到任务完成。这种结构化循环确保了代码变更的可控性和可追溯性。</p>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">模式系统（Mode System） <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <p>Claude Code 提供多种工作模式以适配不同任务场景：<strong>Plan 模式</strong>（先规划后执行，适合复杂变更）、<strong>Auto 模式</strong>（自动执行，适合明确任务）、<strong>讲解模式</strong>（边做边解释，适合学习场景）。模式切换改变 Agent 的自主程度和输出风格，但不改变底层工具能力。</p>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">工具系统（Tool System） <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <p>Claude Code 通过标准化工具接口与开发环境交互，核心工具包括：<strong>Read/Write/Edit</strong>（文件操作）、<strong>Bash</strong>（执行命令）、<strong>Grep/Glob</strong>（代码搜索）、<strong>Git 操作</strong>（版本控制）。每类工具有明确的使用策略和安全边界，多工具组合使用形成完整的开发工作流。</p>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">子代理系统（Subagent） <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <p>Claude Code 支持创建子代理（Subagent）来并行处理独立任务。每个子代理拥有独立的上下文窗口和工具集，主会话负责任务分配和结果整合。常见用法：代码搜索（Explore agent）、代码审查（code-reviewer）、计划制定（Plan agent），多个子代理可以同时运行，互不阻塞。</p>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">Skills 技能系统 <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <p>Skills 是 Claude Code 的<strong>可复用领域知识包</strong>，也是扩展其专业能力的主要方式。</p>
+            <p style="margin-top:12px;"><strong>什么是 Skill？</strong>每个 Skill 是一个独立的知识模块，遵循 <a href="https://agentskills.io" target="_blank">agentskills.io</a> 开放标准。一个 Skill 内部包含：</p>
+            <ul style="margin:8px 0 0 20px;line-height:1.8;">
+              <li><strong>领域指令（Instructions）</strong>：告诉 Agent 在该领域中的操作规范、注意事项和最佳实践</li>
+              <li><strong>工具脚本</strong>：该领域专属的自动化脚本（如 PPT 生成、PDF 解析、OCR 提取）</li>
+              <li><strong>参考文档</strong>：领域知识（API 参考、设计规范、写作指南等）</li>
+              <li><strong>模板</strong>：输出模板（幻灯片模板、文档模板等）</li>
+            </ul>
+            <p style="margin-top:12px;"><strong>Skill 的触发机制：</strong>Claude Code 在收到用户请求后，自动扫描 Skills 库，根据任务语义匹配最相关的 Skill，将其指令加载到上下文窗口。Skill 的激活是<strong>动态且无感的</strong>——你不需要手动指定使用哪个 Skill，Agent 会根据任务自动判断。</p>
+            <p style="margin-top:12px;"><strong>常见 Skill 示例：</strong>前端设计（frontend-design）指导 UI 实现规范、代码审查（code-review）指导审查流程和检查要点、PDF 处理（pdf）指导文档生成样式和排版规则、Bug 调试（systematic-debugging）指导根因分析的思维框架。</p>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">MCP 协议集成 <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <p><strong>MCP（Model Context Protocol）</strong>是 Anthropic 发布的开放协议，为 AI 应用提供标准化的工具接入方式。</p>
+            <p style="margin-top:8px;">Claude Code 原生支持 MCP，通过配置 MCP Server 即可接入外部系统。每个 MCP Server 提供三类资源：<strong>Tools</strong>（可执行操作，如查数据库、发 Slack 消息）、<strong>Resources</strong>（可读取的数据源，如文件、API 响应）、<strong>Prompts</strong>（预定义的提示模板）。</p>
+            <p style="margin-top:8px;">MCP Server 是独立进程，通过 JSON-RPC 与 Claude Code 通信——Agent 决定"调用哪个工具、传什么参数"，Server 实际执行并返回结果。这种架构保证了工具执行的安全隔离。</p>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">&#8505; Skills 与 MCP 的关键区别 <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <table class="compare-table" style="margin-bottom:0;">
+              <thead><tr><th style="width:18%">维度</th><th style="width:41%">Skills（技能）</th><th style="width:41%">MCP（协议工具）</th></tr></thead>
+              <tbody>
+                <tr><td><strong>核心定位</strong></td><td>领域知识 + 操作流程</td><td>外部工具 + 数据接口</td></tr>
+                <tr><td><strong>解决的问题</strong></td><td>"怎么做"——告诉 Agent 完成某类任务的方法论和最佳实践</td><td>"用什么"——为 Agent 提供调用外部系统的标准化接口</td></tr>
+                <tr><td><strong>内容形式</strong></td><td>指令文档、脚本、模板、参考资料</td><td>API 定义、Tool 描述、Resource 和 Prompt 模板</td></tr>
+                <tr><td><strong>运行位置</strong></td><td>加载到 Agent 的上下文窗口，融入推理过程</td><td>独立进程，Agent 通过 JSON-RPC 协议调用，工具在外部执行</td></tr>
+                <tr><td><strong>典型例子</strong></td><td>"如何做一份专业的前端页面"的完整设计方法和规范</td><td>"打开浏览器截图当前页面"的具体操作接口</td></tr>
+                <tr><td><strong>能力扩展</strong></td><td>可人工编写，也可由 Agent 从经验中总结</td><td>须人工开发 MCP Server，工具能力固定</td></tr>
+              </tbody>
+            </table>
+            <p style="margin-top:12px;color:var(--gray-500);font-size:0.85rem;"><strong>简言之：</strong>Skill 教 Agent "怎么做"，MCP 给 Agent "用什么"。一个完整的 Agent 工作流中，MCP 提供了可执行的工具，Skill 提供了使用这些工具的正确方法和领域上下文。两者在 Claude Code 中共存并互补。</p>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">上下文管理（Context Management） <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <p>Claude Code 采用多层上下文管理策略应对长对话场景：<strong>CLAUDE.md</strong>（项目级持久记忆，每次会话自动加载）、<strong>自动摘要压缩</strong>（对话过长时自动提炼关键信息）、<strong>Memory 系统</strong>（跨会话持久化用户偏好和项目知识）。这些机制确保上下文窗口内始终保留最关键的信息。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 前置条件：安装 Node.js 和 Git -->
+  <section class="section">
+    <div class="container">
+      <span class="section-label">Prerequisites</span>
+      <h2 class="section-title">前置条件：安装 Node.js 与 Git</h2>
+      <p class="section-desc">Claude Code 依赖 Node.js 运行环境和 Git 版本控制工具，安装前请先完成以下步骤。</p>
+
+      <div class="grid-2" style="margin-bottom:24px;">
+        <div class="card">
+          <div class="card-icon green">&#128196;</div>
+          <h3>Node.js</h3>
+          <p>Claude Code 的运行基础，提供 npm 包管理器用于安装。</p>
+        </div>
+        <div class="card">
+          <div class="card-icon orange">&#128040;</div>
+          <h3>Git</h3>
+          <p>Claude Code 依赖 Git 进行代码版本管理和仓库操作。</p>
+        </div>
+      </div>
+
+      <!-- 安装 Node.js -->
+      <h3 style="margin-bottom:16px;">一、安装 Node.js</h3>
+
+      <div class="tabs" style="margin-bottom:20px;">
+        <button class="tab-btn active" data-tab="tab-node-win">Windows</button>
+        <button class="tab-btn" data-tab="tab-node-linux">Linux</button>
+      </div>
+
+      <!-- Windows 安装步骤 -->
+      <div class="tab-panel active" data-tab="tab-node-win">
+        <ol class="steps">
+          <li>
+            <h4>下载 Node.js 安装包</h4>
+            <p>下载本培训提供的 Node.js Windows 压缩包 <a href="packages/node-v24.16.0-win-x64.zip" download style="font-weight:600;">node-v24.16.0-win-x64.zip</a>，右键解压到本地。</p>
+          </li>
+          <li>
+            <h4>将解压后的文件夹放到 C:\Soft 目录</h4>
+            <p>将解压得到的 <code style="background:#e5e7eb;padding:2px 6px;border-radius:4px;">node-v24.16.0-win-x64</code> 文件夹，移动到 <code style="background:#e5e7eb;padding:2px 6px;border-radius:4px;">C:\Soft\</code> 目录下（如没有 Soft 目录请先创建）。</p>
+          </li>
+          <li>
+            <h4>打开系统环境变量设置</h4>
+            <p>打开终端管理工具，选择「控制面板」→「系统环境变量」，进入系统属性对话框。</p>
+            <div style="margin-top:12px;">
+              <img src="images/node-env-settings.png" alt="添加系统环境变量" style="border-radius:8px;border:1px solid #e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.06);max-width:100%;" loading="lazy">
+            </div>
+          </li>
+          <li>
+            <h4>将 Node.js 路径追加到 Path 变量</h4>
+            <p>在「系统变量」区域找到并双击 <strong>Path</strong>，点击「新建」，填入以下路径：</p>
+            <div style="background:#1e293b;color:#e2e8f0;padding:12px 20px;border-radius:6px;font-family:Consolas,monospace;font-size:0.9rem;margin-top:12px;">C:\Soft\node-v24.16.0-win-x64</div>
+            <p style="margin-top:8px;">点击「确定」保存，关闭所有对话框。</p>
+          </li>
+          <li>
+            <h4>验证安装结果</h4>
+            <p>打开 CMD 窗口，依次输入以下命令验证 Node.js 是否安装成功：</p>
+            <div id="code-node-verify-win" class="code-block mt-3">
+              <button class="copy-btn" onclick="copyCode('code-node-verify-win', this)">复制</button>
+node --version
+npm --version
+            </div>
+            <p style="margin-top:8px;">如果能正确输出版本号，说明安装成功。</p>
+            <div style="margin-top:12px;">
+              <img src="images/node-version-verify.png" alt="验证node安装结果" style="border-radius:8px;border:1px solid #e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.06);max-width:100%;" loading="lazy">
+            </div>
+          </li>
+        </ol>
+      </div>
+
+      <!-- Linux 安装步骤 -->
+      <div class="tab-panel" data-tab="tab-node-linux">
+        <ol class="steps">
+          <li>
+            <h4>下载 Node.js 安装包</h4>
+            <p>下载本培训提供的 Node.js Linux 压缩包。请根据你的系统架构选择对应版本：</p>
+            <div style="margin-top:8px;">
+              <a href="packages/node-v24.16.0-linux-x64.tar.xz" download class="btn btn-primary btn-sm" style="text-decoration:none;margin-right:8px;">&#128229; x86-64 版</a>
+              <a href="packages/node-v24.16.0-linux-arm64.tar.xz" download class="btn btn-outline btn-sm" style="text-decoration:none;">&#128229; ARM64 版</a>
+            </div>
+            <p style="margin-top:8px;font-size:0.9rem;color:var(--gray-500);">不确定你的架构？在终端执行 <code>uname -m</code>，输出 <code>x86_64</code> 选 x86-64 版，输出 <code>aarch64</code> 选 ARM64 版。</p>
+          </li>
+          <li>
+            <h4>解压安装包</h4>
+            <p>在终端中执行以下命令解压：</p>
+            <div id="code-node-extract-linux" class="code-block mt-3">
+              <button class="copy-btn" onclick="copyCode('code-node-extract-linux', this)">复制</button>
+tar -xJf node-v24.16.0-linux-x64.tar.xz
+            </div>
+          </li>
+          <li>
+            <h4>将 Node.js 移动到系统目录</h4>
+            <p>将解压后的文件夹移动到 <code style="background:#e5e7eb;padding:2px 6px;border-radius:4px;">/usr/local/</code> 目录下：</p>
+            <div id="code-node-move-linux" class="code-block mt-3">
+              <button class="copy-btn" onclick="copyCode('code-node-move-linux', this)">复制</button>
+sudo mv node-v24.16.0-linux-x64 /usr/local/node
+            </div>
+          </li>
+          <li>
+            <h4>配置环境变量</h4>
+            <p>将 Node.js 路径添加到系统 PATH 中：</p>
+            <div id="code-node-path-linux" class="code-block mt-3">
+              <button class="copy-btn" onclick="copyCode('code-node-path-linux', this)">复制</button>
+echo 'export PATH=/usr/local/node/bin:$PATH' >> ~/.bashrc
+source ~/.bashrc
+            </div>
+          </li>
+          <li>
+            <h4>验证安装结果</h4>
+            <p>在终端中输入以下命令验证 Node.js 是否安装成功：</p>
+            <div id="code-node-verify-linux" class="code-block mt-3">
+              <button class="copy-btn" onclick="copyCode('code-node-verify-linux', this)">复制</button>
+node --version
+npm --version
+            </div>
+            <p style="margin-top:8px;">如果能正确输出版本号，说明安装成功。</p>
+          </li>
+        </ol>
+        <div class="tip mt-3">
+          <strong>ARM64 用户请注意</strong>
+          如果你下载的是 ARM64 版（<code>node-v24.16.0-linux-arm64.tar.xz</code>），在执行上述解压和移动命令时，请将文件名中的 <code>x64</code> 替换为 <code>arm64</code>，例如 <code>tar -xJf node-v24.16.0-linux-arm64.tar.xz</code> 和 <code>sudo mv node-v24.16.0-linux-arm64 /usr/local/node</code>。
+        </div>
+      </div>
+
+      <!-- 安装 Git -->
+      <h3 style="margin-top:32px;margin-bottom:16px;">二、安装 Git</h3>
+      <ol class="steps">
+        <li>
+          <h4>通过应用商店安装 Git</h4>
+          <p>登录公司应用商店 <code style="background:#e5e7eb;padding:2px 6px;border-radius:4px;">http://7.24.4.123/Matrix/</code>，搜索 <strong>Git-Bash</strong>，点击安装即可。</p>
+          <div style="margin-top:12px;">
+            <img src="images/git-bash-appstore-install.png" alt="应用商店搜索Git-Bash安装" style="border-radius:8px;border:1px solid #e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.06);max-width:100%;" loading="lazy">
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div style="text-align:center;margin-top:24px;padding-top:20px;border-top:1px dashed var(--gray-200);">
+      <button class="help-btn" onclick="requestHelp(this)">🙋 安装遇到困难？我需要协助</button>
+    </div>
+  </section>
+
+  <!-- 一键安装 Claude Code -->
+  <section class="section">
+    <div class="container">
+      <span class="section-label">One-Click Install</span>
+      <h2 class="section-title">一键安装 Claude Code</h2>
+      <p class="section-desc">Node.js 和 Git 已安装？复制以下<strong>一条命令</strong>到终端，自动完成 npm 源配置 + Claude Code 安装 + 配置目录创建。</p>
+
+      <div class="highlight-box" style="margin-bottom:24px;">
+        <h3>&#9889; 一键安装命令</h3>
+        <p>选择你的终端类型，点击<strong>复制按钮</strong>，粘贴到终端执行即可。</p>
+        <div style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;">
+          <a href="packages/install-claude.ps1" download class="btn btn-primary btn-sm" style="text-decoration:none;">&#128229; 下载 PowerShell 脚本</a>
+          <a href="packages/install-claude.cmd" download class="btn btn-outline btn-sm" style="text-decoration:none;">&#128229; 下载 CMD 脚本</a>
+        </div>
+      </div>
+
+      <div class="code-tabs">
+        <button class="code-tab active" onclick="switchCodeTab('claude-cmd', this)">CMD（命令提示符）</button>
+        <button class="code-tab" onclick="switchCodeTab('claude-ps', this)">PowerShell</button>
+      </div>
+
+      <div id="code-claude-cmd" class="code-block">
+        <button class="copy-btn" onclick="copyCode('code-claude-cmd', this)">复制</button>
+@echo off
+echo ========================================
+echo   Claude Code 一键安装脚本
+echo ========================================
+echo.
+echo [1/3] 检查 Node.js 环境...
+where node &gt;nul 2&gt;&amp;1 || (echo [错误] 请先安装 Node.js &amp;&amp; goto :end)
+node --version &amp;&amp; npm --version
+echo [2/3] 配置 npm 源并安装 Claude Code...
+npm config set registry http://7.24.4.68:28081/repository/npm/
+npm install -g @anthropic-ai/claude-code@2.1.153
+echo [3/3] 创建配置目录...
+if not exist "%USERPROFILE%\.claude" mkdir "%USERPROFILE%\.claude"
+echo.
+echo ========================================
+echo   安装完成！运行 claude --version 验证
+echo ========================================
+:end
+pause
+      </div>
+
+      <div id="code-claude-ps" class="code-block" style="display:none;">
+        <button class="copy-btn" onclick="copyCode('code-claude-ps', this)">复制</button>
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host "  Claude Code 一键安装脚本" -ForegroundColor Cyan
+Write-Host "========================================" -ForegroundColor Cyan
+Write-Host ""
+Write-Host "[1/3] 检查 Node.js 环境..." -ForegroundColor Yellow
+try { node --version; npm --version } catch { Write-Host "[错误] 请先安装 Node.js" -ForegroundColor Red; exit 1 }
+Write-Host "[2/3] 配置 npm 源并安装 Claude Code..." -ForegroundColor Yellow
+npm config set registry http://7.24.4.68:28081/repository/npm/
+npm install -g @anthropic-ai/claude-code@2.1.153
+Write-Host "[3/3] 创建配置目录..." -ForegroundColor Yellow
+New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.claude" | Out-Null
+Write-Host ""
+Write-Host "========================================" -ForegroundColor Green
+Write-Host "  安装完成！运行 claude --version 验证" -ForegroundColor Green
+Write-Host "========================================" -ForegroundColor Green
+      </div>
+
+      <div class="tip mt-3">
+        <strong>安装完成后</strong>
+        还需要 <strong>配置 settings.json</strong>（设置内网模型地址和 API Key），详见下方「配置内网大模型连接」章节。也可以下载预打包的 <a href="packages/claude-win.zip" download>claude-win.zip</a> 快速导入完整环境。
+      </div>
+    </div>
+  </section>
+
+  <!-- 安装 Claude Code -->
+  <section class="section section-gray">
+    <div class="container">
+      <span class="section-label">Installation</span>
+      <h2 class="section-title">安装 Claude Code（分步详解）</h2>
+      <p class="section-desc">如需了解每一步的作用，可参考以下分步安装说明。追求速度可直接使用上方一键脚本。</p>
+
+      <ol class="steps">
+        <li>
+          <h4>执行安装命令</h4>
+          <p>打开终端（CMD 或 PowerShell），执行以下命令全局安装 Claude Code：</p>
+          <div id="code-claude-install" class="code-block mt-3">
+            <button class="copy-btn" onclick="copyCode('code-claude-install', this)">复制</button>
+npm install -g @anthropic-ai/claude-code@2.1.153 --registry=http://7.24.4.68:28081/repository/npm/
+          </div>
+          <div style="margin-top:12px;">
+            <img src="images/claude-install.png" alt="终端安装Claude Code过程" style="border-radius:8px;border:1px solid #e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.06);max-width:100%;" loading="lazy">
+          </div>
+        </li>
+        <li>
+          <h4>验证安装结果</h4>
+          <p>安装完成后，运行以下命令查看 Claude Code 版本，确认安装成功：</p>
+          <div id="code-claude-version" class="code-block mt-3">
+            <button class="copy-btn" onclick="copyCode('code-claude-version', this)">复制</button>
+claude --version
+          </div>
+          <div style="margin-top:12px;">
+            <img src="images/claude-verify-install-version.png" alt="查看Claude Code版本验证安装" style="border-radius:8px;border:1px solid #e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.06);max-width:100%;" loading="lazy">
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 配置内网大模型 -->
+  <section class="section">
+    <div class="container">
+      <span class="section-label">Configuration</span>
+      <h2 class="section-title">配置内网大模型连接</h2>
+      <p class="section-desc">首次运行 Claude Code 之前，需要修改 settings.json 文件，将模型指向公司内网大模型服务。API Key 和接口 URL 请参考 <a href="api-key.html">API Key 申请指南</a> 获取。</p>
+
+      <div class="highlight-box">
+        <h3>为什么需要配置 settings.json？</h3>
+        <p>Claude Code 默认连接 Anthropic 官方服务，公司内网环境下需要将模型接口指向内部 AI Gateway（<code>http://7.24.28.9:8080</code>），并使用在平台上申请的 API Key 进行认证。</p>
+      </div>
+
+      <ol class="steps" style="margin-top:24px;">
+        <li>
+          <h4>找到 settings.json 文件位置</h4>
+          <p>Claude Code 的配置文件位于用户目录下的 <code>.claude</code> 文件夹中：</p>
+          <div style="background:#1e293b;color:#e2e8f0;padding:12px 20px;border-radius:6px;font-family:Consolas,monospace;font-size:0.9rem;margin-top:12px;">C:\Users\你的用户名\.claude\settings.json</div>
+          <p style="margin-top:8px;">如果 <code>.claude</code> 目录尚不存在，请先运行一次 <code style="background:#e5e7eb;padding:2px 6px;border-radius:4px;">claude</code> 命令，首次启动会自动生成该目录。</p>
+          <div style="margin-top:12px;">
+            <img src="images/claude-code的settings.json文件路径.png" alt="settings.json文件路径" style="border-radius:8px;border:1px solid #e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.06);max-width:100%;" loading="lazy">
+          </div>
+        </li>
+        <li>
+          <h4>下载并替换 settings.json</h4>
+          <p>下载以下配置文件模板，将其覆盖到上述 <code>.claude</code> 目录中：</p>
+          <p style="margin-top:8px;">
+            <a href="packages/settings.json" download class="btn btn-primary btn-lg" style="text-decoration:none;display:inline-block;">
+              &#128229; 下载 settings.json
+            </a>
+          </p>
+          <p style="margin-top:8px;font-size:0.85rem;color:var(--gray-400);">该文件已预配置好内网模型地址和接口参数，只需替换 API Key 即可。</p>
+        </li>
+        <li>
+          <h4>修改配置中的关键字段</h4>
+          <p>用文本编辑器（如记事本、VS Code）打开 settings.json，将以下字段替换为你自己的信息：</p>
+          <table class="compare-table" style="margin-top:12px;">
+            <thead>
+              <tr><th>字段</th><th>说明</th><th>修改方式</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ANTHROPIC_AUTH_TOKEN</code></td>
+                <td>API Key，用于身份认证</td>
+                <td>替换为你在 AI Gateway 平台申请的 Key，参考 <a href="api-key.html">API Key 申请</a></td>
+              </tr>
+              <tr>
+                <td><code>ANTHROPIC_BASE_URL</code></td>
+                <td>大模型接口地址</td>
+                <td>已预设为 <code>http://7.24.28.9:8080</code>，无需修改</td>
+              </tr>
+              <tr>
+                <td><code>ANTHROPIC_MODEL</code></td>
+                <td>默认调用的模型名称</td>
+                <td>已预设为 <code>anthropic-glm5</code>，可在<a href="api-key.html">模型目录</a>中查看其他可用模型</td>
+              </tr>
+              <tr>
+                <td><code>ANTHROPIC_DEFAULT_OPUS_MODEL</code></td>
+                <td>Opus 级别模型（复杂任务），Claude Code 执行高难度编码任务时调用</td>
+                <td>建议与 <code>ANTHROPIC_MODEL</code> 保持一致</td>
+              </tr>
+              <tr>
+                <td><code>ANTHROPIC_DEFAULT_SONNET_MODEL</code></td>
+                <td>Sonnet 级别模型（日常任务），Claude Code 常规编码和对话时调用</td>
+                <td>建议与 <code>ANTHROPIC_MODEL</code> 保持一致</td>
+              </tr>
+              <tr>
+                <td><code>ANTHROPIC_DEFAULT_HAIKU_MODEL</code></td>
+                <td>Haiku 级别模型（轻量快速），Claude Code 快速判断和简单操作时调用</td>
+                <td>建议与 <code>ANTHROPIC_MODEL</code> 保持一致</td>
+              </tr>
+              <tr>
+                <td><code>CLAUDE_CODE_SUBAGENT_MODEL</code></td>
+                <td>子代理模型，Claude Code 派出子任务（如代码审查、并行搜索）时调用</td>
+                <td>建议与 <code>ANTHROPIC_MODEL</code> 保持一致</td>
+              </tr>
+              <tr>
+                <td><code>model</code></td>
+                <td>顶层默认模型设置</td>
+                <td>建议与 <code>ANTHROPIC_MODEL</code> 保持一致</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="tip mt-3">
+            <strong>简化配置</strong>
+            内网环境下所有模型字段建议统一填写同一个模型名称（如 <code>anthropic-glm5</code>），避免不同级别任务调用不同模型时因模型不存在而报错。如果后续平台上线了多种模型，可以分别指定。
+          </div>
+          <div class="tip warning mt-3">
+            <strong>安全提醒</strong>
+            文件中的 Key 仅作示例，请务必替换为你自己的 Key，且不要将含有真实 Key 的 settings.json 上传到代码仓库或共享给他人。
+          </div>
+        </li>
+        <li>
+          <h4>配置完成，启动 Claude Code</h4>
+          <p>保存 settings.json 后，在终端中运行 <code style="background:#e5e7eb;padding:2px 6px;border-radius:4px;">claude</code> 命令即可启动。首次启动会自动加载配置，连接内网大模型。</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 一键导入完整环境 -->
+  <section class="section">
+    <div class="container">
+      <span class="section-label">Quick Setup</span>
+      <h2 class="section-title">快速配置方案：一键导入 Claude Code 完整环境</h2>
+      <p class="section-desc">如果你不想手动安装 Node.js、配置 settings.json、逐个安装插件，可以直接下载我们预先打包好的完整 <code>.claude</code> 目录，覆盖到你的电脑上即可使用。该包包含了 Claude Code 的全部插件和配置模板。</p>
+
+      <div class="highlight-box" style="margin-bottom:24px;">
+        <h3>这个压缩包里有什么？</h3>
+        <p>包含完整的 <code>.claude</code> 目录——settings.json 配置模板、80+ 预装插件（代码审查、前端设计、PDF/Office 文档处理、浏览器控制、MCP 工具集成等）、Skills 技能库、Memory 记忆系统。覆盖后只需修改路径和 API Key 即可投入使用，省去数小时的安装和配置时间。</p>
+      </div>
+
+      <ol class="steps">
+        <li>
+          <h4>下载 claude-win.zip</h4>
+          <p>点击下方按钮下载完整环境包（约 1.2 GB，包含所有插件和配置）：</p>
+          <p style="margin-top:12px;">
+            <a href="packages/claude-win.zip" download class="btn btn-primary btn-lg" style="text-decoration:none;display:inline-block;">
+              &#128229; 下载 claude-win.zip（约 1.2 GB）
+            </a>
+          </p>
+        </li>
+        <li>
+          <h4>解压并覆盖到用户目录</h4>
+          <p>将下载的 <code>claude-win.zip</code> 解压，把其中的 <code>.claude</code> 文件夹复制到你的 Windows 用户目录下：</p>
+          <div style="background:#1e293b;color:#e2e8f0;padding:12px 20px;border-radius:6px;font-family:Consolas,monospace;font-size:0.9rem;margin-top:12px;">C:\Users\<strong style="color:#fbbf24;">你的用户名</strong>\.claude\</div>
+          <p style="margin-top:8px;">如果该目录已存在，选择「覆盖/合并」。覆盖后你的 <code>.claude</code> 目录将包含完整的插件和配置模板。</p>
+          <div class="tip warning mt-3">
+            <strong>注意</strong>：覆盖后会替换你原有的 <code>.claude</code> 目录中的同名文件。如果你已有自己的 settings.json，建议先备份。
+          </div>
+        </li>
+        <li>
+          <h4>启动 Claude Code，让 AI 帮你修复配置</h4>
+          <p>解压完成后，打开终端输入 <code style="background:#e5e7eb;padding:2px 6px;border-radius:4px;">claude</code> 启动 Claude Code，然后将以下提示词粘贴到对话中：</p>
+          <div id="code-fix-paths" class="code-block mt-3">
+            <button class="copy-btn" onclick="copyCode('code-fix-paths', this)">复制</button>
+我的 .claude 目录是从另一台电脑拷贝过来的，请帮我改成我自己电脑的配置。需要修改以下内容：
+
+1. 扫描 settings.json 和所有插件配置文件中包含的旧路径（如 C:\Users\11490），全部替换为当前电脑的实际路径（C:\Users\我的用户名）
+2. 检查 settings.json 中的 ANTHROPIC_AUTH_TOKEN，如果有旧的 API Key 请提醒我替换成自己的 Key
+3. 检查所有插件的 enabledPlugins 是否正常，如有插件报错请帮我修复
+4. 确认所有 MCP server 的启动路径是否正确
+          </div>
+          <p style="margin-top:12px;">Claude Code 会自动扫描 <code>.claude</code> 目录下的所有文件，将旧路径替换为当前电脑的用户路径，并检查配置完整性。</p>
+          <div class="tip mt-3">
+            <strong>关键步骤</strong>：这一步非常重要！压缩包是从他人电脑打包的，里面的配置文件和插件引用路径都指向原电脑的用户目录。必须让 Claude 帮你批量替换路径，否则插件会因找不到文件而无法正常工作。
+          </div>
+        </li>
+        <li>
+          <h4>配置 API Key</h4>
+          <p>路径修复完成后，按照 <a href="api-key.html">API Key 申请指南</a> 获取自己的 Key，然后修改 <code>settings.json</code> 中的 <code>ANTHROPIC_AUTH_TOKEN</code> 字段。其他模型配置项（如 ANTHROPIC_MODEL、ANTHROPIC_BASE_URL 等）已预设好内网地址，通常无需修改。</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 使用方式 -->
+  <section class="section section-gray">
+    <div class="container">
+      <span class="section-label">How to Use</span>
+      <h2 class="section-title">使用 Claude Code</h2>
+      <p class="section-desc">配置完成后，即可在项目中开始使用 Claude Code 进行开发协作。</p>
+
+      <ol class="steps">
+        <li>
+          <h4>在项目中启动</h4>
+          <p>打开终端，进入你的项目根目录，运行以下命令进入交互模式：</p>
+          <div id="code-claude-start" class="code-block mt-3">
+            <button class="copy-btn" onclick="copyCode('code-claude-start', this)">复制</button>
+cd 你的项目目录
+claude
+          </div>
+          <p style="margin-top:8px;">Claude Code 会自动扫描项目结构、读取 CLAUDE.md 等配置文件，理解代码上下文后即可开始对话。</p>
+          <div style="margin-top:12px;">
+            <img src="images/启动claude-code.png" alt="启动Claude Code界面" style="border-radius:8px;border:1px solid #e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.06);max-width:100%;" loading="lazy">
+          </div>
+          <div class="tip mt-3">
+            <strong>快捷用法</strong>
+            也可以直接传入任务描述单次执行：<code style="background:#e5e7eb;padding:2px 8px;border-radius:4px;">claude "帮我修复这个Bug"</code>
+          </div>
+        </li>
+        <li>
+          <h4>描述需求，开始协作</h4>
+          <p>在对话界面中描述你的开发需求，Claude Code 会在代码库中直接操作：编写代码、修改文件、运行测试等。每次操作前会提示你确认，你可以随时干预或调整方向。</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 开发模式详解 -->
+  <section class="section section-gray">
+    <div class="container">
+      <span class="section-label">Modes</span>
+      <h2 class="section-title">开发模式详解</h2>
+      <p class="section-desc">Claude Code 内置了多种工作模式，适应不同开发阶段和信任程度。理解每种模式的特点，才能在不同场景下选择最合适的方式。</p>
+
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="tab-plan">Plan 计划模式</button>
+        <button class="tab-btn" data-tab="tab-auto">Auto 自动模式</button>
+        <button class="tab-btn" data-tab="tab-explain">讲解模式</button>
+        <button class="tab-btn" data-tab="tab-learn">学习模式</button>
+      </div>
+
+      <div class="tab-panel active" data-tab="tab-plan">
+        <div class="highlight-box" style="margin-bottom:16px;">
+          <h3>核心思维：先设计、再动手</h3>
+          <p>Plan Mode 让 Claude 在写任何代码之前，先设计完整的实施方案并请你审批。这避免了"写到一半发现方向错了"的浪费，<strong>是处理复杂需求的首选方式</strong>。</p>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-icon blue">&#128736;</div>
+            <h4>何时使用</h4>
+            <p>新功能开发、架构重构、多文件改动、需要权衡多种方案的任务。当你对需求方向不确定时，先用 Plan Mode 对齐思路。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon blue">&#128161;</div>
+            <h4>工作方式</h4>
+            <p>Claude 先深入探索代码库，设计实现方案（包括涉及的文件、改动范围、技术选型），生成计划文档供你审阅，审批通过后才开始写代码。</p>
+          </div>
+        </div>
+        <div class="tip mt-3">
+          <strong>如何触发</strong>：在对话中用 <code>/plan</code> 命令，或描述需求时说"先用 Plan Mode 设计方案"。Claude 也会在判断任务复杂时自动建议进入计划模式。
+        </div>
+      </div>
+
+      <div class="tab-panel" data-tab="tab-auto">
+        <div class="highlight-box" style="margin-bottom:16px;">
+          <h3>核心思维：信任执行、释放双手</h3>
+          <p>Auto Mode 让 Claude 自主完成整个任务链，<strong>跳过每一步的确认提示</strong>。适合你已明确需求、信任 Claude 能独立完成的任务，可以放下键盘去喝杯咖啡。</p>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-icon green">&#9889;</div>
+            <h4>何时使用</h4>
+            <p>你已经清楚描述需求且验证过类似任务、样板代码生成、批量文件操作、运行测试套件并修复失败用例等确定性高的任务。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon green">&#9888;</div>
+            <h4>注意事项</h4>
+            <p>Auto Mode 下 Claude 会连续执行多个操作（读写文件、运行命令），建议在明确任务边界、确认代码已提交后再使用，方便随时回滚。</p>
+          </div>
+        </div>
+        <div class="tip mt-3">
+          <strong>如何触发</strong>：使用 <code>/auto</code> 切换自动模式，或启动时加参数 <code>claude --dangerously-skip-permissions</code>（慎用）。再次输入 <code>/auto</code> 可退出。
+        </div>
+      </div>
+
+      <div class="tab-panel" data-tab="tab-explain">
+        <div class="highlight-box" style="margin-bottom:16px;">
+          <h3>核心思维：边做边讲、知其所以然</h3>
+          <p>讲解模式下 Claude 在写代码的同时会解释<strong>为什么这样写</strong>、<strong>有哪些替代方案</strong>、<strong>涉及的设计模式</strong>。适合学习新框架或接手不熟悉的代码模块。</p>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-icon purple">&#128218;</div>
+            <h4>何时使用</h4>
+            <p>接手陌生代码库、学习新技术栈、Code Review 时希望理解改动原因、团队新人上手项目。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon purple">&#128172;</div>
+            <h4>额外收获</h4>
+            <p>每次操作附带 "Insight" 知识点卡片，讲解架构决策、设计模式、性能考量等，让你在完成工作的同时积累技术判断力。</p>
+          </div>
+        </div>
+        <div class="tip mt-3">
+          <strong>如何触发</strong>：在项目 CLAUDE.md 中设置输出风格为 <code>explanatory</code>，或在对话中说"讲解模式下帮我做XXX"。
+        </div>
+      </div>
+
+      <div class="tab-panel" data-tab="tab-learn">
+        <div class="highlight-box" style="margin-bottom:16px;">
+          <h3>核心思维：引导参与、在实践中学习</h3>
+          <p>学习模式故意不替你写所有代码——Claude 会搭建好上下文和框架，<strong>把关键决策和核心逻辑留给你来写</strong>，通过实际动手加深理解。</p>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-icon orange">&#127891;</div>
+            <h4>何时使用</h4>
+            <p>想通过实战学习编程模式、希望保持对关键代码的控制权、需要理解每个设计决策的场景。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon orange">&#128170;</div>
+            <h4>学习价值</h4>
+            <p>Claude 会解释每个留给你写的函数的意义、提供多种实现思路的对比、在你完成后给出 Code Review 反馈，形成完整的学习闭环。</p>
+          </div>
+        </div>
+        <div class="tip mt-3">
+          <strong>如何触发</strong>：在项目 CLAUDE.md 中设置输出风格为 <code>learning</code>，或在对话中明确要求"用学习模式带我完成这个功能"。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 子代理系统 -->
+  <section class="section">
+    <div class="container">
+      <span class="section-label">Subagent</span>
+      <h2 class="section-title">子代理系统（Subagent）</h2>
+      <p class="section-desc">子代理是 Claude Code 最强大的机制之一——面对复杂任务，它可以<strong>派出多个"小助手"并行工作</strong>，每个子代理有独立的上下文窗口，互不干扰。</p>
+
+      <div class="highlight-box" style="margin-bottom:24px;">
+        <h3>一句话理解</h3>
+        <p>你（主 Claude）是项目主管，子代理就是你派出去的专项工程师。你交代任务、他们独立完成、回来向你汇报——你汇总结果后继续推进。这就是 <strong>Agent 协作模式</strong>。</p>
+      </div>
+
+      <div class="grid-3" style="margin-bottom:24px;">
+        <div class="card">
+          <div class="card-icon blue">&#128269;</div>
+          <h4>Explore 探索代理</h4>
+          <p>只读搜索型，快速在代码库中定位文件、搜索符号、追踪引用关系。不修改任何文件。</p>
+          <p style="font-size:0.85rem;color:var(--gray-400);margin-top:8px;">典型用途：查找某功能在哪些文件中实现、搜索所有调用某API的地方</p>
+        </div>
+        <div class="card">
+          <div class="card-icon purple">&#128221;</div>
+          <h4>Plan 架构代理</h4>
+          <p>设计型，分析现有架构后出实施方案。只做设计和规划，不写实现代码。</p>
+          <p style="font-size:0.85rem;color:var(--gray-400);margin-top:8px;">典型用途：新功能的技术方案设计、重构策略、依赖分析</p>
+        </div>
+        <div class="card">
+          <div class="card-icon green">&#128736;</div>
+          <h4>General 通用代理</h4>
+          <p>全能型，可以读写文件、执行命令、运行测试。是执行具体开发任务的主力。</p>
+          <p style="font-size:0.85rem;color:var(--gray-400);margin-top:8px;">典型用途：独立的Bug修复、小功能实现、代码清理</p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-icon orange">&#9889;</div>
+          <h4>核心优势：上下文隔离</h4>
+          <p>每个子代理有独立上下文窗口（不会被主对话的历史撑爆），因此可以并行处理大量信息。比如同时搜索 3 个不同模块的实现，每个搜索都在独立子代理中运行。</p>
+        </div>
+        <div class="card">
+          <div class="card-icon orange">&#128640;</div>
+          <h4>核心优势：并行执行</h4>
+          <p>多个子代理可以同时启动、各自独立工作。搜索代码库时启动 2-3 个 Explore 代理并行搜索不同关键词，效率翻倍。</p>
+        </div>
+      </div>
+
+      <div class="tip mt-3">
+        <strong>实际体验</strong>：你不需要手动管理子代理——只需向 Claude 描述复杂任务，它会自动判断是否需要派出子代理、派哪些、如何汇总结果。但对子代理机制有概念，能帮你更好地理解 Claude 的工作方式。
+      </div>
+    </div>
+  </section>
+
+  <!-- 常用命令与功能 -->
+  <section class="section section-gray">
+    <div class="container">
+      <span class="section-label">Commands</span>
+      <h2 class="section-title">常用斜杠命令 & 功能</h2>
+      <p class="section-desc">Claude Code 提供丰富的交互命令，在对话中直接输入即可使用。以下是日常开发中最常用的命令和功能。</p>
+
+      <!-- 四个子主题用 Tabs -->
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="tab-cmds">斜杠命令</button>
+        <button class="tab-btn" data-tab="tab-project">项目管理</button>
+        <button class="tab-btn" data-tab="tab-quality">质量保障</button>
+        <button class="tab-btn" data-tab="tab-skills">Skills 技能</button>
+      </div>
+
+      <div class="tab-panel active" data-tab="tab-cmds">
+        <table class="compare-table">
+          <thead>
+            <tr><th style="width:22%">命令</th><th style="width:38%">作用</th><th>使用场景</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>/plan</code></td>
+              <td>进入计划模式，先设计实施方案再动手</td>
+              <td>复杂需求、新功能、重构前</td>
+            </tr>
+            <tr>
+              <td><code>/auto</code></td>
+              <td>切换自动模式，跳过确认提示自主执行</td>
+              <td>明确任务、信任执行的场景</td>
+            </tr>
+            <tr>
+              <td><code>/review</code></td>
+              <td>对当前改动进行代码审查</td>
+              <td>提交前检查、PR Review</td>
+            </tr>
+            <tr>
+              <td><code>/security-review</code></td>
+              <td>安全专项审查，扫描漏洞和风险</td>
+              <td>涉及认证、权限、敏感数据的代码</td>
+            </tr>
+            <tr>
+              <td><code>/init</code></td>
+              <td>初始化项目，生成 CLAUDE.md 项目指南</td>
+              <td>新项目接入 Claude Code 时</td>
+            </tr>
+            <tr>
+              <td><code>/clear</code></td>
+              <td>清空当前对话上下文</td>
+              <td>切换话题、上下文过长时</td>
+            </tr>
+            <tr>
+              <td><code>/compact</code></td>
+              <td>压缩对话上下文，保留关键信息</td>
+              <td>长对话后释放上下文空间</td>
+            </tr>
+            <tr>
+              <td><code>/help</code></td>
+              <td>查看帮助和可用命令列表</td>
+              <td>忘记命令时随时查阅</td>
+            </tr>
+            <tr>
+              <td><code>/config</code></td>
+              <td>修改 Claude Code 配置（主题、模型等）</td>
+              <td>个性化设置、切换模型</td>
+            </tr>
+            <tr>
+              <td><code>/add-dir</code></td>
+              <td>将外部目录加入工作区</td>
+              <td>需要跨多个项目工作时</td>
+            </tr>
+            <tr>
+              <td><code>/cost</code></td>
+              <td>查看当前会话的 Token 用量</td>
+              <td>关注 API 调用成本时</td>
+            </tr>
+            <tr>
+              <td><code>/context</code></td>
+              <td>查看当前上下文使用情况</td>
+              <td>判断是否需要 compact</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tab-panel" data-tab="tab-project">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-icon blue">&#128196;</div>
+            <h4>CLAUDE.md — 项目指南文件</h4>
+            <p>放在项目根目录的 CLAUDE.md 是 Claude 了解你项目的<strong>首要入口</strong>。写明技术栈、目录结构、编码规范、注意事项，Claude 每次启动都会读取。一个维护良好的 CLAUDE.md 能让 Claude 的代码质量提升一个档次。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon purple">&#128230;</div>
+            <h4>Memory 记忆系统</h4>
+            <p>Claude 可以在项目级 <code>.claude/memory/</code> 目录下持久化记录项目信息和工作偏好。比如"这个项目用 snake_case 命名"、"上次重构时决定用 Redis 做缓存"。越用越懂你的项目。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon green">&#128268;</div>
+            <h4>Hooks 钩子系统</h4>
+            <p>通过 <code>settings.json</code> 配置 Hooks，在特定事件（如会话开始、工具调用前后）自动触发脚本。比如每次修改文件后自动运行 lint、提交前跑测试等，构建自动化工作流。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon orange">&#128451;</div>
+            <h4>TodoWrite 任务追踪</h4>
+            <p>Claude 在执行复杂任务时会自动创建 Todo 列表并实时更新进度。你可以在任何时候查看任务进展，了解当前做到哪一步、还剩什么。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" data-tab="tab-quality">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-icon green">&#9989;</div>
+            <h4>Verification 验证机制</h4>
+            <p>Claude Code 有内置的"验证后再报告完成"机制——写完代码后自动运行测试、检查类型、确认编译通过，<strong>确保改动能正常工作</strong>后才标记任务完成。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon orange">&#128270;</div>
+            <h4>Code Review 代码审查</h4>
+            <p>使用 <code>/review</code> 命令，Claude 会对你的改动进行全面审查：检查逻辑正确性、安全漏洞、代码风格、边界情况。支持配置审查深度（低/中/高），作为提交前的最后一道防线。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon purple">&#128274;</div>
+            <h4>Security Review 安全审查</h4>
+            <p><code>/security-review</code> 命令专注于安全维度：SQL注入、XSS、CSRF、敏感信息泄露、权限校验等。涉及用户数据、认证授权的代码建议运行此检查。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon blue">&#128260;</div>
+            <h4>TDD 测试驱动开发</h4>
+            <p>Claude 支持 TDD 工作流——先写测试、确认失败、再写实现、验证通过。对于核心业务逻辑，TDD 模式能显著降低 Bug 率。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" data-tab="tab-skills">
+        <div class="highlight-box" style="margin-bottom:16px;">
+          <h3>Skills = Claude Code 的"专业培训"</h3>
+          <p>Skills 是 Claude Code 的扩展机制——每个 Skill 相当于给 Claude 做了一次专项培训，教它如何处理特定领域的任务。Skill 由 Markdown 文件定义，放在 <code>.claude/skills/</code> 目录下。</p>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-icon blue">&#128736;</div>
+            <h4>内置 Skills</h4>
+            <p>Claude Code 自带大量 Skills：PDF 处理、Excel 操作、PPT 生成、前端设计、代码审查等。在对话中直接说需求（如"把这个数据生成PDF报告"），Claude 会自动调用对应 Skill。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon purple">&#128295;</div>
+            <h4>自定义 Skills</h4>
+            <p>团队可以编写专属 Skills：比如"按公司代码规范审查"、"生成标准API文档"、"对接内部平台"。一次编写、全团队复用，让 Claude 更贴合团队工作流。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon green">&#9889;</div>
+            <h4>如何调用 Skill</h4>
+            <p>两种方式：① 直接描述需求，Claude 自动匹配相关 Skill；② 在对话中输入 <code>/skill-name</code> 明确调用。Claude 在调用 Skill 后会严格遵循其规定的流程。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon orange">&#128214;</div>
+            <h4>延伸学习</h4>
+            <p>想深入了解 Skills 开发，参考延伸阅读区的 <a href="tutorials/claude-code-skills.pdf" target="_blank">《打造 Claude Code 技能完全指南》</a>，从入门到定制全覆盖。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 典型开发工作流 -->
+  <section class="section">
+    <div class="container">
+      <span class="section-label">Workflow</span>
+      <h2 class="section-title">实际开发工作流示例</h2>
+      <p class="section-desc">综合运用上述模式和功能，以下是一个完整的开发协作流程示例。</p>
+
+      <ol class="steps">
+        <li>
+          <h4>启动与上下文准备</h4>
+          <p>在项目根目录运行 <code>claude</code>，Claude 自动读取 CLAUDE.md、扫描项目结构、加载记忆。如有需要先用 <code>/init</code> 生成项目指南。</p>
+        </li>
+        <li>
+          <h4>Plan Mode 方案设计</h4>
+          <p>描述需求后用 <code>/plan</code> 进入计划模式。Claude 探索代码库、设计实施方案、列出改动文件清单，你审阅确认后进入实现阶段。</p>
+        </li>
+        <li>
+          <h4>Auto Mode 批量实现</h4>
+          <p>方案确认后切换到 <code>/auto</code> 模式，Claude 自主完成代码编写、文件编辑、测试运行。你只需在完成后检查 diff。</p>
+        </li>
+        <li>
+          <h4>Review + 修复迭代</h4>
+          <p>实现完成后用 <code>/review</code> 进行代码审查，发现问题直接在对话中要求修复，直到审查通过。</p>
+        </li>
+        <li>
+          <h4>安全审查与提交</h4>
+          <p>涉及敏感操作的代码再跑一次 <code>/security-review</code>，确认无误后提交 PR。整个过程中 Claude 的子代理会自动并行处理搜索和检查任务。</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 最佳实践 -->
+  <section class="section section-gray">
+    <div class="container">
+      <span class="section-label">Best Practices</span>
+      <h2 class="section-title">常见问题 & 使用建议</h2>
+
+      <div class="accordion">
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            Claude Code 和 IDE 插件有什么区别？
+            <span class="arrow">&#9654;</span>
+          </button>
+          <div class="accordion-content">
+            <p>Claude Code 运行在终端中，能理解整个代码仓库的结构，可以直接执行命令、读写文件、运行测试、管理 Git。它比 IDE 插件的上下文范围更广，能做更复杂的跨文件操作，还能派出子代理并行工作。</p>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            如何让 Claude Code 更好理解我的项目？
+            <span class="arrow">&#9654;</span>
+          </button>
+          <div class="accordion-content">
+            <p>维护好项目中的 CLAUDE.md 文件是关键——描述项目结构、技术栈、编码规范和注意事项，这是 Claude 了解项目的最佳入口。另外，在 Memory 中记录重要的设计决策和约定，Claude 会越来越懂你的项目。</p>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            Plan Mode 和 Auto Mode 怎么选择？
+            <span class="arrow">&#9654;</span>
+          </button>
+          <div class="accordion-content">
+            <p><strong>Plan Mode</strong>：需求不太明确、改动涉及多文件、需要权衡技术方案时先用 Plan Mode 对齐思路。<strong>Auto Mode</strong>：需求已明确、任务边界清晰、属于重复性操作时用 Auto Mode 释放双手。一个实用经验是：新功能先用 Plan，Bug修复可直接 Auto。</p>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            生成的代码需要人工检查吗？
+            <span class="arrow">&#9654;</span>
+          </button>
+          <div class="accordion-content">
+            <p>必须检查。AI 生成的代码可能包含逻辑错误、安全漏洞或不符合项目规范的地方。建议每次 AI 修改后：运行测试、检查 diff、确保理解每个变更。可以用 <code>/review</code> 让 Claude 自我审查作为第一道关，但最终决策权在你。</p>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            代码安全问题如何保障？
+            <span class="arrow">&#9654;</span>
+          </button>
+          <div class="accordion-content">
+            <p>四道防线：① 不在 AI 中输入生产密钥、密码等敏感信息；② 使用 <code>/security-review</code> 对敏感代码做专项安全检查；③ AI 生成的代码走正常的 Code Review 流程；④ 所有变更在测试环境验证后再上线。</p>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            Subagent 什么时候会自动触发？
+            <span class="arrow">&#9654;</span>
+          </button>
+          <div class="accordion-content">
+            <p>当你向 Claude 提出需要大范围搜索、并行处理多个独立子任务、或需要独立上下文的分析工作时，它会自动判断并派出子代理。比如"帮我在全项目中找到所有用了旧API的地方并给出替换建议"——Claude 可能同时派出 2-3 个 Explore 子代理并行搜索不同模块，再汇总结果。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 运维实战场景 -->
+  <section class="section">
+    <div class="container">
+      <span class="section-label">Ops Scenarios</span>
+      <h2 class="section-title">运维实战场景</h2>
+      <p class="section-desc">Claude Code 不仅适用于应用开发，在运维脚本、数据处理、配置管理等场景同样得心应手。</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-icon blue">&#128421;</div>
+          <h3>运维脚本开发</h3>
+          <p>用自然语言描述需求，Claude Code 能快速生成 Python/Shell 运维脚本——批量操作、监控脚本、数据采集、自动化巡检等。还可让它审查和优化现有脚本。</p>
+        </div>
+        <div class="card">
+          <div class="card-icon orange">&#128270;</div>
+          <h3>日志分析脚本</h3>
+          <p>将日志样本粘贴给 Claude Code，让它自动编写解析脚本来提取关键信息、统计错误频率、生成可视化报表。手写正则容易出错，AI 能帮你精准匹配日志格式。</p>
+        </div>
+        <div class="card">
+          <div class="card-icon green">&#128451;</div>
+          <h3>数据库操作辅助</h3>
+          <p>编写 SQL 查询、优化慢查询、生成数据库迁移脚本。Claude Code 擅长 SQL，可直接在代码库上下文中理解表结构，帮你写出准确高效的数据库操作。</p>
+        </div>
+        <div class="card">
+          <div class="card-icon purple">&#128260;</div>
+          <h3>配置文件管理</h3>
+          <p>批量修改服务器配置文件、编写 Ansible Playbook、生成 Nginx/Apache 配置模板。Claude Code 能理解复杂的配置语法，减少手动配置的遗漏和错误。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 延伸阅读 -->
+  <section class="section section-gray">
+    <div class="container">
+      <span class="section-label">Further Reading</span>
+      <h2 class="section-title">延伸阅读</h2>
+      <p class="section-desc">以下教程助你从入门到精通 Claude Code，点击任意卡片在线阅读。</p>
+
+      <div class="grid-2">
+        <a href="tutorials/claude-code-beginner.pdf" target="_blank" class="card" style="text-decoration:none;">
+          <div class="card-icon blue">&#128218;</div>
+          <h3>Claude Code 从入门到精通</h3>
+          <p>面向初学者的系统性教程，从安装配置到日常开发全流程覆盖。</p>
+          <span style="font-size:0.85rem;color:var(--blue-600);font-weight:600;">点击在线阅读 &#8594;</span>
+        </a>
+        <a href="tutorials/claude-code-definitive.pdf" target="_blank" class="card" style="text-decoration:none;">
+          <div class="card-icon purple">&#128293;</div>
+          <h3>Claude Code Definitive Guide</h3>
+          <p>权威指南，深入讲解架构原理、高级功能和实战技巧。</p>
+          <span style="font-size:0.85rem;color:var(--purple-600);font-weight:600;">点击在线阅读 &#8594;</span>
+        </a>
+        <a href="tutorials/claude-code-skills.pdf" target="_blank" class="card" style="text-decoration:none;">
+          <div class="card-icon orange">&#128295;</div>
+          <h3>打造 Claude Code 技能完全指南</h3>
+          <p>进阶内容，教你定制 Skills、配置 Hook 和扩展 Agent 能力。</p>
+          <span style="font-size:0.85rem;color:var(--orange-600);font-weight:600;">点击在线阅读 &#8594;</span>
+        </a>
+        <a href="tutorials/claude-code-explore.pdf" target="_blank" class="card" style="text-decoration:none;">
+          <div class="card-icon green">&#128640;</div>
+          <h3>深入探索 Claude Code</h3>
+          <p>前沿视野，探讨 AI Agent 系统设计理念与未来发展方向。</p>
+          <span style="font-size:0.85rem;color:var(--green-600);font-weight:600;">点击在线阅读 &#8594;</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="troubleshooting-bar" style="background:var(--blue-50);border-top:1px solid var(--blue-200);border-bottom:1px solid var(--blue-200);padding:20px 0;text-align:center;">
+  <div class="container">
+    <p style="margin:0;font-size:0.95rem;color:var(--gray-700);"><strong>&#128161; 遇到问题？</strong> AI 技术支持请联系：<strong>李龙（lilong）</strong>、<strong>司佳宇（sijy）</strong>。申请 API Key、配置工具或使用过程中遇到任何问题，欢迎随时沟通。也可在部门群内交流使用经验。</p>
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+
+<script src="js/main.js"></script>
+</body>
+</html>

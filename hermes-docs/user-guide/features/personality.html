@@ -1,0 +1,427 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>个性与 SOUL.md - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / 个性与 SOUL.md</div><p>Hermes Agent 的个性完全可自定义。<code>SOUL.md</code> 是<strong>主要身份标识</strong>——它是系统提示词（prompt）中的第一项内容，定义了 Agent 是谁。</p>
+<ul>
+<li><code>SOUL.md</code> — 存放在 <code>HERMES_HOME</code> 中的持久角色文件，作为 Agent 的身份标识（系统提示词中的第 1 个槽位）</li>
+<li>内置或自定义的 <code>/personality</code> 预设 — 会话级系统提示词覆盖层</li>
+</ul>
+<p>如果你想改变 Hermes 的身份，或将其替换为完全不同的 Agent 角色，请编辑 <code>SOUL.md</code>。</p>
+<h2>SOUL.md 的工作方式</h2>
+<p>Hermes 现在会自动在以下位置生成默认的 <code>SOUL.md</code>：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+~/.hermes/SOUL.md
+</div>
+<p>更准确地说，它使用当前实例的 <code>HERMES_HOME</code>，因此如果你以自定义主目录运行 Hermes，它将使用：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+$HERMES_HOME/SOUL.md
+</div>
+<h3>重要行为</h3>
+<ul>
+<li><strong>SOUL.md 是 Agent 的主要身份标识。</strong> 它占据系统提示词的第 1 个槽位，替代硬编码的默认身份。</li>
+<li>如果 <code>SOUL.md</code> 尚不存在，Hermes 会自动创建一个初始文件</li>
+<li>已有的用户 <code>SOUL.md</code> 文件不会被覆盖</li>
+<li>Hermes 仅从 <code>HERMES_HOME</code> 加载 <code>SOUL.md</code></li>
+<li>Hermes 不会在当前工作目录中查找 <code>SOUL.md</code></li>
+<li>如果 <code>SOUL.md</code> 存在但为空，或无法加载，Hermes 将回退到内置的默认身份</li>
+<li>如果 <code>SOUL.md</code> 有内容，该内容在经过安全扫描和截断处理后将原样注入</li>
+<li>SOUL.md <strong>不会</strong>在上下文文件部分重复出现——它仅作为身份标识出现一次</li>
+</ul>
+<p>这使 <code>SOUL.md</code> 成为真正的每用户或每实例身份标识，而不仅仅是一个附加层。</p>
+<h2>此设计的原因</h2>
+<p>这样可以保持个性的可预测性。</p>
+<p>如果 Hermes 从你启动它的任意目录加载 <code>SOUL.md</code>，你的个性可能会在不同项目之间意外改变。通过仅从 <code>HERMES_HOME</code> 加载，个性归属于 Hermes 实例本身。</p>
+<p>这也让用户更容易理解：</p>
+<ul>
+<li>&quot;编辑 <code>~/.hermes/SOUL.md</code> 来更改 Hermes 的默认个性。&quot;</li>
+</ul>
+<h2>编辑位置</h2>
+<p>对于大多数用户：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+~/.hermes/SOUL.md
+</div>
+<p>如果你使用自定义主目录：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+$HERMES_HOME/SOUL.md
+</div>
+<h2>SOUL.md 应该写什么？</h2>
+<p>用于持久的语气和个性指导，例如：</p>
+<ul>
+<li>语气</li>
+<li>沟通风格</li>
+<li>直接程度</li>
+<li>默认交互风格</li>
+<li>风格上应避免的内容</li>
+<li>Hermes 应如何处理不确定性、分歧或模糊情况</li>
+</ul>
+<p>不适合写入的内容：</p>
+<ul>
+<li>一次性项目说明</li>
+<li>文件路径</li>
+<li>代码库规范</li>
+<li>临时工作流细节</li>
+</ul>
+<p>这些内容属于 <code>AGENTS.md</code>，而不是 <code>SOUL.md</code>。</p>
+<h2>优质 SOUL.md 内容</h2>
+<p>一个好的 SOUL 文件应该：</p>
+<ul>
+<li>在不同上下文中保持稳定</li>
+<li>足够宽泛，适用于多种对话场景</li>
+<li>足够具体，能实质性地塑造语气</li>
+<li>专注于沟通和身份，而非特定任务的指令</li>
+</ul>
+<h3>示例</h3>
+<div class="code-block"><span class="code-lang">markdown</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Personality
+
+You are a pragmatic senior engineer with strong taste.
+You optimize for truth, clarity, and usefulness over politeness theater.
+
+## Style
+- Be direct without being cold
+- Prefer substance over filler
+- Push back when something is a bad idea
+- Admit uncertainty plainly
+- Keep explanations compact unless depth is useful
+
+## What to avoid
+- Sycophancy
+- Hype language
+- Repeating the user's framing if it's wrong
+- Overexplaining obvious things
+
+## Technical posture
+- Prefer simple systems over clever systems
+- Care about operational reality, not idealized architecture
+- Treat edge cases as part of the design, not cleanup
+</div>
+<h2>Hermes 注入提示词的内容</h2>
+<p><code>SOUL.md</code> 的内容直接进入系统提示词的第 1 个槽位——即 Agent 身份位置。不会在其周围添加任何包装语言。</p>
+<p>内容会经过以下处理：</p>
+<ul>
+<li>提示词注入扫描</li>
+<li>内容过大时进行截断</li>
+</ul>
+<p>如果文件为空、仅含空白字符或无法读取，Hermes 将回退到内置默认身份（&quot;You are Hermes Agent, an intelligent AI assistant created by Nous Research...&quot;）。当 <code>skip_context_files</code> 被设置时（例如在子 Agent/委托上下文中），同样适用此回退。</p>
+<h2>安全扫描</h2>
+<p><code>SOUL.md</code> 与其他携带上下文的文件一样，在被包含前会进行提示词注入模式扫描。</p>
+<p>这意味着你仍应将其专注于角色/语气，而不是试图混入奇怪的元指令。</p>
+<h2>SOUL.md 与 AGENTS.md</h2>
+<p>这是最重要的区别。</p>
+<h3>SOUL.md</h3>
+<p>用于：</p>
+<ul>
+<li>身份</li>
+<li>语气</li>
+<li>风格</li>
+<li>沟通默认值</li>
+<li>个性层面的行为</li>
+</ul>
+<h3>AGENTS.md</h3>
+<p>用于：</p>
+<ul>
+<li>项目架构</li>
+<li>编码规范</li>
+<li>工具偏好</li>
+<li>代码库特定工作流</li>
+<li>命令、端口、路径、部署说明</li>
+</ul>
+<p>一个实用的判断规则：</p>
+<ul>
+<li>如果它应该随你到处适用，属于 <code>SOUL.md</code></li>
+<li>如果它属于某个项目，属于 <code>AGENTS.md</code></li>
+</ul>
+<h2>SOUL.md 与 <code>/personality</code></h2>
+<p><code>SOUL.md</code> 是你的持久默认个性。</p>
+<p><code>/personality</code> 是会话级覆盖层，用于更改或补充当前系统提示词。</p>
+<p>因此：</p>
+<ul>
+<li><code>SOUL.md</code> = 基础语气</li>
+<li><code>/personality</code> = 临时模式切换</li>
+</ul>
+<p>示例：</p>
+<ul>
+<li>保持务实的默认 SOUL，然后在辅导对话中使用 <code>/personality teacher</code></li>
+<li>保持简洁的 SOUL，然后在头脑风暴时使用 <code>/personality creative</code></li>
+</ul>
+<h2>内置个性</h2>
+<p>Hermes 内置了多种个性，可通过 <code>/personality</code> 切换。</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>helpful</strong></td>
+<td>友好的通用助手</td>
+</tr>
+<tr>
+<td><strong>concise</strong></td>
+<td>简短、直击要点的回复</td>
+</tr>
+<tr>
+<td><strong>technical</strong></td>
+<td>详尽、准确的技术专家</td>
+</tr>
+<tr>
+<td><strong>creative</strong></td>
+<td>创新、突破常规的思维</td>
+</tr>
+<tr>
+<td><strong>teacher</strong></td>
+<td>耐心的教育者，配有清晰示例</td>
+</tr>
+<tr>
+<td><strong>kawaii</strong></td>
+<td>可爱表达、闪光效果与热情 ★</td>
+</tr>
+<tr>
+<td><strong>catgirl</strong></td>
+<td>带有猫咪表达方式的 Neko-chan，nya~</td>
+</tr>
+<tr>
+<td><strong>pirate</strong></td>
+<td>船长 Hermes，精通技术的海盗</td>
+</tr>
+<tr>
+<td><strong>shakespeare</strong></td>
+<td>充满戏剧张力的吟游诗人风格</td>
+</tr>
+<tr>
+<td><strong>surfer</strong></td>
+<td>超级冷静的冲浪者氛围</td>
+</tr>
+<tr>
+<td><strong>noir</strong></td>
+<td>硬派侦探叙事风格</td>
+</tr>
+<tr>
+<td><strong>uwu</strong></td>
+<td>极致可爱的 uwu 语气</td>
+</tr>
+<tr>
+<td><strong>philosopher</strong></td>
+<td>对每个问题深度沉思</td>
+</tr>
+<tr>
+<td><strong>hype</strong></td>
+<td>最大能量与热情！！！</td>
+</tr>
+</tbody>
+</table>
+<h2>使用命令切换个性</h2>
+<h3>CLI</h3>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/personality
+/personality concise
+/personality technical
+</div>
+<h3>消息平台</h3>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/personality teacher
+</div>
+<p>这些是便捷的覆盖层，但你的全局 <code>SOUL.md</code> 仍然赋予 Hermes 持久的默认个性，除非覆盖层对其进行了实质性更改。</p>
+<h2>在配置中定义自定义个性</h2>
+<p>你也可以在 <code>~/.hermes/config.yaml</code> 的 <code>agent.personalities</code> 下定义命名的自定义个性。</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+agent:
+  personalities:
+    codereviewer: &gt;
+      You are a meticulous code reviewer. Identify bugs, security issues,
+      performance concerns, and unclear design choices. Be precise and constructive.
+</div>
+<p>然后通过以下方式切换：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/personality codereviewer
+</div>
+<h2>推荐工作流</h2>
+<p>一个强健的默认配置：</p>
+<ol>
+<li>在 <code>~/.hermes/SOUL.md</code> 中维护一个经过深思熟虑的全局 <code>SOUL.md</code></li>
+<li>将项目说明放在 <code>AGENTS.md</code> 中</li>
+<li>仅在需要临时模式切换时使用 <code>/personality</code></li>
+</ol>
+<p>这样你将获得：</p>
+<ul>
+<li>稳定的语气</li>
+<li>项目特定行为归属于正确位置</li>
+<li>需要时的临时控制</li>
+</ul>
+<h2>个性如何与完整提示词交互</h2>
+<p>从高层次来看，提示词栈包含：</p>
+<ol>
+<li><strong>SOUL.md</strong>（Agent 身份——如果 SOUL.md 不可用则使用内置回退）</li>
+<li>工具感知行为指导</li>
+<li>记忆/用户上下文</li>
+<li>技能指导</li>
+<li>上下文文件（<code>AGENTS.md</code>、<code>.cursorrules</code>）</li>
+<li>时间戳</li>
+<li>平台特定格式提示</li>
+<li>可选的系统提示词覆盖层，如 <code>/personality</code></li>
+</ol>
+<p><code>SOUL.md</code> 是基础——其他所有内容都建立在它之上。</p>
+<h2>相关文档</h2>
+<ul>
+<li><a href="/user-guide/features/context-files">上下文文件</a></li>
+<li><a href="/user-guide/configuration">配置</a></li>
+<li><a href="/guides/tips">技巧与最佳实践</a></li>
+<li><a href="/guides/use-soul-with-hermes">SOUL.md 指南</a></li>
+</ul>
+<h2>CLI 外观与对话个性</h2>
+<p>对话个性与 CLI 外观是相互独立的：</p>
+<ul>
+<li><code>SOUL.md</code>、<code>agent.system_prompt</code> 和 <code>/personality</code> 影响 Hermes 的说话方式</li>
+<li><code>display.skin</code> 和 <code>/skin</code> 影响 Hermes 在终端中的显示外观</li>
+</ul>
+<p>关于终端外观，请参阅 <a href="./skins.html">皮肤与主题</a>。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

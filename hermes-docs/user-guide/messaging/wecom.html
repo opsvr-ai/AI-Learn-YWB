@@ -1,0 +1,624 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WeCom（企业微信） - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / WeCom（企业微信）</div><p>将 Hermes 连接到 <a href="https://work.weixin.qq.com/">WeCom</a>（企业微信），腾讯的企业即时通讯平台。该适配器使用 WeCom 的 AI Bot WebSocket 网关实现实时双向通信——无需公开端点或 webhook。</p>
+<h2>前提条件</h2>
+<ul>
+<li>一个 WeCom 组织账号</li>
+<li>在 WeCom 管理后台创建的 AI Bot</li>
+<li>来自机器人凭据页面的 Bot ID 和 Secret</li>
+<li>Python 包：<code>aiohttp</code> 和 <code>httpx</code></li>
+</ul>
+<h2>设置</h2>
+<h3>第一步：创建 AI Bot</h3>
+<h4>推荐方式：扫码创建（一条命令）</h4>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway setup
+</div>
+<p>选择 <strong>WeCom</strong>，用企业微信手机端扫描二维码。Hermes 将自动创建具有正确权限的机器人应用并保存凭据。</p>
+<p>设置向导将：</p>
+<ol>
+<li>在终端中显示二维码</li>
+<li>等待你用企业微信手机端扫描</li>
+<li>自动获取 Bot ID 和 Secret</li>
+<li>引导你完成访问控制配置</li>
+</ol>
+<h4>备选方式：手动设置</h4>
+<p>如果扫码创建不可用，向导将回退到手动输入：</p>
+<ol>
+<li>登录 <a href="https://work.weixin.qq.com/wework_admin/frame">WeCom 管理后台</a></li>
+<li>导航至 <strong>应用管理</strong> → <strong>创建应用</strong> → <strong>AI Bot</strong></li>
+<li>配置机器人名称和描述</li>
+<li>从凭据页面复制 <strong>Bot ID</strong> 和 <strong>Secret</strong></li>
+<li>运行 <code>hermes gateway setup</code>，选择 <strong>WeCom</strong>，并在提示时输入凭据</li>
+</ol>
+<div class="tip warning"><strong>⚠️ 警告</strong>
+请妥善保管 Bot Secret。任何持有它的人都可以冒充你的机器人。
+</div>
+<h3>第二步：配置 Hermes</h3>
+<h4>方式 A：交互式设置（推荐）</h4>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway setup
+</div>
+<p>选择 <strong>WeCom</strong> 并按照提示操作。向导将引导你完成：</p>
+<ul>
+<li>机器人凭据（通过二维码扫描或手动输入）</li>
+<li>访问控制设置（白名单、配对模式或开放访问）</li>
+<li>用于通知的主频道</li>
+</ul>
+<h4>方式 B：手动配置</h4>
+<p>将以下内容添加到 <code>~/.hermes/.env</code>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+WECOM_BOT_ID=your-bot-id
+WECOM_SECRET=your-secret
+
+# 可选：限制访问
+WECOM_ALLOWED_USERS=user_id_1,user_id_2
+
+# 可选：用于定时任务/通知的主频道
+WECOM_HOME_CHANNEL=chat_id
+</div>
+<h3>第三步：启动网关</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway
+</div>
+<h2>功能特性</h2>
+<ul>
+<li><strong>WebSocket 传输</strong> — 持久连接，无需公开端点</li>
+<li><strong>私聊和群组消息</strong> — 可配置的访问策略</li>
+<li><strong>按群组的发送者白名单</strong> — 精细控制每个群组中可交互的用户</li>
+<li><strong>媒体支持</strong> — 图片、文件、语音、视频的上传和下载</li>
+<li><strong>AES 加密媒体</strong> — 自动解密入站附件</li>
+<li><strong>引用上下文</strong> — 保留回复线程</li>
+<li><strong>Markdown 渲染</strong> — 富文本响应</li>
+<li><strong>回复模式流式传输</strong> — 将响应与入站消息上下文关联</li>
+<li><strong>自动重连</strong> — 连接断开时指数退避重试</li>
+</ul>
+<h2>配置选项</h2>
+<p>在 <code>config.yaml</code> 的 <code>platforms.wecom.extra</code> 下设置以下选项：</p>
+<table>
+<thead>
+<tr>
+<th>键</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bot_id</code></td>
+<td>—</td>
+<td>WeCom AI Bot ID（必填）</td>
+</tr>
+<tr>
+<td><code>secret</code></td>
+<td>—</td>
+<td>WeCom AI Bot Secret（必填）</td>
+</tr>
+<tr>
+<td><code>websocket_url</code></td>
+<td><code>wss://openws.work.weixin.qq.com</code></td>
+<td>WebSocket 网关 URL</td>
+</tr>
+<tr>
+<td><code>dm_policy</code></td>
+<td><code>open</code></td>
+<td>私聊访问策略：<code>open</code>、<code>allowlist</code>、<code>disabled</code>、<code>pairing</code></td>
+</tr>
+<tr>
+<td><code>group_policy</code></td>
+<td><code>open</code></td>
+<td>群组访问策略：<code>open</code>、<code>allowlist</code>、<code>disabled</code></td>
+</tr>
+<tr>
+<td><code>allow_from</code></td>
+<td><code>[]</code></td>
+<td>允许私聊的用户 ID（当 dm_policy=allowlist 时）</td>
+</tr>
+<tr>
+<td><code>group_allow_from</code></td>
+<td><code>[]</code></td>
+<td>允许的群组 ID（当 group_policy=allowlist 时）</td>
+</tr>
+<tr>
+<td><code>groups</code></td>
+<td><code>{}</code></td>
+<td>按群组配置（见下文）</td>
+</tr>
+</tbody>
+</table>
+<h2>访问策略</h2>
+<h3>私聊策略</h3>
+<p>控制哪些用户可以向机器人发送私信：</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>open</code></td>
+<td>任何人均可私聊机器人（默认）</td>
+</tr>
+<tr>
+<td><code>allowlist</code></td>
+<td>仅 <code>allow_from</code> 中的用户 ID 可私聊</td>
+</tr>
+<tr>
+<td><code>disabled</code></td>
+<td>所有私聊均被忽略</td>
+</tr>
+<tr>
+<td><code>pairing</code></td>
+<td>配对模式（用于初始设置）</td>
+</tr>
+</tbody>
+</table>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+WECOM_DM_POLICY=allowlist
+</div>
+<h3>群组策略</h3>
+<p>控制机器人在哪些群组中响应：</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>open</code></td>
+<td>机器人在所有群组中响应（默认）</td>
+</tr>
+<tr>
+<td><code>allowlist</code></td>
+<td>机器人仅在 <code>group_allow_from</code> 中列出的群组 ID 中响应</td>
+</tr>
+<tr>
+<td><code>disabled</code></td>
+<td>所有群组消息均被忽略</td>
+</tr>
+</tbody>
+</table>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+WECOM_GROUP_POLICY=allowlist
+</div>
+<h3>按群组的发送者白名单</h3>
+<p>如需精细控制，可以限制特定群组内哪些用户可以与机器人交互。在 <code>config.yaml</code> 中配置：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+platforms:
+  wecom:
+    enabled: true
+    extra:
+      bot_id: "your-bot-id"
+      secret: "your-secret"
+      group_policy: "allowlist"
+      group_allow_from:
+        - "group_id_1"
+        - "group_id_2"
+      groups:
+        group_id_1:
+          allow_from:
+            - "user_alice"
+            - "user_bob"
+        group_id_2:
+          allow_from:
+            - "user_charlie"
+        "*":
+          allow_from:
+            - "user_admin"
+</div>
+<p><strong>工作原理：</strong></p>
+<ol>
+<li><code>group_policy</code> 和 <code>group_allow_from</code> 控制决定某个群组是否被允许。</li>
+<li>如果群组通过了顶层检查，<code>groups.&lt;group_id&gt;.allow_from</code> 列表（如果存在）将进一步限制该群组内哪些发送者可以与机器人交互。</li>
+<li>通配符 <code>&quot;*&quot;</code> 群组条目作为未明确列出的群组的默认配置。</li>
+<li>白名单条目支持 <code>*</code> 通配符以允许所有用户，且条目不区分大小写。</li>
+<li>条目可以选择使用 <code>wecom:user:</code> 或 <code>wecom:group:</code> 前缀格式——前缀会被自动去除。</li>
+</ol>
+<p>如果某个群组未配置 <code>allow_from</code>，则该群组中的所有用户均被允许（前提是该群组本身通过了顶层策略检查）。</p>
+<h2>媒体支持</h2>
+<h3>入站（接收）</h3>
+<p>适配器接收用户发送的媒体附件并在本地缓存，供 Agent 处理：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>处理方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>图片</strong></td>
+<td>下载并在本地缓存。支持基于 URL 和 base64 编码的图片。</td>
+</tr>
+<tr>
+<td><strong>文件</strong></td>
+<td>下载并缓存。文件名从原始消息中保留。</td>
+</tr>
+<tr>
+<td><strong>语音</strong></td>
+<td>如果可用，提取语音消息的文字转录。</td>
+</tr>
+<tr>
+<td><strong>混合消息</strong></td>
+<td>WeCom 混合类型消息（文本 + 图片）会被解析并提取所有组件。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>引用消息：</strong> 被引用（回复）消息中的媒体也会被提取，以便 Agent 了解用户正在回复的内容。</p>
+<h3>AES 加密媒体解密</h3>
+<p>WeCom 对部分入站媒体附件使用 AES-256-CBC 加密。适配器会自动处理：</p>
+<ul>
+<li>当入站媒体项包含 <code>aeskey</code> 字段时，适配器下载加密字节并使用带 PKCS#7 填充的 AES-256-CBC 进行解密。</li>
+<li>AES 密钥是 <code>aeskey</code> 字段的 base64 解码值（必须恰好为 32 字节）。</li>
+<li>IV 由密钥的前 16 字节派生。</li>
+<li>此功能需要 <code>cryptography</code> Python 包（<code>pip install cryptography</code>）。</li>
+</ul>
+<p>无需任何配置——收到加密媒体时解密会自动透明地进行。</p>
+<h3>出站（发送）</h3>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>发送内容</th>
+<th>大小限制</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>send</code></td>
+<td>Markdown 文本消息</td>
+<td>4000 字符</td>
+</tr>
+<tr>
+<td><code>send_image</code> / <code>send_image_file</code></td>
+<td>原生图片消息</td>
+<td>10 MB</td>
+</tr>
+<tr>
+<td><code>send_document</code></td>
+<td>文件附件</td>
+<td>20 MB</td>
+</tr>
+<tr>
+<td><code>send_voice</code></td>
+<td>语音消息（原生语音仅支持 AMR 格式）</td>
+<td>2 MB</td>
+</tr>
+<tr>
+<td><code>send_video</code></td>
+<td>视频消息</td>
+<td>10 MB</td>
+</tr>
+</tbody>
+</table>
+<p><strong>分块上传：</strong> 文件通过三步协议（初始化 → 分块 → 完成）以 512 KB 为单位分块上传。适配器会自动处理此过程。</p>
+<p><strong>自动降级：</strong> 当媒体超过原生类型的大小限制但低于 20 MB 绝对限制时，会自动作为通用文件附件发送：</p>
+<ul>
+<li>图片 &gt; 10 MB → 作为文件发送</li>
+<li>视频 &gt; 10 MB → 作为文件发送</li>
+<li>语音 &gt; 2 MB → 作为文件发送</li>
+<li>非 AMR 音频 → 作为文件发送（WeCom 原生语音仅支持 AMR）</li>
+</ul>
+<p>超过 20 MB 绝对限制的文件将被拒绝，并向聊天发送提示消息。</p>
+<h2>回复模式流式响应</h2>
+<p>当机器人通过 WeCom 回调接收到消息时，适配器会记住入站请求 ID。如果在请求上下文仍然有效期间发送响应，适配器将使用 WeCom 的回复模式（<code>aibot_respond_msg</code>）配合流式传输，将响应直接与入站消息关联。这在 WeCom 客户端中提供了更自然的对话体验。</p>
+<p>如果入站请求上下文已过期或不可用，适配器将回退到通过 <code>aibot_send_msg</code> 主动发送消息。</p>
+<p>回复模式同样适用于媒体：上传的媒体可以作为对原始消息的回复发送。</p>
+<h2>连接与重连</h2>
+<p>适配器在 <code>wss://openws.work.weixin.qq.com</code> 维护与 WeCom 网关的持久 WebSocket 连接。</p>
+<h3>连接生命周期</h3>
+<ol>
+<li><strong>连接：</strong> 建立 WebSocket 连接，并发送包含 bot_id 和 secret 的 <code>aibot_subscribe</code> 认证帧。</li>
+<li><strong>心跳：</strong> 每 30 秒发送一次应用层 ping 帧以保持连接活跃。</li>
+<li><strong>监听：</strong> 持续读取入站帧并分发消息回调。</li>
+</ol>
+<h3>重连行为</h3>
+<p>连接断开时，适配器使用指数退避进行重连：</p>
+<table>
+<thead>
+<tr>
+<th>尝试次数</th>
+<th>延迟</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第 1 次重试</td>
+<td>2 秒</td>
+</tr>
+<tr>
+<td>第 2 次重试</td>
+<td>5 秒</td>
+</tr>
+<tr>
+<td>第 3 次重试</td>
+<td>10 秒</td>
+</tr>
+<tr>
+<td>第 4 次重试</td>
+<td>30 秒</td>
+</tr>
+<tr>
+<td>第 5 次及以后</td>
+<td>60 秒</td>
+</tr>
+</tbody>
+</table>
+<p>每次成功重连后，退避计数器重置为零。断开连接时所有待处理的请求 future 都会失败，以防调用方无限期挂起。</p>
+<h3>去重</h3>
+<p>入站消息使用消息 ID 进行去重，时间窗口为 5 分钟，最大缓存 1000 条。这可防止在重连或网络抖动期间重复处理消息。</p>
+<h2>所有环境变量</h2>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>是否必填</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>WECOM_BOT_ID</code></td>
+<td>✅</td>
+<td>—</td>
+<td>WeCom AI Bot ID</td>
+</tr>
+<tr>
+<td><code>WECOM_SECRET</code></td>
+<td>✅</td>
+<td>—</td>
+<td>WeCom AI Bot Secret</td>
+</tr>
+<tr>
+<td><code>WECOM_ALLOWED_USERS</code></td>
+<td>—</td>
+<td><em>（空）</em></td>
+<td>网关级白名单的逗号分隔用户 ID</td>
+</tr>
+<tr>
+<td><code>WECOM_HOME_CHANNEL</code></td>
+<td>—</td>
+<td>—</td>
+<td>定时任务/通知输出的聊天 ID</td>
+</tr>
+<tr>
+<td><code>WECOM_WEBSOCKET_URL</code></td>
+<td>—</td>
+<td><code>wss://openws.work.weixin.qq.com</code></td>
+<td>WebSocket 网关 URL</td>
+</tr>
+<tr>
+<td><code>WECOM_DM_POLICY</code></td>
+<td>—</td>
+<td><code>open</code></td>
+<td>私聊访问策略</td>
+</tr>
+<tr>
+<td><code>WECOM_GROUP_POLICY</code></td>
+<td>—</td>
+<td><code>open</code></td>
+<td>群组访问策略</td>
+</tr>
+</tbody>
+</table>
+<h2>故障排查</h2>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>解决方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>WECOM_BOT_ID and WECOM_SECRET are required</code></td>
+<td>设置两个环境变量，或在设置向导中配置</td>
+</tr>
+<tr>
+<td><code>WeCom startup failed: aiohttp not installed</code></td>
+<td>安装 aiohttp：<code>pip install aiohttp</code></td>
+</tr>
+<tr>
+<td><code>WeCom startup failed: httpx not installed</code></td>
+<td>安装 httpx：<code>pip install httpx</code></td>
+</tr>
+<tr>
+<td><code>invalid secret (errcode=40013)</code></td>
+<td>验证 secret 是否与机器人凭据匹配</td>
+</tr>
+<tr>
+<td><code>Timed out waiting for subscribe acknowledgement</code></td>
+<td>检查到 <code>openws.work.weixin.qq.com</code> 的网络连通性</td>
+</tr>
+<tr>
+<td>机器人在群组中不响应</td>
+<td>检查 <code>group_policy</code> 设置，并确保群组 ID 在 <code>group_allow_from</code> 中</td>
+</tr>
+<tr>
+<td>机器人忽略群组中的某些用户</td>
+<td>检查 <code>groups</code> 配置节中按群组的 <code>allow_from</code> 列表</td>
+</tr>
+<tr>
+<td>媒体解密失败</td>
+<td>安装 <code>cryptography</code>：<code>pip install cryptography</code></td>
+</tr>
+<tr>
+<td><code>cryptography is required for WeCom media decryption</code></td>
+<td>入站媒体已被 AES 加密。安装：<code>pip install cryptography</code></td>
+</tr>
+<tr>
+<td>语音消息作为文件发送</td>
+<td>WeCom 原生语音仅支持 AMR 格式，其他格式会自动降级为文件。</td>
+</tr>
+<tr>
+<td><code>File too large</code> 错误</td>
+<td>WeCom 对所有文件上传有 20 MB 的绝对限制。请压缩或拆分文件。</td>
+</tr>
+<tr>
+<td>图片作为文件发送</td>
+<td>图片 &gt; 10 MB 超过原生图片限制，会自动降级为文件附件。</td>
+</tr>
+<tr>
+<td><code>Timeout sending message to WeCom</code></td>
+<td>WebSocket 可能已断开。检查日志中的重连消息。</td>
+</tr>
+<tr>
+<td><code>WeCom websocket closed during authentication</code></td>
+<td>网络问题或凭据不正确。验证 bot_id 和 secret。</td>
+</tr>
+</tbody>
+</table>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

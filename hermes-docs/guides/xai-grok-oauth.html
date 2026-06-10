@@ -1,0 +1,428 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>xAI Grok OAuth（SuperGrok / X Premium+） - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 实用指南 / xAI Grok OAuth（SuperGrok / X Premium+）</div><p>Hermes Agent 通过基于浏览器的 OAuth 登录流程支持 xAI Grok，认证服务器为 <a href="https://accounts.x.ai">accounts.x.ai</a>，支持 <strong>SuperGrok 订阅</strong>（<a href="https://x.ai/grok">grok.com</a>）或 <strong>X Premium+ 订阅</strong>（已关联的 X 账号）。无需 <code>XAI_API_KEY</code>——登录一次后，Hermes 会在后台自动刷新会话。</p>
+<p>当你使用拥有 Premium+ 的 X 账号登录时，xAI 会自动将订阅状态关联到你的 xAI 会话，因此 OAuth 流程与直接 SuperGrok 订阅者的体验完全相同。</p>
+<p>该传输层复用 <code>codex_responses</code> 适配器（xAI 暴露了 Responses 风格的端点），因此推理、工具调用、流式传输和 prompt（提示词）缓存无需任何适配器改动即可正常工作。</p>
+<p>同一 OAuth bearer token 也会被 Hermes 中所有直连 xAI 的功能复用——TTS、图像生成、视频生成和转录——因此单次登录即可覆盖全部四项功能。</p>
+<h2>概览</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Provider ID</td>
+<td><code>xai-oauth</code></td>
+</tr>
+<tr>
+<td>显示名称</td>
+<td>xAI Grok OAuth (SuperGrok / X Premium+)</td>
+</tr>
+<tr>
+<td>认证类型</td>
+<td>浏览器 OAuth 2.0 PKCE（回环回调）</td>
+</tr>
+<tr>
+<td>传输层</td>
+<td>xAI Responses API（<code>codex_responses</code>）</td>
+</tr>
+<tr>
+<td>默认模型</td>
+<td><code>grok-4.3</code></td>
+</tr>
+<tr>
+<td>端点</td>
+<td><code>https://api.x.ai/v1</code></td>
+</tr>
+<tr>
+<td>认证服务器</td>
+<td><code>https://accounts.x.ai</code></td>
+</tr>
+<tr>
+<td>需要环境变量</td>
+<td>否（此 provider 不使用 <code>XAI_API_KEY</code>）</td>
+</tr>
+<tr>
+<td>订阅要求</td>
+<td><a href="https://x.ai/grok">SuperGrok</a> 或 <a href="https://x.com/i/premium_sign_up">X Premium+</a>——见下方说明</td>
+</tr>
+</tbody>
+</table>
+<h2>前提条件</h2>
+<ul>
+<li>Python 3.9+</li>
+<li>已安装 Hermes Agent</li>
+<li>你的 xAI 账号拥有有效的 <strong>SuperGrok</strong> 订阅，<strong>或</strong>你登录所用的 X 账号拥有 <strong>X Premium+</strong> 订阅（xAI 会自动关联订阅）</li>
+<li>本地机器上有可用的浏览器（远程会话可使用 <code>--no-browser</code>）</li>
+</ul>
+<div class="tip warning"><strong>⚠️ xAI 可能按套餐限制 OAuth API 访问</strong>
+xAI 的后端对 OAuth API 接口维护自己的白名单，已有记录显示即使应用内订阅处于激活状态，标准 SuperGrok 订阅者也会收到 <code>HTTP 403</code>（见 issue <a href="https://github.com/NousResearch/hermes-agent/issues/26847">#26847</a>）。如果浏览器中 OAuth 登录成功但推理返回 403，请设置 <code>XAI_API_KEY</code> 并切换到 API 密钥路径（<code>provider: xai</code>）——该接口目前不受相同限制。
+</div>
+<h2>快速开始</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 启动 provider 和模型选择器
+hermes model
+# → 从 provider 列表中选择 "xAI Grok OAuth (SuperGrok / X Premium+)"
+# → Hermes 在浏览器中打开 accounts.x.ai
+# → 在浏览器中批准访问
+# → 选择模型（grok-4.3 在列表顶部）
+# → 开始对话
+
+hermes
+</div>
+<p>首次登录后，凭据存储在 <code>~/.hermes/auth.json</code> 中，并在过期前自动刷新。</p>
+<h2>手动登录</h2>
+<p>你可以不经过模型选择器直接触发登录：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes auth add xai-oauth
+</div>
+<h3>远程 / 无头会话</h3>
+<p>在没有浏览器的服务器、容器或 SSH 会话中，Hermes 会检测到远程环境并打印授权 URL，而不是打开浏览器。</p>
+<p><strong>重要：</strong> 回环监听器仍在远程机器的 <code>127.0.0.1:56121</code> 上运行。xAI 的重定向需要到达<em>该</em>监听器，因此在你的笔记本上打开 URL 会失败（<code>Could not establish connection. We couldn't reach your app.</code>），除非你转发端口：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 在本地机器的另一个终端中：
+ssh -N -L 56121:127.0.0.1:56121 user@remote-host
+
+# 然后在远程机器的 SSH 会话中：
+hermes auth add xai-oauth --no-browser
+# 在本地浏览器中打开打印出的授权 URL。
+</div>
+<p>通过跳板机 / 堡垒机：添加 <code>-J jump-user@jump-host</code>。</p>
+<p>完整步骤（包括 ProxyJump 链、mosh/tmux 和 ControlMaster 注意事项）请参阅 <a href="./oauth-over-ssh.html">OAuth over SSH / Remote Hosts</a>。</p>
+<h3>仅限浏览器的远程环境（Cloud Shell、Codespaces、EC2 Instance Connect）</h3>
+<p>如果你没有常规 SSH 客户端（例如在 GCP Cloud Shell、GitHub Codespaces、AWS EC2 Instance Connect、Gitpod 或其他基于浏览器的控制台中运行 Hermes），上述 <code>ssh -L</code> 方案不可用。请改用 <code>--manual-paste</code>——Hermes 跳过回环监听器，让你直接从浏览器粘贴失败的回调 URL：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes auth add xai-oauth --manual-paste
+# 或通过模型选择器：
+hermes model --manual-paste
+</div>
+<p>完整操作说明请参阅 <a href="./oauth-over-ssh.html#browser-only-remote-cloud-shell--codespaces--ec2-instance-connect">OAuth over SSH / Remote Hosts</a>。此为 <a href="https://github.com/NousResearch/hermes-agent/issues/26923">#26923</a> 的回归修复。</p>
+<h2>登录流程说明</h2>
+<ol>
+<li>Hermes 在浏览器中打开 <code>accounts.x.ai</code>。</li>
+<li>你登录（或确认现有会话）并批准访问。</li>
+<li>xAI 重定向回 Hermes，token 保存到 <code>~/.hermes/auth.json</code>。</li>
+<li>此后，Hermes 在后台刷新 access token——你将保持登录状态，直到执行 <code>hermes auth remove xai-oauth</code> 或在 xAI 账号设置中撤销访问。</li>
+</ol>
+<h2>检查登录状态</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes doctor
+</div>
+<p><code>◆ Auth Providers</code> 部分将显示每个 provider 的当前状态，包括 <code>xai-oauth</code>。</p>
+<h2>切换模型</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes model
+# → 选择 "xAI Grok OAuth (SuperGrok / X Premium+)"
+# → 从模型列表中选择（grok-4.3 固定在顶部）
+</div>
+<p>或直接设置模型：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes config set model.default grok-4.3
+hermes config set model.provider xai-oauth
+</div>
+<h2>配置参考</h2>
+<p>登录后，<code>~/.hermes/config.yaml</code> 将包含：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  default: grok-4.3
+  provider: xai-oauth
+  base_url: https://api.x.ai/v1
+</div>
+<h3>Provider 别名</h3>
+<p>以下所有别名均解析为 <code>xai-oauth</code>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes --provider xai-oauth        # 规范名称
+hermes --provider grok-oauth       # 别名
+hermes --provider x-ai-oauth       # 别名
+hermes --provider xai-grok-oauth   # 别名
+</div>
+<h2>直连 xAI 工具（TTS / 图像 / 视频 / 转录 / X 搜索）</h2>
+<p>通过 OAuth 登录后，每个直连 xAI 的工具都会自动复用同一 bearer token——<strong>无需单独配置</strong>，除非你更倾向于使用 API 密钥。</p>
+<p>为每个工具选择后端：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes tools
+# → Text-to-Speech       → "xAI TTS"
+# → Image Generation     → "xAI Grok Imagine (image)"
+# → Video Generation     → "xAI Grok Imagine"
+# → X (Twitter) Search   → "xAI Grok OAuth (SuperGrok / X Premium+)"
+</div>
+<p>如果 OAuth token 已存储，选择器会确认并跳过凭据提示。如果既没有 OAuth 也没有设置 <code>XAI_API_KEY</code>，选择器会提供三选一菜单：OAuth 登录、粘贴 API 密钥或跳过。</p>
+<div class="tip"><strong>📝 视频生成默认关闭</strong>
+<code>video_gen</code> 工具集默认禁用。在 <code>hermes tools</code> → <code>🎬 Video Generation</code>（按空格键）中启用后，agent 才能调用 <code>video_generate</code>。否则 agent 可能回退到内置的 ComfyUI 技能，该技能同样标记为视频生成。
+</div>
+<div class="tip"><strong>📝 配置 xAI 凭据后 X 搜索自动启用</strong>
+只要配置了 xAI 凭据（SuperGrok / X Premium+ OAuth token 或 <code>XAI_API_KEY</code>），<code>x_search</code> 工具集就会自动启用。如不需要，请通过 <code>hermes tools</code> → <code>🐦 X (Twitter) Search</code>（按空格键）显式禁用。该工具通过 xAI 内置的 <code>x_search</code> Responses API 路由——支持 <strong>SuperGrok / X Premium+ OAuth 登录</strong>或付费 <code>XAI_API_KEY</code>，两者同时配置时优先使用 OAuth（消耗订阅配额而非 API 费用）。未配置任何 xAI 凭据时，无论工具集是否启用，工具 schema 都对模型隐藏。
+</div>
+<h3>模型</h3>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>模型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>对话</td>
+<td><code>grok-4.3</code></td>
+<td>默认；通过 OAuth 登录时自动选择</td>
+</tr>
+<tr>
+<td>对话</td>
+<td><code>grok-4.20-0309-reasoning</code></td>
+<td>推理变体</td>
+</tr>
+<tr>
+<td>对话</td>
+<td><code>grok-4.20-0309-non-reasoning</code></td>
+<td>非推理变体</td>
+</tr>
+<tr>
+<td>对话</td>
+<td><code>grok-4.20-multi-agent-0309</code></td>
+<td>多 agent 变体</td>
+</tr>
+<tr>
+<td>图像</td>
+<td><code>grok-imagine-image</code></td>
+<td>默认；约 5–10 秒</td>
+</tr>
+<tr>
+<td>图像</td>
+<td><code>grok-imagine-image-quality</code></td>
+<td>更高保真度；约 10–20 秒</td>
+</tr>
+<tr>
+<td>视频</td>
+<td><code>grok-imagine-video</code></td>
+<td>文本转视频</td>
+</tr>
+<tr>
+<td>视频</td>
+<td><code>grok-imagine-video-1.5-preview</code></td>
+<td>图像转视频；日期别名 <code>grok-imagine-video-1.5-2026-05-30</code></td>
+</tr>
+<tr>
+<td>TTS</td>
+<td>（默认音色）</td>
+<td>xAI <code>/v1/tts</code> 端点</td>
+</tr>
+</tbody>
+</table>
+<p>对话模型目录从磁盘上的 <code>models.dev</code> 缓存实时获取；缓存刷新后，新的 xAI 模型会自动出现。<code>grok-4.3</code> 始终固定在列表顶部。</p>
+<h2>环境变量</h2>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>XAI_BASE_URL</code></td>
+<td>覆盖默认的 <code>https://api.x.ai/v1</code> 端点（极少需要）。</td>
+</tr>
+</tbody>
+</table>
+<p>要将 xAI 设为活跃 provider，请在 <code>config.yaml</code> 中设置 <code>model.provider: xai-oauth</code>（使用 <code>hermes setup</code> 进行引导配置），或在单次调用时传入 <code>--provider xai-oauth</code>。</p>
+<h2>故障排查</h2>
+<h3>Token 过期——未自动重新登录</h3>
+<p>Hermes 在每次会话前刷新 token，并在收到 401 时响应式地再次刷新。如果刷新因 <code>invalid_grant</code> 失败（刷新 token 被撤销或账号已轮换），Hermes 会显示类型化的重新认证消息，而不是崩溃。</p>
+<p>当刷新失败是终态时（HTTP 4xx、<code>invalid_grant</code>、授权被撤销等），Hermes 将刷新 token 标记为失效并在本地隔离——后续调用跳过注定失败的刷新尝试，而不是反复重放同一个 401。agent 显示一条&quot;需要重新认证&quot;消息，并在你再次登录前保持等待。</p>
+<p><strong>修复方法：</strong> 再次运行 <code>hermes auth add xai-oauth</code> 开始全新登录。下次成功交换后隔离状态自动清除。</p>
+<h3>授权超时</h3>
+<p>回环监听器有有限的过期窗口（默认 180 秒）。如果你未在时限内批准登录，Hermes 会抛出超时错误。</p>
+<p><strong>修复方法：</strong> 重新运行 <code>hermes auth add xai-oauth</code>（或 <code>hermes model</code>）。流程重新开始。</p>
+<h3>State 不匹配（可能的 CSRF）</h3>
+<p>Hermes 检测到授权服务器返回的 <code>state</code> 值与发送的不匹配。</p>
+<p><strong>修复方法：</strong> 重新运行登录。如果问题持续，检查是否有代理或重定向在修改 OAuth 响应。</p>
+<h3>从远程服务器登录</h3>
+<p>在 SSH 或容器会话中，Hermes 打印授权 URL 而不是打开浏览器。回环回调监听器仍绑定在远程主机的 <code>127.0.0.1:56121</code>——你笔记本上的浏览器无法访问它，除非进行 SSH 本地端口转发：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 本地机器，另一个终端：
+ssh -N -L 56121:127.0.0.1:56121 user@remote-host
+
+# 远程机器：
+hermes auth add xai-oauth --no-browser
+</div>
+<p>完整操作说明（跳板机、mosh/tmux、端口冲突）：<a href="./oauth-over-ssh.html">OAuth over SSH / Remote Hosts</a>。</p>
+<h3>登录成功后 HTTP 403（套餐 / 权限问题）</h3>
+<p>浏览器中 OAuth 完成，token 已保存，但推理或 token 刷新返回 <code>HTTP 403</code>，消息类似于 <em>&quot;The caller does not have permission to execute the specified operation&quot;</em>。</p>
+<p>这<strong>不是</strong> token 过期问题——重新运行 <code>hermes model</code> 不会改变结果。xAI 的后端已被观察到将 OAuth API 访问限制在特定 SuperGrok 套餐，即使应用内订阅处于激活状态（issue <a href="https://github.com/NousResearch/hermes-agent/issues/26847">#26847</a>）。</p>
+<p><strong>修复方法：</strong> 设置 <code>XAI_API_KEY</code> 并切换到 API 密钥路径：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+export XAI_API_KEY=xai-...
+hermes config set model.provider xai
+</div>
+<p>或在 <a href="https://x.ai/grok">x.ai/grok</a> 升级订阅（如果必须使用 OAuth 路径）。</p>
+<h3>运行时出现&quot;No xAI credentials found&quot;错误</h3>
+<p>auth 存储中没有 <code>xai-oauth</code> 条目，也未设置 <code>XAI_API_KEY</code>。你尚未登录，或凭据文件已被删除。</p>
+<p><strong>修复方法：</strong> 运行 <code>hermes model</code> 并选择 xAI Grok OAuth provider，或运行 <code>hermes auth add xai-oauth</code>。</p>
+<h2>退出登录</h2>
+<p>删除所有已存储的 xAI Grok OAuth 凭据：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes auth logout xai-oauth
+</div>
+<p>这会清除 <code>auth.json</code> 中的单例 OAuth 条目以及 <code>xai-oauth</code> 的所有凭据池行。如果只想删除单个池条目，请使用 <code>hermes auth remove xai-oauth &lt;index|id|label&gt;</code>（运行 <code>hermes auth list xai-oauth</code> 查看列表）。</p>
+<h2>另请参阅</h2>
+<ul>
+<li><a href="./oauth-over-ssh.html">OAuth over SSH / Remote Hosts</a> — 如果 Hermes 与浏览器不在同一台机器上，必读</li>
+<li><a href="../integrations/providers.html">AI Providers 参考</a></li>
+<li><a href="../reference/environment-variables.html">环境变量</a></li>
+<li><a href="../user-guide/configuration.html">配置</a></li>
+<li><a href="../user-guide/features/tts.html">语音与 TTS</a></li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

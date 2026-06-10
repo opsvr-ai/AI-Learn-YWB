@@ -1,0 +1,420 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>贡献指南 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 开发者指南 / 贡献指南</div><p>感谢您为 Hermes Agent 做贡献！本指南涵盖开发环境配置、代码库结构说明以及 PR 合并流程。</p>
+<h2>贡献优先级</h2>
+<p>我们按以下顺序评估贡献价值：</p>
+<ol>
+<li><strong>Bug 修复</strong> — 崩溃、错误行为、数据丢失</li>
+<li><strong>跨平台兼容性</strong> — macOS、不同 Linux 发行版、WSL2</li>
+<li><strong>安全加固</strong> — shell 注入、prompt（提示词）注入、路径穿越</li>
+<li><strong>性能与健壮性</strong> — 重试逻辑、错误处理、优雅降级</li>
+<li><strong>新 skill</strong> — 具有广泛用途的 skill（参见 <a href="creating-skills.html">创建 Skill</a>）</li>
+<li><strong>新工具</strong> — 极少需要；大多数能力应以 skill 形式实现</li>
+<li><strong>文档</strong> — 修正、说明、新示例</li>
+</ol>
+<h2>常见贡献路径</h2>
+<ul>
+<li>构建自定义/本地工具而不修改 Hermes 核心？从 <a href="../guides/build-a-hermes-plugin.html">构建 Hermes 插件</a> 开始</li>
+<li>为 Hermes 本身构建新的内置核心工具？从 <a href="./adding-tools.html">添加工具</a> 开始</li>
+<li>构建新的 skill？从 <a href="./creating-skills.html">创建 Skill</a> 开始</li>
+<li>构建新的推理提供商？从 <a href="./adding-providers.html">添加提供商</a> 开始</li>
+</ul>
+<h2>开发环境配置</h2>
+<h3>前置要求</h3>
+<table>
+<thead>
+<tr>
+<th>要求</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Git</strong></td>
+<td>需安装 <code>git-lfs</code> 扩展</td>
+</tr>
+<tr>
+<td><strong>Python 3.11+</strong></td>
+<td>若未安装，uv 会自动安装</td>
+</tr>
+<tr>
+<td><strong>uv</strong></td>
+<td>高速 Python 包管理器（<a href="https://docs.astral.sh/uv/">安装</a>）</td>
+</tr>
+<tr>
+<td><strong>Node.js 20+</strong></td>
+<td>可选 — 浏览器工具和 WhatsApp bridge 需要（与根目录 <code>package.json</code> engines 字段一致）</td>
+</tr>
+</tbody>
+</table>
+<h3>克隆与安装</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+git clone https://github.com/NousResearch/hermes-agent.git
+cd hermes-agent
+
+# 使用 Python 3.11 创建虚拟环境
+uv venv venv --python 3.11
+export VIRTUAL_ENV="$(pwd)/venv"
+
+# 安装所有扩展（messaging、cron、CLI 菜单、开发工具）
+uv pip install -e ".[all,dev]"
+
+# 可选：浏览器工具
+npm install
+</div>
+<h3>配置开发环境</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mkdir -p ~/.hermes/{cron,sessions,logs,memories,skills}
+cp cli-config.yaml.example ~/.hermes/config.yaml
+touch ~/.hermes/.env
+
+# 至少添加一个 LLM 提供商密钥：
+echo 'OPENROUTER_API_KEY=sk-or-v1-your-key' &gt;&gt; ~/.hermes/.env
+</div>
+<h3>运行</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 创建全局访问的符号链接
+mkdir -p ~/.local/bin
+ln -sf "$(pwd)/venv/bin/hermes" ~/.local/bin/hermes
+
+# 验证
+hermes doctor
+hermes chat -q "Hello"
+</div>
+<h3>运行测试</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pytest tests/ -v
+</div>
+<h2>代码风格</h2>
+<ul>
+<li><strong>PEP 8</strong>，允许合理例外（不强制限制行长度）</li>
+<li><strong>注释</strong>：仅在解释非显而易见的意图、权衡取舍或 API 特殊行为时添加</li>
+<li><strong>错误处理</strong>：捕获具体异常。对于意外错误，使用 <code>logger.warning()</code>/<code>logger.error()</code> 并设置 <code>exc_info=True</code></li>
+<li><strong>跨平台</strong>：不得假设 Unix 环境（见下文）</li>
+<li><strong>Profile 安全路径</strong>：不得硬编码 <code>~/.hermes</code> — 代码路径使用 <code>hermes_constants</code> 中的 <code>get_hermes_home()</code>，面向用户的消息使用 <code>display_hermes_home()</code>。完整规则参见 <a href="https://github.com/NousResearch/hermes-agent/blob/main/AGENTS.html#profiles-multi-instance-support">AGENTS.md</a>。</li>
+</ul>
+<h2>跨平台兼容性</h2>
+<p>Hermes 官方支持 <strong>Linux、macOS、WSL2 以及原生 Windows（通过 PowerShell 安装）</strong>。原生 Windows 使用 <a href="https://git-scm.com/download/win">Git for Windows</a> 提供的 Git Bash 执行 shell 命令。部分功能依赖 POSIX 内核原语，已做条件限制：dashboard 内嵌的 PTY 终端面板（<code>/chat</code> 标签页）仅支持 WSL2。如果您主要在 Windows 上开发，推送前请运行 Windows 陷阱（footgun）lint（<code>scripts/check-windows-footguns.py</code>）。</p>
+<p>贡献代码时，请遵守以下规则：</p>
+<ul>
+<li><strong>不得添加未加保护的 <code>signal.SIGKILL</code> 引用。</strong> Windows 上未定义该信号。请通过 <code>gateway.status.terminate_pid(pid, force=True)</code>（集中式原语，Windows 上执行 <code>taskkill /T /F</code>，POSIX 上发送 SIGKILL）路由，或使用 <code>getattr(signal, &quot;SIGKILL&quot;, signal.SIGTERM)</code> 回退。</li>
+<li><strong>在 <code>os.kill(pid, 0)</code> 探测时同时捕获 <code>OSError</code> 和 <code>ProcessLookupError</code>。</strong> Windows 对已消失的 PID 抛出 <code>OSError</code>（WinError 87，&quot;参数不正确&quot;），而非 <code>ProcessLookupError</code>。</li>
+<li><strong>不得强制终端使用 POSIX 语义。</strong> <code>os.setsid</code>、<code>os.killpg</code>、<code>os.getpgid</code>、<code>os.fork</code> 在 Windows 上均会抛出异常 — 使用 <code>if sys.platform != &quot;win32&quot;:</code> 或 <code>if os.name != &quot;nt&quot;:</code> 进行条件判断。</li>
+<li><strong>打开文件时显式指定 <code>encoding=&quot;utf-8&quot;</code>。</strong> Windows 上 Python 默认使用系统区域设置（通常为 cp1252），处理非拉丁字符时会出现乱码或崩溃。</li>
+<li><strong>使用 <code>pathlib.Path</code> / <code>os.path.join</code>，不得手动用 <code>/</code> 拼接路径。</strong> 这对我们构造后传给子进程的字符串尤为重要，而非 OS 返回给我们的字符串。</li>
+</ul>
+<p>关键模式：</p>
+<h3>1. <code>termios</code> 和 <code>fcntl</code> 仅适用于 Unix</h3>
+<p>始终同时捕获 <code>ImportError</code> 和 <code>NotImplementedError</code>：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+try:
+    from simple_term_menu import TerminalMenu
+    menu = TerminalMenu(options)
+    idx = menu.show()
+except (ImportError, NotImplementedError):
+    # 回退：编号菜单
+    for i, opt in enumerate(options):
+        print(f"  {i+1}. {opt}")
+    idx = int(input("Choice: ")) - 1
+</div>
+<h3>2. 文件编码</h3>
+<p>某些环境可能以非 UTF-8 编码保存 <code>.env</code> 文件：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+try:
+    load_dotenv(env_path)
+except UnicodeDecodeError:
+    load_dotenv(env_path, encoding="latin-1")
+</div>
+<h3>3. 进程管理</h3>
+<p><code>os.setsid()</code>、<code>os.killpg()</code> 以及信号处理在各平台间存在差异：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import platform
+if platform.system() != "Windows":
+    kwargs["preexec_fn"] = os.setsid
+</div>
+<h3>4. 路径分隔符</h3>
+<p>使用 <code>pathlib.Path</code> 代替用 <code>/</code> 进行字符串拼接。</p>
+<h2>安全注意事项</h2>
+<p>Hermes 拥有终端访问权限，安全至关重要。</p>
+<h3>现有保护措施</h3>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>实现方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>sudo 密码管道</strong></td>
+<td>使用 <code>shlex.quote()</code> 防止 shell 注入</td>
+</tr>
+<tr>
+<td><strong>危险命令检测</strong></td>
+<td><code>tools/approval.py</code> 中的正则表达式模式，配合用户审批流程</td>
+</tr>
+<tr>
+<td><strong>Cron prompt 注入</strong></td>
+<td>扫描器阻断指令覆盖模式</td>
+</tr>
+<tr>
+<td><strong>写入拒绝列表</strong></td>
+<td>受保护路径通过 <code>os.path.realpath()</code> 解析，防止符号链接绕过</td>
+</tr>
+<tr>
+<td><strong>Skill 守卫</strong></td>
+<td>对 hub 安装的 skill 进行安全扫描</td>
+</tr>
+<tr>
+<td><strong>代码执行沙箱</strong></td>
+<td>子进程运行时剥离 API 密钥</td>
+</tr>
+<tr>
+<td><strong>容器加固</strong></td>
+<td>Docker：删除所有 capability，禁止权限提升，限制 PID 数量</td>
+</tr>
+</tbody>
+</table>
+<h3>贡献安全敏感代码</h3>
+<ul>
+<li>将用户输入插入 shell 命令时，始终使用 <code>shlex.quote()</code></li>
+<li>访问控制检查前，使用 <code>os.path.realpath()</code> 解析符号链接</li>
+<li>不得记录密钥信息</li>
+<li>在工具执行周围捕获宽泛异常</li>
+<li>若您的变更涉及文件路径或进程，请在所有平台上测试</li>
+</ul>
+<h2>Pull Request 流程</h2>
+<h3>分支命名</h3>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+fix/description        # Bug 修复
+feat/description       # 新功能
+docs/description       # 文档
+test/description       # 测试
+refactor/description   # 代码重构
+</div>
+<h3>提交前检查</h3>
+<ol>
+<li><strong>运行测试</strong>：<code>pytest tests/ -v</code></li>
+<li><strong>手动测试</strong>：运行 <code>hermes</code> 并验证您修改的代码路径</li>
+<li><strong>检查跨平台影响</strong>：考虑 macOS 和不同 Linux 发行版</li>
+<li><strong>保持 PR 聚焦</strong>：每个 PR 只包含一个逻辑变更</li>
+</ol>
+<h3>PR 描述</h3>
+<p>请包含：</p>
+<ul>
+<li><strong>变更内容</strong>及<strong>变更原因</strong></li>
+<li><strong>测试方法</strong></li>
+<li><strong>测试平台</strong></li>
+<li>关联 issue 引用</li>
+</ul>
+<h3>Commit 消息</h3>
+<p>我们使用 <a href="https://www.conventionalcommits.org/">Conventional Commits</a>：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+&lt;type&gt;(&lt;scope&gt;): &lt;description&gt;
+</div>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fix</code></td>
+<td>Bug 修复</td>
+</tr>
+<tr>
+<td><code>feat</code></td>
+<td>新功能</td>
+</tr>
+<tr>
+<td><code>docs</code></td>
+<td>文档</td>
+</tr>
+<tr>
+<td><code>test</code></td>
+<td>测试</td>
+</tr>
+<tr>
+<td><code>refactor</code></td>
+<td>代码重构</td>
+</tr>
+<tr>
+<td><code>chore</code></td>
+<td>构建、CI、依赖更新</td>
+</tr>
+</tbody>
+</table>
+<p>Scope 范围：<code>cli</code>、<code>gateway</code>、<code>tools</code>、<code>skills</code>、<code>agent</code>、<code>install</code>、<code>whatsapp</code>、<code>security</code></p>
+<p>示例：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+fix(cli): prevent crash in save_config_value when model is a string
+feat(gateway): add WhatsApp multi-user session isolation
+fix(security): prevent shell injection in sudo password piping
+</div>
+<h2>报告问题</h2>
+<ul>
+<li>使用 <a href="https://github.com/NousResearch/hermes-agent/issues">GitHub Issues</a></li>
+<li>请包含：操作系统、Python 版本、Hermes 版本（<code>hermes version</code>）、完整错误堆栈</li>
+<li>包含复现步骤</li>
+<li>创建前请检查是否已有重复 issue</li>
+<li>安全漏洞请私下报告</li>
+</ul>
+<h2>社区</h2>
+<ul>
+<li><strong>Discord</strong>：<a href="https://discord.gg/NousResearch">discord.gg/NousResearch</a></li>
+<li><strong>GitHub Discussions</strong>：用于设计提案和架构讨论</li>
+<li><strong>Skills Hub</strong>：上传专业 skill 并与社区共享</li>
+</ul>
+<h2>许可证</h2>
+<p>提交贡献即表示您同意您的贡献将以 <a href="https://github.com/NousResearch/hermes-agent/blob/main/LICENSE">MIT 许可证</a> 授权。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

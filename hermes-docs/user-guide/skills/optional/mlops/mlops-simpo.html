@@ -1,0 +1,374 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simpo 训练 — 用于 LLM 对齐的简单偏好优化 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Simpo 训练 — 用于 LLM 对齐的简单偏好优化</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Simpo 训练</h1>
+<p>用于 LLM 对齐的简单偏好优化（Simple Preference Optimization）。无需参考模型的 DPO 替代方案，性能更优（在 AlpacaEval 2.0 上提升 +6.4 分）。无需参考模型，比 DPO 更高效。当需要比 DPO/PPO 更简单、更快速的训练时，可用于偏好对齐。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/mlops/simpo</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/mlops/simpo</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Orchestra Research</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>依赖项</td>
+<td><code>torch</code>, <code>transformers</code>, <code>datasets</code>, <code>trl</code>, <code>accelerate</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Post-Training</code>, <code>SimPO</code>, <code>Preference Optimization</code>, <code>Alignment</code>, <code>DPO Alternative</code>, <code>Reference-Free</code>, <code>LLM Alignment</code>, <code>Efficient Training</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>SimPO - 简单偏好优化</h1>
+<h2>快速开始</h2>
+<p>SimPO 是一种无需参考模型的偏好优化方法，性能优于 DPO。</p>
+<p><strong>安装</strong>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Create environment
+conda create -n simpo python=3.10 &amp;&amp; conda activate simpo
+<h1>Install PyTorch 2.2.2</h1>
+<h1>Visit: https://pytorch.org/get-started/locally/</h1>
+<h1>Install alignment-handbook</h1>
+<p>git clone https://github.com/huggingface/alignment-handbook.git
+cd alignment-handbook
+python -m pip install .</p>
+<h1>Install Flash Attention 2</h1>
+<p>python -m pip install flash-attn --no-build-isolation</p>
+</div>
+<p><strong>训练</strong>（Mistral 7B）：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+ACCELERATE_LOG_LEVEL=info accelerate launch \
+  --config_file accelerate_configs/deepspeed_zero3.yaml \
+  scripts/run_simpo.py \
+  training_configs/mistral-7b-base-simpo.yaml
+</div>
+<h2>常见工作流</h2>
+<h3>工作流 1：从基础模型训练（Mistral 7B）</h3>
+<p><strong>配置文件</strong>（<code>mistral-7b-base-simpo.yaml</code>）：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Model
+model_name_or_path: mistralai/Mistral-7B-v0.1
+torch_dtype: bfloat16
+<h1>Dataset</h1>
+<p>dataset_mixer:
+HuggingFaceH4/ultrafeedback_binarized: 1.0
+dataset_splits:</p>
+<ul>
+<li>train_prefs</li>
+<li>test_prefs</li>
+</ul>
+<h1>SimPO hyperparameters</h1>
+<p>beta: 2.0                  # Reward scaling (2.0-10.0)
+gamma_beta_ratio: 0.5       # Target margin (0-1)
+loss_type: sigmoid          # sigmoid or hinge
+sft_weight: 0.0             # Optional SFT regularization</p>
+<h1>Training</h1>
+<p>learning_rate: 5e-7         # Critical: 3e-7 to 1e-6
+num_train_epochs: 1
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 8</p>
+<h1>Output</h1>
+<p>output_dir: ./outputs/mistral-7b-simpo</p>
+</div>
+<p><strong>启动训练</strong>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+accelerate launch --config_file accelerate_configs/deepspeed_zero3.yaml \
+  scripts/run_simpo.py training_configs/mistral-7b-base-simpo.yaml
+</div>
+<h3>工作流 2：微调指令模型（Llama 3 8B）</h3>
+<p><strong>配置文件</strong>（<code>llama3-8b-instruct-simpo.yaml</code>）：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model_name_or_path: meta-llama/Meta-Llama-3-8B-Instruct
+<p>dataset_mixer:
+argilla/ultrafeedback-binarized-preferences-cleaned: 1.0</p>
+<p>beta: 2.5
+gamma_beta_ratio: 0.5
+learning_rate: 5e-7
+sft_weight: 0.1             # Add SFT loss to preserve capabilities</p>
+<p>num_train_epochs: 1
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 4
+output_dir: ./outputs/llama3-8b-simpo</p>
+</div>
+<p><strong>启动</strong>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+accelerate launch --config_file accelerate_configs/deepspeed_zero3.yaml \
+  scripts/run_simpo.py training_configs/llama3-8b-instruct-simpo.yaml
+</div>
+<h3>工作流 3：推理密集型任务（较低学习率）</h3>
+<p><strong>适用于数学/代码任务</strong>：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model_name_or_path: deepseek-ai/deepseek-math-7b-base
+<p>dataset_mixer:
+argilla/distilabel-math-preference-dpo: 1.0</p>
+<p>beta: 5.0                   # Higher for stronger signal
+gamma_beta_ratio: 0.7       # Larger margin
+learning_rate: 3e-7         # Lower LR for reasoning
+sft_weight: 0.0</p>
+<p>num_train_epochs: 1
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 16</p>
+</div>
+<h2>何时使用及替代方案</h2>
+<p><strong>适合使用 SimPO 的场景</strong>：</p>
+<ul>
+<li>希望比 DPO 训练更简单（无需参考模型）</li>
+<li>拥有偏好数据（chosen/rejected 对）</li>
+<li>需要比 DPO 更好的性能</li>
+<li>计算资源有限</li>
+<li>单节点训练即可满足需求</li>
+</ul>
+<p><strong>算法选择</strong>：</p>
+<ul>
+<li><strong>SimPO</strong>：最简单、性能最优、无需参考模型</li>
+<li><strong>DPO</strong>：需要参考模型基线，更为保守</li>
+<li><strong>PPO</strong>：最大控制度，需要奖励模型，配置复杂</li>
+<li><strong>GRPO</strong>：内存高效的 RL，无需 critic</li>
+</ul>
+<p><strong>改用其他方案的场景</strong>：</p>
+<ul>
+<li><strong>OpenRLHF</strong>：多节点分布式训练，PPO/GRPO</li>
+<li><strong>TRL</strong>：需要在单一框架中使用多种方法</li>
+<li><strong>DPO</strong>：需要建立已有基线对比</li>
+</ul>
+<h2>常见问题</h2>
+<p><strong>问题：损失发散</strong></p>
+<p>降低学习率：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+learning_rate: 3e-7  # Reduce from 5e-7
+</div>
+<p>降低 beta：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+beta: 1.0  # Reduce from 2.0
+</div>
+<p><strong>问题：模型遗忘原有能力</strong></p>
+<p>添加 SFT 正则化：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+sft_weight: 0.1  # Add SFT loss component
+</div>
+<p><strong>问题：偏好分离效果差</strong></p>
+<p>提高 beta 和 margin：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+beta: 5.0            # Increase from 2.0
+gamma_beta_ratio: 0.8  # Increase from 0.5
+</div>
+<p><strong>问题：训练时显存不足（OOM）</strong></p>
+<p>减小批次大小：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 16  # Maintain effective batch
+</div>
+<p>启用梯度检查点：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+gradient_checkpointing: true
+</div>
+<h2>进阶主题</h2>
+<p><strong>损失函数</strong>：参见 <a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/simpo/references/loss-functions.html">references/loss-functions.md</a>，了解 sigmoid 与 hinge 损失、数学公式及各自适用场景。</p>
+<p><strong>超参数调优</strong>：参见 <a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/simpo/references/hyperparameters.html">references/hyperparameters.md</a>，了解 beta、gamma、学习率选择指南及针对不同模型规模的建议。</p>
+<p><strong>数据集准备</strong>：参见 <a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/simpo/references/datasets.html">references/datasets.md</a>，了解偏好数据格式、质量过滤及自定义数据集创建方法。</p>
+<h2>硬件要求</h2>
+<ul>
+<li><strong>GPU</strong>：推荐 NVIDIA A100/H100</li>
+<li><strong>显存</strong>：
+<ul>
+<li>7B 模型：1× A100 40GB（DeepSpeed ZeRO-3）</li>
+<li>8B 模型：2× A100 40GB</li>
+<li>70B 模型：8× A100 80GB</li>
+</ul>
+</li>
+<li><strong>单节点</strong>：DeepSpeed ZeRO-3 即可满足</li>
+<li><strong>混合精度</strong>：推荐 BF16</li>
+</ul>
+<p><strong>内存优化</strong>：</p>
+<ul>
+<li>DeepSpeed ZeRO-3（默认配置）</li>
+<li>梯度检查点</li>
+<li>Flash Attention 2</li>
+</ul>
+<h2>资源</h2>
+<ul>
+<li>论文：https://arxiv.org/abs/2405.14734（NeurIPS 2024）</li>
+<li>GitHub：https://github.com/princeton-nlp/SimPO</li>
+<li>模型：https://huggingface.co/princeton-nlp</li>
+<li>Alignment Handbook：https://github.com/huggingface/alignment-handbook</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

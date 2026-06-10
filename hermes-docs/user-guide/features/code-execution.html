@@ -1,0 +1,419 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>代码执行 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html" class="active">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / 代码执行</div><p><code>execute_code</code> 工具允许 agent 编写调用 Hermes 工具的 Python 脚本，将多步骤工作流压缩至单次 LLM 对话轮次。脚本在 agent 宿主机的子进程中运行，通过 Unix 域套接字 RPC 与 Hermes 通信。</p>
+<h2>工作原理</h2>
+<ol>
+<li>Agent 编写使用 <code>from hermes_tools import ...</code> 的 Python 脚本</li>
+<li>Hermes 生成带有 RPC 函数的 <code>hermes_tools.py</code> 存根模块</li>
+<li>Hermes 打开 Unix 域套接字并启动 RPC 监听线程</li>
+<li>脚本在子进程中运行——工具调用通过套接字传回 Hermes</li>
+<li>只有脚本的 <code>print()</code> 输出会返回给 LLM；中间工具结果不会进入上下文窗口</li>
+</ol>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# The agent can write scripts like:
+from hermes_tools import web_search, web_extract
+
+results = web_search("Python 3.13 features", limit=5)
+for r in results["data"]["web"]:
+    content = web_extract([r["url"]])
+    # ... filter and process ...
+print(summary)
+</div>
+<p><strong>脚本内可用工具：</strong> <code>web_search</code>、<code>web_extract</code>、<code>read_file</code>、<code>write_file</code>、<code>search_files</code>、<code>patch</code>、<code>terminal</code>（仅前台模式）。</p>
+<h2>Agent 何时使用此功能</h2>
+<p>当存在以下情况时，agent 会使用 <code>execute_code</code>：</p>
+<ul>
+<li><strong>3 次及以上工具调用</strong>，且调用之间包含处理逻辑</li>
+<li>批量数据过滤或条件分支</li>
+<li>对结果进行循环处理</li>
+</ul>
+<p>核心优势：中间工具结果不会进入上下文窗口——只有最终的 <code>print()</code> 输出会返回，大幅降低 token 用量。</p>
+<h2>实际示例</h2>
+<h3>数据处理流水线</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from hermes_tools import search_files, read_file
+import json
+
+# Find all config files and extract database settings
+matches = search_files("database", path=".", file_glob="*.yaml", limit=20)
+configs = []
+for match in matches.get("matches", []):
+    content = read_file(match["path"])
+    configs.append({"file": match["path"], "preview": content["content"][:200]})
+
+print(json.dumps(configs, indent=2))
+</div>
+<h3>多步骤网络调研</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from hermes_tools import web_search, web_extract
+import json
+
+# Search, extract, and summarize in one turn
+results = web_search("Rust async runtime comparison 2025", limit=5)
+summaries = []
+for r in results["data"]["web"]:
+    page = web_extract([r["url"]])
+    for p in page.get("results", []):
+        if p.get("content"):
+            summaries.append({
+                "title": r["title"],
+                "url": r["url"],
+                "excerpt": p["content"][:500]
+            })
+
+print(json.dumps(summaries, indent=2))
+</div>
+<h3>批量文件重构</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from hermes_tools import search_files, read_file, patch
+
+# Find all Python files using deprecated API and fix them
+matches = search_files("old_api_call", path="src/", file_glob="*.py")
+fixed = 0
+for match in matches.get("matches", []):
+    result = patch(
+        path=match["path"],
+        old_string="old_api_call(",
+        new_string="new_api_call(",
+        replace_all=True
+    )
+    if "error" not in str(result):
+        fixed += 1
+
+print(f"Fixed {fixed} files out of {len(matches.get('matches', []))} matches")
+</div>
+<h3>构建与测试流水线</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from hermes_tools import terminal, read_file
+import json
+
+# Run tests, parse results, and report
+result = terminal("cd /project &amp;&amp; python -m pytest --tb=short -q 2&gt;&amp;1", timeout=120)
+output = result.get("output", "")
+
+# Parse test output
+passed = output.count(" passed")
+failed = output.count(" failed")
+errors = output.count(" error")
+
+report = {
+    "passed": passed,
+    "failed": failed,
+    "errors": errors,
+    "exit_code": result.get("exit_code", -1),
+    "summary": output[-500:] if len(output) &gt; 500 else output
+}
+
+print(json.dumps(report, indent=2))
+</div>
+<h2>执行模式</h2>
+<p><code>execute_code</code> 有两种执行模式，通过 <code>~/.hermes/config.yaml</code> 中的 <code>code_execution.mode</code> 控制：</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>工作目录</th>
+<th>Python 解释器</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>project</code></strong>（默认）</td>
+<td>会话的工作目录（与 <code>terminal()</code> 相同）</td>
+<td>活跃的 <code>VIRTUAL_ENV</code> / <code>CONDA_PREFIX</code> python，回退至 Hermes 自身的 python</td>
+</tr>
+<tr>
+<td><code>strict</code></td>
+<td>与用户项目隔离的临时暂存目录</td>
+<td><code>sys.executable</code>（Hermes 自身的 python）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>何时保持 <code>project</code> 模式：</strong> 当你希望 <code>import pandas</code>、<code>from my_project import foo</code> 或 <code>open(&quot;.env&quot;)</code> 等相对路径与 <code>terminal()</code> 中的行为一致时。这几乎是你始终想要的模式。</p>
+<p><strong>何时切换至 <code>strict</code> 模式：</strong> 当你需要最大可复现性时——希望无论用户激活哪个 venv，每次会话都使用相同的解释器，并且希望脚本与项目目录隔离（避免通过相对路径意外读取项目文件）。</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ~/.hermes/config.yaml
+code_execution:
+  mode: project   # or "strict"
+</div>
+<p><code>project</code> 模式的回退行为：若 <code>VIRTUAL_ENV</code> / <code>CONDA_PREFIX</code> 未设置、已损坏或指向低于 3.8 的 Python，解析器会干净地回退至 <code>sys.executable</code>——agent 始终有可用的解释器。</p>
+<p>两种模式的安全关键不变量完全相同：</p>
+<ul>
+<li>环境变量清理（API key、token、凭据默认被剥离）</li>
+<li>工具白名单（脚本不能递归调用 <code>execute_code</code>、<code>delegate_task</code> 或 MCP 工具）</li>
+<li>资源限制（超时、stdout 上限、工具调用上限）</li>
+</ul>
+<p>切换模式只改变脚本的运行位置和使用的解释器，不改变脚本可见的凭据或可调用的工具。</p>
+<h2>资源限制</h2>
+<table>
+<thead>
+<tr>
+<th>资源</th>
+<th>限制</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>超时</strong></td>
+<td>5 分钟（300 秒）</td>
+<td>脚本先收到 SIGTERM，5 秒宽限期后收到 SIGKILL</td>
+</tr>
+<tr>
+<td><strong>Stdout</strong></td>
+<td>50 KB</td>
+<td>输出截断并附加 <code>[output truncated at 50KB]</code> 提示</td>
+</tr>
+<tr>
+<td><strong>Stderr</strong></td>
+<td>10 KB</td>
+<td>非零退出时包含在输出中，用于调试</td>
+</tr>
+<tr>
+<td><strong>工具调用</strong></td>
+<td>每次执行 50 次</td>
+<td>达到上限时返回错误</td>
+</tr>
+</tbody>
+</table>
+<p>所有限制均可通过 <code>config.yaml</code> 配置：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# In ~/.hermes/config.yaml
+code_execution:
+  mode: project      # project (default) | strict
+  timeout: 300       # Max seconds per script (default: 300)
+  max_tool_calls: 50 # Max tool calls per execution (default: 50)
+</div>
+<h2>脚本内工具调用的工作方式</h2>
+<p>当脚本调用 <code>web_search(&quot;query&quot;)</code> 等函数时：</p>
+<ol>
+<li>调用被序列化为 JSON，通过 Unix 域套接字发送至父进程</li>
+<li>父进程通过标准 <code>handle_function_call</code> 处理器进行分发</li>
+<li>结果通过套接字发回</li>
+<li>函数返回解析后的结果</li>
+</ol>
+<p>这意味着脚本内的工具调用与普通工具调用行为完全一致——相同的速率限制、相同的错误处理、相同的能力。唯一的限制是 <code>terminal()</code> 仅支持前台模式（不支持 <code>background</code> 或 <code>pty</code> 参数）。</p>
+<h2>错误处理</h2>
+<p>脚本失败时，agent 会收到结构化的错误信息：</p>
+<ul>
+<li><strong>非零退出码</strong>：stderr 包含在输出中，agent 可看到完整的 traceback</li>
+<li><strong>超时</strong>：脚本被终止，agent 看到 <code>&quot;Script timed out after 300s and was killed.&quot;</code></li>
+<li><strong>中断</strong>：若用户在执行期间发送新消息，脚本被终止，agent 看到 <code>[execution interrupted — user sent a new message]</code></li>
+<li><strong>工具调用上限</strong>：达到 50 次调用上限后，后续工具调用返回错误消息</li>
+</ul>
+<p>响应始终包含 <code>status</code>（success/error/timeout/interrupted）、<code>output</code>、<code>tool_calls_made</code> 和 <code>duration_seconds</code>。</p>
+<h2>安全性</h2>
+<div class="tip warning"><strong>🔴 安全模型</strong>
+子进程在<strong>最小化环境</strong>中运行。API key、token 和凭据默认被剥离。脚本只能通过 RPC 通道访问工具——除非显式允许，否则无法从环境变量中读取密钥。
+</div>
+<p>名称中包含 <code>KEY</code>、<code>TOKEN</code>、<code>SECRET</code>、<code>PASSWORD</code>、<code>CREDENTIAL</code>、<code>PASSWD</code> 或 <code>AUTH</code> 的环境变量会被排除。只有安全的系统变量（<code>PATH</code>、<code>HOME</code>、<code>LANG</code>、<code>SHELL</code>、<code>PYTHONPATH</code>、<code>VIRTUAL_ENV</code> 等）会被传递。</p>
+<h3>Skill 环境变量透传</h3>
+<p>当 skill 在其 frontmatter 中声明 <code>required_environment_variables</code> 时，这些变量会在 skill 加载后<strong>自动透传</strong>至 <code>execute_code</code> 和 <code>terminal</code> 子进程。这使 skill 可以使用其声明的 API key，而不会削弱任意代码的安全态势。</p>
+<p>对于非 skill 场景，可在 <code>config.yaml</code> 中显式添加变量白名单：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal:
+  env_passthrough:
+    - MY_CUSTOM_KEY
+    - ANOTHER_TOKEN
+</div>
+<p>详情参见<a href="/user-guide/security#environment-variable-passthrough">安全指南</a>。</p>
+<p>Hermes 始终将脚本和自动生成的 <code>hermes_tools.py</code> RPC 存根写入临时暂存目录，执行完成后清理。在 <code>strict</code> 模式下，脚本也在该目录中<em>运行</em>；在 <code>project</code> 模式下，脚本在会话的工作目录中运行（暂存目录保留在 <code>PYTHONPATH</code> 中以确保导入正常解析）。子进程在独立的进程组中运行，以便在超时或中断时干净地终止。</p>
+<h2>execute_code 与 terminal 对比</h2>
+<table>
+<thead>
+<tr>
+<th>使用场景</th>
+<th>execute_code</th>
+<th>terminal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>调用之间含逻辑的多步骤工作流</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>简单 shell 命令</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>过滤/处理大量工具输出</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>运行构建或测试套件</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>对搜索结果进行循环处理</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>交互式/后台进程</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>需要环境变量中的 API key</td>
+<td>⚠️ 仅通过<a href="/user-guide/security#environment-variable-passthrough">透传</a></td>
+<td>✅（大多数可透传）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>经验法则：</strong> 需要在调用之间含逻辑地程序化调用 Hermes 工具时，使用 <code>execute_code</code>。运行 shell 命令、构建和进程时，使用 <code>terminal</code>。</p>
+<h2>平台支持</h2>
+<p>代码执行依赖 Unix 域套接字，仅在 <strong>Linux 和 macOS</strong> 上可用。在 Windows 上会自动禁用——agent 回退至常规的顺序工具调用。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,322 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Baoyu Comic — Knowledge comics (知识漫画): educational, biography, tutorial - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 命令</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & Skills</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">docs</a> / <a href="/hermes-docs/user-guide/">user-guide</a> / <a href="/hermes-docs/user-guide/skills/">skills</a> / <a href="/hermes-docs/user-guide/skills/bundled/">bundled</a> / <a href="/hermes-docs/user-guide/skills/bundled/creative/">creative</a> / Baoyu Comic — Knowledge comics (知识漫画): educational, biography, tutorial</div><p>{/<em> 本页面由 website/scripts/generate-skill-docs.py 从技能的 SKILL.md 自动生成。请编辑源 SKILL.md，而非本页面。 </em>/}</p>
+<h1>Baoyu Comic</h1>
+<p>Knowledge comics (知识漫画): educational, biography, tutorial.</p>
+<h2>技能元数据</h2>
+<table><thead><tr><th>---</th><th>---</th></tr></thead><tbody>
+<tr><td>来源</td><td>内置（默认安装）</td></tr>
+<tr><td>路径</td><td><code>skills/creative/baoyu-comic</code></td></tr>
+<tr><td>版本</td><td><code>1.56.1</code></td></tr>
+<tr><td>作者</td><td>宝玉 (JimLiu)</td></tr>
+<tr><td>许可证</td><td>MIT</td></tr>
+<tr><td>平台</td><td>linux, macos, windows</td></tr>
+<tr><td>标签</td><td><code>comic</code>, <code>knowledge-comic</code>, <code>creative</code>, <code>image-generation</code></td></tr>
+</tbody></table>
+<h2>参考：完整 SKILL.md</h2>
+<p>:::info</p>
+<p>以下是 Hermes 在此技能被触发时加载的完整技能定义。这是技能激活时代理所看到的指令。</p>
+<p>:::</p>
+<h1>Knowledge Comic Creator</h1>
+<p>Adapted from <a href="https://github.com/JimLiu/baoyu-skills">baoyu-comic</a> for Hermes Agent's tool ecosystem.</p>
+<p>Create original knowledge comics with flexible art style × tone combinations.</p>
+<h2>何时使用</h2>
+<p>Trigger this skill when the user asks to create a knowledge/educational comic, biography comic, tutorial comic, or uses terms like "知识漫画", "教育漫画", or "Logicomix-style". The user provides content (text, file path, URL, or topic) and optionally specifies art style, tone, layout, aspect ratio, or language.</p>
+<h2>Reference Images</h2>
+<p>Hermes' <code>image_generate</code> tool is <strong>prompt-only</strong> — it accepts a text prompt and an aspect ratio, and returns an image URL. It does <strong>NOT</strong> accept reference images. When the user supplies a reference image, use it to <strong>extract traits in text</strong> that get embedded in every page prompt:</p>
+<p><strong>Intake</strong>: Accept file paths when the user provides them (or pastes images in conversation).</p>
+<p>- File path(s) → copy to <code>refs/NN-ref-{slug}.{ext}</code> alongside the comic output for provenance</p>
+<p>- Pasted image with no path → ask the user for the path via <code>clarify</code>, or extract style traits verbally as a text fallback</p>
+<p>- No reference → skip this section</p>
+<p><strong>用法 modes</strong> (per reference):</p>
+<table><thead><tr><th>用法</th><th>Effect</th></tr></thead><tbody>
+<tr><td><code>style</code></td><td>Extract style traits (line treatment, texture, mood) and append to every page's prompt body</td></tr>
+<tr><td><code>palette</code></td><td>Extract hex colors and append to every page's prompt body</td></tr>
+<tr><td><code>scene</code></td><td>Extract scene composition or subject notes and append to the relevant page(s)</td></tr>
+</tbody></table>
+<p><strong>Record in each page's prompt frontmatter</strong> when refs exist:</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+references:
+  - ref_id: 01
+    filename: 01-ref-scene.png
+    usage: style
+    traits: "muted earth tones, soft-edged ink wash, low-contrast backgrounds"
+</div>
+<p>Character consistency is driven by <strong>text descriptions</strong> in <code>characters/characters.md</code> (written in Step 3) that get embedded inline in every page prompt (Step 5). The optional PNG character sheet generated in Step 7.1 is a human-facing review artifact, not an input to <code>image_generate</code>.</p>
+<h2>选项</h2>
+<h3>Visual Dimensions</h3>
+<table><thead><tr><th>Option</th><th>Values</th><th>Description</th></tr></thead><tbody>
+<tr><td>Art</td><td>ligne-claire (default), manga, realistic, ink-brush, chalk, minimalist</td><td>Art style / rendering technique</td></tr>
+<tr><td>Tone</td><td>neutral (default), warm, dramatic, romantic, energetic, vintage, action</td><td>Mood / atmosphere</td></tr>
+<tr><td>Layout</td><td>standard (default), cinematic, dense, splash, mixed, webtoon, four-panel</td><td>Panel arrangement</td></tr>
+<tr><td>Aspect</td><td>3:4 (default, portrait), 4:3 (landscape), 16:9 (widescreen)</td><td>Page aspect ratio</td></tr>
+<tr><td>Language</td><td>auto (default), zh, en, ja, etc.</td><td>Output language</td></tr>
+<tr><td>Refs</td><td>File paths</td><td>Reference images used for style / palette trait extraction (not passed to the image model). See <a href="#reference-images">Reference Images</a> above.</td></tr>
+</tbody></table>
+<h3>Partial Workflow 选项</h3>
+<table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
+<tr><td>Storyboard only</td><td>Generate storyboard only, skip prompts and images</td></tr>
+<tr><td>Prompts only</td><td>Generate storyboard + prompts, skip images</td></tr>
+<tr><td>Images only</td><td>Generate images from existing prompts directory</td></tr>
+<tr><td>Regenerate N</td><td>Regenerate specific page(s) only (e.g., <code>3</code> or <code>2,5,8</code>)</td></tr>
+</tbody></table>
+<p>Details: <a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-comic/references/partial-workflows.md">references/partial-workflows.md</a></p>
+<h3>Art, Tone & Preset Catalogue</h3>
+<p>- <strong>Art styles</strong> (6): <code>ligne-claire</code>, <code>manga</code>, <code>realistic</code>, <code>ink-brush</code>, <code>chalk</code>, <code>minimalist</code>. Full definitions at <code>references/art-styles/<style>.md</code>.</p>
+<p>- <strong>Tones</strong> (7): <code>neutral</code>, <code>warm</code>, <code>dramatic</code>, <code>romantic</code>, <code>energetic</code>, <code>vintage</code>, <code>action</code>. Full definitions at <code>references/tones/<tone>.md</code>.</p>
+<p>- <strong>Presets</strong> (5) with special rules beyond plain art+tone:</p>
+<table><thead><tr><th>Preset</th><th>Equivalent</th><th>Hook</th></tr></thead><tbody>
+<tr><td><code>ohmsha</code></td><td>manga + neutral</td><td>Visual metaphors, no talking heads, gadget reveals</td></tr>
+<tr><td><code>wuxia</code></td><td>ink-brush + action</td><td>Qi effects, combat visuals, atmospheric</td></tr>
+<tr><td><code>shoujo</code></td><td>manga + romantic</td><td>Decorative elements, eye details, romantic beats</td></tr>
+<tr><td><code>concept-story</code></td><td>manga + warm</td><td>Visual symbol system, growth arc, dialogue+action balance</td></tr>
+<tr><td><code>four-panel</code></td><td>minimalist + neutral + four-panel layout</td><td>起承转合 structure, B&W + spot color, stick-figure characters</td></tr>
+</tbody></table>
+<p>  Full rules at <code>references/presets/<preset>.md</code> — load the file when a preset is picked.</p>
+<p>- <strong>Compatibility matrix</strong> and <strong>content-signal → preset</strong> table live in <a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-comic/references/auto-selection.md">references/auto-selection.md</a>. Read it before recommending combinations in Step 2.</p>
+<h2>File Structure</h2>
+<p>Output directory: <code>comic/{topic-slug}/</code></p>
+<p>- Slug: 2-4 words kebab-case from topic (e.g., <code>alan-turing-bio</code>)</p>
+<p>- Conflict: append timestamp (e.g., <code>turing-story-20260118-143052</code>)</p>
+<p><strong>Contents</strong>:</p>
+<table><thead><tr><th>File</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>source-{slug}.md</code></td><td>Saved source content (kebab-case slug matches the output directory)</td></tr>
+<tr><td><code>analysis.md</code></td><td>Content analysis</td></tr>
+<tr><td><code>storyboard.md</code></td><td>Storyboard with panel breakdown</td></tr>
+<tr><td><code>characters/characters.md</code></td><td>Character definitions</td></tr>
+<tr><td><code>characters/characters.png</code></td><td>Character reference sheet (downloaded from <code>image_generate</code>)</td></tr>
+<tr><td><code>prompts/NN-{cover\</td><td>page}-[slug].md</code></td><td>Generation prompts</td></tr>
+<tr><td><code>NN-{cover\</td><td>page}-[slug].png</code></td><td>Generated images (downloaded from <code>image_generate</code>)</td></tr>
+<tr><td><code>refs/NN-ref-{slug}.{ext}</code></td><td>User-supplied reference images (optional, for provenance)</td></tr>
+</tbody></table>
+<h2>Language Handling</h2>
+<p><strong>Detection Priority</strong>:</p>
+<p>1. User-specified language (explicit option)</p>
+<p>2. User's conversation language</p>
+<p>3. Source content language</p>
+<p><strong>Rule</strong>: Use user's input language for ALL interactions:</p>
+<p>- Storyboard outlines and scene descriptions</p>
+<p>- Image generation prompts</p>
+<p>- User selection options and confirmations</p>
+<p>- Progress updates, questions, errors, summaries</p>
+<p>Technical terms remain in English.</p>
+<h2>Workflow</h2>
+<h3>Progress Checklist</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Comic Progress:
+- [ ] Step 1: 设置 & Analyze
+  - [ ] 1.1 Analyze content
+  - [ ] 1.2 Check existing directory
+- [ ] Step 2: Confirmation - Style & options ⚠️ REQUIRED
+- [ ] Step 3: Generate storyboard + characters
+- [ ] Step 4: Review outline (conditional)
+- [ ] Step 5: Generate prompts
+- [ ] Step 6: Review prompts (conditional)
+- [ ] Step 7: Generate images
+  - [ ] 7.1 Generate character sheet (if needed) → characters/characters.png
+  - [ ] 7.2 Generate pages (with character descriptions embedded in prompt)
+- [ ] Step 8: Completion report
+</div>
+<h3>Flow</h3>
+<div class="code-block"><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Input → Analyze → [Check Existing?] → [Confirm: Style + Reviews] → Storyboard → [Review?] → Prompts → [Review?] → Images → Complete
+</div>
+<h3>Step Summary</h3>
+<table><thead><tr><th>Step</th><th>Action</th><th>Key Output</th></tr></thead><tbody>
+<tr><td>1.1</td><td>Analyze content</td><td><code>analysis.md</code>, <code>source-{slug}.md</code></td></tr>
+<tr><td>1.2</td><td>Check existing directory</td><td>Handle conflicts</td></tr>
+<tr><td>2</td><td>Confirm style, focus, audience, reviews</td><td>User preferences</td></tr>
+<tr><td>3</td><td>Generate storyboard + characters</td><td><code>storyboard.md</code>, <code>characters/</code></td></tr>
+<tr><td>4</td><td>Review outline (if requested)</td><td>User approval</td></tr>
+<tr><td>5</td><td>Generate prompts</td><td><code>prompts/*.md</code></td></tr>
+<tr><td>6</td><td>Review prompts (if requested)</td><td>User approval</td></tr>
+<tr><td>7.1</td><td>Generate character sheet (if needed)</td><td><code>characters/characters.png</code></td></tr>
+<tr><td>7.2</td><td>Generate pages</td><td><code>*.png</code> files</td></tr>
+<tr><td>8</td><td>Completion report</td><td>Summary</td></tr>
+</tbody></table>
+<h3>User Questions</h3>
+<p>Use the <code>clarify</code> tool to confirm options. Since <code>clarify</code> handles one question at a time, ask the most important question first and proceed sequentially. See <a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-comic/references/workflow.md">references/workflow.md</a> for the full Step 2 question set.</p>
+<p><strong>Timeout handling (CRITICAL)</strong>: <code>clarify</code> can return <code>"The user did not provide a response within the time limit. Use your best judgement to make the choice and proceed."</code> — this is NOT user consent to default everything.</p>
+<p>- Treat it as a default <strong>for that one question only</strong>. Continue asking the remaining Step 2 questions in sequence; each question is an independent consent point.</p>
+<p>- <strong>Surface the default to the user visibly</strong> in your next message so they have a chance to correct it: e.g. <code>"Style: defaulted to ohmsha preset (clarify timed out). Say the word to switch."</code> — an unreported default is indistinguishable from never having asked.</p>
+<p>- Do NOT collapse Step 2 into a single "use all defaults" pass after one timeout. If the user is genuinely absent, they will be equally absent for all five questions — but they can correct visible defaults when they return, and cannot correct invisible ones.</p>
+<h3>Step 7: Image Generation</h3>
+<p>Use Hermes' built-in <code>image_generate</code> tool for all image rendering. Its schema accepts only <code>prompt</code> and <code>aspect_ratio</code> (<code>landscape</code> | <code>portrait</code> | <code>square</code>); it <strong>returns a URL</strong>, not a local file. Every generated page or character sheet must therefore be downloaded to the output directory.</p>
+<p><strong>Prompt file requirement (hard)</strong>: write each image's full, final prompt to a standalone file under <code>prompts/</code> (naming: <code>NN-{type}-[slug].md</code>) BEFORE calling <code>image_generate</code>. The prompt file is the reproducibility record.</p>
+<p><strong>Aspect ratio mapping</strong> — the storyboard's <code>aspect_ratio</code> field maps to <code>image_generate</code>'s format as follows:</p>
+<table><thead><tr><th>Storyboard ratio</th><th><code>image_generate</code> format</th></tr></thead><tbody>
+<tr><td><code>3:4</code>, <code>9:16</code>, <code>2:3</code></td><td><code>portrait</code></td></tr>
+<tr><td><code>4:3</code>, <code>16:9</code>, <code>3:2</code></td><td><code>landscape</code></td></tr>
+<tr><td><code>1:1</code></td><td><code>square</code></td></tr>
+</tbody></table>
+<p><strong>Download step</strong> — after every <code>image_generate</code> call:</p>
+<p>1. Read the URL from the tool result</p>
+<p>2. Fetch the image bytes using an <strong>absolute</strong> output path, e.g.</p>
+<p>   <code>curl -fsSL "<url>" -o /abs/path/to/comic/<slug>/NN-page-<slug>.png</code></p>
+<p>3. Verify the file exists and is non-empty at that exact path before proceeding to the next page</p>
+<p><strong>Never rely on shell CWD persistence for <code>-o</code> paths.</strong> The terminal tool's persistent-shell CWD can change between batches (session expiry, <code>TERMINAL_LIFETIME_SECONDS</code>, a failed <code>cd</code> that leaves you in the wrong directory). <code>curl -o relative/path.png</code> is a silent footgun: if CWD has drifted, the file lands somewhere else with no error. <strong>Always pass a fully-qualified absolute path to <code>-o</code></strong>, or pass <code>workdir=<abs path></code> to the terminal tool. Incident Apr 2026: pages 06-09 of a 10-page comic landed at the repo root instead of <code>comic/<slug>/</code> because batch 3 inherited a stale CWD from batch 2 and <code>curl -o 06-page-skills.png</code> wrote to the wrong directory. The agent then spent several turns claiming the files existed where they didn't.</p>
+<p><strong>7.1 Character sheet</strong> — generate it (to <code>characters/characters.png</code>, aspect <code>landscape</code>) when the comic is multi-page with recurring characters. Skip for simple presets (e.g., four-panel minimalist) or single-page comics. The prompt file at <code>characters/characters.md</code> must exist before invoking <code>image_generate</code>. The rendered PNG is a <strong>human-facing review artifact</strong> (so the user can visually verify character design) and a reference for later regenerations or manual prompt edits — it does <strong>not</strong> drive Step 7.2. Page prompts are already written in Step 5 from the <strong>text descriptions</strong> in <code>characters/characters.md</code>; <code>image_generate</code> cannot accept images as visual input.</p>
+<p><strong>7.2 Pages</strong> — each page's prompt MUST already be at <code>prompts/NN-{cover|page}-[slug].md</code> before invoking <code>image_generate</code>. Because <code>image_generate</code> is prompt-only, character consistency is enforced by <strong>embedding character descriptions (sourced from <code>characters/characters.md</code>) inline in every page prompt during Step 5</strong>. The embedding is done uniformly whether or not a PNG sheet is produced in 7.1; the PNG is only a review/regeneration aid.</p>
+<p><strong>Backup rule</strong>: existing <code>prompts/…md</code> and <code>…png</code> files → rename with <code>-backup-YYYYMMDD-HHMMSS</code> suffix before regenerating.</p>
+<p>Full step-by-step workflow (analysis, storyboard, review gates, regeneration variants): <a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-comic/references/workflow.md">references/workflow.md</a>.</p>
+<h2>References</h2>
+<p><strong>Core Templates</strong>:</p>
+<p>- <a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-comic/references/analysis-framework.md">analysis-framework.md</a> - Deep content analysis</p>
+<p>- <a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-comic/references/character-template.md">character-template.md</a> - Character definition format</p>
+<p>- <a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-comic/references/storyboard-template.md">storyboard-template.md</a> - Storyboard structure</p>
+<p>- <a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-comic/references/ohmsha-guide.md">ohmsha-guide.md</a> - Ohmsha manga specifics</p>
+<p><strong>Style Definitions</strong>:</p>
+<p>- <code>references/art-styles/</code> - Art styles (ligne-claire, manga, realistic, ink-brush, chalk, minimalist)</p>
+<p>- <code>references/tones/</code> - Tones (neutral, warm, dramatic, romantic, energetic, vintage, action)</p>
+<p>- <code>references/presets/</code> - Presets with special rules (ohmsha, wuxia, shoujo, concept-story, four-panel)</p>
+<p>- <code>references/layouts/</code> - Layouts (standard, cinematic, dense, splash, mixed, webtoon, four-panel)</p>
+<p><strong>Workflow</strong>:</p>
+<p>- <a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-comic/references/workflow.md">workflow.md</a> - Full workflow details</p>
+<p>- <a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-comic/references/auto-selection.md">auto-selection.md</a> - Content signal analysis</p>
+<p>- <a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-comic/references/partial-workflows.md">partial-workflows.md</a> - Partial workflow options</p>
+<h2>Page Modification</h2>
+<table><thead><tr><th>Action</th><th>Steps</th></tr></thead><tbody>
+<tr><td><strong>Edit</strong></td><td><strong>Update prompt file FIRST</strong> → regenerate image → download new PNG</td></tr>
+<tr><td><strong>Add</strong></td><td>Create prompt at position → generate with character descriptions embedded → renumber subsequent → update storyboard</td></tr>
+<tr><td><strong>Delete</strong></td><td>Remove files → renumber subsequent → update storyboard</td></tr>
+</tbody></table>
+<p><strong>IMPORTANT</strong>: When updating pages, ALWAYS update the prompt file (<code>prompts/NN-{cover|page}-[slug].md</code>) FIRST before regenerating. This ensures changes are documented and reproducible.</p>
+<h2>Pitfalls</h2>
+<p>- Image generation: 10-30 seconds per page; auto-retry once on failure</p>
+<p>- <strong>Always download</strong> the URL returned by <code>image_generate</code> to a local PNG — downstream tooling (and the user's review) expects files in the output directory, not ephemeral URLs</p>
+<p>- <strong>Use absolute paths for <code>curl -o</code></strong> — never rely on persistent-shell CWD across batches. Silent footgun: files land in the wrong directory and subsequent <code>ls</code> on the intended path shows nothing. See Step 7 "Download step".</p>
+<p>- Use stylized alternatives for sensitive public figures</p>
+<p>- <strong>Step 2 confirmation required</strong> - do not skip</p>
+<p>- <strong>Steps 4/6 conditional</strong> - only if user requested in Step 2</p>
+<p>- <strong>Step 7.1 character sheet</strong> - recommended for multi-page comics, optional for simple presets. The PNG is a review/regeneration aid; page prompts (written in Step 5) use the text descriptions in <code>characters/characters.md</code>, not the PNG. <code>image_generate</code> does not accept images as visual input</p>
+<p>- <strong>Strip secrets</strong> — scan source content for API keys, tokens, or credentials before writing any output file</p>  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

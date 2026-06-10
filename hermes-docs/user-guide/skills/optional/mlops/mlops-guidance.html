@@ -1,0 +1,704 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guidance - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Guidance</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Guidance</h1>
+<p>使用正则表达式和语法控制 LLM 输出，保证生成有效的 JSON/XML/代码，强制结构化格式，并使用 Guidance（微软研究院的约束生成框架）构建多步骤工作流</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/mlops/guidance</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/mlops/guidance</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Orchestra Research</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>依赖项</td>
+<td><code>guidance</code>, <code>transformers</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Prompt Engineering</code>, <code>Guidance</code>, <code>Constrained Generation</code>, <code>Structured Output</code>, <code>JSON Validation</code>, <code>Grammar</code>, <code>Microsoft Research</code>, <code>Format Enforcement</code>, <code>Multi-Step Workflows</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时看到的指令内容。
+</div>
+<h1>Guidance：约束 LLM 生成</h1>
+<h2>何时使用此 Skill</h2>
+<p>在以下情况下使用 Guidance：</p>
+<ul>
+<li><strong>使用正则表达式或语法控制 LLM 输出语法</strong></li>
+<li><strong>保证生成有效的 JSON/XML/代码</strong></li>
+<li><strong>相比传统 prompting（提示词）方式降低延迟</strong></li>
+<li><strong>强制结构化格式</strong>（日期、邮箱、ID 等）</li>
+<li><strong>使用 Python 风格的控制流构建多步骤工作流</strong></li>
+<li><strong>通过语法约束防止无效输出</strong></li>
+</ul>
+<p><strong>GitHub Stars</strong>：18,000+ | <strong>来自</strong>：微软研究院</p>
+<h2>安装</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 基础安装
+pip install guidance
+<h1>指定后端</h1>
+<p>pip install guidance[transformers]  # Hugging Face 模型
+pip install guidance[llama_cpp]     # llama.cpp 模型</p>
+</div>
+<h2>快速开始</h2>
+<h3>基础示例：结构化生成</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from guidance import models, gen
+<h1>加载模型（支持 OpenAI、Transformers、llama.cpp）</h1>
+<p>lm = models.OpenAI(&quot;gpt-4&quot;)</p>
+<h1>带约束生成</h1>
+<p>result = lm + &quot;The capital of France is &quot; + gen(&quot;capital&quot;, max_tokens=5)</p>
+<p>print(result[&quot;capital&quot;])  # &quot;Paris&quot;</p>
+</div>
+<h3>使用 Anthropic Claude</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from guidance import models, gen, system, user, assistant
+<h1>配置 Claude</h1>
+<p>lm = models.Anthropic(&quot;claude-sonnet-4-5-20250929&quot;)</p>
+<h1>使用上下文管理器实现对话格式</h1>
+<p>with system():
+lm += &quot;You are a helpful assistant.&quot;</p>
+<p>with user():
+lm += &quot;What is the capital of France?&quot;</p>
+<p>with assistant():
+lm += gen(max_tokens=20)</p>
+</div>
+<h2>核心概念</h2>
+<h3>1. 上下文管理器</h3>
+<p>Guidance 使用 Python 风格的上下文管理器实现对话式交互。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from guidance import system, user, assistant, gen
+<p>lm = models.Anthropic(&quot;claude-sonnet-4-5-20250929&quot;)</p>
+<h1>系统消息</h1>
+<p>with system():
+lm += &quot;You are a JSON generation expert.&quot;</p>
+<h1>用户消息</h1>
+<p>with user():
+lm += &quot;Generate a person object with name and age.&quot;</p>
+<h1>助手回复</h1>
+<p>with assistant():
+lm += gen(&quot;response&quot;, max_tokens=100)</p>
+<p>print(lm[&quot;response&quot;])</p>
+</div>
+<p><strong>优势：</strong></p>
+<ul>
+<li>自然的对话流程</li>
+<li>清晰的角色分离</li>
+<li>易于阅读和维护</li>
+</ul>
+<h3>2. 约束生成</h3>
+<p>Guidance 使用正则表达式或语法确保输出符合指定模式。</p>
+<h4>正则表达式约束</h4>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from guidance import models, gen
+<p>lm = models.Anthropic(&quot;claude-sonnet-4-5-20250929&quot;)</p>
+<h1>约束为有效邮箱格式</h1>
+<p>lm += &quot;Email: &quot; + gen(&quot;email&quot;, regex=r&quot;[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}&quot;)</p>
+<h1>约束为日期格式（YYYY-MM-DD）</h1>
+<p>lm += &quot;Date: &quot; + gen(&quot;date&quot;, regex=r&quot;\d{4}-\d{2}-\d{2}&quot;)</p>
+<h1>约束为电话号码</h1>
+<p>lm += &quot;Phone: &quot; + gen(&quot;phone&quot;, regex=r&quot;\d{3}-\d{3}-\d{4}&quot;)</p>
+<p>print(lm[&quot;email&quot;])  # 保证为有效邮箱
+print(lm[&quot;date&quot;])   # 保证为 YYYY-MM-DD 格式</p>
+</div>
+<p><strong>工作原理：</strong></p>
+<ul>
+<li>正则表达式在 token（词元）级别转换为语法</li>
+<li>生成过程中过滤无效 token</li>
+<li>模型只能生成符合匹配条件的输出</li>
+</ul>
+<h4>选择约束</h4>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from guidance import models, gen, select
+<p>lm = models.Anthropic(&quot;claude-sonnet-4-5-20250929&quot;)</p>
+<h1>约束为特定选项</h1>
+<p>lm += &quot;Sentiment: &quot; + select([&quot;positive&quot;, &quot;negative&quot;, &quot;neutral&quot;], name=&quot;sentiment&quot;)</p>
+<h1>多选题选择</h1>
+<p>lm += &quot;Best answer: &quot; + select(
+[&quot;A) Paris&quot;, &quot;B) London&quot;, &quot;C) Berlin&quot;, &quot;D) Madrid&quot;],
+name=&quot;answer&quot;
+)</p>
+<p>print(lm[&quot;sentiment&quot;])  # 其中之一：positive、negative、neutral
+print(lm[&quot;answer&quot;])     # 其中之一：A、B、C 或 D</p>
+</div>
+<h3>3. Token 修复（Token Healing）</h3>
+<p>Guidance 自动&quot;修复&quot; prompt 与生成内容之间的 token 边界。</p>
+<p><strong>问题：</strong> 分词会产生不自然的边界。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 不使用 token 修复
+prompt = "The capital of France is "
+# 最后一个 token：" is "
+# 第一个生成的 token 可能是 " Par"（带前导空格）
+# 结果："The capital of France is  Paris"（双空格！）
+</div>
+<p><strong>解决方案：</strong> Guidance 回退一个 token 并重新生成。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from guidance import models, gen
+<p>lm = models.Anthropic(&quot;claude-sonnet-4-5-20250929&quot;)</p>
+<h1>默认启用 token 修复</h1>
+<p>lm += &quot;The capital of France is &quot; + gen(&quot;capital&quot;, max_tokens=5)</p>
+<h1>结果：&quot;The capital of France is Paris&quot;（间距正确）</h1>
+</div>
+<p><strong>优势：</strong></p>
+<ul>
+<li>自然的文本边界</li>
+<li>无尴尬的间距问题</li>
+<li>更好的模型性能（模型看到自然的 token 序列）</li>
+</ul>
+<h3>4. 基于语法的生成</h3>
+<p>使用上下文无关语法定义复杂结构。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from guidance import models, gen
+<p>lm = models.Anthropic(&quot;claude-sonnet-4-5-20250929&quot;)</p>
+<h1>JSON 语法（简化版）</h1>
+<p>json_grammar = &quot;&quot;&quot;
+{
+&quot;name&quot;: &amp;lt;gen name regex=&quot;[A-Za-z ]+&quot; max_tokens=20&amp;gt;,
+&quot;age&quot;: &amp;lt;gen age regex=&quot;[0-9]+&quot; max_tokens=3&amp;gt;,
+&quot;email&quot;: &amp;lt;gen email regex=&quot;[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}&quot; max_tokens=50&amp;gt;
+}
+&quot;&quot;&quot;</p>
+<h1>生成有效 JSON</h1>
+<p>lm += gen(&quot;person&quot;, grammar=json_grammar)</p>
+<p>print(lm[&quot;person&quot;])  # 保证为有效 JSON 结构</p>
+</div>
+<p><strong>使用场景：</strong></p>
+<ul>
+<li>复杂结构化输出</li>
+<li>嵌套数据结构</li>
+<li>编程语言语法</li>
+<li>领域特定语言</li>
+</ul>
+<h3>5. Guidance 函数</h3>
+<p>使用 <code>@guidance</code> 装饰器创建可复用的生成模式。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from guidance import guidance, gen, models
+<p>@guidance
+def generate_person(lm):
+&quot;&quot;&quot;生成包含姓名和年龄的人物信息。&quot;&quot;&quot;
+lm += &quot;Name: &quot; + gen(&quot;name&quot;, max_tokens=20, stop=&quot;\n&quot;)
+lm += &quot;\nAge: &quot; + gen(&quot;age&quot;, regex=r&quot;[0-9]+&quot;, max_tokens=3)
+return lm</p>
+<h1>使用该函数</h1>
+<p>lm = models.Anthropic(&quot;claude-sonnet-4-5-20250929&quot;)
+lm = generate_person(lm)</p>
+<p>print(lm[&quot;name&quot;])
+print(lm[&quot;age&quot;])</p>
+</div>
+<p><strong>有状态函数：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+@guidance(stateless=False)
+def react_agent(lm, question, tools, max_rounds=5):
+    """带工具调用的 ReAct agent。"""
+    lm += f"Question: {question}\n\n"
+<pre><code>for i in range(max_rounds):
+    # 思考
+    lm += f&quot;Thought {i+1}: &quot; + gen(&quot;thought&quot;, stop=&quot;\n&quot;)
+
+    # 动作
+    lm += &quot;\nAction: &quot; + select(list(tools.keys()), name=&quot;action&quot;)
+
+    # 执行工具
+    tool_result = tools[lm[&quot;action&quot;]]()
+    lm += f&quot;\nObservation: {tool_result}\n\n&quot;
+
+    # 检查是否完成
+    lm += &quot;Done? &quot; + select([&quot;Yes&quot;, &quot;No&quot;], name=&quot;done&quot;)
+    if lm[&quot;done&quot;] == &quot;Yes&quot;:
+        break
+
+# 最终答案
+lm += &quot;\nFinal Answer: &quot; + gen(&quot;answer&quot;, max_tokens=100)
+return lm
+</code></pre>
+</div>
+<h2>后端配置</h2>
+<h3>Anthropic Claude</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from guidance import models
+<p>lm = models.Anthropic(
+model=&quot;claude-sonnet-4-5-20250929&quot;,
+api_key=&quot;your-api-key&quot;  # 或设置 ANTHROPIC_API_KEY 环境变量
+)</p>
+</div>
+<h3>OpenAI</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+lm = models.OpenAI(
+    model="gpt-4o-mini",
+    api_key="your-api-key"  # 或设置 OPENAI_API_KEY 环境变量
+)
+</div>
+<h3>本地模型（Transformers）</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from guidance.models import Transformers
+<p>lm = Transformers(
+&quot;microsoft/Phi-4-mini-instruct&quot;,
+device=&quot;cuda&quot;  # 或 &quot;cpu&quot;
+)</p>
+</div>
+<h3>本地模型（llama.cpp）</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from guidance.models import LlamaCpp
+<p>lm = LlamaCpp(
+model_path=&quot;/path/to/model.gguf&quot;,
+n_ctx=4096,
+n_gpu_layers=35
+)</p>
+</div>
+<h2>常用模式</h2>
+<h3>模式 1：JSON 生成</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from guidance import models, gen, system, user, assistant
+<p>lm = models.Anthropic(&quot;claude-sonnet-4-5-20250929&quot;)</p>
+<p>with system():
+lm += &quot;You generate valid JSON.&quot;</p>
+<p>with user():
+lm += &quot;Generate a user profile with name, age, and email.&quot;</p>
+<p>with assistant():
+lm += &quot;&quot;&quot;{
+&quot;name&quot;: &quot;&quot;&quot; + gen(&quot;name&quot;, regex=r'&quot;[A-Za-z ]+&quot;', max_tokens=30) + &quot;&quot;&quot;,
+&quot;age&quot;: &quot;&quot;&quot; + gen(&quot;age&quot;, regex=r&quot;[0-9]+&quot;, max_tokens=3) + &quot;&quot;&quot;,
+&quot;email&quot;: &quot;&quot;&quot; + gen(&quot;email&quot;, regex=r'&quot;[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}&quot;', max_tokens=50) + &quot;&quot;&quot;
+}&quot;&quot;&quot;</p>
+<p>print(lm)  # 保证为有效 JSON</p>
+</div>
+<h3>模式 2：分类</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from guidance import models, gen, select
+<p>lm = models.Anthropic(&quot;claude-sonnet-4-5-20250929&quot;)</p>
+<p>text = &quot;This product is amazing! I love it.&quot;</p>
+<p>lm += f&quot;Text: {text}\n&quot;
+lm += &quot;Sentiment: &quot; + select([&quot;positive&quot;, &quot;negative&quot;, &quot;neutral&quot;], name=&quot;sentiment&quot;)
+lm += &quot;\nConfidence: &quot; + gen(&quot;confidence&quot;, regex=r&quot;[0-9]+&quot;, max_tokens=3) + &quot;%&quot;</p>
+<p>print(f&quot;Sentiment: {lm['sentiment']}&quot;)
+print(f&quot;Confidence: {lm['confidence']}%&quot;)</p>
+</div>
+<h3>模式 3：多步骤推理</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from guidance import models, gen, guidance
+<p>@guidance
+def chain_of_thought(lm, question):
+&quot;&quot;&quot;逐步推理生成答案。&quot;&quot;&quot;
+lm += f&quot;Question: {question}\n\n&quot;</p>
+<pre><code># 生成多个推理步骤
+for i in range(3):
+    lm += f&quot;Step {i+1}: &quot; + gen(f&quot;step_{i+1}&quot;, stop=&quot;\n&quot;, max_tokens=100) + &quot;\n&quot;
+
+# 最终答案
+lm += &quot;\nTherefore, the answer is: &quot; + gen(&quot;answer&quot;, max_tokens=50)
+
+return lm
+</code></pre>
+<p>lm = models.Anthropic(&quot;claude-sonnet-4-5-20250929&quot;)
+lm = chain_of_thought(lm, &quot;What is 15% of 200?&quot;)</p>
+<p>print(lm[&quot;answer&quot;])</p>
+</div>
+<h3>模式 4：ReAct Agent</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from guidance import models, gen, select, guidance
+<p>@guidance(stateless=False)
+def react_agent(lm, question):
+&quot;&quot;&quot;带工具调用的 ReAct agent。&quot;&quot;&quot;
+tools = {
+&quot;calculator&quot;: lambda expr: eval(expr),
+&quot;search&quot;: lambda query: f&quot;Search results for: {query}&quot;,
+}</p>
+<pre><code>lm += f&quot;Question: {question}\n\n&quot;
+
+for round in range(5):
+    # 思考
+    lm += f&quot;Thought: &quot; + gen(&quot;thought&quot;, stop=&quot;\n&quot;) + &quot;\n&quot;
+
+    # 动作选择
+    lm += &quot;Action: &quot; + select([&quot;calculator&quot;, &quot;search&quot;, &quot;answer&quot;], name=&quot;action&quot;)
+
+    if lm[&quot;action&quot;] == &quot;answer&quot;:
+        lm += &quot;\nFinal Answer: &quot; + gen(&quot;answer&quot;, max_tokens=100)
+        break
+
+    # 动作输入
+    lm += &quot;\nAction Input: &quot; + gen(&quot;action_input&quot;, stop=&quot;\n&quot;) + &quot;\n&quot;
+
+    # 执行工具
+    if lm[&quot;action&quot;] in tools:
+        result = tools[lm[&quot;action&quot;]](lm[&quot;action_input&quot;])
+        lm += f&quot;Observation: {result}\n\n&quot;
+
+return lm
+</code></pre>
+<p>lm = models.Anthropic(&quot;claude-sonnet-4-5-20250929&quot;)
+lm = react_agent(lm, &quot;What is 25 * 4 + 10?&quot;)
+print(lm[&quot;answer&quot;])</p>
+</div>
+<h3>模式 5：数据提取</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from guidance import models, gen, guidance
+<p>@guidance
+def extract_entities(lm, text):
+&quot;&quot;&quot;从文本中提取结构化实体。&quot;&quot;&quot;
+lm += f&quot;Text: {text}\n\n&quot;</p>
+<pre><code># 提取人物
+lm += &quot;Person: &quot; + gen(&quot;person&quot;, stop=&quot;\n&quot;, max_tokens=30) + &quot;\n&quot;
+
+# 提取组织
+lm += &quot;Organization: &quot; + gen(&quot;organization&quot;, stop=&quot;\n&quot;, max_tokens=30) + &quot;\n&quot;
+
+# 提取日期
+lm += &quot;Date: &quot; + gen(&quot;date&quot;, regex=r&quot;\d{4}-\d{2}-\d{2}&quot;, max_tokens=10) + &quot;\n&quot;
+
+# 提取地点
+lm += &quot;Location: &quot; + gen(&quot;location&quot;, stop=&quot;\n&quot;, max_tokens=30) + &quot;\n&quot;
+
+return lm
+</code></pre>
+<p>text = &quot;Tim Cook announced at Apple Park on 2024-09-15 in Cupertino.&quot;</p>
+<p>lm = models.Anthropic(&quot;claude-sonnet-4-5-20250929&quot;)
+lm = extract_entities(lm, text)</p>
+<p>print(f&quot;Person: {lm['person']}&quot;)
+print(f&quot;Organization: {lm['organization']}&quot;)
+print(f&quot;Date: {lm['date']}&quot;)
+print(f&quot;Location: {lm['location']}&quot;)</p>
+</div>
+<h2>最佳实践</h2>
+<h3>1. 使用正则表达式进行格式验证</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ✅ 好：正则表达式确保格式有效
+lm += "Email: " + gen("email", regex=r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}")
+<h1>❌ 差：自由生成可能产生无效邮箱</h1>
+<p>lm += &quot;Email: &quot; + gen(&quot;email&quot;, max_tokens=50)</p>
+</div>
+<h3>2. 对固定类别使用 select()</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ✅ 好：保证为有效类别
+lm += "Status: " + select(["pending", "approved", "rejected"], name="status")
+<h1>❌ 差：可能生成拼写错误或无效值</h1>
+<p>lm += &quot;Status: &quot; + gen(&quot;status&quot;, max_tokens=20)</p>
+</div>
+<h3>3. 利用 Token 修复</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 默认启用 token 修复
+# 无需特殊操作——自然拼接即可
+lm += "The capital is " + gen("capital")  # 自动修复
+</div>
+<h3>4. 使用停止序列</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ✅ 好：在换行处停止，适用于单行输出
+lm += "Name: " + gen("name", stop="\n")
+<h1>❌ 差：可能生成多行内容</h1>
+<p>lm += &quot;Name: &quot; + gen(&quot;name&quot;, max_tokens=50)</p>
+</div>
+<h3>5. 创建可复用函数</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ✅ 好：可复用模式
+@guidance
+def generate_person(lm):
+    lm += "Name: " + gen("name", stop="\n")
+    lm += "\nAge: " + gen("age", regex=r"[0-9]+")
+    return lm
+<h1>多次使用</h1>
+<p>lm = generate_person(lm)
+lm += &quot;\n\n&quot;
+lm = generate_person(lm)</p>
+</div>
+<h3>6. 平衡约束力度</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ✅ 好：合理的约束
+lm += gen("name", regex=r"[A-Za-z ]+", max_tokens=30)
+<h1>❌ 过于严格：可能失败或非常缓慢</h1>
+<p>lm += gen(&quot;name&quot;, regex=r&quot;^(John|Jane)$&quot;, max_tokens=10)</p>
+</div>
+<h2>与替代方案的对比</h2>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Guidance</th>
+<th>Instructor</th>
+<th>Outlines</th>
+<th>LMQL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>正则表达式约束</td>
+<td>✅ 支持</td>
+<td>❌ 不支持</td>
+<td>✅ 支持</td>
+<td>✅ 支持</td>
+</tr>
+<tr>
+<td>语法支持</td>
+<td>✅ CFG</td>
+<td>❌ 不支持</td>
+<td>✅ CFG</td>
+<td>✅ CFG</td>
+</tr>
+<tr>
+<td>Pydantic 验证</td>
+<td>❌ 不支持</td>
+<td>✅ 支持</td>
+<td>✅ 支持</td>
+<td>❌ 不支持</td>
+</tr>
+<tr>
+<td>Token 修复</td>
+<td>✅ 支持</td>
+<td>❌ 不支持</td>
+<td>✅ 支持</td>
+<td>❌ 不支持</td>
+</tr>
+<tr>
+<td>本地模型</td>
+<td>✅ 支持</td>
+<td>⚠️ 有限</td>
+<td>✅ 支持</td>
+<td>✅ 支持</td>
+</tr>
+<tr>
+<td>API 模型</td>
+<td>✅ 支持</td>
+<td>✅ 支持</td>
+<td>⚠️ 有限</td>
+<td>✅ 支持</td>
+</tr>
+<tr>
+<td>Python 风格语法</td>
+<td>✅ 支持</td>
+<td>✅ 支持</td>
+<td>✅ 支持</td>
+<td>❌ 类 SQL</td>
+</tr>
+<tr>
+<td>学习曲线</td>
+<td>低</td>
+<td>低</td>
+<td>中</td>
+<td>高</td>
+</tr>
+</tbody>
+</table>
+<p><strong>何时选择 Guidance：</strong></p>
+<ul>
+<li>需要正则表达式/语法约束</li>
+<li>需要 token 修复</li>
+<li>构建带控制流的复杂工作流</li>
+<li>使用本地模型（Transformers、llama.cpp）</li>
+<li>偏好 Python 风格语法</li>
+</ul>
+<p><strong>何时选择替代方案：</strong></p>
+<ul>
+<li>Instructor：需要带自动重试的 Pydantic 验证</li>
+<li>Outlines：需要 JSON schema 验证</li>
+<li>LMQL：偏好声明式查询语法</li>
+</ul>
+<h2>性能特性</h2>
+<p><strong>延迟降低：</strong></p>
+<ul>
+<li>对于约束输出，比传统 prompting 快 30–50%</li>
+<li>Token 修复减少不必要的重新生成</li>
+<li>语法约束防止无效 token 的生成</li>
+</ul>
+<p><strong>内存占用：</strong></p>
+<ul>
+<li>相比无约束生成，额外开销极小</li>
+<li>语法编译结果在首次使用后缓存</li>
+<li>推理时高效过滤 token</li>
+</ul>
+<p><strong>Token 效率：</strong></p>
+<ul>
+<li>防止在无效输出上浪费 token</li>
+<li>无需重试循环</li>
+<li>直接生成有效输出</li>
+</ul>
+<h2>资源</h2>
+<ul>
+<li><strong>文档</strong>：https://guidance.readthedocs.io</li>
+<li><strong>GitHub</strong>：https://github.com/guidance-ai/guidance（18k+ stars）</li>
+<li><strong>Notebooks</strong>：https://github.com/guidance-ai/guidance/tree/main/notebooks</li>
+<li><strong>Discord</strong>：提供社区支持</li>
+</ul>
+<h2>另请参阅</h2>
+<ul>
+<li><code>references/constraints.md</code> — 全面的正则表达式和语法模式</li>
+<li><code>references/backends.md</code> — 后端专项配置</li>
+<li><code>references/examples.md</code> — 生产就绪示例</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

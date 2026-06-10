@@ -1,0 +1,628 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>快速入门 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html" class="active">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / Getting Started / 快速入门</div><p>本指南带你从零开始搭建一个能够应对实际使用的 Hermes 环境。完成安装、选择 provider（服务提供商）、验证对话正常运行，并了解出现问题时的处理方法。</p>
+<h2>更喜欢看视频？</h2>
+<p><strong>Onchain AI Garage</strong> 制作了一套涵盖安装、配置和基本命令的 Masterclass 演示视频——如果你更习惯跟着视频操作，这是本页的绝佳补充。更多内容请查看完整的 <a href="https://www.youtube.com/channel/UCqB1bhMwGsW-yefBxYwFCCg">Hermes Agent 教程与使用案例</a> 播放列表。</p>
+<div style={{position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden', maxWidth: '100%', marginBottom: '1.5rem'}}>
+  <iframe
+    style={{position: 'absolute', top: 0, left: 0, width: '100%', height: '100%'}}
+    src="https://www.youtube-nocookie.com/embed/R3YOGfTBcQg"
+    title="Hermes Agent Masterclass: Installation, Setup, Basic Commands"
+    frameBorder="0"
+    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
+<h2>适用人群</h2>
+<ul>
+<li>全新用户，想以最短路径完成可用配置</li>
+<li>正在切换 provider，不想因配置错误浪费时间</li>
+<li>为团队、机器人或长期运行的工作流配置 Hermes</li>
+<li>厌倦了&quot;安装成功但什么都做不了&quot;的情况</li>
+</ul>
+<h2>最快路径</h2>
+<p>根据你的目标选择对应行：</p>
+<table>
+<thead>
+<tr>
+<th>目标</th>
+<th>先做这步</th>
+<th>再做这步</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>只想让 Hermes 在本机跑起来</td>
+<td><code>hermes setup</code></td>
+<td>运行一次真实对话并验证有响应</td>
+</tr>
+<tr>
+<td>已知道要用哪个 provider</td>
+<td><code>hermes model</code></td>
+<td>保存配置，然后开始聊天</td>
+</tr>
+<tr>
+<td>想搭建机器人或长期运行的服务</td>
+<td>CLI 正常后运行 <code>hermes gateway setup</code></td>
+<td>接入 Telegram、Discord、Slack 或其他平台</td>
+</tr>
+<tr>
+<td>想使用本地或自托管模型</td>
+<td><code>hermes model</code> → 自定义 endpoint</td>
+<td>验证 endpoint、模型名称和上下文长度</td>
+</tr>
+<tr>
+<td>想要多 provider 故障转移</td>
+<td>先运行 <code>hermes model</code></td>
+<td>基础对话正常后再添加路由和故障转移</td>
+</tr>
+</tbody>
+</table>
+<p><strong>经验法则：</strong> 如果 Hermes 无法完成一次正常对话，暂时不要添加更多功能。先让一次完整对话跑通，再逐步叠加 gateway、cron、skills、语音或路由。</p>
+<hr />
+<h2>1. 安装 Hermes Agent</h2>
+<p><strong>方式 A — pip（最简单）：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install hermes-agent
+hermes postinstall     # 可选：安装 Node.js、浏览器、ripgrep、ffmpeg 并运行 setup
+</div>
+<p>PyPI 发布版本跟踪带标签的版本（主/次版本发布），而非 <code>main</code> 分支上的每次提交。如需最新代码，请使用方式 B。</p>
+<p><strong>方式 B — git 安装器（跟踪 main 分支）：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Linux / macOS / WSL2 / Android (Termux)
+curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
+</div>
+<div class="tip"><strong>💡 Android / Termux</strong>
+如果你在手机上安装，请参阅专门的 <a href="./termux.html">Termux 指南</a>，其中包含经过测试的手动安装步骤、支持的扩展功能以及当前 Android 特有的限制。
+</div>
+<div class="tip"><strong>💡 Windows 用户</strong>
+请先安装 <a href="https://learn.microsoft.com/en-us/windows/wsl/install">WSL2</a>，然后在 WSL2 终端中运行上述命令。
+</div>
+<p>安装完成后，重新加载 shell：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+source ~/.bashrc   # 或 source ~/.zshrc
+</div>
+<p>详细的安装选项、前置条件和故障排查，请参阅 <a href="./installation.html">安装指南</a>。</p>
+<h2>2. 选择 Provider</h2>
+<p>这是最重要的配置步骤。使用 <code>hermes model</code> 以交互方式完成选择：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes model
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes setup --portal
+</div>
+<div class="tip"><strong>💡 最简路径：Nous Portal</strong>
+<p>一个订阅涵盖 300+ 个模型，以及 <a href="../user-guide/features/tool-gateway.html">Tool Gateway</a>（网页搜索、图像生成、TTS、云端浏览器）。全新安装时：</p>
+<p>该命令一次性完成登录、设置 Nous 为 provider 并开启 Tool Gateway。</p>
+
+</div>
+<p>推荐默认选项：</p>
+<table>
+<thead>
+<tr>
+<th>Provider</th>
+<th>说明</th>
+<th>配置方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Nous Portal</strong></td>
+<td>订阅制，零配置</td>
+<td>通过 <code>hermes model</code> 进行 OAuth 登录</td>
+</tr>
+<tr>
+<td><strong>OpenAI Codex</strong></td>
+<td>ChatGPT OAuth，使用 Codex 模型</td>
+<td>通过 <code>hermes model</code> 进行设备码认证</td>
+</tr>
+<tr>
+<td><strong>Anthropic</strong></td>
+<td>直接使用 Claude 模型——Max 计划 + 额外用量积分（OAuth），或按 token 付费的 API key</td>
+<td><code>hermes model</code> → OAuth 登录（需要 Max + 额外积分），或 Anthropic API key</td>
+</tr>
+<tr>
+<td><strong>OpenRouter</strong></td>
+<td>跨多个 provider 的多模型路由</td>
+<td>输入 API key</td>
+</tr>
+<tr>
+<td><strong>Z.AI</strong></td>
+<td>GLM / Zhipu 托管模型</td>
+<td>设置 <code>GLM_API_KEY</code> / <code>ZAI_API_KEY</code></td>
+</tr>
+<tr>
+<td><strong>Kimi / Moonshot</strong></td>
+<td>Moonshot 托管的编程和对话模型</td>
+<td>设置 <code>KIMI_API_KEY</code>（或 Kimi-Coding 专用的 <code>KIMI_CODING_API_KEY</code>）</td>
+</tr>
+<tr>
+<td><strong>Kimi / Moonshot China</strong></td>
+<td>中国区 Moonshot endpoint</td>
+<td>设置 <code>KIMI_CN_API_KEY</code></td>
+</tr>
+<tr>
+<td><strong>Arcee AI</strong></td>
+<td>Trinity 模型</td>
+<td>设置 <code>ARCEEAI_API_KEY</code></td>
+</tr>
+<tr>
+<td><strong>GMI Cloud</strong></td>
+<td>多模型直连 API</td>
+<td>设置 <code>GMI_API_KEY</code></td>
+</tr>
+<tr>
+<td><strong>MiniMax (OAuth)</strong></td>
+<td>通过浏览器 OAuth 使用 MiniMax-M2.7，无需 API key</td>
+<td><code>hermes model</code> → MiniMax (OAuth)</td>
+</tr>
+<tr>
+<td><strong>MiniMax</strong></td>
+<td>国际版 MiniMax endpoint</td>
+<td>设置 <code>MINIMAX_API_KEY</code></td>
+</tr>
+<tr>
+<td><strong>MiniMax China</strong></td>
+<td>中国区 MiniMax endpoint</td>
+<td>设置 <code>MINIMAX_CN_API_KEY</code></td>
+</tr>
+<tr>
+<td><strong>Alibaba Cloud</strong></td>
+<td>通过 DashScope 使用 Qwen 模型</td>
+<td>设置 <code>DASHSCOPE_API_KEY</code></td>
+</tr>
+<tr>
+<td><strong>Hugging Face</strong></td>
+<td>通过统一路由器使用 20+ 开源模型（Qwen、DeepSeek、Kimi 等）</td>
+<td>设置 <code>HF_TOKEN</code></td>
+</tr>
+<tr>
+<td><strong>AWS Bedrock</strong></td>
+<td>通过原生 Converse API 使用 Claude、Nova、Llama、DeepSeek</td>
+<td>IAM 角色或 <code>aws configure</code>（<a href="../guides/aws-bedrock.html">指南</a>）</td>
+</tr>
+<tr>
+<td><strong>Kilo Code</strong></td>
+<td>KiloCode 托管模型</td>
+<td>设置 <code>KILOCODE_API_KEY</code></td>
+</tr>
+<tr>
+<td><strong>OpenCode Zen</strong></td>
+<td>按需付费访问精选模型</td>
+<td>设置 <code>OPENCODE_ZEN_API_KEY</code></td>
+</tr>
+<tr>
+<td><strong>OpenCode Go</strong></td>
+<td>$10/月订阅，访问开源模型</td>
+<td>设置 <code>OPENCODE_GO_API_KEY</code></td>
+</tr>
+<tr>
+<td><strong>DeepSeek</strong></td>
+<td>直接访问 DeepSeek API</td>
+<td>设置 <code>DEEPSEEK_API_KEY</code></td>
+</tr>
+<tr>
+<td><strong>NVIDIA NIM</strong></td>
+<td>通过 build.nvidia.com 或本地 NIM 使用 Nemotron 模型</td>
+<td>设置 <code>NVIDIA_API_KEY</code>（可选：<code>NVIDIA_BASE_URL</code>）</td>
+</tr>
+<tr>
+<td><strong>GitHub Copilot</strong></td>
+<td>GitHub Copilot 订阅（GPT-5.x、Claude、Gemini 等）</td>
+<td>通过 <code>hermes model</code> 进行 OAuth，或设置 <code>COPILOT_GITHUB_TOKEN</code> / <code>GH_TOKEN</code></td>
+</tr>
+<tr>
+<td><strong>GitHub Copilot ACP</strong></td>
+<td>Copilot ACP agent 后端（在本地启动 <code>copilot</code> CLI）</td>
+<td><code>hermes model</code>（需要 <code>copilot</code> CLI + <code>copilot login</code>）</td>
+</tr>
+<tr>
+<td><strong>Custom Endpoint</strong></td>
+<td>VLLM、SGLang、Ollama 或任何兼容 OpenAI 的 API</td>
+<td>设置 base URL + API key</td>
+</tr>
+</tbody>
+</table>
+<p>对于大多数初次使用的用户：选择一个 provider，接受默认值（除非你明确知道为何要修改）。完整的 provider 目录及环境变量和配置步骤请参阅 <a href="../integrations/providers.html">Providers</a> 页面。</p>
+<div class="tip warning"><strong>⚡ 最低上下文要求：64K token</strong>
+Hermes Agent 要求模型至少具备 <strong>64,000 个 token</strong> 的上下文窗口。上下文窗口较小的模型无法为多步骤工具调用工作流维持足够的工作内存，启动时将被拒绝。大多数托管模型（Claude、GPT、Gemini、Qwen、DeepSeek）均轻松满足此要求。如果你运行本地模型，请将其上下文大小设置为至少 64K（例如 llama.cpp 使用 <code>--ctx-size 65536</code>，Ollama 使用 <code>-c 65536</code>）。
+</div>
+<div class="tip"><strong>💡 提示</strong>
+你可以随时通过 <code>hermes model</code> 切换 provider——没有锁定。所有支持的 provider 完整列表及配置详情，请参阅 <a href="../integrations/providers.html">AI Providers</a>。
+</div>
+<h3>配置的存储方式</h3>
+<p>Hermes 将密钥与普通配置分开存储：</p>
+<ul>
+<li><strong>密钥和 token</strong> → <code>~/.hermes/.env</code></li>
+<li><strong>非密钥配置</strong> → <code>~/.hermes/config.yaml</code></li>
+</ul>
+<p>通过 CLI 设置值是最简便的方式，系统会自动将值写入正确的文件：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes config set model anthropic/claude-opus-4.6
+hermes config set terminal.backend docker
+hermes config set OPENROUTER_API_KEY sk-or-...
+</div>
+<h2>3. 运行第一次对话</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes            # 经典 CLI
+hermes --tui      # 现代 TUI（推荐）
+</div>
+<p>你会看到一个欢迎横幅，显示你的模型、可用工具和 skills。使用一个具体且易于验证的 prompt（提示词）：</p>
+<div class="tip"><strong>💡 选择你的界面</strong>
+Hermes 提供两种终端界面：经典的 <code>prompt_toolkit</code> CLI，以及更新的 <a href="../user-guide/tui.html">TUI</a>（支持模态覆盖层、鼠标选择和非阻塞输入）。两者共享相同的会话、斜杠命令和配置——分别用 <code>hermes</code> 和 <code>hermes --tui</code> 试试看。
+</div>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Summarize this repo in 5 bullets and tell me what the main entrypoint is.
+</div>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Check my current directory and tell me what looks like the main project file.
+</div>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Help me set up a clean GitHub PR workflow for this codebase.
+</div>
+<p><strong>成功的标志：</strong></p>
+<ul>
+<li>横幅显示你选择的模型/provider</li>
+<li>Hermes 无错误地回复</li>
+<li>需要时能够使用工具（终端、文件读取、网页搜索）</li>
+<li>对话可以正常进行超过一轮</li>
+</ul>
+<p>如果以上都正常，你已经过了最难的部分。</p>
+<h2>4. 验证会话功能</h2>
+<p>继续之前，确认恢复功能正常：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes --continue    # 恢复最近的会话
+hermes -c            # 简写形式
+</div>
+<p>这应该会带你回到刚才的会话。如果不行，检查你是否在同一个 profile 下，以及会话是否实际已保存。当你同时管理多个配置或多台机器时，这一点很重要。</p>
+<h2>5. 尝试核心功能</h2>
+<h3>使用终端</h3>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+❯ What's my disk usage? Show the top 5 largest directories.
+</div>
+<p>Agent 会代你执行终端命令并显示结果。</p>
+<h3>斜杠命令</h3>
+<p>输入 <code>/</code> 查看所有命令的自动补全下拉列表：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/help</code></td>
+<td>显示所有可用命令</td>
+</tr>
+<tr>
+<td><code>/tools</code></td>
+<td>列出可用工具</td>
+</tr>
+<tr>
+<td><code>/model</code></td>
+<td>交互式切换模型</td>
+</tr>
+<tr>
+<td><code>/personality pirate</code></td>
+<td>尝试一个有趣的人格</td>
+</tr>
+<tr>
+<td><code>/save</code></td>
+<td>保存对话</td>
+</tr>
+</tbody>
+</table>
+<h3>多行输入</h3>
+<p>按 <code>Alt+Enter</code>、<code>Ctrl+J</code> 或 <code>Shift+Enter</code> 换行。<code>Shift+Enter</code> 需要终端能将其作为独立序列发送（Kitty / foot / WezTerm / Ghostty 默认支持；iTerm2 / Alacritty / VS Code 终端需启用 Kitty 键盘协议）。<code>Alt+Enter</code> 和 <code>Ctrl+J</code> 在所有终端中均可使用。</p>
+<h3>中断 Agent</h3>
+<p>如果 agent 响应时间过长，输入新消息并按 Enter——这会中断当前任务并切换到你的新指令。<code>Ctrl+C</code> 同样有效。</p>
+<h2>6. 添加下一层功能</h2>
+<p>仅在基础对话正常后进行。按需选择：</p>
+<h3>机器人或共享助手</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway setup    # 交互式平台配置
+</div>
+<p>接入 <a href="/user-guide/messaging/telegram">Telegram</a>、<a href="/user-guide/messaging/discord">Discord</a>、<a href="/user-guide/messaging/slack">Slack</a>、<a href="/user-guide/messaging/whatsapp">WhatsApp</a>、<a href="/user-guide/messaging/signal">Signal</a>、<a href="/user-guide/messaging/email">Email</a>、<a href="/user-guide/messaging/homeassistant">Home Assistant</a> 或 <a href="/user-guide/messaging/teams">Microsoft Teams</a>。</p>
+<h3>自动化与工具</h3>
+<ul>
+<li><code>hermes tools</code> — 按平台调整工具访问权限</li>
+<li><code>hermes skills</code> — 浏览并安装可复用的工作流</li>
+<li>Cron — 仅在机器人或 CLI 配置稳定后使用</li>
+</ul>
+<h3>沙箱终端</h3>
+<p>为了安全起见，在 Docker 容器或远程服务器中运行 agent：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes config set terminal.backend docker    # Docker 隔离
+hermes config set terminal.backend ssh       # 远程服务器
+</div>
+<h3>语音模式</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 在 Hermes 安装目录下运行（curl 安装器在 Linux/macOS 上将其放置于
+# ~/.hermes/hermes-agent，在 Windows 上为 %LOCALAPPDATA%\hermes\hermes-agent）：
+cd ~/.hermes/hermes-agent
+uv pip install -e ".[voice]"
+# 包含 faster-whisper，用于免费的本地语音转文字
+</div>
+<p>然后在 CLI 中输入：<code>/voice on</code>。按 <code>Ctrl+B</code> 开始录音。参阅 <a href="../user-guide/features/voice-mode.html">语音模式</a>。</p>
+<h3>Skills</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes skills search kubernetes
+hermes skills install openai/skills/k8s
+</div>
+<p>或在聊天会话中使用 <code>/skills</code>。</p>
+<h3>MCP 服务器</h3>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 添加到 ~/.hermes/config.yaml
+mcp_servers:
+  github:
+    command: npx
+    args: ["-y", "@modelcontextprotocol/server-github"]
+    env:
+      GITHUB_PERSONAL_ACCESS_TOKEN: "ghp_xxx"
+</div>
+<h3>编辑器集成（ACP）</h3>
+<p>ACP 支持已包含在标准 <code>[all]</code> 扩展中，因此 curl 安装器已默认包含。直接运行：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes acp
+</div>
+<p>（如果安装时未包含 <code>[all]</code>，请先运行 <code>cd ~/.hermes/hermes-agent &amp;&amp; uv pip install -e &quot;.[acp]&quot;</code>。）</p>
+<p>参阅 <a href="../user-guide/features/acp.html">ACP 编辑器集成</a>。</p>
+<hr />
+<h2>常见故障模式</h2>
+<p>以下是最容易浪费时间的问题：</p>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>可能原因</th>
+<th>解决方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hermes 启动但回复为空或异常</td>
+<td>Provider 认证或模型选择有误</td>
+<td>重新运行 <code>hermes model</code>，确认 provider、模型和认证信息</td>
+</tr>
+<tr>
+<td>自定义 endpoint &quot;可用&quot;但返回乱码</td>
+<td>base URL、模型名称有误，或实际上不兼容 OpenAI</td>
+<td>先用独立客户端验证该 endpoint</td>
+</tr>
+<tr>
+<td>Gateway 启动但无法收到消息</td>
+<td>Bot token、白名单或平台配置不完整</td>
+<td>重新运行 <code>hermes gateway setup</code> 并检查 <code>hermes gateway status</code></td>
+</tr>
+<tr>
+<td><code>hermes --continue</code> 找不到旧会话</td>
+<td>切换了 profile 或会话从未保存</td>
+<td>检查 <code>hermes sessions list</code>，确认你在正确的 profile 下</td>
+</tr>
+<tr>
+<td>模型不可用或出现异常的故障转移行为</td>
+<td>Provider 路由或故障转移设置过于激进</td>
+<td>在基础 provider 稳定之前关闭路由</td>
+</tr>
+<tr>
+<td><code>hermes doctor</code> 标记配置问题</td>
+<td>配置值缺失或已过期</td>
+<td>修复配置，在添加功能前重新测试普通对话</td>
+</tr>
+</tbody>
+</table>
+<h2>恢复工具包</h2>
+<p>当感觉有问题时，按以下顺序操作：</p>
+<ol>
+<li><code>hermes doctor</code></li>
+<li><code>hermes model</code></li>
+<li><code>hermes setup</code></li>
+<li><code>hermes sessions list</code></li>
+<li><code>hermes --continue</code></li>
+<li><code>hermes gateway status</code></li>
+</ol>
+<p>这个顺序能让你快速从&quot;感觉哪里不对&quot;回到已知的正常状态。</p>
+<hr />
+<h2>快速参考</h2>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>hermes</code></td>
+<td>开始聊天</td>
+</tr>
+<tr>
+<td><code>hermes model</code></td>
+<td>选择 LLM provider 和模型</td>
+</tr>
+<tr>
+<td><code>hermes tools</code></td>
+<td>配置每个平台启用的工具</td>
+</tr>
+<tr>
+<td><code>hermes setup</code></td>
+<td>完整配置向导（一次性配置所有内容）</td>
+</tr>
+<tr>
+<td><code>hermes doctor</code></td>
+<td>诊断问题</td>
+</tr>
+<tr>
+<td><code>hermes update</code></td>
+<td>更新到最新版本</td>
+</tr>
+<tr>
+<td><code>hermes gateway</code></td>
+<td>启动消息 gateway</td>
+</tr>
+<tr>
+<td><code>hermes --continue</code></td>
+<td>恢复上次会话</td>
+</tr>
+</tbody>
+</table>
+<h2>下一步</h2>
+<ul>
+<li><strong><a href="../user-guide/cli.html">CLI 指南</a></strong> — 掌握终端界面</li>
+<li><strong><a href="../user-guide/configuration.html">配置</a></strong> — 自定义你的配置</li>
+<li><strong><a href="../user-guide/messaging/index.html">消息 Gateway</a></strong> — 接入 Telegram、Discord、Slack、WhatsApp、Signal、Email、Home Assistant、Teams 等</li>
+<li><strong><a href="../user-guide/features/tools.html">工具与工具集</a></strong> — 探索可用功能</li>
+<li><strong><a href="../integrations/providers.html">AI Providers</a></strong> — 完整 provider 列表及配置详情</li>
+<li><strong><a href="../user-guide/features/skills.html">Skills 系统</a></strong> — 可复用的工作流与知识</li>
+<li><strong><a href="../guides/tips.html">技巧与最佳实践</a></strong> — 高级用户技巧</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

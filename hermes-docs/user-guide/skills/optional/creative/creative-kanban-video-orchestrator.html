@@ -1,0 +1,325 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kanban Video Orchestrator — 规划、搭建并监控由 Hermes Kanban 支撑的多智能体视频制作流水线 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Kanban Video Orchestrator — 规划、搭建并监控由 Hermes Kanban 支撑的多智能体视频制作流水线</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Kanban Video Orchestrator</h1>
+<p>规划、搭建并监控由 Hermes Kanban 支撑的多智能体视频制作流水线。当用户想要制作<strong>任何</strong>类型的视频时使用本技能——叙事短片、产品/营销视频、MV、解说视频、ASCII/终端艺术、抽象/生成循环、漫画、3D、实时/装置艺术——且工作需要分解为专业角色（编剧、设计师、动画师、渲染师、配音、剪辑等）并通过 kanban 看板协调。执行自适应探索以明确需求范围，为所请求的风格设计合适的团队，生成用于创建 Hermes profiles 和初始 kanban 任务的安装脚本，然后协助监控执行过程并在任务卡住或失败时介入。将场景路由到适合每个节拍的 Hermes 渲染/音频/设计技能（<code>ascii-video</code>、<code>manim-video</code>、<code>p5js</code>、<code>comfyui</code>、<code>touchdesigner-mcp</code>、<code>blender-mcp</code>、<code>pixel-art</code>、<code>baoyu-comic</code>、<code>claude-design</code>、<code>excalidraw</code>、<code>songsee</code>、<code>heartmula</code>……）以及用于 TTS、图像生成和图像转视频的外部 API。</p>
+<h2>技能元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/creative/kanban-video-orchestrator</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/creative/kanban-video-orchestrator</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>['SHL0MS', 'alt-glitch']</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>video</code>, <code>kanban</code>, <code>multi-agent</code>, <code>orchestration</code>, <code>production-pipeline</code></td>
+</tr>
+<tr>
+<td>相关技能</td>
+<td><a href="/user-guide/skills/bundled/devops/devops-kanban-orchestrator"><code>kanban-orchestrator</code></a>、<a href="/user-guide/skills/bundled/devops/devops-kanban-worker"><code>kanban-worker</code></a>、<a href="/user-guide/skills/bundled/creative/creative-ascii-video"><code>ascii-video</code></a>、<a href="/user-guide/skills/bundled/creative/creative-manim-video"><code>manim-video</code></a>、<a href="/user-guide/skills/bundled/creative/creative-p5js"><code>p5js</code></a>、<a href="/user-guide/skills/bundled/creative/creative-comfyui"><code>comfyui</code></a>、<a href="/user-guide/skills/bundled/creative/creative-touchdesigner-mcp"><code>touchdesigner-mcp</code></a>、<a href="/user-guide/skills/optional/creative/creative-blender-mcp"><code>blender-mcp</code></a>、<a href="/user-guide/skills/bundled/creative/creative-pixel-art"><code>pixel-art</code></a>、<a href="/user-guide/skills/bundled/creative/creative-ascii-art"><code>ascii-art</code></a>、<a href="/user-guide/skills/bundled/creative/creative-songwriting-and-ai-music"><code>songwriting-and-ai-music</code></a>、<a href="/user-guide/skills/bundled/media/media-heartmula"><code>heartmula</code></a>、<a href="/user-guide/skills/bundled/media/media-songsee"><code>songsee</code></a>、<a href="/user-guide/skills/bundled/media/media-spotify"><code>spotify</code></a>、<a href="/user-guide/skills/bundled/media/media-youtube-content"><code>youtube-content</code></a>、<a href="/user-guide/skills/bundled/creative/creative-claude-design"><code>claude-design</code></a>、<a href="/user-guide/skills/bundled/creative/creative-excalidraw"><code>excalidraw</code></a>、<a href="/user-guide/skills/bundled/creative/creative-architecture-diagram"><code>architecture-diagram</code></a>、<a href="/user-guide/skills/optional/creative/creative-concept-diagrams"><code>concept-diagrams</code></a>、<a href="/user-guide/skills/bundled/creative/creative-baoyu-comic"><code>baoyu-comic</code></a>、<a href="/user-guide/skills/bundled/creative/creative-baoyu-infographic"><code>baoyu-infographic</code></a>、<a href="/user-guide/skills/bundled/creative/creative-humanizer"><code>humanizer</code></a>、<a href="/user-guide/skills/bundled/media/media-gif-search"><code>gif-search</code></a>、<a href="/user-guide/skills/optional/creative/creative-meme-generation"><code>meme-generation</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发本技能时加载的完整技能定义。这是技能激活时智能体所看到的指令内容。
+</div>
+<h1>Kanban Video Orchestrator</h1>
+<p>将任何视频请求——从 15 秒产品预告到 5 分钟叙事短片，再到 MV 或 ASCII 循环——封装进 Hermes Kanban 流水线，将工作分解给专业智能体 profiles。</p>
+<p>本技能<strong>不</strong>自行渲染任何内容。它是一个元流水线，负责：</p>
+<ol>
+<li><strong>探索</strong>——通过有针对性的发现问题明确需求范围</li>
+<li><strong>设计</strong>——根据风格设计合适的团队（哪些角色、每个角色使用哪些工具）</li>
+<li><strong>生成</strong>——生成安装脚本，创建 Hermes profiles、项目工作区和初始 kanban 任务</li>
+<li><strong>交接</strong>——移交给 director profile，由其通过 kanban 进行分解</li>
+<li><strong>监控</strong>——跟踪执行过程，在任务卡住或失败时协助介入</li>
+</ol>
+<p>实际渲染在 kanban 运行后在其内部完成，使用适合各场景的现有技能和工具——<code>ascii-video</code>、<code>manim-video</code>、<code>p5js</code>、<code>comfyui</code>、<code>touchdesigner-mcp</code>、<code>blender-mcp</code>、<code>songwriting-and-ai-music</code>、<code>heartmula</code>、外部 API，或使用 PIL + ffmpeg 的纯 Python。</p>
+<h2>不适用本技能的情况</h2>
+<ul>
+<li>视频是一个无需专业分工的连续程序化项目。直接编写代码即可。</li>
+<li>用户只需快速一次性转换（例如&quot;把这个 mp4 转成 GIF&quot;）——直接使用 ffmpeg。</li>
+<li>输出是静态图片、GIF 或纯音频产物——使用对应的专项技能（<code>ascii-art</code>、<code>gifs</code>、<code>meme-generation</code>、<code>songwriting-and-ai-music</code>）。</li>
+<li>工作完全适合某个现有技能（例如纯 ASCII 视频——直接使用 <code>ascii-video</code>）。</li>
+</ul>
+<h2>工作流程</h2>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+DISCOVER  →  BRIEF  →  TEAM DESIGN  →  SETUP  →  EXECUTE  →  MONITOR
+</div>
+<h3>第一步 — 探索（提出正确的问题）</h3>
+<p>探索过程是<strong>自适应的</strong>：只问真正需要的问题。始终从三个问题开始，以识别大致轮廓：</p>
+<ul>
+<li><strong>视频是什么？</strong>（一句话简介）</li>
+<li><strong>时长多少？</strong>（5-30 秒预告 / 30-90 秒短片 / 90 秒-3 分钟解说 / 3-10 分钟影片 / 更长）</li>
+<li><strong>宽高比和目标平台？</strong>（1:1 / 9:16 / 16:9；X、IG、YouTube、内部使用等）</li>
+</ul>
+<p>根据回答，对风格类别进行分类。风格决定后续需要提问的问题。<strong>不要一次性问所有问题。</strong> 每次问 2-4 个，倾听回答，然后继续。当用户的回答隐含某个答案时，做出合理假设。</p>
+<p>完整的收集模式和各风格问题库，参见
+<strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/creative/kanban-video-orchestrator/references/intake.html">references/intake.md</a></strong>。</p>
+<h3>第二步 — 简报</h3>
+<p>掌握足够信息后，使用 <code>assets/brief.md.tmpl</code> 中的模板生成结构化的 <code>brief.md</code>。阶段如下：</p>
+<ol>
+<li><strong>概念</strong> — 一句话 pitch + 情感北极星</li>
+<li><strong>范围</strong> — 时长、宽高比、平台、截止日期</li>
+<li><strong>风格</strong> — 视觉参考、品牌约束、基调</li>
+<li><strong>场景</strong> — 逐拍分解（时长、内容、目标工具）</li>
+<li><strong>音频</strong> — 旁白 / 音乐 / 音效 / 静音（如需可按场景细分）</li>
+<li><strong>交付物</strong> — 文件格式、分辨率、可选备选版本（竖版剪辑、GIF 等）</li>
+</ol>
+<p>在设计团队之前，将简报展示给用户确认。<strong>简报即合同</strong>——所有下游任务均以其为参考。</p>
+<h3>第三步 — 团队设计</h3>
+<p>从角色库中挑选适合本视频的角色原型。<strong>组合，而非复制。</strong> 大多数视频需要 4-7 个 profiles。director 始终存在；其余角色根据简报的实际需求选取。</p>
+<p>角色库和各风格团队组合，参见
+<strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/creative/kanban-video-orchestrator/references/role-archetypes.html">references/role-archetypes.md</a></strong>。</p>
+<p>角色与 Hermes 技能及工具集的映射关系，参见
+<strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/creative/kanban-video-orchestrator/references/tool-matrix.html">references/tool-matrix.md</a></strong>。</p>
+<h3>第四步 — 安装</h3>
+<p>生成安装脚本（<code>setup.sh</code>）并运行。脚本将：</p>
+<ol>
+<li>创建项目工作区（<code>~/projects/video-pipeline/&lt;slug&gt;/</code>）</li>
+<li>将提供的资产复制到 <code>taste/</code>、<code>audio/</code>、<code>assets/</code></li>
+<li>通过 <code>hermes profile create --clone</code> 创建每个 Hermes profile</li>
+<li>编写各 profile 的 <code>SOUL.md</code>（个性 + 角色定义）</li>
+<li>配置 profile YAML（工具集、always_load 技能、cwd）</li>
+<li>编写 <code>brief.md</code>、<code>TEAM.md</code> 和 <code>taste/</code> 内容</li>
+<li>触发分配给 director 的初始 <code>hermes kanban create</code> 任务</li>
+</ol>
+<p>使用 <code>scripts/bootstrap_pipeline.py</code> 从简报 + 团队设计 JSON 生成 setup.sh。安装脚本结构、profile 配置模式和关键的&quot;共享工作区&quot;规则，参见 <strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/creative/kanban-video-orchestrator/references/kanban-setup.html">references/kanban-setup.md</a></strong>。</p>
+<h3>第五步 — 执行</h3>
+<p>运行 <code>setup.sh</code>。然后向用户提供监控命令：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes kanban watch --tenant &lt;project-tenant&gt;     # 实时事件
+hermes kanban list  --tenant &lt;project-tenant&gt;     # 看板快照
+hermes dashboard                                   # 可视化看板 UI
+</div>
+<p>director profile 从此接管，通过 kanban 工具集将工作分解并路由给专业 profiles。</p>
+<h3>第六步 — 监控与介入</h3>
+<p>保持参与——kanban 自主运行，但卡住的任务或不良输出需要人工（或 AI）判断。</p>
+<p>监控模式：定期轮询 <code>kanban list</code>，用 <code>kanban show &lt;id&gt;</code> 检查任何超出预期时长的 RUNNING 任务，并检查心跳。当某个 worker 的输出未通过审核时，标准介入方式为：</p>
+<ol>
+<li>在 worker 的任务上附上具体反馈评论（<code>kanban_comment</code>）</li>
+<li>以原任务为父任务创建重新运行任务</li>
+<li>调整简报范围，让 director 重新分解</li>
+</ol>
+<p>诊断模式、介入方案和&quot;任务卡住&quot;处理手册，参见 <strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/creative/kanban-video-orchestrator/references/monitoring.html">references/monitoring.md</a></strong>。</p>
+<h2>参考：实际案例</h2>
+<p>六个涵盖截然不同视频风格的具体流水线——叙事短片、产品/营销视频、MV、数学/算法解说、ASCII 视频、实时装置——展示相同工作流程如何产生截然不同的团队和任务图。参见 <strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/creative/kanban-video-orchestrator/references/examples.html">references/examples.md</a></strong>。</p>
+<h2>关键规则</h2>
+<ol>
+<li>
+<p><strong>行动前先探索。</strong> 在至少提出三个基线问题之前，绝不开始生成简报或团队设计。糟糕的简报会在整个流水线中产生连锁反应。</p>
+</li>
+<li>
+<p><strong>团队要匹配视频。</strong> 不要对每个项目都复用同一套 4-profile 配置。没有节拍分析 profile 的 MV 会出错。没有编剧 profile 的叙事短片会产生不连贯的场景。参见 <code>references/role-archetypes.md</code>。</p>
+</li>
+<li>
+<p><strong>每个项目一个工作区。</strong> 同一视频的所有 profiles 共享同一个 <code>dir:</code> 工作区。任务通过共享文件系统和结构化交接传递产物。<strong>每个</strong> <code>kanban_create</code> 调用都传入 <code>workspace_kind=&quot;dir&quot;</code> + <code>workspace_path=&quot;&lt;绝对项目路径&gt;&quot;</code>。</p>
+</li>
+<li>
+<p><strong>每个项目使用独立 tenant。</strong> 使用项目专属 tenant（<code>--tenant &lt;project-slug&gt;</code>）。保持 dashboard 范围清晰，防止与其他正在进行的 kanban 交叉污染。</p>
+</li>
+<li>
+<p><strong>尊重现有技能。</strong> 当某个场景适合现有技能时，相关渲染器应通过任务上的 <code>--skill &lt;name&gt;</code> 或 profile 中的 <code>always_load</code> 加载该技能。不要重新推导技能已提供的内容。</p>
+</li>
+<li>
+<p><strong>director 绝不执行。</strong> 即使拥有完整的 <code>kanban + terminal + file</code> 工具集，director 的 <code>SOUL.md</code> 规则也禁止其自行执行工作。它只负责分解和路由——每个具体任务都变成对专业 profile 的 <code>hermes kanban create</code> 调用。<code>kanban-orchestrator</code> 技能对此有进一步说明。</p>
+</li>
+<li>
+<p><strong>不要过度分解。</strong> 一个 30 秒的产品视频<strong>不需要</strong> 20 个任务。目标是最小任务图，同时仍能良好并行化并暴露正确的人工审核节点。</p>
+</li>
+<li>
+<p><strong>触发前验证 API 密钥。</strong> 外部 API（TTS、图像生成、图像转视频）需要在 <code>~/.hermes/.env</code> 或用户密钥存储中配置密钥。遇到缺少密钥错误的 worker 会浪费一个任务槽。安装脚本的 <code>check_key</code> 辅助函数在缺少必要密钥时会干净地中止。</p>
+</li>
+</ol>
+<h2>文件结构</h2>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+SKILL.md                            ← 本文件（工作流程 + 规则）
+references/
+  intake.md                         ← 各风格的探索问题库
+  role-archetypes.md                ← 角色库（编剧、设计师、动画师……）
+  tool-matrix.md                    ← 各角色的技能 + 工具集映射
+  kanban-setup.md                   ← 安装脚本结构与 profile 配置
+  monitoring.md                     ← 监控 + 介入模式
+  examples.md                       ← 六个实际流水线案例
+assets/
+  brief.md.tmpl                     ← 简报骨架
+  setup.sh.tmpl                     ← 安装脚本骨架
+  soul.md.tmpl                      ← profile 个性骨架
+scripts/
+  bootstrap_pipeline.py             ← 从简报 + 团队 JSON 生成 setup.sh
+  monitor.py                        ← 轮询 + 介入辅助工具
+</div>
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,633 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Qmd - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Qmd</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Qmd</h1>
+<p>使用 qmd 在本地搜索个人知识库、笔记、文档和会议记录 — 一个集成 BM25、向量搜索和 LLM 重排序的混合检索引擎。支持 CLI 和 MCP 集成。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/research/qmd</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/research/qmd</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Hermes Agent + Teknium</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>macos, linux</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Search</code>, <code>Knowledge-Base</code>, <code>RAG</code>, <code>Notes</code>, <code>MCP</code>, <code>Local-AI</code></td>
+</tr>
+<tr>
+<td>相关 skill</td>
+<td><a href="/user-guide/skills/bundled/note-taking/note-taking-obsidian"><code>obsidian</code></a>, <a href="/user-guide/skills/bundled/mcp/mcp-native-mcp"><code>native-mcp</code></a>, <a href="/user-guide/skills/bundled/research/research-arxiv"><code>arxiv</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>QMD — Query Markup Documents</h1>
+<p>本地设备上的个人知识库搜索引擎。可索引 markdown 笔记、会议记录、文档及任何基于文本的文件，并提供结合关键词匹配、语义理解和 LLM 重排序的混合搜索 — 全部在本地运行，无需云端依赖。</p>
+<p>由 <a href="https://github.com/tobi/qmd">Tobi Lütke</a> 创建。MIT 许可证。</p>
+<h2>使用场景</h2>
+<ul>
+<li>用户要求搜索其笔记、文档、知识库或会议记录</li>
+<li>用户希望在大量 markdown/文本文件中查找内容</li>
+<li>用户需要语义搜索（&quot;查找关于 X 概念的笔记&quot;），而非仅仅是关键词 grep</li>
+<li>用户已设置 qmd 集合并希望查询</li>
+<li>用户要求搭建本地知识库或文档搜索系统</li>
+<li>关键词：&quot;search my notes&quot;、&quot;find in my docs&quot;、&quot;knowledge base&quot;、&quot;qmd&quot;</li>
+</ul>
+<h2>前置条件</h2>
+<h3>Node.js &gt;= 22（必需）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 检查版本
+node --version  # must be &gt;= 22
+<h1>macOS — install or upgrade via Homebrew</h1>
+<p>brew install node@22</p>
+<h1>Linux — use NodeSource or nvm</h1>
+<p>curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+sudo apt-get install -y nodejs</p>
+<h1>or with nvm:</h1>
+<p>nvm install 22 &amp;amp;&amp;amp; nvm use 22</p>
+</div>
+<h3>SQLite 扩展支持（仅 macOS）</h3>
+<p>macOS 系统自带的 SQLite 不支持扩展加载。请通过 Homebrew 安装：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+brew install sqlite
+</div>
+<h3>安装 qmd</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+npm install -g @tobilu/qmd
+# or with Bun:
+bun install -g @tobilu/qmd
+</div>
+<p>首次运行会自动下载 3 个本地 GGUF 模型（共约 2GB）：</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>用途</th>
+<th>大小</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>embeddinggemma-300M-Q8_0</td>
+<td>向量 embedding（嵌入）</td>
+<td>~300MB</td>
+</tr>
+<tr>
+<td>qwen3-reranker-0.6b-q8_0</td>
+<td>结果重排序</td>
+<td>~640MB</td>
+</tr>
+<tr>
+<td>qmd-query-expansion-1.7B</td>
+<td>查询扩展</td>
+<td>~1.1GB</td>
+</tr>
+</tbody>
+</table>
+<h3>验证安装</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+qmd --version
+qmd status
+</div>
+<h2>快速参考</h2>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能</th>
+<th>速度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>qmd search &quot;query&quot;</code></td>
+<td>BM25 关键词搜索（无需模型）</td>
+<td>~0.2s</td>
+</tr>
+<tr>
+<td><code>qmd vsearch &quot;query&quot;</code></td>
+<td>语义向量搜索（1 个模型）</td>
+<td>~3s</td>
+</tr>
+<tr>
+<td><code>qmd query &quot;query&quot;</code></td>
+<td>混合搜索 + 重排序（全部 3 个模型）</td>
+<td>热启动 ~2-3s，冷启动 ~19s</td>
+</tr>
+<tr>
+<td><code>qmd get &lt;docid&gt;</code></td>
+<td>获取完整文档内容</td>
+<td>即时</td>
+</tr>
+<tr>
+<td><code>qmd multi-get &quot;glob&quot;</code></td>
+<td>批量获取文件</td>
+<td>即时</td>
+</tr>
+<tr>
+<td><code>qmd collection add &lt;path&gt; --name &lt;n&gt;</code></td>
+<td>将目录添加为集合</td>
+<td>即时</td>
+</tr>
+<tr>
+<td><code>qmd context add &lt;path&gt; &quot;description&quot;</code></td>
+<td>添加上下文元数据以提升检索效果</td>
+<td>即时</td>
+</tr>
+<tr>
+<td><code>qmd embed</code></td>
+<td>生成/更新向量 embedding</td>
+<td>不定</td>
+</tr>
+<tr>
+<td><code>qmd status</code></td>
+<td>显示索引健康状态和集合信息</td>
+<td>即时</td>
+</tr>
+<tr>
+<td><code>qmd mcp</code></td>
+<td>启动 MCP 服务器（stdio）</td>
+<td>持久运行</td>
+</tr>
+<tr>
+<td><code>qmd mcp --http --daemon</code></td>
+<td>启动 MCP 服务器（HTTP，模型保持热启动）</td>
+<td>持久运行</td>
+</tr>
+</tbody>
+</table>
+<h2>设置流程</h2>
+<h3>1. 添加集合</h3>
+<p>将 qmd 指向包含文档的目录：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Add a notes directory
+qmd collection add ~/notes --name notes
+<h1>Add project docs</h1>
+<p>qmd collection add ~/projects/myproject/docs --name project-docs</p>
+<h1>Add meeting transcripts</h1>
+<p>qmd collection add ~/meetings --name meetings</p>
+<h1>List all collections</h1>
+<p>qmd collection list</p>
+</div>
+<h3>2. 添加上下文描述</h3>
+<p>上下文元数据帮助搜索引擎理解每个集合的内容，可显著提升检索质量：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+qmd context add qmd://notes "Personal notes, ideas, and journal entries"
+qmd context add qmd://project-docs "Technical documentation for the main project"
+qmd context add qmd://meetings "Meeting transcripts and action items from team syncs"
+</div>
+<h3>3. 生成 Embedding</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+qmd embed
+</div>
+<p>此命令处理所有集合中的所有文档并生成向量 embedding。添加新文档或集合后需重新运行。</p>
+<h3>4. 验证</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+qmd status   # shows index health, collection stats, model info
+</div>
+<h2>搜索模式</h2>
+<h3>快速关键词搜索（BM25）</h3>
+<p>适用场景：精确词语、代码标识符、名称、已知短语。
+无需加载模型 — 近乎即时返回结果。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+qmd search "authentication middleware"
+qmd search "handleError async"
+</div>
+<h3>语义向量搜索</h3>
+<p>适用场景：自然语言问题、概念性查询。
+首次查询时加载 embedding 模型（约 3s）。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+qmd vsearch "how does the rate limiter handle burst traffic"
+qmd vsearch "ideas for improving onboarding flow"
+</div>
+<h3>混合搜索 + 重排序（最佳质量）</h3>
+<p>适用场景：对质量要求最高的重要查询。
+使用全部 3 个模型 — 查询扩展、并行 BM25+向量搜索、重排序。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+qmd query "what decisions were made about the database migration"
+</div>
+<h3>结构化多模式查询</h3>
+<p>在单次查询中组合不同搜索类型以提升精度：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# BM25 for exact term + vector for concept
+qmd query $'lex: rate limiter\nvec: how does throttling work under load'
+<h1>With query expansion</h1>
+<p>qmd query $'expand: database migration plan\nlex: &quot;schema change&quot;'</p>
+</div>
+<h3>查询语法（lex/BM25 模式）</h3>
+<table>
+<thead>
+<tr>
+<th>语法</th>
+<th>效果</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>term</code></td>
+<td>前缀匹配</td>
+<td><code>perf</code> 匹配 &quot;performance&quot;</td>
+</tr>
+<tr>
+<td><code>&quot;phrase&quot;</code></td>
+<td>精确短语</td>
+<td><code>&quot;rate limiter&quot;</code></td>
+</tr>
+<tr>
+<td><code>-term</code></td>
+<td>排除词语</td>
+<td><code>performance -sports</code></td>
+</tr>
+</tbody>
+</table>
+<h3>HyDE（假设文档 Embedding）</h3>
+<p>对于复杂主题，可描述你期望答案的样子：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+qmd query $'hyde: The migration plan involves three phases. First, we add the new columns without dropping the old ones. Then we backfill data. Finally we cut over and remove legacy columns.'
+</div>
+<h3>限定集合范围</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+qmd search "query" --collection notes
+qmd query "query" --collection project-docs
+</div>
+<h3>输出格式</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+qmd search "query" --json        # JSON output (best for parsing)
+qmd search "query" --limit 5     # Limit results
+qmd get "#abc123"                # Get by document ID
+qmd get "path/to/file.md"       # Get by file path
+qmd get "file.md:50" -l 100     # Get specific line range
+qmd multi-get "journals/*.md" --json  # Batch retrieve by glob
+</div>
+<h2>MCP 集成（推荐）</h2>
+<p>qmd 提供 MCP 服务器，可通过原生 MCP 客户端直接向 Hermes Agent 提供搜索工具。这是推荐的集成方式 — 配置完成后，agent 无需每次加载此 skill 即可自动获得 qmd 工具。</p>
+<h3>方案 A：Stdio 模式（简单）</h3>
+<p>在 <code>~/.hermes/config.yaml</code> 中添加：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mcp_servers:
+  qmd:
+    command: "qmd"
+    args: ["mcp"]
+    timeout: 30
+    connect_timeout: 45
+</div>
+<p>此配置注册以下工具：<code>mcp_qmd_search</code>、<code>mcp_qmd_vsearch</code>、<code>mcp_qmd_deep_search</code>、<code>mcp_qmd_get</code>、<code>mcp_qmd_status</code>。</p>
+<p><strong>权衡：</strong> 模型在首次搜索调用时加载（冷启动约 19s），之后在会话期间保持热启动状态。偶尔使用时可接受。</p>
+<h3>方案 B：HTTP Daemon 模式（快速，重度使用推荐）</h3>
+<p>单独启动 qmd daemon — 它会将模型保持在内存中：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Start daemon (persists across agent restarts)
+qmd mcp --http --daemon
+<h1>Runs on http://localhost:8181 by default</h1>
+</div>
+<p>然后配置 Hermes Agent 通过 HTTP 连接：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mcp_servers:
+  qmd:
+    url: "http://localhost:8181/mcp"
+    timeout: 30
+</div>
+<p><strong>权衡：</strong> 运行时占用约 2GB 内存，但每次查询都很快（约 2-3s）。适合频繁搜索的用户。</p>
+<h3>保持 Daemon 持续运行</h3>
+<h4>macOS（launchd）</h4>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cat &gt; ~/Library/LaunchAgents/com.qmd.daemon.plist &lt;&lt; 'EOF'
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
+&lt;dict&gt;
+  &lt;key&gt;Label&lt;/key&gt;
+  &lt;string&gt;com.qmd.daemon&lt;/string&gt;
+  &lt;key&gt;ProgramArguments&lt;/key&gt;
+  &lt;array&gt;
+    &lt;string&gt;qmd&lt;/string&gt;
+    &lt;string&gt;mcp&lt;/string&gt;
+    &lt;string&gt;--http&lt;/string&gt;
+    &lt;string&gt;--daemon&lt;/string&gt;
+  &lt;/array&gt;
+  &lt;key&gt;RunAtLoad&lt;/key&gt;
+  &lt;true/&gt;
+  &lt;key&gt;KeepAlive&lt;/key&gt;
+  &lt;true/&gt;
+  &lt;key&gt;StandardOutPath&lt;/key&gt;
+  &lt;string&gt;/tmp/qmd-daemon.log&lt;/string&gt;
+  &lt;key&gt;StandardErrorPath&lt;/key&gt;
+  &lt;string&gt;/tmp/qmd-daemon.log&lt;/string&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+EOF
+<p>launchctl load ~/Library/LaunchAgents/com.qmd.daemon.plist</p>
+</div>
+<h4>Linux（systemd 用户服务）</h4>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mkdir -p ~/.config/systemd/user
+<p>cat &amp;gt; ~/.config/systemd/user/qmd-daemon.service &amp;lt;&amp;lt; 'EOF'
+[Unit]
+Description=QMD MCP Daemon
+After=network.target</p>
+<p>[Service]
+ExecStart=qmd mcp --http --daemon
+Restart=on-failure
+RestartSec=10
+Environment=PATH=/usr/local/bin:/usr/bin:/bin</p>
+<p>[Install]
+WantedBy=default.target
+EOF</p>
+<p>systemctl --user daemon-reload
+systemctl --user enable --now qmd-daemon
+systemctl --user status qmd-daemon</p>
+</div>
+<h3>MCP 工具参考</h3>
+<p>连接后，以下工具以 <code>mcp_qmd_*</code> 形式可用：</p>
+<table>
+<thead>
+<tr>
+<th>MCP 工具</th>
+<th>对应命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mcp_qmd_search</code></td>
+<td><code>qmd search</code></td>
+<td>BM25 关键词搜索</td>
+</tr>
+<tr>
+<td><code>mcp_qmd_vsearch</code></td>
+<td><code>qmd vsearch</code></td>
+<td>语义向量搜索</td>
+</tr>
+<tr>
+<td><code>mcp_qmd_deep_search</code></td>
+<td><code>qmd query</code></td>
+<td>混合搜索 + 重排序</td>
+</tr>
+<tr>
+<td><code>mcp_qmd_get</code></td>
+<td><code>qmd get</code></td>
+<td>通过 ID 或路径获取文档</td>
+</tr>
+<tr>
+<td><code>mcp_qmd_status</code></td>
+<td><code>qmd status</code></td>
+<td>索引健康状态和统计信息</td>
+</tr>
+</tbody>
+</table>
+<p>MCP 工具接受结构化 JSON 查询以支持多模式搜索：</p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{
+  "searches": [
+    {"type": "lex", "query": "authentication middleware"},
+    {"type": "vec", "query": "how user login is verified"}
+  ],
+  "collections": ["project-docs"],
+  "limit": 10
+}
+</div>
+<h2>CLI 用法（不使用 MCP）</h2>
+<p>未配置 MCP 时，直接通过终端使用 qmd：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal(command="qmd query 'what was decided about the API redesign' --json", timeout=30)
+</div>
+<p>设置和管理任务始终使用终端：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal(command="qmd collection add ~/Documents/notes --name notes")
+terminal(command="qmd context add qmd://notes 'Personal research notes and ideas'")
+terminal(command="qmd embed")
+terminal(command="qmd status")
+</div>
+<h2>搜索流水线工作原理</h2>
+<p>了解内部机制有助于选择合适的搜索模式：</p>
+<ol>
+<li><strong>查询扩展</strong> — 一个经过微调的 1.7B 模型生成 2 个备选查询。原始查询在融合中获得 2 倍权重。</li>
+<li><strong>并行检索</strong> — BM25（SQLite FTS5）和向量搜索跨所有查询变体并行运行。</li>
+<li><strong>RRF 融合</strong> — 倒数排名融合（k=60）合并结果。顶部排名加成：第 1 名 +0.05，第 2-3 名 +0.02。</li>
+<li><strong>LLM 重排序</strong> — qwen3-reranker 对前 30 个候选结果评分（0.0-1.0）。</li>
+<li><strong>位置感知混合</strong> — 排名 1-3：75% 检索 / 25% 重排序。排名 4-10：60/40。排名 11+：40/60（对长尾结果更信任重排序）。</li>
+</ol>
+<p><strong>智能分块：</strong> 文档在自然断点处分割（标题、代码块、空行），目标约 900 个 token，重叠率 15%。代码块不会在中间被截断。</p>
+<h2>最佳实践</h2>
+<ol>
+<li><strong>始终添加上下文描述</strong> — <code>qmd context add</code> 可显著提升检索准确性。描述每个集合包含的内容。</li>
+<li><strong>添加文档后重新 embed</strong> — 向集合添加新文件后必须重新运行 <code>qmd embed</code>。</li>
+<li><strong>速度优先用 <code>qmd search</code></strong> — 需要快速关键词查找（代码标识符、精确名称）时，BM25 即时响应且无需模型。</li>
+<li><strong>质量优先用 <code>qmd query</code></strong> — 问题具有概念性或用户需要最佳结果时，使用混合搜索。</li>
+<li><strong>优先使用 MCP 集成</strong> — 配置完成后，agent 无需每次加载此 skill 即可获得原生工具。</li>
+<li><strong>频繁用户使用 daemon 模式</strong> — 如果用户经常搜索知识库，建议设置 HTTP daemon。</li>
+<li><strong>结构化搜索中第一个查询获得 2 倍权重</strong> — 组合 lex 和 vec 时，将最重要/最确定的查询放在首位。</li>
+</ol>
+<h2>故障排查</h2>
+<h3>&quot;首次运行时模型正在下载&quot;</h3>
+<p>正常现象 — qmd 首次使用时会自动下载约 2GB 的 GGUF 模型。
+这是一次性操作。</p>
+<h3>冷启动延迟（约 19s）</h3>
+<p>模型未加载到内存时会出现此情况。解决方案：</p>
+<ul>
+<li>使用 HTTP daemon 模式（<code>qmd mcp --http --daemon</code>）保持热启动</li>
+<li>不需要模型时使用 <code>qmd search</code>（仅 BM25）</li>
+<li>MCP stdio 模式在首次搜索时加载模型，会话期间保持热启动</li>
+</ul>
+<h3>macOS：&quot;unable to load extension&quot;</h3>
+<p>安装 Homebrew SQLite：<code>brew install sqlite</code>
+然后确保其在系统 SQLite 之前出现在 PATH 中。</p>
+<h3>&quot;未找到集合&quot;</h3>
+<p>运行 <code>qmd collection add &lt;path&gt; --name &lt;name&gt;</code> 添加目录，
+然后运行 <code>qmd embed</code> 进行索引。</p>
+<h3>Embedding 模型覆盖（CJK/多语言）</h3>
+<p>为非英语内容设置 <code>QMD_EMBED_MODEL</code> 环境变量：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+export QMD_EMBED_MODEL="your-multilingual-model"
+</div>
+<h2>数据存储</h2>
+<ul>
+<li><strong>索引与向量：</strong> <code>~/.cache/qmd/index.sqlite</code></li>
+<li><strong>模型：</strong> 首次运行时自动下载到本地缓存</li>
+<li><strong>无云端依赖</strong> — 全部在本地运行</li>
+</ul>
+<h2>参考资料</h2>
+<ul>
+<li><a href="https://github.com/tobi/qmd">GitHub: tobi/qmd</a></li>
+<li><a href="https://github.com/tobi/qmd/blob/main/CHANGELOG.html">QMD 更新日志</a></li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

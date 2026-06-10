@@ -1,0 +1,381 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Osint Investigation - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Osint Investigation</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Osint Investigation</h1>
+<p>公开记录 OSINT（开源情报）调查框架 — SEC EDGAR 文件、USAspending 合同、参议院游说、OFAC 制裁、ICIJ 离岸泄露、纽约市房产记录（ACRIS）、OpenCorporates 注册信息、CourtListener 法院记录、Wayback Machine 存档、Wikipedia + Wikidata、GDELT 新闻监控。跨来源实体解析、交叉链接分析、时序关联、证据链。仅使用 Python 标准库。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/research/osint-investigation</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/research/osint-investigation</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>0.1.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Hermes Agent（改编自 ShinMegamiBoson/OpenPlanter，MIT 许可）</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>osint</code>, <code>investigation</code>, <code>public-records</code>, <code>sec</code>, <code>sanctions</code>, <code>corporate-registry</code>, <code>property</code>, <code>courts</code>, <code>due-diligence</code>, <code>journalism</code></td>
+</tr>
+<tr>
+<td>相关 skill</td>
+<td><a href="/user-guide/skills/optional/research/research-domain-intel"><code>domain-intel</code></a>, <a href="/user-guide/skills/bundled/research/research-arxiv"><code>arxiv</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发该 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时看到的指令内容。
+</div>
+<h1>OSINT 调查 — 公开记录交叉核查</h1>
+<p>公开记录 OSINT 调查框架：政府合同、企业文件、游说、制裁、离岸泄露、房产记录、法院记录、网络存档、知识库及全球新闻。跨异构来源解析实体，以显式置信度构建交叉链接，运行统计时序检验，并生成结构化证据链。</p>
+<p><strong>仅使用 Python 标准库。</strong> 零安装。支持 Linux、macOS、Windows。大多数来源无需 API 密钥（OpenCorporates 有可选的免费 token，可提高速率限制）。</p>
+<p>改编自 MIT 许可的 ShinMegamiBoson/OpenPlanter 项目；扩展覆盖了原项目未涉及的身份/房产/诉讼/存档/新闻来源。</p>
+<h2>何时使用此 skill</h2>
+<p>当用户请求以下内容时使用：</p>
+<ul>
+<li>&quot;追踪资金流向&quot; — 政府合同、游说 → 立法、制裁</li>
+<li>企业尽职调查 — 谁控制公司 X、在哪里注册、谁担任董事会成员、提交了哪些文件</li>
+<li>制裁筛查 — 实体 X 是否在 OFAC SDN 名单或 ICIJ 离岸泄露中</li>
+<li>权钱交易调查 — 有离岸关联的承包商、赢得合同的游说客户</li>
+<li>房产所有权 — 按姓名或地址查找已记录的契约/抵押（纽约市；其他县请用户查阅相关记录机构）</li>
+<li>诉讼历史 — 查找联邦及州法院意见和 PACER 案卷</li>
+<li>跨来源实体解析（命名存在差异，如 LLC 后缀、缩写）</li>
+<li>以显式置信度构建证据链</li>
+<li>&quot;关于 X 有哪些报道&quot; — 国际新闻（GDELT）+ Wikipedia 叙述 + Wayback Machine 恢复失效 URL</li>
+</ul>
+<p><strong>不适用</strong>此 skill 的场景：</p>
+<ul>
+<li>通用网络研究 → <code>web_search</code> / <code>web_extract</code></li>
+<li>域名/基础设施 OSINT → <code>domain-intel</code> skill</li>
+<li>学术文献 → <code>arxiv</code> skill</li>
+<li>社交媒体账号发现 → <code>sherlock</code> skill（可选）</li>
+<li>美国<strong>联邦</strong>竞选财务 — FEC 在此处有意不覆盖（免费 DEMO_KEY 层级的 API 对临时贡献者姓名查询不可靠）。联邦捐款请直接引导用户访问 https://www.fec.gov/data/。</li>
+</ul>
+<h2>工作流程</h2>
+<p>Agent 通过 <code>terminal</code> 工具运行脚本。<code>SKILL_DIR</code> 是存放此 SKILL.md 的目录。</p>
+<h3>1. 确定适用的数据来源</h3>
+<p>阅读数据来源 wiki 条目以规划调查：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+ls SKILL_DIR/references/sources/
+<h1>联邦财务 / 监管</h1>
+<p>cat SKILL_DIR/references/sources/sec-edgar.md       # 企业文件
+cat SKILL_DIR/references/sources/usaspending.md     # 联邦合同
+cat SKILL_DIR/references/sources/senate-ld.md       # 游说
+cat SKILL_DIR/references/sources/ofac-sdn.md        # 制裁
+cat SKILL_DIR/references/sources/icij-offshore.md   # 离岸泄露</p>
+<h1>身份 / 房产 / 诉讼 / 存档 / 新闻</h1>
+<p>cat SKILL_DIR/references/sources/nyc-acris.md       # 纽约市房产记录
+cat SKILL_DIR/references/sources/opencorporates.md  # 全球企业注册信息
+cat SKILL_DIR/references/sources/courtlistener.md   # 法院记录（联邦 + 州）
+cat SKILL_DIR/references/sources/wayback.md         # Wayback Machine 存档
+cat SKILL_DIR/references/sources/wikipedia.md       # Wikipedia + Wikidata
+cat SKILL_DIR/references/sources/gdelt.md           # 全球新闻监控</p>
+</div>
+<p>每个条目遵循 9 节模板：摘要、访问、schema、覆盖范围、交叉引用键、数据质量、获取方式、法律说明、参考资料。</p>
+<p><strong>交叉引用潜力</strong>部分列出了来源之间的关联键 — 优先阅读这部分以选择合适的配对。</p>
+<h3>2. 获取数据</h3>
+<p>每个来源在 <code>SKILL_DIR/scripts/</code> 中都有仅使用标准库的抓取脚本：</p>
+<p><strong>联邦财务 / 监管</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# SEC EDGAR 文件（企业披露）
+python3 SKILL_DIR/scripts/fetch_sec_edgar.py --cik 0000320193 \
+    --types 10-K,10-Q --out data/edgar_filings.csv
+<h1>USAspending 联邦合同</h1>
+<p>python3 SKILL_DIR/scripts/fetch_usaspending.py --recipient &quot;EXAMPLE CORP&quot; \
+--fy 2024 --out data/contracts.csv</p>
+<h1>参议院 LD-1 / LD-2 游说披露</h1>
+<p>python3 SKILL_DIR/scripts/fetch_senate_ld.py --client &quot;EXAMPLE CORP&quot; \
+--year 2024 --out data/lobbying.csv</p>
+<h1>OFAC SDN 制裁名单（完整快照）</h1>
+<p>python3 SKILL_DIR/scripts/fetch_ofac_sdn.py --out data/ofac_sdn.csv</p>
+<h1>ICIJ 离岸泄露 — 首次使用时下载约 70 MB 批量 CSV，</h1>
+<h1>之后在本地搜索。缓存 30 天，存储于</h1>
+<h1>$HERMES_OSINT_CACHE/icij/（默认：~/.cache/hermes-osint/icij/）。</h1>
+<p>python3 SKILL_DIR/scripts/fetch_icij_offshore.py --entity &quot;EXAMPLE CORP&quot; \
+--out data/icij.csv</p>
+</div>
+<p><strong>身份 / 房产 / 诉讼 / 存档 / 新闻</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 纽约市房产记录（契约、抵押、留置权）— 通过 Socrata 访问 ACRIS
+python3 SKILL_DIR/scripts/fetch_nyc_acris.py --name "SMITH, JOHN" \
+    --out data/acris.csv
+python3 SKILL_DIR/scripts/fetch_nyc_acris.py --address "571 HUDSON" \
+    --out data/acris_addr.csv
+<h1>OpenCorporates — 130+ 司法管辖区企业注册信息</h1>
+<h1>（需要免费 token；设置 OPENCORPORATES_API_TOKEN 或传入 --token）</h1>
+<p>python3 SKILL_DIR/scripts/fetch_opencorporates.py --query &quot;Example Corp&quot; \
+--jurisdiction us_ny --out data/opencorporates.csv</p>
+<h1>CourtListener — 联邦 + 州法院意见、PACER 案卷</h1>
+<p>python3 SKILL_DIR/scripts/fetch_courtlistener.py --query &quot;Smith v. Example Corp&quot; \
+--type opinions --out data/courts.csv</p>
+<h1>Wayback Machine — 历史网页快照</h1>
+<p>python3 SKILL_DIR/scripts/fetch_wayback.py --url &quot;example.com&quot; \
+--match host --collapse digest --out data/wayback.csv</p>
+<h1>Wikipedia + Wikidata — 叙述性传记 + 结构化事实</h1>
+<h1>设置 HERMES_OSINT_UA=your-app/1.0 (your@email) 以标识自身</h1>
+<p>python3 SKILL_DIR/scripts/fetch_wikipedia.py --query &quot;Bill Gates&quot; \
+--out data/wp.csv</p>
+<h1>GDELT — 100+ 语言全球新闻，约 2015 年至今</h1>
+<p>python3 SKILL_DIR/scripts/fetch_gdelt.py --query '&quot;Example Corp&quot;' \
+--timespan 1y --out data/gdelt.csv</p>
+</div>
+<p>所有输出均为带标题行的标准化 CSV。脚本可幂等重复运行。</p>
+<p>当私人个人不会出现在某来源中时（例如非上市公司人员不在 SEC EDGAR 中，非联邦承包商不在 USAspending 中，非游说客户不在参议院 LDA 中），脚本返回 0 行并给出明确警告，而不是静默写入空 CSV。EDGAR 会特别标记公司名称解析器匹配到的是个人 Form 3/4/5 申报人而非企业注册人的情况。</p>
+<p>速率限制说明见各来源的 wiki 条目。默认抓取器在分页请求之间会礼貌地休眠。<strong>API 密钥可提高支持它们的来源的速率限制</strong>（<code>SEC_USER_AGENT</code>、<code>SENATE_LDA_TOKEN</code>、<code>OPENCORPORATES_API_TOKEN</code>、<code>COURTLISTENER_TOKEN</code>）。所有脚本会立即将 429 响应及上游配额消息呈现给用户，以便用户知道需要降速或提供密钥。</p>
+<h3>3. 跨来源实体解析</h3>
+<p>规范化名称并在两个 CSV 文件之间查找匹配：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 将游说客户（参议院 LDA）与合同受益人（USAspending）进行匹配
+python3 SKILL_DIR/scripts/entity_resolution.py \
+    --left  data/lobbying.csv   --left-name-col  client_name \
+    --right data/contracts.csv  --right-name-col recipient_name \
+    --out data/cross_links.csv
+</div>
+<p>三个匹配层级，附带显式置信度：</p>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>方法</th>
+<th>置信度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>exact</code></td>
+<td>去除后缀/标点后规范化字符串相等</td>
+<td>高</td>
+</tr>
+<tr>
+<td><code>fuzzy</code></td>
+<td>排序词元相等（词袋匹配）</td>
+<td>中</td>
+</tr>
+<tr>
+<td><code>token_overlap</code></td>
+<td>≥60% 词元重叠，≥2 个共享词元，词元 ≥4 个字符</td>
+<td>低</td>
+</tr>
+</tbody>
+</table>
+<p>输出 <code>cross_links.csv</code> 列：<code>match_type, confidence, left_name, right_name, left_normalized, right_normalized, left_row, right_row</code>。</p>
+<h3>4. 统计时序关联（可选）</h3>
+<p>检验两个时间序列是否存在可疑的时间聚集 — 例如游说文件提交时间与合同授予时间接近 — 使用置换检验（permutation test）：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 SKILL_DIR/scripts/timing_analysis.py \
+    --donations data/lobbying.csv --donation-date-col filing_date \
+        --donation-amount-col income --donation-donor-col client_name \
+        --donation-recipient-col registrant_name \
+    --contracts data/contracts.csv --contract-date-col award_date \
+        --contract-vendor-col recipient_name \
+    --cross-links data/cross_links.csv \
+    --permutations 1000 \
+    --out data/timing.json
+</div>
+<p>脚本的列标志是有意设计为通用的 — 原工具是为捐款与合同授予场景编写的，但它适用于任何通过交叉链接关联的（事件，收款方）时间序列。零假设：事件时序与合同授予日期无关。单尾 p 值 = 置换中平均最近合同距离 ≤ 观测值的比例。每个（付款方，供应商）配对至少需要 3 个事件才能运行检验。</p>
+<h3>5. 构建调查结果 JSON（证据链）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 SKILL_DIR/scripts/build_findings.py \
+    --cross-links data/cross_links.csv \
+    --timing data/timing.json \
+    --out data/findings.json
+</div>
+<p>每条调查结果包含 <code>id, title, severity, confidence, summary, evidence[], sources[]</code>。每个证据项指向来源 CSV 中的具体行。用户（或后续 agent）可以对照来源验证每项声明。</p>
+<h2>置信度与证据规范</h2>
+<p>这是该 skill 的核心规则。告知用户：</p>
+<ul>
+<li>每项声明必须可追溯至具体记录。不得有无依据的断言。</li>
+<li>置信度层级随声明传递。<code>match_type=fuzzy</code> 表示&quot;可能&quot;，而非&quot;已确认&quot;。</li>
+<li>实体解析产生的是候选结果，而非结论。&quot;ACME LLC&quot;与&quot;Acme Holdings Group&quot;之间的 <code>fuzzy</code> 匹配是线索，不是事实。</li>
+<li>统计显著性 ≠ 违规行为。p &amp;lt; 0.05 意味着该时序模式在零假设下不太可能出现，并不能证明腐败。</li>
+<li>此处所有数据来源均为公开记录，但仍可能包含不准确信息、过时信息或已编辑内容（GDPR、封存记录）。</li>
+</ul>
+<h2>添加新数据来源</h2>
+<p>使用模板：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cp SKILL_DIR/templates/source-template.md \
+    SKILL_DIR/references/sources/&lt;your-source&gt;.md
+</div>
+<p>填写全部 9 个部分。在 <code>scripts/</code> 中编写仅使用标准库的 <code>fetch_&lt;source&gt;.py</code> 脚本，输出标准化 CSV。在上方&quot;何时使用&quot;部分更新来源列表。</p>
+<h2>工具及其限制</h2>
+<ul>
+<li><code>entity_resolution.py</code> 不使用外部模糊匹配库（无 rapidfuzz，无 jellyfish）。词袋匹配是此处的上限。如需 Levenshtein 距离、音译或音素匹配，请单独 pip 安装。</li>
+<li><code>timing_analysis.py</code> 使用 Python 的 <code>random</code> 模块进行置换。如需可复现性，请传入 <code>--seed N</code>。</li>
+<li><code>fetch_*.py</code> 脚本使用 <code>urllib.request</code> 并遵守 <code>Retry-After</code> 头。大量批量使用仍可能违反服务条款 — 请先阅读各来源的法律说明部分。</li>
+</ul>
+<h2>法律说明</h2>
+<p>所有第一阶段来源均为公开记录。根据各自的访问条款（FOIA、公开记录法、ICIJ 明确发布、OFAC 公开数据），允许批量获取。但是：</p>
+<ul>
+<li>部分来源速率限制较为严格。请遵守其响应头。</li>
+<li>部分来源会编辑注册人信息（WHOIS 的 GDPR 合规、封存文件）。</li>
+<li>交叉引用公开记录以识别私人个人可能存在伦理影响。该 skill 生成的是证据链，而非指控。</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

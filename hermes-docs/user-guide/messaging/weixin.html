@@ -1,0 +1,656 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>微信（Weixin） - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / 微信（Weixin）</div><p>将 Hermes 连接到 <a href="https://weixin.qq.com/">微信</a>（WeChat），腾讯的个人即时通讯平台。该适配器使用腾讯的 <strong>iLink Bot API</strong> 对接个人微信账号——与企业微信（WeCom）不同。消息通过长轮询（long-polling）方式传递，无需公网端点或 webhook。</p>
+<div class="tip"><strong>ℹ️ 信息</strong>
+本适配器适用于<strong>个人微信账号</strong>（微信）。如需对接企业微信，请参阅 <a href="./wecom.html">WeCom 适配器</a>。
+</div>
+<div class="tip warning"><strong>⚠️ iLink bot 身份——普通微信群可能无法使用</strong>
+<p>扫码登录后，Hermes 连接的是一个 <strong>iLink bot 身份</strong>（例如 <code>a5ace6fd482e@im.bot</code>），<strong>而非</strong>可完全脚本化的普通个人微信账号。具体影响如下：</p>
+<ul>
+<li>iLink bot 身份通常<strong>无法像普通联系人一样被邀请进入普通微信群</strong>。</li>
+<li>对于大多数 bot 类型账号，iLink 通常<strong>不会将普通微信群事件</strong>（包括对扫码登录所用个人账号的 <code>@</code> 提及）推送到网关。</li>
+<li><code>@</code> 提及用于扫码的个人微信账号，<strong>不等同于</strong> <code>@</code> 提及 iLink bot——两者是独立身份。</li>
+<li>下方的 <code>WEIXIN_GROUP_POLICY</code> / <code>WEIXIN_GROUP_ALLOWED_USERS</code> 设置仅在 iLink 实际为你的账号类型返回群事件时才生效。若 iLink 不返回群事件，无论策略如何配置，群消息都不会到达 Hermes。</li>
+</ul>
+<p>实际部署中，大多数情况下只有发送给 iLink bot 的私信（DM）能可靠工作。若配置完成后群消息仍无法送达，限制来自 iLink 侧，而非 Hermes。只要 <code>WEIXIN_GROUP_POLICY</code> 设置为 <code>disabled</code> 以外的值，网关在启动时会记录一条 <code>WARNING</code>。</p>
+
+</div>
+<h2>前置条件</h2>
+<ul>
+<li>一个个人微信账号</li>
+<li>Python 包：<code>aiohttp</code> 和 <code>cryptography</code></li>
+<li>使用 <code>messaging</code> 扩展安装 Hermes 时已内置终端二维码渲染功能</li>
+</ul>
+<p>安装所需依赖：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install aiohttp cryptography
+# 可选：用于终端二维码显示
+pip install hermes-agent[messaging]
+</div>
+<h2>配置步骤</h2>
+<h3>1. 运行配置向导</h3>
+<p>连接微信账号最简便的方式是通过交互式配置向导：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway setup
+</div>
+<p>在提示中选择 <strong>Weixin</strong>。向导将执行以下步骤：</p>
+<ol>
+<li>向 iLink Bot API 请求二维码</li>
+<li>在终端中显示二维码（或提供 URL）</li>
+<li>等待你用微信手机端扫描二维码</li>
+<li>提示你在手机上确认登录</li>
+<li>自动将账号凭据保存至 <code>~/.hermes/weixin/accounts/</code></li>
+</ol>
+<p>确认后，你将看到如下消息：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+微信连接成功，account_id=your-account-id
+</div>
+<p>向导会保存 <code>account_id</code>、<code>token</code> 和 <code>base_url</code>，无需手动配置。</p>
+<h3>2. 配置环境变量</h3>
+<p>完成首次扫码登录后，在 <code>~/.hermes/.env</code> 中至少设置账号 ID：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+WEIXIN_ACCOUNT_ID=your-account-id
+
+# 可选：覆盖 token（通常由扫码登录自动保存）
+# WEIXIN_TOKEN=your-bot-token
+
+# 可选：限制访问权限
+WEIXIN_DM_POLICY=open
+WEIXIN_ALLOWED_USERS=user_id_1,user_id_2
+
+# 可选：恢复旧版多行拆分行为
+# WEIXIN_SPLIT_MULTILINE_MESSAGES=true
+
+# 可选：cron/通知的默认频道
+WEIXIN_HOME_CHANNEL=chat_id
+WEIXIN_HOME_CHANNEL_NAME=Home
+</div>
+<h3>3. 启动网关</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway
+</div>
+<p>适配器将恢复已保存的凭据，连接到 iLink API，并开始长轮询消息。</p>
+<h2>功能特性</h2>
+<ul>
+<li><strong>长轮询传输</strong> — 无需公网端点、webhook 或 WebSocket</li>
+<li><strong>扫码登录</strong> — 通过 <code>hermes gateway setup</code> 扫码连接</li>
+<li><strong>私信（DM）消息</strong> — 可配置访问策略；群消息功能取决于 iLink 是否实际为所连接身份推送群事件（iLink bot 账号通常不推送，详见上方警告）</li>
+<li><strong>媒体支持</strong> — 图片、视频、文件和语音消息</li>
+<li><strong>AES-128-ECB 加密 CDN</strong> — 所有媒体传输自动加解密</li>
+<li><strong>上下文 token 持久化</strong> — 基于磁盘的回复连续性，重启后仍可保持</li>
+<li><strong>Markdown 格式化</strong> — 保留 Markdown 格式（包括标题、表格和代码块），支持 Markdown 的微信客户端可原生渲染</li>
+<li><strong>智能消息分块</strong> — 未超出长度限制时保持单条消息气泡；仅超长内容在逻辑边界处拆分</li>
+<li><strong>正在输入提示</strong> — 代理处理消息时在微信客户端显示&quot;正在输入…&quot;状态</li>
+<li><strong>SSRF 防护</strong> — 下载前验证外发媒体 URL</li>
+<li><strong>消息去重</strong> — 5 分钟滑动窗口防止重复处理</li>
+<li><strong>自动重试与退避</strong> — 从瞬时 API 错误中自动恢复</li>
+</ul>
+<h2>配置选项</h2>
+<p>在 <code>config.yaml</code> 的 <code>platforms.weixin.extra</code> 下设置：</p>
+<table>
+<thead>
+<tr>
+<th>键</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>account_id</code></td>
+<td>—</td>
+<td>iLink Bot 账号 ID（必填）</td>
+</tr>
+<tr>
+<td><code>token</code></td>
+<td>—</td>
+<td>iLink Bot token（必填，由扫码登录自动保存）</td>
+</tr>
+<tr>
+<td><code>base_url</code></td>
+<td><code>https://ilinkai.weixin.qq.com</code></td>
+<td>iLink API 基础 URL</td>
+</tr>
+<tr>
+<td><code>cdn_base_url</code></td>
+<td><code>https://novac2c.cdn.weixin.qq.com/c2c</code></td>
+<td>媒体传输 CDN 基础 URL</td>
+</tr>
+<tr>
+<td><code>dm_policy</code></td>
+<td><code>open</code></td>
+<td>私信访问策略：<code>open</code>、<code>allowlist</code>、<code>disabled</code>、<code>pairing</code></td>
+</tr>
+<tr>
+<td><code>group_policy</code></td>
+<td><code>disabled</code></td>
+<td>群组访问策略：<code>open</code>、<code>allowlist</code>、<code>disabled</code></td>
+</tr>
+<tr>
+<td><code>allow_from</code></td>
+<td><code>[]</code></td>
+<td>允许发送私信的用户 ID（当 dm_policy=allowlist 时生效）</td>
+</tr>
+<tr>
+<td><code>group_allow_from</code></td>
+<td><code>[]</code></td>
+<td>允许的群组 ID（当 group_policy=allowlist 时生效）</td>
+</tr>
+<tr>
+<td><code>split_multiline_messages</code></td>
+<td><code>false</code></td>
+<td>为 <code>true</code> 时，将多行回复拆分为多条消息（旧版行为）；为 <code>false</code> 时，多行回复保持为单条消息，除非超出长度限制。</td>
+</tr>
+</tbody>
+</table>
+<h2>访问策略</h2>
+<h3>私信策略</h3>
+<p>控制哪些用户可以向 bot 发送私信：</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>open</code></td>
+<td>任何人均可向 bot 发送私信（默认）</td>
+</tr>
+<tr>
+<td><code>allowlist</code></td>
+<td>仅 <code>allow_from</code> 中的用户 ID 可发送私信</td>
+</tr>
+<tr>
+<td><code>disabled</code></td>
+<td>忽略所有私信</td>
+</tr>
+<tr>
+<td><code>pairing</code></td>
+<td>配对模式（用于初始设置）</td>
+</tr>
+</tbody>
+</table>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+WEIXIN_DM_POLICY=allowlist
+WEIXIN_ALLOWED_USERS=user_id_1,user_id_2
+</div>
+<h3>群组策略</h3>
+<p>控制 bot 在哪些群组中响应消息，<strong>前提是 iLink 为所连接身份推送了群事件</strong>。对于扫码登录的 iLink bot 身份（例如 <code>...@im.bot</code>），群事件通常根本不会被推送，因此该策略可能不起作用——详见页面顶部的 iLink bot 限制警告。</p>
+<table>
+<thead>
+<tr>
+<th>值</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>open</code></td>
+<td>bot 在所有群组中响应（如果事件被推送）</td>
+</tr>
+<tr>
+<td><code>allowlist</code></td>
+<td>bot 仅在 <code>group_allow_from</code> 中列出的群组 ID 中响应（如果事件被推送）</td>
+</tr>
+<tr>
+<td><code>disabled</code></td>
+<td>忽略所有群消息（默认）</td>
+</tr>
+</tbody>
+</table>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+WEIXIN_GROUP_POLICY=allowlist
+# 注意：这是以逗号分隔的群聊 ID 列表，而非成员用户 ID，
+# 尽管变量名中包含"USERS"。配置时请注意区分。
+WEIXIN_GROUP_ALLOWED_USERS=group_id_1,group_id_2
+</div>
+<div class="tip"><strong>📝 注意</strong>
+微信的默认群组策略为 <code>disabled</code>（与企业微信默认为 <code>open</code> 不同）。这是有意为之——个人微信账号可能加入了很多群，且 iLink bot 身份通常根本无法接收普通微信群消息。若将 <code>WEIXIN_GROUP_POLICY</code> 设置为 <code>disabled</code> 以外的值，网关在启动时会记录一条 <code>WARNING</code>。
+</div>
+<h2>媒体支持</h2>
+<h3>入站（接收）</h3>
+<p>适配器接收用户发送的媒体附件，从微信 CDN 下载并解密，然后在本地缓存供代理处理：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>处理方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>图片</strong></td>
+<td>下载、AES 解密后缓存为 JPEG。</td>
+</tr>
+<tr>
+<td><strong>视频</strong></td>
+<td>下载、AES 解密后缓存为 MP4。</td>
+</tr>
+<tr>
+<td><strong>文件</strong></td>
+<td>下载、AES 解密后缓存，保留原始文件名。</td>
+</tr>
+<tr>
+<td><strong>语音</strong></td>
+<td>若有文字转录，则提取为文本；否则下载音频（SILK 格式）并缓存。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>引用消息：</strong> 引用（回复）消息中的媒体也会被提取，以便代理了解用户回复的上下文。</p>
+<h3>AES-128-ECB 加密 CDN</h3>
+<p>微信媒体文件通过加密 CDN 传输。适配器透明处理加解密：</p>
+<ul>
+<li><strong>入站：</strong> 使用 <code>encrypted_query_param</code> URL 从 CDN 下载加密媒体，再使用消息载荷中提供的每文件密钥进行 AES-128-ECB 解密。</li>
+<li><strong>出站：</strong> 使用随机 AES-128-ECB 密钥在本地加密文件，上传至 CDN，并在出站消息中包含加密引用。</li>
+<li>AES 密钥为 16 字节（128 位）。密钥可能以原始 base64 或十六进制编码形式到达——适配器两种格式均支持。</li>
+<li>需要安装 <code>cryptography</code> Python 包。</li>
+</ul>
+<p>无需任何配置——加解密自动完成。</p>
+<h3>出站（发送）</h3>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>发送内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>send</code></td>
+<td>带 Markdown 格式的文本消息</td>
+</tr>
+<tr>
+<td><code>send_image</code> / <code>send_image_file</code></td>
+<td>原生图片消息（通过 CDN 上传）</td>
+</tr>
+<tr>
+<td><code>send_document</code></td>
+<td>文件附件（通过 CDN 上传）</td>
+</tr>
+<tr>
+<td><code>send_video</code></td>
+<td>视频消息（通过 CDN 上传）</td>
+</tr>
+</tbody>
+</table>
+<p>所有出站媒体均通过加密 CDN 上传流程处理：</p>
+<ol>
+<li>生成随机 AES-128 密钥</li>
+<li>使用 AES-128-ECB + PKCS#7 填充加密文件</li>
+<li>向 iLink API 请求上传 URL（<code>getuploadurl</code>）</li>
+<li>将密文上传至 CDN</li>
+<li>发送包含加密媒体引用的消息</li>
+</ol>
+<h2>上下文 Token 持久化</h2>
+<p>iLink Bot API 要求在每条出站消息中回传 <code>context_token</code>（针对特定对话方）。适配器维护一个基于磁盘的上下文 token 存储：</p>
+<ul>
+<li>Token 按账号+对话方保存至 <code>~/.hermes/weixin/accounts/&lt;account_id&gt;.context-tokens.json</code></li>
+<li>启动时恢复之前保存的 token</li>
+<li>每条入站消息都会更新该发送方的已存储 token</li>
+<li>出站消息自动包含最新的上下文 token</li>
+</ul>
+<p>这确保了即使网关重启后，回复连续性也不会中断。</p>
+<h2>Markdown 格式化</h2>
+<p>通过 iLink Bot API 连接的微信客户端可以直接渲染 Markdown，因此适配器保留 Markdown 而不对其进行改写：</p>
+<ul>
+<li><strong>标题</strong> 保持为 Markdown 标题格式（<code>#</code>、<code>##</code> 等）</li>
+<li><strong>表格</strong> 保持为 Markdown 表格</li>
+<li><strong>代码围栏</strong> 保持为围栏代码块</li>
+<li><strong>多余空行</strong> 在围栏代码块外折叠为双换行</li>
+</ul>
+<h2>消息分块</h2>
+<p>消息在不超出平台限制时以单条消息发送。仅超长内容才会被拆分发送：</p>
+<ul>
+<li>最大消息长度：<strong>4000 个字符</strong></li>
+<li>未超出限制的消息保持完整，即使包含多个段落或换行</li>
+<li>超长消息在逻辑边界处拆分（段落、空行、代码围栏）</li>
+<li>代码围栏尽可能保持完整（除非围栏本身超出限制，否则不在块中间拆分）</li>
+<li>超长的单个块回退到基础适配器的截断逻辑</li>
+<li>发送多个分块时，块间延迟 0.3 秒，防止触发微信频率限制</li>
+</ul>
+<h2>正在输入提示</h2>
+<p>适配器在微信客户端中显示输入状态：</p>
+<ol>
+<li>消息到达时，适配器通过 <code>getconfig</code> API 获取 <code>typing_ticket</code></li>
+<li>输入票据（typing ticket）按用户缓存 10 分钟</li>
+<li><code>send_typing</code> 发送开始输入信号；<code>stop_typing</code> 发送停止输入信号</li>
+<li>网关在代理处理消息期间自动触发输入提示</li>
+</ol>
+<h2>长轮询连接</h2>
+<p>适配器使用 HTTP 长轮询（而非 WebSocket）接收消息：</p>
+<h3>工作原理</h3>
+<ol>
+<li><strong>连接：</strong> 验证凭据并启动轮询循环</li>
+<li><strong>轮询：</strong> 以 35 秒超时调用 <code>getupdates</code>；服务器保持请求直到消息到达或超时</li>
+<li><strong>分发：</strong> 入站消息通过 <code>asyncio.create_task</code> 并发分发</li>
+<li><strong>同步缓冲区：</strong> 持久化同步游标（<code>get_updates_buf</code>）保存至磁盘，确保重启后从正确位置恢复</li>
+</ol>
+<h3>重试行为</h3>
+<p>发生 API 错误时，适配器采用简单的重试策略：</p>
+<table>
+<thead>
+<tr>
+<th>条件</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>瞬时错误（第 1–2 次）</td>
+<td>2 秒后重试</td>
+</tr>
+<tr>
+<td>持续错误（第 3 次及以上）</td>
+<td>退避 30 秒后重置计数器</td>
+</tr>
+<tr>
+<td>会话过期（<code>errcode=-14</code>）</td>
+<td>暂停 10 分钟（可能需要重新登录）</td>
+</tr>
+<tr>
+<td>超时</td>
+<td>立即重新轮询（正常长轮询行为）</td>
+</tr>
+</tbody>
+</table>
+<h3>去重</h3>
+<p>入站消息使用消息 ID 在 5 分钟窗口内去重，防止网络抖动或轮询响应重叠时重复处理。</p>
+<h3>Token 锁</h3>
+<p>同一时间只有一个微信网关实例可以使用给定的 token。适配器在启动时获取作用域锁，关闭时释放。若另一个网关已在使用相同 token，启动将失败并显示详细错误信息。</p>
+<h2>所有环境变量</h2>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>必填</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>WEIXIN_ACCOUNT_ID</code></td>
+<td>✅</td>
+<td>—</td>
+<td>iLink Bot 账号 ID（来自扫码登录）</td>
+</tr>
+<tr>
+<td><code>WEIXIN_TOKEN</code></td>
+<td>✅</td>
+<td>—</td>
+<td>iLink Bot token（由扫码登录自动保存）</td>
+</tr>
+<tr>
+<td><code>WEIXIN_BASE_URL</code></td>
+<td>—</td>
+<td><code>https://ilinkai.weixin.qq.com</code></td>
+<td>iLink API 基础 URL</td>
+</tr>
+<tr>
+<td><code>WEIXIN_CDN_BASE_URL</code></td>
+<td>—</td>
+<td><code>https://novac2c.cdn.weixin.qq.com/c2c</code></td>
+<td>媒体传输 CDN 基础 URL</td>
+</tr>
+<tr>
+<td><code>WEIXIN_DM_POLICY</code></td>
+<td>—</td>
+<td><code>open</code></td>
+<td>私信访问策略：<code>open</code>、<code>allowlist</code>、<code>disabled</code>、<code>pairing</code></td>
+</tr>
+<tr>
+<td><code>WEIXIN_GROUP_POLICY</code></td>
+<td>—</td>
+<td><code>disabled</code></td>
+<td>群组访问策略：<code>open</code>、<code>allowlist</code>、<code>disabled</code></td>
+</tr>
+<tr>
+<td><code>WEIXIN_ALLOWED_USERS</code></td>
+<td>—</td>
+<td><em>（空）</em></td>
+<td>私信白名单的逗号分隔用户 ID</td>
+</tr>
+<tr>
+<td><code>WEIXIN_GROUP_ALLOWED_USERS</code></td>
+<td>—</td>
+<td><em>（空）</em></td>
+<td>群组白名单的逗号分隔<strong>群聊 ID</strong>（非成员用户 ID）。变量名为历史遗留，实际填写的是群 ID 而非用户 ID。</td>
+</tr>
+<tr>
+<td><code>WEIXIN_HOME_CHANNEL</code></td>
+<td>—</td>
+<td>—</td>
+<td>cron/通知输出的聊天 ID</td>
+</tr>
+<tr>
+<td><code>WEIXIN_HOME_CHANNEL_NAME</code></td>
+<td>—</td>
+<td><code>Home</code></td>
+<td>默认频道的显示名称</td>
+</tr>
+<tr>
+<td><code>WEIXIN_ALLOW_ALL_USERS</code></td>
+<td>—</td>
+<td>—</td>
+<td>网关级别的允许所有用户标志（由配置向导使用）</td>
+</tr>
+</tbody>
+</table>
+<h2>故障排查</h2>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>解决方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Weixin startup failed: aiohttp and cryptography are required</code></td>
+<td>安装两者：<code>pip install aiohttp cryptography</code></td>
+</tr>
+<tr>
+<td><code>Weixin startup failed: WEIXIN_TOKEN is required</code></td>
+<td>运行 <code>hermes gateway setup</code> 完成扫码登录，或手动设置 <code>WEIXIN_TOKEN</code></td>
+</tr>
+<tr>
+<td><code>Weixin startup failed: WEIXIN_ACCOUNT_ID is required</code></td>
+<td>在 <code>.env</code> 中设置 <code>WEIXIN_ACCOUNT_ID</code>，或运行 <code>hermes gateway setup</code></td>
+</tr>
+<tr>
+<td><code>Another local Hermes gateway is already using this Weixin token</code></td>
+<td>先停止另一个网关实例——每个 token 只允许一个轮询器</td>
+</tr>
+<tr>
+<td>会话过期（<code>errcode=-14</code>）</td>
+<td>登录会话已过期。重新运行 <code>hermes gateway setup</code> 扫描新二维码</td>
+</tr>
+<tr>
+<td>配置过程中二维码过期</td>
+<td>二维码最多自动刷新 3 次。若持续过期，请检查网络连接</td>
+</tr>
+<tr>
+<td>Bot 不响应私信</td>
+<td>检查 <code>WEIXIN_DM_POLICY</code>——若设置为 <code>allowlist</code>，发送方必须在 <code>WEIXIN_ALLOWED_USERS</code> 中</td>
+</tr>
+<tr>
+<td>Bot 忽略群消息</td>
+<td>群组策略默认为 <code>disabled</code>。设置 <code>WEIXIN_GROUP_POLICY=open</code> 或 <code>allowlist</code>——但请注意，扫码登录的 iLink bot 身份（<code>...@im.bot</code>）通常根本无法接收普通微信群消息。若网关日志中没有群消息的原始入站事件，限制来自 iLink 侧，而非 Hermes。</td>
+</tr>
+<tr>
+<td>媒体下载/上传失败</td>
+<td>确保已安装 <code>cryptography</code>。检查对 <code>novac2c.cdn.weixin.qq.com</code> 的网络访问</td>
+</tr>
+<tr>
+<td><code>Blocked unsafe URL (SSRF protection)</code></td>
+<td>出站媒体 URL 指向私有/内部地址，仅允许公网 URL</td>
+</tr>
+<tr>
+<td>语音消息显示为文本</td>
+<td>若微信提供了转录文本，适配器会使用文本内容，这是预期行为</td>
+</tr>
+<tr>
+<td>消息出现重复</td>
+<td>适配器通过消息 ID 去重。若仍出现重复，检查是否有多个网关实例在运行</td>
+</tr>
+<tr>
+<td><code>iLink POST ... HTTP 4xx/5xx</code></td>
+<td>iLink 服务返回 API 错误。检查 token 有效性和网络连通性</td>
+</tr>
+<tr>
+<td>终端二维码无法渲染</td>
+<td>使用 messaging 扩展重新安装：<code>pip install hermes-agent[messaging]</code>。或者，打开二维码上方打印的 URL</td>
+</tr>
+</tbody>
+</table>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

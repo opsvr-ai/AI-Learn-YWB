@@ -1,0 +1,304 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>程序化集成 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 开发者指南 / 程序化集成</div><p>Hermes 提供三种协议，供外部程序驱动 agent——IDE 插件、自定义 UI、CI 流水线、嵌入式子 agent。根据你的传输方式和消费端选择合适的协议。</p>
+<table>
+<thead>
+<tr>
+<th>协议</th>
+<th>传输方式</th>
+<th>适用场景</th>
+<th>定义位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ACP</strong></td>
+<td>JSON-RPC over stdio</td>
+<td>已支持 <a href="https://github.com/zed-industries/agent-client-protocol">Agent Client Protocol</a> 的 IDE 客户端（VS Code、Zed、JetBrains）</td>
+<td><code>acp_adapter/</code></td>
+</tr>
+<tr>
+<td><strong>TUI gateway</strong></td>
+<td>JSON-RPC over stdio（或 WebSocket）</td>
+<td>需要精细控制会话、slash 命令、审批及流式事件的自定义宿主</td>
+<td><code>tui_gateway/server.py</code></td>
+</tr>
+<tr>
+<td><strong>API server</strong></td>
+<td>HTTP + Server-Sent Events</td>
+<td>兼容 OpenAI 的前端（Open WebUI、LobeChat、LibreChat……）及语言无关的 Web 客户端</td>
+<td><code>gateway/platforms/api_server.py</code></td>
+</tr>
+</tbody>
+</table>
+<p>三种协议均驱动同一个 <code>AIAgent</code> 核心，区别仅在于线路格式和所暴露的功能集。</p>
+<hr />
+<h2>ACP（Agent Client Protocol）</h2>
+<p><code>hermes acp</code> 启动一个基于 stdio 的 JSON-RPC 服务器，使用 ACP 协议。已在 VS Code（Zed Industries 的 ACP 扩展）、Zed 以及所有安装了 ACP 插件的 JetBrains IDE 中投入生产使用。</p>
+<p>暴露的能力：会话创建、prompt（提示词）提交、流式 agent 消息块、工具调用事件、权限请求、会话 fork、取消及身份验证。工具输出会被渲染为 IDE 可理解的 ACP <code>Diff</code>/<code>ToolCall</code> 内容块。</p>
+<p>完整生命周期、事件桥接及审批流程：<a href="./acp-internals">ACP 内部机制</a>。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes acp                  # 在 stdio 上提供 ACP 服务
+hermes acp --bootstrap      # 打印适用于支持 ACP 的 IDE 的安装代码片段
+</div>
+<hr />
+<h2>TUI Gateway JSON-RPC</h2>
+<p><code>tui_gateway/server.py</code> 是 Ink TUI（<code>hermes --tui</code>）和嵌入式仪表板 PTY 桥接所使用的协议。任何外部宿主均可通过 stdio（或经由 <code>tui_gateway/ws.py</code> 的 WebSocket）使用相同协议。</p>
+<h3>方法目录（精选）</h3>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+prompt.submit           prompt.background       session.steer
+session.create          session.list            session.interrupt
+session.history         session.compress        session.branch
+session.title           session.usage           session.status
+clarify.respond         sudo.respond            secret.respond
+approval.respond        config.set / config.get commands.catalog
+command.resolve         command.dispatch        cli.exec
+reload.mcp              reload.env              process.stop
+delegation.status       subagent.interrupt      spawn_tree.save / list / load
+terminal.resize         clipboard.paste         image.attach
+</div>
+<h3>流式返回的事件</h3>
+<p><code>message.delta</code>、<code>message.complete</code>、<code>tool.start</code>、<code>tool.progress</code>、<code>tool.complete</code>、<code>approval.request</code>、<code>clarify.request</code>、<code>sudo.request</code>、<code>secret.request</code>、<code>gateway.ready</code>，以及会话生命周期和错误事件。</p>
+<h3>Pi 风格 RPC 映射</h3>
+<p>Pi-mono RPC 规范（<a href="https://github.com/NousResearch/hermes-agent/issues/360">issue #360</a>）中的每条命令均有对应的 TUI gateway 等价项：</p>
+<table>
+<thead>
+<tr>
+<th>Pi 命令</th>
+<th>Hermes 等价项</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>prompt</code></td>
+<td><code>prompt.submit</code>（或 ACP <code>session/prompt</code>）</td>
+</tr>
+<tr>
+<td><code>steer</code></td>
+<td><code>session.steer</code></td>
+</tr>
+<tr>
+<td><code>follow_up</code></td>
+<td>在当前轮次结束后排队的 <code>prompt.submit</code></td>
+</tr>
+<tr>
+<td><code>abort</code></td>
+<td><code>session.interrupt</code></td>
+</tr>
+<tr>
+<td><code>set_model</code></td>
+<td>通过 <code>command.dispatch</code> 执行 <code>/model &lt;provider:model&gt;</code>（会话中途生效，持久化）</td>
+</tr>
+<tr>
+<td><code>compact</code></td>
+<td><code>session.compress</code></td>
+</tr>
+<tr>
+<td><code>get_state</code></td>
+<td><code>session.status</code></td>
+</tr>
+<tr>
+<td><code>get_messages</code></td>
+<td><code>session.history</code></td>
+</tr>
+<tr>
+<td><code>switch_session</code></td>
+<td><code>session.resume</code></td>
+</tr>
+<tr>
+<td><code>fork</code></td>
+<td><code>session.branch</code></td>
+</tr>
+<tr>
+<td><code>ui_request</code> / <code>ui_response</code></td>
+<td><code>clarify.respond</code> / <code>sudo.respond</code> / <code>secret.respond</code> / <code>approval.respond</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>兼容 OpenAI 的 API Server</h2>
+<p><code>gateway/platforms/api_server.py</code> 通过 HTTP 暴露 Hermes，供任何已支持 OpenAI 格式的客户端使用。适用于需要 Web 前端、curl 驱动的 CI 运行器或非 Python 消费端的场景。</p>
+<p>端点：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+POST /v1/chat/completions        OpenAI Chat Completions（通过 SSE 流式传输）
+POST /v1/responses               OpenAI Responses API（有状态）
+POST /v1/runs                    启动一次运行，返回 run_id（202）
+GET  /v1/runs/{id}               运行状态
+GET  /v1/runs/{id}/events        生命周期事件的 SSE 流
+POST /v1/runs/{id}/approval      解决待处理的审批
+POST /v1/runs/{id}/stop          中断运行
+GET  /v1/capabilities            机器可读的功能标志
+GET  /v1/models                  列出 hermes-agent
+GET  /health, /health/detailed
+</div>
+<p>配置、请求头（<code>X-Hermes-Session-Id</code>、<code>X-Hermes-Session-Key</code>）及前端接入：<a href="../user-guide/features/api-server">API Server</a>。</p>
+<hr />
+<h2>该选哪个？</h2>
+<ul>
+<li><strong>正在编写 IDE 插件，且 IDE 已支持 ACP</strong> → 选 ACP。IDE 侧无需任何协议工作。</li>
+<li><strong>正在编写自定义桌面 / Web / TUI 宿主，且需要 Hermes 的全部功能</strong>（slash 命令、审批、clarify、多 agent、会话分支）→ 选 TUI gateway JSON-RPC。</li>
+<li><strong>需要任意兼容 OpenAI 的前端、语言无关的 HTTP 客户端或 curl 驱动的自动化</strong> → 选 API server。</li>
+<li><strong>需要在 Python 进程内嵌入，不想启动子进程</strong> → 直接导入 <code>run_agent.AIAgent</code>。参见 <a href="./agent-loop">Agent Loop</a>。</li>
+</ul>
+<hr />
+<h2>模型热切换</h2>
+<p>会话中途切换模型在所有接入方式上均可用——底层均为 <code>/model</code> slash 命令。</p>
+<ul>
+<li><strong>CLI / TUI：</strong> <code>/model claude-sonnet-4</code> 或 <code>/model openrouter:anthropic/claude-sonnet-4.6</code></li>
+<li><strong>TUI gateway RPC：</strong> 使用 <code>{&quot;command&quot;: &quot;/model claude-sonnet-4&quot;}</code> 调用 <code>command.dispatch</code></li>
+<li><strong>ACP：</strong> IDE 将 slash 命令作为 prompt 发送，agent 负责分发</li>
+<li><strong>API server：</strong> 在请求体中包含 <code>model</code> 字段，或设置 <code>X-Hermes-Model</code></li>
+</ul>
+<p>内置 provider 感知解析（相同的模型名称会根据当前 provider 自动选择正确格式）。参见 <code>hermes_cli/model_switch.py</code>。</p>
+<hr />
+<h2>关于 <code>--mode rpc</code> 的说明</h2>
+<p>Hermes 没有 <code>--mode rpc</code> 标志。上述三种协议已覆盖所有使用场景——ACP 用于 IDE 协议客户端，TUI gateway 用于 stdio JSON-RPC 宿主，API server 用于 HTTP。如果你发现上述协议均无法满足的真实需求，请提交 issue 并说明你正在构建的具体消费端。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

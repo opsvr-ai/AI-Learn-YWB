@@ -1,0 +1,447 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCP 配置参考 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html" class="active">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 参考文档 / MCP 配置参考</div><p>本页是主 MCP 文档的简明参考手册。</p>
+<p>概念说明请参阅：</p>
+<ul>
+<li><a href="/user-guide/features/mcp">MCP（Model Context Protocol）</a></li>
+<li><a href="/guides/use-mcp-with-hermes">在 Hermes 中使用 MCP</a></li>
+</ul>
+<h2>根配置结构</h2>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mcp_servers:
+  &lt;server_name&gt;:
+    command: "..."      # stdio servers
+    args: []
+    env: {}
+
+    # OR
+    url: "..."          # HTTP servers
+    headers: {}
+
+    enabled: true
+    timeout: 120
+    connect_timeout: 60
+    supports_parallel_tool_calls: false
+    tools:
+      include: []
+      exclude: []
+      resources: true
+      prompts: true
+</div>
+<h2>服务器键</h2>
+<table>
+<thead>
+<tr>
+<th>键</th>
+<th>类型</th>
+<th>适用范围</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>command</code></td>
+<td>string</td>
+<td>stdio</td>
+<td>要启动的可执行文件</td>
+</tr>
+<tr>
+<td><code>args</code></td>
+<td>list</td>
+<td>stdio</td>
+<td>子进程的参数</td>
+</tr>
+<tr>
+<td><code>env</code></td>
+<td>mapping</td>
+<td>stdio</td>
+<td>传递给子进程的环境变量</td>
+</tr>
+<tr>
+<td><code>url</code></td>
+<td>string</td>
+<td>HTTP</td>
+<td>远程 MCP 端点</td>
+</tr>
+<tr>
+<td><code>headers</code></td>
+<td>mapping</td>
+<td>HTTP</td>
+<td>远程服务器请求的请求头</td>
+</tr>
+<tr>
+<td><code>enabled</code></td>
+<td>bool</td>
+<td>两者</td>
+<td>为 false 时完全跳过该服务器</td>
+</tr>
+<tr>
+<td><code>timeout</code></td>
+<td>number</td>
+<td>两者</td>
+<td>工具调用超时时间</td>
+</tr>
+<tr>
+<td><code>connect_timeout</code></td>
+<td>number</td>
+<td>两者</td>
+<td>初始连接超时时间</td>
+</tr>
+<tr>
+<td><code>supports_parallel_tool_calls</code></td>
+<td>bool</td>
+<td>两者</td>
+<td>允许该服务器的工具并发执行</td>
+</tr>
+<tr>
+<td><code>tools</code></td>
+<td>mapping</td>
+<td>两者</td>
+<td>过滤及工具策略</td>
+</tr>
+<tr>
+<td><code>auth</code></td>
+<td>string</td>
+<td>HTTP</td>
+<td>认证方式。设为 <code>oauth</code> 可启用带 PKCE 的 OAuth 2.1</td>
+</tr>
+<tr>
+<td><code>sampling</code></td>
+<td>mapping</td>
+<td>两者</td>
+<td>服务器发起的 LLM 请求策略（参见 MCP 指南）</td>
+</tr>
+</tbody>
+</table>
+<h2><code>tools</code> 策略键</h2>
+<table>
+<thead>
+<tr>
+<th>键</th>
+<th>类型</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>include</code></td>
+<td>string 或 list</td>
+<td>白名单：指定允许注册的服务器原生 MCP 工具</td>
+</tr>
+<tr>
+<td><code>exclude</code></td>
+<td>string 或 list</td>
+<td>黑名单：指定禁止注册的服务器原生 MCP 工具</td>
+</tr>
+<tr>
+<td><code>resources</code></td>
+<td>bool-like</td>
+<td>启用/禁用 <code>list_resources</code> + <code>read_resource</code></td>
+</tr>
+<tr>
+<td><code>prompts</code></td>
+<td>bool-like</td>
+<td>启用/禁用 <code>list_prompts</code> + <code>get_prompt</code></td>
+</tr>
+</tbody>
+</table>
+<h2>过滤语义</h2>
+<h3><code>include</code></h3>
+<p>若设置了 <code>include</code>，则只注册其中列出的服务器原生 MCP 工具。</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+tools:
+  include: [create_issue, list_issues]
+</div>
+<h3><code>exclude</code></h3>
+<p>若设置了 <code>exclude</code> 且未设置 <code>include</code>，则注册除列出名称之外的所有服务器原生 MCP 工具。</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+tools:
+  exclude: [delete_customer]
+</div>
+<h3>优先级</h3>
+<p>若两者同时设置，<code>include</code> 优先。</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+tools:
+  include: [create_issue]
+  exclude: [create_issue, delete_issue]
+</div>
+<p>结果：</p>
+<ul>
+<li><code>create_issue</code> 仍被允许</li>
+<li><code>delete_issue</code> 被忽略，因为 <code>include</code> 优先级更高</li>
+</ul>
+<h2>工具策略</h2>
+<p>Hermes 可为每个 MCP 服务器注册以下工具包装器：</p>
+<p>Resources（资源）：</p>
+<ul>
+<li><code>list_resources</code></li>
+<li><code>read_resource</code></li>
+</ul>
+<p>Prompts（提示词）：</p>
+<ul>
+<li><code>list_prompts</code></li>
+<li><code>get_prompt</code></li>
+</ul>
+<h3>禁用 resources</h3>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+tools:
+  resources: false
+</div>
+<h3>禁用 prompts</h3>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+tools:
+  prompts: false
+</div>
+<h3>能力感知注册</h3>
+<p>即使设置了 <code>resources: true</code> 或 <code>prompts: true</code>，Hermes 也只在 MCP 会话实际暴露对应能力时才注册相应工具。</p>
+<p>因此以下情况属于正常现象：</p>
+<ul>
+<li>你启用了 prompts</li>
+<li>但没有出现任何 prompt 工具</li>
+<li>原因是该服务器不支持 prompts</li>
+</ul>
+<h2><code>enabled: false</code></h2>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mcp_servers:
+  legacy:
+    url: "https://mcp.legacy.internal"
+    enabled: false
+</div>
+<p>行为：</p>
+<ul>
+<li>不发起连接</li>
+<li>不进行服务发现</li>
+<li>不注册工具</li>
+<li>配置保留，供后续复用</li>
+</ul>
+<h2>空结果行为</h2>
+<p>若过滤后服务器原生工具全部被移除，且没有工具被注册，Hermes 不会为该服务器创建空的 MCP 运行时工具集。</p>
+<h2>配置示例</h2>
+<h3>GitHub 安全白名单</h3>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mcp_servers:
+  github:
+    command: "npx"
+    args: ["-y", "@modelcontextprotocol/server-github"]
+    env:
+      GITHUB_PERSONAL_ACCESS_TOKEN: "***"
+    tools:
+      include: [list_issues, create_issue, update_issue, search_code]
+      resources: false
+      prompts: false
+</div>
+<h3>Stripe 黑名单</h3>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mcp_servers:
+  stripe:
+    url: "https://mcp.stripe.com"
+    headers:
+      Authorization: "Bearer ***"
+    tools:
+      exclude: [delete_customer, refund_payment]
+</div>
+<h3>仅资源的文档服务器</h3>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mcp_servers:
+  docs:
+    url: "https://mcp.docs.example.com"
+    tools:
+      include: []
+      resources: true
+      prompts: false
+</div>
+<h2>重新加载配置</h2>
+<p>修改 MCP 配置后，使用以下命令重新加载服务器：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/reload-mcp
+</div>
+<h2>工具命名</h2>
+<p>服务器原生 MCP 工具的命名格式为：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mcp_&lt;server&gt;_&lt;tool&gt;
+</div>
+<p>示例：</p>
+<ul>
+<li><code>mcp_github_create_issue</code></li>
+<li><code>mcp_filesystem_read_file</code></li>
+<li><code>mcp_my_api_query_data</code></li>
+</ul>
+<p>工具包装器遵循相同的前缀规则：</p>
+<ul>
+<li><code>mcp_&lt;server&gt;_list_resources</code></li>
+<li><code>mcp_&lt;server&gt;_read_resource</code></li>
+<li><code>mcp_&lt;server&gt;_list_prompts</code></li>
+<li><code>mcp_&lt;server&gt;_get_prompt</code></li>
+</ul>
+<h3>名称规范化</h3>
+<p>服务器名称和工具名称中的连字符（<code>-</code>）和点号（<code>.</code>）在注册前均会替换为下划线。这确保工具名称是 LLM function-calling API 的合法标识符。</p>
+<p>例如，名为 <code>my-api</code> 的服务器暴露了名为 <code>list-items.v2</code> 的工具，注册后变为：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mcp_my_api_list_items_v2
+</div>
+<p>编写 <code>include</code> / <code>exclude</code> 过滤器时请注意——使用<strong>原始</strong> MCP 工具名称（含连字符/点号），而非规范化后的名称。</p>
+<h2>OAuth 2.1 认证</h2>
+<p>对于需要 OAuth 的 HTTP 服务器，在服务器条目中设置 <code>auth: oauth</code>：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mcp_servers:
+  protected_api:
+    url: "https://mcp.example.com/mcp"
+    auth: oauth
+</div>
+<p>行为：</p>
+<ul>
+<li>Hermes 使用 MCP SDK 的 OAuth 2.1 PKCE 流程（元数据发现、动态客户端注册、token 交换及刷新）</li>
+<li>首次连接时，浏览器窗口将打开以完成授权</li>
+<li>Token 持久化至 <code>~/.hermes/mcp-tokens/&lt;server&gt;.json</code>，跨会话复用</li>
+<li>Token 刷新自动进行；仅在刷新失败时才需重新授权</li>
+<li>仅适用于 HTTP/StreamableHTTP 传输（基于 <code>url</code> 的服务器）</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

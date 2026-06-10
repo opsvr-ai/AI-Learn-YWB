@@ -1,0 +1,468 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>使用 Webhook 自动发布 GitHub PR 评论 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 实用指南 / 使用 Webhook 自动发布 GitHub PR 评论</div><p>本指南介绍如何将 Hermes Agent 连接到 GitHub，使其自动获取 pull request 的 diff、分析代码变更并发布评论——由 webhook 事件触发，无需手动 prompt（提示词）。</p>
+<p>当 PR 被打开或更新时，GitHub 会向你的 Hermes 实例发送一个 webhook POST 请求。Hermes 使用一个 prompt 运行 agent，该 prompt 指示其通过 <code>gh</code> CLI 获取 diff，并将响应发布回 PR 线程。</p>
+<div class="tip"><strong>💡 想要无需公网端点的更简单配置？</strong>
+如果你没有公网 URL，或只是想快速上手，请查看 <a href="./github-pr-review-agent.html">构建 GitHub PR 审查 Agent</a> —— 使用 cron 作业按计划轮询 PR，可在 NAT 和防火墙后运行。
+</div>
+<div class="tip"><strong>ℹ️ 参考文档</strong>
+完整的 webhook 平台参考（所有配置选项、投递类型、动态订阅、安全模型），请参阅 <a href="/user-guide/messaging/webhooks">Webhooks</a>。
+</div>
+<div class="tip warning"><strong>⚠️ Prompt 注入风险</strong>
+Webhook payload 包含攻击者可控的数据——PR 标题、commit 消息和描述中可能包含恶意指令。当你的 webhook 端点暴露在公网时，请在沙箱环境（Docker、SSH 后端）中运行 gateway。请参阅下方的<a href="#security-notes">安全说明</a>。
+</div>
+<hr />
+<h2>前提条件</h2>
+<ul>
+<li>Hermes Agent 已安装并运行（<code>hermes gateway</code>）</li>
+<li><a href="https://cli.github.com/"><code>gh</code> CLI</a> 已安装并在 gateway 主机上完成认证（<code>gh auth login</code>）</li>
+<li>你的 Hermes 实例有一个可公网访问的 URL（如果在本地运行，请参阅<a href="#local-testing-with-ngrok">使用 ngrok 进行本地测试</a>）</li>
+<li>对 GitHub 仓库的管理员权限（管理 webhook 所需）</li>
+</ul>
+<hr />
+<h2>第一步——启用 webhook 平台</h2>
+<p>在你的 <code>~/.hermes/config.yaml</code> 中添加以下内容：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+platforms:
+  webhook:
+    enabled: true
+    extra:
+      port: 8644          # 默认值；如果该端口被其他服务占用，请修改
+      rate_limit: 30      # 每条路由每分钟最大请求数（非全局上限）
+
+      routes:
+        github-pr-review:
+          secret: "your-webhook-secret-here"   # 必须与 GitHub webhook secret 完全一致
+          events:
+            - pull_request
+
+          # agent 被指示在审查前先获取实际的 diff。
+          # {number} 和 {repository.full_name} 从 GitHub payload 中解析。
+          prompt: |
+            A pull request event was received (action: {action}).
+
+            PR #{number}: {pull_request.title}
+            Author: {pull_request.user.login}
+            Branch: {pull_request.head.ref} → {pull_request.base.ref}
+            Description: {pull_request.body}
+            URL: {pull_request.html_url}
+
+            If the action is "closed" or "labeled", stop here and do not post a comment.
+
+            Otherwise:
+            1. Run: gh pr diff {number} --repo {repository.full_name}
+            2. Review the code changes for correctness, security issues, and clarity.
+            3. Write a concise, actionable review comment and post it.
+
+          deliver: github_comment
+          deliver_extra:
+            repo: "{repository.full_name}"
+            pr_number: "{number}"
+</div>
+<p><strong>关键字段：</strong></p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>secret</code>（路由级别）</td>
+<td>该路由的 HMAC secret。如果省略，则回退到 <code>extra.secret</code> 全局配置。</td>
+</tr>
+<tr>
+<td><code>events</code></td>
+<td>要接受的 <code>X-GitHub-Event</code> 请求头值列表。空列表 = 接受所有。</td>
+</tr>
+<tr>
+<td><code>prompt</code></td>
+<td>模板；<code>{field}</code> 和 <code>{nested.field}</code> 从 GitHub payload 中解析。</td>
+</tr>
+<tr>
+<td><code>deliver</code></td>
+<td><code>github_comment</code> 通过 <code>gh pr comment</code> 发布。<code>log</code> 仅写入 gateway 日志。</td>
+</tr>
+<tr>
+<td><code>deliver_extra.repo</code></td>
+<td>从 payload 中解析为例如 <code>org/repo</code>。</td>
+</tr>
+<tr>
+<td><code>deliver_extra.pr_number</code></td>
+<td>从 payload 中解析为 PR 编号。</td>
+</tr>
+</tbody>
+</table>
+<div class="tip"><strong>📝 Payload 中不包含代码</strong>
+GitHub webhook payload 包含 PR 元数据（标题、描述、分支名、URL），但<strong>不包含 diff</strong>。上方的 prompt 指示 agent 运行 <code>gh pr diff</code> 来获取实际变更。<code>terminal</code> 工具已包含在默认的 <code>hermes-webhook</code> 工具集中，无需额外配置。
+</div>
+<hr />
+<h2>第二步——启动 gateway</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway
+</div>
+<p>你应该看到：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+[webhook] Listening on 0.0.0.0:8644 — routes: github-pr-review
+</div>
+<p>验证其是否正在运行：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl http://localhost:8644/health
+# {"status": "ok", "platform": "webhook"}
+</div>
+<hr />
+<h2>第三步——在 GitHub 上注册 webhook</h2>
+<ol>
+<li>进入你的仓库 → <strong>Settings</strong> → <strong>Webhooks</strong> → <strong>Add webhook</strong></li>
+<li>填写：
+<ul>
+<li><strong>Payload URL：</strong> <code>https://your-public-url.example.com/webhooks/github-pr-review</code></li>
+<li><strong>Content type：</strong> <code>application/json</code></li>
+<li><strong>Secret：</strong> 与路由配置中 <code>secret</code> 设置的值相同</li>
+<li><strong>Which events?</strong> → 选择单个事件 → 勾选 <strong>Pull requests</strong></li>
+</ul>
+</li>
+<li>点击 <strong>Add webhook</strong></li>
+</ol>
+<p>GitHub 会立即发送一个 <code>ping</code> 事件以确认连接。该事件会被安全忽略——<code>ping</code> 不在你的 <code>events</code> 列表中——并返回 <code>{&quot;status&quot;: &quot;ignored&quot;, &quot;event&quot;: &quot;ping&quot;}</code>。它仅在 DEBUG 级别记录日志，因此不会在默认日志级别的控制台中显示。</p>
+<hr />
+<h2>第四步——打开一个测试 PR</h2>
+<p>创建一个分支，推送一个变更，并打开一个 PR。在 30–90 秒内（取决于 PR 大小和模型），Hermes 应该会发布一条审查评论。</p>
+<p>要实时跟踪 agent 的进度：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+tail -f "${HERMES_HOME:-$HOME/.hermes}/logs/gateway.log"
+</div>
+<hr />
+<h2>使用 ngrok 进行本地测试</h2>
+<p>如果 Hermes 在你的笔记本上运行，使用 <a href="https://ngrok.com/">ngrok</a> 将其暴露到公网：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+ngrok http 8644
+</div>
+<p>复制 <code>https://...ngrok-free.app</code> URL 并将其用作你的 GitHub Payload URL。在 ngrok 免费版中，每次 ngrok 重启后 URL 都会变化——每次会话都需要更新你的 GitHub webhook。付费 ngrok 账户可获得静态域名。</p>
+<p>你可以直接用 <code>curl</code> 对静态路由进行冒烟测试——无需 GitHub 账户或真实 PR。</p>
+<div class="tip"><strong>💡 本地测试时使用 `deliver: log`</strong>
+在测试时，将配置中的 <code>deliver: github_comment</code> 改为 <code>deliver: log</code>。否则 agent 将尝试向测试 payload 中的假 <code>org/repo#99</code> 仓库发布评论，这将会失败。对 prompt 输出满意后，再切换回 <code>deliver: github_comment</code>。
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+SECRET="your-webhook-secret-here"
+BODY='{"action":"opened","number":99,"pull_request":{"title":"Test PR","body":"Adds a feature.","user":{"login":"testuser"},"head":{"ref":"feat/x"},"base":{"ref":"main"},"html_url":"https://github.com/org/repo/pull/99"},"repository":{"full_name":"org/repo"}}'
+SIG=$(printf '%s' "$BODY" | openssl dgst -sha256 -hmac "$SECRET" -hex | awk '{print "sha256="$2}')
+
+curl -s -X POST http://localhost:8644/webhooks/github-pr-review \
+  -H "Content-Type: application/json" \
+  -H "X-GitHub-Event: pull_request" \
+  -H "X-Hub-Signature-256: $SIG" \
+  -d "$BODY"
+# Expected: {"status":"accepted","route":"github-pr-review","event":"pull_request","delivery_id":"..."}
+</div>
+<p>然后观察 agent 运行：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+tail -f "${HERMES_HOME:-$HOME/.hermes}/logs/gateway.log"
+</div>
+<div class="tip"><strong>📝 注意</strong>
+<code>hermes webhook test &lt;name&gt;</code> 仅适用于通过 <code>hermes webhook subscribe</code> 创建的<strong>动态订阅</strong>。它不读取 <code>config.yaml</code> 中的路由。
+</div>
+<hr />
+<h2>过滤特定 action</h2>
+<p>GitHub 会针对多种 action 发送 <code>pull_request</code> 事件：<code>opened</code>、<code>synchronize</code>、<code>reopened</code>、<code>closed</code>、<code>labeled</code> 等。<code>events</code> 列表仅按 <code>X-GitHub-Event</code> 请求头值过滤——无法在路由级别按 action 子类型过滤。</p>
+<p>第一步中的 prompt 已通过指示 agent 对 <code>closed</code> 和 <code>labeled</code> 事件提前停止来处理这一问题。</p>
+<div class="tip warning"><strong>⚠️ Agent 仍会运行并消耗 token（令牌）</strong>
+&quot;stop here&quot; 指令会阻止有意义的审查，但无论 action 如何，agent 仍会对每个 <code>pull_request</code> 事件运行至完成。GitHub webhook 只能按事件类型（<code>pull_request</code>、<code>push</code>、<code>issues</code> 等）过滤——无法按 action 子类型（<code>opened</code>、<code>closed</code>、<code>labeled</code>）过滤。路由级别没有针对子 action 的过滤器。对于高流量仓库，请接受这一成本，或通过 GitHub Actions workflow 在上游进行过滤，有条件地调用你的 webhook URL。
+</div>
+<blockquote>
+<p>不支持 Jinja2 或条件模板语法。<code>{field}</code> 和 <code>{nested.field}</code> 是唯一支持的替换方式。其他内容会原样传递给 agent。</p>
+</blockquote>
+<hr />
+<h2>使用 skill 保持一致的审查风格</h2>
+<p>加载一个 <a href="/user-guide/features/skills">Hermes skill</a> 以赋予 agent 一致的审查风格。在 <code>config.yaml</code> 的 <code>platforms.webhook.extra.routes</code> 中，向你的路由添加 <code>skills</code>：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+platforms:
+  webhook:
+    enabled: true
+    extra:
+      routes:
+        github-pr-review:
+          secret: "your-webhook-secret-here"
+          events: [pull_request]
+          prompt: |
+            A pull request event was received (action: {action}).
+            PR #{number}: {pull_request.title} by {pull_request.user.login}
+            URL: {pull_request.html_url}
+
+            If the action is "closed" or "labeled", stop here and do not post a comment.
+
+            Otherwise:
+            1. Run: gh pr diff {number} --repo {repository.full_name}
+            2. Review the diff using your review guidelines.
+            3. Write a concise, actionable review comment and post it.
+          skills:
+            - review
+          deliver: github_comment
+          deliver_extra:
+            repo: "{repository.full_name}"
+            pr_number: "{number}"
+</div>
+<blockquote>
+<p><strong>注意：</strong> 列表中只有第一个找到的 skill 会被加载。Hermes 不会叠加多个 skill——后续条目会被忽略。</p>
+</blockquote>
+<hr />
+<h2>将响应发送到 Slack 或 Discord</h2>
+<p>将路由中的 <code>deliver</code> 和 <code>deliver_extra</code> 字段替换为你的目标平台：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 在 platforms.webhook.extra.routes.&lt;route-name&gt; 内部：
+
+# Slack
+deliver: slack
+deliver_extra:
+  chat_id: "C0123456789"   # Slack 频道 ID（省略则使用配置的默认频道）
+
+# Discord
+deliver: discord
+deliver_extra:
+  chat_id: "987654321012345678"  # Discord 频道 ID（省略则使用默认频道）
+</div>
+<p>目标平台也必须在 gateway 中启用并连接。如果省略 <code>chat_id</code>，响应将发送到该平台配置的默认频道。</p>
+<p>有效的 <code>deliver</code> 值：<code>log</code> · <code>github_comment</code> · <code>telegram</code> · <code>discord</code> · <code>slack</code> · <code>signal</code> · <code>sms</code></p>
+<hr />
+<h2>GitLab 支持</h2>
+<p>同一适配器也适用于 GitLab。GitLab 使用 <code>X-Gitlab-Token</code> 进行认证（纯字符串匹配，非 HMAC）——Hermes 会自动处理两者。</p>
+<p>对于事件过滤，GitLab 将 <code>X-GitLab-Event</code> 设置为 <code>Merge Request Hook</code>、<code>Push Hook</code>、<code>Pipeline Hook</code> 等值。在 <code>events</code> 中使用精确的请求头值：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+events:
+  - Merge Request Hook
+</div>
+<p>GitLab 的 payload 字段与 GitHub 不同——例如，MR 标题使用 <code>{object_attributes.title}</code>，MR 编号使用 <code>{object_attributes.iid}</code>。发现完整 payload 结构最简单的方式是使用 GitLab webhook 设置中的 <strong>Test</strong> 按钮，结合 <strong>Recent Deliveries</strong> 日志。或者，在路由配置中省略 <code>prompt</code>——Hermes 将把完整 payload 作为格式化 JSON 直接传递给 agent，agent 的响应（在 gateway 日志中通过 <code>deliver: log</code> 可见）将描述其结构。</p>
+<hr />
+<h2>安全说明</h2>
+<ul>
+<li><strong>永远不要在生产环境中使用 <code>INSECURE_NO_AUTH</code></strong>——它会完全禁用签名验证。仅用于本地开发。</li>
+<li><strong>定期轮换你的 webhook secret</strong>，并在 GitHub（webhook 设置）和你的 <code>config.yaml</code> 中同步更新。</li>
+<li><strong>速率限制</strong>默认为每条路由每分钟 30 次请求（可通过 <code>extra.rate_limit</code> 配置）。超出限制返回 <code>429</code>。</li>
+<li><strong>重复投递</strong>（webhook 重试）通过 1 小时的幂等性缓存进行去重。缓存键依次为 <code>X-GitHub-Delivery</code>（如果存在）、<code>X-Request-ID</code>、毫秒级时间戳。当两个投递 ID 请求头都未设置时，重试<strong>不会</strong>去重。</li>
+<li><strong>Prompt 注入：</strong> PR 标题、描述和 commit 消息均为攻击者可控内容。恶意 PR 可能尝试操纵 agent 的行为。当暴露在公网时，请在沙箱环境（Docker、VM）中运行 gateway。</li>
+</ul>
+<hr />
+<h2>故障排查</h2>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>检查项</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>401 Invalid signature</code></td>
+<td>config.yaml 中的 secret 与 GitHub webhook secret 不匹配</td>
+</tr>
+<tr>
+<td><code>404 Unknown route</code></td>
+<td>URL 中的路由名称与 <code>routes:</code> 中的键不匹配</td>
+</tr>
+<tr>
+<td><code>429 Rate limit exceeded</code></td>
+<td>每条路由每分钟 30 次请求已超出——在 GitHub UI 中重新投递测试事件时常见；等待一分钟或提高 <code>extra.rate_limit</code></td>
+</tr>
+<tr>
+<td>未发布评论</td>
+<td><code>gh</code> 未安装、不在 PATH 中，或未完成认证（<code>gh auth login</code>）</td>
+</tr>
+<tr>
+<td>Agent 运行但无评论</td>
+<td>检查 gateway 日志——如果 agent 输出为空或仅为&quot;SKIP&quot;，投递仍会被尝试</td>
+</tr>
+<tr>
+<td>端口已被占用</td>
+<td>在 config.yaml 中修改 <code>extra.port</code></td>
+</tr>
+<tr>
+<td>Agent 运行但仅审查了 PR 描述</td>
+<td>prompt 中未包含 <code>gh pr diff</code> 指令——diff 不在 webhook payload 中</td>
+</tr>
+<tr>
+<td>看不到 ping 事件</td>
+<td>被忽略的事件仅在 DEBUG 日志级别返回 <code>{&quot;status&quot;:&quot;ignored&quot;,&quot;event&quot;:&quot;ping&quot;}</code>——检查 GitHub 的投递日志（仓库 → Settings → Webhooks → 你的 webhook → Recent Deliveries）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>GitHub 的 Recent Deliveries 标签页</strong>（仓库 → Settings → Webhooks → 你的 webhook）显示每次投递的精确请求头、payload、HTTP 状态和响应体。这是无需查看服务器日志即可诊断故障的最快方式。</p>
+<hr />
+<h2>完整配置参考</h2>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+platforms:
+  webhook:
+    enabled: true
+    extra:
+      host: "0.0.0.0"         # 绑定地址（默认：0.0.0.0）
+      port: 8644               # 监听端口（默认：8644）
+      secret: ""               # 可选的全局回退 secret
+      rate_limit: 30           # 每条路由每分钟请求数
+      max_body_bytes: 1048576  # payload 大小限制，单位字节（默认：1 MB）
+
+      routes:
+        &lt;route-name&gt;:
+          secret: "required-per-route"
+          events: []            # [] = 接受所有；否则列出 X-GitHub-Event 值
+          prompt: ""            # {field} / {nested.field} 从 payload 中解析
+          skills: []            # 加载第一个匹配的 skill（仅一个）
+          deliver: "log"        # log | github_comment | telegram | discord | slack | signal | sms
+          deliver_extra: {}     # github_comment 需要 repo + pr_number；其他平台需要 chat_id
+</div>
+<hr />
+<h2>下一步</h2>
+<ul>
+<li><strong><a href="./github-pr-review-agent.html">基于 Cron 的 PR 审查</a></strong> —— 按计划轮询 PR，无需公网端点</li>
+<li><strong><a href="/user-guide/messaging/webhooks">Webhook 参考</a></strong> —— webhook 平台的完整配置参考</li>
+<li><strong><a href="/guides/build-a-hermes-plugin">构建 Plugin</a></strong> —— 将审查逻辑打包为可共享的 plugin</li>
+<li><strong><a href="/user-guide/profiles">Profiles</a></strong> —— 运行一个拥有独立内存和配置的专属审查者 profile</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

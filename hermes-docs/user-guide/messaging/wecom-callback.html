@@ -1,0 +1,338 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WeCom 回调（自建应用） - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / WeCom 回调（自建应用）</div><p>通过回调/webhook 模式，将 Hermes 作为企业自建应用接入企业微信（WeCom）。</p>
+<div class="tip"><strong>ℹ️ WeCom Bot 与 WeCom 回调</strong>
+<p>Hermes 支持两种企业微信集成模式：</p>
+<ul>
+<li><strong><a href="wecom.html">WeCom Bot</a></strong> — Bot 风格，通过 WebSocket 连接。配置简单，支持群聊。</li>
+<li><strong>WeCom 回调</strong>（本页）— 自建应用，接收加密 XML 回调。在用户企业微信侧边栏中显示为一级应用，支持多企业路由。</li>
+</ul>
+
+</div>
+<h2>工作原理</h2>
+<ol>
+<li>在企业微信管理后台注册自建应用</li>
+<li>企业微信将加密 XML 推送至你的 HTTP 回调端点</li>
+<li>Hermes 解密消息，将其加入 agent 处理队列</li>
+<li>立即确认（静默——不向用户显示任何内容）</li>
+<li>Agent 处理请求（通常需要 3–30 分钟）</li>
+<li>通过企业微信 <code>message/send</code> API 主动下发回复</li>
+</ol>
+<h2>前置条件</h2>
+<ul>
+<li>具有管理员权限的企业微信账号</li>
+<li><code>aiohttp</code> 和 <code>httpx</code> Python 包（默认安装已包含）</li>
+<li>可公网访问的服务器用于回调 URL（或使用 ngrok 等隧道工具）</li>
+</ul>
+<h2>配置步骤</h2>
+<h3>1. 在企业微信中创建自建应用</h3>
+<ol>
+<li>进入<a href="https://work.weixin.qq.com/">企业微信管理后台</a> → <strong>应用管理</strong> → <strong>创建应用</strong></li>
+<li>记录你的 <strong>Corp ID</strong>（显示在管理后台顶部）</li>
+<li>在应用设置中创建 <strong>Corp Secret</strong></li>
+<li>在应用概览页记录 <strong>Agent ID</strong></li>
+<li>在<strong>接收消息</strong>下配置回调 URL：
+<ul>
+<li>URL：<code>http://YOUR_PUBLIC_IP:8645/wecom/callback</code></li>
+<li>Token：生成一个随机 token（企业微信会提供）</li>
+<li>EncodingAESKey：生成一个密钥（企业微信会提供）</li>
+</ul>
+</li>
+</ol>
+<h3>2. 配置环境变量</h3>
+<p>在 <code>.env</code> 文件中添加：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+WECOM_CALLBACK_CORP_ID=your-corp-id
+WECOM_CALLBACK_CORP_SECRET=your-corp-secret
+WECOM_CALLBACK_AGENT_ID=1000002
+WECOM_CALLBACK_TOKEN=your-callback-token
+WECOM_CALLBACK_ENCODING_AES_KEY=your-43-char-aes-key
+
+# 可选
+WECOM_CALLBACK_HOST=0.0.0.0
+WECOM_CALLBACK_PORT=8645
+WECOM_CALLBACK_ALLOWED_USERS=user1,user2
+</div>
+<h3>3. 启动 Gateway</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway
+</div>
+<p>（仅在通过 <code>hermes gateway install</code> 注册 systemd/launchd 服务后，才使用 <code>hermes gateway start</code>。）</p>
+<p>回调适配器会在配置的端口上启动 HTTP 服务器。企业微信将通过 GET 请求验证回调 URL，随后开始通过 POST 发送消息。</p>
+<h2>配置参考</h2>
+<p>在 <code>config.yaml</code> 的 <code>platforms.wecom_callback.extra</code> 下设置，或使用环境变量：</p>
+<table>
+<thead>
+<tr>
+<th>配置项</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>corp_id</code></td>
+<td>—</td>
+<td>企业微信 Corp ID（必填）</td>
+</tr>
+<tr>
+<td><code>corp_secret</code></td>
+<td>—</td>
+<td>自建应用的 Corp Secret（必填）</td>
+</tr>
+<tr>
+<td><code>agent_id</code></td>
+<td>—</td>
+<td>自建应用的 Agent ID（必填）</td>
+</tr>
+<tr>
+<td><code>token</code></td>
+<td>—</td>
+<td>回调验证 token（必填）</td>
+</tr>
+<tr>
+<td><code>encoding_aes_key</code></td>
+<td>—</td>
+<td>43 字符的 AES 密钥，用于回调加密（必填）</td>
+</tr>
+<tr>
+<td><code>host</code></td>
+<td><code>0.0.0.0</code></td>
+<td>HTTP 回调服务器绑定地址</td>
+</tr>
+<tr>
+<td><code>port</code></td>
+<td><code>8645</code></td>
+<td>HTTP 回调服务器端口</td>
+</tr>
+<tr>
+<td><code>path</code></td>
+<td><code>/wecom/callback</code></td>
+<td>回调端点的 URL 路径</td>
+</tr>
+</tbody>
+</table>
+<h2>多应用路由</h2>
+<p>对于运行多个自建应用的企业（例如跨部门或子公司），在 <code>config.yaml</code> 中配置 <code>apps</code> 列表：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+platforms:
+  wecom_callback:
+    enabled: true
+    extra:
+      host: "0.0.0.0"
+      port: 8645
+      apps:
+        - name: "dept-a"
+          corp_id: "ww_corp_a"
+          corp_secret: "secret-a"
+          agent_id: "1000002"
+          token: "token-a"
+          encoding_aes_key: "key-a-43-chars..."
+        - name: "dept-b"
+          corp_id: "ww_corp_b"
+          corp_secret: "secret-b"
+          agent_id: "1000003"
+          token: "token-b"
+          encoding_aes_key: "key-b-43-chars..."
+</div>
+<p>用户以 <code>corp_id:user_id</code> 为作用域，防止跨企业冲突。当用户发送消息时，适配器会记录其所属应用（企业），并通过对应应用的 access token 路由回复。</p>
+<h2>访问控制</h2>
+<p>限制哪些用户可以与应用交互：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 白名单指定用户
+WECOM_CALLBACK_ALLOWED_USERS=zhangsan,lisi,wangwu
+
+# 或允许所有用户
+WECOM_CALLBACK_ALLOW_ALL_USERS=true
+</div>
+<h2>端点</h2>
+<p>适配器暴露以下端点：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>路径</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td><code>/wecom/callback</code></td>
+<td>URL 验证握手（企业微信在配置时发送）</td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/wecom/callback</code></td>
+<td>加密消息回调（企业微信将用户消息发送至此）</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/health</code></td>
+<td>健康检查——返回 <code>{&quot;status&quot;: &quot;ok&quot;}</code></td>
+</tr>
+</tbody>
+</table>
+<h2>加密</h2>
+<p>所有回调载荷均使用 EncodingAESKey 通过 AES-CBC 加密。适配器处理：</p>
+<ul>
+<li><strong>入站</strong>：解密 XML 载荷，验证 SHA1 签名</li>
+<li><strong>出站</strong>：通过主动调用 API 发送回复（非加密回调响应）</li>
+</ul>
+<p>加密实现与腾讯官方 WXBizMsgCrypt SDK 兼容。</p>
+<h2>限制</h2>
+<ul>
+<li><strong>不支持流式输出</strong> — 回复在 agent 完成处理后以完整消息形式送达</li>
+<li><strong>不支持正在输入提示</strong> — 回调模式不支持输入状态</li>
+<li><strong>仅支持文本</strong> — 目前仅支持文本消息输入；图片/文件/语音输入尚未实现。Agent 可通过企业微信平台提示感知出站媒体能力（图片、文档、视频、语音）。</li>
+<li><strong>响应延迟</strong> — Agent 会话需要 3–30 分钟；用户在处理完成后收到回复</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,353 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kanban Worker — Hermes Kanban worker 的陷阱、示例与边界情况 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Kanban Worker — Hermes Kanban worker 的陷阱、示例与边界情况</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Kanban Worker</h1>
+<p>Hermes Kanban worker 的陷阱、示例与边界情况。生命周期本身会自动注入到每个 worker 的系统 prompt（提示词）中，作为 <code>KANBAN_GUIDANCE</code>（来自 <code>agent/prompt_builder.py</code>）；当你需要深入了解特定场景时，加载此 skill 即可。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>内置（默认安装）</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>skills/devops/kanban-worker</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>2.0.0</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>kanban</code>, <code>multi-agent</code>, <code>collaboration</code>, <code>workflow</code>, <code>pitfalls</code></td>
+</tr>
+<tr>
+<td>相关 skill</td>
+<td><a href="/user-guide/skills/bundled/devops/devops-kanban-orchestrator"><code>kanban-orchestrator</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 skill 激活时 agent 所看到的指令内容。
+</div>
+<h1>Kanban Worker — 陷阱与示例</h1>
+<blockquote>
+<p>你看到此 skill，是因为 Hermes Kanban 调度器以 <code>--skills kanban-worker</code> 参数将你作为 worker 派生——它会为每个被派发的 worker 自动加载。<strong>生命周期</strong>（6 个步骤：orient → work → heartbeat → block/complete）也存在于自动注入到你系统 prompt 中的 <code>KANBAN_GUIDANCE</code> 块里。此 skill 是更深层的细节：良好的交接形式、重试诊断、边界情况。</p>
+</blockquote>
+<h2>工作区处理</h2>
+<p>你的工作区类型决定了你在 <code>$HERMES_KANBAN_WORKSPACE</code> 内部的行为方式：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>含义</th>
+<th>操作方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>scratch</code></td>
+<td>全新的临时目录，仅供你使用</td>
+<td>自由读写；任务归档后会被 GC 回收。</td>
+</tr>
+<tr>
+<td><code>dir:&lt;path&gt;</code></td>
+<td>共享的持久化目录</td>
+<td>其他运行实例会读取你写入的内容。将其视为长期状态。路径保证为绝对路径（内核拒绝相对路径）。</td>
+</tr>
+<tr>
+<td><code>worktree</code></td>
+<td>位于已解析路径的 Git worktree</td>
+<td>若 <code>.git</code> 不存在，先从主仓库执行 <code>git worktree add &lt;path&gt; &lt;branch&gt;</code>，然后 cd 进去正常工作。在此提交工作。</td>
+</tr>
+</tbody>
+</table>
+<h2>租户隔离</h2>
+<p>若 <code>$HERMES_TENANT</code> 已设置，则该任务属于某个租户命名空间。在读写持久化内存时，请为内存条目添加租户前缀，以防上下文跨租户泄漏：</p>
+<ul>
+<li>正确：<code>business-a: Acme is our biggest customer</code></li>
+<li>错误（会泄漏）：<code>Acme is our biggest customer</code></li>
+</ul>
+<h2>良好的 summary + metadata 形式</h2>
+<p><code>kanban_complete(summary=..., metadata=...)</code> 的交接方式是下游 worker 读取你工作成果的途径。以下是有效的模式：</p>
+<p><strong>编码任务：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+kanban_complete(
+    summary="shipped rate limiter — token bucket, keys on user_id with IP fallback, 14 tests pass",
+    metadata={
+        "changed_files": ["rate_limiter.py", "tests/test_rate_limiter.py"],
+        "tests_run": 14,
+        "tests_passed": 14,
+        "decisions": ["user_id primary, IP fallback for unauthenticated requests"],
+    },
+)
+</div>
+<p><strong>需要人工审查的编码任务（review-required）：</strong></p>
+<p>对于大多数涉及代码变更的任务，在人工审查者过目之前，工作并未真正<em>完成</em>。应使用 block 而非 complete，并在 <code>reason</code> 前加 <code>review-required: </code> 前缀，以便仪表板将该行标记为待审查。先将结构化元数据（变更文件、测试计数、diff/PR url）写入 comment，因为 <code>kanban_block</code> 只携带人类可读的原因——comment 是持久化注释的渠道。审查者可执行 <code>hermes kanban unblock &lt;id&gt;</code> 批准（这会携带 comment 线程重新派生你以处理后续事项），或通过另一条 comment 要求修改。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import json
+<p>kanban_comment(
+body=&quot;review-required handoff:\n&quot; + json.dumps({
+&quot;changed_files&quot;: [&quot;rate_limiter.py&quot;, &quot;tests/test_rate_limiter.py&quot;],
+&quot;tests_run&quot;: 14,
+&quot;tests_passed&quot;: 14,
+&quot;diff_path&quot;: &quot;/path/to/worktree&quot;,  # or PR url if pushed
+&quot;decisions&quot;: [&quot;user_id primary, IP fallback for unauthenticated requests&quot;],
+}, indent=2),
+)
+kanban_block(
+reason=&quot;review-required: rate limiter shipped, 14/14 tests pass — needs eyes on the user_id/IP fallback choice before merging&quot;,
+)</p>
+</div>
+<p>仅在任务真正终结时使用 <code>kanban_complete</code>——例如单行拼写修复、无功能影响的文档变更，或产出物本身即为成果的研究任务。</p>
+<p><strong>研究任务：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+kanban_complete(
+    summary="3 competing libraries reviewed; vLLM wins on throughput, SGLang on latency, Tensorrt-LLM on memory efficiency",
+    metadata={
+        "sources_read": 12,
+        "recommendation": "vLLM",
+        "benchmarks": {"vllm": 1.0, "sglang": 0.87, "trtllm": 0.72},
+    },
+)
+</div>
+<p><strong>审查任务：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+kanban_complete(
+    summary="reviewed PR #123; 2 blocking issues found (SQL injection in /search, missing CSRF on /settings)",
+    metadata={
+        "pr_number": 123,
+        "findings": [
+            {"severity": "critical", "file": "api/search.py", "line": 42, "issue": "raw SQL concat"},
+            {"severity": "high", "file": "api/settings.py", "issue": "missing CSRF middleware"},
+        ],
+        "approved": False,
+    },
+)
+</div>
+<p>请将 <code>metadata</code> 的结构设计为下游解析器（审查者、聚合器、调度器）无需重新阅读你的文字描述即可直接使用。</p>
+<h2>认领你实际创建的卡片</h2>
+<p>若你的运行产生了新的 kanban 任务（通过 <code>kanban_create</code>），请在 <code>kanban_complete</code> 的 <code>created_cards</code> 中传入这些 id。内核会验证每个 id 是否存在且由你的 profile 创建；任何幻构的 id 都会导致完成操作被阻断，并附带错误列表说明问题所在，且被拒绝的尝试会永久记录在任务的事件日志中。<strong>只列出你从成功的 <code>kanban_create</code> 返回值中捕获的 id——绝不凭空捏造 id，绝不粘贴来自早期运行的 id，绝不认领其他 worker 创建的卡片。</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 正确 — 捕获返回值，然后认领。
+c1 = kanban_create(title="remediate SQL injection", assignee="security-worker")
+c2 = kanban_create(title="fix CSRF middleware", assignee="web-worker")
+<p>kanban_complete(
+summary=&quot;Review done; spawned remediations for both findings.&quot;,
+metadata={&quot;pr_number&quot;: 123, &quot;approved&quot;: False},
+created_cards=[c1[&quot;task_id&quot;], c2[&quot;task_id&quot;]],
+)</p>
+</div>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 错误 — 认领没有捕获返回值的 id。
+kanban_complete(
+    summary="Created remediation cards t_a1b2c3d4, t_deadbeef",  # 幻构
+    created_cards=["t_a1b2c3d4", "t_deadbeef"],                   # → 门控拒绝
+)
+</div>
+<p>若 <code>kanban_create</code> 调用失败（异常、tool_error），则卡片未被创建——不要为其包含幻构 id。重试创建，或省略该 id 并在 summary 中说明失败情况。散文扫描阶段也会捕获你自由格式 summary 中无法解析的 <code>t_&lt;hex&gt;</code> 引用；这些不会阻断完成操作，但会在仪表板的任务上显示为建议性警告。</p>
+<h2>能快速得到回应的 block 原因</h2>
+<p>差：<code>&quot;stuck&quot;</code> — 人类没有任何上下文。</p>
+<p>好：一句话说明你需要的具体决策。将更长的上下文作为 comment 留下。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+kanban_comment(
+    task_id=os.environ["HERMES_KANBAN_TASK"],
+    body="Full context: I have user IPs from Cloudflare headers but some users are behind NATs with thousands of peers. Keying on IP alone causes false positives.",
+)
+kanban_block(reason="Rate limit key choice: IP (simple, NAT-unsafe) or user_id (requires auth, skips anonymous endpoints)?")
+</div>
+<p>block 消息是仪表板/gateway 通知器中显示的内容。comment 是人类打开任务时阅读的深层上下文。</p>
+<h2>值得发送的 heartbeat</h2>
+<p>好的 heartbeat 应说明进度：<code>&quot;epoch 12/50, loss 0.31&quot;</code>、<code>&quot;scanned 1.2M/2.4M rows&quot;</code>、<code>&quot;uploaded 47/120 videos&quot;</code>。</p>
+<p>差的 heartbeat：<code>&quot;still working&quot;</code>、空 notes、亚秒级间隔。最多每隔几分钟发送一次；对于约 2 分钟以内的任务可完全跳过。</p>
+<h2>重试场景</h2>
+<p>若你打开任务后 <code>kanban_show</code> 返回的 <code>runs: [...]</code> 中包含一个或多个已关闭的运行，说明你是一次重试。先前运行的 <code>outcome</code> / <code>summary</code> / <code>error</code> 会告诉你哪里出了问题。不要重复那条路径。典型的重试诊断：</p>
+<ul>
+<li><code>outcome: &quot;timed_out&quot;</code> — 上次尝试达到了 <code>max_runtime_seconds</code>。你可能需要将工作分块或缩短。</li>
+<li><code>outcome: &quot;crashed&quot;</code> — OOM 或段错误。减少内存占用。</li>
+<li><code>outcome: &quot;spawn_failed&quot;</code> + <code>error: &quot;...&quot;</code> — 通常是 profile 配置问题（缺少凭证、错误的 PATH）。通过 <code>kanban_block</code> 询问人类，而不是盲目重试。</li>
+<li><code>outcome: &quot;reclaimed&quot;</code> + <code>summary: &quot;task archived...&quot;</code> — 操作员在上次运行期间将任务归档；你可能根本不应该在运行，请仔细检查状态。</li>
+<li><code>outcome: &quot;blocked&quot;</code> — 上次尝试被阻断；解除阻断的 comment 现在应该已在线程中。</li>
+</ul>
+<h2>禁止事项</h2>
+<ul>
+<li>不要用 <code>delegate_task</code> 替代 <code>kanban_create</code>。<code>delegate_task</code> 用于你的运行内部的短期推理子任务；<code>kanban_create</code> 用于跨 agent 的、超出单次 API 循环的交接。</li>
+<li>不要修改 <code>$HERMES_KANBAN_WORKSPACE</code> 之外的文件，除非任务正文明确要求。</li>
+<li>不要创建分配给自己的后续任务——分配给合适的专家。</li>
+<li>不要完成一个你实际上没有完成的任务。改为 block 它。</li>
+</ul>
+<h2>陷阱</h2>
+<p><strong>任务状态可能在调度与启动之间发生变化。</strong> 从调度器认领任务到你的进程实际启动之间，任务可能已被 block、重新分配或归档。始终先执行 <code>kanban_show</code>。若其报告 <code>blocked</code> 或 <code>archived</code>，请停止——你不应该在运行。</p>
+<p><strong>工作区可能存在过期产物。</strong> 尤其是 <code>dir:</code> 和 <code>worktree</code> 工作区可能包含来自先前运行的文件。阅读 comment 线程——它通常会解释你为何再次运行以及工作区处于何种状态。</p>
+<p><strong>当指导已可用时，不要依赖 CLI。</strong> <code>kanban_*</code> 工具可在所有终端后端（Docker、Modal、SSH）上工作。从你的终端工具执行 <code>hermes kanban &lt;verb&gt;</code> 在容器化后端中会失败，因为 CLI 未安装在那里。如有疑问，使用工具。</p>
+<h2>CLI 回退（用于脚本）</h2>
+<p>每个工具都有对应的 CLI 等价命令，供人工操作员和脚本使用：</p>
+<ul>
+<li><code>kanban_show</code> ↔ <code>hermes kanban show &lt;id&gt; --json</code></li>
+<li><code>kanban_complete</code> ↔ <code>hermes kanban complete &lt;id&gt; --summary &quot;...&quot; --metadata '{...}'</code></li>
+<li><code>kanban_block</code> ↔ <code>hermes kanban block &lt;id&gt; &quot;reason&quot;</code></li>
+<li><code>kanban_create</code> ↔ <code>hermes kanban create &quot;title&quot; --assignee &lt;profile&gt; [--parent &lt;id&gt;]</code></li>
+<li>等等。</li>
+</ul>
+<p>在 agent 内部使用工具；CLI 供终端前的人类使用。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

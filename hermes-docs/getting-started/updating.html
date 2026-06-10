@@ -1,0 +1,338 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>更新与卸载 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html" class="active">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / Getting Started / 更新与卸载</div><h2>更新</h2>
+<h3>Git 安装方式</h3>
+<p>使用单条命令更新至最新版本：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes update
+</div>
+<p>此命令会从 <code>main</code> 拉取最新代码、更新依赖项，并提示你配置自上次更新以来新增的选项。</p>
+<h3>pip 安装方式</h3>
+<p>PyPI 发布版本跟踪<strong>带标签的版本</strong>（主版本和次版本发布），而非 <code>main</code> 上的每次提交。检查更新并升级：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes update --check    # 查看 PyPI 上是否有更新的版本
+hermes update            # 执行 pip install --upgrade hermes-agent
+</div>
+<p>或手动执行：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install --upgrade hermes-agent    # 或：uv pip install --upgrade hermes-agent
+</div>
+<div class="tip"><strong>💡 提示</strong>
+<code>hermes update</code> 会自动检测新的配置选项并提示你添加。如果跳过了该提示，可手动运行 <code>hermes config check</code> 查看缺失的选项，再运行 <code>hermes config migrate</code> 以交互方式添加。
+</div>
+<h3>更新过程（Git 安装方式）</h3>
+<p>运行 <code>hermes update</code> 时，将依次执行以下步骤：</p>
+<ol>
+<li><strong>配对数据快照</strong> — 保存一份轻量级的更新前状态快照（涵盖 <code>~/.hermes/pairing/</code>、飞书评论规则及其他运行时修改的状态文件）。可通过 <a href="../user-guide/checkpoints-and-rollback.html">快照与回滚</a> 中描述的快照恢复流程进行恢复，或从 Hermes 写入 <code>~/.hermes/</code> 目录旁的最新快速快照 zip 文件中提取。</li>
+<li><strong>Git pull</strong> — 从 <code>main</code> 分支拉取最新代码并更新子模块</li>
+<li><strong>依赖安装</strong> — 运行 <code>uv pip install -e &quot;.[all]&quot;</code> 以获取新增或变更的依赖项</li>
+<li><strong>配置迁移</strong> — 检测自当前版本以来新增的配置选项并提示设置</li>
+<li><strong>Gateway 自动重启</strong> — 更新完成后刷新正在运行的 gateway，使新代码立即生效。由服务管理的 gateway（Linux 上的 systemd、macOS 上的 launchd）通过服务管理器重启；手动启动的 gateway 在 Hermes 能将运行中的 PID 映射回某个 profile 时会自动重新启动。</li>
+</ol>
+<h3>仅预览：<code>hermes update --check</code></h3>
+<p>想在拉取前确认是否有更新？运行 <code>hermes update --check</code> — 对于 Git 安装方式，它会获取并与 <code>origin/main</code> 比较提交；对于 pip 安装方式，它会查询 PyPI 上的最新版本。不修改任何文件，不重启 gateway。适合在以&quot;是否有更新&quot;为条件的脚本和 cron 任务中使用。</p>
+<h3>完整更新前备份：<code>--backup</code></h3>
+<p>对于高价值 profile（生产环境 gateway、团队共享安装），可选择在拉取前对 <code>HERMES_HOME</code>（配置、认证、会话、技能、配对数据）进行完整备份：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes update --backup
+</div>
+<p>或将其设为每次运行的默认行为：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ~/.hermes/config.yaml
+updates:
+  pre_update_backup: true
+</div>
+<p><code>--backup</code> 在早期版本中是始终开启的行为，但在大型 home 目录上会给每次更新增加数分钟时间，因此现已改为按需启用。上述轻量级配对数据快照仍会无条件执行。</p>
+<h3>Windows：另一个 <code>hermes.exe</code> 正在运行</h3>
+<p>在 Windows 上，如果 <code>hermes update</code> 检测到另一个 <code>hermes.exe</code> 进程持有 venv 入口点可执行文件的句柄，它将拒绝运行 — 最常见的情况是 Hermes Desktop 应用启动的后端进程、另一个终端中打开的 <code>hermes</code> REPL，或正在运行的 gateway：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+$ hermes update
+✗ Another hermes.exe is running:
+    PID 12345  hermes.exe
+
+  Updating now would fail to overwrite ...\venv\Scripts\hermes.exe because
+  Windows blocks REPLACE on a running executable.
+
+  Close Hermes Desktop, exit any open `hermes` REPLs, and
+  stop the gateway (`hermes gateway stop`) before retrying.
+  Override with `hermes update --force` if you've already
+  confirmed those processes will not write to the venv.
+</div>
+<p>关闭列出的进程后重试。如果你确定并发进程不会造成干扰（极少见 — 通常仅在杀毒软件 shim 被误判时有用），可传入 <code>--force</code> 跳过检查。此时更新程序仍会以指数退避方式重试 <code>.exe</code> 重命名操作，对于顽固的文件锁，会通过 <code>MoveFileEx(MOVEFILE_DELAY_UNTIL_REBOOT)</code> 将替换操作安排在下次重启时执行，以确保更新能够完成。</p>
+<p>预期输出如下：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+$ hermes update
+Updating Hermes Agent...
+📥 Pulling latest code...
+Already up to date.  (or: Updating abc1234..def5678)
+📦 Updating dependencies...
+✅ Dependencies updated
+🔍 Checking for new config options...
+✅ Config is up to date  (or: Found 2 new options — running migration...)
+🔄 Restarting gateways...
+✅ Gateway restarted
+✅ Hermes Agent updated successfully!
+</div>
+<h3>更新后建议的验证步骤</h3>
+<p><code>hermes update</code> 处理主要的更新流程，但快速验证可确认一切正常落地：</p>
+<ol>
+<li><code>git status --short</code> — 若工作树出现意外的脏状态，请在继续前检查</li>
+<li><code>hermes doctor</code> — 检查配置、依赖项和服务健康状态</li>
+<li><code>hermes --version</code> — 确认版本已按预期更新</li>
+<li>如果使用 gateway：<code>hermes gateway status</code></li>
+<li>如果 <code>doctor</code> 报告 npm audit 问题：在标记的目录中运行 <code>npm audit fix</code></li>
+</ol>
+<div class="tip warning"><strong>⚠️ 更新后工作树出现脏状态</strong>
+如果 <code>hermes update</code> 后 <code>git status --short</code> 显示意外变更，请在继续前停下来检查。这通常意味着本地修改被重新应用到了更新后的代码之上，或依赖步骤刷新了锁文件。
+</div>
+<h3>终端在更新中途断开连接</h3>
+<p><code>hermes update</code> 针对意外终端断开进行了保护：</p>
+<ul>
+<li>更新会忽略 <code>SIGHUP</code>，因此关闭 SSH 会话或终端窗口不再会在安装中途终止它。<code>pip</code> 和 <code>git</code> 子进程继承此保护，因此 Python 环境不会因连接断开而处于半安装状态。</li>
+<li>更新运行期间，所有输出会同步镜像到 <code>~/.hermes/logs/update.log</code>。如果终端消失，重新连接后检查日志，确认更新是否完成以及 gateway 重启是否成功：</li>
+</ul>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+tail -f ~/.hermes/logs/update.log
+</div>
+<ul>
+<li><code>Ctrl-C</code>（SIGINT）和系统关机（SIGTERM）仍会被响应 — 这些是主动取消操作，而非意外中断。</li>
+</ul>
+<p>你不再需要将 <code>hermes update</code> 包裹在 <code>screen</code> 或 <code>tmux</code> 中来应对终端断开。</p>
+<h3>查看当前版本</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes version
+</div>
+<p>与 <a href="https://github.com/NousResearch/hermes-agent/releases">GitHub releases 页面</a> 上的最新版本进行比较。</p>
+<h3>从消息平台更新</h3>
+<p>你也可以直接从 Telegram、Discord、Slack、WhatsApp 或 Teams 发送以下命令进行更新：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/update
+</div>
+<p>此命令会拉取最新代码、更新依赖项并重启正在运行的 gateway。Bot 在重启期间会短暂下线（通常为 5–15 秒），之后恢复服务。</p>
+<h3>手动更新</h3>
+<p>如果你是手动安装的（未使用快速安装脚本）：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cd /path/to/hermes-agent
+export VIRTUAL_ENV="$(pwd)/venv"
+
+# Pull latest code
+git pull origin main
+
+# Reinstall (picks up new dependencies)
+uv pip install -e ".[all]"
+
+# Check for new config options
+hermes config check
+hermes config migrate   # Interactively add any missing options
+</div>
+<h3>回滚说明</h3>
+<p>如果更新引入了问题，可以回滚到之前的版本：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cd /path/to/hermes-agent
+
+# List recent versions
+git log --oneline -10
+
+# Roll back to a specific commit
+git checkout &lt;commit-hash&gt;
+uv pip install -e ".[all]"
+
+# Restart the gateway if running
+hermes gateway restart
+</div>
+<p>回滚到特定发布标签：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+git checkout v0.6.0
+uv pip install -e ".[all]"
+</div>
+<div class="tip warning"><strong>⚠️ 警告</strong>
+如果新增了配置选项，回滚可能导致配置不兼容。回滚后运行 <code>hermes config check</code>，如果遇到错误，请从 <code>config.yaml</code> 中删除无法识别的选项。
+</div>
+<h3>Nix 用户注意事项</h3>
+<p>如果你通过 Nix flake 安装，更新由 Nix 包管理器负责：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Update the flake input
+nix flake update hermes-agent
+
+# Or rebuild with the latest
+nix profile upgrade hermes-agent
+</div>
+<p>Nix 安装是不可变的 — 回滚由 Nix 的 generation 系统处理：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+nix profile rollback
+</div>
+<p>详情参见 <a href="./nix-setup.html">Nix 安装</a>。</p>
+<hr />
+<h2>卸载</h2>
+<h3>Git 安装方式</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes uninstall
+</div>
+<p>卸载程序会提供选项，让你保留配置文件（<code>~/.hermes/</code>）以便将来重新安装。</p>
+<h3>pip 安装方式</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip uninstall hermes-agent
+rm -rf ~/.hermes            # 可选 — 如计划重新安装则保留
+</div>
+<h3>手动卸载</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+rm -f ~/.local/bin/hermes
+rm -rf /path/to/hermes-agent
+rm -rf ~/.hermes            # 可选 — 如计划重新安装则保留
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway stop
+# Linux: systemctl --user disable hermes-gateway
+# macOS: launchctl remove ai.hermes.gateway
+</div>
+<div class="tip"><strong>ℹ️ 信息</strong>
+如果你将 gateway 安装为系统服务，请先停止并禁用它：
+</div>
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

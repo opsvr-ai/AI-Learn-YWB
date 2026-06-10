@@ -1,0 +1,479 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cron 内部机制 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 开发者指南 / Cron 内部机制</div><p>cron 子系统提供定时任务执行能力——从简单的单次延迟到带技能注入和跨平台投递的周期性 cron 表达式任务。</p>
+<h2>关键文件</h2>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cron/jobs.py</code></td>
+<td>任务模型、存储、对 <code>jobs.json</code> 的原子读写</td>
+</tr>
+<tr>
+<td><code>cron/scheduler.py</code></td>
+<td>调度器循环——到期任务检测、执行、重复计数跟踪</td>
+</tr>
+<tr>
+<td><code>tools/cronjob_tools.py</code></td>
+<td>面向模型的 <code>cronjob</code> 工具注册与处理器</td>
+</tr>
+<tr>
+<td><code>gateway/run.py</code></td>
+<td>Gateway 集成——在长运行循环中触发 cron tick</td>
+</tr>
+<tr>
+<td><code>hermes_cli/cron.py</code></td>
+<td>CLI <code>hermes cron</code> 子命令</td>
+</tr>
+</tbody>
+</table>
+<h2>调度模型</h2>
+<p>支持四种调度格式：</p>
+<table>
+<thead>
+<tr>
+<th>格式</th>
+<th>示例</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>相对延迟</strong></td>
+<td><code>30m</code>、<code>2h</code>、<code>1d</code></td>
+<td>单次触发，在指定时长后执行</td>
+</tr>
+<tr>
+<td><strong>间隔</strong></td>
+<td><code>every 2h</code>、<code>every 30m</code></td>
+<td>周期触发，按固定间隔执行</td>
+</tr>
+<tr>
+<td><strong>Cron 表达式</strong></td>
+<td><code>0 9 * * *</code></td>
+<td>标准 5 字段 cron 语法（分钟、小时、日、月、星期）</td>
+</tr>
+<tr>
+<td><strong>ISO 时间戳</strong></td>
+<td><code>2025-01-15T09:00:00</code></td>
+<td>单次触发，在精确时间点执行</td>
+</tr>
+</tbody>
+</table>
+<p>面向模型的接口是单个 <code>cronjob</code> 工具，支持以下操作：<code>create</code>、<code>list</code>、<code>update</code>、<code>pause</code>、<code>resume</code>、<code>run</code>、<code>remove</code>。</p>
+<h2>任务存储</h2>
+<p>任务存储在 <code>~/.hermes/cron/jobs.json</code> 中，采用原子写入语义（先写入临时文件，再重命名）。每条任务记录包含：</p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{
+  "id": "a1b2c3d4e5f6",
+  "name": "Daily briefing",
+  "prompt": "Summarize today's AI news and funding rounds",
+  "schedule": {
+    "kind": "cron",
+    "expr": "0 9 * * *",
+    "display": "0 9 * * *"
+  },
+  "skills": ["ai-funding-daily-report"],
+  "deliver": "telegram:-1001234567890",
+  "repeat": {
+    "times": null,
+    "completed": 42
+  },
+  "state": "scheduled",
+  "enabled": true,
+  "next_run_at": "2025-01-16T09:00:00Z",
+  "last_run_at": "2025-01-15T09:00:00Z",
+  "last_status": "ok",
+  "created_at": "2025-01-01T00:00:00Z",
+  "model": null,
+  "provider": null,
+  "script": null
+}
+</div>
+<h3>任务生命周期状态</h3>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>scheduled</code></td>
+<td>活跃，将在下次计划时间触发</td>
+</tr>
+<tr>
+<td><code>paused</code></td>
+<td>已暂停——恢复前不会触发</td>
+</tr>
+<tr>
+<td><code>completed</code></td>
+<td>重复次数已耗尽，或单次任务已执行</td>
+</tr>
+<tr>
+<td><code>running</code></td>
+<td>正在执行（瞬态状态）</td>
+</tr>
+</tbody>
+</table>
+<h3>向后兼容性</h3>
+<p>旧版任务可能使用单个 <code>skill</code> 字段而非 <code>skills</code> 数组。调度器在加载时会对此进行规范化——单个 <code>skill</code> 会被提升为 <code>skills: [skill]</code>。</p>
+<h2>调度器运行时</h2>
+<h3>Tick 周期</h3>
+<p>调度器按周期性 tick 运行（默认：每 60 秒）：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+tick()
+  1. 获取调度器锁（防止 tick 重叠）
+  2. 从 jobs.json 加载所有任务
+  3. 筛选到期任务（next_run &lt;= now 且 state == "scheduled"）
+  4. 对每个到期任务：
+     a. 将状态设为 "running"
+     b. 创建全新的 AIAgent 会话（无对话历史）
+     c. 按顺序加载附加技能（以用户消息形式注入）
+     d. 通过 agent 执行任务 prompt（提示词）
+     e. 将响应投递到配置的目标
+     f. 更新 run_count，计算下次运行时间
+     g. 若重复次数耗尽 → state = "completed"
+     h. 否则 → state = "scheduled"
+  5. 将更新后的任务写回 jobs.json
+  6. 释放调度器锁
+</div>
+<h3>Gateway 集成</h3>
+<p>在 gateway 模式下，调度器运行在专用后台线程中（<code>gateway/run.py</code> 中的 <code>_start_cron_ticker</code>），每 60 秒调用一次 <code>scheduler.tick()</code>，与消息处理并行运行。</p>
+<p>在 CLI 模式下，cron 任务仅在运行 <code>hermes cron</code> 命令或活跃 CLI 会话期间触发。</p>
+<h3>全新会话隔离</h3>
+<p>每个 cron 任务在完全全新的 agent 会话中运行：</p>
+<ul>
+<li>无前次运行的对话历史</li>
+<li>无前次 cron 执行的记忆（除非已持久化到内存/文件）</li>
+<li>prompt 必须自包含——cron 任务无法提出澄清性问题</li>
+<li><code>cronjob</code> 工具集已禁用（递归防护）</li>
+</ul>
+<h2>技能支持的任务</h2>
+<p>cron 任务可通过 <code>skills</code> 字段附加一个或多个技能。执行时：</p>
+<ol>
+<li>按指定顺序加载技能</li>
+<li>每个技能的 SKILL.md 内容作为上下文注入</li>
+<li>任务的 prompt 作为任务指令追加</li>
+<li>Agent 处理技能上下文与 prompt 的组合内容</li>
+</ol>
+<p>这使得可复用、经过测试的工作流无需将完整指令粘贴到 cron prompt 中。例如：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+创建每日融资报告 → 附加 "ai-funding-daily-report" 技能
+</div>
+<h3>脚本支持的任务</h3>
+<p>任务还可通过 <code>script</code> 字段附加 Python 脚本。该脚本在每次 agent 轮次<em>之前</em>运行，其 stdout 作为上下文注入到 prompt 中。这支持数据采集和变更检测模式：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ~/.hermes/scripts/check_competitors.py
+import requests, json
+# 获取竞争对手发布说明，与上次运行结果进行差异比对
+# 将摘要打印到 stdout——agent 进行分析并报告
+</div>
+<p>脚本超时默认为 120 秒。<code>_get_script_timeout()</code> 通过三层链路解析限制：</p>
+<ol>
+<li><strong>模块级覆盖</strong> — <code>_SCRIPT_TIMEOUT</code>（用于测试/monkeypatching）。仅在与默认值不同时使用。</li>
+<li><strong>环境变量</strong> — <code>HERMES_CRON_SCRIPT_TIMEOUT</code></li>
+<li><strong>配置</strong> — <code>config.yaml</code> 中的 <code>cron.script_timeout_seconds</code>（通过 <code>load_config()</code> 读取）</li>
+<li><strong>默认值</strong> — 120 秒</li>
+</ol>
+<h3>Provider 恢复</h3>
+<p><code>run_job()</code> 将用户配置的备用 provider 和凭证池传入 <code>AIAgent</code> 实例：</p>
+<ul>
+<li><strong>备用 provider</strong> — 从 <code>config.yaml</code> 读取 <code>fallback_providers</code>（列表）或 <code>fallback_model</code>（旧版字典），与 gateway 的 <code>_load_fallback_model()</code> 模式一致。以 <code>fallback_model=</code> 形式传入 <code>AIAgent.__init__</code>，后者将两种格式规范化为备用链。</li>
+<li><strong>凭证池</strong> — 通过 <code>agent.credential_pool</code> 中的 <code>load_pool(provider)</code> 使用解析后的运行时 provider 名称加载。仅在池中有凭证时传入（<code>pool.has_credentials()</code>）。在遭遇 429/限速错误时启用同 provider 的密钥轮换。</li>
+</ul>
+<p>这与 gateway 的行为保持一致——否则 cron agent 在遭遇限速时将直接失败而不尝试恢复。</p>
+<h2>投递模型</h2>
+<p>Cron 任务结果可投递到任何受支持的平台：</p>
+<table>
+<thead>
+<tr>
+<th>目标</th>
+<th>语法</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源聊天</td>
+<td><code>origin</code></td>
+<td>投递到创建该任务的聊天</td>
+</tr>
+<tr>
+<td>本地文件</td>
+<td><code>local</code></td>
+<td>保存到 <code>~/.hermes/cron/output/</code></td>
+</tr>
+<tr>
+<td>Telegram</td>
+<td><code>telegram</code> 或 <code>telegram:&lt;chat_id&gt;</code></td>
+<td><code>telegram:-1001234567890</code></td>
+</tr>
+<tr>
+<td>Discord</td>
+<td><code>discord</code> 或 <code>discord:#channel</code></td>
+<td><code>discord:#engineering</code></td>
+</tr>
+<tr>
+<td>Slack</td>
+<td><code>slack</code></td>
+<td>投递到 Slack 主频道</td>
+</tr>
+<tr>
+<td>WhatsApp</td>
+<td><code>whatsapp</code></td>
+<td>投递到 WhatsApp 主会话</td>
+</tr>
+<tr>
+<td>Signal</td>
+<td><code>signal</code></td>
+<td>投递到 Signal</td>
+</tr>
+<tr>
+<td>Matrix</td>
+<td><code>matrix</code></td>
+<td>投递到 Matrix 主房间</td>
+</tr>
+<tr>
+<td>Mattermost</td>
+<td><code>mattermost</code></td>
+<td>投递到 Mattermost 主频道</td>
+</tr>
+<tr>
+<td>Email</td>
+<td><code>email</code></td>
+<td>通过邮件投递</td>
+</tr>
+<tr>
+<td>SMS</td>
+<td><code>sms</code></td>
+<td>通过短信投递</td>
+</tr>
+<tr>
+<td>Home Assistant</td>
+<td><code>homeassistant</code></td>
+<td>投递到 HA 对话</td>
+</tr>
+<tr>
+<td>DingTalk</td>
+<td><code>dingtalk</code></td>
+<td>投递到钉钉</td>
+</tr>
+<tr>
+<td>Feishu</td>
+<td><code>feishu</code></td>
+<td>投递到飞书</td>
+</tr>
+<tr>
+<td>WeCom</td>
+<td><code>wecom</code></td>
+<td>投递到企业微信</td>
+</tr>
+<tr>
+<td>Weixin</td>
+<td><code>weixin</code></td>
+<td>投递到微信（WeChat）</td>
+</tr>
+<tr>
+<td>BlueBubbles</td>
+<td><code>bluebubbles</code></td>
+<td>通过 BlueBubbles 投递到 iMessage</td>
+</tr>
+<tr>
+<td>QQ Bot</td>
+<td><code>qqbot</code></td>
+<td>通过官方 API v2 投递到 QQ（腾讯）</td>
+</tr>
+</tbody>
+</table>
+<p>对于 Telegram 话题，使用格式 <code>telegram:&lt;chat_id&gt;:&lt;thread_id&gt;</code>（例如 <code>telegram:-1001234567890:17585</code>）。</p>
+<h3>响应包装</h3>
+<p>默认情况下（<code>cron.wrap_response: true</code>），cron 投递内容会被包装：</p>
+<ul>
+<li>头部标识 cron 任务名称和任务内容</li>
+<li>尾部说明 agent 无法在对话中看到已投递的消息</li>
+</ul>
+<p>cron 响应中的 <code>[SILENT]</code> 前缀会完全抑制投递——适用于只需写入文件或执行副作用的任务。</p>
+<h3>会话隔离</h3>
+<p>Cron 投递<strong>不会</strong>镜像到 gateway 会话的对话历史中。它们仅存在于 cron 任务自身的会话中。这可防止目标聊天对话中出现消息交替违规。</p>
+<h2>递归防护</h2>
+<p>Cron 运行的会话已禁用 <code>cronjob</code> 工具集。这可防止：</p>
+<ul>
+<li>定时任务创建新的 cron 任务</li>
+<li>可能导致 token 用量爆炸的递归调度</li>
+<li>在任务内部意外修改任务调度</li>
+</ul>
+<h2>锁机制</h2>
+<p>调度器使用跨进程文件锁（Unix 上的 <code>fcntl.flock</code>，Windows 上的 <code>msvcrt.locking</code>）防止重叠的 tick 对同一批到期任务执行两次——即使在 gateway 的进程内 ticker 与独立的 <code>hermes cron</code> / 手动 <code>tick()</code> 调用之间也如此。若无法获取锁，<code>tick()</code> 立即返回 0。</p>
+<h2>CLI 接口</h2>
+<p><code>hermes cron</code> CLI 提供直接的任务管理功能：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes cron list                    # 显示所有任务
+hermes cron create                  # 交互式创建任务（别名：add）
+hermes cron edit &lt;job_id&gt;           # 编辑任务配置
+hermes cron pause &lt;job_id&gt;          # 暂停运行中的任务
+hermes cron resume &lt;job_id&gt;         # 恢复已暂停的任务
+hermes cron run &lt;job_id&gt;            # 触发立即执行
+hermes cron remove &lt;job_id&gt;         # 删除任务
+</div>
+<h2>相关文档</h2>
+<ul>
+<li><a href="/user-guide/features/cron">Cron 功能指南</a></li>
+<li><a href="./gateway-internals.html">Gateway 内部机制</a></li>
+<li><a href="./agent-loop.html">Agent 循环内部机制</a></li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

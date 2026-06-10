@@ -1,0 +1,403 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Gemini - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 实用指南 / Google Gemini</div><p>Hermes Agent 通过 <strong>Google AI Studio / Gemini API</strong> 原生支持 Google Gemini——而非 OpenAI 兼容端点。这使 Hermes 能够将其内部 OpenAI 格式的消息和工具循环转换为 Gemini 原生的 <code>generateContent</code> API，同时保留工具调用、流式传输、多模态输入以及 Gemini 特有的响应元数据。</p>
+<p>Hermes 还支持独立的 <strong>Google Gemini（OAuth）</strong> provider，使用与 Google Gemini CLI 相同的 Cloud Code Assist 后端。如需最低风险的官方 API 路径，请使用 API 密钥 provider（<code>gemini</code>）。</p>
+<h2>前提条件</h2>
+<ul>
+<li><strong>Google AI Studio API 密钥</strong> — 在 <a href="https://aistudio.google.com/apikey">aistudio.google.com/apikey</a> 创建</li>
+<li><strong>已启用计费的 Google Cloud 项目</strong> — 推荐用于 Agent 场景。Gemini 免费层级对长时间运行的 Agent 会话而言配额过小，因为 Hermes 每次用户交互可能发起多次模型调用。</li>
+<li><strong>已安装 Hermes</strong> — 原生 Gemini provider 无需额外安装 Python 包。</li>
+</ul>
+<div class="tip"><strong>💡 API 密钥路径</strong>
+设置 <code>GOOGLE_API_KEY</code> 或 <code>GEMINI_API_KEY</code>。Hermes 对 <code>gemini</code> provider 会同时检查这两个名称。
+</div>
+<h2>快速开始</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 添加 Gemini API 密钥
+echo "GOOGLE_API_KEY=..." &gt;&gt; ~/.hermes/.env
+
+# 选择 Gemini 作为 provider
+hermes model
+# → 选择 "More providers..." → "Google AI Studio"
+# → Hermes 检查密钥层级并显示 Gemini 模型列表
+# → 选择一个模型
+
+# 开始对话
+hermes chat
+</div>
+<p>如果你偏好直接编辑配置文件，请使用原生 Gemini API 基础 URL：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  default: gemini-3-flash-preview
+  provider: gemini
+  base_url: https://generativelanguage.googleapis.com/v1beta
+</div>
+<h2>配置</h2>
+<p>运行 <code>hermes model</code> 后，<code>~/.hermes/config.yaml</code> 将包含：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  default: gemini-3-flash-preview
+  provider: gemini
+  base_url: https://generativelanguage.googleapis.com/v1beta
+</div>
+<p><code>~/.hermes/.env</code> 中：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+GOOGLE_API_KEY=...
+</div>
+<h3>原生 Gemini API</h3>
+<p>推荐使用的端点为：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+https://generativelanguage.googleapis.com/v1beta
+</div>
+<p>Hermes 检测到该端点后会创建原生 Gemini 适配器。在内部，Hermes 仍以 OpenAI 格式维护 Agent 循环，然后将每个请求转换为 Gemini 原生 schema：</p>
+<ul>
+<li><code>messages[]</code> → Gemini <code>contents[]</code></li>
+<li>系统提示（system prompt）→ Gemini <code>systemInstruction</code></li>
+<li>工具 schema → Gemini <code>functionDeclarations</code></li>
+<li>工具结果 → Gemini <code>functionResponse</code> 部分</li>
+<li>流式响应 → 供 Hermes 循环使用的 OpenAI 格式流式数据块</li>
+</ul>
+<div class="tip"><strong>📝 Gemini 3 思维签名</strong>
+<p>对于 Gemini 3 的工具调用，Hermes 会保留附加在函数调用部分的 <code>thoughtSignature</code> 值，并在下一个工具轮次中重放。这覆盖了多步骤 Agent 工作流中验证关键路径的需求。</p>
+<p>Gemini 3 也可能在其他响应部分附加思维签名。Hermes 的原生适配器目前针对 Agent 工具循环进行了优化，尚未以完整的部分级保真度重放所有非工具调用签名。</p>
+
+</div>
+<h3>优先使用原生端点</h3>
+<p>Google 还提供了 OpenAI 兼容端点：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+https://generativelanguage.googleapis.com/v1beta/openai/
+</div>
+<p>对于 Hermes Agent 会话，请优先使用上述原生 Gemini 端点。Hermes 内置原生 Gemini 适配器，可将多轮工具调用、工具调用结果、流式传输、多模态输入以及 Gemini 响应元数据直接映射到 Gemini 的 <code>generateContent</code> API。OpenAI 兼容端点在你明确需要 OpenAI API 兼容性时仍然有用。</p>
+<p>如果你之前将 <code>GEMINI_BASE_URL</code> 设置为 <code>/openai</code> URL，请将其删除或修改：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta
+</div>
+<h3>OAuth Provider</h3>
+<p>Hermes 还提供 <code>google-gemini-cli</code> provider：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes model
+# → 选择 "Google Gemini (OAuth)"
+</div>
+<p>该方式使用浏览器 PKCE 登录和 Cloud Code Assist 后端。对于希望使用 Gemini CLI 风格 OAuth 的用户可能有用，但 Hermes 会显示明确警告，因为 Google 可能将第三方软件使用 Gemini CLI OAuth 客户端的行为视为违反政策。对于生产环境或最低风险使用场景，请优先使用上述 API 密钥 provider。</p>
+<h2>可用模型</h2>
+<p><code>hermes model</code> 选择器显示 Hermes provider 注册表中维护的 Gemini 模型。常见选项包括：</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>ID</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gemini 3.1 Pro Preview</td>
+<td><code>gemini-3.1-pro-preview</code></td>
+<td>可用时最强大的预览模型</td>
+</tr>
+<tr>
+<td>Gemini 3 Pro Preview</td>
+<td><code>gemini-3-pro-preview</code></td>
+<td>强大的推理和编码模型</td>
+</tr>
+<tr>
+<td>Gemini 3 Flash Preview</td>
+<td><code>gemini-3-flash-preview</code></td>
+<td>推荐的默认选项，速度与能力均衡</td>
+</tr>
+<tr>
+<td>Gemini 3.1 Flash Lite Preview</td>
+<td><code>gemini-3.1-flash-lite-preview</code></td>
+<td>可用时速度最快、成本最低的选项</td>
+</tr>
+</tbody>
+</table>
+<p>模型可用性会随时间变化。如果某个模型消失或未对你的密钥启用，请重新运行 <code>hermes model</code> 并从当前列表中选择。</p>
+<div class="tip"><strong>ℹ️ 模型 ID</strong>
+当 <code>provider: gemini</code> 时，请使用 Gemini 原生模型 ID，如 <code>gemini-3-flash-preview</code>，而非 OpenRouter 风格的 ID（如 <code>google/gemini-3-flash-preview</code>）。
+</div>
+<h3>最新别名</h3>
+<p>Google 为 Pro 和 Flash Gemini 系列发布了滚动别名。当你希望 Google 自动升级模型而无需修改 Hermes 配置时，<code>gemini-pro-latest</code> 和 <code>gemini-flash-latest</code> 非常实用。</p>
+<table>
+<thead>
+<tr>
+<th>别名</th>
+<th>当前指向</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gemini-pro-latest</code></td>
+<td>最新 Gemini Pro 模型</td>
+<td>需要 Google 当前 Pro 默认值时的最佳选择</td>
+</tr>
+<tr>
+<td><code>gemini-flash-latest</code></td>
+<td>最新 Gemini Flash 模型</td>
+<td>需要 Google 当前 Flash 默认值时的最佳选择</td>
+</tr>
+</tbody>
+</table>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  default: gemini-pro-latest
+  provider: gemini
+  base_url: https://generativelanguage.googleapis.com/v1beta
+</div>
+<p>如果需要严格的可复现性，请优先使用明确的模型 ID，如 <code>gemini-3.1-pro-preview</code> 或 <code>gemini-3-flash-preview</code>。</p>
+<h3>通过 Gemini API 使用 Gemma</h3>
+<p>Google 也通过 Gemini API 提供 Gemma 模型。Hermes 将这些模型识别为 Google 模型，但会在默认模型选择器中隐藏吞吐量极低的 Gemma 条目，以防新用户在长时间运行的 Agent 会话中意外选择评估层级的模型。</p>
+<p>常用评估 ID 包括：</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>ID</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gemma 4 31B IT</td>
+<td><code>gemma-4-31b-it</code></td>
+<td>较大的 Gemma 模型；适用于兼容性和质量评估</td>
+</tr>
+<tr>
+<td>Gemma 4 26B A4B IT</td>
+<td><code>gemma-4-26b-a4b-it</code></td>
+<td>可用时的较小活跃参数变体</td>
+</tr>
+</tbody>
+</table>
+<p>这些模型最适合作为 Gemini API 密钥的评估选项。Google 的 Gemma API 定价仅限免费层级，与生产级 Gemini 模型相比使用上限较低，因此持续的 Hermes Agent 使用通常应切换到付费 Gemini 模型、自托管部署或具有适当配额的其他 provider。</p>
+<p>如需使用选择器中隐藏的 Gemma 模型，请直接在配置中指定：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  default: gemma-4-31b-it
+  provider: gemini
+  base_url: https://generativelanguage.googleapis.com/v1beta
+</div>
+<h2>会话中途切换模型</h2>
+<p>在对话中使用 <code>/model</code> 命令：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/model gemini-3-flash-preview
+/model gemini-flash-latest
+/model gemini-3-pro-preview
+/model gemini-pro-latest
+/model gemma-4-31b-it
+/model gemini-3.1-flash-lite-preview
+</div>
+<p>如果尚未配置 Gemini，请退出会话并先运行 <code>hermes model</code>。<code>/model</code> 用于在已配置的 provider 和模型之间切换，不会收集新的 API 密钥。</p>
+<h2>诊断</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes doctor
+</div>
+<p>doctor 命令检查：</p>
+<ul>
+<li><code>GOOGLE_API_KEY</code> 或 <code>GEMINI_API_KEY</code> 是否可用</li>
+<li><code>google-gemini-cli</code> 的 Gemini OAuth 凭据是否存在</li>
+<li>已配置的 provider 凭据是否可以解析</li>
+</ul>
+<p>如需查看 OAuth 配额使用情况，请在 Hermes 会话中运行：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/gquota
+</div>
+<p><code>/gquota</code> 适用于 <code>google-gemini-cli</code> OAuth provider，不适用于 AI Studio API 密钥 provider。</p>
+<h2>Gateway（消息平台）</h2>
+<p>Gemini 可与所有 Hermes gateway 平台配合使用（Telegram、Discord、Slack、WhatsApp、LINE、飞书等）。将 Gemini 配置为你的 provider，然后正常启动 gateway：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway setup
+hermes gateway start
+</div>
+<p>gateway 读取 <code>config.yaml</code> 并使用相同的 Gemini provider 配置。</p>
+<h2>故障排查</h2>
+<h3>&quot;Gemini native client requires an API key&quot;</h3>
+<p>Hermes 找不到可用的 API 密钥。请将以下任一项添加到 <code>~/.hermes/.env</code>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+GOOGLE_API_KEY=...
+# 或
+GEMINI_API_KEY=...
+</div>
+<p>然后重新运行 <code>hermes model</code>。</p>
+<h3>&quot;This Google API key is on the free tier&quot;</h3>
+<p>Hermes 在设置期间会探测 Gemini API 密钥。由于工具调用、重试、压缩和辅助任务可能需要多次模型调用，免费层级配额在少数几轮 Agent 交互后即可耗尽。</p>
+<p>请为与密钥关联的 Google Cloud 项目启用计费，必要时重新生成密钥，然后运行：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes model
+</div>
+<h3>&quot;404 model not found&quot;</h3>
+<p>所选模型对你的账号、地区或密钥不可用。重新运行 <code>hermes model</code> 并从当前列表中选择其他 Gemini 模型。</p>
+<h3>Gemma 模型未显示在 <code>hermes model</code> 中</h3>
+<p>Hermes 默认可能会在选择器中隐藏低吞吐量的 Gemma 模型。如果你有意评估某个模型，请直接在 <code>~/.hermes/config.yaml</code> 中设置模型 ID。</p>
+<h3>Gemma 出现 &quot;429 quota exceeded&quot;</h3>
+<p>通过 Gemini API 提供的 Gemma 模型适合评估使用，但其 Gemini API 免费层级上限较低。请将其用于兼容性测试，然后切换到付费 Gemini 模型或其他 provider 以进行持续的 Agent 会话。</p>
+<h3>已配置 OpenAI 兼容端点</h3>
+<p>检查 <code>~/.hermes/.env</code> 中是否存在：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai/
+</div>
+<p>将其修改为原生端点或删除该覆盖项：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+GEMINI_BASE_URL=https://generativelanguage.googleapis.com/v1beta
+</div>
+<h3>OAuth 登录警告</h3>
+<p><code>google-gemini-cli</code> provider 使用 Gemini CLI / Cloud Code Assist OAuth 流程。Hermes 在启动前会发出警告，因为这与官方 AI Studio API 密钥路径不同。如需官方 API 密钥集成，请使用 <code>provider: gemini</code> 配合 <code>GOOGLE_API_KEY</code>。</p>
+<h3>工具调用因 schema 错误而失败</h3>
+<p>升级 Hermes 并重新运行 <code>hermes model</code>。原生 Gemini 适配器会针对 Gemini 更严格的函数声明格式对工具 schema 进行清理；旧版本或自定义端点可能不支持此功能。</p>
+<h2>相关链接</h2>
+<ul>
+<li><a href="/integrations/providers">AI Providers</a></li>
+<li><a href="/user-guide/configuration">Configuration</a></li>
+<li><a href="/user-guide/features/fallback-providers">Fallback Providers</a></li>
+<li><a href="/guides/aws-bedrock">AWS Bedrock</a> — 使用 AWS 凭据的原生云 provider 集成</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

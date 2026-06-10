@@ -1,0 +1,297 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>电脑操控 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html" class="active">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / 电脑操控</div><p>Hermes Agent 可以在<strong>后台</strong>驱动你的 Mac 桌面——点击、输入、滚动、拖拽。你的光标不会移动，键盘焦点不会改变，macOS 也不会切换 Spaces。你和 Agent 可以在同一台机器上协同工作。</p>
+<p>与大多数电脑操控集成不同，这适用于<strong>任何支持工具调用的模型</strong>——Claude、GPT、Gemini，或本地 vLLM 端点上的开源模型。无需关心 Anthropic 原生 schema。</p>
+<h2>工作原理</h2>
+<p><code>computer_use</code> 工具集通过 stdio 以 MCP 协议与 <a href="https://github.com/trycua/cua"><code>cua-driver</code></a> 通信。<code>cua-driver</code> 是一个 macOS 驱动，使用 SkyLight 私有 SPI（<code>SLEventPostToPid</code>、<code>SLPSPostEventRecordTo</code>）以及 <code>_AXObserverAddNotificationAndCheckRemote</code> 无障碍 SPI，实现以下功能：</p>
+<ul>
+<li>直接向目标进程投递合成事件——无需 HID 事件 tap，无需光标跳转。</li>
+<li>在不提升窗口的情况下切换 AppKit 激活状态——不触发 Space 切换。</li>
+<li>在窗口被遮挡时保持 Chromium/Electron 无障碍树存活。</li>
+</ul>
+<p>这一组合正是 OpenAI Codex「后台电脑操控」所采用的方案。cua-driver 是其开源等价实现。</p>
+<h2>启用</h2>
+<p>选择最方便的方式——两种方式运行的是同一个上游安装程序：</p>
+<p><strong>方式一：使用专用 CLI 命令（最直接）。</strong></p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes computer-use install
+</div>
+<p>此命令会获取并运行上游 cua-driver 安装脚本：
+<code>curl -fsSL https://raw.githubusercontent.com/trycua/cua/main/libs/cua-driver/scripts/install.sh</code>。
+使用 <code>hermes computer-use status</code> 验证安装结果。</p>
+<p><strong>方式二：通过交互式界面启用工具集。</strong></p>
+<ol>
+<li>运行 <code>hermes tools</code>，选择 <code>🖱️ Computer Use (macOS)</code> → <code>cua-driver (background)</code>。</li>
+<li>安装程序将运行上游安装脚本（与方式一相同）。</li>
+</ol>
+<p>安装完成后，无论采用哪种方式，继续执行以下步骤：</p>
+<ol start="3">
+<li>在提示时授予 macOS 权限：
+<ul>
+<li><strong>系统设置 → 隐私与安全性 → 辅助功能</strong> → 允许终端（或 Hermes 应用）。</li>
+<li><strong>系统设置 → 隐私与安全性 → 屏幕录制</strong> → 允许同一应用。</li>
+</ul>
+</li>
+<li>启动启用了该工具集的会话：</li>
+</ol>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+   hermes -t computer_use chat
+</div>
+<p>或在 <code>~/.hermes/config.yaml</code> 中将 <code>computer_use</code> 添加到已启用的工具集列表。</p>
+<h2>保持 cua-driver 最新</h2>
+<p>cua-driver 项目会定期发布修复（例如 v0.1.6 修复了 UTM 工作流中的 Safari 窗口焦点问题）。Hermes 在两处刷新二进制文件，避免你停留在过时版本：</p>
+<ul>
+<li><strong><code>hermes update</code></strong> — 更新 Hermes 本身时，如果 <code>cua-driver</code> 在 PATH 中，更新结束时会重新运行上游安装程序。对非 macOS 用户及未安装 cua-driver 的用户无操作。</li>
+<li><strong><code>hermes computer-use install --upgrade</code></strong> — 手动强制刷新。无论 cua-driver 是否已安装，都会重新运行上游安装程序。在不等待下次 Agent 更新的情况下获取最新修复时使用此命令。</li>
+</ul>
+<p><code>hermes computer-use status</code> 会在二进制路径旁显示已安装的版本号。</p>
+<h2>快速示例</h2>
+<p>用户 prompt（提示词）：<em>「找到我最近一封来自 Stripe 的邮件，总结他们希望我做什么。」</em></p>
+<p>Agent 的执行计划：</p>
+<ol>
+<li><code>computer_use(action=&quot;capture&quot;, mode=&quot;som&quot;, app=&quot;Mail&quot;)</code> — 获取 Mail 的截图，其中每个侧边栏项目、工具栏按钮和邮件行均已编号。</li>
+<li><code>computer_use(action=&quot;click&quot;, element=14)</code> — 点击搜索框（来自截图的第 #14 号元素）。</li>
+<li><code>computer_use(action=&quot;type&quot;, text=&quot;from:stripe&quot;)</code></li>
+<li><code>computer_use(action=&quot;key&quot;, keys=&quot;return&quot;, capture_after=True)</code> — 提交并获取新截图。</li>
+<li>点击最顶部的结果，读取正文，进行总结。</li>
+</ol>
+<p>整个过程中，你的光标保持原位，Mail 窗口始终不会切换到前台。</p>
+<h2>提供商兼容性</h2>
+<table>
+<thead>
+<tr>
+<th>提供商</th>
+<th>支持视觉？</th>
+<th>可用？</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Anthropic（Claude Sonnet/Opus 3+）</td>
+<td>✅</td>
+<td>✅</td>
+<td>综合表现最佳；支持 SOM 与原始坐标。</td>
+</tr>
+<tr>
+<td>OpenRouter（任意视觉模型）</td>
+<td>✅</td>
+<td>✅</td>
+<td>支持多部分工具消息。</td>
+</tr>
+<tr>
+<td>OpenAI（GPT-4+、GPT-5）</td>
+<td>✅</td>
+<td>✅</td>
+<td>同上。</td>
+</tr>
+<tr>
+<td>本地 vLLM / LM Studio（视觉模型）</td>
+<td>✅</td>
+<td>✅</td>
+<td>需模型支持多部分工具内容。</td>
+</tr>
+<tr>
+<td>纯文本模型</td>
+<td>❌</td>
+<td>✅（降级）</td>
+<td>使用 <code>mode=&quot;ax&quot;</code> 仅通过无障碍树操作。</td>
+</tr>
+</tbody>
+</table>
+<p>截图以 OpenAI 风格的 <code>image_url</code> 部分内联在工具结果中发送。对于 Anthropic，适配器会将其转换为原生 <code>tool_result</code> 图像块。</p>
+<h2>安全性</h2>
+<p>Hermes 应用多层防护机制：</p>
+<ul>
+<li>破坏性操作（click、type、drag、scroll、key、focus_app）需要审批——通过 CLI 对话框交互确认，或通过消息平台审批按钮确认。</li>
+<li>工具层面硬性屏蔽的按键组合：清空废纸篓、强制删除、锁定屏幕、注销、强制注销。</li>
+<li>硬性屏蔽的输入模式：<code>curl | bash</code>、<code>sudo rm -rf /</code>、fork bomb 等。</li>
+<li>Agent 的系统 prompt 明确规定：不得点击权限对话框，不得输入密码，不得执行截图中嵌入的指令。</li>
+</ul>
+<p>如需对每个操作进行确认，可在 <code>~/.hermes/config.yaml</code> 中配置 <code>approvals.mode: manual</code>。</p>
+<h2>Token 效率</h2>
+<p>截图开销较大。Hermes 应用四层优化措施：</p>
+<ul>
+<li><strong>截图淘汰</strong> — Anthropic 适配器在上下文中仅保留最近 3 张截图；较旧的截图替换为 <code>[screenshot removed to save context]</code> 占位符。</li>
+<li><strong>客户端压缩裁剪</strong> — 上下文压缩器检测多模态工具结果，并从旧结果中剥离图像部分。</li>
+<li><strong>图像感知 token 估算</strong> — 每张图像计为约 1500 个 token（Anthropic 的固定费率），而非其 base64 字符长度。</li>
+<li><strong>服务端上下文编辑（仅限 Anthropic）</strong> — 激活后，适配器通过 <code>context_management</code> 启用 <code>clear_tool_uses_20250919</code>，由 Anthropic API 在服务端清除旧工具结果。</li>
+</ul>
+<p>在 1568×900 分辨率下执行 20 个操作的会话，截图上下文通常消耗约 3 万个 token，而非约 60 万个。</p>
+<h2>限制</h2>
+<ul>
+<li><strong>仅限 macOS。</strong> cua-driver 使用的私有 Apple SPI 在 Linux 或 Windows 上不存在。跨平台 GUI 自动化请使用 <code>browser</code> 工具集。</li>
+<li><strong>私有 SPI 风险。</strong> Apple 可能在任何 OS 更新中更改 SkyLight 的符号接口。如需在 macOS 版本升级时保持可复现性，请通过 <code>HERMES_CUA_DRIVER_VERSION</code> 环境变量固定驱动版本。</li>
+<li><strong>性能。</strong> 后台模式比前台模式慢——SkyLight 路由事件耗时约 5–20ms，而直接 HID 投递更快。对于 Agent 速度的点击操作无明显影响；若尝试录制速通视频则会有感知。</li>
+<li><strong>不支持键盘输入密码。</strong> <code>type</code> 对命令行 payload 有硬性屏蔽模式；密码请使用系统自动填充功能。</li>
+</ul>
+<h2>配置</h2>
+<p>覆盖驱动二进制路径（用于测试 / CI）：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+HERMES_CUA_DRIVER_CMD=/opt/homebrew/bin/cua-driver
+HERMES_CUA_DRIVER_VERSION=0.5.0    # optional pin
+</div>
+<p>完全替换后端（用于测试）：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+HERMES_COMPUTER_USE_BACKEND=noop   # records calls, no side effects
+</div>
+<h2>故障排查</h2>
+<p><strong><code>computer_use backend unavailable: cua-driver is not installed</code></strong> — 运行 <code>hermes computer-use install</code> 获取 cua-driver 二进制文件，或运行 <code>hermes tools</code> 并启用 Computer Use 工具集。</p>
+<p><strong>点击似乎没有效果</strong> — 截图并验证。可能有一个你未注意到的模态框正在阻止输入。使用 <code>escape</code> 或关闭按钮将其关闭。</p>
+<p><strong>元素索引已过期</strong> — SOM 索引仅在下次 <code>capture</code> 之前有效。任何改变状态的操作后请重新截图。</p>
+<p><strong>「blocked pattern in type text」</strong> — 你尝试 <code>type</code> 的文本匹配了危险 shell 模式列表。请拆分命令或重新考虑操作方式。</p>
+<h2>另请参阅</h2>
+<ul>
+<li><a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/apple/macos-computer-use/SKILL.html">通用技能：<code>macos-computer-use</code></a></li>
+<li><a href="https://github.com/trycua/cua">cua-driver 源码（trycua/cua）</a></li>
+<li>跨平台 Web 任务请参阅<a href="./browser.html">浏览器自动化</a>。</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

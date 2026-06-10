@@ -1,0 +1,736 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stable Diffusion 图像生成 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Stable Diffusion 图像生成</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Stable Diffusion 图像生成</h1>
+<p>通过 HuggingFace Diffusers 使用 Stable Diffusion 模型实现最先进的文本到图像生成。适用于从文本 prompt（提示词）生成图像、执行图像到图像转换、图像修复（inpainting），或构建自定义扩散 pipeline。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/mlops/stable-diffusion</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/mlops/stable-diffusion</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Orchestra Research</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>依赖项</td>
+<td><code>diffusers&gt;=0.30.0</code>, <code>transformers&gt;=4.41.0</code>, <code>accelerate&gt;=0.31.0</code>, <code>torch&gt;=2.0.0</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Image Generation</code>, <code>Stable Diffusion</code>, <code>Diffusers</code>, <code>Text-to-Image</code>, <code>Multimodal</code>, <code>Computer Vision</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>Stable Diffusion 图像生成</h1>
+<p>使用 HuggingFace Diffusers 库通过 Stable Diffusion 生成图像的综合指南。</p>
+<h2>何时使用 Stable Diffusion</h2>
+<p><strong>在以下情况下使用 Stable Diffusion：</strong></p>
+<ul>
+<li>从文本描述生成图像</li>
+<li>执行图像到图像转换（风格迁移、增强）</li>
+<li>Inpainting（填充遮罩区域）</li>
+<li>Outpainting（将图像扩展至边界之外）</li>
+<li>创建现有图像的变体</li>
+<li>构建自定义图像生成工作流</li>
+</ul>
+<p><strong>核心功能：</strong></p>
+<ul>
+<li><strong>文本到图像</strong>：从自然语言 prompt 生成图像</li>
+<li><strong>图像到图像</strong>：在文本引导下转换现有图像</li>
+<li><strong>Inpainting</strong>：用上下文感知内容填充遮罩区域</li>
+<li><strong>ControlNet</strong>：添加空间条件控制（边缘、姿态、深度）</li>
+<li><strong>LoRA 支持</strong>：高效微调与风格适配</li>
+<li><strong>多模型支持</strong>：支持 SD 1.5、SDXL、SD 3.0、Flux</li>
+</ul>
+<p><strong>改用以下替代方案：</strong></p>
+<ul>
+<li><strong>DALL-E 3</strong>：无需 GPU 的 API 生成</li>
+<li><strong>Midjourney</strong>：艺术化、风格化输出</li>
+<li><strong>Imagen</strong>：Google Cloud 集成</li>
+<li><strong>Leonardo.ai</strong>：基于 Web 的创意工作流</li>
+</ul>
+<h2>快速开始</h2>
+<h3>安装</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install diffusers transformers accelerate torch
+pip install xformers  # Optional: memory-efficient attention
+</div>
+<h3>基础文本到图像</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from diffusers import DiffusionPipeline
+import torch
+<h1>Load pipeline (auto-detects model type)</h1>
+<p>pipe = DiffusionPipeline.from_pretrained(
+&quot;stable-diffusion-v1-5/stable-diffusion-v1-5&quot;,
+torch_dtype=torch.float16
+)
+pipe.to(&quot;cuda&quot;)</p>
+<h1>Generate image</h1>
+<p>image = pipe(
+&quot;A serene mountain landscape at sunset, highly detailed&quot;,
+num_inference_steps=50,
+guidance_scale=7.5
+).images[0]</p>
+<p>image.save(&quot;output.png&quot;)</p>
+</div>
+<h3>使用 SDXL（更高质量）</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from diffusers import AutoPipelineForText2Image
+import torch
+<p>pipe = AutoPipelineForText2Image.from_pretrained(
+&quot;stabilityai/stable-diffusion-xl-base-1.0&quot;,
+torch_dtype=torch.float16,
+variant=&quot;fp16&quot;
+)
+pipe.to(&quot;cuda&quot;)</p>
+<h1>Enable memory optimization</h1>
+<p>pipe.enable_model_cpu_offload()</p>
+<p>image = pipe(
+prompt=&quot;A futuristic city with flying cars, cinematic lighting&quot;,
+height=1024,
+width=1024,
+num_inference_steps=30
+).images[0]</p>
+</div>
+<h2>架构概览</h2>
+<h3>三支柱设计</h3>
+<p>Diffusers 围绕三个核心组件构建：</p>
+<!-- ascii-guard-ignore -->
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Pipeline (orchestration)
+├── Model (neural networks)
+│   ├── UNet / Transformer (noise prediction)
+│   ├── VAE (latent encoding/decoding)
+│   └── Text Encoder (CLIP/T5)
+└── Scheduler (denoising algorithm)
+</div>
+<!-- ascii-guard-ignore-end -->
+<h3>Pipeline 推理流程</h3>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Text Prompt → Text Encoder → Text Embeddings
+                                    ↓
+Random Noise → [Denoising Loop] ← Scheduler
+                      ↓
+               Predicted Noise
+                      ↓
+              VAE Decoder → Final Image
+</div>
+<h2>核心概念</h2>
+<h3>Pipeline</h3>
+<p>Pipeline 编排完整工作流：</p>
+<table>
+<thead>
+<tr>
+<th>Pipeline</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>StableDiffusionPipeline</code></td>
+<td>文本到图像（SD 1.x/2.x）</td>
+</tr>
+<tr>
+<td><code>StableDiffusionXLPipeline</code></td>
+<td>文本到图像（SDXL）</td>
+</tr>
+<tr>
+<td><code>StableDiffusion3Pipeline</code></td>
+<td>文本到图像（SD 3.0）</td>
+</tr>
+<tr>
+<td><code>FluxPipeline</code></td>
+<td>文本到图像（Flux 模型）</td>
+</tr>
+<tr>
+<td><code>StableDiffusionImg2ImgPipeline</code></td>
+<td>图像到图像</td>
+</tr>
+<tr>
+<td><code>StableDiffusionInpaintPipeline</code></td>
+<td>Inpainting</td>
+</tr>
+</tbody>
+</table>
+<h3>Scheduler</h3>
+<p>Scheduler 控制去噪过程：</p>
+<table>
+<thead>
+<tr>
+<th>Scheduler</th>
+<th>步数</th>
+<th>质量</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EulerDiscreteScheduler</code></td>
+<td>20-50</td>
+<td>良好</td>
+<td>默认选择</td>
+</tr>
+<tr>
+<td><code>EulerAncestralDiscreteScheduler</code></td>
+<td>20-50</td>
+<td>良好</td>
+<td>更多变化</td>
+</tr>
+<tr>
+<td><code>DPMSolverMultistepScheduler</code></td>
+<td>15-25</td>
+<td>优秀</td>
+<td>快速、高质量</td>
+</tr>
+<tr>
+<td><code>DDIMScheduler</code></td>
+<td>50-100</td>
+<td>良好</td>
+<td>确定性生成</td>
+</tr>
+<tr>
+<td><code>LCMScheduler</code></td>
+<td>4-8</td>
+<td>良好</td>
+<td>极速生成</td>
+</tr>
+<tr>
+<td><code>UniPCMultistepScheduler</code></td>
+<td>15-25</td>
+<td>优秀</td>
+<td>快速收敛</td>
+</tr>
+</tbody>
+</table>
+<h3>切换 Scheduler</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from diffusers import DPMSolverMultistepScheduler
+<h1>Swap for faster generation</h1>
+<p>pipe.scheduler = DPMSolverMultistepScheduler.from_config(
+pipe.scheduler.config
+)</p>
+<h1>Now generate with fewer steps</h1>
+<p>image = pipe(prompt, num_inference_steps=20).images[0]</p>
+</div>
+<h2>生成参数</h2>
+<h3>关键参数</h3>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>prompt</code></td>
+<td>必填</td>
+<td>目标图像的文本描述</td>
+</tr>
+<tr>
+<td><code>negative_prompt</code></td>
+<td>None</td>
+<td>图像中需要避免的内容</td>
+</tr>
+<tr>
+<td><code>num_inference_steps</code></td>
+<td>50</td>
+<td>去噪步数（越多质量越好）</td>
+</tr>
+<tr>
+<td><code>guidance_scale</code></td>
+<td>7.5</td>
+<td>Prompt 遵循程度（通常为 7-12）</td>
+</tr>
+<tr>
+<td><code>height</code>, <code>width</code></td>
+<td>512/1024</td>
+<td>输出尺寸（8 的倍数）</td>
+</tr>
+<tr>
+<td><code>generator</code></td>
+<td>None</td>
+<td>用于可复现性的 Torch generator</td>
+</tr>
+<tr>
+<td><code>num_images_per_prompt</code></td>
+<td>1</td>
+<td>批量大小</td>
+</tr>
+</tbody>
+</table>
+<h3>可复现生成</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import torch
+<p>generator = torch.Generator(device=&quot;cuda&quot;).manual_seed(42)</p>
+<p>image = pipe(
+prompt=&quot;A cat wearing a top hat&quot;,
+generator=generator,
+num_inference_steps=50
+).images[0]</p>
+</div>
+<h3>Negative prompt</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+image = pipe(
+    prompt="Professional photo of a dog in a garden",
+    negative_prompt="blurry, low quality, distorted, ugly, bad anatomy",
+    guidance_scale=7.5
+).images[0]
+</div>
+<h2>图像到图像</h2>
+<p>在文本引导下转换现有图像：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from diffusers import AutoPipelineForImage2Image
+from PIL import Image
+<p>pipe = AutoPipelineForImage2Image.from_pretrained(
+&quot;stable-diffusion-v1-5/stable-diffusion-v1-5&quot;,
+torch_dtype=torch.float16
+).to(&quot;cuda&quot;)</p>
+<p>init_image = Image.open(&quot;input.jpg&quot;).resize((512, 512))</p>
+<p>image = pipe(
+prompt=&quot;A watercolor painting of the scene&quot;,
+image=init_image,
+strength=0.75,  # How much to transform (0-1)
+num_inference_steps=50
+).images[0]</p>
+</div>
+<h2>Inpainting</h2>
+<p>填充遮罩区域：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from diffusers import AutoPipelineForInpainting
+from PIL import Image
+<p>pipe = AutoPipelineForInpainting.from_pretrained(
+&quot;runwayml/stable-diffusion-inpainting&quot;,
+torch_dtype=torch.float16
+).to(&quot;cuda&quot;)</p>
+<p>image = Image.open(&quot;photo.jpg&quot;)
+mask = Image.open(&quot;mask.png&quot;)  # White = inpaint region</p>
+<p>result = pipe(
+prompt=&quot;A red car parked on the street&quot;,
+image=image,
+mask_image=mask,
+num_inference_steps=50
+).images[0]</p>
+</div>
+<h2>ControlNet</h2>
+<p>添加空间条件控制以实现精确控制：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from diffusers import StableDiffusionControlNetPipeline, ControlNetModel
+import torch
+<h1>Load ControlNet for edge conditioning</h1>
+<p>controlnet = ControlNetModel.from_pretrained(
+&quot;lllyasviel/control_v11p_sd15_canny&quot;,
+torch_dtype=torch.float16
+)</p>
+<p>pipe = StableDiffusionControlNetPipeline.from_pretrained(
+&quot;stable-diffusion-v1-5/stable-diffusion-v1-5&quot;,
+controlnet=controlnet,
+torch_dtype=torch.float16
+).to(&quot;cuda&quot;)</p>
+<h1>Use Canny edge image as control</h1>
+<p>control_image = get_canny_image(input_image)</p>
+<p>image = pipe(
+prompt=&quot;A beautiful house in the style of Van Gogh&quot;,
+image=control_image,
+num_inference_steps=30
+).images[0]</p>
+</div>
+<h3>可用的 ControlNet</h3>
+<table>
+<thead>
+<tr>
+<th>ControlNet</th>
+<th>输入类型</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>canny</code></td>
+<td>边缘图</td>
+<td>保留结构</td>
+</tr>
+<tr>
+<td><code>openpose</code></td>
+<td>姿态骨架</td>
+<td>人体姿态</td>
+</tr>
+<tr>
+<td><code>depth</code></td>
+<td>深度图</td>
+<td>3D 感知生成</td>
+</tr>
+<tr>
+<td><code>normal</code></td>
+<td>法线图</td>
+<td>表面细节</td>
+</tr>
+<tr>
+<td><code>mlsd</code></td>
+<td>线段</td>
+<td>建筑线条</td>
+</tr>
+<tr>
+<td><code>scribble</code></td>
+<td>粗略草图</td>
+<td>草图到图像</td>
+</tr>
+</tbody>
+</table>
+<h2>LoRA 适配器</h2>
+<p>加载微调风格适配器：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from diffusers import DiffusionPipeline
+<p>pipe = DiffusionPipeline.from_pretrained(
+&quot;stable-diffusion-v1-5/stable-diffusion-v1-5&quot;,
+torch_dtype=torch.float16
+).to(&quot;cuda&quot;)</p>
+<h1>Load LoRA weights</h1>
+<p>pipe.load_lora_weights(&quot;path/to/lora&quot;, weight_name=&quot;style.safetensors&quot;)</p>
+<h1>Generate with LoRA style</h1>
+<p>image = pipe(&quot;A portrait in the trained style&quot;).images[0]</p>
+<h1>Adjust LoRA strength</h1>
+<p>pipe.fuse_lora(lora_scale=0.8)</p>
+<h1>Unload LoRA</h1>
+<p>pipe.unload_lora_weights()</p>
+</div>
+<h3>多个 LoRA</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Load multiple LoRAs
+pipe.load_lora_weights("lora1", adapter_name="style")
+pipe.load_lora_weights("lora2", adapter_name="character")
+<h1>Set weights for each</h1>
+<p>pipe.set_adapters([&quot;style&quot;, &quot;character&quot;], adapter_weights=[0.7, 0.5])</p>
+<p>image = pipe(&quot;A portrait&quot;).images[0]</p>
+</div>
+<h2>内存优化</h2>
+<h3>启用 CPU 卸载</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Model CPU offload - moves models to CPU when not in use
+pipe.enable_model_cpu_offload()
+<h1>Sequential CPU offload - more aggressive, slower</h1>
+<p>pipe.enable_sequential_cpu_offload()</p>
+</div>
+<h3>Attention 切片</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Reduce memory by computing attention in chunks
+pipe.enable_attention_slicing()
+<h1>Or specific chunk size</h1>
+<p>pipe.enable_attention_slicing(&quot;max&quot;)</p>
+</div>
+<h3>xFormers 内存高效 Attention</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Requires xformers package
+pipe.enable_xformers_memory_efficient_attention()
+</div>
+<h3>大图像的 VAE 切片</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Decode latents in tiles for large images
+pipe.enable_vae_slicing()
+pipe.enable_vae_tiling()
+</div>
+<h2>模型变体</h2>
+<h3>加载不同精度</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# FP16 (recommended for GPU)
+pipe = DiffusionPipeline.from_pretrained(
+    "model-id",
+    torch_dtype=torch.float16,
+    variant="fp16"
+)
+<h1>BF16 (better precision, requires Ampere+ GPU)</h1>
+<p>pipe = DiffusionPipeline.from_pretrained(
+&quot;model-id&quot;,
+torch_dtype=torch.bfloat16
+)</p>
+</div>
+<h3>加载特定组件</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from diffusers import UNet2DConditionModel, AutoencoderKL
+<h1>Load custom VAE</h1>
+<p>vae = AutoencoderKL.from_pretrained(&quot;stabilityai/sd-vae-ft-mse&quot;)</p>
+<h1>Use with pipeline</h1>
+<p>pipe = DiffusionPipeline.from_pretrained(
+&quot;stable-diffusion-v1-5/stable-diffusion-v1-5&quot;,
+vae=vae,
+torch_dtype=torch.float16
+)</p>
+</div>
+<h2>批量生成</h2>
+<p>高效生成多张图像：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Multiple prompts
+prompts = [
+    "A cat playing piano",
+    "A dog reading a book",
+    "A bird painting a picture"
+]
+<p>images = pipe(prompts, num_inference_steps=30).images</p>
+<h1>Multiple images per prompt</h1>
+<p>images = pipe(
+&quot;A beautiful sunset&quot;,
+num_images_per_prompt=4,
+num_inference_steps=30
+).images</p>
+</div>
+<h2>常见工作流</h2>
+<h3>工作流 1：高质量生成</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from diffusers import StableDiffusionXLPipeline, DPMSolverMultistepScheduler
+import torch
+<h1>1. Load SDXL with optimizations</h1>
+<p>pipe = StableDiffusionXLPipeline.from_pretrained(
+&quot;stabilityai/stable-diffusion-xl-base-1.0&quot;,
+torch_dtype=torch.float16,
+variant=&quot;fp16&quot;
+)
+pipe.to(&quot;cuda&quot;)
+pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
+pipe.enable_model_cpu_offload()</p>
+<h1>2. Generate with quality settings</h1>
+<p>image = pipe(
+prompt=&quot;A majestic lion in the savanna, golden hour lighting, 8k, detailed fur&quot;,
+negative_prompt=&quot;blurry, low quality, cartoon, anime, sketch&quot;,
+num_inference_steps=30,
+guidance_scale=7.5,
+height=1024,
+width=1024
+).images[0]</p>
+</div>
+<h3>工作流 2：快速原型验证</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from diffusers import AutoPipelineForText2Image, LCMScheduler
+import torch
+<h1>Use LCM for 4-8 step generation</h1>
+<p>pipe = AutoPipelineForText2Image.from_pretrained(
+&quot;stabilityai/stable-diffusion-xl-base-1.0&quot;,
+torch_dtype=torch.float16
+).to(&quot;cuda&quot;)</p>
+<h1>Load LCM LoRA for fast generation</h1>
+<p>pipe.load_lora_weights(&quot;latent-consistency/lcm-lora-sdxl&quot;)
+pipe.scheduler = LCMScheduler.from_config(pipe.scheduler.config)
+pipe.fuse_lora()</p>
+<h1>Generate in ~1 second</h1>
+<p>image = pipe(
+&quot;A beautiful landscape&quot;,
+num_inference_steps=4,
+guidance_scale=1.0
+).images[0]</p>
+</div>
+<h2>常见问题</h2>
+<p><strong>CUDA 内存不足：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Enable memory optimizations
+pipe.enable_model_cpu_offload()
+pipe.enable_attention_slicing()
+pipe.enable_vae_slicing()
+<h1>Or use lower precision</h1>
+<p>pipe = DiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float16)</p>
+</div>
+<p><strong>黑色/噪声图像：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Check VAE configuration
+# Use safety checker bypass if needed
+pipe.safety_checker = None
+<h1>Ensure proper dtype consistency</h1>
+<p>pipe = pipe.to(dtype=torch.float16)</p>
+</div>
+<p><strong>生成速度慢：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Use faster scheduler
+from diffusers import DPMSolverMultistepScheduler
+pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
+<h1>Reduce steps</h1>
+<p>image = pipe(prompt, num_inference_steps=20).images[0]</p>
+</div>
+<h2>参考资料</h2>
+<ul>
+<li><strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/stable-diffusion/references/advanced-usage.html">高级用法</a></strong> - 自定义 pipeline、微调、部署</li>
+<li><strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/stable-diffusion/references/troubleshooting.html">故障排查</a></strong> - 常见问题与解决方案</li>
+</ul>
+<h2>资源</h2>
+<ul>
+<li><strong>文档</strong>：https://huggingface.co/docs/diffusers</li>
+<li><strong>代码仓库</strong>：https://github.com/huggingface/diffusers</li>
+<li><strong>模型中心</strong>：https://huggingface.co/models?library=diffusers</li>
+<li><strong>Discord</strong>：https://discord.gg/diffusers</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

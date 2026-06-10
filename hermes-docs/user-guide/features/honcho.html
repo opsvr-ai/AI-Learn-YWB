@@ -1,0 +1,564 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Honcho Memory - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Honcho Memory</div><p><a href="https://github.com/plastic-labs/honcho">Honcho</a> 是一个 AI 原生记忆后端，在 Hermes 内置记忆系统之上增加了辩证推理（dialectic reasoning）和深度用户建模能力。它不是简单的键值存储，而是通过对对话事后推理，持续维护一个关于用户的动态模型——涵盖其偏好、沟通风格、目标与行为模式。</p>
+<div class="tip"><strong>ℹ️ Honcho 是一个 Memory Provider 插件</strong>
+Honcho 已集成到 <a href="./memory-providers.html">Memory Providers</a> 系统中。以下所有功能均可通过统一的 memory provider 接口使用。
+</div>
+<h2>Honcho 新增了什么</h2>
+<table>
+<thead>
+<tr>
+<th>能力</th>
+<th>内置记忆</th>
+<th>Honcho</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>跨会话持久化</td>
+<td>✔ 基于文件的 MEMORY.md/USER.md</td>
+<td>✔ 服务端 API</td>
+</tr>
+<tr>
+<td>用户画像</td>
+<td>✔ 手动 agent 维护</td>
+<td>✔ 自动辩证推理</td>
+</tr>
+<tr>
+<td>会话摘要</td>
+<td>—</td>
+<td>✔ 会话级上下文注入</td>
+</tr>
+<tr>
+<td>多 agent 隔离</td>
+<td>—</td>
+<td>✔ 按 peer 分离画像</td>
+</tr>
+<tr>
+<td>观察模式</td>
+<td>—</td>
+<td>✔ 统一或定向观察</td>
+</tr>
+<tr>
+<td>结论（派生洞察）</td>
+<td>—</td>
+<td>✔ 服务端模式推理</td>
+</tr>
+<tr>
+<td>历史搜索</td>
+<td>✔ FTS5 会话搜索</td>
+<td>✔ 基于结论的语义搜索</td>
+</tr>
+</tbody>
+</table>
+<p><strong>辩证推理</strong>：每轮对话后（由 <code>dialecticCadence</code> 控制频率），Honcho 分析交流内容，推导出关于用户偏好、习惯和目标的洞察。这些洞察随时间积累，使 agent 对用户的理解不断加深，超越用户明确表述的内容。辩证过程支持多轮深度（1–3 轮），并自动选择冷启动/热启动 prompt——冷启动查询聚焦于通用用户事实，热启动查询优先处理会话级上下文。</p>
+<p><strong>会话级上下文</strong>：基础上下文现在包含会话摘要，以及用户表示和 peer 卡片。这使 agent 能感知当前会话中已讨论的内容，减少重复并保持连贯性。</p>
+<p><strong>多 agent 画像</strong>：当多个 Hermes 实例与同一用户交互时（例如编程助手和个人助手），Honcho 为每个 peer 维护独立画像。每个 peer 只能看到自己的观察和结论，防止上下文交叉污染。</p>
+<h2>设置</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes memory setup    # 从 provider 列表中选择 "honcho"
+</div>
+<p>或手动配置：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ~/.hermes/config.yaml
+memory:
+  provider: honcho
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+echo 'HONCHO_API_KEY=***' &gt;&gt; ~/.hermes/.env
+</div>
+<p>在 <a href="https://honcho.dev">honcho.dev</a> 获取 API key。</p>
+<h2>架构</h2>
+<h3>双层上下文注入</h3>
+<p>每轮对话（在 <code>hybrid</code> 或 <code>context</code> 模式下），Honcho 组装两层上下文注入到系统 prompt 中：</p>
+<ol>
+<li><strong>基础上下文</strong> — 会话摘要、用户表示、用户 peer 卡片、AI 自我表示和 AI 身份卡片。按 <code>contextCadence</code> 刷新。这是&quot;这个用户是谁&quot;层。</li>
+<li><strong>辩证补充</strong> — LLM 合成的关于用户当前状态和需求的推理。按 <code>dialecticCadence</code> 刷新。这是&quot;当前最重要的是什么&quot;层。</li>
+</ol>
+<p>两层内容拼接后，按 <code>contextTokens</code> 预算截断（如已设置）。</p>
+<h3>冷启动/热启动 Prompt 选择</h3>
+<p>辩证过程自动在两种 prompt 策略之间切换：</p>
+<ul>
+<li><strong>冷启动</strong>（尚无基础上下文）：通用查询——&quot;这个人是谁？他们的偏好、目标和工作方式是什么？&quot;</li>
+<li><strong>热启动会话</strong>（已有基础上下文）：会话级查询——&quot;结合本次会话已讨论的内容，关于该用户哪些上下文最相关？&quot;</li>
+</ul>
+<p>是否已填充基础上下文决定了自动选择哪种策略。</p>
+<h3>三个正交配置旋钮</h3>
+<p>成本和深度由三个独立旋钮控制：</p>
+<table>
+<thead>
+<tr>
+<th>旋钮</th>
+<th>控制内容</th>
+<th>默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>contextCadence</code></td>
+<td><code>context()</code> API 调用之间的最小轮数（基础层刷新）</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><code>dialecticCadence</code></td>
+<td><code>peer.chat()</code> LLM 调用之间的最小轮数（辩证层刷新）</td>
+<td><code>2</code>（推荐 1–5）</td>
+</tr>
+<tr>
+<td><code>dialecticDepth</code></td>
+<td>每次辩证调用的 <code>.chat()</code> 轮数（1–3）</td>
+<td><code>1</code></td>
+</tr>
+</tbody>
+</table>
+<p>三者相互独立——可以频繁刷新上下文而不频繁运行辩证，也可以低频运行深度多轮辩证。示例：<code>contextCadence: 1, dialecticCadence: 5, dialecticDepth: 2</code> 表示每轮刷新基础上下文，每 5 轮运行一次辩证，每次辩证运行 2 轮。</p>
+<h3>辩证深度（多轮）</h3>
+<p>当 <code>dialecticDepth</code> &gt; 1 时，每次辩证调用运行多轮 <code>.chat()</code>：</p>
+<ul>
+<li><strong>第 0 轮</strong>：冷启动或热启动 prompt（见上文）</li>
+<li><strong>第 1 轮</strong>：自我审计——识别初始评估中的不足，并综合近期会话的证据</li>
+<li><strong>第 2 轮</strong>：调和——检查前几轮之间的矛盾，生成最终综合结论</li>
+</ul>
+<p>每轮使用按比例分配的推理级别（早期轮次较轻，主轮次使用基础级别）。通过 <code>dialecticDepthLevels</code> 可逐轮覆盖——例如，深度 3 运行时使用 <code>[&quot;minimal&quot;, &quot;medium&quot;, &quot;high&quot;]</code>。</p>
+<p>如果前一轮返回了强信号（长且结构化的输出），后续轮次会提前退出，因此深度 3 并不总是意味着 3 次 LLM 调用。</p>
+<h3>会话启动预热</h3>
+<p>会话初始化时，Honcho 在后台以完整配置的 <code>dialecticDepth</code> 触发一次辩证调用，并将结果直接传递给第 1 轮的上下文组装。对冷 peer 进行单轮预热通常返回较少内容——多轮深度会在用户开口之前完成审计/调和周期。如果预热在第 1 轮前未完成，第 1 轮将回退到有超时限制的同步调用。</p>
+<h3>查询自适应推理级别</h3>
+<p>自动注入的辩证会根据查询长度调整 <code>dialecticReasoningLevel</code>：≥120 字符时 +1 级，≥400 字符时 +2 级，上限为 <code>reasoningLevelCap</code>（默认 <code>&quot;high&quot;</code>）。设置 <code>reasoningHeuristic: false</code> 可禁用此功能，将所有自动调用固定在 <code>dialecticReasoningLevel</code>。可用级别：<code>minimal</code>、<code>low</code>、<code>medium</code>、<code>high</code>、<code>max</code>。</p>
+<h2>配置选项</h2>
+<p>Honcho 在 <code>~/.honcho/config.json</code>（全局）或 <code>$HERMES_HOME/honcho.json</code>（profile 本地）中配置。设置向导会自动处理。</p>
+<h3>完整配置参考</h3>
+<table>
+<thead>
+<tr>
+<th>键</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>contextTokens</code></td>
+<td><code>null</code>（不限制）</td>
+<td>每轮自动注入上下文的 token 预算。设为整数（如 1200）以限制上限，按词边界截断</td>
+</tr>
+<tr>
+<td><code>contextCadence</code></td>
+<td><code>1</code></td>
+<td><code>context()</code> API 调用之间的最小轮数（基础层刷新）</td>
+</tr>
+<tr>
+<td><code>dialecticCadence</code></td>
+<td><code>2</code></td>
+<td><code>peer.chat()</code> LLM 调用之间的最小轮数（辩证层）。推荐 1–5。在 <code>tools</code> 模式下无关——由模型显式调用</td>
+</tr>
+<tr>
+<td><code>dialecticDepth</code></td>
+<td><code>1</code></td>
+<td>每次辩证调用的 <code>.chat()</code> 轮数，限制在 1–3</td>
+</tr>
+<tr>
+<td><code>dialecticDepthLevels</code></td>
+<td><code>null</code></td>
+<td>可选的每轮推理级别数组，如 <code>[&quot;minimal&quot;, &quot;low&quot;, &quot;medium&quot;]</code>，覆盖按比例分配的默认值</td>
+</tr>
+<tr>
+<td><code>dialecticReasoningLevel</code></td>
+<td><code>'low'</code></td>
+<td>基础推理级别：<code>minimal</code>、<code>low</code>、<code>medium</code>、<code>high</code>、<code>max</code></td>
+</tr>
+<tr>
+<td><code>dialecticDynamic</code></td>
+<td><code>true</code></td>
+<td>为 <code>true</code> 时，模型可通过 tool 参数逐次覆盖推理级别</td>
+</tr>
+<tr>
+<td><code>dialecticMaxChars</code></td>
+<td><code>600</code></td>
+<td>注入系统 prompt 的辩证结果最大字符数</td>
+</tr>
+<tr>
+<td><code>recallMode</code></td>
+<td><code>'hybrid'</code></td>
+<td><code>hybrid</code>（自动注入 + tools）、<code>context</code>（仅注入）、<code>tools</code>（仅 tools）</td>
+</tr>
+<tr>
+<td><code>writeFrequency</code></td>
+<td><code>'async'</code></td>
+<td>消息刷新时机：<code>async</code>（后台线程）、<code>turn</code>（同步）、<code>session</code>（会话结束时批量）或整数 N</td>
+</tr>
+<tr>
+<td><code>saveMessages</code></td>
+<td><code>true</code></td>
+<td>是否将消息持久化到 Honcho API</td>
+</tr>
+<tr>
+<td><code>observationMode</code></td>
+<td><code>'directional'</code></td>
+<td><code>directional</code>（全部开启）或 <code>unified</code>（共享池）。可用 <code>observation</code> 对象进行精细控制</td>
+</tr>
+<tr>
+<td><code>messageMaxChars</code></td>
+<td><code>25000</code></td>
+<td>通过 <code>add_messages()</code> 发送的每条消息最大字符数，超出时分块</td>
+</tr>
+<tr>
+<td><code>dialecticMaxInputChars</code></td>
+<td><code>10000</code></td>
+<td>传入 <code>peer.chat()</code> 的辩证查询输入最大字符数</td>
+</tr>
+<tr>
+<td><code>sessionStrategy</code></td>
+<td><code>'per-directory'</code></td>
+<td><code>per-directory</code>、<code>per-repo</code>、<code>per-session</code> 或 <code>global</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>会话策略</strong>控制 Honcho 会话与工作内容的映射方式：</p>
+<ul>
+<li><code>per-session</code> — 每次 <code>hermes</code> 运行获得一个新会话。干净启动，通过 tools 访问记忆。推荐新用户使用。</li>
+<li><code>per-directory</code> — 每个工作目录对应一个 Honcho 会话，上下文跨运行积累。</li>
+<li><code>per-repo</code> — 每个 git 仓库对应一个会话。</li>
+<li><code>global</code> — 所有目录共用一个会话。</li>
+</ul>
+<p><strong>Recall 模式</strong>控制记忆如何流入对话：</p>
+<ul>
+<li><code>hybrid</code> — 上下文自动注入系统 prompt，同时提供 tools（由模型决定何时查询）。</li>
+<li><code>context</code> — 仅自动注入，隐藏 tools。</li>
+<li><code>tools</code> — 仅 tools，不自动注入。agent 必须显式调用 <code>honcho_reasoning</code>、<code>honcho_search</code> 等。</li>
+</ul>
+<p><strong>各 recall 模式下的设置行为：</strong></p>
+<table>
+<thead>
+<tr>
+<th>设置</th>
+<th><code>hybrid</code></th>
+<th><code>context</code></th>
+<th><code>tools</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>writeFrequency</code></td>
+<td>刷新消息</td>
+<td>刷新消息</td>
+<td>刷新消息</td>
+</tr>
+<tr>
+<td><code>contextCadence</code></td>
+<td>控制基础上下文刷新</td>
+<td>控制基础上下文刷新</td>
+<td>无关——不注入</td>
+</tr>
+<tr>
+<td><code>dialecticCadence</code></td>
+<td>控制自动 LLM 调用</td>
+<td>控制自动 LLM 调用</td>
+<td>无关——由模型显式调用</td>
+</tr>
+<tr>
+<td><code>dialecticDepth</code></td>
+<td>每次调用的多轮数</td>
+<td>每次调用的多轮数</td>
+<td>无关——由模型显式调用</td>
+</tr>
+<tr>
+<td><code>contextTokens</code></td>
+<td>限制注入量</td>
+<td>限制注入量</td>
+<td>无关——不注入</td>
+</tr>
+<tr>
+<td><code>dialecticDynamic</code></td>
+<td>控制模型覆盖</td>
+<td>不适用（无 tools）</td>
+<td>控制模型覆盖</td>
+</tr>
+</tbody>
+</table>
+<p>在 <code>tools</code> 模式下，模型完全自主——它在需要时调用 <code>honcho_reasoning</code>，并自行选择 <code>reasoning_level</code>。Cadence 和预算设置仅适用于有自动注入的模式（<code>hybrid</code> 和 <code>context</code>）。</p>
+<h2>观察模式（定向 vs. 统一）</h2>
+<p>Honcho 将对话建模为 peer 之间的消息交换。每个 peer 有两个观察开关，与 Honcho 的 <code>SessionPeerConfig</code> 一一对应：</p>
+<table>
+<thead>
+<tr>
+<th>开关</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>observeMe</code></td>
+<td>Honcho 根据该 peer 自身的消息构建其表示</td>
+</tr>
+<tr>
+<td><code>observeOthers</code></td>
+<td>该 peer 观察另一 peer 的消息（用于跨 peer 推理）</td>
+</tr>
+</tbody>
+</table>
+<p>两个 peer × 两个开关 = 四个标志。<code>observationMode</code> 是快捷预设：</p>
+<table>
+<thead>
+<tr>
+<th>预设</th>
+<th>用户标志</th>
+<th>AI 标志</th>
+<th>语义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&quot;directional&quot;</code>（默认）</td>
+<td>me: 开，others: 开</td>
+<td>me: 开，others: 开</td>
+<td>完全互相观察。启用跨 peer 辩证——&quot;AI 根据用户所说和 AI 回复，对用户了解多少。&quot;</td>
+</tr>
+<tr>
+<td><code>&quot;unified&quot;</code></td>
+<td>me: 开，others: 关</td>
+<td>me: 关，others: 开</td>
+<td>共享池语义——AI 仅观察用户消息，用户 peer 仅自我建模。单观察者池。</td>
+</tr>
+</tbody>
+</table>
+<p>使用显式 <code>observation</code> 块覆盖预设，实现逐 peer 精细控制：</p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+"observation": {
+  "user": { "observeMe": true,  "observeOthers": true },
+  "ai":   { "observeMe": true,  "observeOthers": false }
+}
+</div>
+<p>常见配置模式：</p>
+<table>
+<thead>
+<tr>
+<th>意图</th>
+<th>配置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>完全观察（大多数用户）</td>
+<td><code>&quot;observationMode&quot;: &quot;directional&quot;</code></td>
+</tr>
+<tr>
+<td>AI 不应根据自身回复重新建模用户</td>
+<td><code>&quot;ai&quot;: {&quot;observeMe&quot;: true, &quot;observeOthers&quot;: false}</code></td>
+</tr>
+<tr>
+<td>AI peer 不应通过自我观察更新的强人设</td>
+<td><code>&quot;ai&quot;: {&quot;observeMe&quot;: false, &quot;observeOthers&quot;: true}</code></td>
+</tr>
+</tbody>
+</table>
+<p>通过 <a href="https://app.honcho.dev">Honcho 控制台</a> 设置的服务端开关优先于本地默认值——Hermes 在会话初始化时同步回本地。</p>
+<h2>Tools</h2>
+<p>当 Honcho 作为 memory provider 激活时，以下五个 tools 可用：</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>honcho_profile</code></td>
+<td>读取或更新 peer 卡片——传入 <code>card</code>（事实列表）以更新，省略则读取</td>
+</tr>
+<tr>
+<td><code>honcho_search</code></td>
+<td>对上下文进行语义搜索——返回原始摘录，不经 LLM 合成</td>
+</tr>
+<tr>
+<td><code>honcho_context</code></td>
+<td>完整会话上下文——摘要、表示、卡片、近期消息</td>
+</tr>
+<tr>
+<td><code>honcho_reasoning</code></td>
+<td>Honcho LLM 合成的答案——传入 <code>reasoning_level</code>（minimal/low/medium/high/max）控制深度</td>
+</tr>
+<tr>
+<td><code>honcho_conclude</code></td>
+<td>创建或删除结论——传入 <code>conclusion</code> 创建，传入 <code>delete_id</code> 删除（仅限 PII）</td>
+</tr>
+</tbody>
+</table>
+<h2>CLI 命令</h2>
+<p><code>hermes honcho</code> 子命令<strong>仅在 Honcho 为当前活跃 memory provider 时注册</strong>（<code>config.yaml</code> 中 <code>memory.provider: honcho</code>）。先运行 <code>hermes memory setup</code> 并选择 Honcho，子命令将在下次调用时出现。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes honcho status          # 连接状态、配置及关键设置
+hermes honcho setup           # 重定向到 `hermes memory setup`
+hermes honcho strategy        # 查看或设置会话策略（per-session/per-directory/per-repo/global）
+hermes honcho peer            # 查看或更新 peer 名称及辩证推理级别
+hermes honcho mode            # 查看或设置 recall 模式（hybrid/context/tools）
+hermes honcho tokens          # 查看或设置上下文和辩证的 token 预算
+hermes honcho identity        # 初始化或查看 AI peer 的 Honcho 身份
+hermes honcho sync            # 将 Honcho 配置同步到所有现有 profile
+hermes honcho peers           # 查看所有 profile 中的 peer 身份
+hermes honcho sessions        # 列出已知的 Honcho 会话映射
+hermes honcho map             # 将当前目录映射到 Honcho 会话名称
+hermes honcho enable          # 为当前 profile 启用 Honcho
+hermes honcho disable         # 为当前 profile 禁用 Honcho
+hermes honcho migrate         # 从 openclaw-honcho 迁移的分步指南
+</div>
+<h2>从 <code>hermes honcho</code> 迁移</h2>
+<p>如果你之前使用了独立的 <code>hermes honcho setup</code>：</p>
+<ol>
+<li>你的现有配置（<code>honcho.json</code> 或 <code>~/.honcho/config.json</code>）已保留</li>
+<li>你的服务端数据（记忆、结论、用户画像）完好无损</li>
+<li>在 config.yaml 中设置 <code>memory.provider: honcho</code> 即可重新激活</li>
+</ol>
+<p>无需重新登录或重新设置。运行 <code>hermes memory setup</code> 并选择&quot;honcho&quot;——向导会自动检测你的现有配置。</p>
+<h2>完整文档</h2>
+<p>参见 <a href="./memory-providers.html#honcho">Memory Providers — Honcho</a> 获取完整参考文档。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,840 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instructor - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Instructor</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Instructor</h1>
+<p>使用 Pydantic 验证从 LLM 响应中提取结构化数据，自动重试失败的提取，以类型安全方式解析复杂 JSON，并使用 Instructor 流式传输部分结果——经过实战检验的结构化输出库</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/mlops/instructor</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/mlops/instructor</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Orchestra Research</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>依赖项</td>
+<td><code>instructor</code>, <code>pydantic</code>, <code>openai</code>, <code>anthropic</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Prompt Engineering</code>, <code>Instructor</code>, <code>Structured Output</code>, <code>Pydantic</code>, <code>Data Extraction</code>, <code>JSON Parsing</code>, <code>Type Safety</code>, <code>Validation</code>, <code>Streaming</code>, <code>OpenAI</code>, <code>Anthropic</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 skill 激活时 agent 所看到的指令内容。
+</div>
+<h1>Instructor：结构化 LLM 输出</h1>
+<h2>何时使用此 Skill</h2>
+<p>在以下情况下使用 Instructor：</p>
+<ul>
+<li><strong>从 LLM 响应中可靠地提取结构化数据</strong></li>
+<li><strong>根据 Pydantic schema 自动验证输出</strong></li>
+<li><strong>通过自动错误处理重试失败的提取</strong></li>
+<li><strong>以类型安全和验证方式解析复杂 JSON</strong></li>
+<li><strong>流式传输部分结果</strong>以进行实时处理</li>
+<li><strong>以一致的 API 支持多个 LLM 提供商</strong></li>
+</ul>
+<p><strong>GitHub Stars</strong>：15,000+｜<strong>实战检验</strong>：100,000+ 开发者</p>
+<h2>安装</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 基础安装
+pip install instructor
+<h1>指定提供商</h1>
+<p>pip install &quot;instructor[anthropic]&quot;  # Anthropic Claude
+pip install &quot;instructor[openai]&quot;     # OpenAI
+pip install &quot;instructor[all]&quot;        # 所有提供商</p>
+</div>
+<h2>快速开始</h2>
+<h3>基础示例：提取用户数据</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import instructor
+from pydantic import BaseModel
+from anthropic import Anthropic
+<h1>Define output structure</h1>
+<p>class User(BaseModel):
+name: str
+age: int
+email: str</p>
+<h1>Create instructor client</h1>
+<p>client = instructor.from_anthropic(Anthropic())</p>
+<h1>Extract structured data</h1>
+<p>user = client.messages.create(
+model=&quot;claude-sonnet-4-5-20250929&quot;,
+max_tokens=1024,
+messages=[{
+&quot;role&quot;: &quot;user&quot;,
+&quot;content&quot;: &quot;John Doe is 30 years old. His email is john@example.com&quot;
+}],
+response_model=User
+)</p>
+<p>print(user.name)   # &quot;John Doe&quot;
+print(user.age)    # 30
+print(user.email)  # &quot;john@example.com&quot;</p>
+</div>
+<h3>使用 OpenAI</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from openai import OpenAI
+<p>client = instructor.from_openai(OpenAI())</p>
+<p>user = client.chat.completions.create(
+model=&quot;gpt-4o-mini&quot;,
+response_model=User,
+messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Extract: Alice, 25, alice@email.com&quot;}]
+)</p>
+</div>
+<h2>核心概念</h2>
+<h3>1. 响应模型（Pydantic）</h3>
+<p>响应模型定义 LLM 输出的结构和验证规则。</p>
+<h4>基础模型</h4>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from pydantic import BaseModel, Field
+<p>class Article(BaseModel):
+title: str = Field(description=&quot;Article title&quot;)
+author: str = Field(description=&quot;Author name&quot;)
+word_count: int = Field(description=&quot;Number of words&quot;, gt=0)
+tags: list[str] = Field(description=&quot;List of relevant tags&quot;)</p>
+<p>article = client.messages.create(
+model=&quot;claude-sonnet-4-5-20250929&quot;,
+max_tokens=1024,
+messages=[{
+&quot;role&quot;: &quot;user&quot;,
+&quot;content&quot;: &quot;Analyze this article: [article text]&quot;
+}],
+response_model=Article
+)</p>
+</div>
+<p><strong>优势：</strong></p>
+<ul>
+<li>使用 Python 类型提示保证类型安全</li>
+<li>自动验证（word_count &gt; 0）</li>
+<li>通过 Field 描述实现自文档化</li>
+<li>IDE 自动补全支持</li>
+</ul>
+<h4>嵌套模型</h4>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+class Address(BaseModel):
+    street: str
+    city: str
+    country: str
+<p>class Person(BaseModel):
+name: str
+age: int
+address: Address  # Nested model</p>
+<p>person = client.messages.create(
+model=&quot;claude-sonnet-4-5-20250929&quot;,
+max_tokens=1024,
+messages=[{
+&quot;role&quot;: &quot;user&quot;,
+&quot;content&quot;: &quot;John lives at 123 Main St, Boston, USA&quot;
+}],
+response_model=Person
+)</p>
+<p>print(person.address.city)  # &quot;Boston&quot;</p>
+</div>
+<h4>可选字段</h4>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from typing import Optional
+<p>class Product(BaseModel):
+name: str
+price: float
+discount: Optional[float] = None  # Optional
+description: str = Field(default=&quot;No description&quot;)  # Default value</p>
+<h1>LLM doesn't need to provide discount or description</h1>
+</div>
+<h4>使用枚举约束值</h4>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from enum import Enum
+<p>class Sentiment(str, Enum):
+POSITIVE = &quot;positive&quot;
+NEGATIVE = &quot;negative&quot;
+NEUTRAL = &quot;neutral&quot;</p>
+<p>class Review(BaseModel):
+text: str
+sentiment: Sentiment  # Only these 3 values allowed</p>
+<p>review = client.messages.create(
+model=&quot;claude-sonnet-4-5-20250929&quot;,
+max_tokens=1024,
+messages=[{
+&quot;role&quot;: &quot;user&quot;,
+&quot;content&quot;: &quot;This product is amazing!&quot;
+}],
+response_model=Review
+)</p>
+<p>print(review.sentiment)  # Sentiment.POSITIVE</p>
+</div>
+<h3>2. 验证</h3>
+<p>Pydantic 自动验证 LLM 输出。若验证失败，Instructor 会自动重试。</p>
+<h4>内置验证器</h4>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from pydantic import Field, EmailStr, HttpUrl
+<p>class Contact(BaseModel):
+name: str = Field(min_length=2, max_length=100)
+age: int = Field(ge=0, le=120)  # 0 &amp;lt;= age &amp;lt;= 120
+email: EmailStr  # Validates email format
+website: HttpUrl  # Validates URL format</p>
+<h1>If LLM provides invalid data, Instructor retries automatically</h1>
+</div>
+<h4>自定义验证器</h4>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from pydantic import field_validator
+<p>class Event(BaseModel):
+name: str
+date: str
+attendees: int</p>
+<pre><code>@field_validator('date')
+def validate_date(cls, v):
+    &quot;&quot;&quot;Ensure date is in YYYY-MM-DD format.&quot;&quot;&quot;
+    import re
+    if not re.match(r'\d{4}-\d{2}-\d{2}', v):
+        raise ValueError('Date must be YYYY-MM-DD format')
+    return v
+
+@field_validator('attendees')
+def validate_attendees(cls, v):
+    &quot;&quot;&quot;Ensure positive attendees.&quot;&quot;&quot;
+    if v &amp;lt; 1:
+        raise ValueError('Must have at least 1 attendee')
+    return v
+</code></pre>
+</div>
+<h4>模型级验证</h4>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from pydantic import model_validator
+<p>class DateRange(BaseModel):
+start_date: str
+end_date: str</p>
+<pre><code>@model_validator(mode='after')
+def check_dates(self):
+    &quot;&quot;&quot;Ensure end_date is after start_date.&quot;&quot;&quot;
+    from datetime import datetime
+    start = datetime.strptime(self.start_date, '%Y-%m-%d')
+    end = datetime.strptime(self.end_date, '%Y-%m-%d')
+
+    if end &amp;lt; start:
+        raise ValueError('end_date must be after start_date')
+    return self
+</code></pre>
+</div>
+<h3>3. 自动重试</h3>
+<p>当验证失败时，Instructor 会自动重试，并将错误反馈提供给 LLM。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Retries up to 3 times if validation fails
+user = client.messages.create(
+    model="claude-sonnet-4-5-20250929",
+    max_tokens=1024,
+    messages=[{
+        "role": "user",
+        "content": "Extract user from: John, age unknown"
+    }],
+    response_model=User,
+    max_retries=3  # Default is 3
+)
+<h1>If age can't be extracted, Instructor tells the LLM:</h1>
+<h1>&quot;Validation error: age - field required&quot;</h1>
+<h1>LLM tries again with better extraction</h1>
+</div>
+<p><strong>工作原理：</strong></p>
+<ol>
+<li>LLM 生成输出</li>
+<li>Pydantic 进行验证</li>
+<li>若无效：将错误信息发回给 LLM</li>
+<li>LLM 根据错误反馈重新尝试</li>
+<li>重复直至达到 max_retries 次数</li>
+</ol>
+<h3>4. 流式传输</h3>
+<p>流式传输部分结果以进行实时处理。</p>
+<h4>流式传输部分对象</h4>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from instructor import Partial
+<p>class Story(BaseModel):
+title: str
+content: str
+tags: list[str]</p>
+<h1>Stream partial updates as LLM generates</h1>
+<p>for partial_story in client.messages.create_partial(
+model=&quot;claude-sonnet-4-5-20250929&quot;,
+max_tokens=1024,
+messages=[{
+&quot;role&quot;: &quot;user&quot;,
+&quot;content&quot;: &quot;Write a short sci-fi story&quot;
+}],
+response_model=Story
+):
+print(f&quot;Title: {partial_story.title}&quot;)
+print(f&quot;Content so far: {partial_story.content[:100]}...&quot;)
+# Update UI in real-time</p>
+</div>
+<h4>流式传输可迭代对象</h4>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+class Task(BaseModel):
+    title: str
+    priority: str
+<h1>Stream list items as they're generated</h1>
+<p>tasks = client.messages.create_iterable(
+model=&quot;claude-sonnet-4-5-20250929&quot;,
+max_tokens=1024,
+messages=[{
+&quot;role&quot;: &quot;user&quot;,
+&quot;content&quot;: &quot;Generate 10 project tasks&quot;
+}],
+response_model=Task
+)</p>
+<p>for task in tasks:
+print(f&quot;- {task.title} ({task.priority})&quot;)
+# Process each task as it arrives</p>
+</div>
+<h2>提供商配置</h2>
+<h3>Anthropic Claude</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import instructor
+from anthropic import Anthropic
+<p>client = instructor.from_anthropic(
+Anthropic(api_key=&quot;your-api-key&quot;)
+)</p>
+<h1>Use with Claude models</h1>
+<p>response = client.messages.create(
+model=&quot;claude-sonnet-4-5-20250929&quot;,
+max_tokens=1024,
+messages=[...],
+response_model=YourModel
+)</p>
+</div>
+<h3>OpenAI</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from openai import OpenAI
+<p>client = instructor.from_openai(
+OpenAI(api_key=&quot;your-api-key&quot;)
+)</p>
+<p>response = client.chat.completions.create(
+model=&quot;gpt-4o-mini&quot;,
+response_model=YourModel,
+messages=[...]
+)</p>
+</div>
+<h3>本地模型（Ollama）</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from openai import OpenAI
+<h1>Point to local Ollama server</h1>
+<p>client = instructor.from_openai(
+OpenAI(
+base_url=&quot;http://localhost:11434/v1&quot;,
+api_key=&quot;ollama&quot;  # Required but ignored
+),
+mode=instructor.Mode.JSON
+)</p>
+<p>response = client.chat.completions.create(
+model=&quot;llama3.1&quot;,
+response_model=YourModel,
+messages=[...]
+)</p>
+</div>
+<h2>常用模式</h2>
+<h3>模式 1：从文本中提取数据</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+class CompanyInfo(BaseModel):
+    name: str
+    founded_year: int
+    industry: str
+    employees: int
+    headquarters: str
+<p>text = &quot;&quot;&quot;
+Tesla, Inc. was founded in 2003. It operates in the automotive and energy
+industry with approximately 140,000 employees. The company is headquartered
+in Austin, Texas.
+&quot;&quot;&quot;</p>
+<p>company = client.messages.create(
+model=&quot;claude-sonnet-4-5-20250929&quot;,
+max_tokens=1024,
+messages=[{
+&quot;role&quot;: &quot;user&quot;,
+&quot;content&quot;: f&quot;Extract company information from: {text}&quot;
+}],
+response_model=CompanyInfo
+)</p>
+</div>
+<h3>模式 2：分类</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+class Category(str, Enum):
+    TECHNOLOGY = "technology"
+    FINANCE = "finance"
+    HEALTHCARE = "healthcare"
+    EDUCATION = "education"
+    OTHER = "other"
+<p>class ArticleClassification(BaseModel):
+category: Category
+confidence: float = Field(ge=0.0, le=1.0)
+keywords: list[str]</p>
+<p>classification = client.messages.create(
+model=&quot;claude-sonnet-4-5-20250929&quot;,
+max_tokens=1024,
+messages=[{
+&quot;role&quot;: &quot;user&quot;,
+&quot;content&quot;: &quot;Classify this article: [article text]&quot;
+}],
+response_model=ArticleClassification
+)</p>
+</div>
+<h3>模式 3：多实体提取</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+class Person(BaseModel):
+    name: str
+    role: str
+<p>class Organization(BaseModel):
+name: str
+industry: str</p>
+<p>class Entities(BaseModel):
+people: list[Person]
+organizations: list[Organization]
+locations: list[str]</p>
+<p>text = &quot;Tim Cook, CEO of Apple, announced at the event in Cupertino...&quot;</p>
+<p>entities = client.messages.create(
+model=&quot;claude-sonnet-4-5-20250929&quot;,
+max_tokens=1024,
+messages=[{
+&quot;role&quot;: &quot;user&quot;,
+&quot;content&quot;: f&quot;Extract all entities from: {text}&quot;
+}],
+response_model=Entities
+)</p>
+<p>for person in entities.people:
+print(f&quot;{person.name} - {person.role}&quot;)</p>
+</div>
+<h3>模式 4：结构化分析</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+class SentimentAnalysis(BaseModel):
+    overall_sentiment: Sentiment
+    positive_aspects: list[str]
+    negative_aspects: list[str]
+    suggestions: list[str]
+    score: float = Field(ge=-1.0, le=1.0)
+<p>review = &quot;The product works well but setup was confusing...&quot;</p>
+<p>analysis = client.messages.create(
+model=&quot;claude-sonnet-4-5-20250929&quot;,
+max_tokens=1024,
+messages=[{
+&quot;role&quot;: &quot;user&quot;,
+&quot;content&quot;: f&quot;Analyze this review: {review}&quot;
+}],
+response_model=SentimentAnalysis
+)</p>
+</div>
+<h3>模式 5：批量处理</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def extract_person(text: str) -&gt; Person:
+    return client.messages.create(
+        model="claude-sonnet-4-5-20250929",
+        max_tokens=1024,
+        messages=[{
+            "role": "user",
+            "content": f"Extract person from: {text}"
+        }],
+        response_model=Person
+    )
+<p>texts = [
+&quot;John Doe is a 30-year-old engineer&quot;,
+&quot;Jane Smith, 25, works in marketing&quot;,
+&quot;Bob Johnson, age 40, software developer&quot;
+]</p>
+<p>people = [extract_person(text) for text in texts]</p>
+</div>
+<h2>高级特性</h2>
+<h3>联合类型</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from typing import Union
+<p>class TextContent(BaseModel):
+type: str = &quot;text&quot;
+content: str</p>
+<p>class ImageContent(BaseModel):
+type: str = &quot;image&quot;
+url: HttpUrl
+caption: str</p>
+<p>class Post(BaseModel):
+title: str
+content: Union[TextContent, ImageContent]  # Either type</p>
+<h1>LLM chooses appropriate type based on content</h1>
+</div>
+<h3>动态模型</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from pydantic import create_model
+<h1>Create model at runtime</h1>
+<p>DynamicUser = create_model(
+'User',
+name=(str, ...),
+age=(int, Field(ge=0)),
+email=(EmailStr, ...)
+)</p>
+<p>user = client.messages.create(
+model=&quot;claude-sonnet-4-5-20250929&quot;,
+max_tokens=1024,
+messages=[...],
+response_model=DynamicUser
+)</p>
+</div>
+<h3>自定义模式</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# For providers without native structured outputs
+client = instructor.from_anthropic(
+    Anthropic(),
+    mode=instructor.Mode.JSON  # JSON mode
+)
+<h1>Available modes:</h1>
+<h1>- Mode.ANTHROPIC_TOOLS (recommended for Claude)</h1>
+<h1>- Mode.JSON (fallback)</h1>
+<h1>- Mode.TOOLS (OpenAI tools)</h1>
+</div>
+<h3>上下文管理</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Single-use client
+with instructor.from_anthropic(Anthropic()) as client:
+    result = client.messages.create(
+        model="claude-sonnet-4-5-20250929",
+        max_tokens=1024,
+        messages=[...],
+        response_model=YourModel
+    )
+    # Client closed automatically
+</div>
+<h2>错误处理</h2>
+<h3>处理验证错误</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from pydantic import ValidationError
+<p>try:
+user = client.messages.create(
+model=&quot;claude-sonnet-4-5-20250929&quot;,
+max_tokens=1024,
+messages=[...],
+response_model=User,
+max_retries=3
+)
+except ValidationError as e:
+print(f&quot;Failed after retries: {e}&quot;)
+# Handle gracefully</p>
+<p>except Exception as e:
+print(f&quot;API error: {e}&quot;)</p>
+</div>
+<h3>自定义错误信息</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+class ValidatedUser(BaseModel):
+    name: str = Field(description="Full name, 2-100 characters")
+    age: int = Field(description="Age between 0 and 120", ge=0, le=120)
+    email: EmailStr = Field(description="Valid email address")
+<pre><code>class Config:
+    # Custom error messages
+    json_schema_extra = {
+        &quot;examples&quot;: [
+            {
+                &quot;name&quot;: &quot;John Doe&quot;,
+                &quot;age&quot;: 30,
+                &quot;email&quot;: &quot;john@example.com&quot;
+            }
+        ]
+    }
+</code></pre>
+</div>
+<h2>最佳实践</h2>
+<h3>1. 清晰的字段描述</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ❌ Bad: Vague
+class Product(BaseModel):
+    name: str
+    price: float
+<h1>✅ Good: Descriptive</h1>
+<p>class Product(BaseModel):
+name: str = Field(description=&quot;Product name from the text&quot;)
+price: float = Field(description=&quot;Price in USD, without currency symbol&quot;)</p>
+</div>
+<h3>2. 使用适当的验证</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ✅ Good: Constrain values
+class Rating(BaseModel):
+    score: int = Field(ge=1, le=5, description="Rating from 1 to 5 stars")
+    review: str = Field(min_length=10, description="Review text, at least 10 chars")
+</div>
+<h3>3. 在 prompt（提示词）中提供示例</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+messages = [{
+    "role": "user",
+    "content": """Extract person info from: "John, 30, engineer"
+<p>Example format:
+{
+&quot;name&quot;: &quot;John Doe&quot;,
+&quot;age&quot;: 30,
+&quot;occupation&quot;: &quot;engineer&quot;
+}&quot;&quot;&quot;
+}]</p>
+</div>
+<h3>4. 对固定类别使用枚举</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ✅ Good: Enum ensures valid values
+class Status(str, Enum):
+    PENDING = "pending"
+    APPROVED = "approved"
+    REJECTED = "rejected"
+<p>class Application(BaseModel):
+status: Status  # LLM must choose from enum</p>
+</div>
+<h3>5. 优雅处理缺失数据</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+class PartialData(BaseModel):
+    required_field: str
+    optional_field: Optional[str] = None
+    default_field: str = "default_value"
+<h1>LLM only needs to provide required_field</h1>
+</div>
+<h2>与其他方案的对比</h2>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Instructor</th>
+<th>手动 JSON</th>
+<th>LangChain</th>
+<th>DSPy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>类型安全</td>
+<td>✅ 是</td>
+<td>❌ 否</td>
+<td>⚠️ 部分</td>
+<td>✅ 是</td>
+</tr>
+<tr>
+<td>自动验证</td>
+<td>✅ 是</td>
+<td>❌ 否</td>
+<td>❌ 否</td>
+<td>⚠️ 有限</td>
+</tr>
+<tr>
+<td>自动重试</td>
+<td>✅ 是</td>
+<td>❌ 否</td>
+<td>❌ 否</td>
+<td>✅ 是</td>
+</tr>
+<tr>
+<td>流式传输</td>
+<td>✅ 是</td>
+<td>❌ 否</td>
+<td>✅ 是</td>
+<td>❌ 否</td>
+</tr>
+<tr>
+<td>多提供商</td>
+<td>✅ 是</td>
+<td>⚠️ 手动</td>
+<td>✅ 是</td>
+<td>✅ 是</td>
+</tr>
+<tr>
+<td>学习曲线</td>
+<td>低</td>
+<td>低</td>
+<td>中</td>
+<td>高</td>
+</tr>
+</tbody>
+</table>
+<p><strong>何时选择 Instructor：</strong></p>
+<ul>
+<li>需要结构化、经过验证的输出</li>
+<li>需要类型安全和 IDE 支持</li>
+<li>需要自动重试</li>
+<li>构建数据提取系统</li>
+</ul>
+<p><strong>何时选择其他方案：</strong></p>
+<ul>
+<li>DSPy：需要 prompt 优化</li>
+<li>LangChain：构建复杂链路</li>
+<li>手动：简单的一次性提取</li>
+</ul>
+<h2>资源</h2>
+<ul>
+<li><strong>文档</strong>：https://python.useinstructor.com</li>
+<li><strong>GitHub</strong>：https://github.com/jxnl/instructor（15k+ stars）</li>
+<li><strong>Cookbook</strong>：https://python.useinstructor.com/examples</li>
+<li><strong>Discord</strong>：提供社区支持</li>
+</ul>
+<h2>另请参阅</h2>
+<ul>
+<li><code>references/validation.md</code> — 高级验证模式</li>
+<li><code>references/providers.md</code> — 提供商专项配置</li>
+<li><code>references/examples.md</code> — 真实使用案例</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

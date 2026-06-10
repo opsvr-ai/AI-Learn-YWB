@@ -1,0 +1,432 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhatsApp - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / WhatsApp</div><p>Hermes 通过基于 <strong>Baileys</strong> 的内置桥接连接到 WhatsApp。其工作原理是模拟 WhatsApp Web 会话——<strong>而非</strong>通过官方 WhatsApp Business API。无需 Meta 开发者账号或 Business 认证。</p>
+<div class="tip warning"><strong>⚠️ 非官方 API — 封号风险</strong>
+<p>WhatsApp <strong>不</strong>官方支持 Business API 以外的第三方机器人。使用第三方桥接存在账号受限的小概率风险。为降低风险：</p>
+<ul>
+<li><strong>为机器人使用专用手机号</strong>（而非个人号码）</li>
+<li><strong>不要发送批量/垃圾消息</strong>——保持对话式使用</li>
+<li><strong>不要向未主动发消息的用户自动发送外发消息</strong></li>
+</ul>
+
+</div>
+<div class="tip warning"><strong>⚠️ WhatsApp Web 协议更新</strong>
+<p>WhatsApp 会定期更新其 Web 协议，这可能导致第三方桥接暂时失效。
+发生这种情况时，Hermes 会更新桥接依赖。如果机器人在 WhatsApp 更新后停止工作，
+请拉取最新版 Hermes 并重新配对。</p>
+
+</div>
+<h2>两种模式</h2>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>工作方式</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>独立机器人号码</strong>（推荐）</td>
+<td>为机器人专用一个手机号，用户直接向该号码发消息。</td>
+<td>体验简洁、多用户、封号风险低</td>
+</tr>
+<tr>
+<td><strong>个人自聊</strong></td>
+<td>使用你自己的 WhatsApp，向自己发消息与 Agent 对话。</td>
+<td>快速配置、单用户、测试用途</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>前置条件</h2>
+<ul>
+<li><strong>Node.js v18+</strong> 和 <strong>npm</strong>——WhatsApp 桥接作为 Node.js 进程运行</li>
+<li><strong>已安装 WhatsApp 的手机</strong>（用于扫描二维码）</li>
+</ul>
+<p>与旧版浏览器驱动的桥接不同，当前基于 Baileys 的桥接<strong>不</strong>需要本地 Chromium 或 Puppeteer 依赖栈。</p>
+<hr />
+<h2>第一步：运行配置向导</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes whatsapp
+</div>
+<p>向导将：</p>
+<ol>
+<li>询问你想要哪种模式（<strong>bot</strong> 或 <strong>self-chat</strong>）</li>
+<li>如有需要，安装桥接依赖</li>
+<li>在终端中显示<strong>二维码</strong></li>
+<li>等待你扫描</li>
+</ol>
+<p><strong>扫描二维码的步骤：</strong></p>
+<ol>
+<li>在手机上打开 WhatsApp</li>
+<li>进入<strong>设置 → 已关联设备</strong></li>
+<li>点击<strong>关联设备</strong></li>
+<li>将摄像头对准终端中的二维码</li>
+</ol>
+<p>配对成功后，向导确认连接并退出。你的会话将自动保存。</p>
+<div class="tip"><strong>💡 提示</strong>
+<p>如果二维码显示乱码，请确保终端宽度至少为 60 列且支持 Unicode。
+也可以尝试换用其他终端模拟器。</p>
+
+</div>
+<hr />
+<h2>第二步：获取第二个手机号（机器人模式）</h2>
+<p>机器人模式需要一个尚未注册 WhatsApp 的手机号。有三种选择：</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>费用</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Google Voice</strong></td>
+<td>免费</td>
+<td>仅限美国。在 <a href="https://voice.google.com">voice.google.com</a> 获取号码，通过 Google Voice 应用以短信验证 WhatsApp。</td>
+</tr>
+<tr>
+<td><strong>预付费 SIM 卡</strong></td>
+<td>一次性 $5–15</td>
+<td>任意运营商。激活后验证 WhatsApp，SIM 卡可放置不用。号码需保持有效（每 90 天拨打一次电话）。</td>
+</tr>
+<tr>
+<td><strong>VoIP 服务</strong></td>
+<td>免费–$5/月</td>
+<td>TextNow、TextFree 等。部分 VoIP 号码被 WhatsApp 屏蔽——如第一个不可用，可多试几个。</td>
+</tr>
+</tbody>
+</table>
+<p>获取号码后：</p>
+<ol>
+<li>在手机上安装 WhatsApp（或使用支持双 SIM 的 WhatsApp Business 应用）</li>
+<li>用新号码注册 WhatsApp</li>
+<li>运行 <code>hermes whatsapp</code> 并从该 WhatsApp 账号扫描二维码</li>
+</ol>
+<hr />
+<h2>第三步：配置 Hermes</h2>
+<p>在 <code>~/.hermes/.env</code> 文件中添加以下内容：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 必填
+WHATSAPP_ENABLED=true
+WHATSAPP_MODE=bot                          # "bot" 或 "self-chat"
+
+# 访问控制——选择以下其中一项：
+WHATSAPP_ALLOWED_USERS=15551234567         # 逗号分隔的手机号（含国家代码，不含 +）
+# WHATSAPP_ALLOWED_USERS=*                 # 或使用 * 允许所有人
+# WHATSAPP_ALLOW_ALL_USERS=true            # 或设置此标志（效果等同于 *）
+</div>
+<div class="tip"><strong>💡 允许所有人的简写</strong>
+<p>将 <code>WHATSAPP_ALLOWED_USERS=*</code> 设置为允许<strong>所有</strong>发送者（等同于 <code>WHATSAPP_ALLOW_ALL_USERS=true</code>）。
+这与 <a href="/reference/environment-variables">Signal 群组白名单</a> 保持一致。
+如需使用配对流程，请移除这两个变量，改用
+<a href="/user-guide/security#dm-pairing-system">私信配对系统</a>。</p>
+
+</div>
+<p>在 <code>~/.hermes/config.yaml</code> 中可选的行为设置：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+unauthorized_dm_behavior: pair
+
+whatsapp:
+  unauthorized_dm_behavior: ignore
+</div>
+<ul>
+<li><code>unauthorized_dm_behavior: pair</code> 是全局默认值。未知私信发送者将收到配对码。</li>
+<li><code>whatsapp.unauthorized_dm_behavior: ignore</code> 使 WhatsApp 对未授权私信保持静默，通常更适合私人号码。</li>
+</ul>
+<p>然后启动 gateway（网关）：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway              # 前台运行
+hermes gateway install      # 安装为用户服务
+sudo hermes gateway install --system   # 仅 Linux：开机启动系统服务
+</div>
+<p>Gateway 会使用已保存的会话自动启动 WhatsApp 桥接。</p>
+<hr />
+<h2>会话持久化</h2>
+<p>Baileys 桥接将会话保存在 <code>~/.hermes/platforms/whatsapp/session</code> 目录下。这意味着：</p>
+<ul>
+<li><strong>会话在重启后仍然有效</strong>——无需每次重新扫描二维码</li>
+<li>会话数据包含加密密钥和设备凭证</li>
+<li><strong>请勿共享或提交此会话目录</strong>——它可授予对 WhatsApp 账号的完整访问权限</li>
+</ul>
+<hr />
+<h2>重新配对</h2>
+<p>如果会话中断（手机重置、WhatsApp 更新、手动取消关联），你将在 gateway 日志中看到连接错误。修复方法：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes whatsapp
+</div>
+<p>这将生成新的二维码。重新扫描后会话即恢复。Gateway 会通过重连逻辑自动处理<strong>临时</strong>断线（网络抖动、手机短暂离线）。</p>
+<hr />
+<h2>语音消息</h2>
+<p>Hermes 支持 WhatsApp 上的语音功能：</p>
+<ul>
+<li><strong>接收：</strong> 语音消息（<code>.ogg</code> opus 格式）会使用已配置的 STT 提供商自动转录：本地 <code>faster-whisper</code>、Groq Whisper（<code>GROQ_API_KEY</code>）或 OpenAI Whisper（<code>VOICE_TOOLS_OPENAI_KEY</code>）</li>
+<li><strong>发送：</strong> TTS 响应以 MP3 音频文件附件形式发送</li>
+<li>Agent 响应默认以&quot;⚕ <strong>Hermes Agent</strong>&quot;为前缀。可在 <code>config.yaml</code> 中自定义或禁用：</li>
+</ul>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ~/.hermes/config.yaml
+whatsapp:
+  reply_prefix: ""                          # 空字符串禁用标题
+  # reply_prefix: "🤖 *My Bot*\n──────\n"  # 自定义前缀（支持 \n 换行）
+</div>
+<hr />
+<h2>消息格式与投递</h2>
+<p>WhatsApp 支持<strong>流式（渐进式）响应</strong>——机器人在 AI 生成文本时实时编辑消息，与 Discord 和 Telegram 一样。在内部，WhatsApp 被归类为 TIER_MEDIUM 平台（投递能力中等）。</p>
+<h3>分块</h3>
+<p>长响应会自动按每块 <strong>4,096 个字符</strong>拆分为多条消息（WhatsApp 的实际显示上限）。无需任何配置——gateway 会自动处理拆分并按顺序发送各块。</p>
+<h3>WhatsApp 兼容 Markdown</h3>
+<p>AI 响应中的标准 Markdown 会自动转换为 WhatsApp 的原生格式：</p>
+<table>
+<thead>
+<tr>
+<th>Markdown</th>
+<th>WhatsApp</th>
+<th>渲染效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>**bold**</code></td>
+<td><code>*bold*</code></td>
+<td><strong>粗体</strong></td>
+</tr>
+<tr>
+<td><code>~~strikethrough~~</code></td>
+<td><code>~strikethrough~</code></td>
+<td>~~删除线~~</td>
+</tr>
+<tr>
+<td><code># Heading</code></td>
+<td><code>*Heading*</code></td>
+<td>粗体文本（无原生标题）</td>
+</tr>
+<tr>
+<td><code>[link text](url)</code></td>
+<td><code>link text (url)</code></td>
+<td>内联 URL</td>
+</tr>
+</tbody>
+</table>
+<p>代码块和内联代码保持原样，因为 WhatsApp 原生支持三反引号格式。</p>
+<h3>工具进度</h3>
+<p>当 Agent 调用工具（网页搜索、文件操作等）时，WhatsApp 会显示实时进度指示器，显示正在运行的工具。此功能默认启用，无需配置。</p>
+<hr />
+<h2>故障排查</h2>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>二维码无法扫描</strong></td>
+<td>确保终端宽度足够（60 列以上）。尝试换用其他终端。确保从正确的 WhatsApp 账号（机器人号码，而非个人号码）扫描。</td>
+</tr>
+<tr>
+<td><strong>二维码过期</strong></td>
+<td>二维码约每 20 秒刷新一次。如果超时，重新运行 <code>hermes whatsapp</code>。</td>
+</tr>
+<tr>
+<td><strong>会话未持久化</strong></td>
+<td>检查 <code>~/.hermes/platforms/whatsapp/session</code> 是否存在且可写。如在容器中运行，请将其挂载为持久卷。</td>
+</tr>
+<tr>
+<td><strong>意外退出登录</strong></td>
+<td>WhatsApp 会在长时间不活跃后取消关联设备。保持手机开机并连接网络，如有需要使用 <code>hermes whatsapp</code> 重新配对。</td>
+</tr>
+<tr>
+<td><strong>桥接崩溃或重连循环</strong></td>
+<td>重启 gateway，更新 Hermes，如会话因 WhatsApp 协议变更而失效则重新配对。</td>
+</tr>
+<tr>
+<td><strong>WhatsApp 更新后机器人停止工作</strong></td>
+<td>更新 Hermes 以获取最新桥接版本，然后重新配对。</td>
+</tr>
+<tr>
+<td><strong>macOS：&quot;Node.js not installed&quot;但终端中 node 可用</strong></td>
+<td>launchd 服务不继承你的 shell PATH。运行 <code>hermes gateway install</code> 将当前 PATH 重新快照到 plist 中，然后运行 <code>hermes gateway start</code>。详见 <a href="./index.html#macos-launchd">Gateway 服务文档</a>。</td>
+</tr>
+<tr>
+<td><strong>未收到消息</strong></td>
+<td>确认 <code>WHATSAPP_ALLOWED_USERS</code> 包含发送者号码（含国家代码，不含 <code>+</code> 或空格），或将其设为 <code>*</code> 允许所有人。在 <code>.env</code> 中设置 <code>WHATSAPP_DEBUG=true</code> 并重启 gateway，可在 <code>bridge.log</code> 中查看原始消息事件。</td>
+</tr>
+<tr>
+<td><strong>机器人向陌生人回复配对码</strong></td>
+<td>如需对未授权私信静默处理，在 <code>~/.hermes/config.yaml</code> 中设置 <code>whatsapp.unauthorized_dm_behavior: ignore</code>。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>安全</h2>
+<div class="tip warning"><strong>⚠️ 警告</strong>
+<p><strong>上线前请配置访问控制。</strong> 在 <code>WHATSAPP_ALLOWED_USERS</code> 中填写具体手机号（含国家代码，不含 <code>+</code>），
+使用 <code>*</code> 允许所有人，或设置 <code>WHATSAPP_ALLOW_ALL_USERS=true</code>。
+若未配置上述任何一项，gateway 将<strong>拒绝所有传入消息</strong>作为安全措施。</p>
+
+</div>
+<p>默认情况下，未授权私信仍会收到配对码回复。如果你希望私人 WhatsApp 号码对陌生人完全静默，请设置：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+whatsapp:
+  unauthorized_dm_behavior: ignore
+</div>
+<ul>
+<li><code>~/.hermes/platforms/whatsapp/session</code> 目录包含完整会话凭证——请像保护密码一样保护它</li>
+<li>设置文件权限：<code>chmod 700 ~/.hermes/platforms/whatsapp/session</code></li>
+<li>为机器人使用<strong>专用手机号</strong>，将风险与个人账号隔离</li>
+<li>如怀疑账号被入侵，在 WhatsApp → 设置 → 已关联设备中取消关联该设备</li>
+<li>日志中的手机号已部分脱敏，但请审查你的日志保留策略</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

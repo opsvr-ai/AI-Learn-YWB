@@ -1,0 +1,268 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Huggingface Hub — HuggingFace hf CLI：搜索/下载/上传模型、数据集 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Huggingface Hub — HuggingFace hf CLI：搜索/下载/上传模型、数据集</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Huggingface Hub</h1>
+<p>HuggingFace hf CLI：搜索/下载/上传模型、数据集。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>内置（默认安装）</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>skills/mlops/huggingface-hub</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Hugging Face</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 skill 激活时 agent 所看到的指令内容。
+</div>
+<h1>Hugging Face CLI（<code>hf</code>）参考指南</h1>
+<p><code>hf</code> 命令是与 Hugging Face Hub 交互的现代命令行界面，提供管理仓库、模型、数据集和 Spaces 的工具。</p>
+<blockquote>
+<p><strong>重要：</strong> <code>hf</code> 命令取代了现已弃用的 <code>huggingface-cli</code> 命令。</p>
+</blockquote>
+<h2>快速开始</h2>
+<ul>
+<li><strong>安装：</strong> <code>curl -LsSf https://hf.co/cli/install.sh | bash -s</code></li>
+<li><strong>帮助：</strong> 使用 <code>hf --help</code> 查看所有可用功能及实际示例。</li>
+<li><strong>认证：</strong> 推荐通过 <code>HF_TOKEN</code> 环境变量或 <code>--token</code> 标志进行认证。</li>
+</ul>
+<hr />
+<h2>核心命令</h2>
+<h3>通用操作</h3>
+<ul>
+<li><code>hf download REPO_ID</code>：从 Hub 下载文件。</li>
+<li><code>hf upload REPO_ID</code>：上传文件/文件夹（推荐用于单次提交）。</li>
+<li><code>hf upload-large-folder REPO_ID LOCAL_PATH</code>：推荐用于大型目录的可恢复上传。</li>
+<li><code>hf sync</code>：在本地目录与存储桶之间同步文件。</li>
+<li><code>hf env</code> / <code>hf version</code>：查看环境和版本详情。</li>
+</ul>
+<h3>认证（<code>hf auth</code>）</h3>
+<ul>
+<li><code>login</code> / <code>logout</code>：使用来自 <a href="https://huggingface.co/settings/tokens">huggingface.co/settings/tokens</a> 的 token 管理会话。</li>
+<li><code>list</code> / <code>switch</code>：管理并切换多个已存储的访问 token。</li>
+<li><code>whoami</code>：查看当前登录账户。</li>
+</ul>
+<h3>仓库管理（<code>hf repos</code>）</h3>
+<ul>
+<li><code>create</code> / <code>delete</code>：创建或永久删除仓库。</li>
+<li><code>duplicate</code>：将模型、数据集或 Space 克隆到新 ID。</li>
+<li><code>move</code>：在命名空间之间迁移仓库。</li>
+<li><code>branch</code> / <code>tag</code>：管理类 Git 引用。</li>
+<li><code>delete-files</code>：使用模式匹配删除特定文件。</li>
+</ul>
+<hr />
+<h2>专项 Hub 交互</h2>
+<h3>数据集与模型</h3>
+<ul>
+<li><strong>数据集：</strong> <code>hf datasets list</code>、<code>info</code> 以及 <code>parquet</code>（列出 parquet URL）。</li>
+<li><strong>SQL 查询：</strong> <code>hf datasets sql SQL</code> — 通过 DuckDB 对数据集 parquet URL 执行原始 SQL。</li>
+<li><strong>模型：</strong> <code>hf models list</code> 和 <code>info</code>。</li>
+<li><strong>论文：</strong> <code>hf papers list</code> — 查看每日论文。</li>
+</ul>
+<h3>讨论与 Pull Request（<code>hf discussions</code>）</h3>
+<ul>
+<li>管理 Hub 贡献的完整生命周期：<code>list</code>、<code>create</code>、<code>info</code>、<code>comment</code>、<code>close</code>、<code>reopen</code> 和 <code>rename</code>。</li>
+<li><code>diff</code>：查看 PR 中的变更。</li>
+<li><code>merge</code>：完成 pull request 合并。</li>
+</ul>
+<h3>基础设施与计算</h3>
+<ul>
+<li><strong>Endpoints：</strong> 部署和管理推理端点（<code>deploy</code>、<code>pause</code>、<code>resume</code>、<code>scale-to-zero</code>、<code>catalog</code>）。</li>
+<li><strong>Jobs：</strong> 在 HF 基础设施上运行计算任务。包括 <code>hf jobs uv</code>（用于运行带内联依赖的 Python 脚本）和 <code>stats</code>（用于资源监控）。</li>
+<li><strong>Spaces：</strong> 管理交互式应用。包括 <code>dev-mode</code> 和 <code>hot-reload</code>，可在不完全重启的情况下热更新 Python 文件。</li>
+</ul>
+<h3>存储与自动化</h3>
+<ul>
+<li><strong>Buckets：</strong> 完整的类 S3 存储桶管理（<code>create</code>、<code>cp</code>、<code>mv</code>、<code>rm</code>、<code>sync</code>）。</li>
+<li><strong>Cache（缓存）：</strong> 使用 <code>list</code>、<code>prune</code>（删除已分离的修订版本）和 <code>verify</code>（校验和检查）管理本地存储。</li>
+<li><strong>Webhooks：</strong> 通过管理 Hub webhook（<code>create</code>、<code>watch</code>、<code>enable</code>/<code>disable</code>）自动化工作流。</li>
+<li><strong>Collections：</strong> 将 Hub 条目整理到集合中（<code>add-item</code>、<code>update</code>、<code>list</code>）。</li>
+</ul>
+<hr />
+<h2>高级用法与技巧</h2>
+<h3>全局标志</h3>
+<ul>
+<li><code>--format json</code>：生成适合自动化的机器可读输出。</li>
+<li><code>-q</code> / <code>--quiet</code>：将输出限制为仅显示 ID。</li>
+</ul>
+<h3>扩展与 Skills</h3>
+<ul>
+<li><strong>扩展：</strong> 通过 GitHub 仓库使用 <code>hf extensions install REPO_ID</code> 扩展 CLI 功能。</li>
+<li><strong>Skills：</strong> 使用 <code>hf skills add</code> 管理 AI 助手 skill。</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

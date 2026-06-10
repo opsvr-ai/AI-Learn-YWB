@@ -1,0 +1,288 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>技巧与最佳实践 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html" class="active">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 实用指南 / 技巧与最佳实践</div><p>一份实用技巧速查集，帮助你立即提升使用 Hermes Agent 的效率。每个章节针对不同方面——扫描标题，直接跳到相关内容。</p>
+<hr />
+<h2>获得最佳结果</h2>
+<h3>明确说明你的需求</h3>
+<p>模糊的 prompt（提示词）只会产生模糊的结果。不要说&quot;修复代码&quot;，而要说&quot;修复 <code>api/handlers.py</code> 第 47 行的 TypeError——<code>process_request()</code> 函数从 <code>parse_body()</code> 收到了 <code>None</code>。&quot;给出的上下文越多，所需的迭代次数就越少。</p>
+<h3>预先提供上下文</h3>
+<p>在请求开头就给出相关细节：文件路径、错误信息、预期行为。一条精心构造的消息胜过三轮来回确认。直接粘贴错误堆栈——agent 能够解析它们。</p>
+<h3>使用上下文文件处理重复指令</h3>
+<p>如果你发现自己在反复输入相同的指令（&quot;用 tab 而非空格&quot;、&quot;我们用 pytest&quot;、&quot;API 地址是 <code>/api/v2</code>&quot;），把它们放进 <code>AGENTS.md</code> 文件。agent 每次会话都会自动读取它——设置一次，永久生效。</p>
+<h3>让 Agent 使用它的工具</h3>
+<p>不要试图手把手指导每一步。说&quot;找到并修复失败的测试&quot;，而不是&quot;打开 <code>tests/test_foo.py</code>，看第 42 行，然后……&quot;。agent 拥有文件搜索、终端访问和代码执行能力——让它自行探索和迭代。</p>
+<h3>对复杂工作流使用 Skill</h3>
+<p>在写一大段 prompt 解释如何做某件事之前，先检查是否已有对应的 skill。输入 <code>/skills</code> 浏览可用的 skill，或直接调用，例如 <code>/axolotl</code> 或 <code>/github-pr-workflow</code>。</p>
+<h2>CLI 高级用户技巧</h2>
+<h3>多行输入</h3>
+<p>按 <strong>Alt+Enter</strong>、<strong>Ctrl+J</strong> 或 <strong>Shift+Enter</strong> 可插入换行而不发送消息。<code>Shift+Enter</code> 仅在终端将其作为独立按键发送时有效（Kitty / foot / WezTerm / Ghostty 默认支持；iTerm2 / Alacritty / VS Code 终端需启用 Kitty 键盘协议）。另外两种方式在所有终端中均可使用。</p>
+<h3>粘贴检测</h3>
+<p>CLI 会自动检测多行粘贴。直接粘贴代码块或错误堆栈——不会将每行作为单独消息发送。粘贴内容会被缓冲后作为一条消息发送。</p>
+<h3>中断与重定向</h3>
+<p>按一次 <strong>Ctrl+C</strong> 可中断 agent 的响应过程，然后输入新消息重新引导它。在 2 秒内双击 Ctrl+C 可强制退出。当 agent 开始走错方向时，这个功能非常有用。</p>
+<h3>使用 <code>-c</code> 恢复会话</h3>
+<p>上次会话有遗漏？运行 <code>hermes -c</code> 可精确恢复到上次离开的位置，完整对话历史全部还原。也可以按标题恢复：<code>hermes -r &quot;my research project&quot;</code>。</p>
+<h3>剪贴板图片粘贴</h3>
+<p>按 <strong>Ctrl+V</strong> 可将剪贴板中的图片直接粘贴到对话中。agent 会使用视觉能力分析截图、图表、错误弹窗或 UI 原型——无需先保存为文件。</p>
+<h3>Slash 命令自动补全</h3>
+<p>输入 <code>/</code> 后按 <strong>Tab</strong> 可查看所有可用命令，包括内置命令（<code>/compress</code>、<code>/model</code>、<code>/title</code>）和所有已安装的 skill。无需记忆任何内容——Tab 补全全部搞定。</p>
+<div class="tip"><strong>💡 提示</strong>
+使用 <code>/verbose</code> 循环切换工具输出显示模式：<strong>off → new → all → verbose</strong>。&quot;all&quot; 模式非常适合观察 agent 的操作过程；&quot;off&quot; 模式在简单问答时最为简洁。
+</div>
+<h2>上下文文件</h2>
+<h3>AGENTS.md：你的项目大脑</h3>
+<p>在项目根目录创建 <code>AGENTS.md</code>，写入架构决策、编码规范和项目专属指令。该文件会自动注入每次会话，让 agent 始终了解你的项目规则。</p>
+<div class="code-block"><span class="code-lang">markdown</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Project Context
+- This is a FastAPI backend with SQLAlchemy ORM
+- Always use async/await for database operations
+- Tests go in tests/ and use pytest-asyncio
+- Never commit .env files
+</div>
+<h3>SOUL.md：自定义个性</h3>
+<p>想让 Hermes 拥有稳定的默认风格？编辑 <code>~/.hermes/SOUL.md</code>（如果使用自定义 Hermes home，则为 <code>$HERMES_HOME/SOUL.md</code>）。Hermes 现在会自动生成一个初始 SOUL 文件，并将该全局文件作为实例级个性来源。</p>
+<p>完整说明请参阅 <a href="/guides/use-soul-with-hermes">在 Hermes 中使用 SOUL.md</a>。</p>
+<div class="code-block"><span class="code-lang">markdown</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Soul
+You are a senior backend engineer. Be terse and direct.
+Skip explanations unless asked. Prefer one-liners over verbose solutions.
+Always consider error handling and edge cases.
+</div>
+<p>使用 <code>SOUL.md</code> 设置持久个性，使用 <code>AGENTS.md</code> 设置项目专属指令。</p>
+<h3>.cursorrules 兼容性</h3>
+<p>已有 <code>.cursorrules</code> 或 <code>.cursor/rules/*.mdc</code> 文件？Hermes 同样会读取它们。无需重复编写编码规范——这些文件会从工作目录自动加载。</p>
+<h3>发现机制</h3>
+<p>Hermes 在会话启动时从当前工作目录加载顶层 <code>AGENTS.md</code>。子目录中的 <code>AGENTS.md</code> 文件在工具调用期间通过 <code>subdirectory_hints.py</code> 延迟发现，并注入工具结果——不会在启动时预先加载到系统 prompt 中。</p>
+<div class="tip"><strong>💡 提示</strong>
+保持上下文文件简洁聚焦。每个字符都会消耗 token 配额，因为它们会注入到每一条消息中。
+</div>
+<h2>记忆与 Skill</h2>
+<h3>记忆 vs. Skill：各司其职</h3>
+<p><strong>记忆（Memory）</strong> 用于存储事实：你的环境、偏好、项目位置，以及 agent 了解到的关于你的信息。<strong>Skill</strong> 用于存储流程：多步骤工作流、特定工具的操作指南和可复用的操作方案。记忆存&quot;是什么&quot;，skill 存&quot;怎么做&quot;。</p>
+<h3>何时创建 Skill</h3>
+<p>如果某个任务需要 5 步以上且你会重复执行，就让 agent 为它创建一个 skill。说&quot;把你刚才做的保存为名为 <code>deploy-staging</code> 的 skill&quot;。下次只需输入 <code>/deploy-staging</code>，agent 就会加载完整流程。</p>
+<h3>管理记忆容量</h3>
+<p>记忆容量是有意限制的（<code>MEMORY.md</code> 约 2,200 字符，<code>USER.md</code> 约 1,375 字符）。当记忆填满时，agent 会自动整合条目。你也可以主动说&quot;清理你的记忆&quot;或&quot;替换旧的 Python 3.9 备注——我们现在用 3.12 了&quot;。</p>
+<h3>让 Agent 记住内容</h3>
+<p>在一次高效的会话结束后，说&quot;记住这些以备下次使用&quot;，agent 会保存关键要点。也可以具体指定：&quot;保存到记忆中，我们的 CI 使用 GitHub Actions 的 <code>deploy.yml</code> 工作流。&quot;</p>
+<div class="tip warning"><strong>⚠️ 警告</strong>
+记忆是一个冻结的快照——会话期间的修改不会出现在系统 prompt 中，直到下一次会话开始。agent 会立即写入磁盘，但 prompt 缓存在会话中途不会失效。
+</div>
+<h2>性能与成本</h2>
+<h3>不要破坏 Prompt 缓存</h3>
+<p>大多数 LLM 提供商会缓存系统 prompt 前缀。如果你保持系统 prompt 稳定（相同的上下文文件、相同的记忆），同一会话中的后续消息会命中<strong>缓存</strong>，成本显著降低。避免在会话中途切换模型或修改系统 prompt。</p>
+<h3>在达到限制前使用 /compress</h3>
+<p>长会话会积累大量 token。当你发现响应变慢或被截断时，运行 <code>/compress</code>。这会对对话历史进行摘要，在大幅减少 token 数量的同时保留关键上下文。使用 <code>/usage</code> 查看当前用量。</p>
+<h3>使用委托实现并行工作</h3>
+<p>需要同时研究三个主题？让 agent 使用 <code>delegate_task</code> 并行分配子任务。每个子 agent 独立运行，拥有各自的上下文，最终只有摘要结果返回——大幅减少主对话的 token 消耗。</p>
+<h3>使用 execute_code 进行批量操作</h3>
+<p>不要逐条运行终端命令，而是让 agent 编写一个脚本一次性完成所有操作。&quot;写一个 Python 脚本把所有 <code>.jpeg</code> 文件重命名为 <code>.jpg</code> 并运行它&quot;比逐个重命名文件更省钱、更快速。</p>
+<h3>选择合适的模型</h3>
+<p>使用 <code>/model</code> 在会话中途切换模型。对于复杂推理和架构决策，使用前沿模型（Claude Sonnet/Opus、GPT-4o）；对于格式化、重命名或样板代码生成等简单任务，切换到更快的模型。</p>
+<div class="tip"><strong>💡 提示</strong>
+定期运行 <code>/usage</code> 查看 token 消耗情况。运行 <code>/insights</code> 可查看过去 30 天的用量模式概览。
+</div>
+<h2>消息技巧</h2>
+<h3>设置主频道</h3>
+<p>在你偏好的 Telegram 或 Discord 聊天中使用 <code>/sethome</code>，将其指定为主频道。定时任务结果和计划任务输出会发送到这里。没有主频道，agent 就没有地方发送主动消息。</p>
+<h3>使用 /title 整理会话</h3>
+<p>用 <code>/title auth-refactor</code> 或 <code>/title research-llm-quantization</code> 为会话命名。命名后的会话可通过 <code>hermes sessions list</code> 轻松找到，并用 <code>hermes -r &quot;auth-refactor&quot;</code> 恢复。未命名的会话会堆积起来，难以区分。</p>
+<h3>DM 配对实现团队访问</h3>
+<p>不要手动收集用户 ID 来维护白名单，而是启用 DM 配对。当团队成员向 bot 发送私信时，他们会收到一次性配对码。你用 <code>hermes pairing approve telegram XKGH5N7P</code> 批准即可——简单且安全。</p>
+<h3>工具进度显示模式</h3>
+<p>使用 <code>/verbose</code> 控制工具活动的显示详细程度。在消息平台上，通常越简洁越好——保持&quot;new&quot;模式只查看新的工具调用。在 CLI 中，&quot;all&quot; 模式可以实时查看 agent 的所有操作。</p>
+<div class="tip"><strong>💡 提示</strong>
+在消息平台上，会话会在空闲一段时间后自动重置（默认 24 小时），或每天凌晨 4 点重置。如需更长的会话时间，可在 <code>~/.hermes/config.yaml</code> 中按平台调整。
+</div>
+<h2>安全</h2>
+<h3>对不可信代码使用 Docker</h3>
+<p>在处理不可信仓库或运行陌生代码时，使用 Docker 或 Daytona 作为终端后端。在 <code>.env</code> 中设置 <code>TERMINAL_BACKEND=docker</code>。容器内的破坏性命令不会影响宿主系统。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# In your .env:
+TERMINAL_BACKEND=docker
+TERMINAL_DOCKER_IMAGE=hermes-sandbox:latest
+</div>
+<h3>避免 Windows 编码陷阱</h3>
+<p>在 Windows 上，某些默认编码（如 <code>cp125x</code>）无法表示所有 Unicode 字符，在测试或脚本中写入文件时可能导致 <code>UnicodeEncodeError</code>。</p>
+<ul>
+<li>建议在打开文件时显式指定 UTF-8 编码：</li>
+</ul>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+with open("results.txt", "w", encoding="utf-8") as f:
+    f.write("✓ All good\n")
+</div>
+<ul>
+<li>在 PowerShell 中，也可以将当前会话的控制台和原生命令输出切换为 UTF-8：</li>
+</ul>
+<div class="code-block"><span class="code-lang">powershell</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+$OutputEncoding = [Console]::OutputEncoding = [Text.UTF8Encoding]::new($false)
+</div>
+<p>这样可以让 PowerShell 和子进程统一使用 UTF-8，避免仅在 Windows 上出现的失败。</p>
+<h3>谨慎选择&quot;始终允许&quot;</h3>
+<p>当 agent 触发危险命令审批（<code>rm -rf</code>、<code>DROP TABLE</code> 等）时，你有四个选项：<strong>once（仅此一次）</strong>、<strong>session（本次会话）</strong>、<strong>always（始终允许）</strong>、<strong>deny（拒绝）</strong>。选择&quot;always&quot;前请仔细考虑——它会永久将该模式加入白名单。在熟悉之前，先用&quot;session&quot;。</p>
+<h3>命令审批是你的安全防线</h3>
+<p>Hermes 在执行每条命令前都会与一份精心维护的危险模式列表进行比对，包括递归删除、SQL DROP、curl 管道到 shell 等。不要在生产环境中禁用此功能——它的存在有充分的理由。</p>
+<div class="tip warning"><strong>⚠️ 警告</strong>
+在容器后端（Docker、Singularity、Modal、Daytona）中运行时，危险命令检查会被<strong>跳过</strong>，因为容器本身就是安全边界。请确保你的容器镜像已妥善加固。
+</div>
+<h3>为消息 Bot 使用白名单</h3>
+<p>永远不要在拥有终端访问权限的 bot 上设置 <code>GATEWAY_ALLOW_ALL_USERS=true</code>。始终使用平台专属白名单（<code>TELEGRAM_ALLOWED_USERS</code>、<code>DISCORD_ALLOWED_USERS</code>）或 DM 配对来控制谁可以与你的 agent 交互。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Recommended: explicit allowlists per platform
+TELEGRAM_ALLOWED_USERS=123456789,987654321
+DISCORD_ALLOWED_USERS=123456789012345678
+
+# Or use cross-platform allowlist
+GATEWAY_ALLOWED_USERS=123456789,987654321
+</div>
+<hr />
+<p><em>有值得收录的技巧？欢迎提交 issue 或 PR——社区贡献随时欢迎。</em></p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

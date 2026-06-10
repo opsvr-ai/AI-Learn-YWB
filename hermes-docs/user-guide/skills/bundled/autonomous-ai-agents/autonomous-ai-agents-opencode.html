@@ -1,0 +1,441 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Opencode — 将编码任务委托给 OpenCode CLI（功能开发、PR 审查） - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Opencode — 将编码任务委托给 OpenCode CLI（功能开发、PR 审查）</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Opencode</h1>
+<p>将编码任务委托给 OpenCode CLI（功能开发、PR 审查）。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>内置（默认安装）</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>skills/autonomous-ai-agents/opencode</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.2.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Hermes Agent</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Coding-Agent</code>, <code>OpenCode</code>, <code>Autonomous</code>, <code>Refactoring</code>, <code>Code-Review</code></td>
+</tr>
+<tr>
+<td>相关 skill</td>
+<td><a href="/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-claude-code"><code>claude-code</code></a>, <a href="/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-codex"><code>codex</code></a>, <a href="/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-hermes-agent"><code>hermes-agent</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>OpenCode CLI</h1>
+<p>使用 <a href="https://opencode.ai">OpenCode</a> 作为由 Hermes 终端/进程工具编排的自主编码工作器。OpenCode 是一个支持多 provider、开源的 AI 编码 agent，具备 TUI（终端用户界面）和 CLI。</p>
+<h2>适用场景</h2>
+<ul>
+<li>用户明确要求使用 OpenCode</li>
+<li>需要外部编码 agent 来实现/重构/审查代码</li>
+<li>需要长时间运行的编码会话并定期检查进度</li>
+<li>需要在隔离的工作目录/worktree 中并行执行任务</li>
+</ul>
+<h2>前置条件</h2>
+<ul>
+<li>已安装 OpenCode：<code>npm i -g opencode-ai@latest</code> 或 <code>brew install anomalyco/tap/opencode</code></li>
+<li>已配置认证：<code>opencode auth login</code> 或设置 provider 环境变量（OPENROUTER_API_KEY 等）</li>
+<li>验证：<code>opencode auth list</code> 应显示至少一个 provider</li>
+<li>代码任务推荐使用 Git 仓库</li>
+<li>交互式 TUI 会话需要 <code>pty=true</code></li>
+</ul>
+<h2>二进制文件解析（重要）</h2>
+<p>Shell 环境可能会解析到不同的 OpenCode 二进制文件。如果你的终端与 Hermes 的行为不一致，请检查：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal(command="which -a opencode")
+terminal(command="opencode --version")
+</div>
+<p>如有需要，可固定使用明确的二进制路径：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal(command="$HOME/.opencode/bin/opencode run '...'", workdir="~/project", pty=true)
+</div>
+<h2>单次任务</h2>
+<p>使用 <code>opencode run</code> 执行有边界的非交互式任务：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal(command="opencode run 'Add retry logic to API calls and update tests'", workdir="~/project")
+</div>
+<p>使用 <code>-f</code> 附加上下文文件：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal(command="opencode run 'Review this config for security issues' -f config.yaml -f .env.example", workdir="~/project")
+</div>
+<p>使用 <code>--thinking</code> 显示模型思考过程：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal(command="opencode run 'Debug why tests fail in CI' --thinking", workdir="~/project")
+</div>
+<p>强制指定特定模型：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal(command="opencode run 'Refactor auth module' --model openrouter/anthropic/claude-sonnet-4", workdir="~/project")
+</div>
+<h2>交互式会话（后台运行）</h2>
+<p>对于需要多轮交互的迭代工作，在后台启动 TUI：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal(command="opencode", workdir="~/project", background=true, pty=true)
+# 返回 session_id
+<h1>发送 prompt（提示词）</h1>
+<p>process(action=&quot;submit&quot;, session_id=&quot;&amp;lt;id&amp;gt;&quot;, data=&quot;Implement OAuth refresh flow and add tests&quot;)</p>
+<h1>监控进度</h1>
+<p>process(action=&quot;poll&quot;, session_id=&quot;&amp;lt;id&amp;gt;&quot;)
+process(action=&quot;log&quot;, session_id=&quot;&amp;lt;id&amp;gt;&quot;)</p>
+<h1>发送后续输入</h1>
+<p>process(action=&quot;submit&quot;, session_id=&quot;&amp;lt;id&amp;gt;&quot;, data=&quot;Now add error handling for token expiry&quot;)</p>
+<h1>干净退出 — Ctrl+C</h1>
+<p>process(action=&quot;write&quot;, session_id=&quot;&amp;lt;id&amp;gt;&quot;, data=&quot;\x03&quot;)</p>
+<h1>或直接终止进程</h1>
+<p>process(action=&quot;kill&quot;, session_id=&quot;&amp;lt;id&amp;gt;&quot;)</p>
+</div>
+<p><strong>重要：</strong> 不要使用 <code>/exit</code>——它不是有效的 OpenCode 命令，会打开 agent 选择器对话框。请使用 Ctrl+C（<code>\x03</code>）或 <code>process(action=&quot;kill&quot;)</code> 退出。</p>
+<h3>TUI 快捷键</h3>
+<table>
+<thead>
+<tr>
+<th>按键</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Enter</code></td>
+<td>提交消息（如有需要可按两次）</td>
+</tr>
+<tr>
+<td><code>Tab</code></td>
+<td>在 agent 之间切换（build/plan）</td>
+</tr>
+<tr>
+<td><code>Ctrl+P</code></td>
+<td>打开命令面板</td>
+</tr>
+<tr>
+<td><code>Ctrl+X L</code></td>
+<td>切换会话</td>
+</tr>
+<tr>
+<td><code>Ctrl+X M</code></td>
+<td>切换模型</td>
+</tr>
+<tr>
+<td><code>Ctrl+X N</code></td>
+<td>新建会话</td>
+</tr>
+<tr>
+<td><code>Ctrl+X E</code></td>
+<td>打开编辑器</td>
+</tr>
+<tr>
+<td><code>Ctrl+C</code></td>
+<td>退出 OpenCode</td>
+</tr>
+</tbody>
+</table>
+<h3>恢复会话</h3>
+<p>退出后，OpenCode 会打印会话 ID。使用以下命令恢复：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal(command="opencode -c", workdir="~/project", background=true, pty=true)  # 继续上次会话
+terminal(command="opencode -s ses_abc123", workdir="~/project", background=true, pty=true)  # 指定会话
+</div>
+<h2>常用标志</h2>
+<table>
+<thead>
+<tr>
+<th>标志</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>run 'prompt'</code></td>
+<td>单次执行后退出</td>
+</tr>
+<tr>
+<td><code>--continue</code> / <code>-c</code></td>
+<td>继续上次 OpenCode 会话</td>
+</tr>
+<tr>
+<td><code>--session &lt;id&gt;</code> / <code>-s</code></td>
+<td>继续指定会话</td>
+</tr>
+<tr>
+<td><code>--agent &lt;name&gt;</code></td>
+<td>选择 OpenCode agent（build 或 plan）</td>
+</tr>
+<tr>
+<td><code>--model provider/model</code></td>
+<td>强制使用指定模型</td>
+</tr>
+<tr>
+<td><code>--format json</code></td>
+<td>机器可读的输出/事件</td>
+</tr>
+<tr>
+<td><code>--file &lt;path&gt;</code> / <code>-f</code></td>
+<td>向消息附加文件</td>
+</tr>
+<tr>
+<td><code>--thinking</code></td>
+<td>显示模型思考块</td>
+</tr>
+<tr>
+<td><code>--variant &lt;level&gt;</code></td>
+<td>推理强度（high、max、minimal）</td>
+</tr>
+<tr>
+<td><code>--title &lt;name&gt;</code></td>
+<td>为会话命名</td>
+</tr>
+<tr>
+<td><code>--attach &lt;url&gt;</code></td>
+<td>连接到正在运行的 opencode 服务器</td>
+</tr>
+</tbody>
+</table>
+<h2>操作流程</h2>
+<ol>
+<li>验证工具就绪状态：
+<ul>
+<li><code>terminal(command=&quot;opencode --version&quot;)</code></li>
+<li><code>terminal(command=&quot;opencode auth list&quot;)</code></li>
+</ul>
+</li>
+<li>对于有边界的任务，使用 <code>opencode run '...'</code>（无需 pty）。</li>
+<li>对于迭代任务，使用 <code>background=true, pty=true</code> 启动 <code>opencode</code>。</li>
+<li>使用 <code>process(action=&quot;poll&quot;|&quot;log&quot;)</code> 监控长时间运行的任务。</li>
+<li>如果 OpenCode 请求输入，通过 <code>process(action=&quot;submit&quot;, ...)</code> 响应。</li>
+<li>使用 <code>process(action=&quot;write&quot;, data=&quot;\x03&quot;)</code> 或 <code>process(action=&quot;kill&quot;)</code> 退出，切勿使用 <code>/exit</code>。</li>
+<li>向用户汇总文件变更、测试结果及后续步骤。</li>
+</ol>
+<h2>PR 审查工作流</h2>
+<p>OpenCode 内置 PR 命令：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal(command="opencode pr 42", workdir="~/project", pty=true)
+</div>
+<p>或在临时克隆中审查以实现隔离：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal(command="REVIEW=$(mktemp -d) &amp;&amp; git clone https://github.com/user/repo.git $REVIEW &amp;&amp; cd $REVIEW &amp;&amp; opencode run 'Review this PR vs main. Report bugs, security risks, test gaps, and style issues.' -f $(git diff origin/main --name-only | head -20 | tr '\n' ' ')", pty=true)
+</div>
+<h2>并行工作模式</h2>
+<p>使用独立的工作目录/worktree 避免冲突：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal(command="opencode run 'Fix issue #101 and commit'", workdir="/tmp/issue-101", background=true, pty=true)
+terminal(command="opencode run 'Add parser regression tests and commit'", workdir="/tmp/issue-102", background=true, pty=true)
+process(action="list")
+</div>
+<h2>会话与成本管理</h2>
+<p>列出历史会话：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal(command="opencode session list")
+</div>
+<p>查看 token 用量和费用：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal(command="opencode stats")
+terminal(command="opencode stats --days 7 --models anthropic/claude-sonnet-4")
+</div>
+<h2>注意事项</h2>
+<ul>
+<li>交互式 <code>opencode</code>（TUI）会话需要 <code>pty=true</code>。<code>opencode run</code> 命令<strong>不需要</strong> pty。</li>
+<li><code>/exit</code> <strong>不是</strong>有效命令——它会打开 agent 选择器。请使用 Ctrl+C 退出 TUI。</li>
+<li>PATH 不匹配可能导致选择错误的 OpenCode 二进制文件/模型配置。</li>
+<li>如果 OpenCode 看起来卡住了，在终止前先检查日志：
+<ul>
+<li><code>process(action=&quot;log&quot;, session_id=&quot;&lt;id&gt;&quot;)</code></li>
+</ul>
+</li>
+<li>避免多个并行 OpenCode 会话共享同一工作目录。</li>
+<li>在 TUI 中可能需要按两次 Enter 才能提交（第一次确认文本，第二次发送）。</li>
+</ul>
+<h2>验证</h2>
+<p>冒烟测试：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal(command="opencode run 'Respond with exactly: OPENCODE_SMOKE_OK'")
+</div>
+<p>成功标准：</p>
+<ul>
+<li>输出包含 <code>OPENCODE_SMOKE_OK</code></li>
+<li>命令退出时无 provider/模型错误</li>
+<li>对于代码任务：预期文件已变更且测试通过</li>
+</ul>
+<h2>规则</h2>
+<ol>
+<li>单次自动化任务优先使用 <code>opencode run</code>——更简单且无需 pty。</li>
+<li>仅在需要迭代时使用交互式后台模式。</li>
+<li>始终将 OpenCode 会话限定在单个仓库/工作目录内。</li>
+<li>对于长时间任务，从 <code>process</code> 日志中提供进度更新。</li>
+<li>报告具体结果（文件变更、测试情况、剩余风险）。</li>
+<li>使用 Ctrl+C 或 kill 退出交互式会话，切勿使用 <code>/exit</code>。</li>
+</ol>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

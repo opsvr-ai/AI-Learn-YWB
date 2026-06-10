@@ -1,0 +1,1800 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Hooks - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html" class="active">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Event Hooks</div><p>Hermes 有三套 hook 系统，可在关键生命周期节点运行自定义代码：</p>
+<table>
+<thead>
+<tr>
+<th>系统</th>
+<th>注册方式</th>
+<th>运行环境</th>
+<th>使用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><a href="#gateway-event-hooks">Gateway hooks</a></strong></td>
+<td><code>~/.hermes/hooks/</code> 下的 <code>HOOK.yaml</code> + <code>handler.py</code></td>
+<td>仅 Gateway</td>
+<td>日志、告警、webhook</td>
+</tr>
+<tr>
+<td><strong><a href="#plugin-hooks">Plugin hooks</a></strong></td>
+<td><a href="/user-guide/features/plugins">插件</a>中的 <code>ctx.register_hook()</code></td>
+<td>CLI + Gateway</td>
+<td>工具拦截、指标采集、护栏</td>
+</tr>
+<tr>
+<td><strong><a href="#shell-hooks">Shell hooks</a></strong></td>
+<td><code>~/.hermes/config.yaml</code> 中 <code>hooks:</code> 块指向的 shell 脚本</td>
+<td>CLI + Gateway</td>
+<td>用于阻断、自动格式化、上下文注入的即插即用脚本</td>
+</tr>
+</tbody>
+</table>
+<p>三套系统均为非阻塞式——任何 hook 中的错误都会被捕获并记录，不会导致 agent 崩溃。</p>
+<h2>Gateway Event Hooks</h2>
+<p>Gateway hooks 在 gateway 运行期间（Telegram、Discord、Slack、WhatsApp、Teams）自动触发，不会阻塞主 agent 管道。</p>
+<h3>创建 Hook</h3>
+<p>每个 hook 是 <code>~/.hermes/hooks/</code> 下的一个目录，包含两个文件：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+~/.hermes/hooks/
+└── my-hook/
+    ├── HOOK.yaml      # 声明要监听的事件
+    └── handler.py     # Python 处理函数
+</div>
+<h4>HOOK.yaml</h4>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+name: my-hook
+description: Log all agent activity to a file
+events:
+  - agent:start
+  - agent:end
+  - agent:step
+</div>
+<p><code>events</code> 列表决定哪些事件会触发你的处理器。可以订阅任意事件组合，包括 <code>command:*</code> 这样的通配符。</p>
+<h4>handler.py</h4>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import json
+from datetime import datetime
+from pathlib import Path
+
+LOG_FILE = Path.home() / ".hermes" / "hooks" / "my-hook" / "activity.log"
+
+async def handle(event_type: str, context: dict):
+    """Called for each subscribed event. Must be named 'handle'."""
+    entry = {
+        "timestamp": datetime.now().isoformat(),
+        "event": event_type,
+        **context,
+    }
+    with open(LOG_FILE, "a") as f:
+        f.write(json.dumps(entry) + "\n")
+</div>
+<p><strong>处理器规则：</strong></p>
+<ul>
+<li>必须命名为 <code>handle</code></li>
+<li>接收 <code>event_type</code>（字符串）和 <code>context</code>（字典）</li>
+<li>可以是 <code>async def</code> 或普通 <code>def</code>——两者均可</li>
+<li>错误会被捕获并记录，不会导致 agent 崩溃</li>
+</ul>
+<h3>可用事件</h3>
+<table>
+<thead>
+<tr>
+<th>事件</th>
+<th>触发时机</th>
+<th>Context 键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gateway:startup</code></td>
+<td>Gateway 进程启动</td>
+<td><code>platforms</code>（活跃平台名称列表）</td>
+</tr>
+<tr>
+<td><code>session:start</code></td>
+<td>新消息会话创建</td>
+<td><code>platform</code>、<code>user_id</code>、<code>session_id</code>、<code>session_key</code></td>
+</tr>
+<tr>
+<td><code>session:end</code></td>
+<td>会话结束（重置前）</td>
+<td><code>platform</code>、<code>user_id</code>、<code>session_key</code></td>
+</tr>
+<tr>
+<td><code>session:reset</code></td>
+<td>用户执行 <code>/new</code> 或 <code>/reset</code></td>
+<td><code>platform</code>、<code>user_id</code>、<code>session_key</code></td>
+</tr>
+<tr>
+<td><code>agent:start</code></td>
+<td>Agent 开始处理消息</td>
+<td><code>platform</code>、<code>user_id</code>、<code>session_id</code>、<code>message</code></td>
+</tr>
+<tr>
+<td><code>agent:step</code></td>
+<td>工具调用循环的每次迭代</td>
+<td><code>platform</code>、<code>user_id</code>、<code>session_id</code>、<code>iteration</code>、<code>tool_names</code></td>
+</tr>
+<tr>
+<td><code>agent:end</code></td>
+<td>Agent 完成处理</td>
+<td><code>platform</code>、<code>user_id</code>、<code>session_id</code>、<code>message</code>、<code>response</code></td>
+</tr>
+<tr>
+<td><code>command:*</code></td>
+<td>任意斜杠命令执行</td>
+<td><code>platform</code>、<code>user_id</code>、<code>command</code>、<code>args</code></td>
+</tr>
+</tbody>
+</table>
+<h4>通配符匹配</h4>
+<p>注册了 <code>command:*</code> 的处理器会在任何 <code>command:</code> 事件（<code>command:model</code>、<code>command:reset</code> 等）触发时执行。通过单个订阅即可监控所有斜杠命令。</p>
+<h3>示例</h3>
+<h4>Telegram 长任务告警</h4>
+<p>当 agent 执行超过 10 步时向自己发送消息：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ~/.hermes/hooks/long-task-alert/HOOK.yaml
+name: long-task-alert
+description: Alert when agent is taking many steps
+events:
+  - agent:step
+</div>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ~/.hermes/hooks/long-task-alert/handler.py
+import os
+import httpx
+
+THRESHOLD = 10
+BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+CHAT_ID = os.getenv("TELEGRAM_HOME_CHANNEL")
+
+async def handle(event_type: str, context: dict):
+    iteration = context.get("iteration", 0)
+    if iteration == THRESHOLD and BOT_TOKEN and CHAT_ID:
+        tools = ", ".join(context.get("tool_names", []))
+        text = f"⚠️ Agent has been running for {iteration} steps. Last tools: {tools}"
+        async with httpx.AsyncClient() as client:
+            await client.post(
+                f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage",
+                json={"chat_id": CHAT_ID, "text": text},
+            )
+</div>
+<h4>命令使用日志记录器</h4>
+<p>追踪哪些斜杠命令被使用：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ~/.hermes/hooks/command-logger/HOOK.yaml
+name: command-logger
+description: Log slash command usage
+events:
+  - command:*
+</div>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ~/.hermes/hooks/command-logger/handler.py
+import json
+from datetime import datetime
+from pathlib import Path
+
+LOG = Path.home() / ".hermes" / "logs" / "command_usage.jsonl"
+
+def handle(event_type: str, context: dict):
+    LOG.parent.mkdir(parents=True, exist_ok=True)
+    entry = {
+        "ts": datetime.now().isoformat(),
+        "command": context.get("command"),
+        "args": context.get("args"),
+        "platform": context.get("platform"),
+        "user": context.get("user_id"),
+    }
+    with open(LOG, "a") as f:
+        f.write(json.dumps(entry) + "\n")
+</div>
+<h4>会话开始 Webhook</h4>
+<p>新会话时 POST 到外部服务：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ~/.hermes/hooks/session-webhook/HOOK.yaml
+name: session-webhook
+description: Notify external service on new sessions
+events:
+  - session:start
+  - session:reset
+</div>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ~/.hermes/hooks/session-webhook/handler.py
+import httpx
+
+WEBHOOK_URL = "https://your-service.example.com/hermes-events"
+
+async def handle(event_type: str, context: dict):
+    async with httpx.AsyncClient() as client:
+        await client.post(WEBHOOK_URL, json={
+            "event": event_type,
+            **context,
+        }, timeout=5)
+</div>
+<h3>教程：BOOT.md——每次 Gateway 启动时运行启动检查清单</h3>
+<p>这是社区中流行的一种模式：在 <code>~/.hermes/BOOT.md</code> 放置一个 Markdown 检查清单，让 agent 在每次 gateway 启动时执行一次。适用于&quot;每次启动时检查隔夜 cron 失败情况，若有失败则在 Discord 上通知我&quot;，或&quot;汇总过去 24 小时的 deploy.log 并发布到 Slack #ops&quot;等场景。</p>
+<p>本教程展示如何以用户自定义 hook 的方式自行构建。Hermes 不内置 BOOT.md hook——你可以精确配置自己想要的行为。</p>
+<h4>我们要构建什么</h4>
+<ol>
+<li>在 <code>~/.hermes/BOOT.md</code> 放置一个包含自然语言启动指令的文件。</li>
+<li>一个监听 <code>gateway:startup</code> 的 gateway hook，它会生成一个一次性 agent，使用 gateway 已解析的模型和凭据，执行 BOOT.md 中的指令。</li>
+<li>一个 <code>[SILENT]</code> 约定，让 agent 在没有内容需要汇报时选择不发送消息。</li>
+</ol>
+<h4>第一步：编写检查清单</h4>
+<p>创建 <code>~/.hermes/BOOT.md</code>。像给人类助手下达指令一样编写：</p>
+<div class="code-block"><span class="code-lang">markdown</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Startup Checklist
+
+1. Run `hermes cron list` and check if any scheduled jobs failed overnight.
+2. If any failed, send a summary to Discord #ops using the `send_message` tool.
+3. Check if `/opt/app/deploy.log` has any ERROR lines from the last 24 hours. If yes, summarize them and include in the same Discord message.
+4. If nothing went wrong, reply with only `[SILENT]` so no message is sent.
+</div>
+<p>Agent 将此内容作为 prompt（提示词）的一部分，因此任何可以用自然语言描述的内容都可以——工具调用、shell 命令、发送消息、汇总文件。</p>
+<h4>第二步：创建 hook</h4>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+~/.hermes/hooks/boot-md/
+├── HOOK.yaml
+└── handler.py
+</div>
+<p><strong><code>~/.hermes/hooks/boot-md/HOOK.yaml</code></strong></p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+name: boot-md
+description: Run ~/.hermes/BOOT.md on gateway startup
+events:
+  - gateway:startup
+</div>
+<p><strong><code>~/.hermes/hooks/boot-md/handler.py</code></strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+"""Run ~/.hermes/BOOT.md on every gateway startup."""
+
+import logging
+import threading
+from pathlib import Path
+
+logger = logging.getLogger("hooks.boot-md")
+
+BOOT_FILE = Path.home() / ".hermes" / "BOOT.md"
+
+
+def _build_prompt(content: str) -&gt; str:
+    return (
+        "You are running a startup boot checklist. Follow the instructions "
+        "below exactly.\n\n"
+        "---\n"
+        f"{content}\n"
+        "---\n\n"
+        "Execute each instruction. Use the send_message tool to deliver any "
+        "messages to platforms like Discord or Slack.\n"
+        "If nothing needs attention and there is nothing to report, reply "
+        "with ONLY: [SILENT]"
+    )
+
+
+def _run_boot_agent(content: str) -&gt; None:
+    """Spawn a one-shot agent and execute the checklist.
+
+    Uses the gateway's resolved model and runtime credentials so this works
+    against custom endpoints, aggregators, and OAuth-based providers alike.
+    """
+    try:
+        from gateway.run import _resolve_gateway_model, _resolve_runtime_agent_kwargs
+        from run_agent import AIAgent
+
+        agent = AIAgent(
+            model=_resolve_gateway_model(),
+            **_resolve_runtime_agent_kwargs(),
+            platform="gateway",
+            quiet_mode=True,
+            skip_context_files=True,
+            skip_memory=True,
+            max_iterations=20,
+        )
+        result = agent.run_conversation(_build_prompt(content))
+        response = result.get("final_response", "")
+        if response and "[SILENT]" not in response:
+            logger.info("boot-md completed: %s", response[:200])
+        else:
+            logger.info("boot-md completed (nothing to report)")
+    except Exception as e:
+        logger.error("boot-md agent failed: %s", e)
+
+
+async def handle(event_type: str, context: dict) -&gt; None:
+    if not BOOT_FILE.exists():
+        return
+    content = BOOT_FILE.read_text(encoding="utf-8").strip()
+    if not content:
+        return
+
+    logger.info("Running BOOT.md (%d chars)", len(content))
+
+    # Background thread so gateway startup isn't blocked on a full agent turn.
+    thread = threading.Thread(
+        target=_run_boot_agent,
+        args=(content,),
+        name="boot-md",
+        daemon=True,
+    )
+    thread.start()
+</div>
+<p>两个关键行：</p>
+<ul>
+<li><code>_resolve_gateway_model()</code> 读取 gateway 当前配置的模型。</li>
+<li><code>_resolve_runtime_agent_kwargs()</code> 以与普通 gateway 轮次相同的方式解析 provider 凭据——包括 API 密钥、base URL、OAuth token 和凭据池。</li>
+</ul>
+<p>若不使用这两行，裸 <code>AIAgent()</code> 会回退到内置默认值，并在任何非默认端点上返回 401。</p>
+<h4>第三步：测试</h4>
+<p>重启 gateway：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway restart
+</div>
+<p>查看日志：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes logs --follow --level INFO | grep boot-md
+</div>
+<p>你应该看到 <code>Running BOOT.md (N chars)</code>，随后是 <code>boot-md completed: ...</code>（agent 执行内容的摘要）或 <code>boot-md completed (nothing to report)</code>（agent 回复了 <code>[SILENT]</code>）。</p>
+<p>删除 <code>~/.hermes/BOOT.md</code> 即可禁用检查清单——hook 保持加载状态，但在文件不存在时会静默跳过。</p>
+<h4>扩展此模式</h4>
+<ul>
+<li><strong>感知调度的检查清单：</strong> 在 BOOT.md 指令中基于 <code>datetime.now().weekday()</code> 进行判断（&quot;如果是周一，还需检查每周部署日志&quot;）。指令是自由格式文本，agent 能推理的内容都可以使用。</li>
+<li><strong>多个检查清单：</strong> 将 hook 指向不同文件（<code>STARTUP.md</code>、<code>MORNING.md</code> 等），并为每个文件注册独立的 hook 目录。</li>
+<li><strong>非 agent 变体：</strong> 如果不需要完整的 agent 循环，完全跳过 <code>AIAgent</code>，直接通过 <code>httpx</code> 在处理器中发送固定通知。更轻量、更快速，且无 provider 依赖。</li>
+</ul>
+<h4>为什么这不是内置功能</h4>
+<p>Hermes 早期版本将此作为内置 hook 发布，每次 gateway 启动时都会静默生成一个使用裸默认值的 agent。这让使用自定义端点的用户感到意外，也让不知道它在运行的用户无从察觉。将其作为文档化模式保留——由你在 hooks 目录中构建——意味着你能清楚地看到它的行为，并通过编写文件来选择启用。</p>
+<h3>工作原理</h3>
+<ol>
+<li>Gateway 启动时，<code>HookRegistry.discover_and_load()</code> 扫描 <code>~/.hermes/hooks/</code></li>
+<li>每个包含 <code>HOOK.yaml</code> + <code>handler.py</code> 的子目录都会被动态加载</li>
+<li>处理器按其声明的事件注册</li>
+<li>在每个生命周期节点，<code>hooks.emit()</code> 触发所有匹配的处理器</li>
+<li>任何处理器中的错误都会被捕获并记录——损坏的 hook 永远不会导致 agent 崩溃</li>
+</ol>
+<div class="tip"><strong>ℹ️ 信息</strong>
+Gateway hooks 仅在 <strong>gateway</strong>（Telegram、Discord、Slack、WhatsApp、Teams）中触发。CLI 不加载 gateway hooks。如需在所有环境中生效的 hook，请使用 <a href="#plugin-hooks">plugin hooks</a>。
+</div>
+<h2>Plugin Hooks</h2>
+<p><a href="/user-guide/features/plugins">插件</a>可以注册在 <strong>CLI 和 gateway</strong> 会话中均会触发的 hook。这些 hook 通过插件 <code>register()</code> 函数中的 <code>ctx.register_hook()</code> 以编程方式注册。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def register(ctx):
+    ctx.register_hook("pre_tool_call", my_tool_observer)
+    ctx.register_hook("post_tool_call", my_tool_logger)
+    ctx.register_hook("pre_llm_call", my_memory_callback)
+    ctx.register_hook("post_llm_call", my_sync_callback)
+    ctx.register_hook("on_session_start", my_init_callback)
+    ctx.register_hook("on_session_end", my_cleanup_callback)
+</div>
+<p><strong>所有 hook 的通用规则：</strong></p>
+<ul>
+<li>回调接收<strong>关键字参数</strong>。始终接受 <code>**kwargs</code> 以保持向前兼容性——未来版本可能会在不破坏插件的情况下添加新参数。</li>
+<li>如果回调<strong>崩溃</strong>，会被记录并跳过。其他 hook 和 agent 继续正常运行。行为异常的插件永远不会破坏 agent。</li>
+<li>两个 hook 的返回值会影响行为：<a href="#pre_tool_call"><code>pre_tool_call</code></a> 可以<strong>阻断</strong>工具，<a href="#pre_llm_call"><code>pre_llm_call</code></a> 可以<strong>注入上下文</strong>到 LLM 调用中。其他所有 hook 均为即发即忘的观察者。</li>
+</ul>
+<h3>快速参考</h3>
+<table>
+<thead>
+<tr>
+<th>Hook</th>
+<th>触发时机</th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#pre_tool_call"><code>pre_tool_call</code></a></td>
+<td>任意工具执行前</td>
+<td><code>{&quot;action&quot;: &quot;block&quot;, &quot;message&quot;: str}</code> 用于否决调用</td>
+</tr>
+<tr>
+<td><a href="#post_tool_call"><code>post_tool_call</code></a></td>
+<td>任意工具返回后</td>
+<td>忽略</td>
+</tr>
+<tr>
+<td><a href="#pre_llm_call"><code>pre_llm_call</code></a></td>
+<td>每轮一次，工具调用循环前</td>
+<td><code>{&quot;context&quot;: str}</code> 用于在用户消息前追加上下文</td>
+</tr>
+<tr>
+<td><a href="#post_llm_call"><code>post_llm_call</code></a></td>
+<td>每轮一次，工具调用循环后</td>
+<td>忽略</td>
+</tr>
+<tr>
+<td><a href="#on_session_start"><code>on_session_start</code></a></td>
+<td>新会话创建（仅第一轮）</td>
+<td>忽略</td>
+</tr>
+<tr>
+<td><a href="#on_session_end"><code>on_session_end</code></a></td>
+<td>会话结束</td>
+<td>忽略</td>
+</tr>
+<tr>
+<td><a href="#on_session_finalize"><code>on_session_finalize</code></a></td>
+<td>CLI/gateway 销毁活跃会话（刷新、保存、统计）</td>
+<td>忽略</td>
+</tr>
+<tr>
+<td><a href="#on_session_reset"><code>on_session_reset</code></a></td>
+<td>Gateway 换入新会话 key（如 <code>/new</code>、<code>/reset</code>）</td>
+<td>忽略</td>
+</tr>
+<tr>
+<td><a href="#subagent_stop"><code>subagent_stop</code></a></td>
+<td><code>delegate_task</code> 子 agent 退出</td>
+<td>忽略</td>
+</tr>
+<tr>
+<td><a href="#pre_gateway_dispatch"><code>pre_gateway_dispatch</code></a></td>
+<td>Gateway 收到用户消息，认证和分发前</td>
+<td><code>{&quot;action&quot;: &quot;skip&quot; | &quot;rewrite&quot; | &quot;allow&quot;, ...}</code> 用于影响流程</td>
+</tr>
+<tr>
+<td><a href="#pre_approval_request"><code>pre_approval_request</code></a></td>
+<td>危险命令需要用户审批，提示/通知发送前</td>
+<td>忽略</td>
+</tr>
+<tr>
+<td><a href="#post_approval_response"><code>post_approval_response</code></a></td>
+<td>用户响应审批提示（或超时）</td>
+<td>忽略</td>
+</tr>
+<tr>
+<td><a href="#transform_tool_result"><code>transform_tool_result</code></a></td>
+<td>任意工具返回后，结果交还给模型前</td>
+<td><code>str</code> 替换结果，<code>None</code> 保持不变</td>
+</tr>
+<tr>
+<td><a href="#transform_terminal_output"><code>transform_terminal_output</code></a></td>
+<td><code>terminal</code> 工具内部，截断/ANSI 剥离/脱敏前</td>
+<td><code>str</code> 替换原始输出，<code>None</code> 保持不变</td>
+</tr>
+<tr>
+<td><a href="#transform_llm_output"><code>transform_llm_output</code></a></td>
+<td>工具调用循环完成后，最终响应交付前</td>
+<td><code>str</code> 替换响应文本，<code>None</code>/空值保持不变</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h3><code>pre_tool_call</code></h3>
+<p>在每次工具执行<strong>之前立即</strong>触发——内置工具和插件工具均适用。</p>
+<p><strong>回调签名：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def my_callback(tool_name: str, args: dict, task_id: str, **kwargs):
+</div>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tool_name</code></td>
+<td><code>str</code></td>
+<td>即将执行的工具名称（如 <code>&quot;terminal&quot;</code>、<code>&quot;web_search&quot;</code>、<code>&quot;read_file&quot;</code>）</td>
+</tr>
+<tr>
+<td><code>args</code></td>
+<td><code>dict</code></td>
+<td>模型传递给工具的参数</td>
+</tr>
+<tr>
+<td><code>task_id</code></td>
+<td><code>str</code></td>
+<td>会话/任务标识符。未设置时为空字符串。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>触发位置：</strong> <code>model_tools.py</code> 中的 <code>handle_function_call()</code> 内，工具处理器运行前。每次工具调用触发一次——若模型并行调用 3 个工具，则触发 3 次。</p>
+<p><strong>返回值——否决调用：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+return {"action": "block", "message": "Reason the tool call was blocked"}
+</div>
+<p>Agent 以 <code>message</code> 作为返回给模型的错误短路该工具调用。第一个匹配的 block 指令生效（Python 插件优先，然后是 shell hooks）。任何其他返回值均被忽略，因此仅作观察用途的现有回调无需修改。</p>
+<p><strong>使用场景：</strong> 日志记录、审计追踪、工具调用计数、阻断危险操作、速率限制、按用户策略执行。</p>
+<p><strong>示例——工具调用审计日志：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import json, logging
+from datetime import datetime
+
+logger = logging.getLogger(__name__)
+
+def audit_tool_call(tool_name, args, task_id, **kwargs):
+    logger.info("TOOL_CALL session=%s tool=%s args=%s",
+                task_id, tool_name, json.dumps(args)[:200])
+
+def register(ctx):
+    ctx.register_hook("pre_tool_call", audit_tool_call)
+</div>
+<p><strong>示例——对危险工具发出警告：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+DANGEROUS = {"terminal", "write_file", "patch"}
+
+def warn_dangerous(tool_name, **kwargs):
+    if tool_name in DANGEROUS:
+        print(f"⚠ Executing potentially dangerous tool: {tool_name}")
+
+def register(ctx):
+    ctx.register_hook("pre_tool_call", warn_dangerous)
+</div>
+<hr />
+<h3><code>post_tool_call</code></h3>
+<p>在每次工具执行返回<strong>之后立即</strong>触发。</p>
+<p><strong>回调签名：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def my_callback(tool_name: str, args: dict, result: str, task_id: str,
+                duration_ms: int, **kwargs):
+</div>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tool_name</code></td>
+<td><code>str</code></td>
+<td>刚刚执行的工具名称</td>
+</tr>
+<tr>
+<td><code>args</code></td>
+<td><code>dict</code></td>
+<td>模型传递给工具的参数</td>
+</tr>
+<tr>
+<td><code>result</code></td>
+<td><code>str</code></td>
+<td>工具的返回值（始终为 JSON 字符串）</td>
+</tr>
+<tr>
+<td><code>task_id</code></td>
+<td><code>str</code></td>
+<td>会话/任务标识符。未设置时为空字符串。</td>
+</tr>
+<tr>
+<td><code>duration_ms</code></td>
+<td><code>int</code></td>
+<td>工具分发耗时，单位毫秒（使用 <code>time.monotonic()</code> 在 <code>registry.dispatch()</code> 前后测量）。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>触发位置：</strong> <code>model_tools.py</code> 中的 <code>handle_function_call()</code> 内，工具处理器返回后。每次工具调用触发一次。若工具抛出未处理异常，<strong>不会</strong>触发（错误被捕获并以错误 JSON 字符串返回，<code>post_tool_call</code> 以该错误字符串作为 <code>result</code> 触发）。</p>
+<p><strong>返回值：</strong> 忽略。</p>
+<p><strong>使用场景：</strong> 记录工具结果、指标采集、追踪工具成功/失败率、延迟仪表盘、按工具预算告警、特定工具完成时发送通知。</p>
+<p><strong>示例——追踪工具使用指标：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from collections import Counter, defaultdict
+import json
+
+_tool_counts = Counter()
+_error_counts = Counter()
+_latency_ms = defaultdict(list)
+
+def track_metrics(tool_name, result, duration_ms=0, **kwargs):
+    _tool_counts[tool_name] += 1
+    _latency_ms[tool_name].append(duration_ms)
+    try:
+        parsed = json.loads(result)
+        if "error" in parsed:
+            _error_counts[tool_name] += 1
+    except (json.JSONDecodeError, TypeError):
+        pass
+
+def register(ctx):
+    ctx.register_hook("post_tool_call", track_metrics)
+</div>
+<hr />
+<h3><code>pre_llm_call</code></h3>
+<p><strong>每轮触发一次</strong>，在工具调用循环开始前。这是<strong>唯一一个返回值会被使用的 hook</strong>——它可以将上下文注入当前轮次的用户消息。</p>
+<p><strong>回调签名：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def my_callback(session_id: str, user_message: str, conversation_history: list,
+                is_first_turn: bool, model: str, platform: str, **kwargs):
+</div>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>session_id</code></td>
+<td><code>str</code></td>
+<td>当前会话的唯一标识符</td>
+</tr>
+<tr>
+<td><code>user_message</code></td>
+<td><code>str</code></td>
+<td>本轮用户的原始消息（技能注入前）</td>
+</tr>
+<tr>
+<td><code>conversation_history</code></td>
+<td><code>list</code></td>
+<td>完整消息列表的副本（OpenAI 格式：<code>[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;...&quot;}]</code>）</td>
+</tr>
+<tr>
+<td><code>is_first_turn</code></td>
+<td><code>bool</code></td>
+<td>新会话的第一轮为 <code>True</code>，后续轮次为 <code>False</code></td>
+</tr>
+<tr>
+<td><code>model</code></td>
+<td><code>str</code></td>
+<td>模型标识符（如 <code>&quot;anthropic/claude-sonnet-4.6&quot;</code>）</td>
+</tr>
+<tr>
+<td><code>platform</code></td>
+<td><code>str</code></td>
+<td>会话运行环境：<code>&quot;cli&quot;</code>、<code>&quot;telegram&quot;</code>、<code>&quot;discord&quot;</code> 等</td>
+</tr>
+</tbody>
+</table>
+<p><strong>触发位置：</strong> <code>run_agent.py</code> 中的 <code>run_conversation()</code> 内，上下文压缩后、主 <code>while</code> 循环前。每次 <code>run_conversation()</code> 调用触发一次（即每个用户轮次一次），而非工具循环内每次 API 调用触发一次。</p>
+<p><strong>返回值：</strong> 若回调返回包含 <code>&quot;context&quot;</code> 键的字典，或非空的普通字符串，该文本会追加到当前轮次的用户消息。返回 <code>None</code> 表示不注入。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 注入上下文
+return {"context": "Recalled memories:\n- User likes Python\n- Working on hermes-agent"}
+
+# 普通字符串（等效）
+return "Recalled memories:\n- User likes Python"
+
+# 不注入
+return None
+</div>
+<p><strong>上下文注入位置：</strong> 始终注入到<strong>用户消息</strong>，而非系统 prompt。这保留了 prompt 缓存——系统 prompt 在各轮次间保持不变，已缓存的 token 得以复用。系统 prompt 是 Hermes 的领域（模型指导、工具执行、个性、技能）。插件在用户输入旁边贡献上下文。</p>
+<p>所有注入的上下文均为<strong>临时性的</strong>——仅在 API 调用时添加。对话历史中的原始用户消息不会被修改，也不会持久化到会话数据库。</p>
+<p>当<strong>多个插件</strong>返回上下文时，其输出按插件发现顺序（按目录名字母顺序）以双换行符连接。</p>
+<p><strong>使用场景：</strong> 记忆召回、RAG 上下文注入、护栏、每轮分析。</p>
+<p><strong>示例——记忆召回：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import httpx
+
+MEMORY_API = "https://your-memory-api.example.com"
+
+def recall(session_id, user_message, is_first_turn, **kwargs):
+    try:
+        resp = httpx.post(f"{MEMORY_API}/recall", json={
+            "session_id": session_id,
+            "query": user_message,
+        }, timeout=3)
+        memories = resp.json().get("results", [])
+        if not memories:
+            return None
+        text = "Recalled context:\n" + "\n".join(f"- {m['text']}" for m in memories)
+        return {"context": text}
+    except Exception:
+        return None
+
+def register(ctx):
+    ctx.register_hook("pre_llm_call", recall)
+</div>
+<p><strong>示例——护栏：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+POLICY = "Never execute commands that delete files without explicit user confirmation."
+
+def guardrails(**kwargs):
+    return {"context": POLICY}
+
+def register(ctx):
+    ctx.register_hook("pre_llm_call", guardrails)
+</div>
+<hr />
+<h3><code>post_llm_call</code></h3>
+<p><strong>每轮触发一次</strong>，在工具调用循环完成且 agent 产生最终响应后。仅在<strong>成功</strong>的轮次触发——若轮次被中断则不触发。</p>
+<p><strong>回调签名：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def my_callback(session_id: str, user_message: str, assistant_response: str,
+                conversation_history: list, model: str, platform: str, **kwargs):
+</div>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>session_id</code></td>
+<td><code>str</code></td>
+<td>当前会话的唯一标识符</td>
+</tr>
+<tr>
+<td><code>user_message</code></td>
+<td><code>str</code></td>
+<td>本轮用户的原始消息</td>
+</tr>
+<tr>
+<td><code>assistant_response</code></td>
+<td><code>str</code></td>
+<td>Agent 本轮的最终文本响应</td>
+</tr>
+<tr>
+<td><code>conversation_history</code></td>
+<td><code>list</code></td>
+<td>轮次完成后完整消息列表的副本</td>
+</tr>
+<tr>
+<td><code>model</code></td>
+<td><code>str</code></td>
+<td>模型标识符</td>
+</tr>
+<tr>
+<td><code>platform</code></td>
+<td><code>str</code></td>
+<td>会话运行环境</td>
+</tr>
+</tbody>
+</table>
+<p><strong>触发位置：</strong> <code>run_agent.py</code> 中的 <code>run_conversation()</code> 内，工具循环以最终响应退出后。受 <code>if final_response and not interrupted</code> 保护——因此当用户在轮次中途中断，或 agent 在未产生响应的情况下达到迭代上限时，<strong>不会</strong>触发。</p>
+<p><strong>返回值：</strong> 忽略。</p>
+<p><strong>使用场景：</strong> 将对话数据同步到外部记忆系统、计算响应质量指标、记录轮次摘要、触发后续操作。</p>
+<p><strong>示例——同步到外部记忆：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import httpx
+
+MEMORY_API = "https://your-memory-api.example.com"
+
+def sync_memory(session_id, user_message, assistant_response, **kwargs):
+    try:
+        httpx.post(f"{MEMORY_API}/store", json={
+            "session_id": session_id,
+            "user": user_message,
+            "assistant": assistant_response,
+        }, timeout=5)
+    except Exception:
+        pass  # best-effort
+
+def register(ctx):
+    ctx.register_hook("post_llm_call", sync_memory)
+</div>
+<p><strong>示例——追踪响应长度：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import logging
+logger = logging.getLogger(__name__)
+
+def log_response_length(session_id, assistant_response, model, **kwargs):
+    logger.info("RESPONSE session=%s model=%s chars=%d",
+                session_id, model, len(assistant_response or ""))
+
+def register(ctx):
+    ctx.register_hook("post_llm_call", log_response_length)
+</div>
+<hr />
+<h3><code>on_session_start</code></h3>
+<p>在全新会话创建时触发<strong>一次</strong>。在会话延续时<strong>不会</strong>触发（用户在已有会话中发送第二条消息时）。</p>
+<p><strong>回调签名：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def my_callback(session_id: str, model: str, platform: str, **kwargs):
+</div>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>session_id</code></td>
+<td><code>str</code></td>
+<td>新会话的唯一标识符</td>
+</tr>
+<tr>
+<td><code>model</code></td>
+<td><code>str</code></td>
+<td>模型标识符</td>
+</tr>
+<tr>
+<td><code>platform</code></td>
+<td><code>str</code></td>
+<td>会话运行环境</td>
+</tr>
+</tbody>
+</table>
+<p><strong>触发位置：</strong> <code>run_agent.py</code> 中的 <code>run_conversation()</code> 内，新会话第一轮期间——具体在系统 prompt 构建后、工具循环开始前。检查条件为 <code>if not conversation_history</code>（无历史消息 = 新会话）。</p>
+<p><strong>返回值：</strong> 忽略。</p>
+<p><strong>使用场景：</strong> 初始化会话级状态、预热缓存、向外部服务注册会话、记录会话开始。</p>
+<p><strong>示例——初始化会话缓存：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+_session_caches = {}
+
+def init_session(session_id, model, platform, **kwargs):
+    _session_caches[session_id] = {
+        "model": model,
+        "platform": platform,
+        "tool_calls": 0,
+        "started": __import__("datetime").datetime.now().isoformat(),
+    }
+
+def register(ctx):
+    ctx.register_hook("on_session_start", init_session)
+</div>
+<hr />
+<h3><code>on_session_end</code></h3>
+<p>在每次 <code>run_conversation()</code> 调用<strong>结束时</strong>触发，无论结果如何。若用户在 agent 处理过程中退出，也会从 CLI 的退出处理器触发。</p>
+<p><strong>回调签名：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def my_callback(session_id: str, completed: bool, interrupted: bool,
+                model: str, platform: str, **kwargs):
+</div>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>session_id</code></td>
+<td><code>str</code></td>
+<td>会话的唯一标识符</td>
+</tr>
+<tr>
+<td><code>completed</code></td>
+<td><code>bool</code></td>
+<td>Agent 产生最终响应时为 <code>True</code>，否则为 <code>False</code></td>
+</tr>
+<tr>
+<td><code>interrupted</code></td>
+<td><code>bool</code></td>
+<td>轮次被中断时为 <code>True</code>（用户发送新消息、<code>/stop</code> 或退出）</td>
+</tr>
+<tr>
+<td><code>model</code></td>
+<td><code>str</code></td>
+<td>模型标识符</td>
+</tr>
+<tr>
+<td><code>platform</code></td>
+<td><code>str</code></td>
+<td>会话运行环境</td>
+</tr>
+</tbody>
+</table>
+<p><strong>触发位置：</strong> 两处：</p>
+<ol>
+<li><strong><code>run_agent.py</code></strong> — 每次 <code>run_conversation()</code> 调用结束时，所有清理完成后。始终触发，即使轮次出错。</li>
+<li><strong><code>cli.py</code></strong> — CLI 的 atexit 处理器中，但<strong>仅当</strong> agent 在退出时处于处理中状态（<code>_agent_running=True</code>）。这捕获了处理过程中的 Ctrl+C 和 <code>/exit</code>。此时 <code>completed=False</code>，<code>interrupted=True</code>。</li>
+</ol>
+<p><strong>返回值：</strong> 忽略。</p>
+<p><strong>使用场景：</strong> 刷新缓冲区、关闭连接、持久化会话状态、记录会话时长、清理 <code>on_session_start</code> 中初始化的资源。</p>
+<p><strong>示例——刷新并清理：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+_session_caches = {}
+
+def cleanup_session(session_id, completed, interrupted, **kwargs):
+    cache = _session_caches.pop(session_id, None)
+    if cache:
+        # Flush accumulated data to disk or external service
+        status = "completed" if completed else ("interrupted" if interrupted else "failed")
+        print(f"Session {session_id} ended: {status}, {cache['tool_calls']} tool calls")
+
+def register(ctx):
+    ctx.register_hook("on_session_end", cleanup_session)
+</div>
+<p><strong>示例——会话时长追踪：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import time, logging
+logger = logging.getLogger(__name__)
+
+_start_times = {}
+
+def on_start(session_id, **kwargs):
+    _start_times[session_id] = time.time()
+
+def on_end(session_id, completed, interrupted, **kwargs):
+    start = _start_times.pop(session_id, None)
+    if start:
+        duration = time.time() - start
+        logger.info("SESSION_DURATION session=%s seconds=%.1f completed=%s interrupted=%s",
+                     session_id, duration, completed, interrupted)
+
+def register(ctx):
+    ctx.register_hook("on_session_start", on_start)
+    ctx.register_hook("on_session_end", on_end)
+</div>
+<hr />
+<h3><code>on_session_finalize</code></h3>
+<p>当 CLI 或 gateway <strong>销毁</strong>活跃会话时触发——例如用户执行 <code>/new</code>、gateway GC 了空闲会话，或 CLI 在 agent 活跃时退出。这是在会话身份消失前刷新与该会话绑定状态的最后机会。</p>
+<p><strong>回调签名：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def my_callback(session_id: str | None, platform: str, **kwargs):
+</div>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>session_id</code></td>
+<td><code>str</code> 或 <code>None</code></td>
+<td>即将销毁的会话 ID。若无活跃会话则可能为 <code>None</code>。</td>
+</tr>
+<tr>
+<td><code>platform</code></td>
+<td><code>str</code></td>
+<td><code>&quot;cli&quot;</code> 或消息平台名称（<code>&quot;telegram&quot;</code>、<code>&quot;discord&quot;</code> 等）。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>触发位置：</strong> <code>cli.py</code>（<code>/new</code> / CLI 退出时）和 <code>gateway/run.py</code>（会话重置或 GC 时）。在 gateway 侧始终与 <code>on_session_reset</code> 配对。</p>
+<p><strong>返回值：</strong> 忽略。</p>
+<p><strong>使用场景：</strong> 在会话 ID 被丢弃前持久化最终会话指标、关闭每会话资源、发出最终遥测事件、排空队列写入。</p>
+<hr />
+<h3><code>on_session_reset</code></h3>
+<p>当 gateway 为活跃聊天<strong>换入新会话 key</strong> 时触发——用户调用了 <code>/new</code>、<code>/reset</code>、<code>/clear</code>，或适配器在空闲窗口后选择了新会话。这让插件能在不等待下一个 <code>on_session_start</code> 的情况下响应对话状态已被清除这一事实。</p>
+<p><strong>回调签名：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def my_callback(session_id: str, platform: str, **kwargs):
+</div>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>session_id</code></td>
+<td><code>str</code></td>
+<td>新会话的 ID（已轮换为新值）。</td>
+</tr>
+<tr>
+<td><code>platform</code></td>
+<td><code>str</code></td>
+<td>消息平台名称。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>触发位置：</strong> <code>gateway/run.py</code> 中，新会话 key 分配后、下一条入站消息处理前立即触发。在 gateway 侧，顺序为：<code>on_session_finalize(old_id)</code> → 切换 → <code>on_session_reset(new_id)</code> → 第一条入站消息时的 <code>on_session_start(new_id)</code>。</p>
+<p><strong>返回值：</strong> 忽略。</p>
+<p><strong>使用场景：</strong> 重置以 <code>session_id</code> 为键的每会话缓存、发出&quot;会话已轮换&quot;分析事件、初始化新状态桶。</p>
+<hr />
+<p>参见 <strong><a href="/guides/build-a-hermes-plugin">构建插件指南</a></strong>，获取包含工具 schema、处理器和高级 hook 模式的完整演练。</p>
+<hr />
+<h3><code>subagent_stop</code></h3>
+<p><code>delegate_task</code> 完成后，<strong>每个子 agent 触发一次</strong>。无论你委托了单个任务还是三个任务的批次，此 hook 对每个子 agent 各触发一次，在父线程上串行执行。</p>
+<p><strong>回调签名：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def my_callback(parent_session_id: str, child_role: str | None,
+                child_summary: str | None, child_status: str,
+                duration_ms: int, **kwargs):
+</div>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>parent_session_id</code></td>
+<td><code>str</code></td>
+<td>委托父 agent 的会话 ID</td>
+</tr>
+<tr>
+<td><code>child_role</code></td>
+<td><code>str | None</code></td>
+<td>子 agent 上设置的编排角色标签（若功能未启用则为 <code>None</code>）</td>
+</tr>
+<tr>
+<td><code>child_summary</code></td>
+<td><code>str | None</code></td>
+<td>子 agent 返回给父 agent 的最终响应</td>
+</tr>
+<tr>
+<td><code>child_status</code></td>
+<td><code>str</code></td>
+<td><code>&quot;completed&quot;</code>、<code>&quot;failed&quot;</code>、<code>&quot;interrupted&quot;</code> 或 <code>&quot;error&quot;</code></td>
+</tr>
+<tr>
+<td><code>duration_ms</code></td>
+<td><code>int</code></td>
+<td>运行子 agent 的挂钟时间，单位毫秒</td>
+</tr>
+</tbody>
+</table>
+<p><strong>触发位置：</strong> <code>tools/delegate_tool.py</code> 中，<code>ThreadPoolExecutor.as_completed()</code> 排空所有子 future 后。触发被编排到父线程，因此 hook 作者无需考虑并发回调执行问题。</p>
+<p><strong>返回值：</strong> 忽略。</p>
+<p><strong>使用场景：</strong> 记录编排活动、为计费累计子 agent 时长、写入委托后审计记录。</p>
+<p><strong>示例——记录编排器活动：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import logging
+logger = logging.getLogger(__name__)
+
+def log_subagent(parent_session_id, child_role, child_status, duration_ms, **kwargs):
+    logger.info(
+        "SUBAGENT parent=%s role=%s status=%s duration_ms=%d",
+        parent_session_id, child_role, child_status, duration_ms,
+    )
+
+def register(ctx):
+    ctx.register_hook("subagent_stop", log_subagent)
+</div>
+<div class="tip"><strong>ℹ️ 信息</strong>
+在大量委托场景下（如编排器角色 × 5 个叶节点 × 嵌套深度），<code>subagent_stop</code> 每轮会触发多次。保持回调快速执行；将耗时操作推送到后台队列。
+</div>
+<hr />
+<h3><code>pre_gateway_dispatch</code></h3>
+<p>在 gateway 中，<strong>每条入站 <code>MessageEvent</code> 触发一次</strong>，在内部事件守卫之后、认证/配对和 agent 分发<strong>之前</strong>。这是 gateway 级消息流策略（只听不回窗口、人工接管、按聊天路由等）的拦截点，这些策略不适合放在任何单一平台适配器中。</p>
+<p><strong>回调签名：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def my_callback(event, gateway, session_store, **kwargs):
+</div>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>event</code></td>
+<td><code>MessageEvent</code></td>
+<td>标准化的入站消息（包含 <code>.text</code>、<code>.source</code>、<code>.message_id</code>、<code>.internal</code> 等）。</td>
+</tr>
+<tr>
+<td><code>gateway</code></td>
+<td><code>GatewayRunner</code></td>
+<td>活跃的 gateway 运行器，插件可调用 <code>gateway.adapters[platform].send(...)</code> 进行旁路回复（所有者通知等）。</td>
+</tr>
+<tr>
+<td><code>session_store</code></td>
+<td><code>SessionStore</code></td>
+<td>用于通过 <code>session_store.append_to_transcript(...)</code> 静默摄入转录。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>触发位置：</strong> <code>gateway/run.py</code> 中的 <code>GatewayRunner._handle_message()</code> 内，<code>is_internal</code> 计算后立即触发。<strong>内部事件完全跳过此 hook</strong>（它们是系统生成的——后台进程完成等——不得被面向用户的策略拦截）。</p>
+<p><strong>返回值：</strong> <code>None</code> 或字典。第一个被识别的 action 字典生效；其余插件结果被忽略。插件回调中的异常会被捕获并记录；gateway 在出错时始终回退到正常分发。</p>
+<table>
+<thead>
+<tr>
+<th>返回值</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{&quot;action&quot;: &quot;skip&quot;, &quot;reason&quot;: &quot;...&quot;}</code></td>
+<td>丢弃消息——无 agent 回复、无配对流程、无认证。假定插件已处理（如静默摄入到转录）。</td>
+</tr>
+<tr>
+<td><code>{&quot;action&quot;: &quot;rewrite&quot;, &quot;text&quot;: &quot;new text&quot;}</code></td>
+<td>替换 <code>event.text</code>，然后以修改后的事件继续正常分发。适用于将缓冲的环境消息合并为单个 prompt。</td>
+</tr>
+<tr>
+<td><code>{&quot;action&quot;: &quot;allow&quot;}</code> / <code>None</code></td>
+<td>正常分发——运行完整的认证/配对/agent 循环链。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>使用场景：</strong> 只听不回的群聊（仅在被 @ 时响应；将环境消息缓冲为上下文）；人工接管（所有者手动处理聊天时静默摄入客户消息）；按 profile 速率限制；策略驱动的路由。</p>
+<p><strong>示例——静默丢弃未授权的私信，不触发配对代码：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def deny_unauthorized_dms(event, **kwargs):
+    src = event.source
+    if src.chat_type == "dm" and not _is_approved_user(src.user_id):
+        return {"action": "skip", "reason": "unauthorized-dm"}
+    return None
+
+def register(ctx):
+    ctx.register_hook("pre_gateway_dispatch", deny_unauthorized_dms)
+</div>
+<p><strong>示例——在被提及时将环境消息缓冲重写为单个 prompt：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+_buffers = {}
+
+def buffer_or_rewrite(event, **kwargs):
+    key = (event.source.platform, event.source.chat_id)
+    buf = _buffers.setdefault(key, [])
+    if _bot_mentioned(event.text):
+        combined = "\n".join(buf + [event.text])
+        buf.clear()
+        return {"action": "rewrite", "text": combined}
+    buf.append(event.text)
+    return {"action": "skip", "reason": "ambient-buffered"}
+
+def register(ctx):
+    ctx.register_hook("pre_gateway_dispatch", buffer_or_rewrite)
+</div>
+<hr />
+<h3><code>pre_approval_request</code></h3>
+<p>在审批请求向用户展示<strong>之前立即</strong>触发——覆盖所有界面：交互式 CLI、Ink TUI、gateway 平台（Telegram、Discord、Slack、WhatsApp、Matrix 等）以及 ACP 客户端（VS Code、Zed、JetBrains）。</p>
+<p>这是接入自定义通知器的正确位置——例如弹出允许/拒绝通知的 macOS 菜单栏应用，或记录每个带上下文审批请求的审计日志。</p>
+<p><strong>回调签名：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def my_callback(
+    command: str,
+    description: str,
+    pattern_key: str,
+    pattern_keys: list[str],
+    session_key: str,
+    surface: str,
+    **kwargs,
+):
+</div>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>command</code></td>
+<td><code>str</code></td>
+<td>等待审批的 shell 命令</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td><code>str</code></td>
+<td>命令被标记的人类可读原因（多个模式匹配时合并）</td>
+</tr>
+<tr>
+<td><code>pattern_key</code></td>
+<td><code>str</code></td>
+<td>触发审批的主要模式键（如 <code>&quot;rm_rf&quot;</code>、<code>&quot;sudo&quot;</code>）</td>
+</tr>
+<tr>
+<td><code>pattern_keys</code></td>
+<td><code>list[str]</code></td>
+<td>所有匹配的模式键</td>
+</tr>
+<tr>
+<td><code>session_key</code></td>
+<td><code>str</code></td>
+<td>会话标识符，用于按聊天限定通知范围</td>
+</tr>
+<tr>
+<td><code>surface</code></td>
+<td><code>str</code></td>
+<td>交互式 CLI/TUI 提示为 <code>&quot;cli&quot;</code>，异步平台审批为 <code>&quot;gateway&quot;</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回值：</strong> 忽略。此处的 hook 仅作观察用途；不能否决或预先回答审批。使用 <a href="#pre_tool_call"><code>pre_tool_call</code></a> 在工具到达审批系统前阻断它。</p>
+<p><strong>使用场景：</strong> 桌面通知、推送告警、审计日志、Slack webhook、升级路由、指标。</p>
+<p><strong>示例——macOS 桌面通知：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import subprocess
+
+def notify_approval(command, description, session_key, **kwargs):
+    title = "Hermes needs approval"
+    body = f"{description}: {command[:80]}"
+    subprocess.Popen([
+        "osascript", "-e",
+        f'display notification "{body}" with title "{title}"',
+    ])
+
+def register(ctx):
+    ctx.register_hook("pre_approval_request", notify_approval)
+</div>
+<hr />
+<h3><code>post_approval_response</code></h3>
+<p>在用户响应审批提示（或提示超时）<strong>之后</strong>触发。</p>
+<p><strong>回调签名：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def my_callback(
+    command: str,
+    description: str,
+    pattern_key: str,
+    pattern_keys: list[str],
+    session_key: str,
+    surface: str,
+    choice: str,
+    **kwargs,
+):
+</div>
+<p>与 <code>pre_approval_request</code> 相同的 kwargs，另加：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>choice</code></td>
+<td><code>str</code></td>
+<td><code>&quot;once&quot;</code>、<code>&quot;session&quot;</code>、<code>&quot;always&quot;</code>、<code>&quot;deny&quot;</code> 或 <code>&quot;timeout&quot;</code> 之一</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回值：</strong> 忽略。</p>
+<p><strong>使用场景：</strong> 关闭对应的桌面通知、在审计日志中记录最终决定、更新指标、推进速率限制器。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def log_decision(command, choice, session_key, **kwargs):
+    logger.info("approval %s: %s for session %s", choice, command[:60], session_key)
+
+def register(ctx):
+    ctx.register_hook("post_approval_response", log_decision)
+</div>
+<hr />
+<h3><code>transform_tool_result</code></h3>
+<p>在工具返回<strong>之后</strong>、结果追加到对话<strong>之前</strong>触发。允许插件重写<strong>任意</strong>工具的结果字符串——不仅限于终端输出——在模型看到之前进行处理。</p>
+<p><strong>回调签名：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def my_callback(
+    tool_name: str,
+    arguments: dict,
+    result: str,
+    task_id: str | None,
+    **kwargs,
+) -&gt; str | None:
+</div>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tool_name</code></td>
+<td><code>str</code></td>
+<td>产生结果的工具（<code>read_file</code>、<code>web_extract</code>、<code>delegate_task</code> 等）。</td>
+</tr>
+<tr>
+<td><code>arguments</code></td>
+<td><code>dict</code></td>
+<td>模型调用工具时传入的参数。</td>
+</tr>
+<tr>
+<td><code>result</code></td>
+<td><code>str</code></td>
+<td>工具的原始结果字符串，截断和 ANSI 剥离后。</td>
+</tr>
+<tr>
+<td><code>task_id</code></td>
+<td><code>str | None</code></td>
+<td>在 RL/基准测试环境中运行时的任务/会话 ID。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回值：</strong> <code>str</code> 替换结果（返回的字符串即模型看到的内容），<code>None</code> 保持不变。</p>
+<p><strong>使用场景：</strong> 从 <code>web_extract</code> 输出中脱敏组织特定的 PII、为长 JSON 工具响应添加摘要头、向 <code>read_file</code> 结果注入检索增强提示、将 <code>delegate_task</code> 子 agent 报告重写为项目特定 schema。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import re
+SECRET = re.compile(r"sk-[A-Za-z0-9]{32,}")
+
+def redact_secrets(tool_name, result, **kwargs):
+    if SECRET.search(result):
+        return SECRET.sub("[REDACTED]", result)
+    return None
+
+def register(ctx):
+    ctx.register_hook("transform_tool_result", redact_secrets)
+</div>
+<p>适用于所有工具。仅针对终端输出的重写请参见下方的 <code>transform_terminal_output</code>——它范围更窄，在管道中运行更早（截断前、脱敏前）。</p>
+<hr />
+<h3><code>transform_terminal_output</code></h3>
+<p>在 <code>terminal</code> 工具的前台输出管道内触发，在默认的 50 KB 截断、ANSI 剥离和密钥脱敏<strong>之前</strong>。允许插件在任何下游处理之前重写 shell 命令的原始 stdout/stderr。</p>
+<p><strong>回调签名：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def my_callback(
+    command: str,
+    output: str,
+    exit_code: int,
+    cwd: str,
+    task_id: str | None,
+    **kwargs,
+) -&gt; str | None:
+</div>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>command</code></td>
+<td><code>str</code></td>
+<td>产生输出的 shell 命令。</td>
+</tr>
+<tr>
+<td><code>output</code></td>
+<td><code>str</code></td>
+<td>原始合并的 stdout/stderr（可能非常大——截断在 hook 之后发生）。</td>
+</tr>
+<tr>
+<td><code>exit_code</code></td>
+<td><code>int</code></td>
+<td>进程退出码。</td>
+</tr>
+<tr>
+<td><code>cwd</code></td>
+<td><code>str</code></td>
+<td>命令运行的工作目录。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回值：</strong> <code>str</code> 替换输出，<code>None</code> 保持不变。</p>
+<p><strong>使用场景：</strong> 为产生大量输出的命令注入摘要（<code>du -ah</code>、<code>find</code>、<code>tree</code>）、用项目特定标记标注输出以便下游 hook 处理、剥离在运行间抖动并破坏 prompt 缓存的计时噪声。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def summarize_find(command, output, **kwargs):
+    if command.startswith("find ") and len(output) &gt; 50_000:
+        lines = output.count("\n")
+        head = "\n".join(output.splitlines()[:40])
+        return f"{head}\n\n[summary: {lines} paths total, showing first 40]"
+    return None
+
+def register(ctx):
+    ctx.register_hook("transform_terminal_output", summarize_find)
+</div>
+<p>与 <code>transform_tool_result</code>（覆盖所有其他工具）配合使用效果更佳。</p>
+<hr />
+<h3><code>transform_llm_output</code></h3>
+<p><strong>每轮触发一次</strong>，在工具调用循环完成且模型产生最终响应后、该响应交付给用户（CLI、gateway 或程序调用方）<strong>之前</strong>。允许插件使用经典编程方法重写 assistant 的最终文本——无需为 SOUL 风格文本或技能驱动的转换消耗额外推理 token。</p>
+<p><strong>回调签名：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def my_callback(
+    response_text: str,
+    session_id: str,
+    model: str,
+    platform: str,
+    **kwargs,
+) -&gt; str | None:
+</div>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>response_text</code></td>
+<td><code>str</code></td>
+<td>本轮 assistant 的最终响应文本。</td>
+</tr>
+<tr>
+<td><code>session_id</code></td>
+<td><code>str</code></td>
+<td>本次对话的会话 ID（一次性运行时可能为空）。</td>
+</tr>
+<tr>
+<td><code>model</code></td>
+<td><code>str</code></td>
+<td>产生响应的模型名称（如 <code>anthropic/claude-sonnet-4.6</code>）。</td>
+</tr>
+<tr>
+<td><code>platform</code></td>
+<td><code>str</code></td>
+<td>交付平台（<code>cli</code>、<code>telegram</code>、<code>discord</code> 等；未设置时为空）。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>返回值：</strong> 非空 <code>str</code> 替换响应文本，<code>None</code> 或空字符串保持不变。当多个插件注册时，<strong>第一个非空字符串生效</strong>——与 <code>transform_tool_result</code> 保持一致。</p>
+<p><strong>使用场景：</strong> 应用个性/词汇转换（海盗腔、海绵宝宝体）、从最终文本中脱敏用户特定标识符、追加项目特定签名页脚、在不消耗 SOUL 指令 token 的情况下执行内部风格指南。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import os, re
+
+def spongebob(response_text, **kwargs):
+    if os.environ.get("SPONGEBOB_MODE") != "on":
+        return None  # pass through unchanged
+    return re.sub(r"!", "!! Tartar sauce!", response_text)
+
+def register(ctx):
+    ctx.register_hook("transform_llm_output", spongebob)
+</div>
+<p>此 hook 受非空、非中断响应保护——不会在停止按钮中断或空轮次时触发。异常会被记录为警告，不会中断 agent 执行。</p>
+<hr />
+<h2>Shell Hooks</h2>
+<p>在 <code>cli-config.yaml</code> 中声明 shell 脚本 hook，Hermes 会在对应的插件 hook 事件触发时将其作为子进程运行——在 CLI 和 gateway 会话中均适用。无需编写 Python 插件。</p>
+<p>当你希望用一个即插即用的单文件脚本（Bash、Python 或任何带 shebang 的脚本）来实现以下功能时，使用 shell hooks：</p>
+<ul>
+<li><strong>阻断工具调用</strong> — 拒绝危险的 <code>terminal</code> 命令、执行按目录策略、要求对破坏性的 <code>write_file</code> / <code>patch</code> 操作进行审批。</li>
+<li><strong>工具调用后运行</strong> — 自动格式化 agent 刚写入的 Python 或 TypeScript 文件、记录 API 调用、触发 CI 工作流。</li>
+<li><strong>向下一个 LLM 轮次注入上下文</strong> — 在用户消息前追加 <code>git status</code> 输出、当前星期几或检索到的文档（参见 <a href="#pre_llm_call"><code>pre_llm_call</code></a>）。</li>
+<li><strong>观察生命周期事件</strong> — 在子 agent 完成（<code>subagent_stop</code>）或会话开始（<code>on_session_start</code>）时写入日志行。</li>
+</ul>
+<p>Shell hooks 通过在 CLI 启动（<code>hermes_cli/main.py</code>）和 gateway 启动（<code>gateway/run.py</code>）时调用 <code>agent.shell_hooks.register_from_config(cfg)</code> 来注册。它们与 Python 插件 hook 自然组合——两者都流经同一个分发器。</p>
+<h3>对比一览</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Shell hooks</th>
+<th><a href="#plugin-hooks">Plugin hooks</a></th>
+<th><a href="#gateway-event-hooks">Gateway hooks</a></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>声明位置</td>
+<td><code>~/.hermes/config.yaml</code> 中的 <code>hooks:</code> 块</td>
+<td>插件 <code>plugin.yaml</code> 中的 <code>register()</code></td>
+<td><code>HOOK.yaml</code> + <code>handler.py</code> 目录</td>
+</tr>
+<tr>
+<td>存放位置</td>
+<td><code>~/.hermes/agent-hooks/</code>（约定）</td>
+<td><code>~/.hermes/plugins/&lt;name&gt;/</code></td>
+<td><code>~/.hermes/hooks/&lt;name&gt;/</code></td>
+</tr>
+<tr>
+<td>语言</td>
+<td>任意（Bash、Python、Go 二进制等）</td>
+<td>仅 Python</td>
+<td>仅 Python</td>
+</tr>
+<tr>
+<td>运行环境</td>
+<td>CLI + Gateway</td>
+<td>CLI + Gateway</td>
+<td>仅 Gateway</td>
+</tr>
+<tr>
+<td>事件</td>
+<td><code>VALID_HOOKS</code>（含 <code>subagent_stop</code>）</td>
+<td><code>VALID_HOOKS</code></td>
+<td>Gateway 生命周期（<code>gateway:startup</code>、<code>agent:*</code>、<code>command:*</code>）</td>
+</tr>
+<tr>
+<td>可阻断工具调用</td>
+<td>是（<code>pre_tool_call</code>）</td>
+<td>是（<code>pre_tool_call</code>）</td>
+<td>否</td>
+</tr>
+<tr>
+<td>可注入 LLM 上下文</td>
+<td>是（<code>pre_llm_call</code>）</td>
+<td>是（<code>pre_llm_call</code>）</td>
+<td>否</td>
+</tr>
+<tr>
+<td>授权</td>
+<td>每个 <code>(event, command)</code> 对首次使用时提示</td>
+<td>隐式（Python 插件信任）</td>
+<td>隐式（目录信任）</td>
+</tr>
+<tr>
+<td>进程间隔离</td>
+<td>是（子进程）</td>
+<td>否（进程内）</td>
+<td>否（进程内）</td>
+</tr>
+</tbody>
+</table>
+<h3>配置 schema</h3>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hooks:
+  &lt;event_name&gt;:                  # Must be in VALID_HOOKS
+    - matcher: "&lt;regex&gt;"         # Optional; used for pre/post_tool_call only
+      command: "&lt;shell command&gt;" # Required; runs via shlex.split, shell=False
+      timeout: &lt;seconds&gt;         # Optional; default 60, capped at 300
+
+hooks_auto_accept: false         # See "Consent model" below
+</div>
+<p>事件名称必须是 <a href="#plugin-hooks">plugin hook 事件</a>之一；拼写错误会产生&quot;你是否想输入 X？&quot;警告并被跳过。单个条目中的未知键会被忽略；缺少 <code>command</code> 会跳过并发出警告。<code>timeout &gt; 300</code> 会被截断并发出警告。</p>
+<h3>JSON 通信协议</h3>
+<p>每次事件触发时，Hermes 为每个匹配的 hook（在 matcher 允许的情况下）生成一个子进程，将 JSON 载荷通过 <strong>stdin</strong> 传入，并从 <strong>stdout</strong> 读取 JSON 响应。</p>
+<p><strong>stdin——脚本接收的载荷：</strong></p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{
+  "hook_event_name": "pre_tool_call",
+  "tool_name":       "terminal",
+  "tool_input":      {"command": "rm -rf /"},
+  "session_id":      "sess_abc123",
+  "cwd":             "/home/user/project",
+  "extra":           {"task_id": "...", "tool_call_id": "..."}
+}
+</div>
+<p>对于非工具事件（<code>pre_llm_call</code>、<code>subagent_stop</code>、会话生命周期），<code>tool_name</code> 和 <code>tool_input</code> 为 <code>null</code>。<code>extra</code> 字典携带所有事件特定的 kwargs（<code>user_message</code>、<code>conversation_history</code>、<code>child_role</code>、<code>duration_ms</code> 等）。不可序列化的值会被字符串化而非省略。</p>
+<p><strong>stdout——可选响应：</strong></p>
+<div class="code-block"><span class="code-lang">jsonc</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+// Block a pre_tool_call (both shapes accepted; normalised internally):
+{"decision": "block", "reason":  "Forbidden: rm -rf"}   // Claude-Code style
+{"action":   "block", "message": "Forbidden: rm -rf"}   // Hermes-canonical
+
+// Inject context for pre_llm_call:
+{"context": "Today is Friday, 2026-04-17"}
+
+// Silent no-op — any empty / non-matching output is fine:
+</div>
+<p>格式错误的 JSON、非零退出码和超时会记录警告，但永远不会中止 agent 循环。</p>
+<h3>实际示例</h3>
+<h4>1. 每次写入后自动格式化 Python 文件</h4>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ~/.hermes/config.yaml
+hooks:
+  post_tool_call:
+    - matcher: "write_file|patch"
+      command: "~/.hermes/agent-hooks/auto-format.sh"
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+#!/usr/bin/env bash
+# ~/.hermes/agent-hooks/auto-format.sh
+payload="$(cat -)"
+path=$(echo "$payload" | jq -r '.tool_input.path // empty')
+[[ "$path" == *.py ]] &amp;&amp; command -v black &gt;/dev/null &amp;&amp; black "$path" 2&gt;/dev/null
+printf '{}\n'
+</div>
+<p>Agent 的上下文内文件视图<strong>不会</strong>自动重新读取——重新格式化仅影响磁盘上的文件。后续的 <code>read_file</code> 调用会读取格式化后的版本。</p>
+<h4>2. 阻断破坏性 <code>terminal</code> 命令</h4>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hooks:
+  pre_tool_call:
+    - matcher: "terminal"
+      command: "~/.hermes/agent-hooks/block-rm-rf.sh"
+      timeout: 5
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+#!/usr/bin/env bash
+# ~/.hermes/agent-hooks/block-rm-rf.sh
+payload="$(cat -)"
+cmd=$(echo "$payload" | jq -r '.tool_input.command // empty')
+if echo "$cmd" | grep -qE 'rm[[:space:]]+-rf?[[:space:]]+/'; then
+  printf '{"decision": "block", "reason": "blocked: rm -rf / is not permitted"}\n'
+else
+  printf '{}\n'
+fi
+</div>
+<h4>3. 向每轮注入 <code>git status</code>（Claude-Code <code>UserPromptSubmit</code> 等效）</h4>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hooks:
+  pre_llm_call:
+    - command: "~/.hermes/agent-hooks/inject-cwd-context.sh"
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+#!/usr/bin/env bash
+# ~/.hermes/agent-hooks/inject-cwd-context.sh
+cat - &gt;/dev/null   # discard stdin payload
+if status=$(git status --porcelain 2&gt;/dev/null) &amp;&amp; [[ -n "$status" ]]; then
+  jq --null-input --arg s "$status" \
+     '{context: ("Uncommitted changes in cwd:\n" + $s)}'
+else
+  printf '{}\n'
+fi
+</div>
+<p>Claude Code 的 <code>UserPromptSubmit</code> 事件在 Hermes 中没有对应的独立事件——<code>pre_llm_call</code> 在相同位置触发，且已支持上下文注入。在此使用即可。</p>
+<h4>4. 记录每次子 agent 完成</h4>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hooks:
+  subagent_stop:
+    - command: "~/.hermes/agent-hooks/log-orchestration.sh"
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+#!/usr/bin/env bash
+# ~/.hermes/agent-hooks/log-orchestration.sh
+log=~/.hermes/logs/orchestration.log
+jq -c '{ts: now, parent: .session_id, extra: .extra}' &lt; /dev/stdin &gt;&gt; "$log"
+printf '{}\n'
+</div>
+<h3>授权模型</h3>
+<p>每个唯一的 <code>(event, command)</code> 对在 Hermes 首次遇到时会提示用户审批，然后将决定持久化到 <code>~/.hermes/shell-hooks-allowlist.json</code>。后续运行（CLI 或 gateway）跳过提示。</p>
+<p>三种方式可绕过交互式提示——满足其一即可：</p>
+<ol>
+<li>CLI 上的 <code>--accept-hooks</code> 标志（如 <code>hermes --accept-hooks chat</code>）</li>
+<li><code>HERMES_ACCEPT_HOOKS=1</code> 环境变量</li>
+<li><code>cli-config.yaml</code> 中的 <code>hooks_auto_accept: true</code></li>
+</ol>
+<p>非 TTY 运行（gateway、cron、CI）需要这三种方式之一——否则任何新添加的 hook 会静默保持未注册状态并记录警告。</p>
+<p><strong>脚本编辑被静默信任。</strong> 允许列表以精确的命令字符串为键，而非脚本的哈希值，因此编辑磁盘上的脚本不会使授权失效。<code>hermes hooks doctor</code> 会标记 mtime 漂移，以便你发现编辑并决定是否重新审批。</p>
+<h3><code>hermes hooks</code> CLI</h3>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>hermes hooks list</code></td>
+<td>列出已配置的 hook，包含 matcher、超时和授权状态</td>
+</tr>
+<tr>
+<td><code>hermes hooks test &lt;event&gt; [--for-tool X] [--payload-file F]</code></td>
+<td>对合成载荷触发所有匹配的 hook 并打印解析后的响应</td>
+</tr>
+<tr>
+<td><code>hermes hooks revoke &lt;command&gt;</code></td>
+<td>删除所有匹配 <code>&lt;command&gt;</code> 的允许列表条目（下次重启后生效）</td>
+</tr>
+<tr>
+<td><code>hermes hooks doctor</code></td>
+<td>对每个已配置的 hook 检查：执行位、允许列表状态、mtime 漂移、JSON 输出有效性和大致执行时间</td>
+</tr>
+</tbody>
+</table>
+<h3>安全性</h3>
+<p>Shell hooks 以<strong>你的完整用户凭据</strong>运行——与 cron 条目或 shell 别名的信任边界相同。将 <code>config.yaml</code> 中的 <code>hooks:</code> 块视为特权配置：</p>
+<ul>
+<li>只引用你自己编写或完整审查过的脚本。</li>
+<li>将脚本保存在 <code>~/.hermes/agent-hooks/</code> 内，便于审计路径。</li>
+<li>拉取共享配置后重新运行 <code>hermes hooks doctor</code>，在新添加的 hook 注册前发现它们。</li>
+<li>如果你的 config.yaml 在团队中进行版本控制，审查修改 <code>hooks:</code> 部分的 PR 时应与审查 CI 配置一样严格。</li>
+</ul>
+<h3>顺序与优先级</h3>
+<p>Python 插件 hook 和 shell hook 都流经同一个 <code>invoke_hook()</code> 分发器。Python 插件先注册（<code>discover_and_load()</code>），shell hook 后注册（<code>register_from_config()</code>），因此在平局情况下 Python <code>pre_tool_call</code> 的 block 决定优先。第一个有效的 block 生效——聚合器在任何回调产生带非空 message 的 <code>{&quot;action&quot;: &quot;block&quot;, &quot;message&quot;: str}</code> 时立即返回。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

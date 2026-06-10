@@ -1,0 +1,537 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Distributed Llm Pretraining Torchtitan - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Distributed Llm Pretraining Torchtitan</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Distributed Llm Pretraining Torchtitan</h1>
+<p>使用 torchtitan 提供 PyTorch 原生分布式 LLM 预训练，支持 4D 并行（FSDP2、TP、PP、CP）。适用于在 8 到 512+ GPU 规模下预训练 Llama 3.1、DeepSeek V3 或自定义模型，支持 Float8、torch.compile 及分布式检查点。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/mlops/torchtitan</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/mlops/torchtitan</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Orchestra Research</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>依赖</td>
+<td><code>torch&gt;=2.6.0</code>, <code>torchtitan&gt;=0.2.0</code>, <code>torchao&gt;=0.5.0</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Model Architecture</code>, <code>Distributed Training</code>, <code>TorchTitan</code>, <code>FSDP2</code>, <code>Tensor Parallel</code>, <code>Pipeline Parallel</code>, <code>Context Parallel</code>, <code>Float8</code>, <code>Llama</code>, <code>Pretraining</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发该 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>TorchTitan - PyTorch 原生分布式 LLM 预训练</h1>
+<h2>快速开始</h2>
+<p>TorchTitan 是 PyTorch 官方的大规模 LLM 预训练平台，支持可组合的 4D 并行（FSDP2、TP、PP、CP），在 H100 GPU 上相比基线可实现 65%+ 的加速。</p>
+<p><strong>安装</strong>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 从 PyPI 安装（稳定版）
+pip install torchtitan
+<h1>从源码安装（最新特性，需要 PyTorch nightly）</h1>
+<p>git clone https://github.com/pytorch/torchtitan
+cd torchtitan
+pip install -r requirements.txt</p>
+</div>
+<p><strong>下载 tokenizer</strong>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 从 https://huggingface.co/settings/tokens 获取 HF token
+python scripts/download_hf_assets.py --repo_id meta-llama/Llama-3.1-8B --assets tokenizer --hf_token=...
+</div>
+<p><strong>在 8 个 GPU 上启动训练</strong>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+CONFIG_FILE="./torchtitan/models/llama3/train_configs/llama3_8b.toml" ./run_train.sh
+</div>
+<h2>常用工作流</h2>
+<h3>工作流 1：在单节点上预训练 Llama 3.1 8B</h3>
+<p>复制此检查清单：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+单节点预训练：
+- [ ] 步骤 1：下载 tokenizer
+- [ ] 步骤 2：配置训练
+- [ ] 步骤 3：启动训练
+- [ ] 步骤 4：监控与检查点
+</div>
+<p><strong>步骤 1：下载 tokenizer</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python scripts/download_hf_assets.py \
+  --repo_id meta-llama/Llama-3.1-8B \
+  --assets tokenizer \
+  --hf_token=YOUR_HF_TOKEN
+</div>
+<p><strong>步骤 2：配置训练</strong></p>
+<p>编辑或创建 TOML 配置文件：</p>
+<div class="code-block"><span class="code-lang">toml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# llama3_8b_custom.toml
+[job]
+dump_folder = "./outputs"
+description = "Llama 3.1 8B training"
+<p>[model]
+name = &quot;llama3&quot;
+flavor = &quot;8B&quot;
+hf_assets_path = &quot;./assets/hf/Llama-3.1-8B&quot;</p>
+<p>[optimizer]
+name = &quot;AdamW&quot;
+lr = 3e-4</p>
+<p>[lr_scheduler]
+warmup_steps = 200</p>
+<p>[training]
+local_batch_size = 2
+seq_len = 8192
+max_norm = 1.0
+steps = 1000
+dataset = &quot;c4&quot;</p>
+<p>[parallelism]
+data_parallel_shard_degree = -1  # Use all GPUs for FSDP</p>
+<p>[activation_checkpoint]
+mode = &quot;selective&quot;
+selective_ac_option = &quot;op&quot;</p>
+<p>[checkpoint]
+enable = true
+folder = &quot;checkpoint&quot;
+interval = 500</p>
+</div>
+<p><strong>步骤 3：启动训练</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 单节点 8 个 GPU
+CONFIG_FILE="./llama3_8b_custom.toml" ./run_train.sh
+<h1>或显式使用 torchrun</h1>
+<p>torchrun --nproc_per_node=8 \
+-m torchtitan.train \
+--job.config_file ./llama3_8b_custom.toml</p>
+</div>
+<p><strong>步骤 4：监控与检查点</strong></p>
+<p>TensorBoard 日志保存至 <code>./outputs/tb/</code>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+tensorboard --logdir ./outputs/tb
+</div>
+<h3>工作流 2：使用 SLURM 进行多节点训练</h3>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+多节点训练：
+- [ ] 步骤 1：为规模配置并行度
+- [ ] 步骤 2：设置 SLURM 脚本
+- [ ] 步骤 3：提交作业
+- [ ] 步骤 4：从检查点恢复
+</div>
+<p><strong>步骤 1：为规模配置并行度</strong></p>
+<p>在 256 个 GPU（32 个节点）上训练 70B 模型：</p>
+<div class="code-block"><span class="code-lang">toml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+[parallelism]
+data_parallel_shard_degree = 32  # FSDP across 32 ranks
+tensor_parallel_degree = 8        # TP within node
+pipeline_parallel_degree = 1      # No PP for 70B
+context_parallel_degree = 1       # Increase for long sequences
+</div>
+<p><strong>步骤 2：设置 SLURM 脚本</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+#!/bin/bash
+#SBATCH --job-name=llama70b
+#SBATCH --nodes=32
+#SBATCH --ntasks-per-node=8
+#SBATCH --gpus-per-node=8
+<p>srun torchrun \
+--nnodes=32 \
+--nproc_per_node=8 \
+--rdzv_backend=c10d \
+--rdzv_endpoint=$MASTER_ADDR:$MASTER_PORT \
+-m torchtitan.train \
+--job.config_file ./llama3_70b.toml</p>
+</div>
+<p><strong>步骤 3：提交作业</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+sbatch multinode_trainer.slurm
+</div>
+<p><strong>步骤 4：从检查点恢复</strong></p>
+<p>若配置的文件夹中存在检查点，训练将自动恢复。</p>
+<h3>工作流 3：为 H100 启用 Float8 训练</h3>
+<p>Float8 在 H100 GPU 上可提供 30-50% 的加速。</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Float8 训练：
+- [ ] 步骤 1：安装 torchao
+- [ ] 步骤 2：配置 Float8
+- [ ] 步骤 3：启动并开启 compile
+</div>
+<p><strong>步骤 1：安装 torchao</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+USE_CPP=0 pip install git+https://github.com/pytorch/ao.git
+</div>
+<p><strong>步骤 2：配置 Float8</strong></p>
+<p>在 TOML 配置中添加：</p>
+<div class="code-block"><span class="code-lang">toml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+[model]
+converters = ["quantize.linear.float8"]
+<p>[quantize.linear.float8]
+enable_fsdp_float8_all_gather = true
+precompute_float8_dynamic_scale_for_fsdp = true
+filter_fqns = [&quot;output&quot;]  # Exclude output layer</p>
+<p>[compile]
+enable = true
+components = [&quot;model&quot;, &quot;loss&quot;]</p>
+</div>
+<p><strong>步骤 3：启动并开启 compile</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+CONFIG_FILE="./llama3_8b.toml" ./run_train.sh \
+  --model.converters="quantize.linear.float8" \
+  --quantize.linear.float8.enable_fsdp_float8_all_gather \
+  --compile.enable
+</div>
+<h3>工作流 4：405B 模型的 4D 并行</h3>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+4D 并行（FSDP + TP + PP + CP）：
+- [ ] 步骤 1：创建种子检查点
+- [ ] 步骤 2：配置 4D 并行
+- [ ] 步骤 3：在 512 个 GPU 上启动
+</div>
+<p><strong>步骤 1：创建种子检查点</strong></p>
+<p>跨 PP 阶段一致初始化所必需：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+NGPU=1 CONFIG_FILE=./llama3_405b.toml ./run_train.sh \
+  --checkpoint.enable \
+  --checkpoint.create_seed_checkpoint \
+  --parallelism.data_parallel_shard_degree 1 \
+  --parallelism.tensor_parallel_degree 1 \
+  --parallelism.pipeline_parallel_degree 1
+</div>
+<p><strong>步骤 2：配置 4D 并行</strong></p>
+<div class="code-block"><span class="code-lang">toml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+[parallelism]
+data_parallel_shard_degree = 8   # FSDP
+tensor_parallel_degree = 8       # TP within node
+pipeline_parallel_degree = 8     # PP across nodes
+context_parallel_degree = 1      # CP for long sequences
+<p>[training]
+local_batch_size = 32
+seq_len = 8192</p>
+</div>
+<p><strong>步骤 3：在 512 个 GPU 上启动</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 64 节点 x 8 GPU = 512 GPU
+srun torchrun --nnodes=64 --nproc_per_node=8 \
+  -m torchtitan.train \
+  --job.config_file ./llama3_405b.toml
+</div>
+<h2>何时使用 vs 替代方案</h2>
+<p><strong>使用 TorchTitan 的场景：</strong></p>
+<ul>
+<li>从头预训练 LLM（8B 到 405B+）</li>
+<li>需要无第三方依赖的 PyTorch 原生方案</li>
+<li>需要可组合的 4D 并行（FSDP2、TP、PP、CP）</li>
+<li>在支持 Float8 的 H100 上训练</li>
+<li>需要与 torchtune/HuggingFace 互操作的检查点</li>
+</ul>
+<p><strong>使用替代方案的场景：</strong></p>
+<ul>
+<li><strong>Megatron-LM</strong>：仅限 NVIDIA 部署时追求最高性能</li>
+<li><strong>DeepSpeed</strong>：更广泛的 ZeRO 优化生态，支持推理</li>
+<li><strong>Axolotl/TRL</strong>：微调而非预训练</li>
+<li><strong>LitGPT</strong>：教学用途，小规模训练</li>
+</ul>
+<h2>常见问题</h2>
+<p><strong>问题：大模型内存不足</strong></p>
+<p>启用激活检查点并减小批次大小：</p>
+<div class="code-block"><span class="code-lang">toml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+[activation_checkpoint]
+mode = "full"  # Instead of "selective"
+<p>[training]
+local_batch_size = 1</p>
+</div>
+<p>或使用梯度累积：</p>
+<div class="code-block"><span class="code-lang">toml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+[training]
+local_batch_size = 1
+global_batch_size = 32  # Accumulates gradients
+</div>
+<p><strong>问题：TP 异步集合通信导致内存占用过高</strong></p>
+<p>设置环境变量：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+export TORCH_NCCL_AVOID_RECORD_STREAMS=1
+</div>
+<p><strong>问题：Float8 训练未见加速</strong></p>
+<p>Float8 仅对大型 GEMM 有效。过滤小层：</p>
+<div class="code-block"><span class="code-lang">toml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+[quantize.linear.float8]
+filter_fqns = ["attention.wk", "attention.wv", "output", "auto_filter_small_kn"]
+</div>
+<p><strong>问题：更改并行度后检查点加载失败</strong></p>
+<p>使用 DCP 的重分片功能：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 将分片检查点转换为单文件
+python -m torch.distributed.checkpoint.format_utils \
+  dcp_to_torch checkpoint/step-1000 checkpoint.pt
+</div>
+<p><strong>问题：Pipeline 并行初始化失败</strong></p>
+<p>请先创建种子检查点（参见工作流 4，步骤 1）。</p>
+<h2>支持的模型</h2>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>规模</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Llama 3.1</td>
+<td>8B, 70B, 405B</td>
+<td>生产可用</td>
+</tr>
+<tr>
+<td>Llama 4</td>
+<td>多种</td>
+<td>实验性</td>
+</tr>
+<tr>
+<td>DeepSeek V3</td>
+<td>16B, 236B, 671B (MoE)</td>
+<td>实验性</td>
+</tr>
+<tr>
+<td>GPT-OSS</td>
+<td>20B, 120B (MoE)</td>
+<td>实验性</td>
+</tr>
+<tr>
+<td>Qwen 3</td>
+<td>多种</td>
+<td>实验性</td>
+</tr>
+<tr>
+<td>Flux</td>
+<td>扩散模型</td>
+<td>实验性</td>
+</tr>
+</tbody>
+</table>
+<h2>性能基准（H100）</h2>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>GPU 数</th>
+<th>并行策略</th>
+<th>TPS/GPU</th>
+<th>技术</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Llama 8B</td>
+<td>8</td>
+<td>FSDP</td>
+<td>5,762</td>
+<td>基线</td>
+</tr>
+<tr>
+<td>Llama 8B</td>
+<td>8</td>
+<td>FSDP+compile+FP8</td>
+<td>8,532</td>
+<td>+48%</td>
+</tr>
+<tr>
+<td>Llama 70B</td>
+<td>256</td>
+<td>FSDP+TP+AsyncTP</td>
+<td>876</td>
+<td>2D 并行</td>
+</tr>
+<tr>
+<td>Llama 405B</td>
+<td>512</td>
+<td>FSDP+TP+PP</td>
+<td>128</td>
+<td>3D 并行</td>
+</tr>
+</tbody>
+</table>
+<h2>进阶主题</h2>
+<p><strong>FSDP2 配置</strong>：参见 <a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/torchtitan/references/fsdp.html">references/fsdp.md</a>，了解 FSDP2 与 FSDP1 的详细对比及 ZeRO 等价关系。</p>
+<p><strong>Float8 训练</strong>：参见 <a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/torchtitan/references/float8.html">references/float8.md</a>，了解 tensorwise 与 rowwise 缩放方案。</p>
+<p><strong>检查点</strong>：参见 <a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/torchtitan/references/checkpoint.html">references/checkpoint.md</a>，了解 HuggingFace 转换与异步检查点。</p>
+<p><strong>添加自定义模型</strong>：参见 <a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/torchtitan/references/custom-models.html">references/custom-models.md</a>，了解 TrainSpec 协议。</p>
+<h2>资源</h2>
+<ul>
+<li>GitHub：https://github.com/pytorch/torchtitan</li>
+<li>论文：https://arxiv.org/abs/2410.06511</li>
+<li>ICLR 2025：https://iclr.cc/virtual/2025/poster/29620</li>
+<li>PyTorch 论坛：https://discuss.pytorch.org/c/distributed/torchtitan/44</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

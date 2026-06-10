@@ -1,0 +1,329 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jupyter Live Kernel — 通过实时 Jupyter 内核进行迭代式 Python 开发（hamelnb） - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Jupyter Live Kernel — 通过实时 Jupyter 内核进行迭代式 Python 开发（hamelnb）</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Jupyter Live Kernel</h1>
+<p>通过实时 Jupyter 内核进行迭代式 Python 开发（hamelnb）。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>内置（默认安装）</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>skills/data-science/jupyter-live-kernel</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Hermes Agent</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>jupyter</code>, <code>notebook</code>, <code>repl</code>, <code>data-science</code>, <code>exploration</code>, <code>iterative</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>Jupyter Live Kernel（hamelnb）</h1>
+<p>通过实时 Jupyter 内核为你提供一个<strong>有状态的 Python REPL</strong>（交互式解释器）。变量在多次执行之间持久保留。当你需要逐步构建状态、探索 API、检查 DataFrame 或迭代复杂代码时，请使用此工具而非 <code>execute_code</code>。</p>
+<h2>何时使用本 Skill 与其他工具</h2>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>使用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>本 skill</strong></td>
+<td>迭代式探索、跨步骤保持状态、数据科学、机器学习、&quot;试试看再检查&quot;</td>
+</tr>
+<tr>
+<td><code>execute_code</code></td>
+<td>需要访问 Hermes 工具（web_search、文件操作）的一次性脚本。无状态。</td>
+</tr>
+<tr>
+<td><code>terminal</code></td>
+<td>Shell 命令、构建、安装、git、进程管理</td>
+</tr>
+</tbody>
+</table>
+<p><strong>经验法则：</strong> 如果你会为某个任务打开 Jupyter notebook，就使用本 skill。</p>
+<h2>前置条件</h2>
+<ol>
+<li>必须安装 <strong>uv</strong>（检查：<code>which uv</code>）</li>
+<li>必须安装 <strong>JupyterLab</strong>：<code>uv tool install jupyterlab</code></li>
+<li>必须有一个正在运行的 Jupyter 服务器（参见下方&quot;设置&quot;部分）</li>
+</ol>
+<h2>设置</h2>
+<p>hamelnb 脚本位置：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+SCRIPT="$HOME/.agent-skills/hamelnb/skills/jupyter-live-kernel/scripts/jupyter_live_kernel.py"
+</div>
+<p>如果尚未克隆：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+git clone https://github.com/hamelsmu/hamelnb.git ~/.agent-skills/hamelnb
+</div>
+<h3>启动 JupyterLab</h3>
+<p>检查是否已有服务器在运行：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+uv run "$SCRIPT" servers
+</div>
+<p>如果未找到服务器，启动一个：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+jupyter-lab --no-browser --port=8888 --notebook-dir=$HOME/notebooks \
+  --IdentityProvider.token='' --ServerApp.password='' &gt; /tmp/jupyter.log 2&gt;&amp;1 &amp;
+sleep 3
+</div>
+<p>注意：已禁用 token/password 以供本地 agent 访问。服务器以无头模式运行。</p>
+<h3>为 REPL 使用创建 Notebook</h3>
+<p>如果你只需要一个 REPL（无需现有 notebook），创建一个最小化的 notebook 文件：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mkdir -p ~/notebooks
+</div>
+写入一个包含一个空代码单元格的最小 .ipynb JSON 文件，然后通过 Jupyter REST API 启动一个内核会话：
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s -X POST http://127.0.0.1:8888/api/sessions \
+  -H "Content-Type: application/json" \
+  -d '{"path":"scratch.ipynb","type":"notebook","name":"scratch.ipynb","kernel":{"name":"python3"}}'
+</div>
+<h2>核心工作流</h2>
+<p>所有命令均返回结构化 JSON。始终使用 <code>--compact</code> 以节省 token。</p>
+<h3>1. 发现服务器和 notebook</h3>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+uv run "$SCRIPT" servers --compact
+uv run "$SCRIPT" notebooks --compact
+</div>
+<h3>2. 执行代码（主要操作）</h3>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+uv run "$SCRIPT" execute --path &lt;notebook.ipynb&gt; --code '&lt;python code&gt;' --compact
+</div>
+<p>状态在多次 execute 调用之间持久保留。变量、导入、对象均会保留。</p>
+<p>多行代码可使用 <code>$'...'</code> 引号语法：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+uv run "$SCRIPT" execute --path scratch.ipynb --code $'import os\nfiles = os.listdir(".")\nprint(f"Found {len(files)} files")' --compact
+</div>
+<h3>3. 检查实时变量</h3>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+uv run "$SCRIPT" variables --path &lt;notebook.ipynb&gt; list --compact
+uv run "$SCRIPT" variables --path &lt;notebook.ipynb&gt; preview --name &lt;varname&gt; --compact
+</div>
+<h3>4. 编辑 notebook 单元格</h3>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 查看当前单元格
+uv run "$SCRIPT" contents --path &lt;notebook.ipynb&gt; --compact
+<h1>插入新单元格</h1>
+<p>uv run &quot;$SCRIPT&quot; edit --path &amp;lt;notebook.ipynb&amp;gt; insert \
+--at-index &amp;lt;N&amp;gt; --cell-type code --source '&amp;lt;code&amp;gt;' --compact</p>
+<h1>替换单元格源码（使用 contents 输出中的 cell-id）</h1>
+<p>uv run &quot;$SCRIPT&quot; edit --path &amp;lt;notebook.ipynb&amp;gt; replace-source \
+--cell-id &amp;lt;id&amp;gt; --source '&amp;lt;new code&amp;gt;' --compact</p>
+<h1>删除单元格</h1>
+<p>uv run &quot;$SCRIPT&quot; edit --path &amp;lt;notebook.ipynb&amp;gt; delete --cell-id &amp;lt;id&amp;gt; --compact</p>
+</div>
+<h3>5. 验证（重启并全部运行）</h3>
+<p>仅在用户要求进行干净验证，或你需要确认 notebook 能从头到尾运行时使用：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+uv run "$SCRIPT" restart-run-all --path &lt;notebook.ipynb&gt; --save-outputs --compact
+</div>
+<h2>实践经验提示</h2>
+<ol>
+<li>
+<p><strong>服务器启动后首次执行可能超时</strong> —— 内核需要片刻时间初始化。如果超时，重试即可。</p>
+</li>
+<li>
+<p><strong>内核 Python 是 JupyterLab 的 Python</strong> —— 包必须安装在该环境中。如需额外的包，请先将其安装到 JupyterLab 工具环境中。</p>
+</li>
+<li>
+<p><strong><code>--compact</code> 标志可显著节省 token</strong> —— 始终使用它。不加此标志时 JSON 输出可能非常冗长。</p>
+</li>
+<li>
+<p><strong>纯 REPL 使用时</strong>，创建一个 scratch.ipynb，无需关心单元格编辑。反复使用 <code>execute</code> 即可。</p>
+</li>
+<li>
+<p><strong>参数顺序很重要</strong> —— 子命令标志（如 <code>--path</code>）必须放在子子命令<strong>之前</strong>。例如：<code>variables --path nb.ipynb list</code>，而非 <code>variables list --path nb.ipynb</code>。</p>
+</li>
+<li>
+<p><strong>如果会话尚不存在</strong>，需要通过 REST API 启动一个（参见&quot;设置&quot;部分）。没有实时内核会话，工具无法执行代码。</p>
+</li>
+<li>
+<p><strong>错误以 JSON 形式返回</strong>，包含 traceback —— 读取 <code>ename</code> 和 <code>evalue</code> 字段以了解出错原因。</p>
+</li>
+<li>
+<p><strong>偶发的 websocket 超时</strong> —— 某些操作（尤其是内核重启后）首次尝试可能超时。在上报问题前先重试一次。</p>
+</li>
+</ol>
+<h2>超时默认值</h2>
+<p>脚本每次执行的默认超时为 30 秒。对于长时间运行的操作，传入 <code>--timeout 120</code>。初始设置或大量计算时，建议使用较宽松的超时值（60 秒以上）。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

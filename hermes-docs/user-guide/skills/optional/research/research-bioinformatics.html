@@ -1,0 +1,380 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生物信息学 — 来自 bioSkills 和 ClawBio 的 400+ 生物信息学技能网关 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / 生物信息学 — 来自 bioSkills 和 ClawBio 的 400+ 生物信息学技能网关</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>生物信息学</h1>
+<p>来自 bioSkills 和 ClawBio 的 400+ 生物信息学技能网关。涵盖基因组学、转录组学、单细胞分析、变异检测、药物基因组学、宏基因组学、结构生物学等领域。按需获取特定领域的参考资料。</p>
+<h2>技能元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 使用 <code>hermes skills install official/research/bioinformatics</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/research/bioinformatics</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>bioinformatics</code>, <code>genomics</code>, <code>sequencing</code>, <code>biology</code>, <code>research</code>, <code>science</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发该技能时加载的完整技能定义。这是 Agent 在技能激活时所看到的指令内容。
+</div>
+<h1>生物信息学技能网关</h1>
+<p>当被问及生物信息学、基因组学、测序、变异检测、基因表达、单细胞分析、蛋白质结构、药物基因组学、宏基因组学、系统发育学或任何计算生物学任务时使用。</p>
+<p>本技能是两个开源生物信息学技能库的网关。它不打包数百个特定领域的技能，而是对其建立索引并按需获取所需内容。</p>
+<h2>来源</h2>
+<p>◆ <strong>bioSkills</strong> — 385 个参考技能（代码模式、参数指南、决策树）
+仓库：https://github.com/GPTomics/bioSkills
+格式：每个主题一个 SKILL.md，含代码示例。支持 Python/R/CLI。</p>
+<p>◆ <strong>ClawBio</strong> — 33 个可运行的流程技能（可执行脚本、可复现性包）
+仓库：https://github.com/ClawBio/ClawBio
+格式：带演示的 Python 脚本。每次分析导出 report.md + commands.sh + environment.yml。</p>
+<h2>如何获取并使用技能</h2>
+<ol>
+<li>
+<p>从下方索引中确定领域和技能名称。</p>
+</li>
+<li>
+<p>克隆相关仓库（浅克隆以节省时间）：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# bioSkills（参考资料）
+git clone --depth 1 https://github.com/GPTomics/bioSkills.git /tmp/bioSkills
+<h1>ClawBio（可运行流程）</h1>
+<p>git clone --depth 1 https://github.com/ClawBio/ClawBio.git /tmp/ClawBio</p>
+</li>
+</ol>
+</div>
+3. 读取具体技能：
+   <div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+   # bioSkills — 每个技能位于：&lt;category&gt;/&lt;skill-name&gt;/SKILL.md
+   cat /tmp/bioSkills/variant-calling/gatk-variant-calling/SKILL.md
+<h1>ClawBio — 每个技能位于：skills/&amp;lt;skill-name&amp;gt;/</h1>
+<p>cat /tmp/ClawBio/skills/pharmgx-reporter/README.md</p>
+</div>
+4. 将获取的技能作为参考资料使用。这些**不是** Hermes 格式的技能——请将其视为专家领域指南。它们包含正确的参数、合适的工具标志和经过验证的流程。
+<h2>按领域划分的技能索引</h2>
+<h3>序列基础</h3>
+<p>bioSkills:
+sequence-io/ — read-sequences, write-sequences, format-conversion, batch-processing, compressed-files, fastq-quality, filter-sequences, paired-end-fastq, sequence-statistics
+sequence-manipulation/ — seq-objects, reverse-complement, transcription-translation, motif-search, codon-usage, sequence-properties, sequence-slicing
+ClawBio:
+seq-wrangler — 序列质控、比对与 BAM 处理（封装 FastQC、BWA、SAMtools）</p>
+<h3>读段质控与比对</h3>
+<p>bioSkills:
+read-qc/ — quality-reports, fastp-workflow, adapter-trimming, quality-filtering, umi-processing, contamination-screening, rnaseq-qc
+read-alignment/ — bwa-alignment, star-alignment, hisat2-alignment, bowtie2-alignment
+alignment-files/ — sam-bam-basics, alignment-sorting, alignment-filtering, bam-statistics, duplicate-handling, pileup-generation</p>
+<h3>变异检测与注释</h3>
+<p>bioSkills:
+variant-calling/ — gatk-variant-calling, deepvariant, variant-calling (bcftools), joint-calling, structural-variant-calling, filtering-best-practices, variant-annotation, variant-normalization, vcf-basics, vcf-manipulation, vcf-statistics, consensus-sequences, clinical-interpretation
+ClawBio:
+vcf-annotator — 结合祖先背景的 VEP + ClinVar + gnomAD 注释
+variant-annotation — 变异注释流程</p>
+<h3>差异表达（Bulk RNA-seq）</h3>
+<p>bioSkills:
+differential-expression/ — deseq2-basics, edger-basics, batch-correction, de-results, de-visualization, timeseries-de
+rna-quantification/ — alignment-free-quant (Salmon/kallisto), featurecounts-counting, tximport-workflow, count-matrix-qc
+expression-matrix/ — counts-ingest, gene-id-mapping, metadata-joins, sparse-handling
+ClawBio:
+rnaseq-de — 含质控、归一化和可视化的完整差异表达流程
+diff-visualizer — 差异表达结果的丰富可视化与报告</p>
+<h3>单细胞 RNA-seq</h3>
+<p>bioSkills:
+single-cell/ — preprocessing, clustering, batch-integration, cell-annotation, cell-communication, doublet-detection, markers-annotation, trajectory-inference, multimodal-integration, perturb-seq, scatac-analysis, lineage-tracing, metabolite-communication, data-io
+ClawBio:
+scrna-orchestrator — 完整 Scanpy 流程（质控、聚类、标记基因、注释）
+scrna-embedding — 基于 scVI 的潜在嵌入与批次整合</p>
+<h3>空间转录组学</h3>
+<p>bioSkills:
+spatial-transcriptomics/ — spatial-data-io, spatial-preprocessing, spatial-domains, spatial-deconvolution, spatial-communication, spatial-neighbors, spatial-statistics, spatial-visualization, spatial-multiomics, spatial-proteomics, image-analysis</p>
+<h3>表观基因组学</h3>
+<p>bioSkills:
+chip-seq/ — peak-calling, differential-binding, motif-analysis, peak-annotation, chipseq-qc, chipseq-visualization, super-enhancers
+atac-seq/ — atac-peak-calling, atac-qc, differential-accessibility, footprinting, motif-deviation, nucleosome-positioning
+methylation-analysis/ — bismark-alignment, methylation-calling, dmr-detection, methylkit-analysis
+hi-c-analysis/ — hic-data-io, tad-detection, loop-calling, compartment-analysis, contact-pairs, matrix-operations, hic-visualization, hic-differential
+ClawBio:
+methylation-clock — 表观遗传年龄估算</p>
+<h3>药物基因组学与临床</h3>
+<p>bioSkills:
+clinical-databases/ — clinvar-lookup, gnomad-frequencies, dbsnp-queries, pharmacogenomics, polygenic-risk, hla-typing, variant-prioritization, somatic-signatures, tumor-mutational-burden, myvariant-queries
+ClawBio:
+pharmgx-reporter — 基于 23andMe/AncestryDNA 的 PGx 报告（12 个基因、31 个 SNP、51 种药物）
+drug-photo — 药物照片 → 个性化 PGx 剂量卡（通过视觉识别）
+clinpgx — 用于基因-药物数据和 CPIC 指南的 ClinPGx API
+gwas-lookup — 跨 9 个基因组数据库的联合变异查询
+gwas-prs — 基于消费者基因数据的多基因风险评分
+nutrigx_advisor — 基于消费者基因数据的个性化营养建议</p>
+<h3>群体遗传学与 GWAS</h3>
+<p>bioSkills:
+population-genetics/ — association-testing (PLINK GWAS), plink-basics, population-structure, linkage-disequilibrium, scikit-allel-analysis, selection-statistics
+causal-genomics/ — mendelian-randomization, fine-mapping, colocalization-analysis, mediation-analysis, pleiotropy-detection
+phasing-imputation/ — haplotype-phasing, genotype-imputation, imputation-qc, reference-panels
+ClawBio:
+claw-ancestry-pca — 基于 SGDP 参考面板的祖先 PCA 分析</p>
+<h3>宏基因组学与微生物组</h3>
+<p>bioSkills:
+metagenomics/ — kraken-classification, metaphlan-profiling, abundance-estimation, functional-profiling, amr-detection, strain-tracking, metagenome-visualization
+microbiome/ — amplicon-processing, diversity-analysis, differential-abundance, taxonomy-assignment, functional-prediction, qiime2-workflow
+ClawBio:
+claw-metagenomics — 鸟枪法宏基因组分析（分类、耐药组、功能通路）</p>
+<h3>基因组组装与注释</h3>
+<p>bioSkills:
+genome-assembly/ — hifi-assembly, long-read-assembly, short-read-assembly, metagenome-assembly, assembly-polishing, assembly-qc, scaffolding, contamination-detection
+genome-annotation/ — eukaryotic-gene-prediction, prokaryotic-annotation, functional-annotation, ncrna-annotation, repeat-annotation, annotation-transfer
+long-read-sequencing/ — basecalling, long-read-alignment, long-read-qc, clair3-variants, structural-variants, medaka-polishing, nanopore-methylation, isoseq-analysis</p>
+<h3>结构生物学与化学信息学</h3>
+<p>bioSkills:
+structural-biology/ — alphafold-predictions, modern-structure-prediction, structure-io, structure-navigation, structure-modification, geometric-analysis
+chemoinformatics/ — molecular-io, molecular-descriptors, similarity-searching, substructure-search, virtual-screening, admet-prediction, reaction-enumeration
+ClawBio:
+struct-predictor — 本地 AlphaFold/Boltz/Chai 结构预测与比较</p>
+<h3>蛋白质组学</h3>
+<p>bioSkills:
+proteomics/ — data-import, peptide-identification, protein-inference, quantification, differential-abundance, dia-analysis, ptm-analysis, proteomics-qc, spectral-libraries
+ClawBio:
+proteomics-de — 蛋白质组学差异表达分析</p>
+<h3>通路分析与基因网络</h3>
+<p>bioSkills:
+pathway-analysis/ — go-enrichment, gsea, kegg-pathways, reactome-pathways, wikipathways, enrichment-visualization
+gene-regulatory-networks/ — scenic-regulons, coexpression-networks, differential-networks, multiomics-grn, perturbation-simulation</p>
+<h3>免疫信息学</h3>
+<p>bioSkills:
+immunoinformatics/ — mhc-binding-prediction, epitope-prediction, neoantigen-prediction, immunogenicity-scoring, tcr-epitope-binding
+tcr-bcr-analysis/ — mixcr-analysis, scirpy-analysis, immcantation-analysis, repertoire-visualization, vdjtools-analysis</p>
+<h3>CRISPR 与基因组工程</h3>
+<p>bioSkills:
+crispr-screens/ — mageck-analysis, jacks-analysis, hit-calling, screen-qc, library-design, crispresso-editing, base-editing-analysis, batch-correction
+genome-engineering/ — grna-design, off-target-prediction, hdr-template-design, base-editing-design, prime-editing-design</p>
+<h3>工作流管理</h3>
+<p>bioSkills:
+workflow-management/ — snakemake-workflows, nextflow-pipelines, cwl-workflows, wdl-workflows
+ClawBio:
+repro-enforcer — 将任意分析导出为可复现性包（Conda 环境 + Singularity + 校验和）
+galaxy-bridge — 访问 usegalaxy.org 上的 8,000+ Galaxy 工具</p>
+<h3>专业领域</h3>
+<p>bioSkills:
+alternative-splicing/ — splicing-quantification, differential-splicing, isoform-switching, sashimi-plots, single-cell-splicing, splicing-qc
+ecological-genomics/ — edna-metabarcoding, landscape-genomics, conservation-genetics, biodiversity-metrics, community-ecology, species-delimitation
+epidemiological-genomics/ — pathogen-typing, variant-surveillance, phylodynamics, transmission-inference, amr-surveillance
+liquid-biopsy/ — cfdna-preprocessing, ctdna-mutation-detection, fragment-analysis, tumor-fraction-estimation, methylation-based-detection, longitudinal-monitoring
+epitranscriptomics/ — m6a-peak-calling, m6a-differential, m6anet-analysis, merip-preprocessing, modification-visualization
+metabolomics/ — xcms-preprocessing, metabolite-annotation, normalization-qc, statistical-analysis, pathway-mapping, lipidomics, targeted-analysis, msdial-preprocessing
+flow-cytometry/ — fcs-handling, gating-analysis, compensation-transformation, clustering-phenotyping, differential-analysis, cytometry-qc, doublet-detection, bead-normalization
+systems-biology/ — flux-balance-analysis, metabolic-reconstruction, gene-essentiality, context-specific-models, model-curation
+rna-structure/ — secondary-structure-prediction, ncrna-search, structure-probing</p>
+<h3>数据可视化与报告</h3>
+<p>bioSkills:
+data-visualization/ — ggplot2-fundamentals, heatmaps-clustering, volcano-customization, circos-plots, genome-browser-tracks, interactive-visualization, multipanel-figures, network-visualization, upset-plots, color-palettes, specialized-omics-plots, genome-tracks
+reporting/ — rmarkdown-reports, quarto-reports, jupyter-reports, automated-qc-reports, figure-export
+ClawBio:
+profile-report — 分析概况报告
+data-extractor — 从科学图像中提取数值数据（通过视觉识别）
+lit-synthesizer — PubMed/bioRxiv 检索、摘要与引用图谱
+pubmed-summariser — 基因/疾病 PubMed 检索与结构化简报</p>
+<h3>数据库访问</h3>
+<p>bioSkills:
+database-access/ — entrez-search, entrez-fetch, entrez-link, blast-searches, local-blast, sra-data, geo-data, uniprot-access, batch-downloads, interaction-databases, sequence-similarity
+ClawBio:
+ukb-navigator — 跨 12,000+ UK Biobank 字段的语义搜索
+clinical-trial-finder — 临床试验发现</p>
+<h3>实验设计</h3>
+<p>bioSkills:
+experimental-design/ — power-analysis, sample-size, batch-design, multiple-testing</p>
+<h3>组学机器学习</h3>
+<p>bioSkills:
+machine-learning/ — omics-classifiers, biomarker-discovery, survival-analysis, model-validation, prediction-explanation, atlas-mapping
+ClawBio:
+claw-semantic-sim — 疾病文献语义相似度索引（PubMedBERT）
+omics-target-evidence-mapper — 跨组学来源的靶点级证据聚合</p>
+<h2>环境配置</h2>
+<p>这些技能假设在生物信息学工作站上运行。常见依赖项：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Python
+pip install biopython pysam cyvcf2 pybedtools pyBigWig scikit-allel anndata scanpy mygene
+<h1>R/Bioconductor</h1>
+<p>Rscript -e 'BiocManager::install(c(&quot;DESeq2&quot;,&quot;edgeR&quot;,&quot;Seurat&quot;,&quot;clusterProfiler&quot;,&quot;methylKit&quot;))'</p>
+<h1>CLI 工具（Ubuntu/Debian）</h1>
+<p>sudo apt install samtools bcftools ncbi-blast+ minimap2 bedtools</p>
+<h1>CLI 工具（macOS）</h1>
+<p>brew install samtools bcftools blast minimap2 bedtools</p>
+<h1>或通过 Conda（推荐，便于复现）</h1>
+<p>conda install -c bioconda samtools bcftools blast minimap2 bedtools fastp kraken2</p>
+</div>
+<h2>注意事项</h2>
+<ul>
+<li>获取的技能<strong>不是</strong> Hermes SKILL.md 格式。它们使用各自的结构（bioSkills：代码模式手册；ClawBio：README + Python 脚本）。请将其作为专家参考资料阅读。</li>
+<li>bioSkills 是参考指南——展示正确的参数和代码模式，但不是可执行的流程。</li>
+<li>ClawBio 技能是可执行的——许多具有 <code>--demo</code> 标志，可直接运行。</li>
+<li>两个仓库均假设已安装生物信息学工具。运行流程前请检查前置条件。</li>
+<li>对于 ClawBio，请先在克隆的仓库中运行 <code>pip install -r requirements.txt</code>。</li>
+<li>基因组数据文件可能非常大。下载参考基因组、SRA 数据集或构建索引时请注意磁盘空间。</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

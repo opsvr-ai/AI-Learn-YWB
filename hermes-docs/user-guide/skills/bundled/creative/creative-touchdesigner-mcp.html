@@ -1,0 +1,737 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Touchdesigner Mcp - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Touchdesigner Mcp</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Touchdesigner Mcp</h1>
+<p>通过 twozero MCP 控制运行中的 TouchDesigner 实例——创建算子、设置参数、连接节点、执行 Python、构建实时视觉效果。36 个原生工具。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>内置（默认安装）</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>skills/creative/touchdesigner-mcp</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.1.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>kshitijk4poor</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>TouchDesigner</code>, <code>MCP</code>, <code>twozero</code>, <code>creative-coding</code>, <code>real-time-visuals</code>, <code>generative-art</code>, <code>audio-reactive</code>, <code>VJ</code>, <code>installation</code>, <code>GLSL</code></td>
+</tr>
+<tr>
+<td>相关 skill</td>
+<td><a href="/user-guide/skills/bundled/mcp/mcp-native-mcp"><code>native-mcp</code></a>, <a href="/user-guide/skills/bundled/creative/creative-ascii-video"><code>ascii-video</code></a>, <a href="/user-guide/skills/bundled/creative/creative-manim-video"><code>manim-video</code></a>, <code>hermes-video</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时看到的指令内容。
+</div>
+<h1>TouchDesigner 集成（twozero MCP）</h1>
+<h2>关键规则</h2>
+<ol>
+<li><strong>绝不猜测参数名称。</strong> 先对目标 op 类型调用 <code>td_get_par_info</code>。你的训练数据对 TD 2025.32 是错误的。</li>
+<li><strong>如果 <code>tdAttributeError</code> 触发，立即停止。</strong> 在继续之前对失败节点调用 <code>td_get_operator_info</code>。</li>
+<li><strong>绝不在脚本回调中硬编码绝对路径。</strong> 使用 <code>me.parent()</code> / <code>scriptOp.parent()</code>。</li>
+<li><strong>优先使用原生 MCP 工具，而非 td_execute_python。</strong> 使用 <code>td_create_operator</code>、<code>td_set_operator_pars</code>、<code>td_get_errors</code> 等。仅在复杂多步骤逻辑时回退到 <code>td_execute_python</code>。</li>
+<li><strong>构建前调用 <code>td_get_hints</code>。</strong> 它会返回针对你正在使用的 op 类型的特定模式。</li>
+</ol>
+<h2>架构</h2>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Hermes Agent -&gt; MCP (Streamable HTTP) -&gt; twozero.tox (port 40404) -&gt; TD Python
+</div>
+<p>36 个原生工具。免费插件（无需付费/许可证——2026 年 4 月确认）。
+上下文感知（知道当前选中的 OP 和当前网络）。
+Hub 健康检查：<code>GET http://localhost:40404/mcp</code> 返回包含实例 PID、项目名称、TD 版本的 JSON。</p>
+<h2>设置（自动化）</h2>
+<p>运行设置脚本处理所有事项：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+bash "${HERMES_HOME:-$HOME/.hermes}/skills/creative/touchdesigner-mcp/scripts/setup.sh"
+</div>
+<p>脚本将：</p>
+<ol>
+<li>检查 TD 是否正在运行</li>
+<li>如果尚未缓存，下载 twozero.tox</li>
+<li>将 <code>twozero_td</code> MCP 服务器添加到 Hermes 配置（如果缺失）</li>
+<li>在端口 40404 上测试 MCP 连接</li>
+<li>报告剩余的手动步骤（将 .tox 拖入 TD，启用 MCP 开关）</li>
+</ol>
+<h3>手动步骤（一次性，无法自动化）</h3>
+<ol>
+<li><strong>将 <code>~/Downloads/twozero.tox</code> 拖入 TD 网络编辑器</strong> → 点击 Install</li>
+<li><strong>启用 MCP：</strong> 点击 twozero 图标 → Settings → mcp → &quot;auto start MCP&quot; → Yes</li>
+<li><strong>重启 Hermes 会话</strong>以加载新的 MCP 服务器</li>
+</ol>
+<p>设置完成后，验证：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+nc -z 127.0.0.1 40404 &amp;&amp; echo "twozero MCP: READY"
+</div>
+<h2>环境说明</h2>
+<ul>
+<li><strong>非商业版 TD</strong> 分辨率上限为 1280×1280。使用 <code>outputresolution = 'custom'</code> 并显式设置宽高。</li>
+<li><strong>编解码器：</strong> <code>prores</code>（macOS 首选）或 <code>mjpa</code> 作为备选。H.264/H.265/AV1 需要商业许可证。</li>
+<li>设置参数前始终调用 <code>td_get_par_info</code>——名称因 TD 版本而异（见关键规则 #1）。</li>
+</ul>
+<h2>工作流程</h2>
+<h3>第 0 步：探索（构建任何内容之前）</h3>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+对每种计划使用的类型，调用 td_get_par_info 并传入 op_type。
+调用 td_get_hints 并传入你正在构建的主题（例如 "glsl"、"audio reactive"、"feedback"）。
+调用 td_get_focus 查看用户所在位置及选中内容。
+调用 td_get_network 查看已存在的内容。
+</div>
+<p>无临时节点，无清理。这完全替代了旧的探索流程。</p>
+<h3>第 1 步：清理 + 构建</h3>
+<p><strong>重要：将清理和创建拆分为独立的 MCP 调用。</strong> 在同一个 <code>td_execute_python</code> 脚本中销毁并重建同名节点会导致&quot;Invalid OP object&quot;错误。见陷阱 #11b。</p>
+<p>使用 <code>td_create_operator</code> 创建每个节点（自动处理视口定位）：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+td_create_operator(type="noiseTOP", parent="/project1", name="bg", parameters={"resolutionw": 1280, "resolutionh": 720})
+td_create_operator(type="levelTOP", parent="/project1", name="brightness")
+td_create_operator(type="nullTOP", parent="/project1", name="out")
+</div>
+<p>批量创建或连线时，使用 <code>td_execute_python</code>：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# td_execute_python script:
+root = op('/project1')
+nodes = []
+for name, optype in [('bg', noiseTOP), ('fx', levelTOP), ('out', nullTOP)]:
+    n = root.create(optype, name)
+    nodes.append(n.path)
+# Wire chain
+for i in range(len(nodes)-1):
+    op(nodes[i]).outputConnectors[0].connect(op(nodes[i+1]).inputConnectors[0])
+result = {'created': nodes}
+</div>
+<h3>第 2 步：设置参数</h3>
+<p>优先使用原生工具（验证参数，不会崩溃）：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+td_set_operator_pars(path="/project1/bg", parameters={"roughness": 0.6, "monochrome": true})
+</div>
+<p>对于表达式或模式，使用 <code>td_execute_python</code>：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+op('/project1/time_driver').par.colorr.expr = "absTime.seconds % 1000.0"
+</div>
+<h3>第 3 步：连线</h3>
+<p>使用 <code>td_execute_python</code>——不存在原生连线工具：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+op('/project1/bg').outputConnectors[0].connect(op('/project1/fx').inputConnectors[0])
+</div>
+<h3>第 4 步：验证</h3>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+td_get_errors(path="/project1", recursive=true)
+td_get_perf()
+td_get_operator_info(path="/project1/out", detail="full")
+</div>
+<h3>第 5 步：显示 / 捕获</h3>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+td_get_screenshot(path="/project1/out")
+</div>
+<p>或通过脚本打开窗口：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+win = op('/project1').create(windowCOMP, 'display')
+win.par.winop = op('/project1/out').path
+win.par.winw = 1280; win.par.winh = 720
+win.par.winopen.pulse()
+</div>
+<h2>MCP 工具快速参考</h2>
+<p><strong>核心（最常用）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>td_execute_python</code></td>
+<td>在 TD 中运行任意 Python。完整 API 访问。</td>
+</tr>
+<tr>
+<td><code>td_create_operator</code></td>
+<td>创建带参数和自动定位的节点</td>
+</tr>
+<tr>
+<td><code>td_set_operator_pars</code></td>
+<td>安全设置参数（验证，不会崩溃）</td>
+</tr>
+<tr>
+<td><code>td_get_operator_info</code></td>
+<td>检查单个节点：连接、参数、错误</td>
+</tr>
+<tr>
+<td><code>td_get_operators_info</code></td>
+<td>一次调用检查多个节点</td>
+</tr>
+<tr>
+<td><code>td_get_network</code></td>
+<td>查看某路径下的网络结构</td>
+</tr>
+<tr>
+<td><code>td_get_errors</code></td>
+<td>递归查找错误/警告</td>
+</tr>
+<tr>
+<td><code>td_get_par_info</code></td>
+<td>获取 OP 类型的参数名称（替代探索流程）</td>
+</tr>
+<tr>
+<td><code>td_get_hints</code></td>
+<td>构建前获取模式/提示</td>
+</tr>
+<tr>
+<td><code>td_get_focus</code></td>
+<td>当前打开的网络及选中内容</td>
+</tr>
+</tbody>
+</table>
+<p><strong>读/写：</strong></p>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>td_read_dat</code></td>
+<td>读取 DAT 文本内容</td>
+</tr>
+<tr>
+<td><code>td_write_dat</code></td>
+<td>写入/修补 DAT 内容</td>
+</tr>
+<tr>
+<td><code>td_read_chop</code></td>
+<td>读取 CHOP 通道值</td>
+</tr>
+<tr>
+<td><code>td_read_textport</code></td>
+<td>读取 TD 控制台输出</td>
+</tr>
+</tbody>
+</table>
+<p><strong>视觉：</strong></p>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>td_get_screenshot</code></td>
+<td>将单个 OP 视图捕获到文件</td>
+</tr>
+<tr>
+<td><code>td_get_screenshots</code></td>
+<td>一次捕获多个 OP</td>
+</tr>
+<tr>
+<td><code>td_get_screen_screenshot</code></td>
+<td>通过 TD 捕获实际屏幕</td>
+</tr>
+<tr>
+<td><code>td_navigate_to</code></td>
+<td>将网络编辑器跳转到某个 OP</td>
+</tr>
+</tbody>
+</table>
+<p><strong>搜索：</strong></p>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>td_find_op</code></td>
+<td>按名称/类型在项目中查找 op</td>
+</tr>
+<tr>
+<td><code>td_search</code></td>
+<td>搜索代码、表达式、字符串参数</td>
+</tr>
+</tbody>
+</table>
+<p><strong>系统：</strong></p>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>td_get_perf</code></td>
+<td>性能分析（FPS、慢速 op）</td>
+</tr>
+<tr>
+<td><code>td_list_instances</code></td>
+<td>列出所有运行中的 TD 实例</td>
+</tr>
+<tr>
+<td><code>td_get_docs</code></td>
+<td>获取 TD 主题的深度文档</td>
+</tr>
+<tr>
+<td><code>td_agents_md</code></td>
+<td>读/写每个 COMP 的 markdown 文档</td>
+</tr>
+<tr>
+<td><code>td_reinit_extension</code></td>
+<td>代码编辑后重新加载扩展</td>
+</tr>
+<tr>
+<td><code>td_clear_textport</code></td>
+<td>调试会话前清空控制台</td>
+</tr>
+</tbody>
+</table>
+<p><strong>输入自动化：</strong></p>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>td_input_execute</code></td>
+<td>向 TD 发送鼠标/键盘事件</td>
+</tr>
+<tr>
+<td><code>td_input_status</code></td>
+<td>轮询输入队列状态</td>
+</tr>
+<tr>
+<td><code>td_input_clear</code></td>
+<td>停止输入自动化</td>
+</tr>
+<tr>
+<td><code>td_op_screen_rect</code></td>
+<td>获取节点的屏幕坐标</td>
+</tr>
+<tr>
+<td><code>td_click_screen_point</code></td>
+<td>点击截图中的某个点</td>
+</tr>
+<tr>
+<td><code>td_screen_point_to_global</code></td>
+<td>将截图像素转换为绝对屏幕坐标</td>
+</tr>
+</tbody>
+</table>
+<p>上表涵盖了典型创意工作流中使用的 32 个工具。其余 4 个工具（<code>td_project_quit</code>、<code>td_test_session</code>、<code>td_dev_log</code>、<code>td_clear_dev_log</code>）是管理/开发模式工具——完整的 36 工具参考及参数 schema 见 <code>references/mcp-tools.md</code>。</p>
+<h2>关键实现规则</h2>
+<p><strong>GLSL 时间：</strong> GLSL TOP 中没有 <code>uTDCurrentTime</code>。使用 Values 页面：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 先调用 td_get_par_info(op_type="glslTOP") 确认参数名称
+td_set_operator_pars(path="/project1/shader", parameters={"value0name": "uTime"})
+# 然后通过脚本设置表达式：
+# op('/project1/shader').par.value0.expr = "absTime.seconds"
+# 在 GLSL 中：uniform float uTime;
+</div>
+<p>备选方案：使用 <code>rgba32float</code> 格式的 Constant TOP（8 位会钳制到 0-1，导致 shader 冻结）。</p>
+<p><strong>Feedback TOP：</strong> 使用 <code>top</code> 参数引用，而非直接输入连线。&quot;Not enough sources&quot; 在首次 cook 后解决。&quot;Cook dependency loop&quot; 警告是预期行为。</p>
+<p><strong>分辨率：</strong> 非商业版上限为 1280×1280。使用 <code>outputresolution = 'custom'</code>。</p>
+<p><strong>大型 shader：</strong> 将 GLSL 写入 <code>/tmp/file.glsl</code>，然后使用 <code>td_write_dat</code> 或 <code>td_execute_python</code> 加载。</p>
+<p><strong>顶点/点访问（TD 2025.32）：</strong> <code>point.P[0]</code>、<code>point.P[1]</code>、<code>point.P[2]</code>——不是 <code>.x</code>、<code>.y</code>、<code>.z</code>。</p>
+<p><strong>扩展：</strong> <code>ext0object</code> 格式为 <code>&quot;op('./datName').module.ClassName(me)&quot;</code>，使用 CONSTANT 模式。用 <code>td_write_dat</code> 编辑扩展代码后，调用 <code>td_reinit_extension</code>。</p>
+<p><strong>脚本回调：</strong> 始终通过 <code>me.parent()</code> / <code>scriptOp.parent()</code> 使用相对路径。</p>
+<p><strong>清理节点：</strong> 迭代前始终使用 <code>list(root.children)</code> 并检查 <code>child.valid</code>。</p>
+<h2>录制 / 导出视频</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# via td_execute_python:
+root = op('/project1')
+rec = root.create(moviefileoutTOP, 'recorder')
+op('/project1/out').outputConnectors[0].connect(rec.inputConnectors[0])
+rec.par.type = 'movie'
+rec.par.file = '/tmp/output.mov'
+rec.par.videocodec = 'prores'  # Apple ProRes — macOS 上不受许可证限制
+rec.par.record = True   # 开始
+# rec.par.record = False  # 停止（稍后单独调用）
+</div>
+<p>H.264/H.265/AV1 需要商业许可证。macOS 上使用 <code>prores</code>，备选 <code>mjpa</code>。
+提取帧：<code>ffmpeg -i /tmp/output.mov -vframes 120 /tmp/frames/frame_%06d.png</code></p>
+<p><strong>TOP.save() 对动画无用</strong>——每次捕获的是同一个 GPU 纹理。始终使用 MovieFileOut。</p>
+<h3>录制前：检查清单</h3>
+<ol>
+<li><strong>通过 <code>td_get_perf</code> 验证 FPS &gt; 0。</strong> 如果 FPS=0，录制结果将为空。见陷阱 #38-39。</li>
+<li><strong>通过 <code>td_get_screenshot</code> 验证 shader 输出不是黑色。</strong> 黑色输出 = shader 错误或缺少输入。见陷阱 #8、#40。</li>
+<li><strong>如果录制时带音频：</strong> 先提示音频开始，然后延迟 3 帧再开始录制。见陷阱 #19。</li>
+<li><strong>在开始录制前设置输出路径</strong>——在同一脚本中同时设置两者可能产生竞争条件。</li>
+</ol>
+<h2>音频响应式 GLSL（经过验证的方案）</h2>
+<h3>正确的信号链（2026 年 4 月测试）</h3>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+AudioFileIn CHOP (playmode=sequential)
+  → AudioSpectrum CHOP (FFT=512, outputmenu=setmanually, outlength=256, timeslice=ON)
+  → Math CHOP (gain=10)
+  → CHOP to TOP (dataformat=r, layout=rowscropped)
+  → GLSL TOP input 1 (spectrum texture, 256x2)
+<p>Constant TOP (rgba32float, time) → GLSL TOP input 0
+GLSL TOP → Null TOP → MovieFileOut</p>
+</div>
+<h3>关键音频响应式规则（经验证）</h3>
+<ol>
+<li><strong>AudioSpectrum 的 TimeSlice 必须保持 ON。</strong> OFF = 处理整个音频文件 → 24000+ 个样本 → CHOP to TOP 溢出。</li>
+<li><strong>通过 <code>outputmenu='setmanually'</code> 和 <code>outlength=256</code> 手动设置输出长度为 256。</strong> 默认输出 22050 个样本。</li>
+<li><strong>不要对频谱平滑使用 Lag CHOP。</strong> Lag CHOP 在 timeslice 模式下运行，会将 256 个样本扩展到 2400+，将所有值平均到接近零（~1e-06）。shader 接收不到可用数据。这是测试中 #1 音频同步失败原因。</li>
+<li><strong>也不要使用 Filter CHOP</strong>——频谱数据存在同样的 timeslice 扩展问题。</li>
+<li><strong>平滑处理应在 GLSL shader 中进行</strong>（如需要），通过带 feedback 纹理的时间 lerp：<code>mix(prevValue, newValue, 0.3)</code>。这提供帧级精确同步，零管线延迟。</li>
+<li><strong>CHOP to TOP dataformat = 'r'</strong>，layout = 'rowscropped'。频谱输出为 256x2（立体声）。在 y=0.25 处采样第一通道。</li>
+<li><strong>Math gain = 10</strong>（不是 5）。原始频谱值在低音范围约为 0.19。增益 10 给 shader 提供可用的约 5.0。</li>
+<li><strong>不需要 Resample CHOP。</strong> 直接通过 AudioSpectrum 的 <code>outlength</code> 参数控制输出大小。</li>
+</ol>
+<h3>GLSL 频谱采样</h3>
+<div class="code-block"><span class="code-lang">glsl</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+// Input 0 = time (1x1 rgba32float), Input 1 = spectrum (256x2)
+float iTime = texture(sTD2DInputs[0], vec2(0.5)).r;
+<p>// 每个频段采样多个点并取平均以提高稳定性：
+// 注意：y=0.25 对应第一通道（立体声纹理为 256x2，第一行中心为 0.25）
+float bass = (texture(sTD2DInputs[1], vec2(0.02, 0.25)).r +
+texture(sTD2DInputs[1], vec2(0.05, 0.25)).r) / 2.0;
+float mid  = (texture(sTD2DInputs[1], vec2(0.2, 0.25)).r +
+texture(sTD2DInputs[1], vec2(0.35, 0.25)).r) / 2.0;
+float hi   = (texture(sTD2DInputs[1], vec2(0.6, 0.25)).r +
+texture(sTD2DInputs[1], vec2(0.8, 0.25)).r) / 2.0;</p>
+</div>
+<p>完整构建脚本和 shader 代码见 <code>references/network-patterns.md</code>。</p>
+<h2>算子快速参考</h2>
+<table>
+<thead>
+<tr>
+<th>家族</th>
+<th>颜色</th>
+<th>Python 类 / MCP 类型</th>
+<th>后缀</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TOP</td>
+<td>紫色</td>
+<td>noiseTOP, glslTOP, compositeTOP, levelTop, blurTOP, textTOP, nullTOP</td>
+<td>TOP</td>
+</tr>
+<tr>
+<td>CHOP</td>
+<td>绿色</td>
+<td>audiofileinCHOP, audiospectrumCHOP, mathCHOP, lfoCHOP, constantCHOP</td>
+<td>CHOP</td>
+</tr>
+<tr>
+<td>SOP</td>
+<td>蓝色</td>
+<td>gridSOP, sphereSOP, transformSOP, noiseSOP</td>
+<td>SOP</td>
+</tr>
+<tr>
+<td>DAT</td>
+<td>白色</td>
+<td>textDAT, tableDAT, scriptDAT, webserverDAT</td>
+<td>DAT</td>
+</tr>
+<tr>
+<td>MAT</td>
+<td>黄色</td>
+<td>phongMAT, pbrMAT, glslMAT, constMAT</td>
+<td>MAT</td>
+</tr>
+<tr>
+<td>COMP</td>
+<td>灰色</td>
+<td>geometryCOMP, containerCOMP, cameraCOMP, lightCOMP, windowCOMP</td>
+<td>COMP</td>
+</tr>
+</tbody>
+</table>
+<h2>安全说明</h2>
+<ul>
+<li>MCP 仅在本地运行（端口 40404）。无身份验证——任何本地进程均可发送命令。</li>
+<li><code>td_execute_python</code> 以 TD 进程用户身份对 TD Python 环境和文件系统拥有不受限制的访问权限。</li>
+<li><code>setup.sh</code> 从官方 404zero.com URL 下载 twozero.tox。如有顾虑，请验证下载内容。</li>
+<li>该 skill 从不向本地以外发送数据。所有 MCP 通信均在本地进行。</li>
+</ul>
+<h2>参考资料</h2>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>references/pitfalls.md</code></td>
+<td>真实会话中积累的经验教训</td>
+</tr>
+<tr>
+<td><code>references/operators.md</code></td>
+<td>所有算子家族及其参数和使用场景</td>
+</tr>
+<tr>
+<td><code>references/network-patterns.md</code></td>
+<td>方案：音频响应式、生成式、GLSL、实例化</td>
+</tr>
+<tr>
+<td><code>references/mcp-tools.md</code></td>
+<td>完整的 twozero MCP 工具参数 schema</td>
+</tr>
+<tr>
+<td><code>references/python-api.md</code></td>
+<td>TD Python：op()、脚本、扩展</td>
+</tr>
+<tr>
+<td><code>references/troubleshooting.md</code></td>
+<td>连接诊断、调试</td>
+</tr>
+<tr>
+<td><code>references/glsl.md</code></td>
+<td>GLSL uniform、内置函数、shader 模板</td>
+</tr>
+<tr>
+<td><code>references/postfx.md</code></td>
+<td>后期效果：bloom、CRT、色差、feedback 辉光</td>
+</tr>
+<tr>
+<td><code>references/layout-compositor.md</code></td>
+<td>HUD 布局模式、面板网格、BSP 风格布局</td>
+</tr>
+<tr>
+<td><code>references/operator-tips.md</code></td>
+<td>线框渲染、feedback TOP 设置</td>
+</tr>
+<tr>
+<td><code>references/geometry-comp.md</code></td>
+<td>Geometry COMP：实例化、POP vs SOP、变形</td>
+</tr>
+<tr>
+<td><code>references/audio-reactive.md</code></td>
+<td>音频频段提取、节拍检测、包络跟随</td>
+</tr>
+<tr>
+<td><code>references/animation.md</code></td>
+<td>LFO、定时器、关键帧、缓动、表达式驱动运动</td>
+</tr>
+<tr>
+<td><code>references/midi-osc.md</code></td>
+<td>MIDI/OSC 控制器、TouchOSC、多机同步</td>
+</tr>
+<tr>
+<td><code>references/particles.md</code></td>
+<td>POP 和旧版 particleSOP——发射、力、碰撞</td>
+</tr>
+<tr>
+<td><code>references/projection-mapping.md</code></td>
+<td>多窗口输出、角点固定、网格变形、边缘融合</td>
+</tr>
+<tr>
+<td><code>references/external-data.md</code></td>
+<td>HTTP、WebSocket、MQTT、Serial、TCP、webserverDAT</td>
+</tr>
+<tr>
+<td><code>references/panel-ui.md</code></td>
+<td>自定义参数、面板 COMP、按钮/滑块/字段、panelExecuteDAT</td>
+</tr>
+<tr>
+<td><code>references/replicator.md</code></td>
+<td>replicatorCOMP——数据驱动克隆、布局、回调</td>
+</tr>
+<tr>
+<td><code>references/dat-scripting.md</code></td>
+<td>Execute DAT 家族——chop/dat/parameter/panel/op/executeDAT</td>
+</tr>
+<tr>
+<td><code>references/3d-scene.md</code></td>
+<td>灯光装置、阴影、IBL/立方体贴图、多摄像机、PBR</td>
+</tr>
+<tr>
+<td><code>scripts/setup.sh</code></td>
+<td>自动化设置脚本</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<blockquote>
+<p>你不是在写代码。你是在指挥光。</p>
+</blockquote>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

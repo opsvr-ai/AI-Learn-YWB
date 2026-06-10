@@ -1,0 +1,491 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>使用 Ollama 在本地运行 Hermes — 零 API 费用 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 实用指南 / 使用 Ollama 在本地运行 Hermes — 零 API 费用</div><h2>问题所在</h2>
+<p>云端 LLM API 按 token（令牌）计费。一次高强度的编程会话可能花费 5–20 美元。对于个人项目、学习或隐私敏感的工作，费用会不断累积——而且你的每一段对话都会发送给第三方。</p>
+<h2>本指南解决什么</h2>
+<p>你将在自己的硬件上完整运行 Hermes Agent，使用 <a href="https://ollama.com">Ollama</a> 作为模型后端。无需 API 密钥，无需订阅，数据不会离开你的机器。配置完成后，Hermes 的使用体验与 OpenRouter 或 Anthropic 完全一致——终端命令、文件编辑、网页浏览、任务委派——只是模型在本地运行。</p>
+<p>完成后，你将拥有：</p>
+<ul>
+<li>Ollama 提供一个或多个开放权重模型的服务</li>
+<li>Hermes 通过自定义端点连接到 Ollama</li>
+<li>一个可以编辑文件、执行命令、浏览网页的本地 agent</li>
+<li>可选：由你自己的硬件驱动的 Telegram/Discord 机器人</li>
+</ul>
+<h2>所需条件</h2>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>最低配置</th>
+<th>推荐配置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>内存</strong></td>
+<td>8 GB（适用于 3B 模型）</td>
+<td>32+ GB（适用于 27B+ 模型）</td>
+</tr>
+<tr>
+<td><strong>存储</strong></td>
+<td>5 GB 可用空间</td>
+<td>30+ GB（适用于多个模型）</td>
+</tr>
+<tr>
+<td><strong>CPU</strong></td>
+<td>4 核</td>
+<td>8+ 核（AMD EPYC、Ryzen、Intel Xeon）</td>
+</tr>
+<tr>
+<td><strong>GPU</strong></td>
+<td>非必需</td>
+<td>配备 8+ GB 显存的 NVIDIA GPU 可显著提速</td>
+</tr>
+</tbody>
+</table>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ~/.hermes/.env
+HERMES_API_TIMEOUT=1800   # 30 分钟 — 为慢速本地模型留出充裕时间
+</div>
+<div class="tip"><strong>💡 仅 CPU 可用，但响应速度较慢</strong>
+Ollama 可在纯 CPU 服务器上运行。现代 8 核 CPU 运行 9B 模型约可达 ~10 tokens/sec。31B 模型在 CPU 上更慢（~2–5 tokens/sec）——每次响应需要 30–120 秒，但可以正常工作。GPU 能大幅改善这一情况。对于纯 CPU 环境，通过环境变量（而非 <code>config.yaml</code> 键）放宽 API 超时时间：
+</div>
+<h2>第一步：安装 Ollama</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -fsSL https://ollama.com/install.sh | sh
+</div>
+<p>验证是否正在运行：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+ollama --version
+curl http://localhost:11434/api/tags   # 应返回 {"models":[]}
+</div>
+<h2>第二步：拉取模型</h2>
+<p>根据你的硬件选择：</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>磁盘占用</th>
+<th>所需内存</th>
+<th style="text-align:center">工具调用</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gemma4:31b</code></td>
+<td>~20 GB</td>
+<td>24+ GB</td>
+<td style="text-align:center">支持</td>
+<td>最佳质量——工具使用和推理能力强</td>
+</tr>
+<tr>
+<td><code>gemma2:27b</code></td>
+<td>~16 GB</td>
+<td>20+ GB</td>
+<td style="text-align:center">不支持</td>
+<td>对话任务，不支持工具使用</td>
+</tr>
+<tr>
+<td><code>gemma2:9b</code></td>
+<td>~5 GB</td>
+<td>8+ GB</td>
+<td style="text-align:center">不支持</td>
+<td>快速问答——无法调用工具</td>
+</tr>
+<tr>
+<td><code>llama3.2:3b</code></td>
+<td>~2 GB</td>
+<td>4+ GB</td>
+<td style="text-align:center">不支持</td>
+<td>仅适合轻量级快速回答</td>
+</tr>
+</tbody>
+</table>
+<div class="tip warning"><strong>⚠️ 工具调用至关重要</strong>
+Hermes 是一个**agentic（智能体）**助手——它通过工具调用来编辑文件、执行命令和浏览网页。不支持工具调用的模型只能进行对话，无法执行操作。要体验完整的 Hermes 功能，请使用支持工具的模型（如 <code>gemma4:31b</code>）。
+</div>
+<p>拉取你选择的模型：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+ollama pull gemma4:31b
+</div>
+<div class="tip"><strong>ℹ️ 多个模型</strong>
+你可以拉取多个模型，并在 Hermes 中使用 <code>/model</code> 切换。Ollama 按需将活跃模型加载到内存，并自动卸载空闲模型。
+</div>
+<p>验证模型是否正常工作：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl http://localhost:11434/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gemma4:31b",
+    "messages": [{"role": "user", "content": "Say hello"}],
+    "max_tokens": 50
+  }'
+</div>
+<p>你应该看到包含模型回复的 JSON 响应。</p>
+<h2>第三步：配置 Hermes</h2>
+<p>运行 Hermes 设置向导：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes setup
+</div>
+<p>当提示选择提供商时，选择 <strong>Custom Endpoint</strong>，并输入：</p>
+<ul>
+<li><strong>Base URL：</strong> <code>http://localhost:11434/v1</code></li>
+<li><strong>API Key：</strong> 留空或输入 <code>no-key</code>（Ollama 不需要密钥）</li>
+<li><strong>Model：</strong> <code>gemma4:31b</code>（或你拉取的模型）</li>
+</ul>
+<p>也可以直接编辑 <code>~/.hermes/config.yaml</code>：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  default: "gemma4:31b"
+  provider: "custom"
+  base_url: "http://localhost:11434/v1"
+</div>
+<h2>第四步：开始使用 Hermes</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes
+</div>
+<p>就这样。你现在运行的是一个完全本地化的 agent。试试看：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+You: List all Python files in this directory and count the lines of code in each
+
+You: Read the README.md and summarize what this project does
+
+You: Create a Python script that fetches the weather for Ho Chi Minh City
+</div>
+<p>Hermes 将使用终端工具、文件操作和你的本地模型——无需任何云端调用。</p>
+<h2>第五步：为任务选择合适的模型</h2>
+<p>并非每个任务都需要最大的模型。以下是实用指南：</p>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>推荐模型</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>文件编辑、代码、终端命令</td>
+<td><code>gemma4:31b</code></td>
+<td>唯一具备可靠工具调用能力的模型</td>
+</tr>
+<tr>
+<td>快速问答（无需工具调用）</td>
+<td><code>gemma2:9b</code></td>
+<td>对话任务响应速度快</td>
+</tr>
+<tr>
+<td>轻量级聊天</td>
+<td><code>llama3.2:3b</code></td>
+<td>最快，但能力非常有限</td>
+</tr>
+</tbody>
+</table>
+<div class="tip"><strong>📝 注意</strong>
+对于完整的 agentic 工作（编辑文件、执行命令、浏览网页），<code>gemma4:31b</code> 目前是支持工具调用的最佳本地选项。请关注 <a href="https://ollama.com/library">Ollama 的模型库</a> 以获取更新模型——工具调用支持正在快速扩展。
+</div>
+<p>在会话中即时切换模型：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/model gemma2:9b
+</div>
+<h2>第六步：优化速度</h2>
+<h3>增大 Ollama 的上下文窗口</h3>
+<p>默认情况下，Ollama 使用 2048 token 的上下文。对于 agentic 工作（工具调用、长对话），需要更大的上下文：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 创建一个扩展上下文的 Modelfile
+cat &gt; /tmp/Modelfile &lt;&lt; 'EOF'
+FROM gemma4:31b
+PARAMETER num_ctx 16384
+EOF
+
+ollama create gemma4-16k -f /tmp/Modelfile
+</div>
+<p>然后将 Hermes 配置中的模型名称更新为 <code>gemma4-16k</code>。</p>
+<h3>保持模型常驻内存</h3>
+<p>默认情况下，Ollama 在模型空闲 5 分钟后将其卸载。对于持久化的 gateway 机器人，保持模型常驻：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 将 keep-alive 设置为 24 小时
+curl http://localhost:11434/api/generate \
+  -d '{"model": "gemma4:31b", "keep_alive": "24h"}'
+</div>
+<p>或在 Ollama 的环境变量中全局设置：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# /etc/systemd/system/ollama.service.d/override.conf
+[Service]
+Environment="OLLAMA_KEEP_ALIVE=24h"
+</div>
+<h3>使用 GPU 卸载（如有）</h3>
+<p>如果你有 NVIDIA GPU，Ollama 会自动将层卸载到 GPU。通过以下命令检查：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+ollama ps   # 显示已加载的模型及 GPU 层数
+</div>
+<p>对于 12 GB 显存 GPU 上的 31B 模型，你将获得部分卸载（约 40 层在 GPU 上，其余在 CPU 上），仍能带来显著的速度提升。</p>
+<h2>第七步：作为 Gateway 机器人运行（可选）</h2>
+<p>一旦 Hermes 在 CLI 中本地运行正常，你可以将其作为 Telegram 或 Discord 机器人对外提供服务——仍完全运行在你的硬件上。</p>
+<h3>Telegram</h3>
+<ol>
+<li>通过 <a href="https://t.me/BotFather">@BotFather</a> 创建机器人并获取 token</li>
+<li>添加到 <code>~/.hermes/config.yaml</code>：</li>
+</ol>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  default: "gemma4:31b"
+  provider: "custom"
+  base_url: "http://localhost:11434/v1"
+
+platforms:
+  telegram:
+    enabled: true
+    token: "YOUR_TELEGRAM_BOT_TOKEN"
+</div>
+<ol start="3">
+<li>启动 gateway：</li>
+</ol>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway
+</div>
+<p>现在在 Telegram 上给你的机器人发消息——它将使用你的本地模型进行响应。</p>
+<h3>Discord</h3>
+<ol>
+<li>在 <a href="https://discord.com/developers/applications">discord.com/developers</a> 创建 Discord 应用</li>
+<li>添加到配置：</li>
+</ol>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+platforms:
+  discord:
+    enabled: true
+    token: "YOUR_DISCORD_BOT_TOKEN"
+</div>
+<ol start="3">
+<li>启动：<code>hermes gateway</code></li>
+</ol>
+<h2>第八步：设置回退方案（可选）</h2>
+<p>本地模型在处理复杂任务时可能力不从心。设置一个仅在本地模型失败时激活的云端回退：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  default: "gemma4:31b"
+  provider: "custom"
+  base_url: "http://localhost:11434/v1"
+
+fallback_providers:
+  - provider: openrouter
+    model: anthropic/claude-sonnet-4
+</div>
+<p>这样，90% 的使用是免费的（本地），只有困难任务才会调用付费 API。</p>
+<h2>故障排查</h2>
+<h3>启动时出现&quot;Connection refused&quot;</h3>
+<p>Ollama 未在运行。启动它：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+sudo systemctl start ollama
+# 或
+ollama serve
+</div>
+<h3>响应缓慢</h3>
+<ul>
+<li><strong>检查模型大小与内存：</strong> 如果模型所需内存超过可用内存，会发生磁盘交换。请使用更小的模型或增加内存。</li>
+<li><strong>检查 <code>ollama ps</code>：</strong> 如果没有 GPU 层被卸载，响应受 CPU 限制。这对于纯 CPU 服务器是正常现象。</li>
+<li><strong>减少上下文：</strong> 长对话会降低推理速度。定期使用 <code>/compress</code>，或在配置中设置更低的压缩阈值。</li>
+</ul>
+<h3>模型不遵循工具调用</h3>
+<p>较小的模型（3B、7B）有时会忽略工具调用指令，输出纯文本而非结构化的函数调用。解决方案：</p>
+<ul>
+<li><strong>使用更大的模型</strong> —— <code>gemma4:31b</code> 或 <code>gemma2:27b</code> 处理工具调用的能力远优于 3B/7B 模型。</li>
+<li><strong>Hermes 具备自动修复功能</strong> —— 它能检测格式错误的工具调用并自动尝试修复。</li>
+<li><strong>设置回退方案</strong> —— 如果本地模型连续失败 3 次，Hermes 将回退到云端提供商。</li>
+</ul>
+<h3>上下文窗口错误</h3>
+<p>Ollama 默认上下文（2048 token）对于 agentic 工作来说太小。请参阅<a href="#step-6-optimize-for-speed">第六步</a>了解如何增大上下文。</p>
+<h2>费用对比</h2>
+<p>以下是与云端 API 相比，本地运行的节省情况，基于典型编程会话（约 10 万 token 输入，约 2 万 token 输出）：</p>
+<table>
+<thead>
+<tr>
+<th>提供商</th>
+<th>每次会话费用</th>
+<th>每月费用（每日使用）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Anthropic Claude Sonnet</td>
+<td>~$0.80</td>
+<td>~$24</td>
+</tr>
+<tr>
+<td>OpenRouter（GPT-4o）</td>
+<td>~$0.60</td>
+<td>~$18</td>
+</tr>
+<tr>
+<td><strong>Ollama（本地）</strong></td>
+<td><strong>$0.00</strong></td>
+<td><strong>$0.00</strong></td>
+</tr>
+</tbody>
+</table>
+<p>你唯一的成本是电费——根据硬件不同，每次会话约 $0.01–0.05。</p>
+<h2>本地运行效果好的场景</h2>
+<ul>
+<li><strong>文件编辑和代码生成</strong> —— 9B+ 模型处理效果良好</li>
+<li><strong>终端命令</strong> —— Hermes 封装命令、执行并读取输出，与模型无关</li>
+<li><strong>网页浏览</strong> —— 浏览器工具负责抓取内容，模型只需解读结果</li>
+<li><strong>定时任务（Cron job）和计划任务</strong> —— 与云端设置完全一致</li>
+<li><strong>多平台 gateway</strong> —— Telegram、Discord、Slack 均可与本地模型配合使用</li>
+</ul>
+<h2>云端模型更具优势的场景</h2>
+<ul>
+<li><strong>非常复杂的多步推理</strong> —— 70B+ 或 Claude Opus 等云端模型明显更强</li>
+<li><strong>长上下文窗口</strong> —— 云端模型提供 10 万–100 万 token；本地模型通常为 8K–32K</li>
+<li><strong>大篇幅响应的速度</strong> —— 对于长文本生成，云端推理比纯 CPU 本地运行更快</li>
+</ul>
+<p>最佳策略：日常任务使用本地模型，困难任务设置云端回退。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

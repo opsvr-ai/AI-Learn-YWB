@@ -1,0 +1,813 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>定时任务（Cron） - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html" class="active">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / 定时任务（Cron）</div><p>使用自然语言或 cron 表达式调度自动运行的任务。Hermes 通过单一 <code>cronjob</code> 工具暴露 cron 管理能力，采用动作式操作，而非分散的 schedule/list/remove 工具。</p>
+<h2>Cron 当前能做什么</h2>
+<p>Cron 任务可以：</p>
+<ul>
+<li>调度一次性或周期性任务</li>
+<li>暂停、恢复、编辑、触发和删除任务</li>
+<li>为任务附加零个、一个或多个 skill</li>
+<li>将结果回传到来源会话、本地文件或已配置的平台目标</li>
+<li>在全新的 agent 会话中运行，使用正常的静态工具列表</li>
+<li>以<strong>无 agent 模式</strong>运行——按计划执行脚本，其 stdout 原样投递，零 LLM 参与（参见下方<a href="#no-agent-mode-script-only-jobs">无 agent 模式</a>章节）</li>
+</ul>
+<p>所有这些功能均可通过 <code>cronjob</code> 工具由 Hermes 自身使用，因此你可以用自然语言创建、暂停、编辑和删除任务——无需 CLI。</p>
+<div class="tip warning"><strong>⚠️ 警告</strong>
+Cron 运行的会话不能递归创建更多 cron 任务。Hermes 在 cron 执行内部禁用了 cron 管理工具，以防止失控的调度循环。
+</div>
+<h2>创建定时任务</h2>
+<h3>在聊天中使用 <code>/cron</code></h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/cron add 30m "Remind me to check the build"
+/cron add "every 2h" "Check server status"
+/cron add "every 1h" "Summarize new feed items" --skill blogwatcher
+/cron add "every 1h" "Use both skills and combine the result" --skill blogwatcher --skill maps
+</div>
+<h3>从独立 CLI</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes cron create "every 2h" "Check server status"
+hermes cron create "every 1h" "Summarize new feed items" --skill blogwatcher
+hermes cron create "every 1h" "Use both skills and combine the result" \
+  --skill blogwatcher \
+  --skill maps \
+  --name "Skill combo"
+</div>
+<h3>通过自然对话</h3>
+<p>直接向 Hermes 描述：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Every morning at 9am, check Hacker News for AI news and send me a summary on Telegram.
+</div>
+<p>Hermes 会在内部使用统一的 <code>cronjob</code> 工具。</p>
+<h2>附带 skill 的 cron 任务</h2>
+<p>Cron 任务可以在运行 prompt（提示词）之前加载一个或多个 skill。</p>
+<h3>单个 skill</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cronjob(
+    action="create",
+    skill="blogwatcher",
+    prompt="Check the configured feeds and summarize anything new.",
+    schedule="0 9 * * *",
+    name="Morning feeds",
+)
+</div>
+<h3>多个 skill</h3>
+<p>Skill 按顺序加载。Prompt 作为任务指令叠加在这些 skill 之上。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cronjob(
+    action="create",
+    skills=["blogwatcher", "maps"],
+    prompt="Look for new local events and interesting nearby places, then combine them into one short brief.",
+    schedule="every 6h",
+    name="Local brief",
+)
+</div>
+<p>当你希望定时 agent 继承可复用的工作流，而不必将完整的 skill 文本塞入 cron prompt 本身时，这非常有用。</p>
+<h2>在指定项目目录中运行任务</h2>
+<p>Cron 任务默认与任何代码仓库脱离运行——不加载 <code>AGENTS.md</code>、<code>CLAUDE.md</code> 或 <code>.cursorrules</code>，终端/文件/代码执行工具从 gateway 启动时的工作目录运行。传入 <code>--workdir</code>（CLI）或 <code>workdir=</code>（工具调用）可更改此行为：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 独立 CLI（schedule 和 prompt 为位置参数）
+hermes cron create "every 1d at 09:00" \
+  "Audit open PRs, summarize CI health, and post to #eng" \
+  --workdir /home/me/projects/acme
+</div>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 在聊天中，通过 cronjob 工具
+cronjob(
+    action="create",
+    schedule="every 1d at 09:00",
+    workdir="/home/me/projects/acme",
+    prompt="Audit open PRs, summarize CI health, and post to #eng",
+)
+</div>
+<p>设置 <code>workdir</code> 后：</p>
+<ul>
+<li>该目录中的 <code>AGENTS.md</code>、<code>CLAUDE.md</code> 和 <code>.cursorrules</code> 会被注入系统 prompt（发现顺序与交互式 CLI 相同）</li>
+<li><code>terminal</code>、<code>read_file</code>、<code>write_file</code>、<code>patch</code>、<code>search_files</code> 和 <code>execute_code</code> 均以该目录为工作目录（通过 <code>TERMINAL_CWD</code>）</li>
+<li>路径必须是已存在的绝对目录——相对路径和不存在的目录在创建/更新时会被拒绝</li>
+<li>编辑时传入 <code>--workdir &quot;&quot;</code>（或工具中的 <code>workdir=&quot;&quot;</code>）可清除该设置并恢复原有行为</li>
+</ul>
+<div class="tip"><strong>📝 串行化</strong>
+设置了 <code>workdir</code> 的任务在调度器 tick 时串行运行，而非在并行池中运行。这是有意为之——<code>TERMINAL_CWD</code> 是进程全局变量，两个 workdir 任务同时运行会互相破坏各自的 cwd。无 workdir 的任务仍像以前一样并行运行。
+</div>
+<h2>在指定 profile 中运行 cron 任务</h2>
+<p>默认情况下，cron 任务继承创建它的 gateway/CLI 所属的 Hermes profile。传入 <code>--profile &lt;name&gt;</code>（CLI）或 <code>profile=</code>（cronjob 工具）可将任务重定向到不同的 profile——调度器会解析该 profile 的 <code>HERMES_HOME</code>，在运行期间临时切换到该 profile，加载其 <code>.env</code> 和 <code>config.yaml</code>，并在其中执行任务：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 将任务固定到 `night-ops` profile，无论在哪里调度
+hermes cron create "every 1d at 03:00" \
+  "Tail the security log and flag anomalies" \
+  --profile night-ops
+</div>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 在聊天中，通过 cronjob 工具
+cronjob(
+    action="create",
+    schedule="every 1d at 03:00",
+    prompt="Tail the security log and flag anomalies",
+    profile="night-ops",
+)
+</div>
+<p>使用 <code>--profile default</code> 可显式固定到根 Hermes profile。指定的 profile 必须已存在；调度器不会动态创建 profile。在 <code>cron edit</code> 时清除 profile 固定，传入空字符串（<code>--profile &quot;&quot;</code> 或 <code>profile=&quot;&quot;</code>）——任务将恢复在调度器当前所在的 profile 中运行。</p>
+<p>如果固定的 profile 后来被删除，调度器会记录警告并回退到在当前 profile 中运行该任务，而不是崩溃——因此过期的 <code>profile</code> 引用不会卡住任务。</p>
+<div class="tip"><strong>📝 串行化</strong>
+设置了 <code>profile</code> 的任务也串行运行，原因与 <code>workdir</code> 固定任务相同：切换 <code>HERMES_HOME</code> 是进程全局变更，两个 profile 固定任务并行运行会产生竞争。未固定的任务仍在正常并行池中运行。
+</div>
+<h2>编辑任务</h2>
+<p>无需删除并重建任务来修改它们。</p>
+<div class="tip"><strong>💡 任务引用</strong>
+下方（以及<a href="#lifecycle-actions">生命周期操作</a>中）的 <code>&lt;job_id&gt;</code> 占位符也接受任务名称（不区分大小写）——当你记得 <code>morning-digest</code> 但不记得十六进制 ID 时很方便。精确的任务 ID 优先于名称匹配；如果引用不是 ID 且名称匹配到多个任务，命令会拒绝执行并打印候选 ID 供你消歧义。
+</div>
+<h3>聊天</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/cron edit &lt;job_id&gt; --schedule "every 4h"
+/cron edit &lt;job_id&gt; --prompt "Use the revised task"
+/cron edit &lt;job_id&gt; --skill blogwatcher --skill maps
+/cron edit &lt;job_id&gt; --remove-skill blogwatcher
+/cron edit &lt;job_id&gt; --clear-skills
+</div>
+<h3>独立 CLI</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes cron edit &lt;job_id&gt; --schedule "every 4h"
+hermes cron edit &lt;job_id&gt; --prompt "Use the revised task"
+hermes cron edit &lt;job_id&gt; --skill blogwatcher --skill maps
+hermes cron edit &lt;job_id&gt; --add-skill maps
+hermes cron edit &lt;job_id&gt; --remove-skill blogwatcher
+hermes cron edit &lt;job_id&gt; --clear-skills
+</div>
+<p>注意：</p>
+<ul>
+<li>重复使用 <code>--skill</code> 会替换任务已附加的 skill 列表</li>
+<li><code>--add-skill</code> 追加到现有列表，不替换</li>
+<li><code>--remove-skill</code> 删除指定的已附加 skill</li>
+<li><code>--clear-skills</code> 删除所有已附加的 skill</li>
+</ul>
+<h2>生命周期操作</h2>
+<p>Cron 任务现在拥有比创建/删除更完整的生命周期。</p>
+<h3>聊天</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/cron list
+/cron pause &lt;job_id&gt;
+/cron resume &lt;job_id&gt;
+/cron run &lt;job_id&gt;
+/cron remove &lt;job_id&gt;
+</div>
+<h3>独立 CLI</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes cron list
+hermes cron pause &lt;job_id&gt;
+hermes cron resume &lt;job_id&gt;
+hermes cron run &lt;job_id&gt;
+hermes cron remove &lt;job_id&gt;
+hermes cron status
+hermes cron tick
+</div>
+<p>各操作说明：</p>
+<ul>
+<li><code>pause</code> — 保留任务但停止调度</li>
+<li><code>resume</code> — 重新启用任务并计算下次运行时间</li>
+<li><code>run</code> — 在下次调度器 tick 时触发任务</li>
+<li><code>remove</code> — 彻底删除任务</li>
+</ul>
+<h2>工作原理</h2>
+<p><strong>Cron 执行由 gateway 守护进程处理。</strong> Gateway 每 60 秒 tick 一次调度器，在隔离的 agent 会话中运行到期的任务。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway install     # 安装为用户服务
+sudo hermes gateway install --system   # Linux：服务器开机启动的系统服务
+hermes gateway             # 或在前台运行
+
+hermes cron list
+hermes cron status
+</div>
+<h3>Gateway 调度器行为</h3>
+<p>每次 tick 时，Hermes：</p>
+<ol>
+<li>从 <code>~/.hermes/cron/jobs.json</code> 加载任务</li>
+<li>对照当前时间检查 <code>next_run_at</code></li>
+<li>为每个到期任务启动全新的 <code>AIAgent</code> 会话</li>
+<li>可选地将一个或多个已附加的 skill 注入该新会话</li>
+<li>将 prompt 运行至完成</li>
+<li>投递最终响应</li>
+<li>更新运行元数据和下次调度时间</li>
+</ol>
+<p><code>~/.hermes/cron/.tick.lock</code> 处的文件锁防止重叠的调度器 tick 重复运行同一批任务。</p>
+<h2>投递选项</h2>
+<p>调度任务时，你可以指定输出的去向：</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&quot;origin&quot;</code></td>
+<td>回传到任务创建的来源</td>
+<td>消息平台上的默认值</td>
+</tr>
+<tr>
+<td><code>&quot;local&quot;</code></td>
+<td>仅保存到本地文件（<code>~/.hermes/cron/output/</code>）</td>
+<td>CLI 上的默认值</td>
+</tr>
+<tr>
+<td><code>&quot;telegram&quot;</code></td>
+<td>Telegram 主频道</td>
+<td>使用 <code>TELEGRAM_HOME_CHANNEL</code></td>
+</tr>
+<tr>
+<td><code>&quot;telegram:123456&quot;</code></td>
+<td>按 ID 指定的 Telegram 会话</td>
+<td>直接投递</td>
+</tr>
+<tr>
+<td><code>&quot;telegram:-100123:17585&quot;</code></td>
+<td>指定 Telegram 话题</td>
+<td><code>chat_id:thread_id</code> 格式</td>
+</tr>
+<tr>
+<td><code>&quot;discord&quot;</code></td>
+<td>Discord 主频道</td>
+<td>使用 <code>DISCORD_HOME_CHANNEL</code></td>
+</tr>
+<tr>
+<td><code>&quot;discord:#engineering&quot;</code></td>
+<td>按频道名指定的 Discord 频道</td>
+<td>按频道名</td>
+</tr>
+<tr>
+<td><code>&quot;slack&quot;</code></td>
+<td>Slack 主频道</td>
+<td></td>
+</tr>
+<tr>
+<td><code>&quot;whatsapp&quot;</code></td>
+<td>WhatsApp 主账号</td>
+<td></td>
+</tr>
+<tr>
+<td><code>&quot;signal&quot;</code></td>
+<td>Signal</td>
+<td></td>
+</tr>
+<tr>
+<td><code>&quot;matrix&quot;</code></td>
+<td>Matrix 主房间</td>
+<td></td>
+</tr>
+<tr>
+<td><code>&quot;mattermost&quot;</code></td>
+<td>Mattermost 主频道</td>
+<td></td>
+</tr>
+<tr>
+<td><code>&quot;email&quot;</code></td>
+<td>邮件</td>
+<td></td>
+</tr>
+<tr>
+<td><code>&quot;sms&quot;</code></td>
+<td>通过 Twilio 发送 SMS</td>
+<td></td>
+</tr>
+<tr>
+<td><code>&quot;homeassistant&quot;</code></td>
+<td>Home Assistant</td>
+<td></td>
+</tr>
+<tr>
+<td><code>&quot;dingtalk&quot;</code></td>
+<td>钉钉</td>
+<td></td>
+</tr>
+<tr>
+<td><code>&quot;feishu&quot;</code></td>
+<td>飞书/Lark</td>
+<td></td>
+</tr>
+<tr>
+<td><code>&quot;wecom&quot;</code></td>
+<td>企业微信</td>
+<td></td>
+</tr>
+<tr>
+<td><code>&quot;weixin&quot;</code></td>
+<td>微信（WeChat）</td>
+<td></td>
+</tr>
+<tr>
+<td><code>&quot;bluebubbles&quot;</code></td>
+<td>BlueBubbles（iMessage）</td>
+<td></td>
+</tr>
+<tr>
+<td><code>&quot;qqbot&quot;</code></td>
+<td>QQ Bot（腾讯 QQ）</td>
+<td></td>
+</tr>
+<tr>
+<td><code>&quot;all&quot;</code></td>
+<td>扇出到所有已连接的主频道</td>
+<td>触发时解析</td>
+</tr>
+<tr>
+<td><code>&quot;telegram,discord&quot;</code></td>
+<td>扇出到指定的一组频道</td>
+<td>逗号分隔列表</td>
+</tr>
+<tr>
+<td><code>&quot;origin,all&quot;</code></td>
+<td>投递到来源<strong>加上</strong>所有其他已连接频道</td>
+<td>可组合任意 token</td>
+</tr>
+</tbody>
+</table>
+<p>Agent 的最终响应会自动投递，无需在 cron prompt 中调用 <code>send_message</code>。</p>
+<h3>路由意图（<code>all</code>）</h3>
+<p><code>all</code> 让你将一个 cron 任务发送到所有已配置的消息频道，无需逐一列举名称。它在<strong>触发时解析</strong>，因此在你配置 <code>TELEGRAM_HOME_CHANNEL</code> 之前创建的任务，会在下次 tick 时自动纳入 Telegram。</p>
+<p>语义：<code>all</code> 展开为所有已配置主频道的平台。零个也没问题；任务只是没有投递目标，并在上游记录为投递失败。</p>
+<p><code>all</code> 可与显式目标组合。<code>origin,all</code> 投递到来源会话<strong>加上</strong>所有其他已连接的主频道，按 <code>(platform, chat_id, thread_id)</code> 去重。</p>
+<h3>Telegram cron 话题（<code>TELEGRAM_CRON_THREAD_ID</code>）</h3>
+<p>启用 Telegram 话题模式后，根 DM 被保留为系统大厅——发送到那里的回复会被拒绝并附带大厅提示，<code>reply_to_message_id</code> 会被丢弃，因此你无法回复落在主聊天中的 cron 消息。</p>
+<p>将 cron 指向专用的论坛话题：</p>
+<ol>
+<li>在 Telegram 中打开机器人 DM，创建一个名为 <code>Cron</code> 的话题。长按话题标题 → <strong>复制链接</strong>；末尾的整数即为该话题的 <code>message_thread_id</code>。</li>
+<li>在 <code>.env</code> 中设置 <code>TELEGRAM_CRON_THREAD_ID=&lt;该 id&gt;</code>。</li>
+</ol>
+<p>这仅适用于 cron 投递。<code>TELEGRAM_HOME_CHANNEL_THREAD_ID</code>（用于其他地方，如重启通知）不受影响。显式的 <code>deliver=&quot;telegram:chat_id:thread_id&quot;</code> 目标仍优先于环境变量。对 cron 消息的回复现在会进入已有的话题会话，你可以直接在其中操作。</p>
+<h3>响应包装</h3>
+<p>默认情况下，投递的 cron 输出会带有页眉和页脚，以便接收方知道这来自定时任务：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Cronjob Response: Morning feeds
+-------------
+
+&lt;agent output here&gt;
+
+Note: The agent cannot see this message, and therefore cannot respond to it.
+</div>
+<p>若要投递不带包装的原始 agent 输出，将 <code>cron.wrap_response</code> 设为 <code>false</code>：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ~/.hermes/config.yaml
+cron:
+  wrap_response: false
+</div>
+<h3>静默抑制</h3>
+<p>如果 agent 的最终响应以 <code>[SILENT]</code> 开头，投递将被完全抑制。输出仍会保存到本地以供审计（位于 <code>~/.hermes/cron/output/</code>），但不会向投递目标发送任何消息。</p>
+<p>这对于只在出现问题时才需要上报的监控任务很有用：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Check if nginx is running. If everything is healthy, respond with only [SILENT].
+Otherwise, report the issue.
+</div>
+<p>失败的任务无论 <code>[SILENT]</code> 标记如何都会投递——只有成功的运行才能被静默。</p>
+<h2>脚本超时</h2>
+<p>预运行脚本（通过 <code>script</code> 参数附加）的默认超时为 120 秒。如果你的脚本需要更长时间——例如，包含随机延迟以避免类机器人的时序模式——可以增加此值：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ~/.hermes/config.yaml
+cron:
+  script_timeout_seconds: 300   # 5 分钟
+</div>
+<p>或设置 <code>HERMES_CRON_SCRIPT_TIMEOUT</code> 环境变量。解析顺序为：环境变量 → config.yaml → 默认 120 秒。</p>
+<h2>无 agent 模式（纯脚本任务）</h2>
+<p>对于不需要 LLM 推理的周期性任务——经典的看门狗、磁盘/内存告警、心跳、CI ping——在创建时传入 <code>no_agent=True</code>。调度器按计划运行你的脚本，并直接投递其 stdout，完全跳过 agent：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes cron create "every 5m" \
+  --no-agent \
+  --script memory-watchdog.sh \
+  --deliver telegram \
+  --name "memory-watchdog"
+</div>
+<p>语义：</p>
+<ul>
+<li>脚本 stdout（去除首尾空白）→ 原样作为消息投递。</li>
+<li><strong>stdout 为空 → 静默 tick</strong>，不投递。这是看门狗模式：&quot;只在出现问题时才说话&quot;。</li>
+<li>非零退出或超时 → 投递错误告警，确保损坏的看门狗不会静默失败。</li>
+<li>最后一行输出 <code>{&quot;wakeAgent&quot;: false}</code> → 静默 tick（与 LLM 任务使用相同的门控）。</li>
+<li>无 token、无模型、无 provider 回退——任务永远不会触及推理层。</li>
+</ul>
+<p><code>.sh</code>/<code>.bash</code> 文件在 <code>/bin/bash</code> 下运行；其他文件在当前 Python 解释器（<code>sys.executable</code>）下运行。脚本必须位于 <code>~/.hermes/scripts/</code>（与预运行脚本门控相同的沙箱规则）。</p>
+<h3>Agent 为你设置这些</h3>
+<p><code>cronjob</code> 工具的 schema 直接向 Hermes 暴露了 <code>no_agent</code>，因此你可以在聊天中描述一个看门狗，让 agent 来配置它：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Ping me on Telegram if RAM is over 85%, every 5 minutes.
+</div>
+<p>Hermes 会通过 <code>write_file</code> 将检查脚本写入 <code>~/.hermes/scripts/</code>，然后调用：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cronjob(action="create", schedule="every 5m",
+        script="memory-watchdog.sh", no_agent=True,
+        deliver="telegram", name="memory-watchdog")
+</div>
+<p>当消息内容完全由脚本决定时（看门狗、阈值告警、心跳），它会自动选择 <code>no_agent=True</code>。同一工具也让 agent 可以暂停、恢复、编辑和删除任务——整个生命周期都通过聊天驱动，无需任何人接触 CLI。</p>
+<p>参见<a href="/guides/cron-script-only">纯脚本 Cron 任务指南</a>获取实际示例。</p>
+<h2>通过 <code>context_from</code> 串联任务</h2>
+<p>Cron 任务在隔离的会话中运行，不保留之前运行的记忆。但有时一个任务的输出恰好是下一个任务所需的输入。<code>context_from</code> 参数自动建立这种连接——任务 B 的 prompt 在运行时会将任务 A 的最新输出作为上下文前置。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 任务 1：收集原始数据
+cronjob(
+    action="create",
+    prompt="Fetch the top 10 AI/ML stories from Hacker News. Save them to ~/.hermes/data/briefs/raw.md in markdown format with title, URL, and score.",
+    schedule="0 7 * * *",
+    name="AI News Collector",
+)
+
+# 任务 2：分类——接收任务 1 的输出作为上下文
+# 从 cronjob(action="list") 获取任务 1 的 ID
+cronjob(
+    action="create",
+    prompt="Read ~/.hermes/data/briefs/raw.md. Score each story 1–10 for engagement potential and novelty. Output the top 5 to ~/.hermes/data/briefs/ranked.md.",
+    schedule="30 7 * * *",
+    context_from="&lt;job1_id&gt;",
+    name="AI News Triage",
+)
+
+# 任务 3：发布——接收任务 2 的输出作为上下文
+cronjob(
+    action="create",
+    prompt="Read ~/.hermes/data/briefs/ranked.md. Write 3 tweet drafts (hook + body + hashtags). Deliver to telegram:7976161601.",
+    schedule="0 8 * * *",
+    context_from="&lt;job2_id&gt;",
+    name="AI News Brief",
+)
+</div>
+<p><strong>工作原理：</strong></p>
+<ul>
+<li>任务 2 触发时，Hermes 从 <code>~/.hermes/cron/output/{job1_id}/*.md</code> 读取任务 1 的最新输出</li>
+<li>该输出自动前置到任务 2 的 prompt</li>
+<li>任务 2 无需硬编码&quot;读取此文件&quot;——它以上下文形式接收内容</li>
+<li>链可以是任意长度：任务 1 → 任务 2 → 任务 3 → …</li>
+</ul>
+<p><strong><code>context_from</code> 接受的格式：</strong></p>
+<table>
+<thead>
+<tr>
+<th>格式</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单个任务 ID（字符串）</td>
+<td><code>context_from=&quot;a1b2c3d4&quot;</code></td>
+</tr>
+<tr>
+<td>多个任务 ID（列表）</td>
+<td><code>context_from=[&quot;job_a&quot;, &quot;job_b&quot;]</code></td>
+</tr>
+</tbody>
+</table>
+<p>输出按列表顺序拼接。</p>
+<p><strong>适用场景：</strong></p>
+<ul>
+<li>多阶段流水线（收集 → 过滤 → 格式化 → 投递）</li>
+<li>步骤 N 依赖步骤 N−1 输出的依赖任务</li>
+<li>一个任务聚合多个其他任务结果的扇入模式</li>
+</ul>
+<h2>Provider 恢复</h2>
+<p>Cron 任务继承你配置的回退 provider 和凭证池轮换。如果主 API key 被限速或 provider 返回错误，cron agent 可以：</p>
+<ul>
+<li><strong>回退到备用 provider</strong>，前提是你在 <code>config.yaml</code> 中配置了 <code>fallback_providers</code>（或旧版 <code>fallback_model</code>）</li>
+<li><strong>轮换到下一个凭证</strong>，即同一 provider 的<a href="/user-guide/configuration#credential-pool-strategies">凭证池</a>中的下一个</li>
+</ul>
+<p>这意味着高频运行或在高峰时段运行的 cron 任务更具弹性——单个被限速的 key 不会导致整次运行失败。</p>
+<h2>调度格式</h2>
+<p>Agent 的最终响应会自动投递——你<strong>无需</strong>在 cron prompt 中为同一目标包含 <code>send_message</code>。如果 cron 运行调用了 <code>send_message</code> 且目标与调度器已投递的目标完全相同，Hermes 会跳过该重复发送，并告知模型将面向用户的内容放在最终响应中。仅对额外或不同的目标使用 <code>send_message</code>。</p>
+<h3>相对延迟（一次性）</h3>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+30m     → 30 分钟后运行一次
+2h      → 2 小时后运行一次
+1d      → 1 天后运行一次
+</div>
+<h3>间隔（周期性）</h3>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+every 30m    → 每 30 分钟
+every 2h     → 每 2 小时
+every 1d     → 每天
+</div>
+<h3>Cron 表达式</h3>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+0 9 * * *       → 每天上午 9:00
+0 9 * * 1-5     → 工作日上午 9:00
+0 */6 * * *     → 每 6 小时
+30 8 1 * *      → 每月 1 日上午 8:30
+0 0 * * 0       → 每周日午夜
+</div>
+<h3>ISO 时间戳</h3>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+2026-03-15T09:00:00    → 2026 年 3 月 15 日上午 9:00 一次性运行
+</div>
+<h2>重复行为</h2>
+<table>
+<thead>
+<tr>
+<th>调度类型</th>
+<th>默认重复次数</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一次性（<code>30m</code>、时间戳）</td>
+<td>1</td>
+<td>运行一次</td>
+</tr>
+<tr>
+<td>间隔（<code>every 2h</code>）</td>
+<td>永久</td>
+<td>运行直到删除</td>
+</tr>
+<tr>
+<td>Cron 表达式</td>
+<td>永久</td>
+<td>运行直到删除</td>
+</tr>
+</tbody>
+</table>
+<p>可以覆盖：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cronjob(
+    action="create",
+    prompt="...",
+    schedule="every 2h",
+    repeat=5,
+)
+</div>
+<h2>以编程方式管理任务</h2>
+<p>面向 agent 的 API 是单一工具：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cronjob(action="create", ...)
+cronjob(action="list")
+cronjob(action="update", job_id="...")
+cronjob(action="pause", job_id="...")
+cronjob(action="resume", job_id="...")
+cronjob(action="run", job_id="...")
+cronjob(action="remove", job_id="...")
+</div>
+<p>对于 <code>update</code>，传入 <code>skills=[]</code> 可删除所有已附加的 skill。</p>
+<h2>Cron 任务可用的工具集</h2>
+<p>Cron 在全新的 agent 会话中运行每个任务，不附加任何聊天平台。默认情况下，cron agent 获得<strong>你在 <code>hermes tools</code> 中为 <code>cron</code> 平台配置的工具集</strong>——不是 CLI 默认值，也不是所有工具。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes tools
+# → 在 curses UI 中选择 "cron" 平台
+# → 像 Telegram/Discord 等平台一样切换工具集开关
+</div>
+<p>通过 <code>cronjob.create</code>（或通过 <code>cronjob.update</code> 对现有任务）上的 <code>enabled_toolsets</code> 字段可进行更精细的单任务控制：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cronjob(action="create", name="weekly-news-summary",
+        schedule="every sunday 9am",
+        enabled_toolsets=["web", "file"],      # 仅 web + file，无 terminal/browser 等
+        prompt="Summarize this week's AI news: ...")
+</div>
+<p>当任务上设置了 <code>enabled_toolsets</code> 时，它优先生效；否则 <code>hermes tools</code> 的 cron 平台配置生效；否则 Hermes 回退到内置默认值。这对成本控制很重要：在每个小型&quot;获取新闻&quot;任务中携带 <code>moa</code>、<code>browser</code>、<code>delegation</code> 会在每次 LLM 调用时膨胀工具 schema prompt。</p>
+<h3>完全跳过 agent：<code>wakeAgent</code></h3>
+<p>如果你的 cron 任务附加了预检脚本（通过 <code>script=</code>），脚本可以在运行时决定 Hermes 是否应该调用 agent。在 stdout 最后一行输出如下格式：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{"wakeAgent": false}
+</div>
+<p>……cron 将完全跳过本次 tick 的 agent 运行。适用于高频轮询（每 1–5 分钟），只在状态实际发生变化时才需要唤醒 LLM——否则你会为一遍遍的零内容 agent 轮次付费。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 预检脚本
+import json, sys
+latest = fetch_latest_issue_count()
+prev = read_state("issue_count")
+if latest == prev:
+    print(json.dumps({"wakeAgent": False}))   # 跳过本次 tick
+    sys.exit(0)
+write_state("issue_count", latest)
+print(json.dumps({"wakeAgent": True, "context": {"new_issues": latest - prev}}))
+</div>
+<p>省略 <code>wakeAgent</code> 时，默认为 <code>true</code>（照常唤醒 agent）。</p>
+<h4>实用方案：低成本预运行门控</h4>
+<p><code>wakeAgent</code> 门控提供了一种零成本的方式，用于决定定时任务是否应该消耗任何 LLM token。三种模式覆盖了大多数使用场景。</p>
+<p><strong>文件变更门控</strong>——仅在被监视文件自上次成功 tick 以来有新内容时运行。调度器记录每个任务的 <code>last_run_at</code>；将其与文件的 mtime 比较。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+#!/bin/bash
+# ~/.hermes/scripts/feed-changed.sh
+FEED="$HOME/data/feed.json"
+STATE="$HOME/.hermes/scripts/.feed-changed.last"
+test -f "$FEED" || { echo '{"wakeAgent": false}'; exit 0; }
+mtime=$(stat -c %Y "$FEED")
+last=$(cat "$STATE" 2&gt;/dev/null || echo 0)
+if [ "$mtime" -le "$last" ]; then
+  echo '{"wakeAgent": false}'
+else
+  echo "$mtime" &gt; "$STATE"
+  echo '{"wakeAgent": true}'
+fi
+</div>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cronjob(action="create", name="process-feed",
+        schedule="every 30m",
+        script="feed-changed.sh",
+        prompt="A new ~/data/feed.json has landed. Summarize what changed.")
+</div>
+<p><strong>外部标志门控</strong>——仅在其他进程发出就绪信号时运行（例如，部署 hook 落下一个文件，CI 任务在状态存储中设置一个值）。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+#!/bin/bash
+# ~/.hermes/scripts/flag-ready.sh
+if test -f /tmp/new-data-ready; then
+  rm -f /tmp/new-data-ready
+  echo '{"wakeAgent": true}'
+else
+  echo '{"wakeAgent": false}'
+fi
+</div>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cronjob(action="create", name="nightly-analysis",
+        schedule="0 9 * * *",
+        script="flag-ready.sh",
+        prompt="Run the nightly analysis over today's batch.")
+</div>
+<p><strong>SQL 计数门控</strong>——仅在你自己的数据库中有新行需要处理时运行。脚本还可以通过 <code>context</code> 将计数传递给 agent，让 agent 无需重新查询就知道数据量。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+#!/usr/bin/env python
+# ~/.hermes/scripts/new-rows.py
+import json, sqlite3
+conn = sqlite3.connect("/home/me/data/app.db")
+n = conn.execute(
+    "SELECT COUNT(*) FROM messages WHERE ts &gt; strftime('%s','now','-2 hours')"
+).fetchone()[0]
+if n &lt; 1:
+    print(json.dumps({"wakeAgent": False}))
+else:
+    print(json.dumps({"wakeAgent": True, "context": {"new_rows": n}}))
+</div>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cronjob(action="create", name="summarize-new-msgs",
+        schedule="every 2h",
+        script="new-rows.py",
+        prompt="Summarize the new messages from the last 2 hours.")
+</div>
+<p>同样的模式适用于任何可以从脚本查询的数据源——Postgres、HTTP API、你自己的状态存储——无需将 SQL 求值器内置到 cron 子系统中。</p>
+<div class="tip"><strong>💡 提示</strong>
+Hermes 自身的 <code>~/.hermes/state.db</code> 是内部 schema，会在版本间变更。不要从预运行门控中查询它——指向你自己的数据库或 feed。
+</div>
+<p>致谢：此方案集由 @iankar8 在 <a href="https://github.com/NousResearch/hermes-agent/pull/2654">#2654</a> 中的探索所启发，该 PR 提议将 sql/file/command 触发器作为并行机制添加。<code>script</code> + <code>wakeAgent</code> 门控已以零成本覆盖了所有三种情况，因此该工作以文档形式落地。</p>
+<h3>串联任务：<code>context_from</code></h3>
+<p>Cron 任务可以通过在 <code>context_from</code> 中列出其他任务的名称（或 ID）来消费这些任务最近一次成功运行的输出：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cronjob(action="create", name="daily-digest",
+        schedule="every day 7am",
+        context_from=["ai-news-fetch", "github-prs-fetch"],
+        prompt="Write the daily digest using the outputs above.")
+</div>
+<p>被引用任务最近一次完成的输出会作为上下文注入到本次运行的 prompt 之上。每个上游条目必须是有效的任务 ID 或名称（参见 <code>cronjob action=&quot;list&quot;</code>）。注意：串联读取的是<em>最近一次完成</em>的输出——它不会等待同一 tick 中正在运行的上游任务。</p>
+<h2>任务存储</h2>
+<p>任务存储在 <code>~/.hermes/cron/jobs.json</code>。任务运行的输出保存到 <code>~/.hermes/cron/output/{job_id}/{timestamp}.md</code>。</p>
+<p>任务可能将 <code>model</code> 和 <code>provider</code> 存储为 <code>null</code>。省略这些字段时，Hermes 在执行时从全局配置中解析它们。只有设置了单任务覆盖时，这些字段才会出现在任务记录中。</p>
+<p>存储使用原子文件写入，因此中断的写入不会留下部分写入的任务文件。</p>
+<h2>自包含的 prompt 仍然重要</h2>
+<div class="tip warning"><strong>⚠️ 重要</strong>
+Cron 任务在完全全新的 agent 会话中运行。Prompt 必须包含 agent 所需的一切，除非已由附加的 skill 提供。
+</div>
+<p><strong>错误：</strong> <code>&quot;Check on that server issue&quot;</code></p>
+<p><strong>正确：</strong> <code>&quot;SSH into server 192.168.1.100 as user 'deploy', check if nginx is running with 'systemctl status nginx', and verify https://example.com returns HTTP 200.&quot;</code></p>
+<h2>安全性</h2>
+<p>定时任务的 prompt 在创建和更新时会扫描 prompt 注入和凭证外泄模式。包含不可见 Unicode 技巧、SSH 后门尝试或明显的密钥外泄载荷的 prompt 会被拦截。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,442 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memory Provider 插件 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 开发者指南 / Memory Provider 插件</div><p>Memory provider 插件为 Hermes Agent 提供跨会话的持久化知识，超越内置的 MEMORY.md 和 USER.md。本指南介绍如何构建一个 memory provider 插件。</p>
+<div class="tip"><strong>💡 提示</strong>
+Memory provider 是两种 <strong>provider 插件</strong>类型之一。另一种是 <a href="/developer-guide/context-engine-plugin">Context Engine 插件</a>，用于替换内置的上下文压缩器。两者遵循相同的模式：单选、配置驱动、通过 <code>hermes plugins</code> 管理。
+</div>
+<h2>目录结构</h2>
+<p>每个 memory provider 位于 <code>plugins/memory/&lt;name&gt;/</code>：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+plugins/memory/my-provider/
+├── __init__.py      # MemoryProvider 实现 + register() 入口点
+├── plugin.yaml      # 元数据（name、description、hooks）
+└── README.md        # 配置说明、配置参考、工具
+</div>
+<h2>MemoryProvider 抽象基类</h2>
+<p>你的插件需要实现 <code>agent/memory_provider.py</code> 中的 <code>MemoryProvider</code> 抽象基类（ABC）：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from agent.memory_provider import MemoryProvider
+
+class MyMemoryProvider(MemoryProvider):
+    @property
+    def name(self) -&gt; str:
+        return "my-provider"
+
+    def is_available(self) -&gt; bool:
+        """检查此 provider 是否可以激活。禁止发起网络请求。"""
+        return bool(os.environ.get("MY_API_KEY"))
+
+    def initialize(self, session_id: str, **kwargs) -&gt; None:
+        """在 agent 启动时调用一次。
+
+        kwargs 始终包含：
+          hermes_home (str): 当前活跃的 HERMES_HOME 路径。用于存储数据。
+        """
+        self._api_key = os.environ.get("MY_API_KEY", "")
+        self._session_id = session_id
+
+    # ... 实现其余方法
+</div>
+<h2>必须实现的方法</h2>
+<h3>核心生命周期</h3>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>调用时机</th>
+<th>是否必须实现？</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code>（property）</td>
+<td>始终</td>
+<td><strong>是</strong></td>
+</tr>
+<tr>
+<td><code>is_available()</code></td>
+<td>agent 初始化，激活前</td>
+<td><strong>是</strong> — 禁止网络请求</td>
+</tr>
+<tr>
+<td><code>initialize(session_id, **kwargs)</code></td>
+<td>agent 启动</td>
+<td><strong>是</strong></td>
+</tr>
+<tr>
+<td><code>get_tool_schemas()</code></td>
+<td>初始化后，用于注入工具</td>
+<td><strong>是</strong></td>
+</tr>
+<tr>
+<td><code>handle_tool_call(name, args)</code></td>
+<td>agent 调用你的工具时</td>
+<td><strong>是</strong>（如果有工具）</td>
+</tr>
+</tbody>
+</table>
+<h3>配置</h3>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>用途</th>
+<th>是否必须实现？</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>get_config_schema()</code></td>
+<td>为 <code>hermes memory setup</code> 声明配置字段</td>
+<td><strong>是</strong></td>
+</tr>
+<tr>
+<td><code>save_config(values, hermes_home)</code></td>
+<td>将非敏感配置写入原生位置</td>
+<td><strong>是</strong>（除非仅使用环境变量）</td>
+</tr>
+</tbody>
+</table>
+<h3>可选 Hook</h3>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>调用时机</th>
+<th>使用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>system_prompt_block()</code></td>
+<td>系统 prompt 组装时</td>
+<td>静态 provider 信息</td>
+</tr>
+<tr>
+<td><code>prefetch(query)</code></td>
+<td>每次 API 调用前</td>
+<td>返回召回的上下文</td>
+</tr>
+<tr>
+<td><code>queue_prefetch(query)</code></td>
+<td>每轮对话结束后</td>
+<td>为下一轮预热</td>
+</tr>
+<tr>
+<td><code>sync_turn(user, assistant)</code></td>
+<td>每轮对话完成后</td>
+<td>持久化对话内容</td>
+</tr>
+<tr>
+<td><code>on_session_end(messages)</code></td>
+<td>对话结束时</td>
+<td>最终提取/刷新</td>
+</tr>
+<tr>
+<td><code>on_pre_compress(messages)</code></td>
+<td>上下文压缩前</td>
+<td>在丢弃前保存关键信息</td>
+</tr>
+<tr>
+<td><code>on_memory_write(action, target, content)</code></td>
+<td>内置 memory 写入时</td>
+<td>同步到你的后端</td>
+</tr>
+<tr>
+<td><code>shutdown()</code></td>
+<td>进程退出时</td>
+<td>清理连接</td>
+</tr>
+</tbody>
+</table>
+<h2>配置 Schema</h2>
+<p><code>get_config_schema()</code> 返回一个字段描述符列表，供 <code>hermes memory setup</code> 使用：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def get_config_schema(self):
+    return [
+        {
+            "key": "api_key",
+            "description": "My Provider API key",
+            "secret": True,           # → 写入 .env
+            "required": True,
+            "env_var": "MY_API_KEY",   # 显式指定环境变量名
+            "url": "https://my-provider.com/keys",  # 获取密钥的地址
+        },
+        {
+            "key": "region",
+            "description": "Server region",
+            "default": "us-east",
+            "choices": ["us-east", "eu-west", "ap-south"],
+        },
+        {
+            "key": "project",
+            "description": "Project identifier",
+            "default": "hermes",
+        },
+    ]
+</div>
+<p><code>secret: True</code> 且带有 <code>env_var</code> 的字段写入 <code>.env</code>。非敏感字段传递给 <code>save_config()</code>。</p>
+<div class="tip"><strong>💡 最简 Schema 与完整 Schema</strong>
+<code>get_config_schema()</code> 中的每个字段都会在 <code>hermes memory setup</code> 期间提示用户输入。选项较多的 provider 应保持 schema 精简——只包含用户<strong>必须</strong>配置的字段（API key、必要凭证）。可选配置请在配置文件参考文档中说明（例如 <code>$HERMES_HOME/myprovider.json</code>），而不是在 setup 向导中逐一提示。这样既能保持 setup 流程简洁，又支持高级配置。可参考 Supermemory provider 的实现——它只提示输入 API key，其余选项均位于 <code>supermemory.json</code> 中。
+</div>
+<h2>保存配置</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def save_config(self, values: dict, hermes_home: str) -&gt; None:
+    """将非敏感配置写入原生位置。"""
+    import json
+    from pathlib import Path
+    config_path = Path(hermes_home) / "my-provider.json"
+    config_path.write_text(json.dumps(values, indent=2))
+</div>
+<p>对于仅使用环境变量的 provider，保留默认的空实现即可。</p>
+<h2>插件入口点</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def register(ctx) -&gt; None:
+    """由 memory 插件发现系统调用。"""
+    ctx.register_memory_provider(MyMemoryProvider())
+</div>
+<h2>plugin.yaml</h2>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+name: my-provider
+version: 1.0.0
+description: "此 provider 功能的简短描述。"
+hooks:
+  - on_session_end    # 列出你实现的 hook
+</div>
+<h2>线程约定</h2>
+<p><strong><code>sync_turn()</code> 必须是非阻塞的。</strong> 如果你的后端存在延迟（API 调用、LLM 处理），请在守护线程中执行：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def sync_turn(self, user_content, assistant_content):
+    def _sync():
+        try:
+            self._api.ingest(user_content, assistant_content)
+        except Exception as e:
+            logger.warning("Sync failed: %s", e)
+
+    if self._sync_thread and self._sync_thread.is_alive():
+        self._sync_thread.join(timeout=5.0)
+    self._sync_thread = threading.Thread(target=_sync, daemon=True)
+    self._sync_thread.start()
+</div>
+<h2>Profile 隔离</h2>
+<p>所有存储路径<strong>必须</strong>使用 <code>initialize()</code> 中的 <code>hermes_home</code> kwarg，而不是硬编码的 <code>~/.hermes</code>：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 正确 — 按 profile 隔离
+from hermes_constants import get_hermes_home
+data_dir = get_hermes_home() / "my-provider"
+
+# 错误 — 所有 profile 共享
+data_dir = Path("~/.hermes/my-provider").expanduser()
+</div>
+<h2>测试</h2>
+<p>完整的端到端测试模式（使用真实 SQLite provider）请参见 <code>tests/agent/test_memory_plugin_e2e.py</code>。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from agent.memory_manager import MemoryManager
+
+mgr = MemoryManager()
+mgr.add_provider(my_provider)
+mgr.initialize_all(session_id="test-1", platform="cli")
+
+# 测试工具路由
+result = mgr.handle_tool_call("my_tool", {"action": "add", "content": "test"})
+
+# 测试生命周期
+mgr.sync_all("user msg", "assistant msg")
+mgr.on_session_end([])
+mgr.shutdown_all()
+</div>
+<h2>添加 CLI 命令</h2>
+<p>Memory provider 插件可以注册自己的 CLI 子命令树（例如 <code>hermes my-provider status</code>、<code>hermes my-provider config</code>）。这套系统基于约定发现，无需修改核心文件。</p>
+<h3>工作原理</h3>
+<ol>
+<li>在插件目录中添加 <code>cli.py</code> 文件</li>
+<li>定义 <code>register_cli(subparser)</code> 函数来构建 argparse 树</li>
+<li>memory 插件系统在启动时通过 <code>discover_plugin_cli_commands()</code> 自动发现</li>
+<li>你的命令以 <code>hermes &lt;provider-name&gt; &lt;subcommand&gt;</code> 的形式出现</li>
+</ol>
+<p><strong>仅对活跃 provider 开放：</strong> 你的 CLI 命令只在你的 provider 是配置中活跃的 <code>memory.provider</code> 时才会出现。如果用户尚未配置你的 provider，你的命令不会显示在 <code>hermes --help</code> 中。</p>
+<h3>示例</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# plugins/memory/my-provider/cli.py
+
+def my_command(args):
+    """由 argparse 分发的处理函数。"""
+    sub = getattr(args, "my_command", None)
+    if sub == "status":
+        print("Provider is active and connected.")
+    elif sub == "config":
+        print("Showing config...")
+    else:
+        print("Usage: hermes my-provider &lt;status|config&gt;")
+
+def register_cli(subparser) -&gt; None:
+    """构建 hermes my-provider 的 argparse 树。
+
+    在 argparse 初始化时由 discover_plugin_cli_commands() 调用。
+    """
+    subs = subparser.add_subparsers(dest="my_command")
+    subs.add_parser("status", help="Show provider status")
+    subs.add_parser("config", help="Show provider config")
+    subparser.set_defaults(func=my_command)
+</div>
+<h3>参考实现</h3>
+<p>完整示例请参见 <code>plugins/memory/honcho/cli.py</code>，包含 13 个子命令、跨 profile 管理（<code>--target-profile</code>）以及配置读写。</p>
+<h3>含 CLI 的目录结构</h3>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+plugins/memory/my-provider/
+├── __init__.py      # MemoryProvider 实现 + register()
+├── plugin.yaml      # 元数据
+├── cli.py           # register_cli(subparser) — CLI 命令
+└── README.md        # 配置说明
+</div>
+<h2>单 Provider 规则</h2>
+<p>同一时间只能有<strong>一个</strong>外部 memory provider 处于活跃状态。如果用户尝试注册第二个，MemoryManager 会拒绝并发出警告。这可以防止工具 schema 膨胀和后端冲突。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

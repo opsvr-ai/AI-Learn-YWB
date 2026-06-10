@@ -1,0 +1,398 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Faiss — Facebook 用于高效相似性搜索和密集向量聚类的库 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Faiss — Facebook 用于高效相似性搜索和密集向量聚类的库</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Faiss</h1>
+<p>Facebook 用于高效相似性搜索和密集向量聚类的库。支持数十亿向量、GPU 加速以及多种索引类型（Flat、IVF、HNSW）。适用于快速 k-NN 搜索、大规模向量检索，或仅需纯相似性搜索而无需元数据的场景。最适合高性能应用。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/mlops/faiss</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/mlops/faiss</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Orchestra Research</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>依赖项</td>
+<td><code>faiss-cpu</code>, <code>faiss-gpu</code>, <code>numpy</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>RAG</code>, <code>FAISS</code>, <code>Similarity Search</code>, <code>Vector Search</code>, <code>Facebook AI</code>, <code>GPU Acceleration</code>, <code>Billion-Scale</code>, <code>K-NN</code>, <code>HNSW</code>, <code>High Performance</code>, <code>Large Scale</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 skill 激活时 agent 所看到的指令内容。
+</div>
+<h1>FAISS - 高效相似性搜索</h1>
+<p>Facebook AI 用于十亿级向量相似性搜索的库。</p>
+<h2>何时使用 FAISS</h2>
+<p><strong>在以下情况下使用 FAISS：</strong></p>
+<ul>
+<li>需要对大型向量数据集（百万/十亿级）进行快速相似性搜索</li>
+<li>需要 GPU 加速</li>
+<li>纯向量相似性搜索（无需元数据过滤）</li>
+<li>对高吞吐量、低延迟有严格要求</li>
+<li>对 embedding（嵌入向量）进行离线/批量处理</li>
+</ul>
+<p><strong>指标</strong>：</p>
+<ul>
+<li><strong>GitHub 31,700+ 星</strong></li>
+<li>Meta/Facebook AI Research 出品</li>
+<li><strong>支持数十亿向量</strong></li>
+<li><strong>C++</strong> 并提供 Python 绑定</li>
+</ul>
+<p><strong>以下情况请使用替代方案</strong>：</p>
+<ul>
+<li><strong>Chroma/Pinecone</strong>：需要元数据过滤</li>
+<li><strong>Weaviate</strong>：需要完整数据库功能</li>
+<li><strong>Annoy</strong>：更简单，功能较少</li>
+</ul>
+<h2>快速开始</h2>
+<h3>安装</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 仅 CPU
+pip install faiss-cpu
+<h1>GPU 支持</h1>
+<p>pip install faiss-gpu</p>
+</div>
+<h3>基本用法</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import faiss
+import numpy as np
+<h1>创建示例数据（1000 个向量，128 维）</h1>
+<p>d = 128
+nb = 1000
+vectors = np.random.random((nb, d)).astype('float32')</p>
+<h1>创建索引</h1>
+<p>index = faiss.IndexFlatL2(d)  # L2 距离
+index.add(vectors)             # 添加向量</p>
+<h1>搜索</h1>
+<p>k = 5  # 查找 5 个最近邻
+query = np.random.random((1, d)).astype('float32')
+distances, indices = index.search(query, k)</p>
+<p>print(f&quot;Nearest neighbors: {indices}&quot;)
+print(f&quot;Distances: {distances}&quot;)</p>
+</div>
+<h2>索引类型</h2>
+<h3>1. Flat（精确搜索）</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# L2（欧氏）距离
+index = faiss.IndexFlatL2(d)
+<h1>内积（归一化后等同于余弦相似度）</h1>
+<p>index = faiss.IndexFlatIP(d)</p>
+<h1>速度最慢，精度最高</h1>
+</div>
+<h3>2. IVF（倒排文件）- 快速近似搜索</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 创建量化器
+quantizer = faiss.IndexFlatL2(d)
+<h1>含 100 个聚类的 IVF 索引</h1>
+<p>nlist = 100
+index = faiss.IndexIVFFlat(quantizer, d, nlist)</p>
+<h1>在数据上训练</h1>
+<p>index.train(vectors)</p>
+<h1>添加向量</h1>
+<p>index.add(vectors)</p>
+<h1>搜索（nprobe = 搜索的聚类数）</h1>
+<p>index.nprobe = 10
+distances, indices = index.search(query, k)</p>
+</div>
+<h3>3. HNSW（分层小世界图）- 质量/速度最佳平衡</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# HNSW 索引
+M = 32  # 每层连接数
+index = faiss.IndexHNSWFlat(d, M)
+<h1>无需训练</h1>
+<p>index.add(vectors)</p>
+<h1>搜索</h1>
+<p>distances, indices = index.search(query, k)</p>
+</div>
+<h3>4. 乘积量化（Product Quantization）- 内存高效</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# PQ 可将内存减少 16-32 倍
+m = 8   # 子量化器数量
+nbits = 8
+index = faiss.IndexPQ(d, m, nbits)
+<h1>训练并添加</h1>
+<p>index.train(vectors)
+index.add(vectors)</p>
+</div>
+<h2>保存与加载</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 保存索引
+faiss.write_index(index, "large.index")
+<h1>加载索引</h1>
+<p>index = faiss.read_index(&quot;large.index&quot;)</p>
+<h1>继续使用</h1>
+<p>distances, indices = index.search(query, k)</p>
+</div>
+<h2>GPU 加速</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 单 GPU
+res = faiss.StandardGpuResources()
+index_cpu = faiss.IndexFlatL2(d)
+index_gpu = faiss.index_cpu_to_gpu(res, 0, index_cpu)  # GPU 0
+<h1>多 GPU</h1>
+<p>index_gpu = faiss.index_cpu_to_all_gpus(index_cpu)</p>
+<h1>比 CPU 快 10-100 倍</h1>
+</div>
+<h2>LangChain 集成</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from langchain_community.vectorstores import FAISS
+from langchain_openai import OpenAIEmbeddings
+<h1>创建 FAISS 向量存储</h1>
+<p>vectorstore = FAISS.from_documents(docs, OpenAIEmbeddings())</p>
+<h1>保存</h1>
+<p>vectorstore.save_local(&quot;faiss_index&quot;)</p>
+<h1>加载</h1>
+<p>vectorstore = FAISS.load_local(
+&quot;faiss_index&quot;,
+OpenAIEmbeddings(),
+allow_dangerous_deserialization=True
+)</p>
+<h1>搜索</h1>
+<p>results = vectorstore.similarity_search(&quot;query&quot;, k=5)</p>
+</div>
+<h2>LlamaIndex 集成</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from llama_index.vector_stores.faiss import FaissVectorStore
+import faiss
+<h1>创建 FAISS 索引</h1>
+<p>d = 1536
+faiss_index = faiss.IndexFlatL2(d)</p>
+<p>vector_store = FaissVectorStore(faiss_index=faiss_index)</p>
+</div>
+<h2>最佳实践</h2>
+<ol>
+<li><strong>选择合适的索引类型</strong> — 10K 以下用 Flat，10K-1M 用 IVF，追求质量用 HNSW</li>
+<li><strong>余弦相似度需归一化</strong> — 对归一化向量使用 IndexFlatIP</li>
+<li><strong>大数据集使用 GPU</strong> — 速度提升 10-100 倍</li>
+<li><strong>保存已训练的索引</strong> — 训练成本较高</li>
+<li><strong>调整 nprobe/ef_search</strong> — 平衡速度与精度</li>
+<li><strong>监控内存使用</strong> — 大数据集使用 PQ</li>
+<li><strong>批量查询</strong> — 提升 GPU 利用率</li>
+</ol>
+<h2>性能对比</h2>
+<table>
+<thead>
+<tr>
+<th>索引类型</th>
+<th>构建时间</th>
+<th>搜索时间</th>
+<th>内存占用</th>
+<th>精度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Flat</td>
+<td>快</td>
+<td>慢</td>
+<td>高</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>IVF</td>
+<td>中等</td>
+<td>快</td>
+<td>中等</td>
+<td>95-99%</td>
+</tr>
+<tr>
+<td>HNSW</td>
+<td>慢</td>
+<td>最快</td>
+<td>高</td>
+<td>99%</td>
+</tr>
+<tr>
+<td>PQ</td>
+<td>中等</td>
+<td>快</td>
+<td>低</td>
+<td>90-95%</td>
+</tr>
+</tbody>
+</table>
+<h2>资源</h2>
+<ul>
+<li><strong>GitHub</strong>：https://github.com/facebookresearch/faiss ⭐ 31,700+</li>
+<li><strong>Wiki</strong>：https://github.com/facebookresearch/faiss/wiki</li>
+<li><strong>许可证</strong>：MIT</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

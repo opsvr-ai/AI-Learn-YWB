@@ -1,0 +1,408 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>教程：GitHub PR 审查 Agent - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html" class="active">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 实用指南 / 教程：GitHub PR 审查 Agent</div><p><strong>问题所在：</strong> 团队提交 PR 的速度比你审查的速度还快。PR 等待数天无人问津。初级开发者因为没人检查而合并了有 bug 的代码。你每天早上都在追赶 diff，而不是在写新功能。</p>
+<p><strong>解决方案：</strong> 一个全天候监控你的仓库的 AI agent，对每个新 PR 进行 bug、安全问题和代码质量审查，并向你发送摘要——这样你只需把时间花在真正需要人工判断的 PR 上。</p>
+<p><strong>你将构建的内容：</strong></p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+┌───────────────────────────────────────────────────────────────────┐
+│                                                                   │
+│   Cron Timer  ──▶  Hermes Agent  ──▶  GitHub API  ──▶  Review     │
+│   (every 2h)       + gh CLI           (PR diffs)       delivery   │
+│                    + skill                             (Telegram, │
+│                    + memory                            Discord,   │
+│                                                        local)     │
+│                                                                   │
+└───────────────────────────────────────────────────────────────────┘
+</div>
+<p>本指南使用 <strong>cron 任务</strong>按计划轮询 PR——无需服务器或公开端点，在 NAT 和防火墙后面同样可用。</p>
+<div class="tip"><strong>💡 想要实时审查？</strong>
+如果你有可用的公开端点，请查看<a href="./webhook-github-pr-review.html">使用 Webhook 自动化 GitHub PR 评论</a>——GitHub 会在 PR 被打开或更新时立即向 Hermes 推送事件。
+</div>
+<hr />
+<h2>前提条件</h2>
+<ul>
+<li><strong>已安装 Hermes Agent</strong> — 参见<a href="/getting-started/installation">安装指南</a></li>
+<li><strong>Gateway 已运行</strong>（用于 cron 任务）：</li>
+</ul>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+  hermes gateway install   # Install as a service
+  # or
+  hermes gateway           # Run in foreground
+</div>
+<ul>
+<li><strong>已安装并认证 GitHub CLI（<code>gh</code>）</strong>：</li>
+</ul>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+  # Install
+  brew install gh        # macOS
+  sudo apt install gh    # Ubuntu/Debian
+
+  # Authenticate
+  gh auth login
+</div>
+<ul>
+<li><strong>已配置消息通知</strong>（可选）— <a href="/user-guide/messaging/telegram">Telegram</a> 或 <a href="/user-guide/messaging/discord">Discord</a></li>
+</ul>
+<div class="tip"><strong>💡 没有消息通知？没关系</strong>
+使用 <code>deliver: &quot;local&quot;</code> 将审查结果保存到 <code>~/.hermes/cron/output/</code>。在接入通知之前用于测试非常方便。
+</div>
+<hr />
+<h2>第一步：验证配置</h2>
+<p>确保 Hermes 可以访问 GitHub。启动对话：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes
+</div>
+<p>用一个简单命令测试：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Run: gh pr list --repo NousResearch/hermes-agent --state open --limit 3
+</div>
+<p>你应该能看到一个开放 PR 的列表。如果成功，就可以继续了。</p>
+<hr />
+<h2>第二步：手动试审一个 PR</h2>
+<p>仍在对话中，让 Hermes 审查一个真实的 PR：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Review this pull request. Read the diff, check for bugs, security issues,
+and code quality. Be specific about line numbers and quote problematic code.
+
+Run: gh pr diff 3888 --repo NousResearch/hermes-agent
+</div>
+<p>Hermes 将会：</p>
+<ol>
+<li>执行 <code>gh pr diff</code> 获取代码变更</li>
+<li>通读整个 diff</li>
+<li>生成包含具体发现的结构化审查报告</li>
+</ol>
+<p>如果你对审查质量满意，就可以开始自动化了。</p>
+<hr />
+<h2>第三步：创建审查 Skill</h2>
+<p>Skill 为 Hermes 提供一致的审查准则，在会话和 cron 运行之间持久保存。没有 skill，审查质量会参差不齐。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mkdir -p ~/.hermes/skills/code-review
+</div>
+<p>创建 <code>~/.hermes/skills/code-review/SKILL.md</code>：</p>
+<div class="code-block"><span class="code-lang">markdown</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+---
+name: code-review
+description: Review pull requests for bugs, security issues, and code quality
+---
+
+# Code Review Guidelines
+
+When reviewing a pull request:
+
+## What to Check
+1. **Bugs** — Logic errors, off-by-one, null/undefined handling
+2. **Security** — Injection, auth bypass, secrets in code, SSRF
+3. **Performance** — N+1 queries, unbounded loops, memory leaks
+4. **Style** — Naming conventions, dead code, missing error handling
+5. **Tests** — Are changes tested? Do tests cover edge cases?
+
+## Output Format
+For each finding:
+- **File:Line** — exact location
+- **Severity** — Critical / Warning / Suggestion
+- **What's wrong** — one sentence
+- **Fix** — how to fix it
+
+## Rules
+- Be specific. Quote the problematic code.
+- Don't flag style nitpicks unless they affect readability.
+- If the PR looks good, say so. Don't invent problems.
+- End with: APPROVE / REQUEST_CHANGES / COMMENT
+</div>
+<p>验证是否已加载——启动 <code>hermes</code>，你应该能在启动时的 skill 列表中看到 <code>code-review</code>。</p>
+<hr />
+<h2>第四步：教会它你的团队规范</h2>
+<p>这才是让审查器真正有用的关键。启动一个会话，向 Hermes 传授你的团队标准：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Remember: In our backend repo, we use Python with FastAPI.
+All endpoints must have type annotations and Pydantic models.
+We don't allow raw SQL — only SQLAlchemy ORM.
+Test files go in tests/ and must use pytest fixtures.
+</div>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Remember: In our frontend repo, we use TypeScript with React.
+No `any` types allowed. All components must have props interfaces.
+We use React Query for data fetching, never useEffect for API calls.
+</div>
+<p>这些记忆会永久保存——审查器无需每次提醒就会自动执行你的规范。</p>
+<hr />
+<h2>第五步：创建自动化 Cron 任务</h2>
+<p>现在把所有内容串联起来。创建一个每 2 小时运行一次的 cron 任务：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes cron create "0 */2 * * *" \
+  "Check for new open PRs and review them.
+
+Repos to monitor:
+- myorg/backend-api
+- myorg/frontend-app
+
+Steps:
+1. Run: gh pr list --repo REPO --state open --limit 5 --json number,title,author,createdAt
+2. For each PR created or updated in the last 4 hours:
+   - Run: gh pr diff NUMBER --repo REPO
+   - Review the diff using the code-review guidelines
+3. Format output as:
+
+## PR Reviews — today
+
+### [repo] #[number]: [title]
+**Author:** [name] | **Verdict:** APPROVE/REQUEST_CHANGES/COMMENT
+[findings]
+
+If no new PRs found, say: No new PRs to review." \
+  --name "pr-review" \
+  --deliver telegram \
+  --skill code-review
+</div>
+<p>验证任务已调度：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes cron list
+</div>
+<h3>其他常用调度计划</h3>
+<table>
+<thead>
+<tr>
+<th>计划</th>
+<th>触发时机</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0 */2 * * *</code></td>
+<td>每 2 小时</td>
+</tr>
+<tr>
+<td><code>0 9,13,17 * * 1-5</code></td>
+<td>工作日每天三次</td>
+</tr>
+<tr>
+<td><code>0 9 * * 1</code></td>
+<td>每周一早上汇总</td>
+</tr>
+<tr>
+<td><code>30m</code></td>
+<td>每 30 分钟（高流量仓库）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>第六步：按需手动触发</h2>
+<p>不想等待调度？手动触发：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes cron run pr-review
+</div>
+<p>或在对话会话中：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/cron run pr-review
+</div>
+<hr />
+<h2>进阶用法</h2>
+<h3>直接在 GitHub 上发布审查评论</h3>
+<p>不将结果发送到 Telegram，而是让 agent 直接在 PR 上评论：</p>
+<p>在你的 cron prompt（提示词）中添加：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+After reviewing, post your review:
+- For issues: gh pr review NUMBER --repo REPO --comment --body "YOUR_REVIEW"
+- For critical issues: gh pr review NUMBER --repo REPO --request-changes --body "YOUR_REVIEW"
+- For clean PRs: gh pr review NUMBER --repo REPO --approve --body "Looks good"
+</div>
+<div class="tip warning"><strong>⚡ 注意</strong>
+确保 <code>gh</code> 使用的 token 具有 <code>repo</code> 权限范围。审查评论将以 <code>gh</code> 当前认证的用户身份发布。
+</div>
+<h3>每周 PR 看板</h3>
+<p>创建一个每周一早上的仓库概览：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes cron create "0 9 * * 1" \
+  "Generate a weekly PR dashboard:
+- myorg/backend-api
+- myorg/frontend-app
+- myorg/infra
+
+For each repo show:
+1. Open PR count and oldest PR age
+2. PRs merged this week
+3. Stale PRs (older than 5 days)
+4. PRs with no reviewer assigned
+
+Format as a clean summary." \
+  --name "weekly-dashboard" \
+  --deliver telegram
+</div>
+<h3>多仓库监控</h3>
+<p>在 prompt 中添加更多仓库即可扩展规模。Agent 会按顺序处理它们——无需额外配置。</p>
+<hr />
+<h2>故障排查</h2>
+<h3>&quot;gh: command not found&quot;</h3>
+<p>Gateway 在精简环境中运行。请确保 <code>gh</code> 在系统 PATH 中，然后重启 gateway。</p>
+<h3>审查结果过于泛泛</h3>
+<ol>
+<li>添加 <code>code-review</code> skill（第三步）</li>
+<li>通过 memory（记忆）向 Hermes 传授你的团队规范（第四步）</li>
+<li>它对你的技术栈了解越多，审查质量越好</li>
+</ol>
+<h3>Cron 任务未运行</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway status    # Is the gateway running?
+hermes cron list         # Is the job enabled?
+</div>
+<h3>速率限制</h3>
+<p>GitHub 对已认证用户每小时允许 5,000 次 API 请求。每次 PR 审查约消耗 3-5 次请求（列表 + diff + 可选评论）。即使每天审查 100 个 PR，也远低于限制。</p>
+<hr />
+<h2>下一步</h2>
+<ul>
+<li><strong><a href="./webhook-github-pr-review.html">基于 Webhook 的 PR 审查</a></strong> — 在 PR 被打开时立即获得审查（需要公开端点）</li>
+<li><strong><a href="/guides/daily-briefing-bot">每日简报 Bot</a></strong> — 将 PR 审查与你的晨间资讯摘要结合</li>
+<li><strong><a href="/guides/build-a-hermes-plugin">构建 Plugin</a></strong> — 将审查逻辑封装为可共享的 plugin</li>
+<li><strong><a href="/user-guide/profiles">Profiles</a></strong> — 运行一个专属审查器 profile，拥有独立的 memory 和配置</li>
+<li><strong><a href="/user-guide/features/fallback-providers">Fallback Providers</a></strong> — 确保在某个 provider 不可用时审查任务仍能正常运行</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

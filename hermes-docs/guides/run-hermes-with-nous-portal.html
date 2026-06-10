@@ -1,0 +1,368 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>通过 Nous Portal 运行 Hermes Agent - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 实用指南 / 通过 Nous Portal 运行 Hermes Agent</div><p>本指南带你从头到尾完成在 <a href="https://portal.nousresearch.com">Nous Portal</a> 订阅下运行 Hermes Agent 的全过程——从注册账号到验证每个工具的路由是否正确。如果你只想了解 Portal 的概述及订阅内容，请参阅 <a href="/integrations/nous-portal">Nous Portal 集成页面</a>。本页是操作步骤脚本。</p>
+<h2>前提条件</h2>
+<ul>
+<li>已安装 Hermes Agent（<a href="/getting-started/quickstart">快速入门</a>）</li>
+<li>在你正在配置的机器上有可用的浏览器（或 SSH 端口转发——参见 <a href="/guides/oauth-over-ssh">OAuth over SSH</a>）</li>
+<li>约 5 分钟时间</li>
+</ul>
+<p>你<strong>不需要</strong>：OpenAI 密钥、Anthropic 密钥、Firecrawl 账号、FAL 账号、Browser Use 账号，或任何其他按供应商分配的凭证。这正是 Portal 的意义所在。</p>
+<h2>1. 获取订阅</h2>
+<p>打开 <a href="https://portal.nousresearch.com/manage-subscription">portal.nousresearch.com/manage-subscription</a>，注册并选择一个套餐。</p>
+<p>已订阅？跳至第 2 步。</p>
+<h2>2. 运行一键配置</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes setup --portal
+</div>
+<p>这条命令会完成五件事：</p>
+<ol>
+<li>打开浏览器跳转至 portal.nousresearch.com 进行 OAuth 登录</li>
+<li>将 refresh token 存储至 <code>~/.hermes/auth.json</code></li>
+<li>在 <code>~/.hermes/config.yaml</code> 中设置 <code>model.provider: nous</code></li>
+<li>选择一个默认的 agentic 模型（<code>anthropic/claude-sonnet-4.6</code> 或类似模型）</li>
+<li>为网页搜索、图像生成、TTS 和浏览器自动化开启 Tool Gateway</li>
+</ol>
+<p>命令执行完毕后，你将回到终端，可以直接开始对话。</p>
+<h3>如果我通过 SSH 连接到服务器怎么办？</h3>
+<p>OAuth 需要浏览器，但 loopback 回调运行在 Hermes 所在的机器上。有两种方案：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 方案 A：SSH 端口转发（推荐）
+ssh -N -L 8642:127.0.0.1:8642 user@remote-host    # 在本地终端执行
+hermes setup --portal                              # 在远程机器上执行，在本地浏览器中打开打印出的 URL
+
+# 方案 B：手动粘贴（适用于 Cloud Shell、Codespaces、EC2 Instance Connect）
+hermes auth add nous --type oauth --manual-paste
+# 然后重新运行 `hermes setup --portal` 以连接 provider + gateway
+</div>
+<p>完整操作说明（包括 ProxyJump 链、mosh/tmux 和 ControlMaster 注意事项）请参阅 <a href="/guides/oauth-over-ssh">OAuth over SSH / 远程主机</a>。</p>
+<h2>3. 验证配置是否成功</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes portal info
+</div>
+<p>你应该看到：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+  Nous Portal
+  ───────────
+  Auth:    ✓ logged in
+  Portal:  https://portal.nousresearch.com
+  Model:   ✓ using Nous as inference provider
+
+  Tool Gateway
+  ────────────
+  Web search &amp; extract  via Nous Portal
+  Image generation      via Nous Portal
+  Text-to-speech        via Nous Portal
+  Browser automation    via Nous Portal
+</div>
+<p>如果任何一行显示的不是&quot;via Nous Portal&quot;，或者 auth 行显示&quot;not logged in&quot;，请跳至下方的<a href="#troubleshooting">故障排查</a>。</p>
+<h2>4. 运行第一次对话</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes chat
+</div>
+<p>尝试一个同时调用模型和 Tool Gateway 的请求：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Hey, search the web for "Hermes Agent release notes" and summarize the top 3 hits.
+</div>
+<p>你应该看到 Hermes 调用 <code>web_search</code>（通过 gateway 由 Firecrawl 提供支持）并返回摘要。如果搜索正常执行且响应内容合理，说明配置完成——Portal 已端到端连通。</p>
+<h2>5. 选择你实际需要的模型</h2>
+<p><code>hermes setup --portal</code> 会在设置过程中让你选择模型，但订阅的意义在于可以访问完整的模型目录——随时可在会话中使用 <code>/model</code> 切换：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/model anthropic/claude-sonnet-4.6     # 最佳通用 agentic 模型
+/model openai/gpt-5.4                  # 强推理 + 工具调用
+/model google/gemini-2.5-pro           # 超大上下文窗口
+/model deepseek/deepseek-v3.2          # 高性价比编程模型
+/model anthropic/claude-opus-4.6       # 处理复杂问题的重量级模型
+</div>
+<p>或者打开选择器浏览：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/model
+</div>
+<p>永久设置不同的默认模型：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 在终端中，在任何会话之外执行
+hermes config set model.default anthropic/claude-sonnet-4.6
+</div>
+<h3>不要在 agent 任务中使用 Hermes-4</h3>
+<p>Hermes-4-70B 和 Hermes-4-405B 在 Portal 上以大幅折扣提供，但它们是<strong>对话/推理模型</strong>，并非针对工具调用优化的模型。它们在多步骤 agent 循环中表现不佳。请通过 <a href="https://chat.nousresearch.com">Nous Chat</a> 将它们用于对话/研究工作，或通过<a href="/user-guide/features/subscription-proxy">订阅代理</a>从非 agent 工具中使用。对于 Hermes Agent 本身，请坚持使用上述前沿 agentic 模型。</p>
+<p>Portal 的<a href="https://portal.nousresearch.com/info">信息页面</a>也有此说明——这是 Nous 官方指导，并非仅代表 Hermes 一方的意见。</p>
+<h2>6. （可选）自定义 Tool Gateway 路由</h2>
+<p>gateway 是按工具选择启用的，而非全部开启或全部关闭。如果你已有 Browserbase 账号并希望继续使用，同时将网页搜索和图像生成路由至 Nous，这是支持的：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes tools
+# → Web search       → "Nous Subscription"     （推荐）
+# → Image generation → "Nous Subscription"     （推荐）
+# → Browser          → "Browserbase"           （你自己的密钥）
+# → TTS              → "Nous Subscription"     （推荐）
+</div>
+<p>使用以下命令验证你的混合配置：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes portal tools
+</div>
+<p>你将看到每个工具的路由情况——通过订阅路由的工具显示 <code>via Nous Portal</code>，使用你自己密钥的工具显示合作方名称（<code>browserbase</code>、<code>firecrawl</code> 等）。</p>
+<h2>7. （可选）启用语音模式</h2>
+<p>由于 Tool Gateway 包含 OpenAI TTS，无需单独的 OpenAI 密钥即可使用<a href="/user-guide/features/voice-mode">语音模式</a>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes setup voice
+# → 为 TTS 选择 "Nous Subscription"
+# → 选择语音转文字后端（本地 faster-whisper 免费，无需配置）
+</div>
+<p>之后在任何消息平台会话中（Telegram、Discord、Signal 等），发送语音消息，Hermes 将转录内容、生成回复并以合成语音回复——全部通过你的 Portal 订阅完成。</p>
+<h2>8. （可选）Cron 定时任务与常驻工作流</h2>
+<p>Portal 订阅对 <a href="/user-guide/features/cron">cron 定时任务</a>和<a href="/user-guide/features/batch-processing">批处理</a>的支持方式与交互式对话相同——OAuth refresh token 会自动复用。无需额外配置，直接安排 cron 任务，费用将计入你的订阅。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes cron add "Daily AI news summary" "every day at 9am" \
+  "Search the web for top AI news and summarize the 5 most important stories"
+</div>
+<p>该 cron 任务无人值守运行，调用模型、网页搜索和摘要生成，全部通过你的 Portal 订阅完成。</p>
+<h2>Profiles 与多用户配置</h2>
+<p>如果你使用 <a href="/user-guide/profiles">Hermes profiles</a>（例如每个项目单独一套配置），Portal refresh token 会通过共享 token 存储自动在所有 profiles 之间共享。在任意 profile 上登录一次，其余 profiles 会自动获取。</p>
+<p>对于多人共用一台机器的团队场景，每个人有自己的 Portal 账号 → 每个 home 目录保存各自的 <code>~/.hermes/auth.json</code> → 用户之间不共享 token。这是正确的边界划分。</p>
+<h2>故障排查</h2>
+<h3>运行 <code>hermes setup --portal</code> 后，<code>hermes portal info</code> 显示&quot;not logged in&quot;</h3>
+<p>OAuth 流程未完成。重新运行：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes portal
+</div>
+<p>如果浏览器未打开或回调失败，你可能在远程/无头主机上——参见 <a href="/guides/oauth-over-ssh">OAuth over SSH</a> 了解端口转发和手动粘贴的解决方案。</p>
+<h3>&quot;Model: currently openrouter&quot;（或其他 provider）而非&quot;using Nous as inference provider&quot;</h3>
+<p>本地配置发生了偏移。OAuth 成功，但 <code>model.provider</code> 仍指向其他 provider。修复方法：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes config set model.provider nous
+</div>
+<p>或以交互方式：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes model
+# 选择 Nous Portal
+</div>
+<p>使用 <code>hermes portal info</code> 重新验证。</p>
+<h3>Tool Gateway 工具显示合作方名称而非&quot;via Nous Portal&quot;</h3>
+<p>按工具的配置覆盖了 gateway 设置。运行：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes tools
+# 对需要通过 gateway 路由的工具选择 "Nous Subscription"
+</div>
+<p>部分用户会有意混合使用——例如网页搜索通过 Nous 路由，但浏览器使用自己的 Browserbase 密钥。如果这是有意为之，保持不变即可。如果不是，此命令可修复。</p>
+<h3>会话中途出现&quot;Re-authentication required&quot;</h3>
+<p>你的 Portal refresh token 已失效（密码更改、手动撤销、会话过期）。该 token 现已在本地被隔离，以防 Hermes 无限重试。重新登录即可：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes auth add nous
+</div>
+<p>成功重新登录后，隔离状态会自动解除。</p>
+<h3>我想要的模型不在 <code>/model</code> 选择器中</h3>
+<p>Portal 目录镜像了 OpenRouter 的模型列表（300+ 个）。如果某个模型缺失，尝试直接输入 OpenRouter 风格的 slug：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/model anthropic/claude-opus-4.6
+/model openai/o1-2025-12-17
+</div>
+<p>如果某个模型确实不可用，请<a href="https://github.com/NousResearch/hermes-agent/issues">提交 issue</a>——大多数缺失是我们可以更新的路由配置问题。</p>
+<h3>账单未出现在我的 Portal 账号中</h3>
+<p><code>hermes portal info</code> 会告诉你是否真的在通过 Portal 路由，还是使用了其他 provider。常见原因：</p>
+<ul>
+<li><code>model.provider</code> 设置为 <code>openrouter</code>/<code>anthropic</code>/等，而非 <code>nous</code></li>
+<li>OAuth refresh 失败后回退到了其他已配置的 provider</li>
+<li>存在多个 Hermes profiles，你使用的是错误的那个（检查 <code>hermes profile current</code>）</li>
+</ul>
+<h3>想要撤销并重新开始</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes auth remove nous       # 清除本地 refresh token
+# 然后重新运行 setup，或在 Portal 网页界面取消订阅
+</div>
+<h2>用具体数字说明 Portal 的价值</h2>
+<table>
+<thead>
+<tr>
+<th>不使用 Portal</th>
+<th>使用 Portal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 个 OpenRouter / Anthropic / OpenAI 密钥写入 <code>.env</code></td>
+<td>1 个 OAuth refresh token，无需 <code>.env</code> 密钥</td>
+</tr>
+<tr>
+<td>1 个 Firecrawl 密钥用于网页搜索</td>
+<td>网页搜索通过 gateway 路由</td>
+</tr>
+<tr>
+<td>1 个 FAL 密钥用于图像生成</td>
+<td>图像生成通过 gateway 路由</td>
+</tr>
+<tr>
+<td>1 个 Browser Use / Browserbase 密钥用于浏览器</td>
+<td>浏览器通过 gateway 路由</td>
+</tr>
+<tr>
+<td>1 个 OpenAI 密钥用于 TTS / 语音模式</td>
+<td>TTS 通过 gateway 路由</td>
+</tr>
+<tr>
+<td>5 个独立的控制台、充值、发票</td>
+<td>1 个订阅，1 张发票</td>
+</tr>
+<tr>
+<td>跨机器：复制全部 5 个密钥</td>
+<td>跨机器：重新 OAuth 一次</td>
+</tr>
+</tbody>
+</table>
+<p>这就是 Portal 的价值。如果你本来就在使用其中两个以上的后端，订阅费用自然就回来了。</p>
+<h2>另请参阅</h2>
+<ul>
+<li><strong><a href="/integrations/nous-portal">Nous Portal 集成页面</a></strong> — 订阅内容概述</li>
+<li><strong><a href="/user-guide/features/tool-gateway">Tool Gateway</a></strong> — 每个 gateway 路由工具的完整说明</li>
+<li><strong><a href="/user-guide/features/subscription-proxy">订阅代理</a></strong> — 在非 Hermes 工具中使用你的 Portal 订阅</li>
+<li><strong><a href="/user-guide/features/voice-mode">语音模式</a></strong> — 在 Portal 订阅上配置语音对话</li>
+<li><strong><a href="/guides/oauth-over-ssh">OAuth over SSH</a></strong> — 远程/无头主机登录方案</li>
+<li><strong><a href="/user-guide/profiles">Profiles</a></strong> — 在多个 Hermes 配置之间共享一个 Portal 登录</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

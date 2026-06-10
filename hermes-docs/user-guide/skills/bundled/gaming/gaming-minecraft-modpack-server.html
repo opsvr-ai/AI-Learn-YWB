@@ -1,0 +1,307 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minecraft Modpack Server — Host modded Minecraft servers (CurseForge, Modrinth) - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 命令</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & Skills</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">docs</a> / <a href="/hermes-docs/user-guide/">user-guide</a> / <a href="/hermes-docs/user-guide/skills/">skills</a> / <a href="/hermes-docs/user-guide/skills/bundled/">bundled</a> / <a href="/hermes-docs/user-guide/skills/bundled/gaming/">gaming</a> / Minecraft Modpack Server — Host modded Minecraft servers (CurseForge, Modrinth)</div><p>{/<em> 本页面由 website/scripts/generate-skill-docs.py 从技能的 SKILL.md 自动生成。请编辑源 SKILL.md，而非本页面。 </em>/}</p>
+<h1>Minecraft Modpack Server</h1>
+<p>Host modded Minecraft servers (CurseForge, Modrinth).</p>
+<h2>技能元数据</h2>
+<table><thead><tr><th>---</th><th>---</th></tr></thead><tbody>
+<tr><td>来源</td><td>内置（默认安装）</td></tr>
+<tr><td>路径</td><td><code>skills/gaming/minecraft-modpack-server</code></td></tr>
+<tr><td>平台</td><td>linux, macos</td></tr>
+</tbody></table>
+<h2>参考：完整 SKILL.md</h2>
+<p>:::info</p>
+<p>以下是 Hermes 在此技能被触发时加载的完整技能定义。这是技能激活时代理所看到的指令。</p>
+<p>:::</p>
+<h1>Minecraft Modpack Server 设置</h1>
+<h2>When to use</h2>
+<p>- User wants to set up a modded Minecraft server from a server pack zip</p>
+<p>- User needs help with NeoForge/Forge server configuration</p>
+<p>- User asks about Minecraft server performance tuning or backups</p>
+<h2>Gather User Preferences First</h2>
+<p>Before starting setup, ask the user for:</p>
+<p>- <strong>Server name / MOTD</strong> — what should it say in the server list?</p>
+<p>- <strong>Seed</strong> — specific seed or random?</p>
+<p>- <strong>Difficulty</strong> — peaceful / easy / normal / hard?</p>
+<p>- <strong>Gamemode</strong> — survival / creative / adventure?</p>
+<p>- <strong>Online mode</strong> — true (Mojang auth, legit accounts) or false (LAN/cracked friendly)?</p>
+<p>- <strong>Player count</strong> — how many players expected? (affects RAM & view distance tuning)</p>
+<p>- <strong>RAM allocation</strong> — or let agent decide based on mod count & available RAM?</p>
+<p>- <strong>View distance / simulation distance</strong> — or let agent pick based on player count & hardware?</p>
+<p>- <strong>PvP</strong> — on or off?</p>
+<p>- <strong>Whitelist</strong> — open server or whitelist only?</p>
+<p>- <strong>Backups</strong> — want automated backups? How often?</p>
+<p>Use sensible defaults if the user doesn't care, but always ask before generating the config.</p>
+<h2>Steps</h2>
+<h3>1. Download & Inspect the Pack</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mkdir -p ~/minecraft-server
+cd ~/minecraft-server
+wget -O serverpack.zip "<URL>"
+unzip -o serverpack.zip -d server
+ls server/
+</div>
+<p>Look for: <code>startserver.sh</code>, installer jar (neoforge/forge), <code>user_jvm_args.txt</code>, <code>mods/</code> folder.</p>
+<p>Check the script to determine: mod loader type, version, and required Java version.</p>
+<h3>2. Install Java</h3>
+<p>- Minecraft 1.21+ → Java 21: <code>sudo apt install openjdk-21-jre-headless</code></p>
+<p>- Minecraft 1.18-1.20 → Java 17: <code>sudo apt install openjdk-17-jre-headless</code></p>
+<p>- Minecraft 1.16 and below → Java 8: <code>sudo apt install openjdk-8-jre-headless</code></p>
+<p>- Verify: <code>java -version</code></p>
+<h3>3. Install the Mod Loader</h3>
+<p>Most server packs include an install script. Use the INSTALL_ONLY env var to install without launching:</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cd ~/minecraft-server/server
+ATM10_INSTALL_ONLY=true bash startserver.sh
+# Or for generic Forge packs:
+# java -jar forge-*-installer.jar --installServer
+</div>
+<p>This downloads libraries, patches the server jar, etc.</p>
+<h3>4. Accept EULA</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+echo "eula=true" > ~/minecraft-server/server/eula.txt
+</div>
+<h3>5. Configure server.properties</h3>
+<p>Key settings for modded/LAN:</p>
+<div class="code-block"><span class="code-lang">properties</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+motd=\u00a7b\u00a7lServer Name \u00a7r\u00a78| \u00a7aModpack Name
+server-port=25565
+online-mode=true          # false for LAN without Mojang auth
+enforce-secure-profile=true  # match online-mode
+difficulty=hard            # most modpacks balance around hard
+allow-flight=true          # REQUIRED for modded (flying mounts/items)
+spawn-protection=0         # let everyone build at spawn
+max-tick-time=180000       # modded needs longer tick timeout
+enable-command-block=true
+</div>
+<p>Performance settings (scale to hardware):</p>
+<div class="code-block"><span class="code-lang">properties</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 2 players, beefy machine:
+view-distance=16
+simulation-distance=10
+
+# 4-6 players, moderate machine:
+view-distance=10
+simulation-distance=6
+
+# 8+ players or weaker hardware:
+view-distance=8
+simulation-distance=4
+</div>
+<h3>6. Tune JVM Args (user_jvm_args.txt)</h3>
+<p>Scale RAM to player count and mod count. Rule of thumb for modded:</p>
+<p>- 100-200 mods: 6-12GB</p>
+<p>- 200-350+ mods: 12-24GB</p>
+<p>- Leave at least 8GB free for the OS/other tasks</p>
+<div class="code-block"><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+-Xms12G
+-Xmx24G
+-XX:+UseG1GC
+-XX:+ParallelRefProcEnabled
+-XX:MaxGCPauseMillis=200
+-XX:+Unlock实验性VM选项
+-XX:+DisableExplicitGC
+-XX:+AlwaysPreTouch
+-XX:G1NewSizePercent=30
+-XX:G1MaxNewSizePercent=40
+-XX:G1HeapRegionSize=8M
+-XX:G1ReservePercent=20
+-XX:G1HeapWastePercent=5
+-XX:G1MixedGCCountTarget=4
+-XX:InitiatingHeapOccupancyPercent=15
+-XX:G1MixedGCLiveThresholdPercent=90
+-XX:G1RSetUpdatingPauseTimePercent=5
+-XX:SurvivorRatio=32
+-XX:+PerfDisableSharedMem
+-XX:MaxTenuringThreshold=1
+</div>
+<h3>7. Open Firewall</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+sudo ufw allow 25565/tcp comment "Minecraft Server"
+</div>
+<p>Check with: <code>sudo ufw status | grep 25565</code></p>
+<h3>8. Create Launch Script</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cat > ~/start-minecraft.sh << 'EOF'
+#!/bin/bash
+cd ~/minecraft-server/server
+java @user_jvm_args.txt @libraries/net/neoforged/neoforge/<VERSION>/unix_args.txt nogui
+EOF
+chmod +x ~/start-minecraft.sh
+</div>
+<p>Note: For Forge (not NeoForge), the args file path differs. Check <code>startserver.sh</code> for the exact path.</p>
+<h3>9. Set Up Automated Backups</h3>
+<p>Create backup script:</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cat > ~/minecraft-server/backup.sh << 'SCRIPT'
+#!/bin/bash
+SERVER_DIR="$HOME/minecraft-server/server"
+BACKUP_DIR="$HOME/minecraft-server/backups"
+WORLD_DIR="$SERVER_DIR/world"
+MAX_BACKUPS=24
+mkdir -p "$BACKUP_DIR"
+[ ! -d "$WORLD_DIR" ] && echo "[BACKUP] No world folder" && exit 0
+TIMESTAMP=$(date +%Y-%m-%d_%H-%M-%S)
+BACKUP_FILE="$BACKUP_DIR/world_${TIMESTAMP}.tar.gz"
+echo "[BACKUP] Starting at $(date)"
+tar -czf "$BACKUP_FILE" -C "$SERVER_DIR" world
+SIZE=$(du -h "$BACKUP_FILE" | cut -f1)
+echo "[BACKUP] Saved: $BACKUP_FILE ($SIZE)"
+BACKUP_COUNT=$(ls -1t "$BACKUP_DIR"/world_*.tar.gz 2>/dev/null | wc -l)
+if [ "$BACKUP_COUNT" -gt "$MAX_BACKUPS" ]; then
+    REMOVE=$((BACKUP_COUNT - MAX_BACKUPS))
+    ls -1t "$BACKUP_DIR"/world_*.tar.gz | tail -n "$REMOVE" | xargs rm -f
+    echo "[BACKUP] Pruned $REMOVE old backup(s)"
+fi
+echo "[BACKUP] Done at $(date)"
+SCRIPT
+chmod +x ~/minecraft-server/backup.sh
+</div>
+<p>Add hourly cron:</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+(crontab -l 2>/dev/null | grep -v "minecraft/backup.sh"; echo "0 * * * * $HOME/minecraft-server/backup.sh >> $HOME/minecraft-server/backups/backup.log 2>&1") | crontab -
+</div>
+<h2>Pitfalls</h2>
+<p>- ALWAYS set <code>allow-flight=true</code> for modded — mods with jetpacks/flight will kick players otherwise</p>
+<p>- <code>max-tick-time=180000</code> or higher — modded servers often have long ticks during worldgen</p>
+<p>- First startup is SLOW (several minutes for big packs) — don't panic</p>
+<p>- "Can't keep up!" warnings on first launch are normal, settles after initial chunk gen</p>
+<p>- If online-mode=false, set enforce-secure-profile=false too or clients get rejected</p>
+<p>- The pack's startserver.sh often has an auto-restart loop — make a clean launch script without it</p>
+<p>- Delete the world/ folder to regenerate with a new seed</p>
+<p>- Some packs have env vars to control behavior (e.g., ATM10 uses ATM10_JAVA, ATM10_RESTART, ATM10_INSTALL_ONLY)</p>
+<h2>Verification</h2>
+<p>- <code>pgrep -fa neoforge</code> or <code>pgrep -fa minecraft</code> to check if running</p>
+<p>- Check logs: <code>tail -f ~/minecraft-server/server/logs/latest.log</code></p>
+<p>- Look for "Done (Xs)!" in the log = server is ready</p>
+<p>- Test connection: player adds server IP in Multiplayer</p>  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

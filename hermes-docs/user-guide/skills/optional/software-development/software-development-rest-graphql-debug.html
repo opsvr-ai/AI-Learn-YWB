@@ -1,0 +1,608 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rest Graphql Debug — 调试 REST/GraphQL API：状态码、认证、Schema、复现 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Rest Graphql Debug — 调试 REST/GraphQL API：状态码、认证、Schema、复现</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Rest Graphql Debug</h1>
+<p>调试 REST/GraphQL API：状态码、认证、Schema、复现。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/software-development/rest-graphql-debug</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/software-development/rest-graphql-debug</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.2.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>eren-karakus0</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>api</code>, <code>rest</code>, <code>graphql</code>, <code>http</code>, <code>debugging</code>, <code>testing</code>, <code>curl</code>, <code>integration</code></td>
+</tr>
+<tr>
+<td>相关 skill</td>
+<td><a href="/user-guide/skills/bundled/software-development/software-development-systematic-debugging"><code>systematic-debugging</code></a>、<a href="/user-guide/skills/bundled/software-development/software-development-test-driven-development"><code>test-driven-development</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 skill 激活时 agent 所看到的指令内容。
+</div>
+<h1>API 测试与调试</h1>
+<p>通过 Hermes 工具驱动 REST 和 GraphQL 诊断 —— <code>terminal</code> 用于 <code>curl</code>，<code>execute_code</code> 用于 Python <code>requests</code>，<code>web_extract</code> 用于查阅厂商文档。在猜测修复方案之前，先隔离出故障层。</p>
+<h2>适用场景</h2>
+<ul>
+<li>API 返回意外的状态码或响应体</li>
+<li>认证（auth）失败（token 刷新后仍 401/403、OAuth、API key）</li>
+<li>Postman 中正常但代码中失败</li>
+<li>Webhook / 回调集成调试</li>
+<li>构建或审查 API 集成测试</li>
+<li>限流或分页问题</li>
+</ul>
+<p>以下场景跳过本 skill（向上升级）：UI 渲染、DB 查询调优、DNS/防火墙基础设施。</p>
+<h2>核心原则</h2>
+<p><strong>先隔离层，再修复。</strong> 200 OK 可能隐藏损坏的数据。500 可能掩盖一个字符的认证拼写错误。按顺序逐层排查，不要跳过任何步骤。</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+1. 连通性       → 能否访问到主机？
+1.5 超时        → 连接慢还是读取慢？
+2. TLS/SSL      → 证书是否有效且受信任？
+3. 认证         → 凭据是否正确且未过期？
+4. 请求格式     → payload 结构是否符合服务端预期？
+5. 响应解析     → 代码是否能接受返回的内容？
+6. 语义         → 数据含义是否符合我们的假设？
+</div>
+<h2>5 分钟快速上手</h2>
+<h3>通过 terminal 调试 REST</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 详细的请求/响应交互
+terminal('curl -v https://api.example.com/users/1')
+<h1>带 JSON 的 POST</h1>
+<p>terminal(&quot;&quot;&quot;curl -X POST https://api.example.com/users \\
+-H 'Content-Type: application/json' \\
+-H &quot;Authorization: Bearer $TOKEN&quot; \\
+-d '{&quot;name&quot;:&quot;test&quot;,&quot;email&quot;:&quot;test@example.com&quot;}'&quot;&quot;&quot;)</p>
+<h1>仅查看响应头</h1>
+<p>terminal('curl -sI https://api.example.com/health')</p>
+<h1>格式化输出 JSON</h1>
+<p>terminal('curl -s https://api.example.com/users | python3 -m json.tool')</p>
+</div>
+<h3>通过 terminal 调试 GraphQL</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal("""curl -X POST https://api.example.com/graphql \\
+  -H 'Content-Type: application/json' \\
+  -H "Authorization: Bearer $TOKEN" \\
+  -d '{"query":"{ user(id: 1) { name email } }"}'""")
+</div>
+<p><strong>GraphQL 注意事项：</strong> 即使查询失败，服务端通常也会返回 HTTP 200。无论状态码如何，始终检查 <code>errors</code> 字段：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+execute_code('''
+import os, requests
+resp = requests.post(
+    "https://api.example.com/graphql",
+    json={"query": "{ user(id: 1) { name email } }"},
+    headers={"Authorization": f"Bearer {os.environ['TOKEN']}"},
+    timeout=10,
+)
+data = resp.json()
+if data.get("errors"):
+    for err in data["errors"]:
+        print(f"GraphQL error: {err['message']} (path: {err.get('path')})")
+print(data.get("data"))
+''')
+</div>
+<h3>通过 execute_code 使用 Python（requests）</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+execute_code('''
+import requests
+resp = requests.get(
+    "https://api.example.com/users/1",
+    headers={"Authorization": "Bearer &lt;TOKEN&gt;"},
+    timeout=(3.05, 30),  # (connect, read)
+)
+print(resp.status_code, dict(resp.headers))
+print(resp.text[:500])
+''')
+</div>
+<h2>分层调试流程</h2>
+<h3>第 1 步 — 连通性</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal('nslookup api.example.com')
+terminal('curl -v --connect-timeout 5 https://api.example.com/health')
+</div>
+<p>常见故障：DNS 无法解析、防火墙、需要 VPN、缺少代理。</p>
+<h3>第 1.5 步 — 超时</h3>
+<p>区分<em>无法到达</em>与<em>到达但响应慢</em>：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal('''curl -w "dns:%{time_namelookup}s connect:%{time_connect}s tls:%{time_appconnect}s ttfb:%{time_starttransfer}s total:%{time_total}s\\n" \\
+  -o /dev/null -s https://api.example.com/endpoint''')
+</div>
+<p>在 Python 中，始终传入元组超时 —— <code>requests</code> 没有默认值，会永久挂起：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+execute_code('''
+import requests
+from requests.exceptions import ConnectTimeout, ReadTimeout
+try:
+    requests.get(url, timeout=(3.05, 30))
+except ConnectTimeout:
+    print("Cannot reach host — DNS, firewall, VPN")
+except ReadTimeout:
+    print("Connected but server is slow")
+''')
+</div>
+<p>诊断：<code>time_connect</code> 高说明是网络/防火墙问题；<code>time_connect</code> 低但 <code>time_starttransfer</code> 高说明是服务端响应慢。</p>
+<h3>第 2 步 — TLS/SSL</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal('curl -vI https://api.example.com 2&gt;&amp;1 | grep -E "SSL|subject|expire|issuer"')
+</div>
+<p>常见故障：证书过期、自签名证书、主机名不匹配、缺少 CA bundle。<code>-k</code> 仅用于临时调试，不得写入代码。</p>
+<h3>第 3 步 — 认证</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 检查 token 有效性
+terminal('curl -s -o /dev/null -w "%{http_code}\\n" -H "Authorization: Bearer $TOKEN" https://api.example.com/me')
+<h1>解码 JWT exp 声明 — 正确处理 base64url 填充</h1>
+<p>execute_code('''
+import json, base64, os
+tok = os.environ[&quot;TOKEN&quot;]
+payload = tok.split(&quot;.&quot;)[1]
+payload += &quot;=&quot; * (-len(payload) % 4)
+print(json.dumps(json.loads(base64.urlsafe_b64decode(payload)), indent=2))
+''')</p>
+</div>
+<p>检查清单：</p>
+<ul>
+<li>Token 是否过期？（JWT 中的 <code>exp</code> 声明）</li>
+<li>认证方案是否正确？Bearer vs Basic vs Token vs <code>X-Api-Key</code></li>
+<li>环境是否正确？将 Staging 的 key 用于 prod 是常见错误</li>
+<li>API key 是放在请求头还是查询参数（<code>?api_key=…</code>）中？</li>
+</ul>
+<h3>第 4 步 — 请求格式</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal("""curl -v -X POST https://api.example.com/endpoint \\
+  -H 'Content-Type: application/json' \\
+  -d '{"key":"value"}' 2&gt;&amp;1""")
+</div>
+<p><strong>Content-Type 与请求体不匹配 —— 静默的 415/400：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 错误 — data= 发送表单编码，但 header 声明 JSON
+requests.post(url, data='{"k":"v"}', headers={"Content-Type": "application/json"})
+<h1>正确 — json= 自动设置 header 并序列化</h1>
+<p>requests.post(url, json={&quot;k&quot;: &quot;v&quot;})</p>
+<h1>错误 — Accept 声明 XML，代码却调用 .json()</h1>
+<p>requests.get(url, headers={&quot;Accept&quot;: &quot;text/xml&quot;})</p>
+<h1>正确 — 让 requests 自动构建带 boundary 的 multipart</h1>
+<p>requests.post(url, files={&quot;file&quot;: open(&quot;doc.pdf&quot;, &quot;rb&quot;)})</p>
+</div>
+<p>常见问题：表单编码 vs JSON、缺少必填字段、HTTP 方法错误、查询参数未编码。</p>
+<h3>第 5 步 — 响应解析</h3>
+<p>调用 <code>.json()</code> 前始终检查 content-type：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+execute_code('''
+import requests
+resp = requests.post(url, json=payload, timeout=10)
+print(f"status={resp.status_code}")
+print(f"headers={dict(resp.headers)}")
+ct = resp.headers.get("Content-Type", "")
+if "application/json" in ct:
+    print(resp.json())
+else:
+    print(f"unexpected content-type {ct!r}, body={resp.text[:500]!r}")
+''')
+</div>
+<p>常见故障：期望 JSON 却收到 HTML 错误页、响应体为空、字符集错误。</p>
+<h3>第 6 步 — 语义验证</h3>
+<p>解析成功 —— 但数据<em>正确</em>吗？</p>
+<ul>
+<li><code>&quot;status&quot;: &quot;active&quot;</code> 的含义是否符合代码预期？</li>
+<li>响应中的 ID 是否与请求的 ID 一致？</li>
+<li>时间戳是否在预期时区？</li>
+<li>分页是否返回了全部结果，还是只有第 1 页？</li>
+</ul>
+<h2>HTTP 状态码处理手册</h2>
+<h3>401 Unauthorized — 凭据缺失或无效</h3>
+<ol>
+<li><code>Authorization</code> 请求头是否实际存在？（用 <code>curl -v</code> 确认）</li>
+<li>Token 是否正确且未过期？</li>
+<li>认证方案是否正确？（<code>Bearer</code> vs <code>Basic</code> vs <code>Token</code>）</li>
+<li>部分 API 使用查询参数（<code>?api_key=…</code>）而非请求头。</li>
+</ol>
+<h3>403 Forbidden — 已认证但无权限</h3>
+<ol>
+<li>Token 是否具有所需的 scope/权限？</li>
+<li>资源是否属于其他账户？</li>
+<li>IP 白名单是否将你拦截？</li>
+<li>浏览器中的 CORS 问题？（检查 <code>Access-Control-Allow-Origin</code>）</li>
+</ol>
+<h3>404 Not Found — 资源不存在或 URL 错误</h3>
+<ol>
+<li>路径是否正确？（末尾斜杠、拼写错误、版本前缀）</li>
+<li>资源 ID 是否存在？</li>
+<li>API 版本是否正确（<code>/v1/</code> vs <code>/v2/</code>）？</li>
+<li>Base URL 是否正确（staging vs prod）？</li>
+</ol>
+<h3>409 Conflict — 状态冲突</h3>
+<ol>
+<li>资源是否已存在（重复创建）？</li>
+<li><code>ETag</code> / <code>If-Match</code> 是否过期？</li>
+<li>是否有其他进程并发修改？</li>
+</ol>
+<h3>422 Unprocessable Entity — JSON 合法但数据无效</h3>
+<p>错误响应体通常会指出有问题的字段。检查：</p>
+<ul>
+<li>字段类型（string vs int、日期格式）</li>
+<li>必填 vs 可选</li>
+<li>枚举值是否在允许范围内</li>
+</ul>
+<h3>429 Too Many Requests — 触发限流</h3>
+<p>检查 <code>Retry-After</code> 和 <code>X-RateLimit-*</code> 响应头。指数退避：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+execute_code('''
+import time, requests
+<p>def with_backoff(method, url, **kwargs):
+for attempt in range(5):
+resp = requests.request(method, url, **kwargs)
+if resp.status_code != 429:
+return resp
+wait = int(resp.headers.get(&quot;Retry-After&quot;, 2 ** attempt))
+time.sleep(wait)
+return resp
+''')</p>
+</div>
+<h3>5xx — 服务端问题，通常不是你的错</h3>
+<ul>
+<li><strong>500</strong> — 服务端 bug。记录 correlation ID，向服务商提交工单。</li>
+<li><strong>502</strong> — 上游服务宕机。退避后重试。</li>
+<li><strong>503</strong> — 过载 / 维护中。查看状态页。</li>
+<li><strong>504</strong> — 上游超时。减小 payload 或增大超时时间。</li>
+</ul>
+<p>所有 5xx：带抖动的退避重试，持续出现时发出告警。</p>
+<h2>分页与幂等性</h2>
+<p><strong>分页。</strong> 确认你获取了<em>全部</em>结果。查找 <code>next_cursor</code>、<code>next_page</code>、<code>total_count</code>。两种常见模式：</p>
+<ul>
+<li>偏移量（<code>?limit=100&amp;offset=200</code>）—— 简单，但数据变动时可能跳过条目。</li>
+<li>游标（<code>?cursor=abc123</code>）—— 适用于实时或大数据集，推荐使用。</li>
+</ul>
+<p><strong>幂等性。</strong> 对于非幂等操作（POST），发送 <code>Idempotency-Key: &lt;uuid&gt;</code>，确保重试不会重复扣款或重复创建。支付和订单场景必须使用。</p>
+<h2>契约验证</h2>
+<p>在进入生产前捕获 schema 漂移：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+execute_code('''
+import requests
+<p>def validate_user(data: dict) -&amp;gt; list[str]:
+errors = []
+required = {&quot;id&quot;: int, &quot;email&quot;: str, &quot;created_at&quot;: str}
+for field, expected in required.items():
+if field not in data:
+errors.append(f&quot;missing field: {field}&quot;)
+elif not isinstance(data[field], expected):
+errors.append(f&quot;{field}: want {expected.<strong>name</strong>}, got {type(data[field]).<strong>name</strong>}&quot;)
+return errors</p>
+<p>resp = requests.get(f&quot;{BASE}/users/1&quot;, headers=HEADERS, timeout=10)
+issues = validate_user(resp.json())
+if issues:
+print(f&quot;contract violations: {issues}&quot;)
+''')</p>
+</div>
+<p>在 API 升级后、接入新第三方时，或在 CI 冒烟测试中运行。</p>
+<h2>Correlation ID</h2>
+<p>始终记录服务商的请求 ID —— 这是联系厂商支持的最快途径：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+execute_code('''
+import requests
+resp = requests.post(url, json=payload, headers=headers, timeout=10)
+request_id = (
+    resp.headers.get("X-Request-Id")
+    or resp.headers.get("X-Trace-Id")
+    or resp.headers.get("CF-Ray")  # Cloudflare
+)
+if resp.status_code &gt;= 400:
+    print(f"failed status={resp.status_code} req_id={request_id} ts={resp.headers.get('Date')}")
+''')
+</div>
+<p><strong>厂商 bug 报告模板：</strong></p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Endpoint:    POST /api/v1/orders
+Request ID:  req_abc123xyz
+Timestamp:   2026-03-17T14:30:00Z
+Status:      500
+Expected:    201 with order object
+Actual:      500 {"error":"internal server error"}
+Repro:       curl -X POST … (auth: &lt;REDACTED&gt;)
+</div>
+<h2>回归测试模板</h2>
+<p>将以下内容放入 <code>tests/</code> 目录，通过 <code>terminal('pytest tests/test_api_smoke.py -v')</code> 运行：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import os, requests, pytest
+<p>BASE_URL = os.environ.get(&quot;API_BASE_URL&quot;, &quot;https://api.example.com&quot;)
+TOKEN    = os.environ.get(&quot;API_TOKEN&quot;, &quot;&quot;)
+HEADERS  = {&quot;Authorization&quot;: f&quot;Bearer {TOKEN}&quot;}</p>
+<p>class TestAPISmoke:
+def test_health(self):
+resp = requests.get(f&quot;{BASE_URL}/health&quot;, timeout=5)
+assert resp.status_code == 200</p>
+<pre><code>def test_list_users_returns_array(self):
+    resp = requests.get(f&quot;{BASE_URL}/users&quot;, headers=HEADERS, timeout=10)
+    assert resp.status_code == 200
+    data = resp.json()
+    assert isinstance(data.get(&quot;data&quot;, data), list)
+
+def test_get_user_required_fields(self):
+    resp = requests.get(f&quot;{BASE_URL}/users/1&quot;, headers=HEADERS, timeout=10)
+    assert resp.status_code in (200, 404)
+    if resp.status_code == 200:
+        user = resp.json()
+        assert &quot;id&quot; in user and &quot;email&quot; in user
+
+def test_invalid_auth_returns_401(self):
+    resp = requests.get(
+        f&quot;{BASE_URL}/users&quot;,
+        headers={&quot;Authorization&quot;: &quot;Bearer invalid-token&quot;},
+        timeout=10,
+    )
+    assert resp.status_code == 401
+</code></pre>
+</div>
+<h2>安全</h2>
+<h3>Token 处理</h3>
+<ul>
+<li>不要记录完整 token。脱敏处理：<code>Bearer &lt;REDACTED&gt;</code>。</li>
+<li>不要在脚本中硬编码 token。从环境变量（<code>os.environ[&quot;API_TOKEN&quot;]</code>）或 <code>~/.hermes/.env</code> 读取。</li>
+<li>如果 token 出现在日志、错误信息或 git 历史中，立即轮换。</li>
+</ul>
+<h3>安全日志记录</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def redact_auth(headers: dict) -&gt; dict:
+    sensitive = {"authorization", "x-api-key", "cookie", "set-cookie"}
+    return {k: ("&lt;REDACTED&gt;" if k.lower() in sensitive else v) for k, v in headers.items()}
+</div>
+<h3>泄露检查清单</h3>
+<ul>
+<li>[ ] <strong>URL 中的凭据。</strong> 查询字符串中的 API key 会出现在服务器日志、浏览器历史、Referer 请求头中 —— 请使用请求头传递。</li>
+<li>[ ] <strong>错误响应中的 PII。</strong> <code>404 on /users/123</code> 不应暴露该用户是否存在（枚举攻击）。</li>
+<li>[ ] <strong>生产环境中的堆栈跟踪。</strong> 500 响应不应泄露文件路径、框架版本。</li>
+<li>[ ] <strong>内部主机名/IP。</strong> 错误响应体中出现 <code>10.x.x.x</code>、<code>internal-api.corp.local</code>。</li>
+<li>[ ] <strong>Token 被回显。</strong> 部分 API 会在错误详情中包含认证 token。请验证其不会如此。</li>
+<li>[ ] <strong>冗余的 <code>Server</code> / <code>X-Powered-By</code>。</strong> 技术栈信息泄露。记录以供安全审查。</li>
+</ul>
+<h2>Hermes 工具使用模式</h2>
+<h3>terminal — 用于 curl、dig、openssl</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal('curl -sI https://api.example.com')
+terminal('openssl s_client -connect api.example.com:443 -servername api.example.com &lt;/dev/null 2&gt;/dev/null | openssl x509 -noout -dates')
+</div>
+<h3>execute_code — 用于多步骤 Python 流程</h3>
+<p>当调试跨越认证 → 请求 → 分页 → 验证多个环节时，使用 <code>execute_code</code>。变量在脚本内持久存在，结果打印到 stdout，不会在上下文中产生 token 污染：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+execute_code('''
+import os, requests
+<p>token = os.environ[&quot;API_TOKEN&quot;]
+base  = &quot;https://api.example.com&quot;
+H     = {&quot;Authorization&quot;: f&quot;Bearer {token}&quot;}</p>
+<h1>1. 认证</h1>
+<p>me = requests.get(f&quot;{base}/me&quot;, headers=H, timeout=10)
+print(f&quot;auth {me.status_code}&quot;)</p>
+<h1>2. 分页</h1>
+<p>all_users, cursor = [], None
+while True:
+params = {&quot;cursor&quot;: cursor} if cursor else {}
+r = requests.get(f&quot;{base}/users&quot;, headers=H, params=params, timeout=10)
+body = r.json()
+all_users.extend(body[&quot;data&quot;])
+cursor = body.get(&quot;next_cursor&quot;)
+if not cursor:
+break
+print(f&quot;users={len(all_users)}&quot;)
+''')</p>
+</div>
+<h3>web_extract — 用于查阅厂商 API 文档</h3>
+<p>直接拉取你正在调试的端点的规范，而不是靠猜测：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+web_extract(urls=["https://docs.example.com/api/v1/users"])
+</div>
+<h3>delegate_task — 用于完整的 CRUD 测试扫描</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+delegate_task(
+    goal="Test all CRUD endpoints for /api/v1/users",
+    context="""
+Follow the rest-graphql-debug skill (optional-skills/software-development/rest-graphql-debug).
+Base URL: https://api.example.com
+Auth: Bearer token from API_TOKEN env var.
+<p>For each verb (POST, GET, PATCH, DELETE):</p>
+<ul>
+<li>happy path: assert status + response schema</li>
+<li>error cases: 400, 404, 422</li>
+<li>log a repro curl for any failure (redact tokens)</li>
+</ul>
+<p>Output: pass/fail per endpoint + correlation IDs for failures.
+&quot;&quot;&quot;,
+toolsets=[&quot;terminal&quot;, &quot;file&quot;],
+)</p>
+</div>
+<h2>输出格式</h2>
+<p>报告调试结论时：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+## Finding
+Endpoint: POST /api/v1/users
+Status:   422 Unprocessable Entity
+Req ID:   req_abc123xyz
+<h2>Repro</h2>
+<p>curl -X POST https://api.example.com/api/v1/users \
+-H 'Content-Type: application/json' \
+-H 'Authorization: Bearer &amp;lt;REDACTED&amp;gt;' \
+-d '{&quot;name&quot;:&quot;test&quot;}'</p>
+<h2>Root Cause</h2>
+<p>Missing required field <code>email</code>. Server validation rejects before processing.</p>
+<h2>Fix</h2>
+<p>-d '{&quot;name&quot;:&quot;test&quot;,&quot;email&quot;:&quot;test@example.com&quot;}'</p>
+</div>
+<h2>相关 Skill</h2>
+<ul>
+<li><code>systematic-debugging</code> —— 隔离出故障 API 层后，对代码进行根因分析</li>
+<li><code>test-driven-development</code> —— 在发布修复前先编写回归测试</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

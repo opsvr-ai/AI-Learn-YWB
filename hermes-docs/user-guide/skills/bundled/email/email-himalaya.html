@@ -1,0 +1,396 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Himalaya — Himalaya CLI: IMAP/SMTP email from terminal - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Himalaya — Himalaya CLI: IMAP/SMTP email from terminal</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Himalaya</h1>
+<p>Himalaya CLI：从终端收发 IMAP/SMTP 邮件。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>内置（默认安装）</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>skills/email/himalaya</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.1.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>community</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Email</code>, <code>IMAP</code>, <code>SMTP</code>, <code>CLI</code>, <code>Communication</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 skill 激活时 agent 所看到的指令内容。
+</div>
+<h1>Himalaya 邮件 CLI</h1>
+<p>Himalaya 是一个 CLI 邮件客户端，支持通过 IMAP、SMTP、Notmuch 或 Sendmail 后端从终端管理邮件。</p>
+<h2>参考资料</h2>
+<ul>
+<li><code>references/configuration.md</code>（配置文件设置 + IMAP/SMTP 认证）</li>
+<li><code>references/message-composition.md</code>（用于撰写邮件的 MML 语法）</li>
+</ul>
+<h2>前置条件</h2>
+<ol>
+<li>已安装 Himalaya CLI（运行 <code>himalaya --version</code> 验证）</li>
+<li>配置文件位于 <code>~/.config/himalaya/config.toml</code></li>
+<li>已配置 IMAP/SMTP 凭据（密码安全存储）</li>
+</ol>
+<h3>安装</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 预编译二进制（Linux/macOS — 推荐）
+curl -sSL https://raw.githubusercontent.com/pimalaya/himalaya/master/install.sh | PREFIX=~/.local sh
+<h1>macOS 通过 Homebrew</h1>
+<p>brew install himalaya</p>
+<h1>或通过 cargo（任何支持 Rust 的平台）</h1>
+<p>cargo install himalaya --locked</p>
+</div>
+<h2>配置设置</h2>
+<p>运行交互式向导以设置账户：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+himalaya account configure
+</div>
+<p>或手动创建 <code>~/.config/himalaya/config.toml</code>：</p>
+<div class="code-block"><span class="code-lang">toml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+[accounts.personal]
+email = "you@example.com"
+display-name = "Your Name"
+default = true
+<p>backend.type = &quot;imap&quot;
+backend.host = &quot;imap.example.com&quot;
+backend.port = 993
+backend.encryption.type = &quot;tls&quot;
+backend.login = &quot;you@example.com&quot;
+backend.auth.type = &quot;password&quot;
+backend.auth.cmd = &quot;pass show email/imap&quot;  # or use keyring</p>
+<p>message.send.backend.type = &quot;smtp&quot;
+message.send.backend.host = &quot;smtp.example.com&quot;
+message.send.backend.port = 587
+message.send.backend.encryption.type = &quot;start-tls&quot;
+message.send.backend.login = &quot;you@example.com&quot;
+message.send.backend.auth.type = &quot;password&quot;
+message.send.backend.auth.cmd = &quot;pass show email/smtp&quot;</p>
+<h1>Folder aliases (himalaya v1.2.0+ syntax). Required whenever the</h1>
+<h1>server's folder names don't match himalaya's canonical names</h1>
+<h1>(inbox/sent/drafts/trash). Gmail is the common case — see</h1>
+<h1><code>references/configuration.md</code> for the <code>[Gmail]/Sent Mail</code> mapping.</h1>
+<p>folder.aliases.inbox = &quot;INBOX&quot;
+folder.aliases.sent = &quot;Sent&quot;
+folder.aliases.drafts = &quot;Drafts&quot;
+folder.aliases.trash = &quot;Trash&quot;</p>
+</div>
+<blockquote>
+<p><strong>关于别名语法的注意事项。</strong> v1.2.0 之前的文档使用 <code>[accounts.NAME.folder.alias]</code> 子节（单数 <code>alias</code>）。v1.2.0 会静默忽略该形式——TOML 解析正常，但别名解析器从不读取它，因此每次查找都会回退到规范名称。在 Gmail 上，这意味着 SMTP 投递成功<em>之后</em>保存到已发送文件夹会失败，且 <code>himalaya message send</code> 以非零状态退出。任何在该退出码上重试的调用方（agent、脚本、用户）都会重新执行整个发送流程——包括 SMTP——从而向收件人产生重复邮件。请始终使用 <code>folder.aliases.X</code>（复数、点分键，直接位于 <code>[accounts.NAME]</code> 下）。</p>
+</blockquote>
+<h2>Hermes 集成说明</h2>
+<ul>
+<li><strong>读取、列出、搜索、移动、删除</strong>均可直接通过终端工具完成</li>
+<li><strong>撰写/回复/转发</strong>——推荐使用管道输入（<code>cat &lt;&lt; EOF | himalaya template send</code>）以确保可靠性。交互式 <code>$EDITOR</code> 模式可配合 <code>pty=true</code> + 后台 + 进程工具使用，但需要了解编辑器及其命令</li>
+<li>使用 <code>--output json</code> 获取结构化输出，便于程序化解析</li>
+<li><code>himalaya account configure</code> 向导需要交互式输入——请使用 PTY 模式：<code>terminal(command=&quot;himalaya account configure&quot;, pty=true)</code></li>
+</ul>
+<h2>常用操作</h2>
+<h3>列出文件夹</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+himalaya folder list
+</div>
+<h3>列出邮件</h3>
+<p>列出 INBOX 中的邮件（默认）：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+himalaya envelope list
+</div>
+<p>列出指定文件夹中的邮件：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+himalaya envelope list --folder "Sent"
+</div>
+<p>分页列出：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+himalaya envelope list --page 1 --page-size 20
+</div>
+<h3>搜索邮件</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+himalaya envelope list from john@example.com subject meeting
+</div>
+<h3>阅读邮件</h3>
+<p>按 ID 阅读邮件（显示纯文本）：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+himalaya message read 42
+</div>
+<p>导出原始 MIME：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+himalaya message export 42 --full
+</div>
+<h3>回复邮件</h3>
+<p>在 Hermes 中非交互式回复，请读取原始邮件、撰写回复并通过管道发送：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 获取回复模板，编辑后发送
+himalaya template reply 42 | sed 's/^$/\nYour reply text here\n/' | himalaya template send
+</div>
+<p>或手动构建回复：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cat &lt;&lt; 'EOF' | himalaya template send
+From: you@example.com
+To: sender@example.com
+Subject: Re: Original Subject
+In-Reply-To: &lt;original-message-id&gt;
+<p>Your reply here.
+EOF</p>
+</div>
+<p>全部回复（交互式——需要 $EDITOR，建议改用上述模板方式）：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+himalaya message reply 42 --all
+</div>
+<h3>转发邮件</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 获取转发模板并通过管道修改后发送
+himalaya template forward 42 | sed 's/^To:.*/To: newrecipient@example.com/' | himalaya template send
+</div>
+<h3>撰写新邮件</h3>
+<p><strong>非交互式（在 Hermes 中使用此方式）</strong>——通过 stdin 管道传入邮件：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cat &lt;&lt; 'EOF' | himalaya template send
+From: you@example.com
+To: recipient@example.com
+Subject: Test Message
+<p>Hello from Himalaya!
+EOF</p>
+</div>
+<p>或使用 headers 标志：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+himalaya message write -H "To:recipient@example.com" -H "Subject:Test" "Message body here"
+</div>
+<p>注意：不带管道输入的 <code>himalaya message write</code> 会打开 <code>$EDITOR</code>。配合 <code>pty=true</code> + 后台模式可以使用，但管道方式更简单可靠。</p>
+<h3>移动/复制邮件</h3>
+<p>移动到文件夹：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+himalaya message move 42 "Archive"
+</div>
+<p>复制到文件夹：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+himalaya message copy 42 "Important"
+</div>
+<h3>删除邮件</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+himalaya message delete 42
+</div>
+<h3>管理标志</h3>
+<p>添加标志：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+himalaya flag add 42 --flag seen
+</div>
+<p>移除标志：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+himalaya flag remove 42 --flag seen
+</div>
+<h2>多账户</h2>
+<p>列出账户：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+himalaya account list
+</div>
+<p>使用指定账户：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+himalaya --account work envelope list
+</div>
+<h2>附件</h2>
+<p>保存邮件附件：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+himalaya attachment download 42
+</div>
+<p>保存到指定目录：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+himalaya attachment download 42 --dir ~/Downloads
+</div>
+<h2>输出格式</h2>
+<p>大多数命令支持 <code>--output</code> 以获取结构化输出：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+himalaya envelope list --output json
+himalaya envelope list --output plain
+</div>
+<h2>调试</h2>
+<p>启用调试日志：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+RUST_LOG=debug himalaya envelope list
+</div>
+<p>完整追踪与回溯：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+RUST_LOG=trace RUST_BACKTRACE=1 himalaya envelope list
+</div>
+<h2>提示</h2>
+<ul>
+<li>使用 <code>himalaya --help</code> 或 <code>himalaya &lt;command&gt; --help</code> 查看详细用法。</li>
+<li>消息 ID 相对于当前文件夹；切换文件夹后请重新列出。</li>
+<li>如需撰写带附件的富文本邮件，请使用 MML 语法（参见 <code>references/message-composition.md</code>）。</li>
+<li>使用 <code>pass</code>、系统密钥环或输出密码的命令安全存储密码。</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,496 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Docker 管理 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Docker 管理</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Docker 管理</h1>
+<p>管理 Docker 容器、镜像、卷、网络和 Compose 栈——生命周期操作、调试、清理及 Dockerfile 优化。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选——使用 <code>hermes skills install official/devops/docker-management</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/devops/docker-management</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>sprmn24</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>docker</code>, <code>containers</code>, <code>devops</code>, <code>infrastructure</code>, <code>compose</code>, <code>images</code>, <code>volumes</code>, <code>networks</code>, <code>debugging</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 skill 激活时 agent 所看到的指令内容。
+</div>
+<h1>Docker 管理</h1>
+<p>使用标准 Docker CLI 命令管理 Docker 容器、镜像、卷、网络和 Compose 栈。除 Docker 本身外无需额外依赖。</p>
+<h2>适用场景</h2>
+<ul>
+<li>运行、停止、重启、删除或检查容器</li>
+<li>构建、拉取、推送、标记或清理 Docker 镜像</li>
+<li>使用 Docker Compose（多服务栈）</li>
+<li>管理卷或网络</li>
+<li>调试崩溃的容器或分析日志</li>
+<li>检查 Docker 磁盘使用情况或释放空间</li>
+<li>审查或优化 Dockerfile</li>
+</ul>
+<h2>前提条件</h2>
+<ul>
+<li>Docker Engine 已安装并运行</li>
+<li>用户已加入 <code>docker</code> 组（或使用 <code>sudo</code>）</li>
+<li>Docker Compose v2（现代 Docker 安装已包含）</li>
+</ul>
+<p>快速检查：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+docker --version &amp;&amp; docker compose version
+</div>
+<h2>快速参考</h2>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>运行容器（后台）</td>
+<td><code>docker run -d --name NAME IMAGE</code></td>
+</tr>
+<tr>
+<td>停止并删除</td>
+<td><code>docker stop NAME &amp;&amp; docker rm NAME</code></td>
+</tr>
+<tr>
+<td>查看日志（跟踪）</td>
+<td><code>docker logs --tail 50 -f NAME</code></td>
+</tr>
+<tr>
+<td>进入容器 Shell</td>
+<td><code>docker exec -it NAME /bin/sh</code></td>
+</tr>
+<tr>
+<td>列出所有容器</td>
+<td><code>docker ps -a</code></td>
+</tr>
+<tr>
+<td>构建镜像</td>
+<td><code>docker build -t TAG .</code></td>
+</tr>
+<tr>
+<td>Compose 启动</td>
+<td><code>docker compose up -d</code></td>
+</tr>
+<tr>
+<td>Compose 停止</td>
+<td><code>docker compose down</code></td>
+</tr>
+<tr>
+<td>磁盘使用情况</td>
+<td><code>docker system df</code></td>
+</tr>
+<tr>
+<td>清理悬空资源</td>
+<td><code>docker image prune &amp;&amp; docker container prune</code></td>
+</tr>
+</tbody>
+</table>
+<h2>操作流程</h2>
+<h3>1. 确定操作域</h3>
+<p>判断请求属于哪个领域：</p>
+<ul>
+<li><strong>容器生命周期</strong> → run、stop、start、restart、rm、pause/unpause</li>
+<li><strong>容器交互</strong> → exec、cp、logs、inspect、stats</li>
+<li><strong>镜像管理</strong> → build、pull、push、tag、rmi、save/load</li>
+<li><strong>Docker Compose</strong> → up、down、ps、logs、exec、build、config</li>
+<li><strong>卷与网络</strong> → create、inspect、rm、prune、connect</li>
+<li><strong>故障排查</strong> → 日志分析、退出码、资源问题</li>
+</ul>
+<h3>2. 容器操作</h3>
+<p><strong>运行新容器：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 后台服务，带端口映射
+docker run -d --name web -p 8080:80 nginx
+<h1>带环境变量</h1>
+<p>docker run -d -e POSTGRES_PASSWORD=secret -e POSTGRES_DB=mydb --name db postgres:16</p>
+<h1>带持久化数据（命名卷）</h1>
+<p>docker run -d -v pgdata:/var/lib/postgresql/data --name db postgres:16</p>
+<h1>开发环境（绑定挂载源码）</h1>
+<p>docker run -d -v $(pwd)/src:/app/src -p 3000:3000 --name dev my-app</p>
+<h1>交互式调试（退出后自动删除）</h1>
+<p>docker run -it --rm ubuntu:22.04 /bin/bash</p>
+<h1>带资源限制和重启策略</h1>
+<p>docker run -d --memory=512m --cpus=1.5 --restart=unless-stopped --name app my-app</p>
+</div>
+<p>关键参数：<code>-d</code> 后台运行，<code>-it</code> 交互式+tty，<code>--rm</code> 自动删除，<code>-p</code> 端口（宿主机:容器），<code>-e</code> 环境变量，<code>-v</code> 卷，<code>--name</code> 名称，<code>--restart</code> 重启策略。</p>
+<p><strong>管理运行中的容器：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+docker ps                        # 运行中的容器
+docker ps -a                     # 所有容器（包括已停止的）
+docker stop NAME                 # 优雅停止
+docker start NAME                # 启动已停止的容器
+docker restart NAME              # 停止并重启
+docker rm NAME                   # 删除已停止的容器
+docker rm -f NAME                # 强制删除运行中的容器
+docker container prune           # 删除所有已停止的容器
+</div>
+<p><strong>与容器交互：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+docker exec -it NAME /bin/sh          # Shell 访问（如可用则使用 /bin/bash）
+docker exec NAME env                   # 查看环境变量
+docker exec -u root NAME apt update    # 以指定用户运行
+docker logs --tail 100 -f NAME         # 跟踪最后 100 行日志
+docker logs --since 2h NAME            # 最近 2 小时的日志
+docker cp NAME:/path/file ./local      # 从容器复制文件
+docker cp ./file NAME:/path/           # 向容器复制文件
+docker inspect NAME                    # 完整容器详情（JSON）
+docker stats --no-stream               # 资源使用快照
+docker top NAME                        # 运行中的进程
+</div>
+<h3>3. 镜像管理</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 构建
+docker build -t my-app:latest .
+docker build -t my-app:prod -f Dockerfile.prod .
+docker build --no-cache -t my-app .              # 全量重新构建
+DOCKER_BUILDKIT=1 docker build -t my-app .       # 使用 BuildKit 加速
+<h1>拉取与推送</h1>
+<p>docker pull node:20-alpine
+docker login ghcr.io
+docker tag my-app:latest registry/my-app:v1.0
+docker push registry/my-app:v1.0</p>
+<h1>检查</h1>
+<p>docker images                          # 列出本地镜像
+docker history IMAGE                   # 查看层信息
+docker inspect IMAGE                   # 完整详情</p>
+<h1>清理</h1>
+<p>docker image prune                     # 删除悬空（未标记）镜像
+docker image prune -a                  # 删除所有未使用镜像（谨慎！）
+docker image prune -a --filter &quot;until=168h&quot;   # 删除 7 天前未使用的镜像</p>
+</div>
+<h3>4. Docker Compose</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 启动/停止
+docker compose up -d                   # 后台启动所有服务
+docker compose up -d --build           # 启动前重新构建镜像
+docker compose down                    # 停止并删除容器
+docker compose down -v                 # 同时删除卷（会销毁数据）
+<h1>监控</h1>
+<p>docker compose ps                      # 列出服务
+docker compose logs -f api             # 跟踪指定服务的日志
+docker compose logs --tail 50          # 所有服务最后 50 行日志</p>
+<h1>交互</h1>
+<p>docker compose exec api /bin/sh        # 进入运行中服务的 Shell
+docker compose run --rm api npm test   # 一次性命令（新容器）
+docker compose restart api             # 重启指定服务</p>
+<h1>验证</h1>
+<p>docker compose config                  # 验证并查看解析后的配置</p>
+</div>
+<p><strong>最简 compose.yml 示例：</strong></p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+services:
+  api:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgres://user:pass@db:5432/mydb
+    depends_on:
+      db:
+        condition: service_healthy
+<p>db:
+image: postgres:16-alpine
+environment:
+POSTGRES_USER: user
+POSTGRES_PASSWORD: pass
+POSTGRES_DB: mydb
+volumes:
+- pgdata:/var/lib/postgresql/data
+healthcheck:
+test: [&quot;CMD-SHELL&quot;, &quot;pg_isready -U user&quot;]
+interval: 10s
+timeout: 5s
+retries: 5</p>
+<p>volumes:
+pgdata:</p>
+</div>
+<h3>5. 卷与网络</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 卷
+docker volume ls                       # 列出卷
+docker volume create mydata            # 创建命名卷
+docker volume inspect mydata           # 详情（挂载点等）
+docker volume rm mydata                # 删除（使用中则失败）
+docker volume prune                    # 删除未使用的卷
+<h1>网络</h1>
+<p>docker network ls                      # 列出网络
+docker network create mynet            # 创建桥接网络
+docker network inspect mynet           # 详情（已连接的容器）
+docker network connect mynet NAME      # 将容器连接到网络
+docker network disconnect mynet NAME   # 断开容器连接
+docker network rm mynet                # 删除网络
+docker network prune                   # 删除未使用的网络</p>
+</div>
+<h3>6. 磁盘使用与清理</h3>
+<p>清理前始终先进行诊断：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 检查空间占用
+docker system df                       # 摘要
+docker system df -v                    # 详细分解
+<h1>针对性清理（安全）</h1>
+<p>docker container prune                 # 已停止的容器
+docker image prune                     # 悬空镜像
+docker volume prune                    # 未使用的卷
+docker network prune                   # 未使用的网络</p>
+<h1>激进清理（请先与用户确认！）</h1>
+<p>docker system prune                    # 容器 + 镜像 + 网络
+docker system prune -a                 # 同时包含未使用镜像
+docker system prune -a --volumes       # 全部清除——包括命名卷</p>
+</div>
+<p><strong>警告：</strong> 未经用户确认，切勿运行 <code>docker system prune -a --volumes</code>。此命令会删除可能包含重要数据的命名卷。</p>
+<h2>常见问题</h2>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>原因</th>
+<th>解决方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>容器立即退出</td>
+<td>主进程结束或崩溃</td>
+<td>检查 <code>docker logs NAME</code>，尝试 <code>docker run -it --entrypoint /bin/sh IMAGE</code></td>
+</tr>
+<tr>
+<td>&quot;port is already allocated&quot;</td>
+<td>该端口已被其他进程占用</td>
+<td>使用 <code>docker ps</code> 或 <code>lsof -i :PORT</code> 查找</td>
+</tr>
+<tr>
+<td>&quot;no space left on device&quot;</td>
+<td>Docker 磁盘已满</td>
+<td>执行 <code>docker system df</code> 后针对性清理</td>
+</tr>
+<tr>
+<td>无法连接到容器</td>
+<td>容器内应用绑定到 127.0.0.1</td>
+<td>应用须绑定到 <code>0.0.0.0</code>，检查 <code>-p</code> 映射</td>
+</tr>
+<tr>
+<td>卷权限被拒绝</td>
+<td>宿主机与容器 UID/GID 不匹配</td>
+<td>使用 <code>--user $(id -u):$(id -g)</code> 或修复权限</td>
+</tr>
+<tr>
+<td>Compose 服务间无法互通</td>
+<td>网络错误或服务名称错误</td>
+<td>服务使用服务名作为主机名，检查 <code>docker compose config</code></td>
+</tr>
+<tr>
+<td>构建缓存失效</td>
+<td>Dockerfile 层顺序错误</td>
+<td>将不常变动的层放在前面（依赖在源码之前）</td>
+</tr>
+<tr>
+<td>镜像过大</td>
+<td>未使用多阶段构建，缺少 .dockerignore</td>
+<td>使用多阶段构建，添加 <code>.dockerignore</code></td>
+</tr>
+</tbody>
+</table>
+<h2>验证</h2>
+<p>每次 Docker 操作后，验证结果：</p>
+<ul>
+<li><strong>容器已启动？</strong> → <code>docker ps</code>（检查状态为 &quot;Up&quot;）</li>
+<li><strong>日志无异常？</strong> → <code>docker logs --tail 20 NAME</code>（无报错）</li>
+<li><strong>端口可访问？</strong> → <code>curl -s http://localhost:PORT</code> 或 <code>docker port NAME</code></li>
+<li><strong>镜像已构建？</strong> → <code>docker images | grep TAG</code></li>
+<li><strong>Compose 栈健康？</strong> → <code>docker compose ps</code>（所有服务状态为 &quot;running&quot; 或 &quot;healthy&quot;）</li>
+<li><strong>磁盘已释放？</strong> → <code>docker system df</code>（对比清理前后）</li>
+</ul>
+<h2>Dockerfile 优化建议</h2>
+<p>审查或创建 Dockerfile 时，建议以下改进：</p>
+<ol>
+<li><strong>多阶段构建</strong> — 将构建环境与运行时分离，减小最终镜像体积</li>
+<li><strong>层顺序</strong> — 将依赖放在源码之前，避免变更使缓存层失效</li>
+<li><strong>合并 RUN 命令</strong> — 减少层数，缩小镜像体积</li>
+<li><strong>使用 .dockerignore</strong> — 排除 <code>node_modules</code>、<code>.git</code>、<code>__pycache__</code> 等</li>
+<li><strong>固定基础镜像版本</strong> — 使用 <code>node:20-alpine</code> 而非 <code>node:latest</code></li>
+<li><strong>以非 root 用户运行</strong> — 添加 <code>USER</code> 指令以提升安全性</li>
+<li><strong>使用 slim/alpine 基础镜像</strong> — 使用 <code>python:3.12-slim</code> 而非 <code>python:3.12</code></li>
+</ol>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

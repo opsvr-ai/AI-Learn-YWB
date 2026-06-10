@@ -1,0 +1,446 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>网页搜索提供商插件 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 开发者指南 / 网页搜索提供商插件</div><p>网页搜索提供商插件注册一个后端，用于处理 <code>web_search</code>、<code>web_extract</code> 以及（可选的）深度爬取工具调用。内置提供商——Firecrawl、SearXNG、Tavily、Exa、Parallel、Brave Search（免费层）和 DDGS——均以插件形式存放于 <code>plugins/web/&lt;name&gt;/</code> 目录下。你可以在该目录旁新建一个目录来添加新提供商，或覆盖已有的内置提供商。</p>
+<div class="tip"><strong>💡 提示</strong>
+网页搜索是 Hermes 支持的多种<strong>后端插件</strong>之一。其他插件（各有其 ABC）包括：<a href="/developer-guide/image-gen-provider-plugin">图像生成提供商插件</a>、<a href="/developer-guide/video-gen-provider-plugin">视频生成提供商插件</a>、<a href="/developer-guide/memory-provider-plugin">记忆提供商插件</a>、<a href="/developer-guide/context-engine-plugin">上下文引擎插件</a>和<a href="/developer-guide/model-provider-plugin">模型提供商插件</a>。通用工具/hook/CLI 插件请参阅<a href="/guides/build-a-hermes-plugin">构建 Hermes 插件</a>。
+</div>
+<h2>发现机制</h2>
+<p>Hermes 在三个位置扫描网页搜索后端：</p>
+<ol>
+<li><strong>内置</strong> — <code>&lt;repo&gt;/plugins/web/&lt;name&gt;/</code>（以 <code>kind: backend</code> 自动加载，始终可用）</li>
+<li><strong>用户</strong> — <code>~/.hermes/plugins/web/&lt;name&gt;/</code>（通过 <code>plugins.enabled</code> 或 <code>hermes plugins enable &lt;name&gt;</code> 按需启用）</li>
+<li><strong>Pip</strong> — 声明了 <code>hermes_agent.plugins</code> 入口点的包</li>
+</ol>
+<p>每个插件的 <code>register(ctx)</code> 函数调用 <code>ctx.register_web_search_provider(...)</code> ——将实例注册到 <code>agent/web_search_registry.py</code> 中的注册表。各能力的活跃提供商由配置决定：</p>
+<table>
+<thead>
+<tr>
+<th>能力</th>
+<th>配置键</th>
+<th>回退至</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>web_search</code></td>
+<td><code>web.search_backend</code></td>
+<td><code>web.backend</code></td>
+</tr>
+<tr>
+<td><code>web_extract</code></td>
+<td><code>web.extract_backend</code></td>
+<td><code>web.backend</code></td>
+</tr>
+<tr>
+<td><code>web_extract</code> 内的深度爬取模式</td>
+<td><code>web.extract_backend</code></td>
+<td><code>web.backend</code></td>
+</tr>
+</tbody>
+</table>
+<p>若两个键均未设置，Hermes 将根据环境中存在的 API key/URL 自动检测后端。<code>hermes tools</code> 会引导用户完成选择。</p>
+<h2>目录结构</h2>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+plugins/web/my-backend/
+├── __init__.py     # register() 入口点
+├── provider.py     # WebSearchProvider 子类
+└── plugin.yaml     # 包含 kind: backend 和 provides_web_providers 的清单文件
+</div>
+<p><code>brave_free/</code> 和 <code>ddgs/</code> 是代码库中最小的参考实现——<code>brave_free</code> 是需要 API key 的纯搜索提供商，<code>ddgs</code> 是无需 key 且懒加载 SDK 的提供商。</p>
+<h2>WebSearchProvider ABC</h2>
+<p>继承 <code>agent.web_search_provider.WebSearchProvider</code>。唯一必须实现的成员是 <code>name</code>、<code>is_available()</code>，以及你所实现的 <code>search()</code> / <code>extract()</code> / <code>crawl()</code> 中的相应方法。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# plugins/web/my-backend/provider.py
+from __future__ import annotations
+
+import os
+from typing import Any, Dict, List
+
+from agent.web_search_provider import WebSearchProvider
+
+
+class MyBackendWebSearchProvider(WebSearchProvider):
+    """Minimal search-only provider against the My Backend HTTP API."""
+
+    @property
+    def name(self) -&gt; str:
+        # Stable id used in web.search_backend / web.extract_backend / web.backend
+        # config keys. Lowercase, no spaces; hyphens permitted.
+        return "my-backend"
+
+    @property
+    def display_name(self) -&gt; str:
+        # Human label shown in `hermes tools`. Defaults to `name`.
+        return "My Backend"
+
+    def is_available(self) -&gt; bool:
+        # Cheap check — env var present, optional dep importable, etc.
+        # MUST NOT make network calls (runs on every `hermes tools` paint).
+        return bool(os.getenv("MY_BACKEND_API_KEY", "").strip())
+
+    def supports_search(self) -&gt; bool:
+        return True
+
+    def supports_extract(self) -&gt; bool:
+        return False
+
+    def search(self, query: str, limit: int = 5) -&gt; Dict[str, Any]:
+        import httpx
+
+        api_key = os.environ["MY_BACKEND_API_KEY"]
+        try:
+            resp = httpx.get(
+                "https://api.example.com/search",
+                params={"q": query, "count": max(1, min(int(limit), 20))},
+                headers={"Authorization": f"Bearer {api_key}"},
+                timeout=15,
+            )
+            resp.raise_for_status()
+            data = resp.json()
+        except httpx.HTTPError as exc:
+            return {"success": False, "error": str(exc)}
+
+        # Response shape is fixed — see "Response shape" below.
+        return {
+            "success": True,
+            "data": {
+                "web": [
+                    {
+                        "title": item.get("title", ""),
+                        "url": item.get("url", ""),
+                        "description": item.get("snippet", ""),
+                        "position": idx + 1,
+                    }
+                    for idx, item in enumerate(data.get("results", []))
+                ],
+            },
+        }
+</div>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# plugins/web/my-backend/__init__.py
+from plugins.web.my_backend.provider import MyBackendWebSearchProvider
+
+
+def register(ctx) -&gt; None:
+    """Plugin entry point — called once at load time."""
+    ctx.register_web_search_provider(MyBackendWebSearchProvider())
+</div>
+<h2>plugin.yaml</h2>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+name: web-my-backend
+version: 1.0.0
+description: "My Backend web search — Bearer-auth REST API"
+author: Your Name
+kind: backend
+provides_web_providers:
+  - my-backend
+requires_env:
+  - MY_BACKEND_API_KEY
+</div>
+<table>
+<thead>
+<tr>
+<th>键</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kind: backend</code></td>
+<td>将插件路由至后端加载路径</td>
+</tr>
+<tr>
+<td><code>provides_web_providers</code></td>
+<td>该插件注册的提供商 <code>name</code> 列表——在 <code>register()</code> 运行之前，加载器即可通过此字段在 <code>hermes tools</code> 中公示插件</td>
+</tr>
+<tr>
+<td><code>requires_env</code></td>
+<td>在 <code>hermes plugins install</code> 期间进行交互式凭据提示（富格式说明参见<a href="/guides/build-a-hermes-plugin#gate-on-environment-variables">构建 Hermes 插件</a>）</td>
+</tr>
+</tbody>
+</table>
+<h2>ABC 参考</h2>
+<p>完整契约位于 <code>agent/web_search_provider.py</code>。可覆盖的方法如下：</p>
+<table>
+<thead>
+<tr>
+<th>成员</th>
+<th>必须</th>
+<th>默认值</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>✅</td>
+<td>—</td>
+<td>在 <code>web.*_backend</code> 配置中使用的稳定 id</td>
+</tr>
+<tr>
+<td><code>display_name</code></td>
+<td>—</td>
+<td><code>name</code></td>
+<td>在 <code>hermes tools</code> 中显示的标签</td>
+</tr>
+<tr>
+<td><code>is_available()</code></td>
+<td>✅</td>
+<td>—</td>
+<td>轻量可用性检查——环境变量、可选依赖等</td>
+</tr>
+<tr>
+<td><code>supports_search()</code></td>
+<td>—</td>
+<td><code>True</code></td>
+<td><code>web_search</code> 路由的能力标志</td>
+</tr>
+<tr>
+<td><code>supports_extract()</code></td>
+<td>—</td>
+<td><code>False</code></td>
+<td><code>web_extract</code> 路由的能力标志</td>
+</tr>
+<tr>
+<td><code>search(query, limit)</code></td>
+<td>条件必须</td>
+<td>抛出异常</td>
+<td>当 <code>supports_search()</code> 返回 <code>True</code> 时必须实现</td>
+</tr>
+<tr>
+<td><code>extract(urls, **kwargs)</code></td>
+<td>条件必须</td>
+<td>抛出异常</td>
+<td>当 <code>supports_extract()</code> 返回 <code>True</code> 时必须实现</td>
+</tr>
+</tbody>
+</table>
+<p>提供商可以在单个类中声明多种能力——Firecrawl、Tavily、Exa 和 Parallel 均实现了搜索和提取两种能力。Brave Search 和 DDGS 仅支持搜索；SearXNG 也仅支持搜索，并有文档说明的&quot;与提取提供商配对使用&quot;工作流。</p>
+<h2>响应格式</h2>
+<p>工具包装器期望固定的响应信封（envelope），以避免在不同后端之间进行转换。</p>
+<p><strong>搜索成功：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{
+    "success": True,
+    "data": {
+        "web": [
+            {"title": str, "url": str, "description": str, "position": int},
+            ...
+        ],
+    },
+}
+</div>
+<p><strong>提取成功：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{
+    "success": True,
+    "data": [
+        {
+            "url": str,
+            "title": str,
+            "content": str,
+            "raw_content": str,
+            "metadata": dict,    # optional
+            "error": str,        # optional, only on per-URL failure
+        },
+        ...
+    ],
+}
+</div>
+<p><strong>任意能力，失败时：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{"success": False, "error": "human-readable message"}
+</div>
+<p><code>search()</code> 和 <code>extract()</code> 均可定义为 <code>async def</code>——调度器通过 <code>inspect.iscoroutinefunction</code> 检测协程函数并相应地进行 await。对于小型后端，执行阻塞 I/O（HTTP、SDK 调用）的同步实现也完全可行；调度器会处理线程调度。</p>
+<h2>能力标志</h2>
+<p>Hermes 根据 <code>supports_*</code> 标志将调用路由至正确的提供商。一种常见的多提供商配置：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ~/.hermes/config.yaml
+web:
+  search_backend: "brave-free"     # 纯搜索，速度快，每月免费 2k 次
+  extract_backend: "firecrawl"     # 提取 + 爬取，付费配额
+</div>
+<p>当 <code>web.search_backend</code> 或 <code>web.extract_backend</code> 未设置时，均回退至 <code>web.backend</code>。若该项也未设置，Hermes 将根据环境变量的存在情况，选取第一个支持所请求能力的可用提供商。</p>
+<p>如果你的提供商只支持一种能力，将其他标志保持默认值（<code>False</code>）即可，注册表会在对应工具调用时跳过它——当用户仅将 X 用于搜索而要求 agent 进行提取时，不会看到误导性的&quot;提供商 X 失败&quot;错误。</p>
+<h2>Hermes 如何将其接入工具</h2>
+<p><code>web_search</code> 和 <code>web_extract</code> 工具位于 <code>tools/web_tools.py</code>。调用时执行以下步骤：</p>
+<ol>
+<li>读取相关配置键（<code>web_search</code> 对应 <code>web.search_backend</code>，<code>web_extract</code> 对应 <code>web.extract_backend</code>）</li>
+<li>向注册表查询具有该 <code>name</code> 的提供商</li>
+<li>检查 <code>is_available()</code> 及对应的 <code>supports_*()</code> 标志</li>
+<li>调度至 <code>search()</code> / <code>extract()</code> / <code>crawl()</code>，若方法为协程则进行 await</li>
+<li>将响应信封 JSON 序列化后返回给 LLM</li>
+</ol>
+<p>错误以工具结果的形式呈现；LLM 决定如何解释。若没有提供商被注册（或所有可用提供商均未通过能力检查），工具将返回一条指向 <code>hermes tools</code> 的友好错误信息。</p>
+<h2>懒加载可选依赖</h2>
+<p>如果你的提供商封装了第三方 SDK（如 DDGS 封装了 <code>ddgs</code> 包），请勿在模块顶层 <code>import</code>。在 <code>is_available()</code> 或 <code>search()</code> 内部使用 <code>tools.lazy_deps.ensure(...)</code> ——Hermes 将在首次使用时安装该包，并受 <code>security.allow_lazy_installs</code> 控制。安全模型详见<a href="/guides/build-a-hermes-plugin#lazy-install-optional-python-dependencies">构建 Hermes 插件 → 懒加载</a>。</p>
+<h2>参考实现</h2>
+<ul>
+<li><strong><code>plugins/web/brave_free/</code></strong> — 小型、需要 API key 的纯搜索 HTTP 提供商。适合作为起始模板。</li>
+<li><strong><code>plugins/web/ddgs/</code></strong> — 无需 key、懒加载 SDK 的提供商。适用于封装 Python 包的后端。</li>
+<li><strong><code>plugins/web/firecrawl/</code></strong> — 完整的多能力提供商（搜索 + 提取 + 爬取），支持多种格式模式。</li>
+<li><strong><code>plugins/web/searxng/</code></strong> — 自托管、通过 URL 配置、无需认证的后端。</li>
+<li><strong><code>plugins/web/xai/</code></strong> — 通过 Grok 服务端 <code>web_search</code> 工具实现的 LLM 驱动搜索。展示了如何复用现有的 OAuth/环境变量凭据（<code>tools/xai_http.py</code>）而无需新增环境变量，以及如何编写遵守无网络调用约定的轻量 <code>is_available()</code>。</li>
+</ul>
+<h2>通过 pip 分发</h2>
+<div class="code-block"><span class="code-lang">toml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# pyproject.toml
+[project.entry-points."hermes_agent.plugins"]
+my-backend-web = "my_backend_web_package"
+</div>
+<p><code>my_backend_web_package</code> 必须暴露顶层 <code>register</code> 函数。完整配置说明参见通用插件指南中的<a href="/guides/build-a-hermes-plugin#distribute-via-pip">通过 pip 分发</a>。</p>
+<h2>相关页面</h2>
+<ul>
+<li><a href="/user-guide/features/web-search">网页搜索</a> — 面向用户的功能文档及各后端配置说明</li>
+<li><a href="/user-guide/features/plugins">插件概览</a> — 所有插件类型一览</li>
+<li><a href="/guides/build-a-hermes-plugin">构建 Hermes 插件</a> — 通用工具/hook/斜杠命令指南</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

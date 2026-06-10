@@ -1,0 +1,670 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weights And Biases — W&B：记录 ML 实验、sweeps、模型注册表、仪表盘 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Weights And Biases — W&B：记录 ML 实验、sweeps、模型注册表、仪表盘</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Weights And Biases</h1>
+<p>W&amp;B：记录 ML 实验、sweeps、模型注册表、仪表盘。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>内置（默认安装）</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>skills/mlops/evaluation/weights-and-biases</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Orchestra Research</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>依赖</td>
+<td><code>wandb</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>MLOps</code>, <code>Weights And Biases</code>, <code>WandB</code>, <code>Experiment Tracking</code>, <code>Hyperparameter Tuning</code>, <code>Model Registry</code>, <code>Collaboration</code>, <code>Real-Time Visualization</code>, <code>PyTorch</code>, <code>TensorFlow</code>, <code>HuggingFace</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>Weights &amp; Biases：ML 实验追踪与 MLOps</h1>
+<h2>适用场景</h2>
+<p>在以下情况下使用 Weights &amp; Biases（W&amp;B）：</p>
+<ul>
+<li><strong>追踪 ML 实验</strong>，自动记录指标</li>
+<li><strong>实时仪表盘可视化</strong>训练过程</li>
+<li><strong>跨超参数和配置对比运行结果</strong></li>
+<li><strong>自动化 sweeps 优化超参数</strong></li>
+<li><strong>管理模型注册表</strong>，支持版本控制与血缘追踪</li>
+<li><strong>团队协作开展 ML 项目</strong>，共享工作区</li>
+<li><strong>追踪 artifacts</strong>（数据集、模型、代码）及其血缘关系</li>
+</ul>
+<p><strong>用户数</strong>：20 万+ ML 从业者 | <strong>GitHub Stars</strong>：10.5k+ | <strong>集成数</strong>：100+</p>
+<h2>安装</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 安装 W&amp;B
+pip install wandb
+<h1>登录（创建 API key）</h1>
+<p>wandb login</p>
+<h1>或以编程方式设置 API key</h1>
+<p>export WANDB_API_KEY=your_api_key_here</p>
+</div>
+<h2>快速开始</h2>
+<h3>基础实验追踪</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import wandb
+<h1>初始化一次运行</h1>
+<p>run = wandb.init(
+project=&quot;my-project&quot;,
+config={
+&quot;learning_rate&quot;: 0.001,
+&quot;epochs&quot;: 10,
+&quot;batch_size&quot;: 32,
+&quot;architecture&quot;: &quot;ResNet50&quot;
+}
+)</p>
+<h1>训练循环</h1>
+<p>for epoch in range(run.config.epochs):
+# 你的训练代码
+train_loss = train_epoch()
+val_loss = validate()</p>
+<pre><code># 记录指标
+wandb.log({
+    &quot;epoch&quot;: epoch,
+    &quot;train/loss&quot;: train_loss,
+    &quot;val/loss&quot;: val_loss,
+    &quot;train/accuracy&quot;: train_acc,
+    &quot;val/accuracy&quot;: val_acc
+})
+</code></pre>
+<h1>结束运行</h1>
+<p>wandb.finish()</p>
+</div>
+<h3>与 PyTorch 配合使用</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import torch
+import wandb
+<h1>初始化</h1>
+<p>wandb.init(project=&quot;pytorch-demo&quot;, config={
+&quot;lr&quot;: 0.001,
+&quot;epochs&quot;: 10
+})</p>
+<h1>访问配置</h1>
+<p>config = wandb.config</p>
+<h1>训练循环</h1>
+<p>for epoch in range(config.epochs):
+for batch_idx, (data, target) in enumerate(train_loader):
+# 前向传播
+output = model(data)
+loss = criterion(output, target)</p>
+<pre><code>    # 反向传播
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+
+    # 每 100 个 batch 记录一次
+    if batch_idx % 100 == 0:
+        wandb.log({
+            &quot;loss&quot;: loss.item(),
+            &quot;epoch&quot;: epoch,
+            &quot;batch&quot;: batch_idx
+        })
+</code></pre>
+<h1>保存模型</h1>
+<p>torch.save(model.state_dict(), &quot;model.pth&quot;)
+wandb.save(&quot;model.pth&quot;)  # 上传至 W&amp;amp;B</p>
+<p>wandb.finish()</p>
+</div>
+<h2>核心概念</h2>
+<h3>1. Projects 与 Runs</h3>
+<p><strong>Project</strong>：相关实验的集合
+<strong>Run</strong>：训练脚本的单次执行</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 创建/使用 project
+run = wandb.init(
+    project="image-classification",
+    name="resnet50-experiment-1",  # 可选的运行名称
+    tags=["baseline", "resnet"],    # 使用标签组织
+    notes="First baseline run"      # 添加备注
+)
+<h1>每次运行都有唯一 ID</h1>
+<p>print(f&quot;Run ID: {run.id}&quot;)
+print(f&quot;Run URL: {run.url}&quot;)</p>
+</div>
+<h3>2. 配置追踪</h3>
+<p>自动追踪超参数：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+config = {
+    # 模型架构
+    "model": "ResNet50",
+    "pretrained": True,
+<pre><code># 训练参数
+&quot;learning_rate&quot;: 0.001,
+&quot;batch_size&quot;: 32,
+&quot;epochs&quot;: 50,
+&quot;optimizer&quot;: &quot;Adam&quot;,
+
+# 数据参数
+&quot;dataset&quot;: &quot;ImageNet&quot;,
+&quot;augmentation&quot;: &quot;standard&quot;
+</code></pre>
+<p>}</p>
+<p>wandb.init(project=&quot;my-project&quot;, config=config)</p>
+<h1>训练过程中访问配置</h1>
+<p>lr = wandb.config.learning_rate
+batch_size = wandb.config.batch_size</p>
+</div>
+<h3>3. 指标记录</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 记录标量
+wandb.log({"loss": 0.5, "accuracy": 0.92})
+<h1>记录多个指标</h1>
+<p>wandb.log({
+&quot;train/loss&quot;: train_loss,
+&quot;train/accuracy&quot;: train_acc,
+&quot;val/loss&quot;: val_loss,
+&quot;val/accuracy&quot;: val_acc,
+&quot;learning_rate&quot;: current_lr,
+&quot;epoch&quot;: epoch
+})</p>
+<h1>使用自定义 x 轴记录</h1>
+<p>wandb.log({&quot;loss&quot;: loss}, step=global_step)</p>
+<h1>记录媒体（图像、音频、视频）</h1>
+<p>wandb.log({&quot;examples&quot;: [wandb.Image(img) for img in images]})</p>
+<h1>记录直方图</h1>
+<p>wandb.log({&quot;gradients&quot;: wandb.Histogram(gradients)})</p>
+<h1>记录表格</h1>
+<p>table = wandb.Table(columns=[&quot;id&quot;, &quot;prediction&quot;, &quot;ground_truth&quot;])
+wandb.log({&quot;predictions&quot;: table})</p>
+</div>
+<h3>4. 模型检查点</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import torch
+import wandb
+<h1>保存模型检查点</h1>
+<p>checkpoint = {
+'epoch': epoch,
+'model_state_dict': model.state_dict(),
+'optimizer_state_dict': optimizer.state_dict(),
+'loss': loss,
+}</p>
+<p>torch.save(checkpoint, 'checkpoint.pth')</p>
+<h1>上传至 W&amp;amp;B</h1>
+<p>wandb.save('checkpoint.pth')</p>
+<h1>或使用 Artifacts（推荐）</h1>
+<p>artifact = wandb.Artifact('model', type='model')
+artifact.add_file('checkpoint.pth')
+wandb.log_artifact(artifact)</p>
+</div>
+<h2>超参数 Sweeps</h2>
+<p>自动搜索最优超参数。</p>
+<h3>定义 Sweep 配置</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+sweep_config = {
+    'method': 'bayes',  # 或 'grid'、'random'
+    'metric': {
+        'name': 'val/accuracy',
+        'goal': 'maximize'
+    },
+    'parameters': {
+        'learning_rate': {
+            'distribution': 'log_uniform',
+            'min': 1e-5,
+            'max': 1e-1
+        },
+        'batch_size': {
+            'values': [16, 32, 64, 128]
+        },
+        'optimizer': {
+            'values': ['adam', 'sgd', 'rmsprop']
+        },
+        'dropout': {
+            'distribution': 'uniform',
+            'min': 0.1,
+            'max': 0.5
+        }
+    }
+}
+<h1>初始化 sweep</h1>
+<p>sweep_id = wandb.sweep(sweep_config, project=&quot;my-project&quot;)</p>
+</div>
+<h3>定义训练函数</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def train():
+    # 初始化运行
+    run = wandb.init()
+<pre><code># 访问 sweep 参数
+lr = wandb.config.learning_rate
+batch_size = wandb.config.batch_size
+optimizer_name = wandb.config.optimizer
+
+# 使用 sweep 配置构建模型
+model = build_model(wandb.config)
+optimizer = get_optimizer(optimizer_name, lr)
+
+# 训练循环
+for epoch in range(NUM_EPOCHS):
+    train_loss = train_epoch(model, optimizer, batch_size)
+    val_acc = validate(model)
+
+    # 记录指标
+    wandb.log({
+        &quot;train/loss&quot;: train_loss,
+        &quot;val/accuracy&quot;: val_acc
+    })
+</code></pre>
+<h1>运行 sweep</h1>
+<p>wandb.agent(sweep_id, function=train, count=50)  # 运行 50 次试验</p>
+</div>
+<h3>Sweep 策略</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 网格搜索 - 穷举
+sweep_config = {
+    'method': 'grid',
+    'parameters': {
+        'lr': {'values': [0.001, 0.01, 0.1]},
+        'batch_size': {'values': [16, 32, 64]}
+    }
+}
+<h1>随机搜索</h1>
+<p>sweep_config = {
+'method': 'random',
+'parameters': {
+'lr': {'distribution': 'uniform', 'min': 0.0001, 'max': 0.1},
+'dropout': {'distribution': 'uniform', 'min': 0.1, 'max': 0.5}
+}
+}</p>
+<h1>贝叶斯优化（推荐）</h1>
+<p>sweep_config = {
+'method': 'bayes',
+'metric': {'name': 'val/loss', 'goal': 'minimize'},
+'parameters': {
+'lr': {'distribution': 'log_uniform', 'min': 1e-5, 'max': 1e-1}
+}
+}</p>
+</div>
+<h2>Artifacts</h2>
+<p>追踪数据集、模型及其他文件的血缘关系。</p>
+<h3>记录 Artifacts</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 创建 artifact
+artifact = wandb.Artifact(
+    name='training-dataset',
+    type='dataset',
+    description='ImageNet training split',
+    metadata={'size': '1.2M images', 'split': 'train'}
+)
+<h1>添加文件</h1>
+<p>artifact.add_file('data/train.csv')
+artifact.add_dir('data/images/')</p>
+<h1>记录 artifact</h1>
+<p>wandb.log_artifact(artifact)</p>
+</div>
+<h3>使用 Artifacts</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 下载并使用 artifact
+run = wandb.init(project="my-project")
+<h1>下载 artifact</h1>
+<p>artifact = run.use_artifact('training-dataset:latest')
+artifact_dir = artifact.download()</p>
+<h1>使用数据</h1>
+<p>data = load_data(f&quot;{artifact_dir}/train.csv&quot;)</p>
+</div>
+<h3>模型注册表</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 将模型记录为 artifact
+model_artifact = wandb.Artifact(
+    name='resnet50-model',
+    type='model',
+    metadata={'architecture': 'ResNet50', 'accuracy': 0.95}
+)
+<p>model_artifact.add_file('model.pth')
+wandb.log_artifact(model_artifact, aliases=['best', 'production'])</p>
+<h1>链接到模型注册表</h1>
+<p>run.link_artifact(model_artifact, 'model-registry/production-models')</p>
+</div>
+<h2>集成示例</h2>
+<h3>HuggingFace Transformers</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from transformers import Trainer, TrainingArguments
+import wandb
+<h1>初始化 W&amp;amp;B</h1>
+<p>wandb.init(project=&quot;hf-transformers&quot;)</p>
+<h1>带 W&amp;amp;B 的训练参数</h1>
+<p>training_args = TrainingArguments(
+output_dir=&quot;./results&quot;,
+report_to=&quot;wandb&quot;,  # 启用 W&amp;amp;B 日志
+run_name=&quot;bert-finetuning&quot;,
+logging_steps=100,
+save_steps=500
+)</p>
+<h1>Trainer 自动记录至 W&amp;amp;B</h1>
+<p>trainer = Trainer(
+model=model,
+args=training_args,
+train_dataset=train_dataset,
+eval_dataset=eval_dataset
+)</p>
+<p>trainer.train()</p>
+</div>
+<h3>PyTorch Lightning</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from pytorch_lightning import Trainer
+from pytorch_lightning.loggers import WandbLogger
+import wandb
+<h1>创建 W&amp;amp;B logger</h1>
+<p>wandb_logger = WandbLogger(
+project=&quot;lightning-demo&quot;,
+log_model=True  # 记录模型检查点
+)</p>
+<h1>与 Trainer 配合使用</h1>
+<p>trainer = Trainer(
+logger=wandb_logger,
+max_epochs=10
+)</p>
+<p>trainer.fit(model, datamodule=dm)</p>
+</div>
+<h3>Keras/TensorFlow</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import wandb
+from wandb.keras import WandbCallback
+<h1>初始化</h1>
+<p>wandb.init(project=&quot;keras-demo&quot;)</p>
+<h1>添加回调</h1>
+<p>model.fit(
+x_train, y_train,
+validation_data=(x_val, y_val),
+epochs=10,
+callbacks=[WandbCallback()]  # 自动记录指标
+)</p>
+</div>
+<h2>可视化与分析</h2>
+<h3>自定义图表</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 记录自定义可视化
+import matplotlib.pyplot as plt
+<p>fig, ax = plt.subplots()
+ax.plot(x, y)
+wandb.log({&quot;custom_plot&quot;: wandb.Image(fig)})</p>
+<h1>记录混淆矩阵</h1>
+<p>wandb.log({&quot;conf_mat&quot;: wandb.plot.confusion_matrix(
+probs=None,
+y_true=ground_truth,
+preds=predictions,
+class_names=class_names
+)})</p>
+</div>
+<h3>Reports</h3>
+<p>在 W&amp;B UI 中创建可分享的报告：</p>
+<ul>
+<li>组合运行结果、图表与文本</li>
+<li>支持 Markdown</li>
+<li>可嵌入的可视化内容</li>
+<li>团队协作</li>
+</ul>
+<h2>最佳实践</h2>
+<h3>1. 使用标签和分组进行组织</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+wandb.init(
+    project="my-project",
+    tags=["baseline", "resnet50", "imagenet"],
+    group="resnet-experiments",  # 对相关运行分组
+    job_type="train"             # 任务类型
+)
+</div>
+<h3>2. 记录所有相关信息</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 记录系统指标
+wandb.log({
+    "gpu/util": gpu_utilization,
+    "gpu/memory": gpu_memory_used,
+    "cpu/util": cpu_utilization
+})
+<h1>记录代码版本</h1>
+<p>wandb.log({&quot;git_commit&quot;: git_commit_hash})</p>
+<h1>记录数据划分</h1>
+<p>wandb.log({
+&quot;data/train_size&quot;: len(train_dataset),
+&quot;data/val_size&quot;: len(val_dataset)
+})</p>
+</div>
+<h3>3. 使用描述性名称</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ✅ 好：描述性运行名称
+wandb.init(
+    project="nlp-classification",
+    name="bert-base-lr0.001-bs32-epoch10"
+)
+<h1>❌ 差：通用名称</h1>
+<p>wandb.init(project=&quot;nlp&quot;, name=&quot;run1&quot;)</p>
+</div>
+<h3>4. 保存重要 Artifacts</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 保存最终模型
+artifact = wandb.Artifact('final-model', type='model')
+artifact.add_file('model.pth')
+wandb.log_artifact(artifact)
+<h1>保存预测结果以供分析</h1>
+<p>predictions_table = wandb.Table(
+columns=[&quot;id&quot;, &quot;input&quot;, &quot;prediction&quot;, &quot;ground_truth&quot;],
+data=predictions_data
+)
+wandb.log({&quot;predictions&quot;: predictions_table})</p>
+</div>
+<h3>5. 在网络不稳定时使用离线模式</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import os
+<h1>启用离线模式</h1>
+<p>os.environ[&quot;WANDB_MODE&quot;] = &quot;offline&quot;</p>
+<p>wandb.init(project=&quot;my-project&quot;)</p>
+<h1>... 你的代码 ...</h1>
+<h1>稍后同步</h1>
+<h1>wandb sync &amp;lt;run_directory&amp;gt;</h1>
+</div>
+<h2>团队协作</h2>
+<h3>分享运行结果</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 运行结果可通过 URL 自动分享
+run = wandb.init(project="team-project")
+print(f"Share this URL: {run.url}")
+</div>
+<h3>团队项目</h3>
+<ul>
+<li>在 wandb.ai 创建团队账号</li>
+<li>添加团队成员</li>
+<li>设置项目可见性（私有/公开）</li>
+<li>使用团队级 artifacts 和模型注册表</li>
+</ul>
+<h2>定价</h2>
+<ul>
+<li><strong>免费版</strong>：无限公开项目，100GB 存储</li>
+<li><strong>学术版</strong>：学生/研究人员免费使用</li>
+<li><strong>团队版</strong>：$50/席位/月，私有项目，无限存储</li>
+<li><strong>企业版</strong>：定制定价，支持本地部署</li>
+</ul>
+<h2>资源</h2>
+<ul>
+<li><strong>文档</strong>：https://docs.wandb.ai</li>
+<li><strong>GitHub</strong>：https://github.com/wandb/wandb（10.5k+ stars）</li>
+<li><strong>示例</strong>：https://github.com/wandb/examples</li>
+<li><strong>社区</strong>：https://wandb.ai/community</li>
+<li><strong>Discord</strong>：https://wandb.me/discord</li>
+</ul>
+<h2>另请参阅</h2>
+<ul>
+<li><code>references/sweeps.md</code> — 超参数优化综合指南</li>
+<li><code>references/artifacts.md</code> — 数据与模型版本控制模式</li>
+<li><code>references/integrations.md</code> — 框架专项示例</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ideation — Generate project ideas via creative constraints - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 命令</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & Skills</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">docs</a> / <a href="/hermes-docs/user-guide/">user-guide</a> / <a href="/hermes-docs/user-guide/skills/">skills</a> / <a href="/hermes-docs/user-guide/skills/bundled/">bundled</a> / <a href="/hermes-docs/user-guide/skills/bundled/creative/">creative</a> / Ideation — Generate project ideas 通过 creative constraints</div><p>{/<em> 本页面由 website/scripts/generate-skill-docs.py 从技能的 SKILL.md 自动生成。请编辑源 SKILL.md，而非本页面。 </em>/}</p>
+<h1>Ideation</h1>
+<p>Generate project ideas via creative constraints.</p>
+<h2>技能元数据</h2>
+<table><thead><tr><th>---</th><th>---</th></tr></thead><tbody>
+<tr><td>来源</td><td>内置（默认安装）</td></tr>
+<tr><td>路径</td><td><code>skills/creative/creative-ideation</code></td></tr>
+<tr><td>版本</td><td><code>1.0.0</code></td></tr>
+<tr><td>作者</td><td>SHL0MS</td></tr>
+<tr><td>许可证</td><td>MIT</td></tr>
+<tr><td>平台</td><td>linux, macos, windows</td></tr>
+<tr><td>标签</td><td><code>Creative</code>, <code>Ideation</code>, <code>Projects</code>, <code>Brainstorming</code>, <code>Inspiration</code></td></tr>
+</tbody></table>
+<h2>参考：完整 SKILL.md</h2>
+<p>:::info</p>
+<p>以下是 Hermes 在此技能被触发时加载的完整技能定义。这是技能激活时代理所看到的指令。</p>
+<p>:::</p>
+<h1>Creative Ideation</h1>
+<h2>When to use</h2>
+<p>Use when the user says 'I want to build something', 'give me a project idea', 'I'm bored', 'what should I make', 'inspire me', or any variant of 'I have tools but no direction'. Works for code, art, hardware, writing, tools, and anything that can be made.</p>
+<p>Generate project ideas through creative constraints. Constraint + direction = creativity.</p>
+<h2>How It Works</h2>
+<p>1. <strong>Pick a constraint</strong> from the library below — random, or matched to the user's domain/mood</p>
+<p>2. <strong>Interpret it broadly</strong> — a coding prompt can become a hardware project, an art prompt can become a CLI tool</p>
+<p>3. <strong>Generate 3 concrete project ideas</strong> that satisfy the constraint</p>
+<p>4. <strong>If they pick one, build it</strong> — create the project, write the code, ship it</p>
+<h2>The Rule</h2>
+<p>Every prompt is interpreted as broadly as possible. "Does this include X?" → Yes. The prompts provide direction and mild constraint. Without either, there is no creativity.</p>
+<h2>Constraint Library</h2>
+<h3>For Developers</h3>
+<p><strong>Solve your own itch:</strong></p>
+<p>Build the tool you wished existed this week. Under 50 lines. Ship it today.</p>
+<p><strong>Automate the annoying thing:</strong></p>
+<p>What's the most tedious part of your workflow? Script it away. Two hours to fix a problem that costs you five minutes a day.</p>
+<p><strong>The CLI tool that should exist:</strong></p>
+<p>Think of a command you've wished you could type. <code>git undo-that-thing-i-just-did</code>. <code>docker why-is-this-broken</code>. <code>npm explain-yourself</code>. Now build it.</p>
+<p><strong>Nothing new except glue:</strong></p>
+<p>Make something entirely from existing APIs, libraries, and datasets. The only original contribution is how you connect them.</p>
+<p><strong>Frankenstein week:</strong></p>
+<p>Take something that does X and make it do Y. A git repo that plays music. A Dockerfile that generates poetry. A cron job that sends compliments.</p>
+<p><strong>Subtract:</strong></p>
+<p>How much can you remove from a codebase before it breaks? Strip a tool to its minimum viable function. Delete until only the essence remains.</p>
+<p><strong>High concept, low effort:</strong></p>
+<p>A deep idea, lazily executed. The concept should be brilliant. The implementation should take an afternoon. If it takes longer, you're overthinking it.</p>
+<h3>For Makers & Artists</h3>
+<p><strong>Blatantly copy something:</strong></p>
+<p>Pick something you admire — a tool, an artwork, an interface. Recreate it from scratch. The learning is in the gap between your version and theirs.</p>
+<p><strong>One million of something:</strong></p>
+<p>One million is both a lot and not that much. One million pixels is a 1MB photo. One million API calls is a Tuesday. One million of anything becomes interesting at scale.</p>
+<p><strong>Make something that dies:</strong></p>
+<p>A website that loses a feature every day. A chatbot that forgets. A countdown to nothing. An exercise in rot, killing, or letting go.</p>
+<p><strong>Do a lot of math:</strong></p>
+<p>Generative geometry, shader golf, mathematical art, computational origami. Time to re-learn what an arcsin is.</p>
+<h3>For Anyone</h3>
+<p><strong>Text is the universal interface:</strong></p>
+<p>Build something where text is the only interface. No buttons, no graphics, just words in and words out. Text can go in and out of almost anything.</p>
+<p><strong>Start at the punchline:</strong></p>
+<p>Think of something that would be a funny sentence. Work backwards to make it real. "I taught my thermostat to gaslight me" → now build it.</p>
+<p><strong>Hostile UI:</strong></p>
+<p>Make something intentionally painful to use. A password field that requires 47 conditions. A form where every label lies. A CLI that judges your commands.</p>
+<p><strong>Take two:</strong></p>
+<p>Remember an old project. Do it again from scratch. No looking at the original. See what changed about how you think.</p>
+<p>See <code>references/full-prompt-library.md</code> for 30+ additional constraints across communication, scale, philosophy, transformation, and more.</p>
+<h2>Matching Constraints to Users</h2>
+<table><thead><tr><th>User says</th><th>Pick from</th></tr></thead><tbody>
+<tr><td>"I want to build something" (no direction)</td><td>Random — any constraint</td></tr>
+<tr><td>"I'm learning [language]"</td><td>Blatantly copy something, Automate the annoying thing</td></tr>
+<tr><td>"I want something weird"</td><td>Hostile UI, Frankenstein week, Start at the punchline</td></tr>
+<tr><td>"I want something useful"</td><td>Solve your own itch, The CLI that should exist, Automate the annoying thing</td></tr>
+<tr><td>"I want something beautiful"</td><td>Do a lot of math, One million of something</td></tr>
+<tr><td>"I'm burned out"</td><td>High concept low effort, Make something that dies</td></tr>
+<tr><td>"Weekend project"</td><td>Nothing new except glue, Start at the punchline</td></tr>
+<tr><td>"I want a challenge"</td><td>One million of something, Subtract, Take two</td></tr>
+</tbody></table>
+<h2>Output Format</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+## Constraint: [Name]
+> [The constraint, one sentence]
+
+### Ideas
+
+1. **[One-line pitch]**
+   [2-3 sentences: what you'd build and why it's interesting]
+   ⏱ [weekend / week / month] • 🔧 [stack]
+
+2. **[One-line pitch]**
+   [2-3 sentences]
+   ⏱ ... • 🔧 ...
+
+3. **[One-line pitch]**
+   [2-3 sentences]
+   ⏱ ... • 🔧 ...
+</div>
+<h2>Example</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+## Constraint: The CLI tool that should exist
+> Think of a command you've wished you could type. Now build it.
+
+### Ideas
+
+1. **`git whatsup` — show what happened while you were away**
+   Compares your last active commit to HEAD and summarizes what changed,
+   who committed, and what PRs merged. Like a morning standup from your repo.
+   ⏱ weekend • 🔧 Python, GitPython, click
+
+2. **`explain 503` — HTTP status codes for humans**
+   Pipe any status code or error message and get a plain-English explanation
+   with common causes and fixes. Pulls from a curated database, not an LLM.
+   ⏱ weekend • 🔧 Rust or Go, static dataset
+
+3. **`deps why <package>` — why is this in my dependency tree**
+   Traces a transitive dependency back to the direct dependency that pulled
+   it in. Answers "why do I have 47 copies of lodash" in one command.
+   ⏱ weekend • 🔧 Node.js, npm/yarn lockfile parsing
+</div>
+<p>After the user picks one, start building — create the project, write the code, iterate.</p>
+<h2>Attribution</h2>
+<p>Constraint approach inspired by <a href="https://wttdotm.com/prompts.html">wttdotm.com/prompts.html</a>. Adapted and expanded for software development and general-purpose ideation.</p>  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

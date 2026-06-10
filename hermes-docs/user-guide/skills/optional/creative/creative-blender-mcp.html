@@ -1,0 +1,306 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blender Mcp — 通过 socket 连接 blender-mcp 插件，直接从 Hermes 控制 Blender - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Blender Mcp — 通过 socket 连接 blender-mcp 插件，直接从 Hermes 控制 Blender</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Blender Mcp</h1>
+<p>通过 socket 连接 blender-mcp 插件，直接从 Hermes 控制 Blender。可创建 3D 对象、材质、动画，并运行任意 Blender Python（bpy）代码。当用户需要在 Blender 中创建或修改任何内容时使用。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/creative/blender-mcp</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/creative/blender-mcp</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>alireza78a</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>Blender MCP</h1>
+<p>通过 TCP 端口 9876 上的 socket，从 Hermes 控制正在运行的 Blender 实例。</p>
+<h2>设置（一次性）</h2>
+<h3>1. 安装 Blender 插件</h3>
+<pre><code>curl -sL https://raw.githubusercontent.com/ahujasid/blender-mcp/main/addon.py -o ~/Desktop/blender_mcp_addon.py
+</code></pre>
+<p>在 Blender 中：
+Edit &gt; Preferences &gt; Add-ons &gt; Install &gt; 选择 blender_mcp_addon.py
+启用 &quot;Interface: Blender MCP&quot;</p>
+<h3>2. 在 Blender 中启动 socket 服务器</h3>
+<p>在 Blender 视口中按 N 键打开侧边栏。
+找到 &quot;BlenderMCP&quot; 标签页，点击 &quot;Start Server&quot;。</p>
+<h3>3. 验证连接</h3>
+<pre><code>nc -z -w2 localhost 9876 &amp;&amp; echo &quot;OPEN&quot; || echo &quot;CLOSED&quot;
+</code></pre>
+<h2>协议</h2>
+<p>通过 TCP 传输纯 UTF-8 JSON — 无长度前缀。</p>
+<p>发送：    &amp;#123;&quot;type&quot;: &quot;&amp;lt;command&gt;&quot;, &quot;params&quot;: &amp;#123;&amp;lt;kwargs&gt;&amp;#125;&amp;#125;
+接收：    &amp;#123;&quot;status&quot;: &quot;success&quot;, &quot;result&quot;: &amp;lt;value&gt;&amp;#125;
+&amp;#123;&quot;status&quot;: &quot;error&quot;,   &quot;message&quot;: &quot;&amp;lt;reason&gt;&quot;&amp;#125;</p>
+<h2>可用命令</h2>
+<table>
+<thead>
+<tr>
+<th>type</th>
+<th>params</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>execute_code</td>
+<td>code (str)</td>
+<td>运行任意 bpy Python 代码</td>
+</tr>
+<tr>
+<td>get_scene_info</td>
+<td>（无）</td>
+<td>列出场景中的所有对象</td>
+</tr>
+<tr>
+<td>get_object_info</td>
+<td>object_name (str)</td>
+<td>获取特定对象的详细信息</td>
+</tr>
+<tr>
+<td>get_viewport_screenshot</td>
+<td>（无）</td>
+<td>截取当前视口截图</td>
+</tr>
+</tbody>
+</table>
+<h2>Python 辅助函数</h2>
+<p>在 execute_code 工具调用中使用：</p>
+<pre><code>import socket, json
+
+def blender_exec(code: str, host=&quot;localhost&quot;, port=9876, timeout=15):
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((host, port))
+    s.settimeout(timeout)
+    payload = json.dumps(&amp;#123;&quot;type&quot;: &quot;execute_code&quot;, &quot;params&quot;: &amp;#123;&quot;code&quot;: code&amp;#125;&amp;#125;)
+    s.sendall(payload.encode(&quot;utf-8&quot;))
+    buf = b&quot;&quot;
+    while True:
+        try:
+            chunk = s.recv(4096)
+            if not chunk:
+                break
+            buf += chunk
+            try:
+                json.loads(buf.decode(&quot;utf-8&quot;))
+                break
+            except json.JSONDecodeError:
+                continue
+        except socket.timeout:
+            break
+    s.close()
+    return json.loads(buf.decode(&quot;utf-8&quot;))
+</code></pre>
+<h2>常用 bpy 模式</h2>
+<h3>清空场景</h3>
+<pre><code>bpy.ops.object.select_all(action='SELECT')
+bpy.ops.object.delete()
+</code></pre>
+<h3>添加网格对象</h3>
+<pre><code>bpy.ops.mesh.primitive_uv_sphere_add(radius=1, location=(0, 0, 0))
+bpy.ops.mesh.primitive_cube_add(size=2, location=(3, 0, 0))
+bpy.ops.mesh.primitive_cylinder_add(radius=0.5, depth=2, location=(-3, 0, 0))
+</code></pre>
+<h3>创建并指定材质</h3>
+<pre><code>mat = bpy.data.materials.new(name=&quot;MyMat&quot;)
+mat.use_nodes = True
+bsdf = mat.node_tree.nodes.get(&quot;Principled BSDF&quot;)
+bsdf.inputs[&quot;Base Color&quot;].default_value = (R, G, B, 1.0)
+bsdf.inputs[&quot;Roughness&quot;].default_value = 0.3
+bsdf.inputs[&quot;Metallic&quot;].default_value = 0.0
+obj.data.materials.append(mat)
+</code></pre>
+<h3>关键帧动画</h3>
+<pre><code>obj.location = (0, 0, 0)
+obj.keyframe_insert(data_path=&quot;location&quot;, frame=1)
+obj.location = (0, 0, 3)
+obj.keyframe_insert(data_path=&quot;location&quot;, frame=60)
+</code></pre>
+<h3>渲染到文件</h3>
+<pre><code>bpy.context.scene.render.filepath = &quot;/tmp/render.png&quot;
+bpy.context.scene.render.engine = 'CYCLES'
+bpy.ops.render.render(write_still=True)
+</code></pre>
+<h2>注意事项</h2>
+<ul>
+<li>运行前必须检查 socket 是否已开放（nc -z localhost 9876）</li>
+<li>每次会话都需要在 Blender 内部启动插件服务器（N 面板 &gt; BlenderMCP &gt; Connect）</li>
+<li>将复杂场景拆分为多个较小的 execute_code 调用，以避免超时</li>
+<li>渲染输出路径必须为绝对路径（/tmp/...），不能使用相对路径</li>
+<li><code>shade_smooth()</code> 要求对象已被选中且处于对象模式</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

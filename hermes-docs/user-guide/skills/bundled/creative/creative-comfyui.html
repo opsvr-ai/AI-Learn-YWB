@@ -1,0 +1,823 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comfyui - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Comfyui</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Comfyui</h1>
+<p>使用 ComfyUI 生成图像、视频和音频——安装、启动、管理节点/模型、运行带参数注入的工作流。使用官方 comfy-cli 进行生命周期管理，使用直接 REST/WebSocket API 执行工作流。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>内置（默认安装）</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>skills/creative/comfyui</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>5.1.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>['kshitijk4poor', 'alt-glitch', 'purzbeats']</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>macos, linux, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>comfyui</code>, <code>image-generation</code>, <code>stable-diffusion</code>, <code>flux</code>, <code>sd3</code>, <code>wan-video</code>, <code>hunyuan-video</code>, <code>creative</code>, <code>generative-ai</code>, <code>video-generation</code></td>
+</tr>
+<tr>
+<td>相关 skill</td>
+<td><a href="/user-guide/skills/optional/mlops/mlops-stable-diffusion"><code>stable-diffusion-image-generation</code></a>, <code>image_gen</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时看到的指令内容。
+</div>
+<h1>ComfyUI</h1>
+<p>通过 ComfyUI 生成图像、视频、音频和 3D 内容，使用官方 <code>comfy-cli</code> 进行安装/生命周期管理，使用直接 REST/WebSocket API 执行工作流。</p>
+<h2>此 skill 包含的内容</h2>
+<p><strong>参考文档（<code>references/</code>）：</strong></p>
+<ul>
+<li><code>official-cli.md</code> — 所有 <code>comfy ...</code> 命令及其标志</li>
+<li><code>rest-api.md</code> — REST + WebSocket 端点（本地 + 云端），payload（载荷）schema</li>
+<li><code>workflow-format.md</code> — API 格式 JSON、常见节点类型、参数映射</li>
+<li><code>template-integrity.md</code> — 将 <code>comfyui-workflow-templates</code> 从编辑器格式转换为 API 格式：Reroute bypass、点分动态输入键（<code>values.a</code>、<code>resize_type.width</code>）、云端特性（302 重定向、免费层 1 个并发任务、1080p VRAM 上限）、Discord 兼容 ffmpeg 拼接。由 <a href="https://github.com/purzbeats">@purzbeats</a> 撰写。从官方模板开始时请加载此文档。</li>
+</ul>
+<p><strong>脚本（<code>scripts/</code>）：</strong></p>
+<table>
+<thead>
+<tr>
+<th>脚本</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>_common.py</code></td>
+<td>共享 HTTP、云端路由、节点目录（不要直接运行）</td>
+</tr>
+<tr>
+<td><code>hardware_check.py</code></td>
+<td>探测 GPU/VRAM/磁盘 → 推荐本地或 Comfy Cloud</td>
+</tr>
+<tr>
+<td><code>comfyui_setup.sh</code></td>
+<td>硬件检查 + comfy-cli + ComfyUI 安装 + 启动 + 验证</td>
+</tr>
+<tr>
+<td><code>extract_schema.py</code></td>
+<td>读取工作流 → 列出可控参数 + 模型依赖</td>
+</tr>
+<tr>
+<td><code>check_deps.py</code></td>
+<td>对比运行中的服务器检查工作流 → 列出缺失节点/模型</td>
+</tr>
+<tr>
+<td><code>auto_fix_deps.py</code></td>
+<td>运行 check_deps 然后执行 <code>comfy node install</code> / <code>comfy model download</code></td>
+</tr>
+<tr>
+<td><code>run_workflow.py</code></td>
+<td>注入参数、提交、监控、下载输出（HTTP 或 WS）</td>
+</tr>
+<tr>
+<td><code>run_batch.py</code></td>
+<td>以 sweep 方式提交工作流 N 次，并行数量受限于你的套餐层级</td>
+</tr>
+<tr>
+<td><code>ws_monitor.py</code></td>
+<td>执行中任务的实时 WebSocket 查看器（实时进度）</td>
+</tr>
+<tr>
+<td><code>health_check.py</code></td>
+<td>验证清单运行器——comfy-cli + 服务器 + 模型 + 冒烟测试</td>
+</tr>
+<tr>
+<td><code>fetch_logs.py</code></td>
+<td>拉取指定 prompt_id 的 traceback / 状态消息</td>
+</tr>
+</tbody>
+</table>
+<p><strong>示例工作流（<code>workflows/</code>）：</strong> SD 1.5、SDXL、Flux Dev、SDXL img2img、SDXL inpaint、ESRGAN 放大、AnimateDiff 视频、Wan T2V。参见 <code>workflows/README.md</code>。</p>
+<h2>使用场景</h2>
+<ul>
+<li>用户要求使用 Stable Diffusion、SDXL、Flux、SD3 等生成图像</li>
+<li>用户想运行特定的 ComfyUI 工作流文件</li>
+<li>用户想串联生成步骤（txt2img → 放大 → 人脸修复）</li>
+<li>用户需要 ControlNet、inpainting、img2img 或其他高级 pipeline</li>
+<li>用户要管理 ComfyUI 队列、检查模型或安装自定义节点</li>
+<li>用户想通过 AnimateDiff、Hunyuan、Wan、AudioCraft 等进行视频/音频/3D 生成</li>
+</ul>
+<h2>架构：两层</h2>
+<!-- ascii-guard-ignore -->
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+┌─────────────────────────────────────────────────────┐
+│ Layer 1: comfy-cli (official lifecycle tool)        │
+│   Setup, server lifecycle, custom nodes, models     │
+│   → comfy install / launch / stop / node / model    │
+└─────────────────────────┬───────────────────────────┘
+                          │
+┌─────────────────────────▼───────────────────────────┐
+│ Layer 2: REST/WebSocket API + skill scripts         │
+│   Workflow execution, param injection, monitoring   │
+│   POST /api/prompt, GET /api/view, WS /ws           │
+│   → run_workflow.py, run_batch.py, ws_monitor.py    │
+└─────────────────────────────────────────────────────┘
+</div>
+<!-- ascii-guard-ignore-end -->
+<p><strong>为什么要两层？</strong> 官方 CLI 非常适合安装和服务器管理，但对工作流执行的支持极少。REST/WS API 填补了这一空缺——脚本处理 CLI 不具备的参数注入、执行监控和输出下载功能。</p>
+<h2>快速开始</h2>
+<h3>检测环境</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 检查可用内容
+command -v comfy &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo "comfy-cli: installed"
+curl -s http://127.0.0.1:8188/system_stats 2&gt;/dev/null &amp;&amp; echo "server: running"
+<h1>此机器能否在本地运行 ComfyUI？（GPU/VRAM/磁盘检查）</h1>
+<p>python3 scripts/hardware_check.py</p>
+</div>
+<p>如果未安装任何内容，请参阅下方的<strong>安装与引导</strong>——但始终先运行硬件检查。</p>
+<h3>一行健康检查</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 scripts/health_check.py
+# → JSON: comfy_cli 在 PATH 中？服务器可达？至少有一个 checkpoint？冒烟测试通过？
+</div>
+<h2>核心工作流</h2>
+<h3>第一步：获取 API 格式的工作流 JSON</h3>
+<p>工作流必须为 API 格式（每个节点有 <code>class_type</code>）。来源包括：</p>
+<ul>
+<li>ComfyUI Web UI → <strong>Workflow → Export (API)</strong>（新版 UI）或旧版&quot;Save (API Format)&quot;按钮（旧版 UI）</li>
+<li>此 skill 的 <code>workflows/</code> 目录（可直接运行的示例）</li>
+<li>社区下载（civitai、Reddit、Discord）——通常为编辑器格式，必须加载到 ComfyUI 后重新导出</li>
+</ul>
+<p>编辑器格式（顶层含 <code>nodes</code> 和 <code>links</code> 数组）<strong>不可直接执行</strong>。脚本会检测此情况并提示你重新导出。</p>
+<h3>第二步：查看可控内容</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 scripts/extract_schema.py workflow_api.json --summary-only
+# → {"parameter_count": 12, "has_negative_prompt": true, "has_seed": true, ...}
+<p>python3 scripts/extract_schema.py workflow_api.json</p>
+<h1>→ 完整 schema，包含参数、模型依赖、embedding 引用</h1>
+</div>
+<h3>第三步：带参数运行</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 本地（默认 http://127.0.0.1:8188）
+python3 scripts/run_workflow.py \
+  --workflow workflow_api.json \
+  --args '{"prompt": "a beautiful sunset over mountains", "seed": -1, "steps": 30}' \
+  --output-dir ./outputs
+<h1>云端（一次性导出 API key；自动使用正确的 /api 路由）</h1>
+<p>export COMFY_CLOUD_API_KEY=&quot;comfyui-...&quot;
+python3 scripts/run_workflow.py \
+--workflow workflow_api.json \
+--args '{&quot;prompt&quot;: &quot;...&quot;}' \
+--host https://cloud.comfy.org \
+--output-dir ./outputs</p>
+<h1>通过 WebSocket 实时查看进度（需要 <code>pip install websocket-client</code>）</h1>
+<p>python3 scripts/run_workflow.py \
+--workflow flux_dev.json \
+--args '{&quot;prompt&quot;: &quot;...&quot;}' \
+--ws</p>
+<h1>img2img / inpaint：传入 --input-image 自动上传并引用</h1>
+<p>python3 scripts/run_workflow.py \
+--workflow sdxl_img2img.json \
+--input-image image=./photo.png \
+--args '{&quot;prompt&quot;: &quot;make it watercolor&quot;, &quot;denoise&quot;: 0.6}'</p>
+<h1>批量 / sweep：8 个随机种子，并行数量受限于云端套餐层级</h1>
+<p>python3 scripts/run_batch.py \
+--workflow sdxl.json \
+--args '{&quot;prompt&quot;: &quot;abstract&quot;}' \
+--count 8 --randomize-seed --parallel 3 \
+--output-dir ./outputs/batch</p>
+</div>
+<p><code>seed</code> 传 <code>-1</code>（或配合 <code>--randomize-seed</code> 省略 seed）可在每次运行时生成新的随机种子。</p>
+<h3>第四步：呈现结果</h3>
+<p>脚本向 stdout 输出描述每个输出文件的 JSON：</p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{
+  "status": "success",
+  "prompt_id": "abc-123",
+  "outputs": [
+    {"file": "./outputs/sdxl_00001_.png", "node_id": "9",
+     "type": "image", "filename": "sdxl_00001_.png"}
+  ]
+}
+</div>
+<h2>决策树</h2>
+<table>
+<thead>
+<tr>
+<th>用户说</th>
+<th>工具</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>生命周期（使用 comfy-cli）</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;安装 ComfyUI&quot;</td>
+<td>comfy-cli</td>
+<td><code>bash scripts/comfyui_setup.sh</code></td>
+</tr>
+<tr>
+<td>&quot;启动 ComfyUI&quot;</td>
+<td>comfy-cli</td>
+<td><code>comfy launch --background</code></td>
+</tr>
+<tr>
+<td>&quot;停止 ComfyUI&quot;</td>
+<td>comfy-cli</td>
+<td><code>comfy stop</code></td>
+</tr>
+<tr>
+<td>&quot;安装 X 节点&quot;</td>
+<td>comfy-cli</td>
+<td><code>comfy node install &lt;name&gt;</code></td>
+</tr>
+<tr>
+<td>&quot;下载 X 模型&quot;</td>
+<td>comfy-cli</td>
+<td><code>comfy model download --url &lt;url&gt; --relative-path models/checkpoints</code></td>
+</tr>
+<tr>
+<td>&quot;列出已安装模型&quot;</td>
+<td>comfy-cli</td>
+<td><code>comfy model list</code></td>
+</tr>
+<tr>
+<td>&quot;列出已安装节点&quot;</td>
+<td>comfy-cli</td>
+<td><code>comfy node show installed</code></td>
+</tr>
+<tr>
+<td><strong>执行（使用脚本）</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;一切准备好了吗？&quot;</td>
+<td>脚本</td>
+<td><code>health_check.py</code>（可选加 <code>--workflow X --smoke-test</code>）</td>
+</tr>
+<tr>
+<td>&quot;这个工作流我能改什么？&quot;</td>
+<td>脚本</td>
+<td><code>extract_schema.py W.json</code></td>
+</tr>
+<tr>
+<td>&quot;检查 W 的依赖是否满足&quot;</td>
+<td>脚本</td>
+<td><code>check_deps.py W.json</code></td>
+</tr>
+<tr>
+<td>&quot;修复缺失依赖&quot;</td>
+<td>脚本</td>
+<td><code>auto_fix_deps.py W.json</code></td>
+</tr>
+<tr>
+<td>&quot;生成一张图片&quot;</td>
+<td>脚本</td>
+<td><code>run_workflow.py --workflow W --args '{...}'</code></td>
+</tr>
+<tr>
+<td>&quot;使用这张图片&quot;（img2img）</td>
+<td>脚本</td>
+<td><code>run_workflow.py --input-image image=./x.png ...</code></td>
+</tr>
+<tr>
+<td>&quot;8 个随机种子变体&quot;</td>
+<td>脚本</td>
+<td><code>run_batch.py --count 8 --randomize-seed ...</code></td>
+</tr>
+<tr>
+<td>&quot;显示实时进度&quot;</td>
+<td>脚本</td>
+<td><code>ws_monitor.py --prompt-id &lt;id&gt;</code></td>
+</tr>
+<tr>
+<td>&quot;获取任务 X 的错误&quot;</td>
+<td>脚本</td>
+<td><code>fetch_logs.py &lt;prompt_id&gt;</code></td>
+</tr>
+<tr>
+<td><strong>直接 REST</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>&quot;队列里有什么？&quot;</td>
+<td>REST</td>
+<td><code>curl http://HOST:8188/queue</code>（本地）或 <code>--host https://cloud.comfy.org</code></td>
+</tr>
+<tr>
+<td>&quot;取消那个&quot;</td>
+<td>REST</td>
+<td><code>curl -X POST http://HOST:8188/interrupt</code></td>
+</tr>
+<tr>
+<td>&quot;释放 GPU 内存&quot;</td>
+<td>REST</td>
+<td><code>curl -X POST http://HOST:8188/free</code></td>
+</tr>
+</tbody>
+</table>
+<h2>安装与引导</h2>
+<p>当用户要求安装 ComfyUI 时，<strong>首先要询问他们想要 Comfy Cloud（托管，零安装，API key）还是本地安装（在其机器上安装 ComfyUI）</strong>。在得到答复之前，不要开始运行安装命令或硬件检查。</p>
+<p><strong>官方文档：</strong> https://docs.comfy.org/installation
+<strong>CLI 文档：</strong> https://docs.comfy.org/comfy-cli/getting-started
+<strong>Cloud 文档：</strong> https://docs.comfy.org/get_started/cloud
+<strong>Cloud API：</strong> https://docs.comfy.org/development/cloud/overview</p>
+<h3>第零步：询问本地还是云端（始终优先）</h3>
+<p>建议话术：</p>
+<blockquote>
+<p>&quot;您想在本地机器上运行 ComfyUI，还是使用 Comfy Cloud？</p>
+<ul>
+<li><strong>Comfy Cloud</strong> — 托管于 RTX 6000 Pro GPU，所有常用模型预装，零配置。需要 API key（实际运行工作流需要付费订阅；免费层仅限只读）。如果您没有性能足够的 GPU，推荐此选项。</li>
+<li><strong>本地</strong> — 免费，但您的机器必须满足硬件要求：
+<ul>
+<li>NVIDIA GPU，<strong>≥6 GB VRAM</strong>（SDXL 需 ≥8 GB，Flux/视频需 ≥12 GB），或</li>
+<li>支持 ROCm 的 AMD GPU（Linux），或</li>
+<li>Apple Silicon Mac（M1+），<strong>≥16 GB 统一内存</strong>（推荐 ≥32 GB）。</li>
+<li>Intel Mac 和无 GPU 的机器<strong>不可用</strong>——请改用 Cloud。</li>
+</ul>
+</li>
+</ul>
+<p>您选择哪种？&quot;</p>
+</blockquote>
+<p>路由逻辑：</p>
+<ul>
+<li><strong>Cloud</strong> → 跳至<strong>路径 A</strong>。</li>
+<li><strong>本地</strong> → 先运行硬件检查，再根据结果从路径 B–E 中选择。</li>
+<li><strong>不确定</strong> → 运行硬件检查，由结果决定。</li>
+</ul>
+<h3>第一步：验证硬件（仅当用户选择本地时）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 scripts/hardware_check.py --json
+# 可选：同时探测 `torch` 以获取实际 CUDA/MPS 信息：
+python3 scripts/hardware_check.py --json --check-pytorch
+</div>
+<table>
+<thead>
+<tr>
+<th>结果</th>
+<th>含义</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ok</code></td>
+<td>≥8 GB VRAM（独立显卡）或 ≥32 GB 统一内存（Apple Silicon）</td>
+<td>本地安装——使用报告中的 <code>comfy_cli_flag</code></td>
+</tr>
+<tr>
+<td><code>marginal</code></td>
+<td>SD1.5 可用；SDXL 较紧张；Flux/视频不太可能</td>
+<td>轻量工作流可本地，否则选<strong>路径 A（Cloud）</strong></td>
+</tr>
+<tr>
+<td><code>cloud</code></td>
+<td>无可用 GPU、&amp;lt;6 GB VRAM、&amp;lt;16 GB Apple 统一内存、Intel Mac、Rosetta Python</td>
+<td><strong>切换至 Cloud</strong>，除非用户明确强制本地</td>
+</tr>
+</tbody>
+</table>
+<p>脚本还会显示 <code>wsl: true</code>（带 NVIDIA 直通的 WSL2）和 <code>rosetta: true</code>（Apple Silicon 上的 x86_64 Python——必须重新安装为 ARM64）。</p>
+<p>如果结果为 <code>cloud</code> 但用户想要本地，不要静默继续。逐字显示 <code>notes</code> 数组，并询问他们是否要（a）切换至 Cloud 或（b）强制本地安装（在现代模型上会 OOM 或极慢）。</p>
+<h3>选择安装路径</h3>
+<p>优先使用硬件检查结果。下表适用于用户已告知其硬件的情况：</p>
+<table>
+<thead>
+<tr>
+<th>情况</th>
+<th>推荐路径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>硬件检查结果为 <code>verdict: cloud</code></td>
+<td><strong>路径 A：Comfy Cloud</strong></td>
+</tr>
+<tr>
+<td>无 GPU / 想先试用</td>
+<td><strong>路径 A：Comfy Cloud</strong></td>
+</tr>
+<tr>
+<td>Windows + NVIDIA + 非技术用户</td>
+<td><strong>路径 B：ComfyUI Desktop</strong></td>
+</tr>
+<tr>
+<td>Windows + NVIDIA + 技术用户</td>
+<td><strong>路径 C：Portable</strong> 或<strong>路径 D：comfy-cli</strong></td>
+</tr>
+<tr>
+<td>Linux + 任意 GPU</td>
+<td><strong>路径 D：comfy-cli</strong>（最简单）</td>
+</tr>
+<tr>
+<td>macOS + Apple Silicon</td>
+<td><strong>路径 B：Desktop</strong> 或<strong>路径 D：comfy-cli</strong></td>
+</tr>
+<tr>
+<td>无头/服务器/CI/agent</td>
+<td><strong>路径 D：comfy-cli</strong></td>
+</tr>
+</tbody>
+</table>
+<p>全自动路径（硬件检查 → 安装 → 启动 → 验证）：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+bash scripts/comfyui_setup.sh
+# 或带覆盖参数：
+bash scripts/comfyui_setup.sh --m-series --port=8190 --workspace=/data/comfy
+</div>
+<p>该脚本内部运行 <code>hardware_check.py</code>，当结果为 <code>cloud</code> 时拒绝本地安装（除非传入 <code>--force-cloud-override</code>），选择正确的 <code>comfy-cli</code> 标志，并优先使用 <code>pipx</code>/<code>uvx</code> 而非全局 <code>pip</code> 以避免污染系统 Python。</p>
+<hr />
+<h3>路径 A：Comfy Cloud（无需本地安装）</h3>
+<p>适用于没有性能足够 GPU 或想要零配置的用户。托管于 RTX 6000 Pro。</p>
+<p><strong>文档：</strong> https://docs.comfy.org/get_started/cloud</p>
+<ol>
+<li>在 https://comfy.org/cloud 注册</li>
+<li>在 https://platform.comfy.org/login 生成 API key</li>
+<li>设置 key：<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+export COMFY_CLOUD_API_KEY="comfyui-xxxxxxxxxxxx"
+</li>
+</ol>
+</div>
+4. 运行工作流：
+   <div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+   python3 scripts/run_workflow.py \
+     --workflow workflows/flux_dev_txt2img.json \
+     --args '{"prompt": "..."}' \
+     --host https://cloud.comfy.org \
+     --output-dir ./outputs
+</div>
+<p><strong>定价：</strong> https://www.comfy.org/cloud/pricing
+<strong>并发任务：</strong> 免费/标准版 1 个，Creator 3 个，Pro 5 个。免费层<strong>无法通过 API 运行工作流</strong>——仅可浏览模型。<code>/api/prompt</code>、<code>/api/upload/*</code>、<code>/api/view</code> 等需要付费订阅。</p>
+<hr />
+<h3>路径 B：ComfyUI Desktop（Windows / macOS）</h3>
+<p>面向非技术用户的一键安装程序。目前为 Beta 版。</p>
+<p><strong>文档：</strong> https://docs.comfy.org/installation/desktop</p>
+<ul>
+<li><strong>Windows（NVIDIA）：</strong> https://download.comfy.org/windows/nsis/x64</li>
+<li><strong>macOS（Apple Silicon）：</strong> https://comfy.org</li>
+</ul>
+<p>Linux <strong>不支持</strong> Desktop——请使用路径 D。</p>
+<hr />
+<h3>路径 C：ComfyUI Portable（仅 Windows）</h3>
+<p><strong>文档：</strong> https://docs.comfy.org/installation/comfyui_portable_windows</p>
+<p>从 https://github.com/comfyanonymous/ComfyUI/releases 下载，解压后运行 <code>run_nvidia_gpu.bat</code>。通过 <code>update/update_comfyui_stable.bat</code> 更新。</p>
+<hr />
+<h3>路径 D：comfy-cli（全平台——推荐用于 Agent）</h3>
+<p>官方 CLI 是无头/自动化安装的最佳路径。</p>
+<p><strong>文档：</strong> https://docs.comfy.org/comfy-cli/getting-started</p>
+<h4>安装 comfy-cli</h4>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 推荐：
+pipx install comfy-cli
+# 或不安装直接使用 uvx：
+uvx --from comfy-cli comfy --help
+# 或（如果 pipx/uvx 不可用）：
+pip install --user comfy-cli
+</div>
+<p>非交互式禁用分析：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+comfy --skip-prompt tracking disable
+</div>
+<h4>安装 ComfyUI</h4>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+comfy --skip-prompt install --nvidia              # NVIDIA（CUDA）
+comfy --skip-prompt install --amd                 # AMD（ROCm，Linux）
+comfy --skip-prompt install --m-series            # Apple Silicon（MPS）
+comfy --skip-prompt install --cpu                 # 仅 CPU（较慢）
+comfy --skip-prompt install --nvidia --fast-deps  # 基于 uv 的依赖解析
+</div>
+<p>默认位置：<code>~/comfy/ComfyUI</code>（Linux），<code>~/Documents/comfy/ComfyUI</code>（macOS/Win）。使用 <code>comfy --workspace /custom/path install</code> 覆盖。</p>
+<h4>启动 / 验证</h4>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+comfy launch --background                       # 后台守护进程，端口 :8188
+comfy launch -- --listen 0.0.0.0 --port 8190    # 局域网可访问的自定义端口
+curl -s http://127.0.0.1:8188/system_stats      # 健康检查
+</div>
+<hr />
+<h3>路径 E：手动安装（高级 / 不支持的硬件）</h3>
+<p>适用于昇腾 NPU、寒武纪 MLU、Intel Arc 或其他不支持的硬件。</p>
+<p><strong>文档：</strong> https://docs.comfy.org/installation/manual_install</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+git clone https://github.com/comfyanonymous/ComfyUI.git
+cd ComfyUI
+pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu130
+pip install -r requirements.txt
+python main.py
+</div>
+<hr />
+<h3>安装后：下载模型</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# SDXL（通用，约 6.5 GB）
+comfy model download \
+  --url "https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.safetensors" \
+  --relative-path models/checkpoints
+<h1>SD 1.5（更轻量，约 4 GB，适合 6 GB 显卡）</h1>
+<p>comfy model download \
+--url &quot;https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-v1-5/resolve/main/v1-5-pruned-emaonly.safetensors&quot; \
+--relative-path models/checkpoints</p>
+<h1>Flux Dev fp8（较小变体，约 12 GB）</h1>
+<p>comfy model download \
+--url &quot;https://huggingface.co/Comfy-Org/flux1-dev/resolve/main/flux1-dev-fp8.safetensors&quot; \
+--relative-path models/checkpoints</p>
+<h1>CivitAI（先设置 token）：</h1>
+<p>comfy model download \
+--url &quot;https://civitai.com/api/download/models/128713&quot; \
+--relative-path models/checkpoints \
+--set-civitai-api-token &quot;YOUR_TOKEN&quot;</p>
+</div>
+<p>列出已安装：<code>comfy model list</code>。</p>
+<h3>安装后：安装自定义节点</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+comfy node install comfyui-impact-pack             # 常用工具包
+comfy node install comfyui-animatediff-evolved     # 视频生成
+comfy node install comfyui-controlnet-aux          # ControlNet 预处理器
+comfy node install comfyui-essentials              # 常用辅助工具
+comfy node update all
+comfy node install-deps --workflow=workflow.json   # 安装工作流所需的全部内容
+</div>
+<h3>安装后：验证</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 scripts/health_check.py
+# → comfy_cli 在 PATH 中？服务器可达？有 checkpoint？冒烟测试？
+<p>python3 scripts/check_deps.py my_workflow.json</p>
+<h1>→ 此工作流的节点/模型/embedding 是否已安装？</h1>
+<p>python3 scripts/run_workflow.py \
+--workflow workflows/sd15_txt2img.json \
+--args '{&quot;prompt&quot;: &quot;test&quot;, &quot;steps&quot;: 4}' \
+--output-dir ./test-outputs</p>
+</div>
+<h2>图像上传（img2img / Inpainting）</h2>
+<p>最简单的方式是在 <code>run_workflow.py</code> 中使用 <code>--input-image</code>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 scripts/run_workflow.py \
+  --workflow workflows/sdxl_img2img.json \
+  --input-image image=./photo.png \
+  --args '{"prompt": "make it cyberpunk", "denoise": 0.6}'
+</div>
+<p>该标志上传 <code>photo.png</code>，然后将其服务端文件名注入到 schema 中名为 <code>image</code> 的参数。对于 inpainting，同时传入：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 scripts/run_workflow.py \
+  --workflow workflows/sdxl_inpaint.json \
+  --input-image image=./photo.png \
+  --input-image mask_image=./mask.png \
+  --args '{"prompt": "fill with flowers"}'
+</div>
+<p>通过 REST 手动上传：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -X POST "http://127.0.0.1:8188/upload/image" \
+  -F "image=@photo.png" -F "type=input" -F "overwrite=true"
+# 返回：{"name": "photo.png", "subfolder": "", "type": "input"}
+<h1>云端等效：</h1>
+<p>curl -X POST &quot;https://cloud.comfy.org/api/upload/image&quot; \
+-H &quot;X-API-Key: $COMFY_CLOUD_API_KEY&quot; \
+-F &quot;image=@photo.png&quot; -F &quot;type=input&quot; -F &quot;overwrite=true&quot;</p>
+</div>
+<h2>云端特性</h2>
+<ul>
+<li><strong>Base URL：</strong> <code>https://cloud.comfy.org</code></li>
+<li><strong>认证：</strong> <code>X-API-Key</code> 请求头（WebSocket 使用 <code>?token=KEY</code>）</li>
+<li><strong>API key：</strong> 设置一次 <code>$COMFY_CLOUD_API_KEY</code>，脚本自动读取</li>
+<li><strong>输出下载：</strong> <code>/api/view</code> 返回 302 跳转至签名 URL；脚本会跟随跳转并在从存储后端（S3/CloudFront）获取前去除 <code>X-API-Key</code>（避免泄露 API key）。</li>
+<li><strong>与本地 ComfyUI 的端点差异：</strong>
+<ul>
+<li><code>/api/object_info</code>、<code>/api/queue</code>、<code>/api/userdata</code> — <strong>免费层返回 403</strong>；仅付费可用。</li>
+<li><code>/history</code> 在云端重命名为 <code>/history_v2</code>（脚本自动路由）。</li>
+<li><code>/models/&lt;folder&gt;</code> 在云端重命名为 <code>/experiment/models/&lt;folder&gt;</code>（脚本自动路由）。</li>
+<li>WebSocket 中的 <code>clientId</code> 目前被忽略——同一用户的所有连接接收相同广播。请在客户端按 <code>prompt_id</code> 过滤。</li>
+<li>上传时接受 <code>subfolder</code> 但会被忽略——云端使用扁平命名空间。</li>
+</ul>
+</li>
+<li><strong>并发任务：</strong> 免费/标准版：1，Creator：3，Pro：5。超出部分自动排队。使用 <code>run_batch.py --parallel N</code> 充分利用你的套餐层级。</li>
+</ul>
+<h2>队列与系统管理</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 本地
+curl -s http://127.0.0.1:8188/queue | python3 -m json.tool
+curl -X POST http://127.0.0.1:8188/queue -d '{"clear": true}'    # 取消待处理任务
+curl -X POST http://127.0.0.1:8188/interrupt                      # 取消运行中任务
+curl -X POST http://127.0.0.1:8188/free \
+  -H "Content-Type: application/json" \
+  -d '{"unload_models": true, "free_memory": true}'
+<h1>云端——相同路径加 /api/ 前缀，另外：</h1>
+<p>python3 scripts/fetch_logs.py --tail-queue --host https://cloud.comfy.org</p>
+</div>
+<h2>常见问题</h2>
+<ol>
+<li>
+<p><strong>必须使用 API 格式</strong> — 所有脚本和 <code>/api/prompt</code> 端点均需要 API 格式的工作流 JSON。脚本会检测编辑器格式（顶层含 <code>nodes</code> 和 <code>links</code> 数组）并提示通过&quot;Workflow → Export (API)&quot;（新版 UI）或&quot;Save (API Format)&quot;（旧版 UI）重新导出。</p>
+</li>
+<li>
+<p><strong>服务器必须运行</strong> — 所有执行操作都需要运行中的服务器。<code>comfy launch --background</code> 可启动服务器。通过 <code>curl http://127.0.0.1:8188/system_stats</code> 验证。</p>
+</li>
+<li>
+<p><strong>模型名称必须精确</strong> — 区分大小写，包含文件扩展名。<code>check_deps.py</code> 会进行模糊匹配（含/不含扩展名和文件夹前缀），但工作流本身必须使用规范名称。使用 <code>comfy model list</code> 查看已安装内容。</p>
+</li>
+<li>
+<p><strong>缺少自定义节点</strong> — &quot;class_type not found&quot; 表示所需节点未安装。<code>check_deps.py</code> 会报告需要安装哪个包；<code>auto_fix_deps.py</code> 会自动执行安装。</p>
+</li>
+<li>
+<p><strong>工作目录</strong> — <code>comfy-cli</code> 会自动检测 ComfyUI workspace。如果命令报错&quot;no workspace found&quot;，请使用 <code>comfy --workspace /path/to/ComfyUI &lt;command&gt;</code> 或 <code>comfy set-default /path/to/ComfyUI</code>。</p>
+</li>
+<li>
+<p><strong>云端免费层 API 限制</strong> — <code>/api/prompt</code>、<code>/api/view</code>、<code>/api/upload/*</code>、<code>/api/object_info</code> 在免费账户上均返回 403。<code>health_check.py</code> 和 <code>check_deps.py</code> 会优雅处理此情况并显示清晰提示。</p>
+</li>
+<li>
+<p><strong>视频/音频工作流超时</strong> — 当输出节点为 <code>VHS_VideoCombine</code>、<code>SaveVideo</code> 等时自动检测；默认超时从 300 秒跳至 900 秒。可通过 <code>--timeout 1800</code> 显式覆盖。</p>
+</li>
+<li>
+<p><strong>输出文件名路径遍历</strong> — 服务端提供的文件名会经过 <code>safe_path_join</code> 处理，拒绝任何试图逃出 <code>--output-dir</code> 的路径。请保留此保护——带自定义保存节点的工作流可能产生任意路径。</p>
+</li>
+<li>
+<p><strong>工作流 JSON 是任意代码</strong> — 自定义节点运行 Python，因此提交未知工作流的信任风险与 <code>eval</code> 相同。运行来自不可信来源的工作流前请先检查。</p>
+</li>
+<li>
+<p><strong>自动随机化种子</strong> — 在 <code>--args</code> 中传入 <code>seed: -1</code>（或使用 <code>--randomize-seed</code> 并省略 seed）可在每次运行时获得新种子。实际种子会记录到 stderr。</p>
+</li>
+<li>
+<p><strong><code>tracking</code> 提示</strong> — 首次运行 <code>comfy</code> 可能会提示分析选项。使用 <code>comfy --skip-prompt tracking disable</code> 非交互式跳过。<code>comfyui_setup.sh</code> 会自动处理此问题。</p>
+</li>
+</ol>
+<h2>验证清单</h2>
+<p>使用 <code>python3 scripts/health_check.py</code> 一次性运行全部检查。手动检查：</p>
+<ul>
+<li>[ ] <code>hardware_check.py</code> 结果为 <code>ok</code>，或用户明确选择了 Comfy Cloud</li>
+<li>[ ] <code>comfy --version</code> 可用（或 <code>uvx --from comfy-cli comfy --help</code>）</li>
+<li>[ ] <code>curl http://HOST:PORT/system_stats</code> 返回 JSON</li>
+<li>[ ] <code>comfy model list</code> 显示至少一个 checkpoint（本地），或 <code>/api/experiment/models/checkpoints</code> 返回模型（云端）</li>
+<li>[ ] 工作流 JSON 为 API 格式</li>
+<li>[ ] <code>check_deps.py</code> 报告 <code>is_ready: true</code>（或云端免费层仅显示 <code>node_check_skipped</code>）</li>
+<li>[ ] 用小型工作流测试运行完成；输出文件出现在 <code>--output-dir</code> 中</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

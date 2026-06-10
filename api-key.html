@@ -1,0 +1,266 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Key 申请指南 — AI赋能日常工作</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <span class="icon">AI</span>
+      运维部AI学习平台
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">&#128172;</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">&#9000;</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">&#128218;</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">&#128214;</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">&#128273;</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">&#128214;</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">&#128172;</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">&#128202;</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="container">
+      <div class="breadcrumb"><a href="index.html">首页</a> / API Key 申请</div>
+      <h1>API Key 申请指南</h1>
+      <p class="subtitle">一步步教你通过公司内网申请模型API Key，开启AI工具之旅</p>
+    </div>
+  </div>
+
+  <!-- 申请步骤 -->
+  <section class="section">
+    <div class="container">
+      <span class="section-label">Step by Step</span>
+      <h2 class="section-title">申请流程</h2>
+      <p class="section-desc">按照以下步骤在公司内网平台申请API Key，整个过程约5分钟。</p>
+
+      <ol class="steps">
+        <li>
+          <h4>访问 AI Gateway 平台</h4>
+          <p>使用域账号（OA账号）访问公司内网 AI Gateway 地址：<code style="background:#e5e7eb;padding:2px 8px;border-radius:4px;">http://aigateway.sccba.org/</code></p>
+        </li>
+        <li>
+          <h4>进入令牌管理页面</h4>
+          <p>登录后点击导航栏中的「令牌管理」，查看已有令牌或申请新令牌。</p>
+          <div style="margin-top:12px;">
+            <img src="images/token-management.png" alt="令牌管理页面" style="border-radius:8px;border:1px solid #e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.06);max-width:100%;" loading="lazy">
+          </div>
+        </li>
+        <li>
+          <h4>申请新令牌</h4>
+          <p>点击「申请新令牌」按钮，在表单中填写：</p>
+          <ul style="margin-top:8px;padding-left:20px;color:var(--gray-500);font-size:0.9rem;">
+            <li><strong>令牌类型</strong>：个人办公使用则选择「个人使用」</li>
+            <li><strong>令牌名称</strong>：起一个辨识度高的名字（如"张三-ClaudeCode"）</li>
+            <li><strong>令牌描述</strong>：简要说明用途</li>
+          </ul>
+          <div style="margin-top:12px;">
+            <img src="images/token-application.png" alt="令牌申请页面" style="border-radius:8px;border:1px solid #e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.06);max-width:100%;" loading="lazy">
+          </div>
+        </li>
+        <li>
+          <h4>复制并保存令牌</h4>
+          <p>提交申请后系统生成令牌字符串。<strong>请立即点击复制按钮并妥善保存</strong>，关闭弹窗后将无法再次查看完整令牌。</p>
+          <div class="tip warning">
+            <strong>重要提醒</strong>
+            令牌等同于账号密码，请勿在截图中泄露、不要通过即时通讯工具明文传输、不要提交到代码仓库中。
+          </div>
+        </li>
+        <li>
+          <h4>复制 API 接口 URL</h4>
+          <p>平台提供 Anthropic 和 OpenAI 两种兼容接口，按需使用：</p>
+          <ul style="margin-top:8px;padding-left:20px;color:var(--gray-500);font-size:0.9rem;">
+            <li><strong>Anthropic 接口</strong>：<code style="background:#e5e7eb;padding:2px 6px;border-radius:4px;font-size:0.85rem;">http://7.24.28.9:8080</code></li>
+            <li><strong>OpenAI 接口</strong>：<code style="background:#e5e7eb;padding:2px 6px;border-radius:4px;font-size:0.85rem;">http://7.24.28.9:8080/v1</code></li>
+          </ul>
+          <div style="margin-top:12px;">
+            <img src="images/api-interface.png" alt="模型接口说明" style="border-radius:8px;border:1px solid #e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.06);max-width:100%;" loading="lazy">
+          </div>
+        </li>
+        <li>
+          <h4>选择模型</h4>
+          <p>点击「模型目录」，在模型列表中选择需要的模型。其中以 <strong>anthropic</strong> 开头的是兼容 Anthropic 接口的模型，直接复制模型名称即可使用。</p>
+          <div style="margin-top:12px;">
+            <img src="images/model-catalog.png" alt="模型目录" style="border-radius:8px;border:1px solid #e5e7eb;box-shadow:0 2px 8px rgba(0,0,0,0.06);max-width:100%;" loading="lazy">
+          </div>
+        </li>
+        <li>
+          <h4>配置到工具中使用</h4>
+          <p>拿到令牌后，根据你要使用的工具进行配置：</p>
+          <div class="grid-2" style="margin-top:12px;">
+            <div class="card">
+              <div class="card-icon blue">&#127760;</div>
+              <h3>Hermes-Agent</h3>
+              <p>在 Hermes-Agent 平台设置中填入 API Key 和接口 URL 即可使用，通常平台会自动关联。</p>
+            </div>
+            <div class="card">
+              <div class="card-icon purple">&#9000;</div>
+              <h3>Claude Code</h3>
+              <p>设置环境变量 <code style="background:#e5e7eb;padding:2px 6px;border-radius:4px;font-size:0.85rem;">ANTHROPIC_API_KEY=你的令牌</code> 和 <code style="background:#e5e7eb;padding:2px 6px;border-radius:4px;font-size:0.85rem;">ANTHROPIC_BASE_URL=http://7.24.28.9:8080</code>，启动 Claude Code 即可使用。</p>
+            </div>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <div style="text-align:center;margin-top:24px;padding-top:20px;border-top:1px dashed var(--gray-200);">
+      <button class="help-btn" onclick="requestHelp(this)">🙋 申请遇到困难？我需要协助</button>
+    </div>
+  </section>
+
+  <!-- 管理 -->
+  <section class="section section-gray">
+    <div class="container">
+      <span class="section-label">Management</span>
+      <h2 class="section-title">API Key 管理</h2>
+      <p class="section-desc">申请后可以在平台随时管理你的API Key。</p>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-icon blue">&#128065;</div>
+          <h3>查看列表</h3>
+          <p>在API Key管理页面可以查看你所有已申请的Key及其状态。</p>
+        </div>
+        <div class="card">
+          <div class="card-icon orange">&#8635;</div>
+          <h3>重新生成</h3>
+          <p>Key 丢失后可重新生成新 Key（旧 Key 将立即失效）。注意 API Key 长期有效，无需续期。</p>
+        </div>
+        <div class="card">
+          <div class="card-icon green">&#128274;</div>
+          <h3>吊销</h3>
+          <p>如果Key泄露或不再使用，应立即在平台上吊销/删除该Key。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 技术支持 -->
+  <section class="section section-gray">
+    <div class="container">
+      <span class="section-label">Support</span>
+      <h2 class="section-title">AI 技术支持</h2>
+      <p class="section-desc">在使用 AI 工具或申请 API Key 过程中如有疑问，请联系以下技术支持人员。</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-icon blue">&#128104;&#8205;&#128187;</div>
+          <h3>李龙</h3>
+          <p style="font-size:0.85rem;color:var(--gray-400);margin-bottom:4px;">lilong</p>
+          <p>Claude Code、Hermes-Agent 技术支持，API Key 申请与配置问题协助。</p>
+        </div>
+        <div class="card">
+          <div class="card-icon green">&#128105;&#8205;&#128187;</div>
+          <h3>司佳宇</h3>
+          <p style="font-size:0.85rem;color:var(--gray-400);margin-bottom:4px;">sijy</p>
+          <p>AI 工具使用指导、模型相关问题、培训咨询与技术支持。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="container">
+      <span class="section-label">FAQ</span>
+      <h2 class="section-title">常见问题</h2>
+
+      <div class="accordion">
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            一个API Key可以用于多个工具吗？
+            <span class="arrow">&#9654;</span>
+          </button>
+          <div class="accordion-content">
+            <p>没有限制。一个API Key可以用于所有支持该认证的服务，包括 Hermes-Agent、Claude Code 以及其他兼容接口的工具。</p>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            API Key 有使用限制吗？
+            <span class="arrow">&#9654;</span>
+          </button>
+          <div class="accordion-content">
+            <p>有频率限制：每个API Key一分钟内最多8次请求。建议合理控制调用频率，避免触发限流。</p>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            Key 会过期吗？
+            <span class="arrow">&#9654;</span>
+          </button>
+          <div class="accordion-content">
+            <p>不会。API Key长期有效，无需续期操作。</p>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            忘记保存Key了怎么办？
+            <span class="arrow">&#9654;</span>
+          </button>
+          <div class="accordion-content">
+            <p>回到申请Key的「令牌管理」页面，在已有令牌列表中可以重新复制Key。</p>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            申请API Key需要审批吗？
+            <span class="arrow">&#9654;</span>
+          </button>
+          <div class="accordion-content">
+            <p>需要审批。提交申请后等待管理员审批通过即可使用。如果长时间未审批，请联系信息技术部处理。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="troubleshooting-bar" style="background:var(--blue-50);border-top:1px solid var(--blue-200);border-bottom:1px solid var(--blue-200);padding:20px 0;text-align:center;">
+  <div class="container">
+    <p style="margin:0;font-size:0.95rem;color:var(--gray-700);"><strong>&#128161; 遇到问题？</strong> AI 技术支持请联系：<strong>李龙（lilong）</strong>、<strong>司佳宇（sijy）</strong>。申请 API Key、配置工具或使用过程中遇到任何问题，欢迎随时沟通。也可在部门群内交流使用经验。</p>
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+
+<script src="js/main.js"></script>
+</body>
+</html>

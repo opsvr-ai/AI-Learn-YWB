@@ -1,0 +1,431 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>对抗性 UX 测试 — 扮演产品最难搞的技术抵触用户 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / 对抗性 UX 测试 — 扮演产品最难搞的技术抵触用户</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>对抗性 UX 测试</h1>
+<p>扮演产品最难搞、最抵触技术的用户。以该角色身份浏览应用，找出所有 UX 痛点，再通过实用主义过滤层将真实问题与噪音区分开来。仅针对真实问题创建可执行的工单。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/dogfood/adversarial-ux-test</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/dogfood/adversarial-ux-test</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Omni @ Comelse</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>qa</code>, <code>ux</code>, <code>testing</code>, <code>adversarial</code>, <code>dogfood</code>, <code>personas</code>, <code>user-testing</code></td>
+</tr>
+<tr>
+<td>相关 skill</td>
+<td><a href="/user-guide/skills/bundled/dogfood/dogfood-dogfood"><code>dogfood</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发该 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时看到的指令内容。
+</div>
+<h1>对抗性 UX 测试</h1>
+<p>扮演产品的最差情况用户——那个讨厌技术、不想用你软件、并且会找各种理由抱怨的人。然后通过实用主义过滤层筛选他们的反馈，将真实的 UX 问题与&quot;我讨厌电脑&quot;的噪音区分开来。</p>
+<p>可以把它理解为自动化的&quot;妈妈测试&quot;——但更愤怒。</p>
+<h2>为什么有效</h2>
+<p>大多数 QA 找的是 bug。这个方法找的是<strong>摩擦点</strong>。一个技术上正确的应用对真实用户来说仍可能无法使用。对抗性角色（persona）能捕捉到：</p>
+<ul>
+<li>对开发者有意义但用户看不懂的术语</li>
+<li>完成基本任务需要太多步骤</li>
+<li>缺少引导或&quot;顿悟时刻&quot;</li>
+<li>无障碍问题（字体大小、对比度、点击目标）</li>
+<li>冷启动问题（空状态、无演示内容）</li>
+<li>阻碍转化的付费墙/注册摩擦</li>
+</ul>
+<p><strong>实用主义过滤器</strong>（第 3 阶段）是让这个方法有用而不只是有趣的关键。没有它，你会因为爷爷搞不定 PDF 就在每个页面都加一个&quot;打印此页&quot;按钮。</p>
+<h2>使用方法</h2>
+<p>告诉 agent：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+"Run an adversarial UX test on [URL]"
+"Be a grumpy [persona type] and test [app name]"
+"Do an asshole user test on my staging site"
+</div>
+<p>你可以提供一个 persona，也可以让 agent 根据你的产品目标受众自动生成一个。</p>
+<h2>第一步：定义 Persona</h2>
+<p>如果未提供 persona，通过回答以下问题来生成一个：</p>
+<ol>
+<li><strong>谁是这个产品最难搞的用户？</strong>（50 岁以上，非技术岗位，几十年来一直用&quot;老方法&quot;做事）</li>
+<li><strong>他们的技术熟练程度如何？</strong>（越低越好——只用 WhatsApp、用纸质笔记本、邮箱是老婆帮设置的）</li>
+<li><strong>他们需要完成的那一件事是什么？</strong>（他们的核心工作，不是你的功能列表）</li>
+<li><strong>什么会让他们放弃？</strong>（点击太多、术语、速度慢、令人困惑）</li>
+<li><strong>他们沮丧时怎么说话？</strong>（直接、带脏话、不屑一顾、叹气）</li>
+</ol>
+<h3>好的 Persona 示例</h3>
+<blockquote>
+<p><strong>&quot;大迈克&quot;麦卡利斯特</strong> — 58 岁的力量与体能教练。只用 WhatsApp，仅此而已。他的&quot;电子表格&quot;是一本纸质笔记本。&quot;如果我 10 秒内搞不明白，我就回去用我的笔记本。&quot;需要记录 25 名球员的训练结果。讨厌小字、术语和密码。</p>
+</blockquote>
+<h3>差的 Persona 示例</h3>
+<blockquote>
+<p>&quot;一个不喜欢这个应用的用户&quot;——太模糊，没有约束，没有声音。</p>
+</blockquote>
+<p>Persona 必须<strong>足够具体，能在 20 分钟的测试中保持角色一致性</strong>。</p>
+<h2>第二步：成为那个混蛋（以 Persona 身份浏览）</h2>
+<ol>
+<li>
+<p>阅读所有可用的项目文档，了解应用背景和 URL</p>
+</li>
+<li>
+<p><strong>完全代入 persona</strong>——他们的挫败感、局限性、目标</p>
+</li>
+<li>
+<p>使用浏览器工具导航到应用</p>
+</li>
+<li>
+<p><strong>尝试完成 persona 的实际任务</strong>（不是功能巡览）：</p>
+<ul>
+<li>他们能做到想做的事吗？</li>
+<li>完成任务需要多少次点击/页面跳转？</li>
+<li>什么让他们困惑？</li>
+<li>什么让他们愤怒？</li>
+<li>他们在哪里迷路？</li>
+<li>什么会让他们放弃，回到原来的方式？</li>
+</ul>
+</li>
+<li>
+<p>测试以下摩擦类别：</p>
+<ul>
+<li><strong>第一印象</strong> — 他们会不会在落地页就放弃？</li>
+<li><strong>核心工作流</strong> — 他们最常需要做的那一件事</li>
+<li><strong>错误恢复</strong> — 他们做错了什么会发生什么？</li>
+<li><strong>可读性</strong> — 文字大小、对比度、信息密度</li>
+<li><strong>速度</strong> — 感觉比他们现在的方法更快吗？</li>
+<li><strong>术语</strong> — 有他们看不懂的行话吗？</li>
+<li><strong>导航</strong> — 他们能找到回去的路吗？他们知道自己在哪里吗？</li>
+</ul>
+</li>
+<li>
+<p>对每个痛点截图</p>
+</li>
+<li>
+<p>在每个页面检查浏览器控制台的 JS 错误</p>
+</li>
+</ol>
+<h2>第三步：发泄（以角色身份写反馈）</h2>
+<p>以 <strong>PERSONA 的身份</strong>写反馈——用他们的声音，带着他们的挫败感。这不是 bug 报告，这是一个真实的人在发泄。</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+[PERSONA NAME]'s Review of [PRODUCT]
+<p>Overall: [Would they keep using it? Yes/No/Maybe with conditions]</p>
+<p>THE GOOD (grudging admission):</p>
+<ul>
+<li>[things even they have to admit work]</li>
+</ul>
+<p>THE BAD (legitimate UX issues):</p>
+<ul>
+<li>[real problems that would stop them from using the product]</li>
+</ul>
+<p>THE UGLY (showstoppers):</p>
+<ul>
+<li>[things that would make them uninstall/cancel immediately]</li>
+</ul>
+<p>SPECIFIC COMPLAINTS:</p>
+<ol>
+<li>[Page/feature]: &quot;[quote in persona voice]&quot; — [what happened, expected]</li>
+<li>...</li>
+</ol>
+<p>VERDICT: &quot;[one-line persona quote summarizing their experience]&quot;</p>
+</div>
+<h2>第四步：实用主义过滤器（关键——不可跳过）</h2>
+<p>走出 persona。以产品人的身份评估每条投诉：</p>
+<ul>
+<li><strong>红色：真实 UX BUG</strong> — 任何用户都会遇到这个问题，不只是爱抱怨的用户。修复它。</li>
+<li><strong>黄色：有效但优先级低</strong> — 真实问题，但只影响极端用户。记录下来。</li>
+<li><strong>白色：Persona 噪音</strong> — 是&quot;我讨厌电脑&quot;在说话，不是产品问题。跳过。</li>
+<li><strong>绿色：功能需求</strong> — 投诉中隐藏的好想法。考虑一下。</li>
+</ul>
+<h3>过滤标准</h3>
+<ol>
+<li>一个 35 岁、有能力但很忙的用户会有同样的投诉吗？→ 红色</li>
+<li>这是真实的无障碍问题（字体大小、对比度、点击目标）吗？→ 红色</li>
+<li>这是&quot;我想让它像纸一样工作&quot;的数字化抵触吗？→ 白色</li>
+<li>这是 persona 偶然发现的真实工作流低效问题吗？→ 黄色或红色</li>
+<li>修复这个问题会给 80% 没有问题的用户增加复杂性吗？→ 白色</li>
+<li>这条投诉是否揭示了缺失的引导时刻？→ 绿色</li>
+</ol>
+<p><strong>此过滤器是强制性的。</strong> 永远不要将原始 persona 投诉直接作为工单提交。</p>
+<h2>第五步：创建工单</h2>
+<p>仅针对<strong>红色</strong>和<strong>绿色</strong>条目：</p>
+<ul>
+<li>清晰、可执行的标题</li>
+<li>包含 persona 的原话（有趣且令人印象深刻）</li>
+<li>其背后的真实 UX 问题（客观）</li>
+<li>建议的修复方案（可执行）</li>
+<li>标签/标记：&quot;ux-review&quot;</li>
+</ul>
+<p>针对<strong>黄色</strong>条目：创建一个汇总所有备注的综合工单。</p>
+<p><strong>白色</strong>条目仅出现在报告中，不创建工单。</p>
+<p><strong>每次会话最多 10 个工单</strong> — 专注于最严重的问题。</p>
+<h2>第六步：报告</h2>
+<p>交付内容：</p>
+<ol>
+<li>Persona 发泄内容（第三步）——有趣且直击痛点</li>
+<li>过滤后的评估（第四步）——务实且可执行</li>
+<li>已创建的工单（第五步）——附链接</li>
+<li>关键问题的截图</li>
+</ol>
+<h2>技巧</h2>
+<ul>
+<li><strong>每次会话只用一个 persona。</strong> 不要混合视角。</li>
+<li><strong>在第二步和第三步期间保持角色。</strong> 只在第四步才打破角色。</li>
+<li><strong>优先测试核心工作流。</strong> 不要被设置页面分散注意力。</li>
+<li><strong>空状态是金矿。</strong> 新用户体验揭示的摩擦最多。</li>
+<li><strong>最好的发现是 persona 在做其他事情时意外发现的红色条目。</strong></li>
+<li><strong>如果 persona 零投诉，说明你的 persona 技术水平太高了。</strong> 让他们更老、更没耐心、更固执。</li>
+<li><strong>在演示、发布前或发布一批功能后运行此测试。</strong></li>
+<li><strong>尽可能以新用户身份注册。</strong> 不要使用预置的管理员账户——冷启动体验才是大多数摩擦所在。</li>
+<li><strong>零白色条目是一个信号，不是失败。</strong> 如果实用主义过滤器没有发现噪音，说明你的产品有真实的 UX 问题，而不只是一个爱抱怨的 persona。</li>
+<li><strong>测试结束后再查看项目文档中的已知问题。</strong> 如果 persona 发现了一个已在已知问题列表中的 bug，这实际上是最有力的发现——这意味着团队知道这个问题，但从未真正感受过用户的痛苦。</li>
+<li><strong>订阅/付费墙测试至关重要。</strong> 用已过期的账户测试，而不只是活跃账户。&quot;无法付款时会发生什么&quot;的体验揭示了产品是否尊重用户，还是扣押他们的数据。</li>
+<li><strong>统计完成 persona 那一件核心任务所需的点击次数。</strong> 如果超过 5 次，无论 persona 的技术水平如何，这几乎总是一个红色发现。</li>
+</ul>
+<h2>各行业 Persona 示例</h2>
+<p>以下是起点——请根据你的具体产品进行定制：</p>
+<table>
+<thead>
+<tr>
+<th>产品类型</th>
+<th>Persona</th>
+<th>年龄</th>
+<th>关键特征</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CRM</td>
+<td>养老院院长</td>
+<td>68</td>
+<td>文件柜就是现在的 CRM</td>
+</tr>
+<tr>
+<td>摄影 SaaS</td>
+<td>农村婚礼摄影师</td>
+<td>62</td>
+<td>电话接单，纸质开票</td>
+</tr>
+<tr>
+<td>AI/ML 工具</td>
+<td>百货公司采购</td>
+<td>55</td>
+<td>被 3 个失败的科技创业公司坑过</td>
+</tr>
+<tr>
+<td>健身应用</td>
+<td>老派健身教练</td>
+<td>58</td>
+<td>纸质笔记本、手指粗、眼睛不好</td>
+</tr>
+<tr>
+<td>会计</td>
+<td>家庭面包店老板</td>
+<td>64</td>
+<td>一鞋盒收据，讨厌订阅制</td>
+</tr>
+<tr>
+<td>电商</td>
+<td>集市摊主</td>
+<td>60</td>
+<td>只收现金，智能手机只用来打电话</td>
+</tr>
+<tr>
+<td>医疗</td>
+<td>资深全科医生</td>
+<td>63</td>
+<td>口述笔记，护士负责操作电脑</td>
+</tr>
+<tr>
+<td>教育</td>
+<td>资深教师</td>
+<td>57</td>
+<td>粉笔加讲授，活页夹里的讲义</td>
+</tr>
+</tbody>
+</table>
+<h2>规则</h2>
+<ul>
+<li>在第二步和第三步期间保持角色</li>
+<li>真实地刻薄但公平——找真实问题，不要制造问题</li>
+<li>实用主义过滤器（第四步）是<strong>强制性的</strong></li>
+<li>每条投诉都需要截图</li>
+<li>每次会话最多 10 个工单</li>
+<li>在 staging/已部署的应用上测试，不要在本地开发环境测试</li>
+<li>一个 persona，一次会话，一份报告</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,464 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pinggy Tunnel — 通过 Pinggy 实现零安装 SSH localhost 隧道 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Pinggy Tunnel — 通过 Pinggy 实现零安装 SSH localhost 隧道</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Pinggy Tunnel</h1>
+<p>通过 Pinggy 实现零安装 SSH localhost 隧道。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 使用 <code>hermes skills install official/devops/pinggy-tunnel</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/devops/pinggy-tunnel</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>0.1.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Teknium (teknium1), Hermes Agent</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Pinggy</code>, <code>Tunnel</code>, <code>Networking</code>, <code>SSH</code>, <code>Webhook</code>, <code>Localhost</code></td>
+</tr>
+<tr>
+<td>相关 skill</td>
+<td><code>cloudflared-quick-tunnel</code>, <a href="/user-guide/skills/bundled/devops/devops-webhook-subscriptions"><code>webhook-subscriptions</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 skill 激活时 agent 所看到的指令内容。
+</div>
+<h1>Pinggy Tunnel Skill</h1>
+<p>使用 Pinggy SSH 反向隧道将本地服务（开发服务器、webhook 接收器、MCP 端点、演示）暴露到公共互联网。无需安装任何守护进程——用户的标准 SSH 客户端连接到 <code>a.pinggy.io:443</code>，Pinggy 返回一个公共 HTTP/HTTPS URL。</p>
+<p>免费套餐：60 分钟隧道，随机子域名，无需注册。Pro 套餐（$3/月）需要 token，按需选用。</p>
+<h2>使用时机</h2>
+<ul>
+<li>用户要求&quot;暴露本地服务&quot;、&quot;分享我的开发服务器&quot;、&quot;将此 URL 公开&quot;、&quot;隧道端口 N&quot;、&quot;为 webhook 获取公共 URL&quot;</li>
+<li>在本地任务期间需要接收 webhook 回调（Stripe、GitHub、Discord、AgentMail）</li>
+<li>与远程方分享一次性 HTTP 演示（MCP 服务器、Ollama/vLLM 端点、仪表盘）</li>
+<li>主机有 SSH 但没有 <code>cloudflared</code> / <code>ngrok</code> 二进制文件，安装一个又显得多余</li>
+</ul>
+<p>如果主机已配置 <code>cloudflared</code>，优先使用 <code>cloudflared-quick-tunnel</code> skill——Cloudflare 快速隧道不会在 60 分钟后过期。</p>
+<h2>前提条件</h2>
+<ul>
+<li>PATH 中有 <code>ssh</code>（<code>ssh -V</code>）。Linux、macOS 和 Windows 10+ 默认自带。无需其他安装。</li>
+<li>隧道启动前，本地服务已在 <code>127.0.0.1:&lt;port&gt;</code> 上监听。Pinggy 会返回 URL，但在本地源服务启动之前访问会返回 502。</li>
+</ul>
+<p>可选：</p>
+<ul>
+<li><code>PINGGY_TOKEN</code> 环境变量，用于付费 Pro 功能（持久子域名、自定义域名、多隧道、无 60 分钟限制）。免费套餐无需凭据。</li>
+</ul>
+<h2>快速参考</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 端口 8000 的普通 HTTP/HTTPS 隧道（免费套餐）
+ssh -p 443 -o StrictHostKeyChecking=no -o ServerAliveInterval=30 \
+    -R0:localhost:8000 free@a.pinggy.io
+<h1>TCP 隧道（数据库、原始 SSH 等）</h1>
+<p>ssh -p 443 -o StrictHostKeyChecking=no -R0:localhost:5432 tcp@a.pinggy.io</p>
+<h1>TLS 隧道（Pinggy 无法解密——在源端自带证书）</h1>
+<p>ssh -p 443 -o StrictHostKeyChecking=no -R0:localhost:443 tls@a.pinggy.io</p>
+<h1>Basic auth 认证（b:user:pass）</h1>
+<p>ssh -p 443 -o StrictHostKeyChecking=no -R0:localhost:8000 \
+&quot;b:admin:secret+free@a.pinggy.io&quot;</p>
+<h1>Bearer token 认证（k:token）</h1>
+<p>ssh -p 443 -o StrictHostKeyChecking=no -R0:localhost:8000 \
+&quot;k:mysecrettoken+free@a.pinggy.io&quot;</p>
+<h1>IP 白名单（w:CIDR）</h1>
+<p>ssh -p 443 -o StrictHostKeyChecking=no -R0:localhost:8000 \
+&quot;w:203.0.113.0/24+free@a.pinggy.io&quot;</p>
+<h1>启用 CORS + 强制 HTTPS 重定向</h1>
+<p>ssh -p 443 -o StrictHostKeyChecking=no -R0:localhost:8000 \
+&quot;co+x:https+free@a.pinggy.io&quot;</p>
+<h1>Pro 套餐（持久 URL，无 60 分钟限制）</h1>
+<p>ssh -p 443 -o StrictHostKeyChecking=no -R0:localhost:8000 &quot;$PINGGY_TOKEN+a.pinggy.io&quot;</p>
+</div>
+<h2>操作流程——启动隧道并获取 URL</h2>
+<p>模型应使用 <code>terminal</code> 工具。隧道在共享期间必须保持存活，因此以后台进程方式运行，并从 stdout 解析公共 URL。</p>
+<h3>1. 确认本地源服务已启动</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -sI http://127.0.0.1:8000/ | head -1
+# 期望返回 HTTP/1.x 200（或任何非连接拒绝的响应）
+</div>
+<p>如果尚无服务在监听，先启动它（例如 <code>python3 -m http.server 8000 --bind 127.0.0.1</code>）。Pinggy 会正常返回 URL，但在本地源服务启动之前用户会看到 502。</p>
+<h3>2. 以后台进程方式启动隧道</h3>
+<p>使用 <code>terminal(background=True)</code> 并将输出捕获到日志文件（Pinggy 在 stdout 打印 URL 后保持连接）：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+LOG=/tmp/pinggy-8000.log
+nohup ssh -p 443 \
+    -o StrictHostKeyChecking=no \
+    -o UserKnownHostsFile=/dev/null \
+    -o ServerAliveInterval=30 \
+    -o ServerAliveCountMax=3 \
+    -R0:localhost:8000 free@a.pinggy.io \
+    &gt; "$LOG" 2&gt;&amp;1 &amp;
+echo $! &gt; /tmp/pinggy-8000.pid
+</div>
+<p><code>StrictHostKeyChecking=no</code> + <code>UserKnownHostsFile=/dev/null</code> 跳过首次运行的主机密钥确认提示。<code>ServerAliveInterval=30</code> 防止 SSH 会话因空闲 NAT 而被断开。</p>
+<h3>3. 从日志中解析 URL</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+sleep 4
+grep -oE 'https://[a-z0-9-]+\.[a-z]+\.pinggy\.link' /tmp/pinggy-8000.log | head -1
+</div>
+<p>预期输出如下：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+You are not authenticated.
+Your tunnel will expire in 60 minutes.
+http://yqycl-98-162-69-48.a.free.pinggy.link
+https://yqycl-98-162-69-48.a.free.pinggy.link
+</div>
+<p>将 <code>https://...pinggy.link</code> URL 提供给用户。</p>
+<h3>4. 验证</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -sI https://&lt;the-url&gt;/ | head -3
+# 期望返回 200/302/本地源服务实际返回的状态码
+</div>
+<p>如果返回 <code>502 Bad Gateway</code>，说明 SSH 会话已建立但本地源服务未在监听——先修复步骤 1。</p>
+<h3>5. 关闭隧道</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+kill "$(cat /tmp/pinggy-8000.pid)"
+# 或者，如果 pid 文件丢失：
+pkill -f 'ssh -p 443 .* free@a\.pinggy\.io'
+</div>
+<p>如果有来自 <code>terminal(background=True)</code> 的 session_id，优先使用 <code>process(action='kill', session_id=...)</code>。</p>
+<h2>通过用户名关键字进行访问控制</h2>
+<p>Pinggy 将控制标志以 <code>+</code> 分隔堆叠到 SSH 用户名中。当 <code>user@host</code> 参数包含 <code>+</code> 时，始终用引号括起整个参数：</p>
+<table>
+<thead>
+<tr>
+<th>关键字</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>b:user:pass</code></td>
+<td>HTTP Basic auth 认证门控</td>
+</tr>
+<tr>
+<td><code>k:token</code></td>
+<td>Bearer token 请求头门控（<code>Authorization: Bearer &lt;token&gt;</code>）</td>
+</tr>
+<tr>
+<td><code>w:CIDR</code></td>
+<td>IP 白名单（单个 IP 或 CIDR，可重复使用）</td>
+</tr>
+<tr>
+<td><code>co</code></td>
+<td>添加 <code>Access-Control-Allow-Origin: *</code>（CORS）</td>
+</tr>
+<tr>
+<td><code>x:https</code></td>
+<td>强制 HTTPS——自动将 HTTP 重定向到 HTTPS</td>
+</tr>
+<tr>
+<td><code>a:Name:Value</code></td>
+<td>添加请求头</td>
+</tr>
+<tr>
+<td><code>u:Name:Value</code></td>
+<td>更新请求头</td>
+</tr>
+<tr>
+<td><code>r:Name</code></td>
+<td>删除请求头</td>
+</tr>
+<tr>
+<td><code>qr</code></td>
+<td>将 URL 的二维码打印到 stdout（便于移动端分享）</td>
+</tr>
+</tbody>
+</table>
+<p>可自由组合：<code>&quot;b:admin:secret+co+x:https+free@a.pinggy.io&quot;</code>。</p>
+<h2>Web 调试器（可选）</h2>
+<p>Pinggy 可将入站流量镜像到 <code>localhost:4300</code> 以供检查。在 SSH 命令中添加本地转发：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+ssh -p 443 -L4300:localhost:4300 -R0:localhost:8000 free@a.pinggy.io
+</div>
+<p>然后在浏览器中打开 <code>http://localhost:4300</code>，查看实时请求/响应对。</p>
+<h2>注意事项</h2>
+<ul>
+<li><strong>免费套餐有 60 分钟硬性限制。</strong> SSH 会话在 60 分钟时终止，URL 失效。如需更长时间的共享，使用 <code>PINGGY_TOKEN</code>（Pro）或用 shell 循环自动重启（注意免费套餐每次重启 URL 都会变化）。</li>
+<li><strong>免费套餐 URL 是随机的，重启后会变化。</strong> 不要收藏，不要粘贴到配置文件中。每次都从日志重新解析。</li>
+<li><strong>同一源 IP 的并发免费隧道限制为一个。</strong> 从同一台机器启动第二个隧道通常会终止第一个。Pro 套餐取消此限制。</li>
+<li><strong>用户名中的 <code>+</code> 必须加引号。</strong> 裸命令 <code>ssh ... b:admin:secret+free@a.pinggy.io</code> 在 bash 中可以工作，但在将 <code>+</code> 视为特殊字符的 shell 中或以编程方式组装时会出错。始终用双引号括起。</li>
+<li><strong>不加访问控制标志不要隧道任何敏感内容。</strong> 裸 HTTP 隧道对任何知道 URL 的人都可访问。对非公开服务使用 <code>b:</code>、<code>k:</code> 或 <code>w:</code>。</li>
+<li><strong><code>process(action='log')</code> 可能会遗漏 SSH banner 输出。</strong> Pinggy 打印 URL 后 SSH 会话进入交互模式。始终重定向到日志文件并直接 <code>grep</code> 文件——与 <code>cloudflared-quick-tunnel</code> 相同的模式。</li>
+<li><strong>首次运行时的主机密钥提示。</strong> 默认 OpenSSH 配置会要求用户接受 Pinggy 的主机密钥。无人值守运行时始终传入 <code>-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null</code>。</li>
+<li><strong>TCP 和 TLS 隧道返回 <code>&lt;subdomain&gt;.a.pinggy.online:&lt;port&gt;</code> 对，而非 https URL。</strong> 使用不同的正则表达式解析（<code>tcp://</code> 加端口）。不要假设每个 Pinggy 隧道都是 HTTP。</li>
+<li><strong>Pro 模式需要将 token 作为用户名，而非标志。</strong> 使用 <code>&quot;$PINGGY_TOKEN+a.pinggy.io&quot;</code>（无 <code>free@</code>）。使用 token 还可以添加 <code>:persistent</code> 获得稳定子域名——参见 <code>pinggy.io/docs/</code>。</li>
+</ul>
+<h2>示例配方</h2>
+<p>将本地源服务与 Pinggy 隧道结合的复合模式。每个配方均自包含——启动源服务、启动隧道、解析 URL、返回给用户。</p>
+<h3>配方 1——接收 webhook 回调</h3>
+<p>当外部服务（Stripe、GitHub、Discord、AgentMail 等）需要在本地任务期间 POST 到公开可达的 URL 时使用。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 1. 简易捕获服务器：每个请求都追加到 /tmp/webhook-hits.log
+cat &gt;/tmp/webhook-server.py &lt;&lt;'PY'
+import http.server, json, datetime, pathlib
+LOG = pathlib.Path("/tmp/webhook-hits.log")
+class H(http.server.BaseHTTPRequestHandler):
+    def _capture(self):
+        n = int(self.headers.get("content-length") or 0)
+        body = self.rfile.read(n).decode("utf-8", "replace") if n else ""
+        rec = {"t": datetime.datetime.utcnow().isoformat(), "path": self.path,
+               "method": self.command, "headers": dict(self.headers), "body": body}
+        with LOG.open("a") as f: f.write(json.dumps(rec) + "\n")
+        self.send_response(200); self.send_header("content-type","application/json")
+        self.end_headers(); self.wfile.write(b'{"ok":true}\n')
+    def do_GET(self): self._capture()
+    def do_POST(self): self._capture()
+    def log_message(self,*a,**k): pass
+http.server.HTTPServer(("127.0.0.1", 18080), H).serve_forever()
+PY
+nohup python3 /tmp/webhook-server.py &gt;/tmp/webhook-server.log 2&gt;&amp;1 &amp;
+echo $! &gt;/tmp/webhook-server.pid
+<h1>2. 隧道——使用 bearer token 门控，防止无关请求污染捕获日志</h1>
+<p>nohup ssh -p 443 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+-o ServerAliveInterval=30 \
+-R0:localhost:18080 &quot;k:$(openssl rand -hex 12)+free@a.pinggy.io&quot; \
+&amp;gt;/tmp/webhook-pinggy.log 2&amp;gt;&amp;amp;1 &amp;amp;
+echo $! &amp;gt;/tmp/webhook-pinggy.pid
+sleep 5
+URL=$(grep -oE 'https://[a-z0-9-]+\.[a-z]+\.pinggy\.link' /tmp/webhook-pinggy.log | head -1)
+echo &quot;Webhook URL: $URL&quot;</p>
+<h1>3. 在 agent 工作期间，监视请求到达</h1>
+<p>tail -f /tmp/webhook-hits.log</p>
+</div>
+<p>将 <code>$URL</code> 提供给需要调用你的服务。关闭：<code>kill $(cat /tmp/webhook-server.pid) $(cat /tmp/webhook-pinggy.pid)</code>。</p>
+<h3>配方 2——通过 HTTP/SSE 暴露 MCP 服务器</h3>
+<p>当远程 MCP 客户端（另一台机器上的 Claude Desktop、队友的编辑器等）需要访问本地运行的 MCP 服务器时使用。仅适用于使用 HTTP transport 的 MCP 服务器——stdio 模式的服务器无法被隧道。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 1. 以 HTTP 模式启动 MCP 服务器（示例：端口 8765 上的 FastMCP 服务器）
+nohup python3 my_mcp_server.py --transport http --port 8765 \
+    &gt;/tmp/mcp-server.log 2&gt;&amp;1 &amp;
+echo $! &gt;/tmp/mcp-server.pid
+<h1>2. 使用 bearer token 建立隧道——MCP 流量不应对互联网开放</h1>
+<p>TOKEN=$(openssl rand -hex 16)
+nohup ssh -p 443 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+-o ServerAliveInterval=30 \
+-R0:localhost:8765 &quot;k:$TOKEN+free@a.pinggy.io&quot; \
+&amp;gt;/tmp/mcp-pinggy.log 2&amp;gt;&amp;amp;1 &amp;amp;
+echo $! &amp;gt;/tmp/mcp-pinggy.pid
+sleep 5
+URL=$(grep -oE 'https://[a-z0-9-]+\.[a-z]+\.pinggy\.link' /tmp/mcp-pinggy.log | head -1)
+echo &quot;MCP URL: $URL&quot;
+echo &quot;Bearer token: $TOKEN&quot;</p>
+</div>
+<p>远程客户端使用 <code>Authorization: Bearer $TOKEN</code> 连接到 <code>$URL</code>。Hermes 原生 MCP 客户端配置：<code>{&quot;transport&quot;: &quot;http&quot;, &quot;url&quot;: &quot;&lt;URL&gt;&quot;, &quot;headers&quot;: {&quot;Authorization&quot;: &quot;Bearer &lt;TOKEN&gt;&quot;}}</code>。</p>
+<h3>配方 3——暴露本地 LLM 端点（Ollama / vLLM / llama.cpp）</h3>
+<p>与远程调用方（另一个 agent、手机、队友）共享本地模型。Ollama 监听 <code>:11434</code>，vLLM 和 llama.cpp 通常监听 <code>:8000</code>。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 前提：模型服务器已在 127.0.0.1:11434 上运行（Ollama 默认端口）
+TOKEN=$(openssl rand -hex 16)
+nohup ssh -p 443 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+    -o ServerAliveInterval=30 \
+    -R0:localhost:11434 "k:$TOKEN+co+free@a.pinggy.io" \
+    &gt;/tmp/llm-pinggy.log 2&gt;&amp;1 &amp;
+echo $! &gt;/tmp/llm-pinggy.pid
+sleep 5
+URL=$(grep -oE 'https://[a-z0-9-]+\.[a-z]+\.pinggy\.link' /tmp/llm-pinggy.log | head -1)
+echo "Endpoint: $URL"
+echo "Token:    $TOKEN"
+<h1>验证</h1>
+<p>curl -s &quot;$URL/api/tags&quot; -H &quot;Authorization: Bearer $TOKEN&quot; | head</p>
+</div>
+<p><code>co</code> 启用 CORS，使浏览器调用方可以访问端点。纯后端调用方可去掉 <code>co</code>。对于兼容 OpenAI 的 vLLM/llama.cpp 端点，调用方使用基础 URL <code>$URL/v1</code> 加 <code>Authorization: Bearer $TOKEN</code>——但请注意 Pinggy 不会修改请求体中的任何内容，因此本地服务器实际上会看到 Pinggy 的 token；本地服务器应配置为忽略认证（它已在 <code>127.0.0.1</code> 上），让 Pinggy 负责门控。</p>
+<h3>配方 4——用一次性密码共享开发服务器</h3>
+<p>最快的&quot;让队友访问我正在运行的应用&quot;模式。随机密码，打印一次，Ctrl-C 后终止。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+PASS=$(openssl rand -base64 12 | tr -d '+/=' | head -c 12)
+echo "Dev server password: $PASS"
+ssh -p 443 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+    -o ServerAliveInterval=30 \
+    -R0:localhost:3000 "b:dev:$PASS+co+x:https+free@a.pinggy.io"
+# URL 打印到终端。分享 URL + 密码。Ctrl-C 关闭隧道。
+</div>
+<p><code>b:dev:$PASS</code> 使用 HTTP Basic auth 对 URL 进行门控。<code>x:https</code> 强制 TLS。<code>co</code> 为 SPA 前端添加 CORS。</p>
+<h2>验证</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 端到端：启动一个简单的源服务，建立隧道，访问它，然后关闭
+python3 -m http.server 18000 --bind 127.0.0.1 &gt;/tmp/origin.log 2&gt;&amp;1 &amp;
+ORIGIN_PID=$!
+<p>nohup ssh -p 443 \
+-o StrictHostKeyChecking=no \
+-o UserKnownHostsFile=/dev/null \
+-R0:localhost:18000 free@a.pinggy.io &amp;gt;/tmp/pinggy-verify.log 2&amp;gt;&amp;amp;1 &amp;amp;
+SSH_PID=$!</p>
+<p>sleep 5
+URL=$(grep -oE 'https://[a-z0-9-]+\.[a-z]+\.pinggy\.link' /tmp/pinggy-verify.log | head -1)
+echo &quot;URL: $URL&quot;
+curl -sI &quot;$URL/&quot; | head -1</p>
+<p>kill &quot;$SSH_PID&quot; &quot;$ORIGIN_PID&quot;</p>
+</div>
+<p>预期结果：一个 <code>pinggy.link</code> URL 以及 curl 返回的 <code>HTTP/2 200</code>。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

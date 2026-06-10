@@ -1,0 +1,736 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lambda Labs Gpu Cloud — 用于 ML 训练和推理的预留及按需 GPU 云实例 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Lambda Labs Gpu Cloud — 用于 ML 训练和推理的预留及按需 GPU 云实例</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Lambda Labs Gpu Cloud</h1>
+<p>用于 ML 训练和推理的预留及按需 GPU 云实例。当你需要具备简单 SSH 访问的专用 GPU 实例、持久化文件系统，或用于大规模训练的高性能多节点集群时，请使用此 skill。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/mlops/lambda-labs</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/mlops/lambda-labs</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Orchestra Research</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>依赖</td>
+<td><code>lambda-cloud-client&gt;=1.0.0</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Infrastructure</code>, <code>GPU Cloud</code>, <code>Training</code>, <code>Inference</code>, <code>Lambda Labs</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>Lambda Labs GPU Cloud</h1>
+<p>在 Lambda Labs GPU 云上运行 ML 工作负载的综合指南，涵盖按需实例和 1-Click Clusters。</p>
+<h2>何时使用 Lambda Labs</h2>
+<p><strong>在以下情况下使用 Lambda Labs：</strong></p>
+<ul>
+<li>需要具备完整 SSH 访问权限的专用 GPU 实例</li>
+<li>运行长时间训练任务（数小时至数天）</li>
+<li>希望简单定价且无出口费用</li>
+<li>需要跨会话的持久化存储</li>
+<li>需要高性能多节点集群（16-512 个 GPU）</li>
+<li>希望使用预装 ML 栈（Lambda Stack，含 PyTorch、CUDA、NCCL）</li>
+</ul>
+<p><strong>主要特性：</strong></p>
+<ul>
+<li><strong>GPU 种类</strong>：B200、H100、GH200、A100、A10、A6000、V100</li>
+<li><strong>Lambda Stack</strong>：预装 PyTorch、TensorFlow、CUDA、cuDNN、NCCL</li>
+<li><strong>持久化文件系统</strong>：实例重启后数据保留</li>
+<li><strong>1-Click Clusters</strong>：16-512 个 GPU 的 Slurm 集群，配备 InfiniBand</li>
+<li><strong>简单定价</strong>：按分钟计费，无出口费用</li>
+<li><strong>全球区域</strong>：全球 12+ 个区域</li>
+</ul>
+<p><strong>以下情况请使用替代方案：</strong></p>
+<ul>
+<li><strong>Modal</strong>：用于无服务器、自动扩缩容工作负载</li>
+<li><strong>SkyPilot</strong>：用于多云编排和成本优化</li>
+<li><strong>RunPod</strong>：用于更便宜的竞价实例和无服务器端点</li>
+<li><strong>Vast.ai</strong>：用于价格最低的 GPU 市场</li>
+</ul>
+<h2>快速开始</h2>
+<h3>账户设置</h3>
+<ol>
+<li>在 https://lambda.ai 创建账户</li>
+<li>添加付款方式</li>
+<li>从控制台生成 API 密钥</li>
+<li>添加 SSH 密钥（启动实例前必须完成）</li>
+</ol>
+<h3>通过控制台启动</h3>
+<ol>
+<li>前往 https://cloud.lambda.ai/instances</li>
+<li>点击&quot;Launch instance&quot;</li>
+<li>选择 GPU 类型和区域</li>
+<li>选择 SSH 密钥</li>
+<li>可选择挂载文件系统</li>
+<li>启动并等待 3-15 分钟</li>
+</ol>
+<h3>通过 SSH 连接</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 从控制台获取实例 IP
+ssh ubuntu@&lt;INSTANCE-IP&gt;
+<h1>或使用指定密钥</h1>
+<p>ssh -i ~/.ssh/lambda_key ubuntu@&amp;lt;INSTANCE-IP&amp;gt;</p>
+</div>
+<h2>GPU 实例</h2>
+<h3>可用 GPU</h3>
+<table>
+<thead>
+<tr>
+<th>GPU</th>
+<th>显存</th>
+<th>价格/GPU/小时</th>
+<th>最适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>B200 SXM6</td>
+<td>180 GB</td>
+<td>$4.99</td>
+<td>最大模型，最快训练</td>
+</tr>
+<tr>
+<td>H100 SXM</td>
+<td>80 GB</td>
+<td>$2.99-3.29</td>
+<td>大模型训练</td>
+</tr>
+<tr>
+<td>H100 PCIe</td>
+<td>80 GB</td>
+<td>$2.49</td>
+<td>性价比 H100</td>
+</tr>
+<tr>
+<td>GH200</td>
+<td>96 GB</td>
+<td>$1.49</td>
+<td>单 GPU 大模型</td>
+</tr>
+<tr>
+<td>A100 80GB</td>
+<td>80 GB</td>
+<td>$1.79</td>
+<td>生产训练</td>
+</tr>
+<tr>
+<td>A100 40GB</td>
+<td>40 GB</td>
+<td>$1.29</td>
+<td>标准训练</td>
+</tr>
+<tr>
+<td>A10</td>
+<td>24 GB</td>
+<td>$0.75</td>
+<td>推理、微调</td>
+</tr>
+<tr>
+<td>A6000</td>
+<td>48 GB</td>
+<td>$0.80</td>
+<td>显存/价格比优</td>
+</tr>
+<tr>
+<td>V100</td>
+<td>16 GB</td>
+<td>$0.55</td>
+<td>低成本训练</td>
+</tr>
+</tbody>
+</table>
+<h3>实例配置</h3>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+8x GPU: 最适合分布式训练（DDP、FSDP）
+4x GPU: 大模型、多 GPU 训练
+2x GPU: 中等工作负载
+1x GPU: 微调、推理、开发
+</div>
+<h3>启动时间</h3>
+<ul>
+<li>单 GPU：3-5 分钟</li>
+<li>多 GPU：10-15 分钟</li>
+</ul>
+<h2>Lambda Stack</h2>
+<p>所有实例均预装 Lambda Stack：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 包含软件
+- Ubuntu 22.04 LTS
+- NVIDIA drivers (latest)
+- CUDA 12.x
+- cuDNN 8.x
+- NCCL (for multi-GPU)
+- PyTorch (latest)
+- TensorFlow (latest)
+- JAX
+- JupyterLab
+</div>
+<h3>验证安装</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 检查 GPU
+nvidia-smi
+<h1>检查 PyTorch</h1>
+<p>python -c &quot;import torch; print(torch.cuda.is_available())&quot;</p>
+<h1>检查 CUDA 版本</h1>
+<p>nvcc --version</p>
+</div>
+<h2>Python API</h2>
+<h3>安装</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install lambda-cloud-client
+</div>
+<h3>认证</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import os
+import lambda_cloud_client
+<h1>使用 API 密钥配置</h1>
+<p>configuration = lambda_cloud_client.Configuration(
+host=&quot;https://cloud.lambdalabs.com/api/v1&quot;,
+access_token=os.environ[&quot;LAMBDA_API_KEY&quot;]
+)</p>
+</div>
+<h3>列出可用实例</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+with lambda_cloud_client.ApiClient(configuration) as api_client:
+    api = lambda_cloud_client.DefaultApi(api_client)
+<pre><code># 获取可用实例类型
+types = api.instance_types()
+for name, info in types.data.items():
+    print(f&quot;{name}: {info.instance_type.description}&quot;)
+</code></pre>
+</div>
+<h3>启动实例</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from lambda_cloud_client.models import LaunchInstanceRequest
+<p>request = LaunchInstanceRequest(
+region_name=&quot;us-west-1&quot;,
+instance_type_name=&quot;gpu_1x_h100_sxm5&quot;,
+ssh_key_names=[&quot;my-ssh-key&quot;],
+file_system_names=[&quot;my-filesystem&quot;],  # 可选
+name=&quot;training-job&quot;
+)</p>
+<p>response = api.launch_instance(request)
+instance_id = response.data.instance_ids[0]
+print(f&quot;Launched: {instance_id}&quot;)</p>
+</div>
+<h3>列出运行中的实例</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+instances = api.list_instances()
+for instance in instances.data:
+    print(f"{instance.name}: {instance.ip} ({instance.status})")
+</div>
+<h3>终止实例</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from lambda_cloud_client.models import TerminateInstanceRequest
+<p>request = TerminateInstanceRequest(
+instance_ids=[instance_id]
+)
+api.terminate_instance(request)</p>
+</div>
+<h3>SSH 密钥管理</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from lambda_cloud_client.models import AddSshKeyRequest
+<h1>添加 SSH 密钥</h1>
+<p>request = AddSshKeyRequest(
+name=&quot;my-key&quot;,
+public_key=&quot;ssh-rsa AAAA...&quot;
+)
+api.add_ssh_key(request)</p>
+<h1>列出密钥</h1>
+<p>keys = api.list_ssh_keys()</p>
+<h1>删除密钥</h1>
+<p>api.delete_ssh_key(key_id)</p>
+</div>
+<h2>使用 curl 的 CLI</h2>
+<h3>列出实例类型</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -u $LAMBDA_API_KEY: \
+  https://cloud.lambdalabs.com/api/v1/instance-types | jq
+</div>
+<h3>启动实例</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -u $LAMBDA_API_KEY: \
+  -X POST https://cloud.lambdalabs.com/api/v1/instance-operations/launch \
+  -H "Content-Type: application/json" \
+  -d '{
+    "region_name": "us-west-1",
+    "instance_type_name": "gpu_1x_h100_sxm5",
+    "ssh_key_names": ["my-key"]
+  }' | jq
+</div>
+<h3>终止实例</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -u $LAMBDA_API_KEY: \
+  -X POST https://cloud.lambdalabs.com/api/v1/instance-operations/terminate \
+  -H "Content-Type: application/json" \
+  -d '{"instance_ids": ["&lt;INSTANCE-ID&gt;"]}' | jq
+</div>
+<h2>持久化存储</h2>
+<h3>文件系统</h3>
+<p>文件系统在实例重启后保留数据：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 挂载位置
+/lambda/nfs/&lt;FILESYSTEM_NAME&gt;
+<h1>示例：保存检查点</h1>
+<p>python train.py --checkpoint-dir /lambda/nfs/my-storage/checkpoints</p>
+</div>
+<h3>创建文件系统</h3>
+<ol>
+<li>前往 Lambda 控制台中的 Storage</li>
+<li>点击&quot;Create filesystem&quot;</li>
+<li>选择区域（必须与实例区域一致）</li>
+<li>命名并创建</li>
+</ol>
+<h3>挂载到实例</h3>
+<p>文件系统必须在实例启动时挂载：</p>
+<ul>
+<li>通过控制台：启动时选择文件系统</li>
+<li>通过 API：在启动请求中包含 <code>file_system_names</code></li>
+</ul>
+<h3>最佳实践</h3>
+<!-- ascii-guard-ignore -->
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 存储在文件系统上（持久化）
+/lambda/nfs/storage/
+  ├── datasets/
+  ├── checkpoints/
+  ├── models/
+  └── outputs/
+<h1>本地 SSD（更快，临时）</h1>
+<p>/home/ubuntu/
+└── working/  # 临时文件</p>
+</div>
+<!-- ascii-guard-ignore-end -->
+<h2>SSH 配置</h2>
+<h3>添加 SSH 密钥</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 在本地生成密钥
+ssh-keygen -t ed25519 -f ~/.ssh/lambda_key
+<h1>将公钥添加到 Lambda 控制台</h1>
+<h1>或通过 API 添加</h1>
+</div>
+<h3>多个密钥</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 在实例上添加更多密钥
+echo 'ssh-rsa AAAA...' &gt;&gt; ~/.ssh/authorized_keys
+</div>
+<h3>从 GitHub 导入</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 在实例上执行
+ssh-import-id gh:username
+</div>
+<h3>SSH 隧道</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 转发 Jupyter
+ssh -L 8888:localhost:8888 ubuntu@&lt;IP&gt;
+<h1>转发 TensorBoard</h1>
+<p>ssh -L 6006:localhost:6006 ubuntu@&amp;lt;IP&amp;gt;</p>
+<h1>多端口</h1>
+<p>ssh -L 8888:localhost:8888 -L 6006:localhost:6006 ubuntu@&amp;lt;IP&amp;gt;</p>
+</div>
+<h2>JupyterLab</h2>
+<h3>从控制台启动</h3>
+<ol>
+<li>前往 Instances 页面</li>
+<li>点击 Cloud IDE 列中的&quot;Launch&quot;</li>
+<li>JupyterLab 在浏览器中打开</li>
+</ol>
+<h3>手动访问</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 在实例上
+jupyter lab --ip=0.0.0.0 --port=8888
+<h1>在本地机器上建立隧道</h1>
+<p>ssh -L 8888:localhost:8888 ubuntu@&amp;lt;IP&amp;gt;</p>
+<h1>打开 http://localhost:8888</h1>
+</div>
+<h2>训练工作流</h2>
+<h3>单 GPU 训练</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# SSH 到实例
+ssh ubuntu@&lt;IP&gt;
+<h1>克隆仓库</h1>
+<p>git clone https://github.com/user/project
+cd project</p>
+<h1>安装依赖</h1>
+<p>pip install -r requirements.txt</p>
+<h1>训练</h1>
+<p>python train.py --epochs 100 --checkpoint-dir /lambda/nfs/storage/checkpoints</p>
+</div>
+<h3>多 GPU 训练（单节点）</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# train_ddp.py
+import torch
+import torch.distributed as dist
+from torch.nn.parallel import DistributedDataParallel as DDP
+<p>def main():
+dist.init_process_group(&quot;nccl&quot;)
+rank = dist.get_rank()
+device = rank % torch.cuda.device_count()</p>
+<pre><code>model = MyModel().to(device)
+model = DDP(model, device_ids=[device])
+
+# 训练循环...
+</code></pre>
+<p>if <strong>name</strong> == &quot;<strong>main</strong>&quot;:
+main()</p>
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 使用 torchrun 启动（8 个 GPU）
+torchrun --nproc_per_node=8 train_ddp.py
+</div>
+<h3>检查点保存到文件系统</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import os
+<p>checkpoint_dir = &quot;/lambda/nfs/my-storage/checkpoints&quot;
+os.makedirs(checkpoint_dir, exist_ok=True)</p>
+<h1>保存检查点</h1>
+<p>torch.save({
+'epoch': epoch,
+'model_state_dict': model.state_dict(),
+'optimizer_state_dict': optimizer.state_dict(),
+'loss': loss,
+}, f&quot;{checkpoint_dir}/checkpoint_{epoch}.pt&quot;)</p>
+</div>
+<h2>1-Click Clusters</h2>
+<h3>概述</h3>
+<p>高性能 Slurm 集群，具备：</p>
+<ul>
+<li>16-512 个 NVIDIA H100 或 B200 GPU</li>
+<li>NVIDIA Quantum-2 400 Gb/s InfiniBand</li>
+<li>GPUDirect RDMA，速率 3200 Gb/s</li>
+<li>预装分布式 ML 栈</li>
+</ul>
+<h3>包含软件</h3>
+<ul>
+<li>Ubuntu 22.04 LTS + Lambda Stack</li>
+<li>NCCL、Open MPI</li>
+<li>PyTorch（含 DDP 和 FSDP）</li>
+<li>TensorFlow</li>
+<li>OFED 驱动</li>
+</ul>
+<h3>存储</h3>
+<ul>
+<li>每个计算节点 24 TB NVMe（临时）</li>
+<li>Lambda 文件系统用于持久化数据</li>
+</ul>
+<h3>多节点训练</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 在 Slurm 集群上
+srun --nodes=4 --ntasks-per-node=8 --gpus-per-node=8 \
+  torchrun --nnodes=4 --nproc_per_node=8 \
+  --rdzv_backend=c10d --rdzv_endpoint=$MASTER_ADDR:29500 \
+  train.py
+</div>
+<h2>网络</h2>
+<h3>带宽</h3>
+<ul>
+<li>实例间（同一区域）：最高 200 Gbps</li>
+<li>互联网出站：最高 20 Gbps</li>
+</ul>
+<h3>防火墙</h3>
+<ul>
+<li>默认：仅开放 22 端口（SSH）</li>
+<li>在 Lambda 控制台中配置其他端口</li>
+<li>默认允许 ICMP 流量</li>
+</ul>
+<h3>私有 IP</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 查找私有 IP
+ip addr show | grep 'inet '
+</div>
+<h2>常见工作流</h2>
+<h3>工作流 1：微调 LLM</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 1. 启动带文件系统的 8x H100 实例
+<h1>2. SSH 并设置环境</h1>
+<p>ssh ubuntu@&amp;lt;IP&amp;gt;
+pip install transformers accelerate peft</p>
+<h1>3. 将模型下载到文件系统</h1>
+<p>python -c &quot;
+from transformers import AutoModelForCausalLM
+model = AutoModelForCausalLM.from_pretrained('meta-llama/Llama-2-7b-hf')
+model.save_pretrained('/lambda/nfs/storage/models/llama-2-7b')
+&quot;</p>
+<h1>4. 使用文件系统上的检查点进行微调</h1>
+<p>accelerate launch --num_processes 8 train.py \
+--model_path /lambda/nfs/storage/models/llama-2-7b \
+--output_dir /lambda/nfs/storage/outputs \
+--checkpoint_dir /lambda/nfs/storage/checkpoints</p>
+</div>
+<h3>工作流 2：批量推理</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 1. 启动 A10 实例（推理性价比高）
+<h1>2. 运行推理</h1>
+<p>python inference.py \
+--model /lambda/nfs/storage/models/fine-tuned \
+--input /lambda/nfs/storage/data/inputs.jsonl \
+--output /lambda/nfs/storage/data/outputs.jsonl</p>
+</div>
+<h2>成本优化</h2>
+<h3>选择合适的 GPU</h3>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>推荐 GPU</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LLM 微调（7B）</td>
+<td>A100 40GB</td>
+</tr>
+<tr>
+<td>LLM 微调（70B）</td>
+<td>8x H100</td>
+</tr>
+<tr>
+<td>推理</td>
+<td>A10、A6000</td>
+</tr>
+<tr>
+<td>开发</td>
+<td>V100、A10</td>
+</tr>
+<tr>
+<td>最高性能</td>
+<td>B200</td>
+</tr>
+</tbody>
+</table>
+<h3>降低成本</h3>
+<ol>
+<li><strong>使用文件系统</strong>：避免重复下载数据</li>
+<li><strong>频繁保存检查点</strong>：恢复中断的训练</li>
+<li><strong>合理配置</strong>：不要过度分配 GPU</li>
+<li><strong>终止空闲实例</strong>：无自动停止，需手动终止</li>
+</ol>
+<h3>监控使用情况</h3>
+<ul>
+<li>控制台显示实时 GPU 利用率</li>
+<li>通过 API 进行程序化监控</li>
+</ul>
+<h2>常见问题</h2>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>实例无法启动</td>
+<td>检查区域可用性，尝试不同 GPU</td>
+</tr>
+<tr>
+<td>SSH 连接被拒绝</td>
+<td>等待实例初始化（3-15 分钟）</td>
+</tr>
+<tr>
+<td>终止后数据丢失</td>
+<td>使用持久化文件系统</td>
+</tr>
+<tr>
+<td>数据传输缓慢</td>
+<td>使用同一区域的文件系统</td>
+</tr>
+<tr>
+<td>GPU 未被检测到</td>
+<td>重启实例，检查驱动</td>
+</tr>
+</tbody>
+</table>
+<h2>参考资料</h2>
+<ul>
+<li><strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/lambda-labs/references/advanced-usage.html">高级用法</a></strong> — 多节点训练、API 自动化</li>
+<li><strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/lambda-labs/references/troubleshooting.html">故障排查</a></strong> — 常见问题及解决方案</li>
+</ul>
+<h2>资源</h2>
+<ul>
+<li><strong>文档</strong>：https://docs.lambda.ai</li>
+<li><strong>控制台</strong>：https://cloud.lambda.ai</li>
+<li><strong>定价</strong>：https://lambda.ai/instances</li>
+<li><strong>支持</strong>：https://support.lambdalabs.com</li>
+<li><strong>博客</strong>：https://lambda.ai/blog</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

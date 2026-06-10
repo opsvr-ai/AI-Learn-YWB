@@ -1,0 +1,355 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tensorrt Llm — 使用 NVIDIA TensorRT 优化 LLM 推理以实现最大吞吐量和最低延迟 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Tensorrt Llm — 使用 NVIDIA TensorRT 优化 LLM 推理以实现最大吞吐量和最低延迟</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Tensorrt Llm</h1>
+<p>使用 NVIDIA TensorRT 优化 LLM 推理，实现最大吞吐量和最低延迟。适用于在 NVIDIA GPU（A100/H100）上进行生产部署、需要比 PyTorch 快 10-100 倍的推理速度，或需要使用量化（FP8/INT4）、in-flight batching（动态批处理）和多 GPU 扩展来服务模型的场景。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/mlops/tensorrt-llm</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/mlops/tensorrt-llm</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Orchestra Research</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>依赖项</td>
+<td><code>tensorrt-llm</code>, <code>torch</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Inference Serving</code>, <code>TensorRT-LLM</code>, <code>NVIDIA</code>, <code>Inference Optimization</code>, <code>High Throughput</code>, <code>Low Latency</code>, <code>Production</code>, <code>FP8</code>, <code>INT4</code>, <code>In-Flight Batching</code>, <code>Multi-GPU</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 skill 激活时 agent 所看到的指令内容。
+</div>
+<h1>TensorRT-LLM</h1>
+<p>NVIDIA 的开源库，用于在 NVIDIA GPU 上以最先进的性能优化 LLM 推理。</p>
+<h2>何时使用 TensorRT-LLM</h2>
+<p><strong>在以下情况下使用 TensorRT-LLM：</strong></p>
+<ul>
+<li>在 NVIDIA GPU（A100、H100、GB200）上部署</li>
+<li>需要最大吞吐量（Llama 3 上 24,000+ tokens/sec）</li>
+<li>实时应用需要低延迟</li>
+<li>使用量化模型（FP8、INT4、FP4）</li>
+<li>跨多个 GPU 或节点扩展</li>
+</ul>
+<p><strong>在以下情况下改用 vLLM：</strong></p>
+<ul>
+<li>需要更简单的设置和 Python 优先的 API</li>
+<li>希望使用 PagedAttention 而无需 TensorRT 编译</li>
+<li>使用 AMD GPU 或非 NVIDIA 硬件</li>
+</ul>
+<p><strong>在以下情况下改用 llama.cpp：</strong></p>
+<ul>
+<li>在 CPU 或 Apple Silicon 上部署</li>
+<li>需要无 NVIDIA GPU 的边缘部署</li>
+<li>希望使用更简单的 GGUF 量化格式</li>
+</ul>
+<h2>快速开始</h2>
+<h3>安装</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Docker（推荐）
+docker pull nvidia/tensorrt_llm:latest
+<h1>pip 安装</h1>
+<p>pip install tensorrt_llm==1.2.0rc3</p>
+<h1>需要 CUDA 13.0.0、TensorRT 10.13.2、Python 3.10-3.12</h1>
+</div>
+<h3>基本推理</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from tensorrt_llm import LLM, SamplingParams
+<h1>初始化模型</h1>
+<p>llm = LLM(model=&quot;meta-llama/Meta-Llama-3-8B&quot;)</p>
+<h1>配置采样参数</h1>
+<p>sampling_params = SamplingParams(
+max_tokens=100,
+temperature=0.7,
+top_p=0.9
+)</p>
+<h1>生成</h1>
+<p>prompts = [&quot;Explain quantum computing&quot;]
+outputs = llm.generate(prompts, sampling_params)</p>
+<p>for output in outputs:
+print(output.text)</p>
+</div>
+<h3>使用 trtllm-serve 提供服务</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 启动服务器（自动下载和编译模型）
+trtllm-serve meta-llama/Meta-Llama-3-8B \
+    --tp_size 4 \              # 张量并行（4 个 GPU）
+    --max_batch_size 256 \
+    --max_num_tokens 4096
+<h1>客户端请求</h1>
+<p>curl -X POST http://localhost:8000/v1/chat/completions \
+-H &quot;Content-Type: application/json&quot; \
+-d '{
+&quot;model&quot;: &quot;meta-llama/Meta-Llama-3-8B&quot;,
+&quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Hello!&quot;}],
+&quot;temperature&quot;: 0.7,
+&quot;max_tokens&quot;: 100
+}'</p>
+</div>
+<h2>核心特性</h2>
+<h3>性能优化</h3>
+<ul>
+<li><strong>In-flight batching</strong>：生成过程中的动态批处理</li>
+<li><strong>Paged KV cache</strong>：高效内存管理</li>
+<li><strong>Flash Attention</strong>：优化的注意力计算核</li>
+<li><strong>量化</strong>：FP8、INT4、FP4，推理速度提升 2-4 倍</li>
+<li><strong>CUDA graphs</strong>：降低内核启动开销</li>
+</ul>
+<h3>并行化</h3>
+<ul>
+<li><strong>张量并行（TP）</strong>：跨 GPU 拆分模型</li>
+<li><strong>流水线并行（PP）</strong>：按层分布</li>
+<li><strong>专家并行</strong>：用于混合专家（Mixture-of-Experts）模型</li>
+<li><strong>多节点</strong>：扩展至单机以外</li>
+</ul>
+<h3>高级特性</h3>
+<ul>
+<li><strong>推测解码（Speculative decoding）</strong>：使用草稿模型加速生成</li>
+<li><strong>LoRA serving</strong>：高效多适配器部署</li>
+<li><strong>分离式服务（Disaggregated serving）</strong>：预填充与生成分离</li>
+</ul>
+<h2>常见模式</h2>
+<h3>量化模型（FP8）</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from tensorrt_llm import LLM
+<h1>加载 FP8 量化模型（速度提升 2 倍，内存减少 50%）</h1>
+<p>llm = LLM(
+model=&quot;meta-llama/Meta-Llama-3-70B&quot;,
+dtype=&quot;fp8&quot;,
+max_num_tokens=8192
+)</p>
+<h1>推理方式与之前相同</h1>
+<p>outputs = llm.generate([&quot;Summarize this article...&quot;])</p>
+</div>
+<h3>多 GPU 部署</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 跨 8 个 GPU 的张量并行
+llm = LLM(
+    model="meta-llama/Meta-Llama-3-405B",
+    tensor_parallel_size=8,
+    dtype="fp8"
+)
+</div>
+<h3>批量推理</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 高效处理 100 个 prompt
+prompts = [f"Question {i}: ..." for i in range(100)]
+<p>outputs = llm.generate(
+prompts,
+sampling_params=SamplingParams(max_tokens=200)
+)</p>
+<h1>自动 in-flight batching 以实现最大吞吐量</h1>
+</div>
+<h2>性能基准</h2>
+<p><strong>Meta Llama 3-8B</strong>（H100 GPU）：</p>
+<ul>
+<li>吞吐量：24,000 tokens/sec</li>
+<li>延迟：每 token 约 10ms</li>
+<li>对比 PyTorch：<strong>快 100 倍</strong></li>
+</ul>
+<p><strong>Llama 3-70B</strong>（8× A100 80GB）：</p>
+<ul>
+<li>FP8 量化：比 FP16 快 2 倍</li>
+<li>内存：FP8 减少 50%</li>
+</ul>
+<h2>支持的模型</h2>
+<ul>
+<li><strong>LLaMA 系列</strong>：Llama 2、Llama 3、CodeLlama</li>
+<li><strong>GPT 系列</strong>：GPT-2、GPT-J、GPT-NeoX</li>
+<li><strong>Qwen</strong>：Qwen、Qwen2、QwQ</li>
+<li><strong>DeepSeek</strong>：DeepSeek-V2、DeepSeek-V3</li>
+<li><strong>Mixtral</strong>：Mixtral-8x7B、Mixtral-8x22B</li>
+<li><strong>视觉模型</strong>：LLaVA、Phi-3-vision</li>
+<li><strong>100+ 模型</strong>，可在 HuggingFace 上获取</li>
+</ul>
+<h2>参考文档</h2>
+<ul>
+<li><strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/tensorrt-llm/references/optimization.html">优化指南</a></strong> — 量化、批处理、KV cache 调优</li>
+<li><strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/tensorrt-llm/references/multi-gpu.html">多 GPU 配置</a></strong> — 张量/流水线并行、多节点</li>
+<li><strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/tensorrt-llm/references/serving.html">服务指南</a></strong> — 生产部署、监控、自动扩缩容</li>
+</ul>
+<h2>资源</h2>
+<ul>
+<li><strong>文档</strong>：https://nvidia.github.io/TensorRT-LLM/</li>
+<li><strong>GitHub</strong>：https://github.com/NVIDIA/TensorRT-LLM</li>
+<li><strong>模型</strong>：https://huggingface.co/models?library=tensorrt_llm</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,466 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>上下文压缩与缓存 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 开发者指南 / 上下文压缩与缓存</div><p>Hermes Agent 使用双重压缩系统和 Anthropic prompt（提示词）缓存，在长对话中高效管理上下文窗口用量。</p>
+<p>源文件：<code>agent/context_engine.py</code>（ABC）、<code>agent/context_compressor.py</code>（默认引擎）、
+<code>agent/prompt_caching.py</code>、<code>gateway/run.py</code>（会话清理）、<code>run_agent.py</code>（搜索 <code>_compress_context</code>）</p>
+<h2>可插拔上下文引擎</h2>
+<p>上下文管理基于 <code>ContextEngine</code> ABC（<code>agent/context_engine.py</code>）构建。内置的 <code>ContextCompressor</code> 是默认实现，但插件可以用其他引擎替换它（例如无损上下文管理）。</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+context:
+  engine: "compressor"    # default — built-in lossy summarization
+  engine: "lcm"           # example — plugin providing lossless context
+</div>
+<p>引擎负责：</p>
+<ul>
+<li>决定何时触发压缩（<code>should_compress()</code>）</li>
+<li>执行压缩（<code>compress()</code>）</li>
+<li>可选地暴露 agent 可调用的工具（例如 <code>lcm_grep</code>）</li>
+<li>追踪 API 响应中的 token 用量</li>
+</ul>
+<p>通过 <code>config.yaml</code> 中的 <code>context.engine</code> 进行配置驱动选择。解析顺序：</p>
+<ol>
+<li>检查 <code>plugins/context_engine/&lt;name&gt;/</code> 目录</li>
+<li>检查通用插件系统（<code>register_context_engine()</code>）</li>
+<li>回退到内置 <code>ContextCompressor</code></li>
+</ol>
+<p>插件引擎<strong>永远不会自动激活</strong>——用户必须在 <code>context.engine</code> 中显式设置插件名称。默认的 <code>&quot;compressor&quot;</code> 始终使用内置实现。</p>
+<p>通过 <code>hermes plugins</code> → Provider Plugins → Context Engine 进行配置，或直接编辑 <code>config.yaml</code>。</p>
+<p>关于构建上下文引擎插件，请参阅 <a href="/developer-guide/context-engine-plugin">Context Engine 插件</a>。</p>
+<h2>双重压缩系统</h2>
+<p>Hermes 有两个独立运行的压缩层：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+                     ┌──────────────────────────┐
+  Incoming message   │   Gateway Session Hygiene │  Fires at 85% of context
+  ─────────────────► │   (pre-agent, rough est.) │  Safety net for large sessions
+                     └─────────────┬────────────┘
+                                   │
+                                   ▼
+                     ┌──────────────────────────┐
+                     │   Agent ContextCompressor │  Fires at 50% of context (default)
+                     │   (in-loop, real tokens)  │  Normal context management
+                     └──────────────────────────┘
+</div>
+<h3>1. Gateway 会话清理（85% 阈值）</h3>
+<p>位于 <code>gateway/run.py</code>（搜索 <code>Session hygiene: auto-compress</code>）。这是一个<strong>安全网</strong>，在 agent 处理消息之前运行。它防止会话在两次交互之间增长过大时（例如 Telegram/Discord 中的隔夜积累）导致 API 失败。</p>
+<ul>
+<li><strong>阈值</strong>：固定为模型上下文长度的 85%</li>
+<li><strong>Token 来源</strong>：优先使用上一轮 API 实际报告的 token 数；回退到基于字符的粗略估算（<code>estimate_messages_tokens_rough</code>）</li>
+<li><strong>触发条件</strong>：仅当 <code>len(history) &gt;= 4</code> 且压缩已启用时</li>
+<li><strong>目的</strong>：捕获逃过 agent 自身压缩器的会话</li>
+</ul>
+<p>Gateway 清理阈值有意高于 agent 压缩器的阈值。将其设置为 50%（与 agent 相同）会导致长 gateway 会话在每一轮都过早触发压缩。</p>
+<h3>2. Agent ContextCompressor（50% 阈值，可配置）</h3>
+<p>位于 <code>agent/context_compressor.py</code>。这是<strong>主要压缩系统</strong>，在 agent 的工具循环内运行，可访问准确的 API 报告 token 数。</p>
+<h2>配置</h2>
+<p>所有压缩设置从 <code>config.yaml</code> 的 <code>compression</code> 键读取：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+compression:
+  enabled: true              # Enable/disable compression (default: true)
+  threshold: 0.50            # Fraction of context window (default: 0.50 = 50%)
+  target_ratio: 0.20         # How much of threshold to keep as tail (default: 0.20)
+  protect_last_n: 20         # Minimum protected tail messages (default: 20)
+
+# Summarization model/provider configured under auxiliary:
+auxiliary:
+  compression:
+    model: null              # Override model for summaries (default: auto-detect)
+    provider: auto           # Provider: "auto", "openrouter", "nous", "main", etc.
+    base_url: null           # Custom OpenAI-compatible endpoint
+</div>
+<h3>参数详情</h3>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>默认值</th>
+<th>范围</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>threshold</code></td>
+<td><code>0.50</code></td>
+<td>0.0-1.0</td>
+<td>当 prompt token 数 ≥ <code>threshold × context_length</code> 时触发压缩</td>
+</tr>
+<tr>
+<td><code>target_ratio</code></td>
+<td><code>0.20</code></td>
+<td>0.10-0.80</td>
+<td>控制尾部保护 token 预算：<code>threshold_tokens × target_ratio</code></td>
+</tr>
+<tr>
+<td><code>protect_last_n</code></td>
+<td><code>20</code></td>
+<td>≥1</td>
+<td>始终保留的最近消息最小数量</td>
+</tr>
+<tr>
+<td><code>protect_first_n</code></td>
+<td><code>3</code></td>
+<td>（硬编码）</td>
+<td>系统提示词 + 首次交互始终保留</td>
+</tr>
+</tbody>
+</table>
+<h3>计算值（200K 上下文模型，默认参数）</h3>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+context_length       = 200,000
+threshold_tokens     = 200,000 × 0.50 = 100,000
+tail_token_budget    = 100,000 × 0.20 = 20,000
+max_summary_tokens   = min(200,000 × 0.05, 12,000) = 10,000
+</div>
+<h2>压缩算法</h2>
+<p><code>ContextCompressor.compress()</code> 方法遵循 4 阶段算法：</p>
+<h3>阶段 1：清除旧工具结果（廉价，无需 LLM 调用）</h3>
+<p>保护尾部之外的旧工具结果（&gt;200 字符）将被替换为：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+[Old tool output cleared to save context space]
+</div>
+<p>这是一个廉价的预处理步骤，可从冗长的工具输出（文件内容、终端输出、搜索结果）中节省大量 token。</p>
+<h3>阶段 2：确定边界</h3>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+┌─────────────────────────────────────────────────────────────┐
+│  Message list                                               │
+│                                                             │
+│  [0..2]  ← protect_first_n (system + first exchange)        │
+│  [3..N]  ← middle turns → SUMMARIZED                        │
+│  [N..end] ← tail (by token budget OR protect_last_n)        │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+</div>
+<p>尾部保护基于 <strong>token 预算</strong>：从末尾向前遍历，累积 token 直到预算耗尽。如果预算保护的消息数少于固定的 <code>protect_last_n</code>，则回退到该固定数量。</p>
+<p>边界对齐以避免拆分 tool_call/tool_result 组。<code>_align_boundary_backward()</code> 方法会跳过连续的工具结果，找到父级 assistant 消息，保持组的完整性。</p>
+<h3>阶段 3：生成结构化摘要</h3>
+<div class="tip warning"><strong>⚠️ 摘要模型上下文长度</strong>
+摘要模型的上下文窗口必须<strong>至少与主 agent 模型一样大</strong>。整个中间部分通过单次 <code>call_llm(task=&quot;compression&quot;)</code> 调用发送给摘要模型。如果摘要模型的上下文更小，API 将返回上下文长度错误——<code>_generate_summary()</code> 会捕获该错误，记录警告并返回 <code>None</code>。压缩器随后会<strong>在没有摘要的情况下丢弃中间轮次</strong>，静默丢失对话上下文。这是压缩质量下降最常见的原因。
+</div>
+<p>中间轮次使用辅助 LLM 以结构化模板进行摘要：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+## Goal
+[What the user is trying to accomplish]
+
+## Constraints &amp; Preferences
+[User preferences, coding style, constraints, important decisions]
+
+## Progress
+### Done
+[Completed work — specific file paths, commands run, results]
+### In Progress
+[Work currently underway]
+### Blocked
+[Any blockers or issues encountered]
+
+## Key Decisions
+[Important technical decisions and why]
+
+## Relevant Files
+[Files read, modified, or created — with brief note on each]
+
+## Next Steps
+[What needs to happen next]
+
+## Critical Context
+[Specific values, error messages, configuration details]
+</div>
+<p>摘要预算随被压缩内容的量动态调整：</p>
+<ul>
+<li>公式：<code>content_tokens × 0.20</code>（<code>_SUMMARY_RATIO</code> 常量）</li>
+<li>最小值：2,000 token</li>
+<li>最大值：<code>min(context_length × 0.05, 12,000)</code> token</li>
+</ul>
+<h3>阶段 4：组装压缩后的消息</h3>
+<p>压缩后的消息列表为：</p>
+<ol>
+<li>头部消息（首次压缩时在系统提示词后追加一条说明）</li>
+<li>摘要消息（角色经过选择以避免连续相同角色违规）</li>
+<li>尾部消息（未修改）</li>
+</ol>
+<p><code>_sanitize_tool_pairs()</code> 清理孤立的 tool_call/tool_result 对：</p>
+<ul>
+<li>引用已删除调用的工具结果 → 删除</li>
+<li>结果已被删除的工具调用 → 注入存根结果</li>
+</ul>
+<h3>迭代重压缩</h3>
+<p>在后续压缩中，前一次摘要会连同指令一起传递给 LLM，要求其<strong>更新</strong>摘要而非从头摘要。这在多次压缩中保留了信息——条目从&quot;进行中&quot;移至&quot;已完成&quot;，新进展被添加，过时信息被删除。</p>
+<p>压缩器实例上的 <code>_previous_summary</code> 字段存储最后一次摘要文本以供此用途。</p>
+<h2>压缩前后示例</h2>
+<h3>压缩前（45 条消息，约 95K token）</h3>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+[0] system:    "You are a helpful assistant..." (system prompt)
+[1] user:      "Help me set up a FastAPI project"
+[2] assistant: &lt;tool_call&gt; terminal: mkdir project &lt;/tool_call&gt;
+[3] tool:      "directory created"
+[4] assistant: &lt;tool_call&gt; write_file: main.py &lt;/tool_call&gt;
+[5] tool:      "file written (2.3KB)"
+    ... 30 more turns of file editing, testing, debugging ...
+[38] assistant: &lt;tool_call&gt; terminal: pytest &lt;/tool_call&gt;
+[39] tool:      "8 passed, 2 failed\n..."  (5KB output)
+[40] user:      "Fix the failing tests"
+[41] assistant: &lt;tool_call&gt; read_file: tests/test_api.py &lt;/tool_call&gt;
+[42] tool:      "import pytest\n..."  (3KB)
+[43] assistant: "I see the issue with the test fixtures..."
+[44] user:      "Great, also add error handling"
+</div>
+<h3>压缩后（25 条消息，约 45K token）</h3>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+[0] system:    "You are a helpful assistant...
+               [Note: Some earlier conversation turns have been compacted...]"
+[1] user:      "Help me set up a FastAPI project"
+[2] assistant: "[CONTEXT COMPACTION] Earlier turns were compacted...
+
+               ## Goal
+               Set up a FastAPI project with tests and error handling
+
+               ## Progress
+               ### Done
+               - Created project structure: main.py, tests/, requirements.txt
+               - Implemented 5 API endpoints in main.py
+               - Wrote 10 test cases in tests/test_api.py
+               - 8/10 tests passing
+
+               ### In Progress
+               - Fixing 2 failing tests (test_create_user, test_delete_user)
+
+               ## Relevant Files
+               - main.py — FastAPI app with 5 endpoints
+               - tests/test_api.py — 10 test cases
+               - requirements.txt — fastapi, pytest, httpx
+
+               ## Next Steps
+               - Fix failing test fixtures
+               - Add error handling"
+[3] user:      "Fix the failing tests"
+[4] assistant: &lt;tool_call&gt; read_file: tests/test_api.py &lt;/tool_call&gt;
+[5] tool:      "import pytest\n..."
+[6] assistant: "I see the issue with the test fixtures..."
+[7] user:      "Great, also add error handling"
+</div>
+<h2>Prompt 缓存（Anthropic）</h2>
+<p>来源：<code>agent/prompt_caching.py</code></p>
+<p>通过缓存对话前缀，在多轮对话中将输入 token 成本降低约 75%。使用 Anthropic 的 <code>cache_control</code> 断点。</p>
+<h3>策略：system_and_3</h3>
+<p>Anthropic 每次请求最多允许 4 个 <code>cache_control</code> 断点。Hermes 使用&quot;system_and_3&quot;策略：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Breakpoint 1: System prompt           (stable across all turns)
+Breakpoint 2: 3rd-to-last non-system message  ─┐
+Breakpoint 3: 2nd-to-last non-system message   ├─ Rolling window
+Breakpoint 4: Last non-system message          ─┘
+</div>
+<h3>工作原理</h3>
+<p><code>apply_anthropic_cache_control()</code> 深拷贝消息并注入 <code>cache_control</code> 标记：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Cache marker format
+marker = {"type": "ephemeral"}
+# Or for 1-hour TTL:
+marker = {"type": "ephemeral", "ttl": "1h"}
+</div>
+<p>标记根据内容类型以不同方式应用：</p>
+<table>
+<thead>
+<tr>
+<th>内容类型</th>
+<th>标记位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>字符串内容</td>
+<td>转换为 <code>[{&quot;type&quot;: &quot;text&quot;, &quot;text&quot;: ..., &quot;cache_control&quot;: ...}]</code></td>
+</tr>
+<tr>
+<td>列表内容</td>
+<td>添加到最后一个元素的字典中</td>
+</tr>
+<tr>
+<td>None/空</td>
+<td>作为 <code>msg[&quot;cache_control&quot;]</code> 添加</td>
+</tr>
+<tr>
+<td>工具消息</td>
+<td>作为 <code>msg[&quot;cache_control&quot;]</code> 添加（仅限原生 Anthropic）</td>
+</tr>
+</tbody>
+</table>
+<h3>缓存感知设计模式</h3>
+<ol>
+<li>
+<p><strong>稳定的系统提示词</strong>：系统提示词是断点 1，在所有轮次中缓存。避免在对话中途修改它（压缩仅在首次压缩时追加一条说明）。</p>
+</li>
+<li>
+<p><strong>消息顺序很重要</strong>：缓存命中需要前缀匹配。在中间添加或删除消息会使其后所有内容的缓存失效。</p>
+</li>
+<li>
+<p><strong>压缩与缓存的交互</strong>：压缩后，被压缩区域的缓存失效，但系统提示词缓存保留。滚动 3 消息窗口在 1-2 轮内重新建立缓存。</p>
+</li>
+<li>
+<p><strong>TTL 选择</strong>：默认为 <code>5m</code>（5 分钟）。对于用户在轮次之间有较长间隔的长时间会话，使用 <code>1h</code>。</p>
+</li>
+</ol>
+<h3>启用 Prompt 缓存</h3>
+<p>满足以下条件时，prompt 缓存自动启用：</p>
+<ul>
+<li>模型为 Anthropic Claude 模型（通过模型名称检测）</li>
+<li>提供商支持 <code>cache_control</code>（原生 Anthropic API 或 OpenRouter）</li>
+</ul>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# config.yaml — TTL is configurable (must be "5m" or "1h")
+prompt_caching:
+  cache_ttl: "5m"
+</div>
+<p>CLI 在启动时显示缓存状态：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+💾 Prompt caching: ENABLED (Claude via OpenRouter, 5m TTL)
+</div>
+<h2>上下文压力警告</h2>
+<p>中间上下文压力警告已被移除（参见 <code>run_agent.py</code> 中的迭代预算块，其中注明：&quot;No intermediate pressure warnings — they caused models to 'give up' prematurely on complex tasks&quot;）。压缩在 prompt token 达到配置的 <code>compression.threshold</code>（默认 50%）时触发，无需事先警告步骤；gateway 会话清理作为二级安全网在模型上下文窗口的 85% 处触发。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

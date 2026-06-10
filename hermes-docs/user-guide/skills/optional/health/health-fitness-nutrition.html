@@ -1,0 +1,551 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>健身营养 — 健身房训练计划与营养追踪 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / 健身营养 — 健身房训练计划与营养追踪</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>健身营养</h1>
+<p>健身房训练计划与营养追踪。通过 wger 按肌肉、器械或类别搜索 690+ 个动作。通过 USDA FoodData Central 查询 380,000+ 种食物的宏量营养素和热量。纯 Python 计算 BMI、TDEE、单次最大重量（one-rep max）、宏量分配和体脂率——无需 pip 安装。适合增肌、减脂或只是想吃得更健康的用户。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/health/fitness-nutrition</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/health/fitness-nutrition</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>health</code>, <code>fitness</code>, <code>nutrition</code>, <code>gym</code>, <code>workout</code>, <code>diet</code>, <code>exercise</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>健身与营养</h1>
+<p>专业健身教练与运动营养师 skill。两个数据源加上离线计算器——健身者所需的一切尽在其中。</p>
+<p><strong>数据源（全部免费，无 pip 依赖）：</strong></p>
+<ul>
+<li><strong>wger</strong> (https://wger.de/api/v2/) — 开放动作数据库，690+ 个动作，含肌肉、器械、图片信息。公开端点无需任何认证。</li>
+<li><strong>USDA FoodData Central</strong> (https://api.nal.usda.gov/fdc/v1/) — 美国政府营养数据库，380,000+ 种食物。<code>DEMO_KEY</code> 可立即使用；免费注册可获得更高请求限额。</li>
+</ul>
+<p><strong>离线计算器（纯标准库 Python）：</strong></p>
+<ul>
+<li>BMI、TDEE（Mifflin-St Jeor 公式）、单次最大重量（Epley/Brzycki/Lombardi 公式）、宏量分配、体脂率（美国海军方法）</li>
+</ul>
+<hr />
+<h2>使用时机</h2>
+<p>当用户询问以下内容时触发此 skill：</p>
+<ul>
+<li>动作、训练、健身计划、肌肉群、训练分化</li>
+<li>食物宏量、热量、蛋白质含量、饮食计划、热量计算</li>
+<li>身体成分：BMI、体脂率、TDEE、热量盈余/赤字</li>
+<li>单次最大重量估算、训练百分比、渐进超负荷</li>
+<li>减脂、增肌或维持期的宏量比例</li>
+</ul>
+<hr />
+<h2>操作流程</h2>
+<h3>动作查询（wger API）</h3>
+<p>所有 wger 公开端点返回 JSON，无需认证。动作查询始终添加 <code>format=json</code> 和 <code>language=2</code>（英语）。</p>
+<p><strong>第一步 — 确认用户需求：</strong></p>
+<ul>
+<li>按肌肉 → 使用 <code>/api/v2/exercise/?muscles={id}&amp;language=2&amp;status=2&amp;format=json</code></li>
+<li>按类别 → 使用 <code>/api/v2/exercise/?category={id}&amp;language=2&amp;status=2&amp;format=json</code></li>
+<li>按器械 → 使用 <code>/api/v2/exercise/?equipment={id}&amp;language=2&amp;status=2&amp;format=json</code></li>
+<li>按名称 → 使用 <code>/api/v2/exercise/search/?term={query}&amp;language=english&amp;format=json</code></li>
+<li>完整详情 → 使用 <code>/api/v2/exerciseinfo/{exercise_id}/?format=json</code></li>
+</ul>
+<p><strong>第二步 — 参考 ID（避免额外 API 调用）：</strong></p>
+<p>动作类别：</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>类别</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8</td>
+<td>Arms</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Legs</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Abs</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Chest</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Back</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Shoulders</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Calves</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Cardio</td>
+</tr>
+</tbody>
+</table>
+<p>肌肉：</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>肌肉</th>
+<th>ID</th>
+<th>肌肉</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Biceps brachii</td>
+<td>2</td>
+<td>Anterior deltoid</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Serratus anterior</td>
+<td>4</td>
+<td>Pectoralis major</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Obliquus externus</td>
+<td>6</td>
+<td>Gastrocnemius</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Rectus abdominis</td>
+<td>8</td>
+<td>Gluteus maximus</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Trapezius</td>
+<td>10</td>
+<td>Quadriceps femoris</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Biceps femoris</td>
+<td>12</td>
+<td>Latissimus dorsi</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Brachialis</td>
+<td>14</td>
+<td>Triceps brachii</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Soleus</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>器械：</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>器械</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Barbell</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Dumbbell</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Gym mat</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Swiss Ball</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Pull-up bar</td>
+</tr>
+<tr>
+<td>7</td>
+<td>none (bodyweight)</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Bench</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Incline bench</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Kettlebell</td>
+</tr>
+</tbody>
+</table>
+<p><strong>第三步 — 获取并展示结果：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Search exercises by name
+QUERY="$1"
+ENCODED=$(python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))" "$QUERY")
+curl -s "https://wger.de/api/v2/exercise/search/?term=${ENCODED}&amp;language=english&amp;format=json" \
+  | python3 -c "
+import json,sys
+data=json.load(sys.stdin)
+for s in data.get('suggestions',[])[:10]:
+    d=s.get('data',{})
+    print(f\"  ID {d.get('id','?'):&gt;4} | {d.get('name','N/A'):&lt;35} | Category: {d.get('category','N/A')}\")
+"
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Get full details for a specific exercise
+EXERCISE_ID="$1"
+curl -s "https://wger.de/api/v2/exerciseinfo/${EXERCISE_ID}/?format=json" \
+  | python3 -c "
+import json,sys,html,re
+data=json.load(sys.stdin)
+trans=[t for t in data.get('translations',[]) if t.get('language')==2]
+t=trans[0] if trans else data.get('translations',[{}])[0]
+desc=re.sub('&lt;[^&gt;]+&gt;','',html.unescape(t.get('description','N/A')))
+print(f\"Exercise  : {t.get('name','N/A')}\")
+print(f\"Category  : {data.get('category',{}).get('name','N/A')}\")
+print(f\"Primary   : {', '.join(m.get('name_en','') for m in data.get('muscles',[])) or 'N/A'}\")
+print(f\"Secondary : {', '.join(m.get('name_en','') for m in data.get('muscles_secondary',[])) or 'none'}\")
+print(f\"Equipment : {', '.join(e.get('name','') for e in data.get('equipment',[])) or 'bodyweight'}\")
+print(f\"How to    : {desc[:500]}\")
+imgs=data.get('images',[])
+if imgs: print(f\"Image     : {imgs[0].get('image','')}\")
+"
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# List exercises filtering by muscle, category, or equipment
+# Combine filters as needed: ?muscles=4&amp;equipment=1&amp;language=2&amp;status=2
+FILTER="$1"  # e.g. "muscles=4" or "category=11" or "equipment=3"
+curl -s "https://wger.de/api/v2/exercise/?${FILTER}&amp;language=2&amp;status=2&amp;limit=20&amp;format=json" \
+  | python3 -c "
+import json,sys
+data=json.load(sys.stdin)
+print(f'Found {data.get(\"count\",0)} exercises.')
+for ex in data.get('results',[]):
+    print(f\"  ID {ex['id']:&gt;4} | muscles: {ex.get('muscles',[])} | equipment: {ex.get('equipment',[])}\")
+"
+</div>
+<h3>营养查询（USDA FoodData Central）</h3>
+<p>优先使用 <code>USDA_API_KEY</code> 环境变量，否则回退到 <code>DEMO_KEY</code>。
+DEMO_KEY = 每小时 30 次请求。免费注册密钥 = 每小时 1,000 次请求。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Search foods by name
+FOOD="$1"
+API_KEY="${USDA_API_KEY:-DEMO_KEY}"
+ENCODED=$(python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))" "$FOOD")
+curl -s "https://api.nal.usda.gov/fdc/v1/foods/search?api_key=${API_KEY}&amp;query=${ENCODED}&amp;pageSize=5&amp;dataType=Foundation,SR%20Legacy" \
+  | python3 -c "
+import json,sys
+data=json.load(sys.stdin)
+foods=data.get('foods',[])
+if not foods: print('No foods found.'); sys.exit()
+for f in foods:
+    n={x['nutrientName']:x.get('value','?') for x in f.get('foodNutrients',[])}
+    cal=n.get('Energy','?'); prot=n.get('Protein','?')
+    fat=n.get('Total lipid (fat)','?'); carb=n.get('Carbohydrate, by difference','?')
+    print(f\"{f.get('description','N/A')}\")
+    print(f\"  Per 100g: {cal} kcal | {prot}g protein | {fat}g fat | {carb}g carbs\")
+    print(f\"  FDC ID: {f.get('fdcId','N/A')}\")
+    print()
+"
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Detailed nutrient profile by FDC ID
+FDC_ID="$1"
+API_KEY="${USDA_API_KEY:-DEMO_KEY}"
+curl -s "https://api.nal.usda.gov/fdc/v1/food/${FDC_ID}?api_key=${API_KEY}" \
+  | python3 -c "
+import json,sys
+d=json.load(sys.stdin)
+print(f\"Food: {d.get('description','N/A')}\")
+print(f\"{'Nutrient':&lt;40} {'Amount':&gt;8} {'Unit'}\")
+print('-'*56)
+for x in sorted(d.get('foodNutrients',[]),key=lambda x:x.get('nutrient',{}).get('rank',9999)):
+    nut=x.get('nutrient',{}); amt=x.get('amount',0)
+    if amt and float(amt)&gt;0:
+        print(f\"  {nut.get('name',''):&lt;38} {amt:&gt;8} {nut.get('unitName','')}\")
+"
+</div>
+<h3>离线计算器</h3>
+<p>对批量操作使用 <code>scripts/</code> 中的辅助脚本，或内联运行单次计算：</p>
+<ul>
+<li><code>python3 scripts/body_calc.py bmi &lt;weight_kg&gt; &lt;height_cm&gt;</code></li>
+<li><code>python3 scripts/body_calc.py tdee &lt;weight_kg&gt; &lt;height_cm&gt; &lt;age&gt; &lt;M|F&gt; &lt;activity 1-5&gt;</code></li>
+<li><code>python3 scripts/body_calc.py 1rm &lt;weight&gt; &lt;reps&gt;</code></li>
+<li><code>python3 scripts/body_calc.py macros &lt;tdee_kcal&gt; &lt;cut|maintain|bulk&gt;</code></li>
+<li><code>python3 scripts/body_calc.py bodyfat &lt;M|F&gt; &lt;neck_cm&gt; &lt;waist_cm&gt; [hip_cm] &lt;height_cm&gt;</code></li>
+</ul>
+<p>各公式的科学依据详见 <code>references/FORMULAS.md</code>。</p>
+<hr />
+<h2>注意事项</h2>
+<ul>
+<li>wger 动作端点默认返回<strong>所有语言</strong>——始终添加 <code>language=2</code> 以获取英语内容</li>
+<li>wger 包含<strong>未经验证的用户提交内容</strong>——添加 <code>status=2</code> 仅获取已审核动作</li>
+<li>USDA <code>DEMO_KEY</code> 限制<strong>每小时 30 次请求</strong>——批量请求之间添加 <code>sleep 2</code>，或申请免费密钥</li>
+<li>USDA 数据基于 <strong>每 100g</strong>——提醒用户按实际份量换算</li>
+<li>BMI 无法区分肌肉与脂肪——肌肉量大的人 BMI 偏高不一定不健康</li>
+<li>体脂率公式为<strong>估算值</strong>（误差 ±3-5%）——精确测量建议使用 DEXA 扫描</li>
+<li>单次最大重量公式在超过 10 次重复时准确性下降——建议使用 3-5 次重复组进行估算</li>
+<li>wger 的 <code>exercise/search</code> 端点参数名为 <code>term</code> 而非 <code>query</code></li>
+</ul>
+<hr />
+<h2>验证</h2>
+<p>运行动作搜索后：确认结果包含动作名称、肌肉群和器械信息。
+营养查询后：确认返回每 100g 的宏量数据，包含 kcal、蛋白质、脂肪、碳水化合物。
+计算器运行后：对输出进行合理性检查（例如，大多数成年人的 TDEE 应在 1500-3500 之间）。</p>
+<hr />
+<h2>快速参考</h2>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>数据源</th>
+<th>端点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>按名称搜索动作</td>
+<td>wger</td>
+<td><code>GET /api/v2/exercise/search/?term=&amp;language=english</code></td>
+</tr>
+<tr>
+<td>动作详情</td>
+<td>wger</td>
+<td><code>GET /api/v2/exerciseinfo/{id}/</code></td>
+</tr>
+<tr>
+<td>按肌肉筛选</td>
+<td>wger</td>
+<td><code>GET /api/v2/exercise/?muscles={id}&amp;language=2&amp;status=2</code></td>
+</tr>
+<tr>
+<td>按器械筛选</td>
+<td>wger</td>
+<td><code>GET /api/v2/exercise/?equipment={id}&amp;language=2&amp;status=2</code></td>
+</tr>
+<tr>
+<td>列出类别</td>
+<td>wger</td>
+<td><code>GET /api/v2/exercisecategory/</code></td>
+</tr>
+<tr>
+<td>列出肌肉</td>
+<td>wger</td>
+<td><code>GET /api/v2/muscle/</code></td>
+</tr>
+<tr>
+<td>搜索食物</td>
+<td>USDA</td>
+<td><code>GET /fdc/v1/foods/search?query=&amp;dataType=Foundation,SR Legacy</code></td>
+</tr>
+<tr>
+<td>食物详情</td>
+<td>USDA</td>
+<td><code>GET /fdc/v1/food/{fdcId}</code></td>
+</tr>
+<tr>
+<td>BMI / TDEE / 单次最大重量 / 宏量</td>
+<td>离线</td>
+<td><code>python3 scripts/body_calc.py</code></td>
+</tr>
+</tbody>
+</table>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

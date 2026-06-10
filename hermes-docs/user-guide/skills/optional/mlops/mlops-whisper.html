@@ -1,0 +1,517 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Whisper — OpenAI 的通用语音识别模型 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Whisper — OpenAI 的通用语音识别模型</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Whisper</h1>
+<p>OpenAI 的通用语音识别模型。支持 99 种语言、转录、翻译为英语及语言识别。提供六种模型规格，从 tiny（3900 万参数）到 large（15.5 亿参数）。适用于语音转文字、播客转录或多语言音频处理。是鲁棒多语言 ASR（自动语音识别）的首选。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/mlops/whisper</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/mlops/whisper</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Orchestra Research</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>依赖项</td>
+<td><code>openai-whisper</code>, <code>transformers</code>, <code>torch</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Whisper</code>, <code>Speech Recognition</code>, <code>ASR</code>, <code>Multimodal</code>, <code>Multilingual</code>, <code>OpenAI</code>, <code>Speech-To-Text</code>, <code>Transcription</code>, <code>Translation</code>, <code>Audio Processing</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>Whisper - 鲁棒语音识别</h1>
+<p>OpenAI 的多语言语音识别模型。</p>
+<h2>何时使用 Whisper</h2>
+<p><strong>适用场景：</strong></p>
+<ul>
+<li>语音转文字转录（99 种语言）</li>
+<li>播客/视频转录</li>
+<li>会议记录自动化</li>
+<li>翻译为英语</li>
+<li>嘈杂音频转录</li>
+<li>多语言音频处理</li>
+</ul>
+<p><strong>指标</strong>：</p>
+<ul>
+<li><strong>GitHub 72,900+ 星</strong></li>
+<li>支持 99 种语言</li>
+<li>基于 68 万小时音频训练</li>
+<li>MIT 许可证</li>
+</ul>
+<p><strong>改用其他替代方案的情况</strong>：</p>
+<ul>
+<li><strong>AssemblyAI</strong>：托管 API，支持说话人分离</li>
+<li><strong>Deepgram</strong>：实时流式 ASR</li>
+<li><strong>Google Speech-to-Text</strong>：基于云端</li>
+</ul>
+<h2>快速开始</h2>
+<h3>安装</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Requires Python 3.8-3.11
+pip install -U openai-whisper
+<h1>Requires ffmpeg</h1>
+<h1>macOS: brew install ffmpeg</h1>
+<h1>Ubuntu: sudo apt install ffmpeg</h1>
+<h1>Windows: choco install ffmpeg</h1>
+</div>
+<h3>基本转录</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import whisper
+<h1>Load model</h1>
+<p>model = whisper.load_model(&quot;base&quot;)</p>
+<h1>Transcribe</h1>
+<p>result = model.transcribe(&quot;audio.mp3&quot;)</p>
+<h1>Print text</h1>
+<p>print(result[&quot;text&quot;])</p>
+<h1>Access segments</h1>
+<p>for segment in result[&quot;segments&quot;]:
+print(f&quot;[{segment['start']:.2f}s - {segment['end']:.2f}s] {segment['text']}&quot;)</p>
+</div>
+<h2>模型规格</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Available models
+models = ["tiny", "base", "small", "medium", "large", "turbo"]
+<h1>Load specific model</h1>
+<p>model = whisper.load_model(&quot;turbo&quot;)  # Fastest, good quality</p>
+</div>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>参数量</th>
+<th>仅英语</th>
+<th>多语言</th>
+<th>速度</th>
+<th>显存</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tiny</td>
+<td>39M</td>
+<td>✓</td>
+<td>✓</td>
+<td>~32x</td>
+<td>~1 GB</td>
+</tr>
+<tr>
+<td>base</td>
+<td>74M</td>
+<td>✓</td>
+<td>✓</td>
+<td>~16x</td>
+<td>~1 GB</td>
+</tr>
+<tr>
+<td>small</td>
+<td>244M</td>
+<td>✓</td>
+<td>✓</td>
+<td>~6x</td>
+<td>~2 GB</td>
+</tr>
+<tr>
+<td>medium</td>
+<td>769M</td>
+<td>✓</td>
+<td>✓</td>
+<td>~2x</td>
+<td>~5 GB</td>
+</tr>
+<tr>
+<td>large</td>
+<td>1550M</td>
+<td>✗</td>
+<td>✓</td>
+<td>1x</td>
+<td>~10 GB</td>
+</tr>
+<tr>
+<td>turbo</td>
+<td>809M</td>
+<td>✗</td>
+<td>✓</td>
+<td>~8x</td>
+<td>~6 GB</td>
+</tr>
+</tbody>
+</table>
+<p><strong>推荐</strong>：追求最佳速度/质量比使用 <code>turbo</code>，原型开发使用 <code>base</code></p>
+<h2>转录选项</h2>
+<h3>语言指定</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Auto-detect language
+result = model.transcribe("audio.mp3")
+<h1>Specify language (faster)</h1>
+<p>result = model.transcribe(&quot;audio.mp3&quot;, language=&quot;en&quot;)</p>
+<h1>Supported: en, es, fr, de, it, pt, ru, ja, ko, zh, and 89 more</h1>
+</div>
+<h3>任务选择</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Transcription (default)
+result = model.transcribe("audio.mp3", task="transcribe")
+<h1>Translation to English</h1>
+<p>result = model.transcribe(&quot;spanish.mp3&quot;, task=&quot;translate&quot;)</p>
+<h1>Input: Spanish audio → Output: English text</h1>
+</div>
+<h3>初始 prompt（提示词）</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Improve accuracy with context
+result = model.transcribe(
+    "audio.mp3",
+    initial_prompt="This is a technical podcast about machine learning and AI."
+)
+<h1>Helps with:</h1>
+<h1>- Technical terms</h1>
+<h1>- Proper nouns</h1>
+<h1>- Domain-specific vocabulary</h1>
+</div>
+<h3>时间戳</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Word-level timestamps
+result = model.transcribe("audio.mp3", word_timestamps=True)
+<p>for segment in result[&quot;segments&quot;]:
+for word in segment[&quot;words&quot;]:
+print(f&quot;{word['word']} ({word['start']:.2f}s - {word['end']:.2f}s)&quot;)</p>
+</div>
+<h3>温度回退</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Retry with different temperatures if confidence low
+result = model.transcribe(
+    "audio.mp3",
+    temperature=(0.0, 0.2, 0.4, 0.6, 0.8, 1.0)
+)
+</div>
+<h2>命令行用法</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Basic transcription
+whisper audio.mp3
+<h1>Specify model</h1>
+<p>whisper audio.mp3 --model turbo</p>
+<h1>Output formats</h1>
+<p>whisper audio.mp3 --output_format txt     # Plain text
+whisper audio.mp3 --output_format srt     # Subtitles
+whisper audio.mp3 --output_format vtt     # WebVTT
+whisper audio.mp3 --output_format json    # JSON with timestamps</p>
+<h1>Language</h1>
+<p>whisper audio.mp3 --language Spanish</p>
+<h1>Translation</h1>
+<p>whisper spanish.mp3 --task translate</p>
+</div>
+<h2>批量处理</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import os
+<p>audio_files = [&quot;file1.mp3&quot;, &quot;file2.mp3&quot;, &quot;file3.mp3&quot;]</p>
+<p>for audio_file in audio_files:
+print(f&quot;Transcribing {audio_file}...&quot;)
+result = model.transcribe(audio_file)</p>
+<pre><code># Save to file
+output_file = audio_file.replace(&quot;.mp3&quot;, &quot;.txt&quot;)
+with open(output_file, &quot;w&quot;) as f:
+    f.write(result[&quot;text&quot;])
+</code></pre>
+</div>
+<h2>实时转录</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# For streaming audio, use faster-whisper
+# pip install faster-whisper
+<p>from faster_whisper import WhisperModel</p>
+<p>model = WhisperModel(&quot;base&quot;, device=&quot;cuda&quot;, compute_type=&quot;float16&quot;)</p>
+<h1>Transcribe with streaming</h1>
+<p>segments, info = model.transcribe(&quot;audio.mp3&quot;, beam_size=5)</p>
+<p>for segment in segments:
+print(f&quot;[{segment.start:.2f}s -&amp;gt; {segment.end:.2f}s] {segment.text}&quot;)</p>
+</div>
+<h2>GPU 加速</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import whisper
+<h1>Automatically uses GPU if available</h1>
+<p>model = whisper.load_model(&quot;turbo&quot;)</p>
+<h1>Force CPU</h1>
+<p>model = whisper.load_model(&quot;turbo&quot;, device=&quot;cpu&quot;)</p>
+<h1>Force GPU</h1>
+<p>model = whisper.load_model(&quot;turbo&quot;, device=&quot;cuda&quot;)</p>
+<h1>10-20× faster on GPU</h1>
+</div>
+<h2>与其他工具集成</h2>
+<h3>字幕生成</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Generate SRT subtitles
+whisper video.mp4 --output_format srt --language English
+<h1>Output: video.srt</h1>
+</div>
+<h3>与 LangChain 集成</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from langchain.document_loaders import WhisperTranscriptionLoader
+<p>loader = WhisperTranscriptionLoader(file_path=&quot;audio.mp3&quot;)
+docs = loader.load()</p>
+<h1>Use transcription in RAG</h1>
+<p>from langchain_chroma import Chroma
+from langchain_openai import OpenAIEmbeddings</p>
+<p>vectorstore = Chroma.from_documents(docs, OpenAIEmbeddings())</p>
+</div>
+<h3>从视频中提取音频</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Use ffmpeg to extract audio
+ffmpeg -i video.mp4 -vn -acodec pcm_s16le audio.wav
+<h1>Then transcribe</h1>
+<p>whisper audio.wav</p>
+</div>
+<h2>最佳实践</h2>
+<ol>
+<li><strong>使用 turbo 模型</strong> — 英语场景下速度/质量最优</li>
+<li><strong>指定语言</strong> — 比自动检测更快</li>
+<li><strong>添加初始 prompt</strong> — 提升专业术语识别准确率</li>
+<li><strong>使用 GPU</strong> — 速度提升 10–20 倍</li>
+<li><strong>批量处理</strong> — 效率更高</li>
+<li><strong>转换为 WAV</strong> — 兼容性更好</li>
+<li><strong>切分长音频</strong> — 每段不超过 30 分钟</li>
+<li><strong>确认语言支持情况</strong> — 不同语言质量有差异</li>
+<li><strong>使用 faster-whisper</strong> — 比 openai-whisper 快 4 倍</li>
+<li><strong>监控显存</strong> — 根据硬件配置选择模型规格</li>
+</ol>
+<h2>性能</h2>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>实时倍率（CPU）</th>
+<th>实时倍率（GPU）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>tiny</td>
+<td>~0.32</td>
+<td>~0.01</td>
+</tr>
+<tr>
+<td>base</td>
+<td>~0.16</td>
+<td>~0.01</td>
+</tr>
+<tr>
+<td>turbo</td>
+<td>~0.08</td>
+<td>~0.01</td>
+</tr>
+<tr>
+<td>large</td>
+<td>~1.0</td>
+<td>~0.05</td>
+</tr>
+</tbody>
+</table>
+<p><em>实时倍率：0.1 表示比实时速度快 10 倍</em></p>
+<h2>语言支持</h2>
+<p>主要支持语言：</p>
+<ul>
+<li>英语（en）</li>
+<li>西班牙语（es）</li>
+<li>法语（fr）</li>
+<li>德语（de）</li>
+<li>意大利语（it）</li>
+<li>葡萄牙语（pt）</li>
+<li>俄语（ru）</li>
+<li>日语（ja）</li>
+<li>韩语（ko）</li>
+<li>中文（zh）</li>
+</ul>
+<p>完整列表：共 99 种语言</p>
+<h2>局限性</h2>
+<ol>
+<li><strong>幻觉问题</strong> — 可能重复或生成不存在的文本</li>
+<li><strong>长音频准确率</strong> — 超过 30 分钟后质量下降</li>
+<li><strong>说话人识别</strong> — 不支持说话人分离</li>
+<li><strong>口音</strong> — 质量因口音而异</li>
+<li><strong>背景噪音</strong> — 可能影响准确率</li>
+<li><strong>实时延迟</strong> — 不适合实时字幕场景</li>
+</ol>
+<h2>资源</h2>
+<ul>
+<li><strong>GitHub</strong>：https://github.com/openai/whisper ⭐ 72,900+</li>
+<li><strong>论文</strong>：https://arxiv.org/abs/2212.04356</li>
+<li><strong>模型卡片</strong>：https://github.com/openai/whisper/blob/main/model-card.md</li>
+<li><strong>Colab</strong>：可在仓库中获取</li>
+<li><strong>许可证</strong>：MIT</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

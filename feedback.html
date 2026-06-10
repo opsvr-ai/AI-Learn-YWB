@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>问题反馈 — AI赋能日常工作</title>
+<link rel="stylesheet" href="css/style.css"><link rel="icon" type="image/svg+xml" href="favicon.svg">
+<style>
+.community-page{max-width:1000px;margin:0 auto;padding:32px 24px 60px}
+.community-page .page-title{font-size:1.6rem;font-weight:800;color:var(--gray-900);margin-bottom:4px;display:flex;align-items:center;gap:10px}
+.community-page .page-subtitle{font-size:.9rem;color:var(--gray-500);margin-bottom:24px}
+.cat-tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:20px}
+.cat-tab{padding:6px 16px;border-radius:99px;font-size:.85rem;font-weight:500;border:1px solid var(--gray-200);background:#fff;color:var(--gray-600);cursor:pointer;transition:all .2s}
+.cat-tab:hover{border-color:var(--blue-300);color:var(--blue-700);background:var(--blue-50)}
+.cat-tab.active{background:var(--blue-600);color:#fff;border-color:var(--blue-600)}
+.fb-card{background:#fff;border-radius:var(--radius-lg);padding:16px 20px;margin-bottom:12px;box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);cursor:pointer;transition:all .2s}
+.fb-card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.fb-card .fb-title{font-size:.95rem;font-weight:700;color:var(--gray-900)}
+.fb-card .fb-meta{font-size:.78rem;color:var(--gray-400);margin-top:4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.fb-card .fb-badges{display:flex;gap:4px;align-items:center;margin-top:6px;flex-wrap:wrap}
+.fb-status{font-size:.75rem;font-weight:600;border-radius:99px;padding:2px 10px;display:inline-block}
+.fb-status.open{background:#fff3cd;color:#856404}
+.fb-status.resolved{background:#d4edda;color:#155724}
+.fb-cat-tag{font-size:.72rem;background:var(--gray-50);color:var(--gray-500);padding:2px 8px;border-radius:4px}
+.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.4);z-index:200;justify-content:center;align-items:flex-start;padding-top:60px}
+.modal-overlay.show{display:flex}
+.modal-box{background:#fff;border-radius:var(--radius-lg);padding:28px 30px;width:580px;max-width:90vw;box-shadow:0 8px 32px rgba(0,0,0,.15);max-height:85vh;overflow-y:auto}
+.modal-box h3{font-size:1.1rem;margin-bottom:16px}
+.modal-box label{display:block;font-size:.85rem;font-weight:600;color:var(--gray-700);margin-bottom:4px;margin-top:12px}
+.modal-box input,.modal-box textarea,.modal-box select{width:100%;border:1px solid var(--gray-300);border-radius:var(--radius);padding:8px 12px;font-size:.9rem;margin-bottom:6px;box-sizing:border-box}
+.modal-box textarea{min-height:80px;resize:vertical}
+.modal-box .btn-row{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
+.reply-item{background:var(--gray-50);border-radius:var(--radius);padding:12px 16px;margin:8px 0}
+.reply-item .reply-meta{font-size:.78rem;color:var(--gray-400)}
+.img-grid{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.img-grid img{max-width:280px;max-height:200px;border-radius:var(--radius);border:1px solid var(--gray-100);cursor:pointer;object-fit:cover;transition:opacity .2s}
+.img-grid img:hover{opacity:.85}
+.lightbox{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.85);z-index:300;justify-content:center;align-items:center}
+.lightbox.show{display:flex}
+.lightbox img{max-width:90vw;max-height:90vh;border-radius:var(--radius)}
+.skeleton{background:linear-gradient(90deg,var(--gray-100) 25%,var(--gray-200) 50%,var(--gray-100) 75%);background-size:200% 100%;animation:skeleton-shimmer 1.5s ease-in-out infinite;border-radius:var(--radius-sm)}
+.skeleton-card{height:80px;border-radius:var(--radius-lg);margin-bottom:12px}
+@keyframes skeleton-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.empty-state{text-align:center;padding:60px 20px;color:var(--gray-400)}
+.empty-state .empty-icon{font-size:3rem;margin-bottom:12px;opacity:.4}
+.empty-state p{font-size:.95rem}
+.resolve-btn{background:#d4edda;color:#155724;border:1px solid #b7dfb9}
+.resolve-btn:hover{background:#c3e6cb}
+</style></head><body>
+<nav class="nav"><div class="nav-inner"><a href="index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a><ul class="nav-links"><li><a href="index.html">首页</a></li>
+<li class="has-submenu"><span class="nav-label">🎓 AI学习</span><ul class="nav-submenu"><li><a href="hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600)">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li><li><a href="claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600)">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li><li class="menu-divider"></li>
+<li><a href="ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600)">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li><li><a href="hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600)">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li><li><a href="api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600)">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li></ul></li>
+<li><a href="token-stats.html">📊 Token统计</a></li>
+<li class="has-submenu"><span class="nav-label">💬 社区</span><ul class="nav-submenu"><li><a href="cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600)">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li><li><a href="feedback.html" class="active"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600)">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li></ul></li></ul>
+<div class="nav-right"><div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div><div class="checkin-wrapper"><span id="checkin-area" class="checkin-area">---</span><button class="checkin-btn" onclick="doCheckin(this)">打卡</button></div></div></div></nav>
+<main class="community-page page"><h1 class="page-title">💬 问题反馈</h1><p class="page-subtitle">遇到问题来这里求助，支持截图粘贴 / 上传图片</p>
+<div class="cat-tabs" id="status-tabs"><button class="cat-tab active" data-filter="all">全部</button><button class="cat-tab" data-filter="open" style="border-color:#f0c27f">待解决</button><button class="cat-tab" data-filter="resolved" style="border-color:#a3d9a5">已解决</button><button class="cat-tab" data-filter="bug">🐛 Bug</button><button class="cat-tab" data-filter="feature">💡 功能建议</button><button class="cat-tab" data-filter="question">❓ 使用疑问</button></div>
+<div class="fb-toolbar"><button class="btn btn-primary btn-sm" onclick="openAsk()">➕ 提问题</button></div>
+<div id="fb-list"><div class="skeleton skeleton-card"></div><div class="skeleton skeleton-card" style="width:95%"></div><div class="skeleton skeleton-card" style="width:90%"></div></div></main>
+<div class="modal-overlay" id="ask-modal"><div class="modal-box"><h3>📝 提问题</h3><label>问题标题 *</label><input type="text" id="fb-title" placeholder="例如：Hermes-Agent 安装后无法启动"><label>分类</label><select id="fb-cat"><option value="question">❓ 使用疑问</option><option value="bug">🐛 Bug</option><option value="feature">💡 功能建议</option></select><label>问题描述 *</label><textarea id="fb-content" placeholder="详细描述你遇到的问题...  Ctrl+V 可直接粘贴截图"></textarea><div id="ask-img-preview" class="img-preview"></div><label>截图（可多选，也可 Ctrl+V 粘贴）</label><input type="file" id="ask-file" accept="image/*" multiple onchange="previewFiles(this,'ask-img-preview')"><div class="btn-row"><button class="btn btn-outline btn-sm" onclick="closeAsk()">取消</button><button class="btn btn-primary btn-sm" onclick="submitFeedback()">提交</button></div></div></div>
+<div class="modal-overlay" id="detail-modal"><div class="modal-box" id="detail-body"></div></div>
+<div class="lightbox" id="img-lightbox" onclick="this.classList.remove('show')"><img id="lightbox-img" src="" loading="lazy"></div>
+<footer class="footer"><div class="container"><p>Copyright &copy; 生产运维部，内部学习资料</p></div></footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="js/main.js"></script>
+<script>
+(function(){'use strict';
+function esc(s){if(s==null)return '';var d=document.createElement('div');d.appendChild(document.createTextNode(String(s)));return d.innerHTML}
+var account='';try{account=((window.getUserName?window.getUserName():null)||'').toLowerCase()}catch(e){}
+var filter='all',listCache=[];
+var catNames={'bug':'🐛 Bug','feature':'💡 功能建议','question':'❓ 使用疑问'}
+function af(m,u){var a=new AbortController();setTimeout(function(){a.abort()},15000);return fetch(u,{method:m,signal:a.signal}).then(function(r){return r}).catch(function(){return new Promise(function(r){var x=new XMLHttpRequest();x.open(m,u,true);x.onload=function(){r({ok:x.status>=200&&x.status<300,json:function(){try{return Promise.resolve(JSON.parse(x.responseText))}catch(e){return Promise.reject()}}})};x.onerror=function(){r({ok:false})};x.send()})})}
+function apig(m,u,b){var a=new AbortController();setTimeout(function(){a.abort()},15000);return fetch(u,{method:m,headers:{'Content-Type':'application/json'},body:JSON.stringify(b),signal:a.signal}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
+var askImages=[],replyImages=[];
+function uploadImg(file,cb){var fd=new FormData();fd.append('image',file);var x=new XMLHttpRequest();x.open('POST','/api/upload-image');x.onload=function(){try{cb(JSON.parse(x.responseText))}catch(e){cb(null)}};x.onerror=function(){cb(null)};x.send(fd)}
+function addImg(file,arr,pid){uploadImg(file,function(r){if(r&&r.ok){arr.push(r.filename);document.getElementById(pid).innerHTML=arr.map(function(f,i){return '<span class="img-preview-wrap">'+esc(f)+'<span class="del-btn" onclick="event.stopPropagation();delImg('+i+','+(pid==='ask-img-preview'?'askImages':'replyImages')+',\x27'+pid+'\x27)">\u2715</span></span>'}).join('')}})}
+function delImg(i,arr,pid){arr.splice(i,1);document.getElementById(pid).innerHTML=arr.map(function(f,i2){return '<span class="img-preview-wrap">'+esc(f)+'<span class="del-btn" onclick="event.stopPropagation();delImg('+i2+','+(pid==='ask-img-preview'?'askImages':'replyImages')+',\x27'+pid+'\x27)">\u2715</span></span>'}).join('')}
+function setupPaste(eid,arr,pid){var el=document.getElementById(eid);if(!el)return;el.addEventListener('paste',function(e){var items=(e.clipboardData||e.originalEvent.clipboardData).items;for(var i=0;i<items.length;i++){if(items[i].type.indexOf('image')!==-1){addImg(items[i].getAsFile(),arr,pid)}}})}
+window.previewFiles=function(input,pid){var arr=pid==='ask-img-preview'?askImages:replyImages;for(var i=0;i<input.files.length;i++){addImg(input.files[i],arr,pid)}input.value=''}
+function imgGrid(str){if(!str)return '';var imgs=str.split(',').filter(Boolean).map(function(s){return s.trim()});if(!imgs.length)return '';return '<div class="img-grid">'+imgs.map(function(f){return '<img src="uploads/'+f.trim()+'" onclick="event.stopPropagation();document.getElementById(\x27lightbox-img\x27).src=this.src;document.getElementById(\x27img-lightbox\x27).classList.add(\x27show\x27)" loading="lazy">'}).join('')+'</div>'}
+document.getElementById('status-tabs').addEventListener('click',function(e){var btn=e.target.closest('.cat-tab');if(!btn)return;document.querySelectorAll('#status-tabs .cat-tab').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');filter=btn.getAttribute('data-filter');applyFilter()})
+function applyFilter(){var items=listCache.slice();if(filter==='open')items=items.filter(function(f){return f.status==='open'});else if(filter==='resolved')items=items.filter(function(f){return f.status==='resolved'});else if(['bug','feature','question'].indexOf(filter)>=0)items=items.filter(function(f){return f.category===filter});if(!items.length){document.getElementById('fb-list').innerHTML='<div class="empty-state"><div class="empty-icon">📭</div><p>'+(filter==='all'?'暂无问题，欢迎提出第一个问题！':'没有匹配的问题')+'</p></div>';return}
+var html='';for(var i=0;i<items.length;i++){var f=items[i];var imgCount=(f.images||'').split(',').filter(Boolean).length;html+='<div class="fb-card" onclick="showDetail('+f.id+')"><div class="fb-title">'+esc(f.title)+'</div><div class="fb-meta"><span>👤 '+esc(f.author_name||f.author)+'</span><span>📅 '+(f.created_at||'')+'</span><span>💬 '+f.reply_count+' 回复</span>'+(imgCount?'<span>📷 '+imgCount+' 张截图</span>':'')+'</div><div class="fb-badges"><span class="fb-status '+f.status+'">'+(f.status==='open'?'待解决':'已解决')+'</span>'+(f.category&&catNames[f.category]?'<span class="fb-cat-tag">'+catNames[f.category]+'</span>':'')+'</div></div>'}
+document.getElementById('fb-list').innerHTML=html}
+async function loadList(){document.getElementById('fb-list').innerHTML='<div class="skeleton skeleton-card"></div><div class="skeleton skeleton-card" style="width:95%"></div><div class="skeleton skeleton-card" style="width:90%"></div>';var d=await af('GET','/api/feedback?view=list').then(function(r){return r.ok?r.json():null}).catch(function(){return null});if(!Array.isArray(d)){document.getElementById('fb-list').innerHTML='<div class="empty-state"><div class="empty-icon">📡</div><p>加载失败，请刷新重试</p></div>';return}listCache=d;applyFilter()}
+window.showDetail=async function(id){var d=await af('GET','/api/feedback?view=detail&id='+id).then(function(r){return r.ok?r.json():null}).catch(function(){return null});if(!d||d.error)return;var html='<h3>'+esc(d.title)+'</h3><p style="color:var(--gray-400);font-size:.8rem;">👤 '+esc(d.author_name||d.author)+' · 📅 '+(d.created_at||'')+' <span class="fb-status '+d.status+'">'+(d.status==='open'?'待解决':'已解决')+'</span>'+(d.category&&catNames[d.category]?' <span class="fb-cat-tag">'+catNames[d.category]+'</span>':'')+'</p>';html+='<div style="margin:14px 0;color:var(--gray-700);line-height:1.7;">'+esc(d.content).replace(/\n/g,'<br>')+'</div>';html+=imgGrid(d.images||'');if(d.replies&&d.replies.length){html+='<h4 style="margin-top:18px;font-size:.95rem;">💬 回复 ('+d.replies.length+')</h4>';for(var ri=0;ri<d.replies.length;ri++){var r=d.replies[ri];html+='<div class="reply-item"><div class="reply-meta">👤 '+esc(r.author_name||r.author)+' · 📅 '+(r.created_at||'')+'</div><div style="color:var(--gray-700);margin-top:4px;">'+esc(r.content).replace(/\n/g,'<br>')+'</div>'+imgGrid(r.images||'')+'</div>'}}
+if(d.status==='open'){html+='<label style="margin-top:14px;display:block;font-weight:600;font-size:.85rem;">✏️ 我来解答（可 Ctrl+V 粘贴截图）</label><textarea id="reply-text" style="width:100%;border:1px solid var(--gray-300);border-radius:var(--radius);padding:8px 12px;font-size:.9rem;margin-bottom:6px;box-sizing:border-box;min-height:60px;resize:vertical;"></textarea><div id="reply-img-preview" class="img-preview"></div><input type="file" id="reply-file" accept="image/*" multiple onchange="previewFiles(this,\x27reply-img-preview\x27)" style="margin-bottom:6px;"><div class="btn-row"><button class="btn btn-outline btn-sm" onclick="postReply('+d.id+')">提交回复</button><button class="btn btn-sm resolve-btn" onclick="markResolved('+d.id+')">\u2713 标记已解决</button></div>';setTimeout(function(){setupPaste('reply-text',replyImages,'reply-img-preview')},100)}
+html+='<div class="btn-row" style="margin-top:8px;"><button class="btn btn-primary btn-sm" onclick="document.getElementById(\x27detail-modal\x27).classList.remove(\x27show\x27)">关闭</button></div>';document.getElementById('detail-body').innerHTML=html;document.getElementById('detail-modal').classList.add('show')}
+window.postReply=async function(fid){var txt=document.getElementById('reply-text').value.trim();var a='';try{a=((window.getUserName?window.getUserName():null)||'').toLowerCase()}catch(e){}if(!txt||!a)return;var d=await apig('POST','/api/feedback/reply',{feedback_id:fid,content:txt,author:a,author_name:a,images:replyImages.join(',')});if(d&&d.ok){replyImages=[];showDetail(fid);loadList()}}
+window.markResolved=async function(fid){var d=await apig('POST','/api/feedback/resolve',{feedback_id:fid});if(d&&d.ok){showDetail(fid);loadList()}}
+window.openAsk=function(){var a='';try{a=((window.getUserName?window.getUserName():null)||'').toLowerCase()}catch(e){}if(!a){alert('请先在导航栏输入域账号');return}askImages=[];document.getElementById('fb-title').value='';document.getElementById('fb-content').value='';document.getElementById('fb-cat').value='question';document.getElementById('ask-img-preview').innerHTML='';document.getElementById('ask-file').value='';document.getElementById('ask-modal').classList.add('show')}
+window.closeAsk=function(){document.getElementById('ask-modal').classList.remove('show')}
+window.submitFeedback=async function(){var t=document.getElementById('fb-title').value.trim();var c=document.getElementById('fb-content').value.trim();if(!t||!c){alert('请填写完整');return}var a='';try{a=((window.getUserName?window.getUserName():null)||'').toLowerCase()}catch(e){}var d=await apig('POST','/api/feedback',{title:t,content:c,category:document.getElementById('fb-cat').value,author:a,author_name:a,images:askImages.join(',')});if(d&&d.ok){closeAsk();loadList()}}
+document.getElementById('detail-modal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('show')});document.getElementById('ask-modal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('show')});setupPaste('fb-content',askImages,'ask-img-preview');loadList()})();
+</script></body></html>

@@ -1,0 +1,334 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profiles：运行多个 Agent - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html" class="active">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Profiles：运行多个 Agent</div><p>在同一台机器上运行多个独立的 Hermes agent——每个 agent 拥有各自的配置、API 密钥、记忆、会话、技能和 gateway 状态。</p>
+<h2>什么是 profile？</h2>
+<p>profile 是一个独立的 Hermes 主目录。每个 profile 拥有自己的目录，其中包含各自的 <code>config.yaml</code>、<code>.env</code>、<code>SOUL.md</code>、记忆、会话、技能、cron 任务和状态数据库。profile 让你可以为不同用途运行独立的 agent——编程助手、个人机器人、研究 agent——而不会混淆 Hermes 状态。</p>
+<p>创建 profile 后，它会自动成为独立的命令。创建名为 <code>coder</code> 的 profile，你立即就拥有了 <code>coder chat</code>、<code>coder setup</code>、<code>coder gateway start</code> 等命令。</p>
+<h2>快速开始</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes profile create coder       # 创建 profile + "coder" 命令别名
+coder setup                       # 配置 API 密钥和模型
+coder chat                        # 开始对话
+</div>
+<p>就这些。<code>coder</code> 现在是拥有独立配置、记忆和状态的 Hermes profile。</p>
+<h2>创建 profile</h2>
+<h3>空白 profile</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes profile create mybot
+</div>
+<p>创建一个预置了内置技能的全新 profile。运行 <code>mybot setup</code> 配置 API 密钥、模型和 gateway token。</p>
+<p>如果你计划将此 profile 用作 kanban（看板）工作节点（或希望 kanban 编排器将任务路由到它），在创建时传入 <code>--description &quot;&lt;角色&gt;&quot;</code> 以便编排器了解其能力：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes profile create researcher --description "Reads source code and external docs, writes findings."
+</div>
+<p>你也可以稍后通过 <code>hermes profile describe</code> 设置或自动生成描述——完整路由模型请参阅 <a href="./features/kanban#auto-vs-manual-orchestration">Kanban 指南</a>。</p>
+<h3>仅克隆配置（<code>--clone</code>）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes profile create work --clone
+</div>
+<p>将当前 profile 的 <code>config.yaml</code>、<code>.env</code> 和 <code>SOUL.md</code> 复制到新 profile。API 密钥和模型相同，但会话和记忆是全新的。编辑 <code>~/.hermes/profiles/work/.env</code> 可使用不同的 API 密钥，编辑 <code>~/.hermes/profiles/work/SOUL.md</code> 可设置不同的人格。</p>
+<h3>克隆全部内容（<code>--clone-all</code>）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes profile create backup --clone-all
+</div>
+<p>复制<strong>所有内容</strong>——配置、API 密钥、人格、所有记忆、完整会话历史、技能、cron 任务、插件。完整快照。适用于备份或 fork 已有上下文的 agent。</p>
+<h3>从指定 profile 克隆</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes profile create work --clone --clone-from coder
+</div>
+<div class="tip"><strong>💡 Honcho 记忆 + profiles</strong>
+启用 Honcho 后，<code>--clone</code> 会自动为新 profile 创建专属 AI 对等体，同时共享同一用户工作区。每个 profile 构建各自的观察记录和身份标识。详见 <a href="./features/memory-providers.html#honcho">Honcho——多 agent / Profiles</a>。
+</div>
+<h2>使用 profile</h2>
+<h3>命令别名</h3>
+<p>每个 profile 在 <code>~/.local/bin/&lt;name&gt;</code> 自动获得一个命令别名：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+coder chat                    # 与 coder agent 对话
+coder setup                   # 配置 coder 的设置
+coder gateway start           # 启动 coder 的 gateway
+coder doctor                  # 检查 coder 的健康状态
+coder skills list             # 列出 coder 的技能
+coder config set model.default anthropic/claude-sonnet-4
+</div>
+<p>别名支持所有 hermes 子命令——底层实际上是 <code>hermes -p &lt;name&gt;</code>。</p>
+<h3><code>-p</code> 标志</h3>
+<p>你也可以通过任意命令显式指定 profile：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes -p coder chat
+hermes --profile=coder doctor
+hermes chat -p coder -q "hello"    # 可在任意位置使用
+</div>
+<h3>粘性默认值（<code>hermes profile use</code>）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes profile use coder
+hermes chat                   # 现在指向 coder
+hermes tools                  # 配置 coder 的工具
+hermes profile use default    # 切换回默认
+</div>
+<p>设置默认值后，普通 <code>hermes</code> 命令将指向该 profile。类似于 <code>kubectl config use-context</code>。</p>
+<h3>了解当前所在 profile</h3>
+<p>CLI 始终显示当前活跃的 profile：</p>
+<ul>
+<li><strong>提示符</strong>：显示 <code>coder ❯</code> 而非 <code>❯</code></li>
+<li><strong>启动横幅</strong>：启动时显示 <code>Profile: coder</code></li>
+<li><strong><code>hermes profile</code></strong>：显示当前 profile 名称、路径、模型、gateway 状态</li>
+</ul>
+<h2>Profile vs 工作区 vs 沙箱</h2>
+<p>profile 常与工作区或沙箱混淆，但它们是不同的概念：</p>
+<ul>
+<li><strong>profile</strong> 为 Hermes 提供独立的状态目录：<code>config.yaml</code>、<code>.env</code>、<code>SOUL.md</code>、会话、记忆、日志、cron 任务和 gateway 状态。</li>
+<li><strong>工作区</strong>或<strong>工作目录</strong>是终端命令的起始位置，由 <code>terminal.cwd</code> 单独控制。</li>
+<li><strong>沙箱</strong>用于限制文件系统访问。profile <strong>不</strong>对 agent 进行沙箱隔离。</li>
+</ul>
+<p>在默认的 <code>local</code> 终端后端，agent 仍拥有与你的用户账户相同的文件系统访问权限。profile 不会阻止其访问 profile 目录之外的文件夹。</p>
+<p>如果你希望 profile 默认在特定项目文件夹中启动，请在该 profile 的 <code>config.yaml</code> 中设置绝对路径的 <code>terminal.cwd</code>：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal:
+  backend: local
+  cwd: /absolute/path/to/project
+</div>
+<p>在 local 后端使用 <code>cwd: &quot;.&quot;</code> 表示&quot;Hermes 启动时所在的目录&quot;，而非&quot;profile 目录&quot;。</p>
+<p>另请注意：</p>
+<ul>
+<li><code>SOUL.md</code> 可以引导模型，但不能强制限定工作区边界。</li>
+<li><code>SOUL.md</code> 的更改在新会话中会生效。现有会话可能仍在使用旧的 prompt（提示词）状态。</li>
+<li>询问模型&quot;你在哪个目录？&quot;并不是可靠的隔离测试。如果你需要工具有可预测的起始目录，请显式设置 <code>terminal.cwd</code>。</li>
+</ul>
+<h2>运行 gateway</h2>
+<p>每个 profile 以独立进程运行各自的 gateway，使用各自的 bot token：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+coder gateway start           # 启动 coder 的 gateway
+assistant gateway start       # 启动 assistant 的 gateway（独立进程）
+</div>
+<h3>不同的 bot token</h3>
+<p>每个 profile 有各自的 <code>.env</code> 文件。在各文件中配置不同的 Telegram/Discord/Slack bot token：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 编辑 coder 的 token
+nano ~/.hermes/profiles/coder/.env
+
+# 编辑 assistant 的 token
+nano ~/.hermes/profiles/assistant/.env
+</div>
+<h3>安全性：token 锁</h3>
+<p>如果两个 profile 意外使用了相同的 bot token，第二个 gateway 将被阻止并显示明确的错误信息，指出冲突的 profile。支持 Telegram、Discord、Slack、WhatsApp 和 Signal。</p>
+<h3>持久化服务</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+coder gateway install         # 创建 hermes-gateway-coder systemd/launchd 服务
+assistant gateway install     # 创建 hermes-gateway-assistant 服务
+</div>
+<p>每个 profile 拥有独立的服务名称，各自独立运行。</p>
+<div class="tip"><strong>📝 在官方 Docker 镜像中</strong>
+各 profile 的 gateway 由 <a href="https://github.com/just-containers/s6-overlay">s6-overlay</a>（容器中的 PID 1）监管，因此 <code>hermes profile create &lt;name&gt;</code> 会自动在 <code>/run/service/gateway-&lt;name&gt;/</code> 注册 s6 服务槽。<code>hermes -p &lt;name&gt; gateway start/stop/restart</code> 会调度到 <code>s6-svc</code> 而非直接启动裸进程——崩溃后自动重启，<code>docker restart</code> 会保留之前运行的 gateway 集合。详见 <a href="/user-guide/docker#per-profile-gateway-supervision">各 profile gateway 监管</a>。
+</div>
+<h2>配置 profile</h2>
+<p>每个 profile 拥有各自的：</p>
+<ul>
+<li><strong><code>config.yaml</code></strong> — 模型、提供商、工具集及所有设置</li>
+<li><strong><code>.env</code></strong> — API 密钥、bot token</li>
+<li><strong><code>SOUL.md</code></strong> — 人格与指令</li>
+</ul>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+coder config set model.default anthropic/claude-sonnet-4
+echo "You are a focused coding assistant." &gt; ~/.hermes/profiles/coder/SOUL.md
+</div>
+<p>如果你希望此 profile 默认在特定项目中工作，还需设置其 <code>terminal.cwd</code>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+coder config set terminal.cwd /absolute/path/to/project
+</div>
+<h2>更新</h2>
+<p><code>hermes update</code> 拉取一次代码（共享），并自动将新的内置技能同步到<strong>所有</strong> profile：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes update
+# → Code updated (12 commits)
+# → Skills synced: default (up to date), coder (+2 new), assistant (+2 new)
+</div>
+<p>用户修改过的技能不会被覆盖。</p>
+<h2>管理 profile</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes profile list           # 显示所有 profile 及其状态
+hermes profile show coder     # 显示某个 profile 的详细信息
+hermes profile rename coder dev-bot   # 重命名（同步更新别名和服务）
+hermes profile export coder   # 导出为 coder.tar.gz
+hermes profile import coder.tar.gz   # 从归档文件导入
+</div>
+<h2>删除 profile</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes profile delete coder
+</div>
+<p>此操作将停止 gateway、移除 systemd/launchd 服务、移除命令别名并删除所有 profile 数据。系统会要求你输入 profile 名称以确认。</p>
+<p>使用 <code>--yes</code> 跳过确认：<code>hermes profile delete coder --yes</code></p>
+<div class="tip"><strong>📝 注意</strong>
+你无法删除默认 profile（<code>~/.hermes</code>）。如需删除所有内容，请使用 <code>hermes uninstall</code>。
+</div>
+<h2>Tab 补全</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Bash
+eval "$(hermes completion bash)"
+
+# Zsh
+eval "$(hermes completion zsh)"
+</div>
+<p>将该行添加到 <code>~/.bashrc</code> 或 <code>~/.zshrc</code> 以启用持久补全。支持补全 <code>-p</code> 后的 profile 名称、profile 子命令及顶级命令。</p>
+<h2>工作原理</h2>
+<p>profile 使用 <code>HERMES_HOME</code> 环境变量。运行 <code>coder chat</code> 时，包装脚本在启动 hermes 前将 <code>HERMES_HOME</code> 设置为 <code>~/.hermes/profiles/coder</code>。由于代码库中 119+ 个文件通过 <code>get_hermes_home()</code> 解析路径，Hermes 状态会自动限定在 profile 目录范围内——包括配置、会话、记忆、技能、状态数据库、gateway PID、日志和 cron 任务。</p>
+<p>这与终端工作目录是分开的。工具执行从 <code>terminal.cwd</code> 开始（或在 local 后端使用 <code>cwd: &quot;.&quot;</code> 时从启动目录开始），而非自动从 <code>HERMES_HOME</code> 开始。</p>
+<p>默认 profile 就是 <code>~/.hermes</code> 本身。无需迁移——现有安装的工作方式完全不变。</p>
+<h2>将 profile 作为发行版共享</h2>
+<p>你在一台机器上构建的 profile 可以打包为 <strong>git 仓库</strong>，并通过一条命令安装到另一台机器——你自己的工作站、团队成员的笔记本，或社区用户的环境。共享包包含 SOUL、配置、技能、cron 任务和 MCP 连接。凭据、记忆和会话保持各机器独立。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 从 git 仓库安装完整 agent
+hermes profile install github.com/you/research-bot --alias
+
+# 当作者发布新版本时更新（保留你的记忆和 .env）
+hermes profile update research-bot
+</div>
+<p>完整指南请参阅 <strong><a href="./profile-distributions.html">Profile 发行版：共享完整 Agent</a></strong>——包括编写、发布、更新语义、安全模型和使用场景。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

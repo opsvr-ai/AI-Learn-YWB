@@ -1,0 +1,539 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chroma — 面向 AI 应用的开源 embedding 数据库 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Chroma — 面向 AI 应用的开源 embedding 数据库</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Chroma</h1>
+<p>面向 AI 应用的开源 embedding（向量嵌入）数据库。存储 embedding 与元数据，执行向量搜索和全文搜索，按元数据过滤。简洁的 4 函数 API，从 notebook 到生产集群均可扩展。适用于语义搜索、RAG 应用或文档检索。最适合本地开发和开源项目。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/mlops/chroma</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/mlops/chroma</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Orchestra Research</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>依赖</td>
+<td><code>chromadb</code>, <code>sentence-transformers</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>RAG</code>, <code>Chroma</code>, <code>Vector Database</code>, <code>Embeddings</code>, <code>Semantic Search</code>, <code>Open Source</code>, <code>Self-Hosted</code>, <code>Document Retrieval</code>, <code>Metadata Filtering</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>Chroma - 开源 Embedding 数据库</h1>
+<p>专为构建具备记忆能力的 LLM 应用而设计的 AI 原生数据库。</p>
+<h2>何时使用 Chroma</h2>
+<p><strong>适用场景：</strong></p>
+<ul>
+<li>构建 RAG（检索增强生成）应用</li>
+<li>需要本地/自托管向量数据库</li>
+<li>希望使用开源方案（Apache 2.0）</li>
+<li>在 notebook 中快速原型验证</li>
+<li>对文档进行语义搜索</li>
+<li>存储带元数据的 embedding</li>
+</ul>
+<p><strong>指标</strong>：</p>
+<ul>
+<li><strong>24,300+ GitHub stars</strong></li>
+<li><strong>1,900+ forks</strong></li>
+<li><strong>v1.3.3</strong>（稳定版，每周发布）</li>
+<li><strong>Apache 2.0 许可证</strong></li>
+</ul>
+<p><strong>以下场景请使用替代方案</strong>：</p>
+<ul>
+<li><strong>Pinecone</strong>：托管云服务，自动扩缩容</li>
+<li><strong>FAISS</strong>：纯相似度搜索，不支持元数据</li>
+<li><strong>Weaviate</strong>：面向生产的 ML 原生数据库</li>
+<li><strong>Qdrant</strong>：高性能，基于 Rust</li>
+</ul>
+<h2>快速开始</h2>
+<h3>安装</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Python
+pip install chromadb
+<h1>JavaScript/TypeScript</h1>
+<p>npm install chromadb @chroma-core/default-embed</p>
+</div>
+<h3>基本用法（Python）</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import chromadb
+<h1>Create client</h1>
+<p>client = chromadb.Client()</p>
+<h1>Create collection</h1>
+<p>collection = client.create_collection(name=&quot;my_collection&quot;)</p>
+<h1>Add documents</h1>
+<p>collection.add(
+documents=[&quot;This is document 1&quot;, &quot;This is document 2&quot;],
+metadatas=[{&quot;source&quot;: &quot;doc1&quot;}, {&quot;source&quot;: &quot;doc2&quot;}],
+ids=[&quot;id1&quot;, &quot;id2&quot;]
+)</p>
+<h1>Query</h1>
+<p>results = collection.query(
+query_texts=[&quot;document about topic&quot;],
+n_results=2
+)</p>
+<p>print(results)</p>
+</div>
+<h2>核心操作</h2>
+<h3>1. 创建集合</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Simple collection
+collection = client.create_collection("my_docs")
+<h1>With custom embedding function</h1>
+<p>from chromadb.utils import embedding_functions</p>
+<p>openai_ef = embedding_functions.OpenAIEmbeddingFunction(
+api_key=&quot;your-key&quot;,
+model_name=&quot;text-embedding-3-small&quot;
+)</p>
+<p>collection = client.create_collection(
+name=&quot;my_docs&quot;,
+embedding_function=openai_ef
+)</p>
+<h1>Get existing collection</h1>
+<p>collection = client.get_collection(&quot;my_docs&quot;)</p>
+<h1>Delete collection</h1>
+<p>client.delete_collection(&quot;my_docs&quot;)</p>
+</div>
+<h3>2. 添加文档</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Add with auto-generated IDs
+collection.add(
+    documents=["Doc 1", "Doc 2", "Doc 3"],
+    metadatas=[
+        {"source": "web", "category": "tutorial"},
+        {"source": "pdf", "page": 5},
+        {"source": "api", "timestamp": "2025-01-01"}
+    ],
+    ids=["id1", "id2", "id3"]
+)
+<h1>Add with custom embeddings</h1>
+<p>collection.add(
+embeddings=[[0.1, 0.2, ...], [0.3, 0.4, ...]],
+documents=[&quot;Doc 1&quot;, &quot;Doc 2&quot;],
+ids=[&quot;id1&quot;, &quot;id2&quot;]
+)</p>
+</div>
+<h3>3. 查询（相似度搜索）</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Basic query
+results = collection.query(
+    query_texts=["machine learning tutorial"],
+    n_results=5
+)
+<h1>Query with filters</h1>
+<p>results = collection.query(
+query_texts=[&quot;Python programming&quot;],
+n_results=3,
+where={&quot;source&quot;: &quot;web&quot;}
+)</p>
+<h1>Query with metadata filters</h1>
+<p>results = collection.query(
+query_texts=[&quot;advanced topics&quot;],
+where={
+&quot;$and&quot;: [
+{&quot;category&quot;: &quot;tutorial&quot;},
+{&quot;difficulty&quot;: {&quot;$gte&quot;: 3}}
+]
+}
+)</p>
+<h1>Access results</h1>
+<p>print(results[&quot;documents&quot;])      # List of matching documents
+print(results[&quot;metadatas&quot;])      # Metadata for each doc
+print(results[&quot;distances&quot;])      # Similarity scores
+print(results[&quot;ids&quot;])            # Document IDs</p>
+</div>
+<h3>4. 获取文档</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Get by IDs
+docs = collection.get(
+    ids=["id1", "id2"]
+)
+<h1>Get with filters</h1>
+<p>docs = collection.get(
+where={&quot;category&quot;: &quot;tutorial&quot;},
+limit=10
+)</p>
+<h1>Get all documents</h1>
+<p>docs = collection.get()</p>
+</div>
+<h3>5. 更新文档</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Update document content
+collection.update(
+    ids=["id1"],
+    documents=["Updated content"],
+    metadatas=[{"source": "updated"}]
+)
+</div>
+<h3>6. 删除文档</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Delete by IDs
+collection.delete(ids=["id1", "id2"])
+<h1>Delete with filter</h1>
+<p>collection.delete(
+where={&quot;source&quot;: &quot;outdated&quot;}
+)</p>
+</div>
+<h2>持久化存储</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Persist to disk
+client = chromadb.PersistentClient(path="./chroma_db")
+<p>collection = client.create_collection(&quot;my_docs&quot;)
+collection.add(documents=[&quot;Doc 1&quot;], ids=[&quot;id1&quot;])</p>
+<h1>Data persisted automatically</h1>
+<h1>Reload later with same path</h1>
+<p>client = chromadb.PersistentClient(path=&quot;./chroma_db&quot;)
+collection = client.get_collection(&quot;my_docs&quot;)</p>
+</div>
+<h2>Embedding 函数</h2>
+<h3>默认（Sentence Transformers）</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Uses sentence-transformers by default
+collection = client.create_collection("my_docs")
+# Default model: all-MiniLM-L6-v2
+</div>
+<h3>OpenAI</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from chromadb.utils import embedding_functions
+<p>openai_ef = embedding_functions.OpenAIEmbeddingFunction(
+api_key=&quot;your-key&quot;,
+model_name=&quot;text-embedding-3-small&quot;
+)</p>
+<p>collection = client.create_collection(
+name=&quot;openai_docs&quot;,
+embedding_function=openai_ef
+)</p>
+</div>
+<h3>HuggingFace</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+huggingface_ef = embedding_functions.HuggingFaceEmbeddingFunction(
+    api_key="your-key",
+    model_name="sentence-transformers/all-mpnet-base-v2"
+)
+<p>collection = client.create_collection(
+name=&quot;hf_docs&quot;,
+embedding_function=huggingface_ef
+)</p>
+</div>
+<h3>自定义 embedding 函数</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from chromadb import Documents, EmbeddingFunction, Embeddings
+<p>class MyEmbeddingFunction(EmbeddingFunction):
+def <strong>call</strong>(self, input: Documents) -&amp;gt; Embeddings:
+# Your embedding logic
+return embeddings</p>
+<p>my_ef = MyEmbeddingFunction()
+collection = client.create_collection(
+name=&quot;custom_docs&quot;,
+embedding_function=my_ef
+)</p>
+</div>
+<h2>元数据过滤</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Exact match
+results = collection.query(
+    query_texts=["query"],
+    where={"category": "tutorial"}
+)
+<h1>Comparison operators</h1>
+<p>results = collection.query(
+query_texts=[&quot;query&quot;],
+where={&quot;page&quot;: {&quot;$gt&quot;: 10}}  # $gt, $gte, $lt, $lte, $ne
+)</p>
+<h1>Logical operators</h1>
+<p>results = collection.query(
+query_texts=[&quot;query&quot;],
+where={
+&quot;$and&quot;: [
+{&quot;category&quot;: &quot;tutorial&quot;},
+{&quot;difficulty&quot;: {&quot;$lte&quot;: 3}}
+]
+}  # Also: $or
+)</p>
+<h1>Contains</h1>
+<p>results = collection.query(
+query_texts=[&quot;query&quot;],
+where={&quot;tags&quot;: {&quot;$in&quot;: [&quot;python&quot;, &quot;ml&quot;]}}
+)</p>
+</div>
+<h2>LangChain 集成</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from langchain_chroma import Chroma
+from langchain_openai import OpenAIEmbeddings
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+<h1>Split documents</h1>
+<p>text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000)
+docs = text_splitter.split_documents(documents)</p>
+<h1>Create Chroma vector store</h1>
+<p>vectorstore = Chroma.from_documents(
+documents=docs,
+embedding=OpenAIEmbeddings(),
+persist_directory=&quot;./chroma_db&quot;
+)</p>
+<h1>Query</h1>
+<p>results = vectorstore.similarity_search(&quot;machine learning&quot;, k=3)</p>
+<h1>As retriever</h1>
+<p>retriever = vectorstore.as_retriever(search_kwargs={&quot;k&quot;: 5})</p>
+</div>
+<h2>LlamaIndex 集成</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from llama_index.vector_stores.chroma import ChromaVectorStore
+from llama_index.core import VectorStoreIndex, StorageContext
+import chromadb
+<h1>Initialize Chroma</h1>
+<p>db = chromadb.PersistentClient(path=&quot;./chroma_db&quot;)
+collection = db.get_or_create_collection(&quot;my_collection&quot;)</p>
+<h1>Create vector store</h1>
+<p>vector_store = ChromaVectorStore(chroma_collection=collection)
+storage_context = StorageContext.from_defaults(vector_store=vector_store)</p>
+<h1>Create index</h1>
+<p>index = VectorStoreIndex.from_documents(
+documents,
+storage_context=storage_context
+)</p>
+<h1>Query</h1>
+<p>query_engine = index.as_query_engine()
+response = query_engine.query(&quot;What is machine learning?&quot;)</p>
+</div>
+<h2>服务器模式</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Run Chroma server
+# Terminal: chroma run --path ./chroma_db --port 8000
+<h1>Connect to server</h1>
+<p>import chromadb
+from chromadb.config import Settings</p>
+<p>client = chromadb.HttpClient(
+host=&quot;localhost&quot;,
+port=8000,
+settings=Settings(anonymized_telemetry=False)
+)</p>
+<h1>Use as normal</h1>
+<p>collection = client.get_or_create_collection(&quot;my_docs&quot;)</p>
+</div>
+<h2>最佳实践</h2>
+<ol>
+<li><strong>使用持久化客户端</strong> — 避免重启后数据丢失</li>
+<li><strong>添加元数据</strong> — 支持过滤与追踪</li>
+<li><strong>批量操作</strong> — 一次性添加多个文档</li>
+<li><strong>选择合适的 embedding 模型</strong> — 平衡速度与质量</li>
+<li><strong>使用过滤器</strong> — 缩小搜索范围</li>
+<li><strong>唯一 ID</strong> — 避免冲突</li>
+<li><strong>定期备份</strong> — 复制 <code>chroma_db</code> 目录</li>
+<li><strong>监控集合大小</strong> — 按需扩容</li>
+<li><strong>测试 embedding 函数</strong> — 确保质量</li>
+<li><strong>生产环境使用服务器模式</strong> — 更适合多用户场景</li>
+</ol>
+<h2>性能</h2>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>延迟</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>添加 100 个文档</td>
+<td>~1-3s</td>
+<td>含 embedding 生成</td>
+</tr>
+<tr>
+<td>查询（top 10）</td>
+<td>~50-200ms</td>
+<td>取决于集合大小</td>
+</tr>
+<tr>
+<td>元数据过滤</td>
+<td>~10-50ms</td>
+<td>正确索引下速度较快</td>
+</tr>
+</tbody>
+</table>
+<h2>资源</h2>
+<ul>
+<li><strong>GitHub</strong>: https://github.com/chroma-core/chroma ⭐ 24,300+</li>
+<li><strong>文档</strong>: https://docs.trychroma.com</li>
+<li><strong>Discord</strong>: https://discord.gg/MMeYNTmh3x</li>
+<li><strong>版本</strong>: 1.3.3+</li>
+<li><strong>许可证</strong>: Apache 2.0</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

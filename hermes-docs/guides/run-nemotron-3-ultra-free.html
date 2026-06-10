@@ -1,0 +1,218 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>在 Hermes Agent 中免费运行 Nemotron 3 Ultra - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 实用指南 / 在 Hermes Agent 中免费运行 Nemotron 3 Ultra</div><p>Nous Research 已加入由 <strong>NVIDIA</strong> 合作的领先 AI 实验室组成的 <strong>Nemotron Coalition</strong>，致力于推进开放前沿基础模型。为此，我们与 <strong>Nebius</strong> 合作，在 <a href="https://portal.nousresearch.com">Nous Portal</a> 上提供 <strong>Nemotron 3 Ultra</strong> 为期两周的免费使用（<strong>6月4日至6月18日</strong>）。按照以下说明即可在你的 Hermes Agent 中体验该模型。</p>
+<div class="tip"><strong>ℹ️ 限时优惠</strong>
+<code>nvidia/nemotron-3-ultra:free</code> 层级在 <strong>6月4日至6月18日</strong> 期间可用。<code>:free</code> 标签使其保持在免费计划中——请选择该精确变体。
+</div>
+<p>选择最适合你的安装方式。<strong>桌面应用</strong>最简单——无需终端。如果你习惯使用终端，命令行安装就在下方。</p>
+<h2>方案 A — 桌面应用（推荐）</h2>
+<p>最简便的方式：一键安装，附带引导式点击设置。无需终端。</p>
+<h3>1. 下载并安装</h3>
+<p><a href="https://hermes-agent.nousresearch.com/desktop">下载 Hermes Desktop 安装程序</a>（macOS 或 Windows），然后打开。首次启动时会完成自我设置（通常在一分钟以内）。</p>
+<h3>2. 连接 Nous Portal</h3>
+<p>应用打开后，你会看到一个&quot;Let's get you set up&quot;屏幕。点击 <strong>Nous Portal</strong>（标记为 <strong>Recommended</strong>）。你的浏览器打开——创建一个 <a href="https://portal.nousresearch.com">Nous Portal</a> 账户（或登录），选择 <strong>Free</strong> 计划，并授权 Hermes。应用自动连接。</p>
+<h3>3. 选择免费 Nemotron 3 Ultra 模型</h3>
+<p>连接后，应用显示 <strong>Default model</strong> 卡片。点击 <strong>Change</strong>，搜索 <strong>nemotron 3 ultra</strong>，选择标记为 <strong>Free tier</strong> 的变体：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+nvidia/nemotron-3-ultra:free
+</div>
+<p><code>:free</code> 标签使其保持在免费层级——请选择该变体。</p>
+<h3>4. 开始对话</h3>
+<p>点击 <strong>Start chatting</strong>。就这样——你正在免费与 Nemotron 3 Ultra 对话。</p>
+<h2>方案 B — 命令行</h2>
+<p>偏好终端？</p>
+<h3>1. 安装 Hermes Agent</h3>
+<p>macOS/Linux/WSL2/Android 上运行：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
+</div>
+<p>Windows 上运行：</p>
+<div class="code-block"><span class="code-lang">powershell</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+iex (irm https://hermes-agent.nousresearch.com/install.ps1)
+</div>
+<p>安装完成后，重新加载 shell：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+source ~/.bashrc   # 或 source ~/.zshrc
+</div>
+<h3>2. 运行快速设置</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes setup
+</div>
+<p>选择 <strong>Quick Setup</strong>。Hermes 打开浏览器标签页，等待你完成后续步骤。</p>
+<h3>3. 创建 Nous Portal 账户</h3>
+<p>在浏览器中，创建一个 <a href="https://portal.nousresearch.com">Nous Portal</a> 账户（或登录），选择 <strong>Free</strong> 计划。</p>
+<h3>4. 连接你的账户</h3>
+<p>当提示将你的账户连接到 Hermes Agent 时，点击 <strong>Connect</strong>。连接成功后你会看到确认提示。</p>
+<h3>5. 选择免费 Nemotron 3 Ultra 模型</h3>
+<p>返回终端。从模型列表中选择：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+nvidia/nemotron-3-ultra:free
+</div>
+<p><code>:free</code> 标签使其保持在免费层级，因此请确保你选择了该变体。</p>
+<h3>6. 开始对话</h3>
+<p>完成剩余的快速设置提示，然后运行：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes
+</div>
+<p>就这样——你正在免费与 Nemotron 3 Ultra 对话。</p>
+<h2>之后切换到此模型</h2>
+<p>已设置好其他模型？</p>
+<ul>
+<li><strong>桌面应用：</strong> 打开模型选择器，搜索 <strong>nemotron 3 ultra</strong>，选择 <strong>Free tier</strong> 变体。</li>
+<li><strong>CLI / TUI：</strong> 在会话中随时使用 <code>/model nvidia/nemotron-3-ultra:free</code> 切换，或运行 <code>/model</code> 打开选择器并从列表中选择。</li>
+</ul>
+<h2>故障排查</h2>
+<ul>
+<li><strong>列表中看不到模型？</strong> 确保你完成了 Nous Portal 连接，并且你使用的是 <strong>Free</strong> 计划。在 CLI 中，<code>hermes portal info</code> 可确认你已登录并通过 Nous 路由。</li>
+<li><strong>选错了变体？</strong> 重新选择 <code>nvidia/nemotron-3-ultra:free</code>——<code>:free</code> 后缀是保持在免费层级的必要条件。</li>
+<li><strong>浏览器未打开 / 你在远程主机上（CLI）？</strong> 参见 <a href="/guides/oauth-over-ssh">SSH / 远程主机上的 OAuth</a> 了解端口转发和手动粘贴的解决方法。</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

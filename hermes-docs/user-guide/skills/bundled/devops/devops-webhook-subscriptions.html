@@ -1,0 +1,301 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Webhook Subscriptions — Webhook subscriptions: event-driven agent runs - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 命令</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & Skills</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">docs</a> / <a href="/hermes-docs/user-guide/">user-guide</a> / <a href="/hermes-docs/user-guide/skills/">skills</a> / <a href="/hermes-docs/user-guide/skills/bundled/">bundled</a> / <a href="/hermes-docs/user-guide/skills/bundled/devops/">devops</a> / Webhook Subscriptions — Webhook subscriptions: event-driven agent runs</div><p>{/<em> 本页面由 website/scripts/generate-skill-docs.py 从技能的 SKILL.md 自动生成。请编辑源 SKILL.md，而非本页面。 </em>/}</p>
+<h1>Webhook Subscriptions</h1>
+<p>Webhook subscriptions: event-driven agent runs.</p>
+<h2>技能元数据</h2>
+<table><thead><tr><th>---</th><th>---</th></tr></thead><tbody>
+<tr><td>来源</td><td>内置（默认安装）</td></tr>
+<tr><td>路径</td><td><code>skills/devops/webhook-subscriptions</code></td></tr>
+<tr><td>版本</td><td><code>1.1.0</code></td></tr>
+<tr><td>平台</td><td>linux, macos, windows</td></tr>
+<tr><td>标签</td><td><code>webhook</code>, <code>events</code>, <code>automation</code>, <code>integrations</code>, <code>notifications</code>, <code>push</code></td></tr>
+</tbody></table>
+<h2>参考：完整 SKILL.md</h2>
+<p>:::info</p>
+<p>以下是 Hermes 在此技能被触发时加载的完整技能定义。这是技能激活时代理所看到的指令。</p>
+<p>:::</p>
+<h1>Webhook Subscriptions</h1>
+<p>Create dynamic webhook subscriptions so external services (GitHub, GitLab, Stripe, CI/CD, IoT sensors, monitoring tools) can trigger Hermes agent runs by POSTing events to a URL.</p>
+<h2>设置 (必需 First)</h2>
+<p>The webhook platform must be enabled before subscriptions can be created. Check with:</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes webhook list
+</div>
+<p>If it says "Webhook platform is not enabled", set it up:</p>
+<h3>Option 1: 设置 wizard</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway setup
+</div>
+<p>Follow the prompts to enable webhooks, set the port, and set a global HMAC secret.</p>
+<h3>Option 2: Manual config</h3>
+<p>Add to <code>~/.hermes/config.yaml</code>:</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+platforms:
+  webhook:
+    enabled: true
+    extra:
+      host: "0.0.0.0"
+      port: 8644
+      secret: "generate-a-strong-secret-here"
+</div>
+<h3>Option 3: Environment variables</h3>
+<p>Add to <code>~/.hermes/.env</code>:</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+WEBHOOK_ENABLED=true
+WEBHOOK_PORT=8644
+WEBHOOK_SECRET=generate-a-strong-secret-here
+</div>
+<p>After configuration, start (or restart) the gateway:</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway run
+# Or if using systemd:
+systemctl --user restart hermes-gateway
+</div>
+<p>Verify it's running:</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl http://localhost:8644/health
+</div>
+<h2>Commands</h2>
+<p>All management is via the <code>hermes webhook</code> CLI command:</p>
+<h3>Create a subscription</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes webhook subscribe <name> \
+  --prompt "Prompt template with {payload.fields}" \
+  --events "event1,event2" \
+  --description "What this does" \
+  --skills "skill1,skill2" \
+  --deliver telegram \
+  --deliver-chat-id "12345" \
+  --secret "optional-custom-secret"
+</div>
+<p>Returns the webhook URL and HMAC secret. The user configures their service to POST to that URL.</p>
+<h3>List subscriptions</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes webhook list
+</div>
+<h3>Remove a subscription</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes webhook remove <name>
+</div>
+<h3>Test a subscription</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes webhook test <name>
+hermes webhook test <name> --payload '{"key": "value"}'
+</div>
+<h2>Prompt Templates</h2>
+<p>Prompts support <code>{dot.notation}</code> for accessing nested payload fields:</p>
+<p>- <code>{issue.title}</code> — GitHub issue title</p>
+<p>- <code>{pull_request.user.login}</code> — PR author</p>
+<p>- <code>{data.object.amount}</code> — Stripe payment amount</p>
+<p>- <code>{sensor.temperature}</code> — IoT sensor reading</p>
+<p>If no prompt is specified, the full JSON payload is dumped into the agent prompt.</p>
+<h2>Common Patterns</h2>
+<h3>GitHub: new issues</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes webhook subscribe github-issues \
+  --events "issues" \
+  --prompt "New GitHub issue #{issue.number}: {issue.title}\n\nAction: {action}\nAuthor: {issue.user.login}\nBody:\n{issue.body}\n\nPlease triage this issue." \
+  --deliver telegram \
+  --deliver-chat-id "-100123456789"
+</div>
+<p>Then in GitHub repo Settings → Webhooks → Add webhook:</p>
+<p>- Payload URL: the returned webhook_url</p>
+<p>- Content type: application/json</p>
+<p>- Secret: the returned secret</p>
+<p>- Events: "Issues"</p>
+<h3>GitHub: PR reviews</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes webhook subscribe github-prs \
+  --events "pull_request" \
+  --prompt "PR #{pull_request.number} {action}: {pull_request.title}\nBy: {pull_request.user.login}\nBranch: {pull_request.head.ref}\n\n{pull_request.body}" \
+  --skills "github-code-review" \
+  --deliver github_comment
+</div>
+<h3>Stripe: payment events</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes webhook subscribe stripe-payments \
+  --events "payment_intent.succeeded,payment_intent.payment_failed" \
+  --prompt "Payment {data.object.status}: {data.object.amount} cents from {data.object.receipt_email}" \
+  --deliver telegram \
+  --deliver-chat-id "-100123456789"
+</div>
+<h3>CI/CD: build notifications</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes webhook subscribe ci-builds \
+  --events "pipeline" \
+  --prompt "Build {object_attributes.status} on {project.name} branch {object_attributes.ref}\nCommit: {commit.message}" \
+  --deliver discord \
+  --deliver-chat-id "1234567890"
+</div>
+<h3>Generic monitoring alert</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes webhook subscribe alerts \
+  --prompt "Alert: {alert.name}\nSeverity: {alert.severity}\nMessage: {alert.message}\n\nPlease investigate and suggest remediation." \
+  --deliver origin
+</div>
+<h3>Direct delivery (no agent, zero LLM cost)</h3>
+<p>For use cases where you just want to push a notification through to a user's chat — no reasoning, no agent loop — add <code>--deliver-only</code>. The rendered <code>--prompt</code> template becomes the literal message body and is dispatched directly to the target adapter.</p>
+<p>Use this for:</p>
+<p>- External service push notifications (Supabase/Firebase webhooks → Telegram)</p>
+<p>- Monitoring alerts that should forward verbatim</p>
+<p>- Inter-agent pings where one agent is telling another agent's user something</p>
+<p>- Any webhook where an LLM round trip would be wasted effort</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes webhook subscribe antenna-matches \
+  --deliver telegram \
+  --deliver-chat-id "123456789" \
+  --deliver-only \
+  --prompt "🎉 New match: {match.user_name} matched with you!" \
+  --description "Antenna match notifications"
+</div>
+<p>The POST returns <code>200 OK</code> on successful delivery, <code>502</code> on target failure — so upstream services can retry intelligently. HMAC auth, rate limits, and idempotency still apply.</p>
+<p>Requires <code>--deliver</code> to be a real target (telegram, discord, slack, github_comment, etc.) — <code>--deliver log</code> is rejected because log-only direct delivery is pointless.</p>
+<h2>安全</h2>
+<p>- Each subscription gets an auto-generated HMAC-SHA256 secret (or provide your own with <code>--secret</code>)</p>
+<p>- The webhook adapter validates signatures on every incoming POST</p>
+<p>- Static routes from config.yaml cannot be overwritten by dynamic subscriptions</p>
+<p>- Subscriptions persist to <code>~/.hermes/webhook_subscriptions.json</code></p>
+<h2>How It Works</h2>
+<p>1. <code>hermes webhook subscribe</code> writes to <code>~/.hermes/webhook_subscriptions.json</code></p>
+<p>2. The webhook adapter hot-reloads this file on each incoming request (mtime-gated, negligible overhead)</p>
+<p>3. When a POST arrives matching a route, the adapter formats the prompt and triggers an agent run</p>
+<p>4. The agent's response is delivered to the configured target (Telegram, Discord, GitHub comment, etc.)</p>
+<h2>故障排除</h2>
+<p>If webhooks aren't working:</p>
+<p>1. <strong>Is the gateway running?</strong> Check with <code>systemctl --user status hermes-gateway</code> or <code>ps aux | grep gateway</code></p>
+<p>2. <strong>Is the webhook server listening?</strong> <code>curl http://localhost:8644/health</code> should return <code>{"status": "ok"}</code></p>
+<p>3. <strong>Check gateway logs:</strong> <code>grep webhook ~/.hermes/logs/gateway.log | tail -20</code></p>
+<p>4. <strong>Signature mismatch?</strong> Verify the secret in your service matches the one from <code>hermes webhook list</code>. GitHub sends <code>X-Hub-Signature-256</code>, GitLab sends <code>X-Gitlab-Token</code>.</p>
+<p>5. <strong>Firewall/NAT?</strong> The webhook URL must be reachable from the service. For local development, use a tunnel (ngrok, cloudflared).</p>
+<p>6. <strong>Wrong event type?</strong> Check <code>--events</code> filter matches what the service sends. Use <code>hermes webhook test <name></code> to verify the route works.</p>  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

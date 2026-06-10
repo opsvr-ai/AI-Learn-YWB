@@ -1,0 +1,557 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ascii Video — ASCII 视频：将视频/音频转换为彩色 ASCII MP4/GIF - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Ascii Video — ASCII 视频：将视频/音频转换为彩色 ASCII MP4/GIF</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Ascii Video</h1>
+<p>ASCII 视频：将视频/音频转换为彩色 ASCII MP4/GIF。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>内置（默认安装）</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>skills/creative/ascii-video</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>ASCII 视频生产流水线</h1>
+<h2>使用时机</h2>
+<p>当用户请求以下内容时使用：ASCII 视频、文字艺术视频、终端风格视频、字符艺术动画、复古文字可视化、ASCII 音频可视化器、将视频转换为 ASCII 艺术、矩阵风格特效，或任何动态 ASCII 输出。</p>
+<h2>内容概述</h2>
+<p>用于 ASCII 艺术视频的生产流水线——支持任意格式。将视频/音频/图像/生成式输入转换为彩色 ASCII 字符视频输出（MP4、GIF、图像序列）。涵盖：视频转 ASCII、音频响应式音乐可视化器、生成式 ASCII 艺术动画、视频+音频混合响应、文字/歌词叠加、实时终端渲染。</p>
+<h2>创作标准</h2>
+<p>这是视觉艺术。ASCII 字符是媒介；电影是标准。</p>
+<p><strong>在写下任何一行代码之前</strong>，先阐明创作概念。氛围是什么？这讲述了怎样的视觉故事？是什么让这个项目与其他所有 ASCII 视频不同？用户的 prompt（提示词）只是起点——以创作野心去诠释它，而非字面转录。</p>
+<p><strong>首次渲染即达到卓越水准，不可妥协。</strong> 输出必须在无需修改的情况下具有视觉冲击力。如果看起来平庸、单调，或像&quot;AI 生成的 ASCII 艺术&quot;，那就是错的——在交付前重新思考创作概念。</p>
+<p><strong>超越参考词汇表。</strong> 参考资料中的特效目录、shader（着色器）预设和调色板库只是起点词汇。每个项目都应组合、修改并发明新的模式。目录是颜料——你来作画。</p>
+<p><strong>主动发挥创造力。</strong> 当项目需要时，扩展 skill 的词汇表。如果参考资料无法满足创作愿景，就自己构建。至少加入一个用户没有要求但会欣赏的视觉时刻——一个过渡、一个特效、一个提升整体作品的色彩选择。</p>
+<p><strong>整体美学优先于技术正确性。</strong> 视频中的所有场景必须通过统一的视觉语言相互关联——共同的色温、相关的字符调色板、一致的运动词汇。一个技术上正确但每个场景随机使用不同特效的视频，在美学上是失败的。</p>
+<p><strong>密集、分层、深思熟虑。</strong> 每一帧都应值得细看。绝不使用纯黑背景。始终使用多网格构图。始终保持逐场景变化。始终使用有意为之的色彩。</p>
+<h2>模式</h2>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>输入</th>
+<th>输出</th>
+<th>参考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>视频转 ASCII</strong></td>
+<td>视频文件</td>
+<td>源素材的 ASCII 重现</td>
+<td><code>references/inputs.md</code> § Video Sampling</td>
+</tr>
+<tr>
+<td><strong>音频响应式</strong></td>
+<td>音频文件</td>
+<td>由音频特征驱动的生成式视觉效果</td>
+<td><code>references/inputs.md</code> § Audio Analysis</td>
+</tr>
+<tr>
+<td><strong>生成式</strong></td>
+<td>无（或种子参数）</td>
+<td>程序化 ASCII 动画</td>
+<td><code>references/effects.md</code></td>
+</tr>
+<tr>
+<td><strong>混合式</strong></td>
+<td>视频 + 音频</td>
+<td>带音频响应叠加层的 ASCII 视频</td>
+<td>两个输入参考</td>
+</tr>
+<tr>
+<td><strong>歌词/文字</strong></td>
+<td>音频 + 文字/SRT</td>
+<td>带视觉特效的定时文字</td>
+<td><code>references/inputs.md</code> § Text/Lyrics</td>
+</tr>
+<tr>
+<td><strong>TTS 旁白</strong></td>
+<td>文字引用 + TTS API</td>
+<td>带打字文字效果的旁白证言/引用视频</td>
+<td><code>references/inputs.md</code> § TTS Integration</td>
+</tr>
+</tbody>
+</table>
+<h2>技术栈</h2>
+<p>每个项目使用单一自包含 Python 脚本。无需 GPU。</p>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>工具</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>核心</td>
+<td>Python 3.10+, NumPy</td>
+<td>数学运算、数组操作、向量化特效</td>
+</tr>
+<tr>
+<td>信号</td>
+<td>SciPy</td>
+<td>FFT、峰值检测（音频模式）</td>
+</tr>
+<tr>
+<td>图像</td>
+<td>Pillow (PIL)</td>
+<td>字体光栅化、帧解码、图像 I/O</td>
+</tr>
+<tr>
+<td>视频 I/O</td>
+<td>ffmpeg (CLI)</td>
+<td>解码输入、编码输出、混合音频</td>
+</tr>
+<tr>
+<td>并行</td>
+<td>concurrent.futures</td>
+<td>N 个 worker 用于批量/片段渲染</td>
+</tr>
+<tr>
+<td>TTS</td>
+<td>ElevenLabs API（可选）</td>
+<td>生成旁白片段</td>
+</tr>
+<tr>
+<td>可选</td>
+<td>OpenCV</td>
+<td>视频帧采样、边缘检测</td>
+</tr>
+</tbody>
+</table>
+<h2>流水线架构</h2>
+<p>每种模式遵循相同的 6 阶段流水线：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+INPUT → ANALYZE → SCENE_FN → TONEMAP → SHADE → ENCODE
+</div>
+<ol>
+<li><strong>INPUT</strong> — 加载/解码源素材（视频帧、音频采样、图像，或无输入）</li>
+<li><strong>ANALYZE</strong> — 提取逐帧特征（音频频段、视频亮度/边缘、运动向量）</li>
+<li><strong>SCENE_FN</strong> — 场景函数渲染到像素画布（<code>uint8 H,W,3</code>）。通过 <code>_render_vf()</code> + 像素混合模式组合多个字符网格。参见 <code>references/composition.md</code></li>
+<li><strong>TONEMAP</strong> — 基于百分位数的自适应亮度归一化。参见 <code>references/composition.md</code> § Adaptive Tonemap</li>
+<li><strong>SHADE</strong> — 通过 <code>ShaderChain</code> + <code>FeedbackBuffer</code> 进行后处理。参见 <code>references/shaders.md</code></li>
+<li><strong>ENCODE</strong> — 将原始 RGB 帧通过管道传输至 ffmpeg 进行 H.264/GIF 编码</li>
+</ol>
+<h2>创作方向</h2>
+<h3>美学维度</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>选项</th>
+<th>参考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>字符调色板</strong></td>
+<td>密度渐变、块状元素、符号、文字（片假名、希腊字母、符文、盲文）、项目专属</td>
+<td><code>architecture.md</code> § Palettes</td>
+</tr>
+<tr>
+<td><strong>色彩策略</strong></td>
+<td>HSV、OKLAB/OKLCH、离散 RGB 调色板、自动生成和声、单色、色温</td>
+<td><code>architecture.md</code> § Color System</td>
+</tr>
+<tr>
+<td><strong>背景纹理</strong></td>
+<td>正弦场、fBM 噪声、域扭曲、voronoi、反应扩散、元胞自动机、视频</td>
+<td><code>effects.md</code></td>
+</tr>
+<tr>
+<td><strong>主要特效</strong></td>
+<td>环形、螺旋、隧道、漩涡、波浪、干涉、极光、火焰、SDF、奇异吸引子</td>
+<td><code>effects.md</code></td>
+</tr>
+<tr>
+<td><strong>粒子</strong></td>
+<td>火花、雪花、雨滴、气泡、符文、轨道、群集 boid、流场跟随者、轨迹</td>
+<td><code>effects.md</code> § Particles</td>
+</tr>
+<tr>
+<td><strong>Shader 风格</strong></td>
+<td>复古 CRT、简洁现代、故障艺术、电影感、梦幻、工业、迷幻</td>
+<td><code>shaders.md</code></td>
+</tr>
+<tr>
+<td><strong>网格密度</strong></td>
+<td>xs(8px) 到 xxl(40px)，每层可混合使用</td>
+<td><code>architecture.md</code> § Grid System</td>
+</tr>
+<tr>
+<td><strong>坐标空间</strong></td>
+<td>笛卡尔、极坐标、平铺、旋转、鱼眼、Möbius、域扭曲</td>
+<td><code>effects.md</code> § Transforms</td>
+</tr>
+<tr>
+<td><strong>Feedback</strong></td>
+<td>缩放隧道、彩虹轨迹、幽灵回声、旋转曼陀罗、色彩演化</td>
+<td><code>composition.md</code> § Feedback</td>
+</tr>
+<tr>
+<td><strong>遮罩</strong></td>
+<td>圆形、环形、渐变、文字模板、动态虹膜/擦除/溶解</td>
+<td><code>composition.md</code> § Masking</td>
+</tr>
+<tr>
+<td><strong>过渡</strong></td>
+<td>交叉淡化、擦除、溶解、故障切换、虹膜、基于遮罩的揭示</td>
+<td><code>shaders.md</code> § Transitions</td>
+</tr>
+</tbody>
+</table>
+<h3>逐段变化</h3>
+<p>绝不对整个视频使用相同配置。对每个段落/场景：</p>
+<ul>
+<li><strong>不同的背景特效</strong>（或组合 2-3 种）</li>
+<li><strong>不同的字符调色板</strong>（匹配氛围）</li>
+<li><strong>不同的色彩策略</strong>（或至少使用不同色调）</li>
+<li><strong>变化 shader 强度</strong>（高潮时更多泛光，安静时更多颗粒感）</li>
+<li><strong>不同的粒子类型</strong>（如果粒子处于激活状态）</li>
+</ul>
+<h3>项目专属创新</h3>
+<p>每个项目至少发明以下之一：</p>
+<ul>
+<li>匹配主题的自定义字符调色板</li>
+<li>自定义背景特效（组合/修改现有构建块）</li>
+<li>自定义色彩调色板（匹配品牌/氛围的离散 RGB 集合）</li>
+<li>自定义粒子字符集</li>
+<li>新颖的场景过渡或视觉时刻</li>
+</ul>
+<p>不要只从目录中挑选。目录是词汇——你来写诗。</p>
+<h2>工作流程</h2>
+<h3>第一步：创作愿景</h3>
+<p>在任何代码之前，阐明创作概念：</p>
+<ul>
+<li><strong>氛围/气氛</strong>：观众应该感受到什么？充满活力、冥想感、混沌、优雅、不祥？</li>
+<li><strong>视觉故事</strong>：在整个时长内发生了什么？积累张力？转变？消解？</li>
+<li><strong>色彩世界</strong>：暖色/冷色？单色？霓虹？大地色调？主色调是什么？</li>
+<li><strong>字符质感</strong>：密集数据？稀疏星点？有机点阵？几何块状？</li>
+<li><strong>与众不同之处</strong>：是什么让这个项目独一无二？</li>
+<li><strong>情感弧线</strong>：场景如何推进？以能量开场，积累至高潮，然后解决？</li>
+</ul>
+<p>将用户的 prompt 映射到美学选择。&quot;轻松 lo-fi 可视化器&quot;与&quot;故障赛博朋克数据流&quot;在各方面都要求截然不同的处理。</p>
+<h3>第二步：技术设计</h3>
+<ul>
+<li><strong>模式</strong> — 上述 6 种模式中的哪一种</li>
+<li><strong>分辨率</strong> — 横屏 1920x1080（默认）、竖屏 1080x1920、方形 1080x1080 @ 24fps</li>
+<li><strong>硬件检测</strong> — 自动检测核心数/内存，设置质量配置文件。参见 <code>references/optimization.md</code></li>
+<li><strong>段落</strong> — 将时间戳映射到场景函数，每个场景有其自己的特效/调色板/色彩/shader 配置</li>
+<li><strong>输出格式</strong> — MP4（默认）、GIF（640x360 @ 15fps）、PNG 序列</li>
+</ul>
+<h3>第三步：构建脚本</h3>
+<p>单一 Python 文件。组件（含参考）：</p>
+<ol>
+<li><strong>硬件检测 + 质量配置文件</strong> — <code>references/optimization.md</code></li>
+<li><strong>输入加载器</strong> — 依模式而定；<code>references/inputs.md</code></li>
+<li><strong>特征分析器</strong> — 音频 FFT、视频亮度，或合成</li>
+<li><strong>网格 + 渲染器</strong> — 带位图缓存的多密度网格；<code>references/architecture.md</code></li>
+<li><strong>字符调色板</strong> — 每个项目多个；<code>references/architecture.md</code> § Palettes</li>
+<li><strong>色彩系统</strong> — HSV + 离散 RGB + 和声生成；<code>references/architecture.md</code> § Color</li>
+<li><strong>场景函数</strong> — 每个返回 <code>canvas (uint8 H,W,3)</code>；<code>references/scenes.md</code></li>
+<li><strong>Tonemap</strong> — 自适应亮度归一化；<code>references/composition.md</code></li>
+<li><strong>Shader 流水线</strong> — <code>ShaderChain</code> + <code>FeedbackBuffer</code>；<code>references/shaders.md</code></li>
+<li><strong>场景表 + 调度器</strong> — 时间 → 场景函数 + 配置；<code>references/scenes.md</code></li>
+<li><strong>并行编码器</strong> — N worker 片段渲染，使用 ffmpeg 管道</li>
+<li><strong>Main</strong> — 编排完整流水线</li>
+</ol>
+<h3>第四步：质量验证</h3>
+<ul>
+<li><strong>先测试帧</strong>：在完整渲染前，在关键时间戳渲染单帧</li>
+<li><strong>亮度检查</strong>：所有 ASCII 内容的 <code>canvas.mean() &gt; 8</code>。如果偏暗，降低 gamma</li>
+<li><strong>视觉连贯性</strong>：所有场景是否感觉属于同一个视频？</li>
+<li><strong>创作愿景检查</strong>：输出是否与第一步的概念相符？如果看起来平庸，请返回重做</li>
+</ul>
+<h2>关键实现注意事项</h2>
+<h3>亮度——使用 <code>tonemap()</code>，而非线性乘数</h3>
+<p>这是第一大视觉问题。黑色背景上的 ASCII 本质上偏暗。<strong>绝不使用 <code>canvas * N</code> 乘数</strong>——它们会截断高光。使用自适应 tonemap：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def tonemap(canvas, gamma=0.75):
+    f = canvas.astype(np.float32)
+    lo, hi = np.percentile(f[::4, ::4], [1, 99.5])
+    if hi - lo &lt; 10: hi = lo + 10
+    f = np.clip((f - lo) / (hi - lo), 0, 1) ** gamma
+    return (f * 255).astype(np.uint8)
+</div>
+<p>流水线：<code>scene_fn() → tonemap() → FeedbackBuffer → ShaderChain → ffmpeg</code></p>
+<p>逐场景 gamma：默认 0.75，日晒效果 0.55，色调分离 0.50，明亮场景 0.85。暗层使用 <code>screen</code> 混合（而非 <code>overlay</code>）。</p>
+<h3>字体单元高度</h3>
+<p>macOS Pillow：<code>textbbox()</code> 返回错误高度。使用 <code>font.getmetrics()</code>：<code>cell_height = ascent + descent</code>。参见 <code>references/troubleshooting.md</code>。</p>
+<h3>ffmpeg 管道死锁</h3>
+<p>长时间运行的 ffmpeg 绝不使用 <code>stderr=subprocess.PIPE</code>——缓冲区在 64KB 时填满并死锁。重定向到文件。参见 <code>references/troubleshooting.md</code>。</p>
+<h3>字体兼容性</h3>
+<p>并非所有 Unicode 字符都能在所有字体中渲染。在初始化时验证调色板——渲染每个字符，检查是否有空白输出。参见 <code>references/troubleshooting.md</code>。</p>
+<h3>逐片段架构</h3>
+<p>对于分段视频（引用、场景、章节），将每段渲染为独立的片段文件，以支持并行渲染和选择性重渲染。参见 <code>references/scenes.md</code>。</p>
+<h2>性能目标</h2>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>预算</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>特征提取</td>
+<td>1-5ms</td>
+</tr>
+<tr>
+<td>特效函数</td>
+<td>2-15ms</td>
+</tr>
+<tr>
+<td>字符渲染</td>
+<td>80-150ms（瓶颈）</td>
+</tr>
+<tr>
+<td>Shader 流水线</td>
+<td>5-25ms</td>
+</tr>
+<tr>
+<td><strong>总计</strong></td>
+<td>~100-200ms/帧</td>
+</tr>
+</tbody>
+</table>
+<h2>参考资料</h2>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>references/architecture.md</code></td>
+<td>网格系统、分辨率预设、字体选择、字符调色板（20+）、色彩系统（HSV + OKLAB + 离散 RGB + 和声生成）、<code>_render_vf()</code> 辅助函数、GridLayer 类</td>
+</tr>
+<tr>
+<td><code>references/composition.md</code></td>
+<td>像素混合模式（20 种）、<code>blend_canvas()</code>、多网格构图、自适应 <code>tonemap()</code>、<code>FeedbackBuffer</code>、<code>PixelBlendStack</code>、遮罩/模板系统</td>
+</tr>
+<tr>
+<td><code>references/effects.md</code></td>
+<td>特效构建块：值场生成器、色调场、噪声/fBM/域扭曲、voronoi、反应扩散、元胞自动机、SDF、奇异吸引子、粒子系统、坐标变换、时间连贯性</td>
+</tr>
+<tr>
+<td><code>references/shaders.md</code></td>
+<td><code>ShaderChain</code>、<code>_apply_shader_step()</code> 调度、38 种 shader 目录、音频响应式缩放、过渡、色调预设、输出格式编码、终端渲染</td>
+</tr>
+<tr>
+<td><code>references/scenes.md</code></td>
+<td>场景协议、<code>Renderer</code> 类、<code>SCENES</code> 表、<code>render_clip()</code>、节拍同步剪切、并行渲染、设计模式（层级结构、方向弧线、视觉隐喻、构图技法）、各复杂度级别的完整场景示例、场景设计检查清单</td>
+</tr>
+<tr>
+<td><code>references/inputs.md</code></td>
+<td>音频分析（FFT、频段、节拍）、视频采样、图像转换、文字/歌词、TTS 集成（ElevenLabs、声音分配、音频混合）</td>
+</tr>
+<tr>
+<td><code>references/optimization.md</code></td>
+<td>硬件检测、质量配置文件、向量化模式、并行渲染、内存管理、性能预算</td>
+</tr>
+<tr>
+<td><code>references/troubleshooting.md</code></td>
+<td>NumPy 广播陷阱、混合模式陷阱、多进程/pickling、亮度诊断、ffmpeg 问题、字体问题、常见错误</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>创意发散（仅在用户请求实验性/创意性/独特输出时使用）</h2>
+<p>如果用户要求创意性、实验性、令人惊喜或非常规的输出，选择最适合的策略，并在生成代码<strong>之前</strong>推理其步骤。</p>
+<ul>
+<li><strong>强制关联</strong> — 当用户想要跨领域灵感时（&quot;让它看起来有机感&quot;、&quot;工业美学&quot;）</li>
+<li><strong>概念融合</strong> — 当用户命名两个要组合的事物时（&quot;海洋遇见音乐&quot;、&quot;太空 + 书法&quot;）</li>
+<li><strong>斜向策略</strong> — 当用户完全开放时（&quot;给我惊喜&quot;、&quot;我从未见过的东西&quot;）</li>
+</ul>
+<h3>强制关联</h3>
+<ol>
+<li>选择一个与视觉目标无关的领域（天气系统、微生物学、建筑、流体动力学、纺织编织）</li>
+<li>列出其核心视觉/结构元素（侵蚀 → 逐渐揭示；有丝分裂 → 分裂复制；编织 → 交错图案）</li>
+<li>将这些元素映射到 ASCII 字符和动画模式</li>
+<li>综合——&quot;侵蚀&quot;或&quot;结晶&quot;在字符网格中看起来是什么样的？</li>
+</ol>
+<h3>概念融合</h3>
+<ol>
+<li>命名两个不同的视觉/概念空间（例如，海浪 + 乐谱）</li>
+<li>映射对应关系（波峰 = 高音，波谷 = 休止，浪花 = 断奏）</li>
+<li>选择性融合——保留最有趣的映射，舍弃牵强的</li>
+<li>发展只存在于融合中的涌现属性</li>
+</ol>
+<h3>斜向策略</h3>
+<ol>
+<li>抽取一张：&quot;将错误视为隐藏的意图&quot; / &quot;使用一个旧想法&quot; / &quot;你最亲密的朋友会怎么做？&quot; / &quot;强调缺陷&quot; / &quot;颠倒过来&quot; / &quot;只取一部分，而非全部&quot; / &quot;反转&quot;</li>
+<li>将该指令对照当前 ASCII 动画挑战进行诠释</li>
+<li>在编写代码之前，将这一横向洞见应用于视觉设计</li>
+</ol>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

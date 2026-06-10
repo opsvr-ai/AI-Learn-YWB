@@ -1,0 +1,394 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ocr And Documents — 从 PDF/扫描件中提取文本（pymupdf、marker-pdf） - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Ocr And Documents — 从 PDF/扫描件中提取文本（pymupdf、marker-pdf）</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Ocr And Documents</h1>
+<p>从 PDF/扫描件中提取文本（pymupdf、marker-pdf）。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>内置（默认安装）</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>skills/productivity/ocr-and-documents</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>2.3.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Hermes Agent</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>PDF</code>, <code>Documents</code>, <code>Research</code>, <code>Arxiv</code>, <code>Text-Extraction</code>, <code>OCR</code></td>
+</tr>
+<tr>
+<td>相关 skill</td>
+<td><a href="/user-guide/skills/bundled/productivity/productivity-powerpoint"><code>powerpoint</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>PDF 与文档提取</h1>
+<p>对于 DOCX：使用 <code>python-docx</code>（解析实际文档结构，远优于 OCR）。
+对于 PPTX：参见 <code>powerpoint</code> skill（使用 <code>python-pptx</code>，完整支持幻灯片/备注）。
+本 skill 涵盖 <strong>PDF 及扫描文档</strong>。</p>
+<h2>第一步：是否有远程 URL？</h2>
+<p>如果文档有 URL，<strong>始终优先尝试 <code>web_extract</code></strong>：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+web_extract(urls=["https://arxiv.org/pdf/2402.03300"])
+web_extract(urls=["https://example.com/report.pdf"])
+</div>
+<p>这通过 Firecrawl 实现 PDF 转 Markdown，无需本地依赖。</p>
+<p>仅在以下情况使用本地提取：文件在本地、<code>web_extract</code> 失败，或需要批量处理。</p>
+<h2>第二步：选择本地提取器</h2>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>pymupdf（约 25MB）</th>
+<th>marker-pdf（约 3-5GB）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>基于文本的 PDF</strong></td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>扫描 PDF（OCR）</strong></td>
+<td>❌</td>
+<td>✅（支持 90+ 种语言）</td>
+</tr>
+<tr>
+<td><strong>表格</strong></td>
+<td>✅（基础）</td>
+<td>✅（高精度）</td>
+</tr>
+<tr>
+<td><strong>公式 / LaTeX</strong></td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>代码块</strong></td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>表单</strong></td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>页眉/页脚去除</strong></td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>阅读顺序检测</strong></td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>图片提取</strong></td>
+<td>✅（嵌入图片）</td>
+<td>✅（含上下文）</td>
+</tr>
+<tr>
+<td><strong>图片 → 文本（OCR）</strong></td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>EPUB</strong></td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Markdown 输出</strong></td>
+<td>✅（通过 pymupdf4llm）</td>
+<td>✅（原生，质量更高）</td>
+</tr>
+<tr>
+<td><strong>安装体积</strong></td>
+<td>约 25MB</td>
+<td>约 3-5GB（PyTorch + 模型）</td>
+</tr>
+<tr>
+<td><strong>速度</strong></td>
+<td>即时</td>
+<td>约 1-14 秒/页（CPU），约 0.2 秒/页（GPU）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>决策原则</strong>：除非需要 OCR、公式、表单或复杂版面分析，否则使用 pymupdf。</p>
+<p>如果用户需要 marker-pdf 的功能但系统磁盘空间不足约 5GB：</p>
+<blockquote>
+<p>&quot;此文档需要 OCR/高级提取（marker-pdf），这需要约 5GB 用于 PyTorch 和模型。您的系统剩余 [X]GB 可用空间。可选方案：释放磁盘空间、提供 URL 以使用 web_extract，或我可以尝试 pymupdf——它适用于基于文本的 PDF，但不支持扫描文档或公式。&quot;</p>
+</blockquote>
+<hr />
+<h2>pymupdf（轻量级）</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install pymupdf pymupdf4llm
+</div>
+<p><strong>通过辅助脚本</strong>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python scripts/extract_pymupdf.py document.pdf              # 纯文本
+python scripts/extract_pymupdf.py document.pdf --markdown    # Markdown
+python scripts/extract_pymupdf.py document.pdf --tables      # 表格
+python scripts/extract_pymupdf.py document.pdf --images out/ # 提取图片
+python scripts/extract_pymupdf.py document.pdf --metadata    # 标题、作者、页数
+python scripts/extract_pymupdf.py document.pdf --pages 0-4   # 指定页面
+</div>
+<p><strong>内联方式</strong>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 -c "
+import pymupdf
+doc = pymupdf.open('document.pdf')
+for page in doc:
+    print(page.get_text())
+"
+</div>
+<hr />
+<h2>marker-pdf（高质量 OCR）</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 先检查磁盘空间
+python scripts/extract_marker.py --check
+<p>pip install marker-pdf</p>
+</div>
+<p><strong>通过辅助脚本</strong>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python scripts/extract_marker.py document.pdf                # Markdown
+python scripts/extract_marker.py document.pdf --json         # 含元数据的 JSON
+python scripts/extract_marker.py document.pdf --output_dir out/  # 保存图片
+python scripts/extract_marker.py scanned.pdf                 # 扫描 PDF（OCR）
+python scripts/extract_marker.py document.pdf --use_llm      # LLM 增强精度
+</div>
+<p><strong>CLI</strong>（随 marker-pdf 一同安装）：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+marker_single document.pdf --output_dir ./output
+marker /path/to/folder --workers 4    # 批量处理
+</div>
+<hr />
+<h2>Arxiv 论文</h2>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 仅摘要（快速）
+web_extract(urls=["https://arxiv.org/abs/2402.03300"])
+<h1>完整论文</h1>
+<p>web_extract(urls=[&quot;https://arxiv.org/pdf/2402.03300&quot;])</p>
+<h1>搜索</h1>
+<p>web_search(query=&quot;arxiv GRPO reinforcement learning 2026&quot;)</p>
+</div>
+<h2>拆分、合并与搜索</h2>
+<p>pymupdf 原生支持这些操作——使用 <code>execute_code</code> 或内联 Python：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 拆分：将第 1-5 页提取为新 PDF
+import pymupdf
+doc = pymupdf.open("report.pdf")
+new = pymupdf.open()
+for i in range(5):
+    new.insert_pdf(doc, from_page=i, to_page=i)
+new.save("pages_1-5.pdf")
+</div>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 合并多个 PDF
+import pymupdf
+result = pymupdf.open()
+for path in ["a.pdf", "b.pdf", "c.pdf"]:
+    result.insert_pdf(pymupdf.open(path))
+result.save("merged.pdf")
+</div>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 在所有页面中搜索文本
+import pymupdf
+doc = pymupdf.open("report.pdf")
+for i, page in enumerate(doc):
+    results = page.search_for("revenue")
+    if results:
+        print(f"Page {i+1}: {len(results)} match(es)")
+        print(page.get_text("text"))
+</div>
+<p>无需额外依赖——pymupdf 在一个包内涵盖拆分、合并、搜索和文本提取。</p>
+<hr />
+<h2>注意事项</h2>
+<ul>
+<li><code>web_extract</code> 始终是 URL 的首选方案</li>
+<li>pymupdf 是安全的默认选择——即时可用，无需模型，适用于所有环境</li>
+<li>marker-pdf 用于 OCR、扫描文档、公式、复杂版面——仅在需要时安装</li>
+<li>两个辅助脚本均支持 <code>--help</code> 查看完整用法</li>
+<li>marker-pdf 首次使用时会将约 2.5GB 的模型下载至 <code>~/.cache/huggingface/</code></li>
+<li>对于 Word 文档：<code>pip install python-docx</code>（优于 OCR——解析实际文档结构）</li>
+<li>对于 PowerPoint：参见 <code>powerpoint</code> skill（使用 python-pptx）</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

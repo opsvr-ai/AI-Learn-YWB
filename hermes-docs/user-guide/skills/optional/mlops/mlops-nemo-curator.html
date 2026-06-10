@@ -1,0 +1,525 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nemo Curator — 用于 LLM 训练的 GPU 加速数据整理工具 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Nemo Curator — 用于 LLM 训练的 GPU 加速数据整理工具</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Nemo Curator</h1>
+<p>用于 LLM 训练的 GPU 加速数据整理工具。支持文本/图像/视频/音频。具备模糊去重（速度提升 16×）、质量过滤（30+ 启发式规则）、语义去重、PII 脱敏、NSFW 检测等功能。通过 RAPIDS 跨 GPU 扩展。适用于准备高质量训练数据集、清洗网络数据或对大型语料库去重。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/mlops/nemo-curator</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/mlops/nemo-curator</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Orchestra Research</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>依赖项</td>
+<td><code>nemo-curator</code>, <code>cudf</code>, <code>dask</code>, <code>rapids</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Data Processing</code>, <code>NeMo Curator</code>, <code>Data Curation</code>, <code>GPU Acceleration</code>, <code>Deduplication</code>, <code>Quality Filtering</code>, <code>NVIDIA</code>, <code>RAPIDS</code>, <code>PII Redaction</code>, <code>Multimodal</code>, <code>LLM Training Data</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发该 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>NeMo Curator - GPU 加速数据整理</h1>
+<p>NVIDIA 用于为 LLM 准备高质量训练数据的工具包。</p>
+<h2>何时使用 NeMo Curator</h2>
+<p><strong>在以下情况下使用 NeMo Curator：</strong></p>
+<ul>
+<li>从网络抓取数据（Common Crawl）准备 LLM 训练数据</li>
+<li>需要快速去重（比 CPU 快 16×）</li>
+<li>整理多模态数据集（文本、图像、视频、音频）</li>
+<li>过滤低质量或有害内容</li>
+<li>跨 GPU 集群扩展数据处理</li>
+</ul>
+<p><strong>性能</strong>：</p>
+<ul>
+<li><strong>16× 更快</strong>的模糊去重（8TB RedPajama v2）</li>
+<li><strong>降低 40% TCO</strong>（总拥有成本），优于 CPU 方案</li>
+<li><strong>近线性扩展</strong>，跨 GPU 节点</li>
+</ul>
+<p><strong>以下情况请使用替代方案</strong>：</p>
+<ul>
+<li><strong>datatrove</strong>：基于 CPU 的开源数据处理</li>
+<li><strong>dolma</strong>：Allen AI 的数据工具包</li>
+<li><strong>Ray Data</strong>：通用 ML 数据处理（无数据整理专项功能）</li>
+</ul>
+<h2>快速开始</h2>
+<h3>安装</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 文本整理（CUDA 12）
+uv pip install "nemo-curator[text_cuda12]"
+<h1>所有模态</h1>
+<p>uv pip install &quot;nemo-curator[all_cuda12]&quot;</p>
+<h1>仅 CPU（较慢）</h1>
+<p>uv pip install &quot;nemo-curator[cpu]&quot;</p>
+</div>
+<h3>基础文本整理流水线</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from nemo_curator import ScoreFilter, Modify
+from nemo_curator.datasets import DocumentDataset
+import pandas as pd
+<h1>加载数据</h1>
+<p>df = pd.DataFrame({&quot;text&quot;: [&quot;Good document&quot;, &quot;Bad doc&quot;, &quot;Excellent text&quot;]})
+dataset = DocumentDataset(df)</p>
+<h1>质量过滤</h1>
+<p>def quality_score(doc):
+return len(doc[&quot;text&quot;].split()) &amp;gt; 5  # Filter short docs</p>
+<p>filtered = ScoreFilter(quality_score)(dataset)</p>
+<h1>去重</h1>
+<p>from nemo_curator.modules import ExactDuplicates
+deduped = ExactDuplicates()(filtered)</p>
+<h1>保存</h1>
+<p>deduped.to_parquet(&quot;curated_data/&quot;)</p>
+</div>
+<h2>数据整理流水线</h2>
+<h3>阶段 1：质量过滤</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from nemo_curator.filters import (
+    WordCountFilter,
+    RepeatedLinesFilter,
+    UrlRatioFilter,
+    NonAlphaNumericFilter
+)
+<h1>应用 30+ 启发式过滤器</h1>
+<p>from nemo_curator import ScoreFilter</p>
+<h1>词数过滤</h1>
+<p>dataset = dataset.filter(WordCountFilter(min_words=50, max_words=100000))</p>
+<h1>去除重复内容</h1>
+<p>dataset = dataset.filter(RepeatedLinesFilter(max_repeated_line_fraction=0.3))</p>
+<h1>URL 比例过滤</h1>
+<p>dataset = dataset.filter(UrlRatioFilter(max_url_ratio=0.2))</p>
+</div>
+<h3>阶段 2：去重</h3>
+<p><strong>精确去重</strong>：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from nemo_curator.modules import ExactDuplicates
+<h1>删除完全重复项</h1>
+<p>deduped = ExactDuplicates(id_field=&quot;id&quot;, text_field=&quot;text&quot;)(dataset)</p>
+</div>
+<p><strong>模糊去重</strong>（GPU 上速度提升 16×）：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from nemo_curator.modules import FuzzyDuplicates
+<h1>MinHash + LSH 去重</h1>
+<p>fuzzy_dedup = FuzzyDuplicates(
+id_field=&quot;id&quot;,
+text_field=&quot;text&quot;,
+num_hashes=260,      # MinHash parameters
+num_buckets=20,
+hash_method=&quot;md5&quot;
+)</p>
+<p>deduped = fuzzy_dedup(dataset)</p>
+</div>
+<p><strong>语义去重</strong>：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from nemo_curator.modules import SemanticDuplicates
+<h1>基于 embedding（向量嵌入）的去重</h1>
+<p>semantic_dedup = SemanticDuplicates(
+id_field=&quot;id&quot;,
+text_field=&quot;text&quot;,
+embedding_model=&quot;sentence-transformers/all-MiniLM-L6-v2&quot;,
+threshold=0.8  # Cosine similarity threshold
+)</p>
+<p>deduped = semantic_dedup(dataset)</p>
+</div>
+<h3>阶段 3：PII 脱敏</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from nemo_curator.modules import Modify
+from nemo_curator.modifiers import PIIRedactor
+<h1>脱敏个人身份信息（PII）</h1>
+<p>pii_redactor = PIIRedactor(
+supported_entities=[&quot;EMAIL_ADDRESS&quot;, &quot;PHONE_NUMBER&quot;, &quot;PERSON&quot;, &quot;LOCATION&quot;],
+anonymize_action=&quot;replace&quot;  # or &quot;redact&quot;
+)</p>
+<p>redacted = Modify(pii_redactor)(dataset)</p>
+</div>
+<h3>阶段 4：分类器过滤</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from nemo_curator.classifiers import QualityClassifier
+<h1>质量分类</h1>
+<p>quality_clf = QualityClassifier(
+model_path=&quot;nvidia/quality-classifier-deberta&quot;,
+batch_size=256,
+device=&quot;cuda&quot;
+)</p>
+<h1>过滤低质量文档</h1>
+<p>high_quality = dataset.filter(lambda doc: quality_clf(doc[&quot;text&quot;]) &amp;gt; 0.5)</p>
+</div>
+<h2>GPU 加速</h2>
+<h3>GPU 与 CPU 性能对比</h3>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>CPU（16 核）</th>
+<th>GPU（A100）</th>
+<th>加速比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>模糊去重（8TB）</td>
+<td>120 小时</td>
+<td>7.5 小时</td>
+<td>16×</td>
+</tr>
+<tr>
+<td>精确去重（1TB）</td>
+<td>8 小时</td>
+<td>0.5 小时</td>
+<td>16×</td>
+</tr>
+<tr>
+<td>质量过滤</td>
+<td>2 小时</td>
+<td>0.2 小时</td>
+<td>10×</td>
+</tr>
+</tbody>
+</table>
+<h3>多 GPU 扩展</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from nemo_curator import get_client
+import dask_cuda
+<h1>初始化 GPU 集群</h1>
+<p>client = get_client(cluster_type=&quot;gpu&quot;, n_workers=8)</p>
+<h1>使用 8 块 GPU 处理</h1>
+<p>deduped = FuzzyDuplicates(...)(dataset)</p>
+</div>
+<h2>多模态数据整理</h2>
+<h3>图像整理</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from nemo_curator.image import (
+    AestheticFilter,
+    NSFWFilter,
+    CLIPEmbedder
+)
+<h1>美学评分</h1>
+<p>aesthetic_filter = AestheticFilter(threshold=5.0)
+filtered_images = aesthetic_filter(image_dataset)</p>
+<h1>NSFW 检测</h1>
+<p>nsfw_filter = NSFWFilter(threshold=0.9)
+safe_images = nsfw_filter(filtered_images)</p>
+<h1>生成 CLIP embedding</h1>
+<p>clip_embedder = CLIPEmbedder(model=&quot;openai/clip-vit-base-patch32&quot;)
+image_embeddings = clip_embedder(safe_images)</p>
+</div>
+<h3>视频整理</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from nemo_curator.video import (
+    SceneDetector,
+    ClipExtractor,
+    InternVideo2Embedder
+)
+<h1>场景检测</h1>
+<p>scene_detector = SceneDetector(threshold=27.0)
+scenes = scene_detector(video_dataset)</p>
+<h1>提取片段</h1>
+<p>clip_extractor = ClipExtractor(min_duration=2.0, max_duration=10.0)
+clips = clip_extractor(scenes)</p>
+<h1>生成 embedding</h1>
+<p>video_embedder = InternVideo2Embedder()
+video_embeddings = video_embedder(clips)</p>
+</div>
+<h3>音频整理</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from nemo_curator.audio import (
+    ASRInference,
+    WERFilter,
+    DurationFilter
+)
+<h1>ASR 转录</h1>
+<p>asr = ASRInference(model=&quot;nvidia/stt_en_fastconformer_hybrid_large_pc&quot;)
+transcribed = asr(audio_dataset)</p>
+<h1>按 WER（词错误率）过滤</h1>
+<p>wer_filter = WERFilter(max_wer=0.3)
+high_quality_audio = wer_filter(transcribed)</p>
+<h1>时长过滤</h1>
+<p>duration_filter = DurationFilter(min_duration=1.0, max_duration=30.0)
+filtered_audio = duration_filter(high_quality_audio)</p>
+</div>
+<h2>常见模式</h2>
+<h3>网络抓取数据整理（Common Crawl）</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from nemo_curator import ScoreFilter, Modify
+from nemo_curator.filters import *
+from nemo_curator.modules import *
+from nemo_curator.datasets import DocumentDataset
+<h1>加载 Common Crawl 数据</h1>
+<p>dataset = DocumentDataset.read_parquet(&quot;common_crawl/*.parquet&quot;)</p>
+<h1>流水线</h1>
+<p>pipeline = [
+# 1. 质量过滤
+WordCountFilter(min_words=100, max_words=50000),
+RepeatedLinesFilter(max_repeated_line_fraction=0.2),
+SymbolToWordRatioFilter(max_symbol_to_word_ratio=0.3),
+UrlRatioFilter(max_url_ratio=0.3),</p>
+<pre><code># 2. 语言过滤
+LanguageIdentificationFilter(target_languages=[&quot;en&quot;]),
+
+# 3. 去重
+ExactDuplicates(id_field=&quot;id&quot;, text_field=&quot;text&quot;),
+FuzzyDuplicates(id_field=&quot;id&quot;, text_field=&quot;text&quot;, num_hashes=260),
+
+# 4. PII 脱敏
+PIIRedactor(),
+
+# 5. NSFW 过滤
+NSFWClassifier(threshold=0.8)
+</code></pre>
+<p>]</p>
+<h1>执行</h1>
+<p>for stage in pipeline:
+dataset = stage(dataset)</p>
+<h1>保存</h1>
+<p>dataset.to_parquet(&quot;curated_common_crawl/&quot;)</p>
+</div>
+<h3>分布式处理</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from nemo_curator import get_client
+from dask_cuda import LocalCUDACluster
+<h1>多 GPU 集群</h1>
+<p>cluster = LocalCUDACluster(n_workers=8)
+client = get_client(cluster=cluster)</p>
+<h1>处理大型数据集</h1>
+<p>dataset = DocumentDataset.read_parquet(&quot;s3://large_dataset/*.parquet&quot;)
+deduped = FuzzyDuplicates(...)(dataset)</p>
+<h1>清理</h1>
+<p>client.close()
+cluster.close()</p>
+</div>
+<h2>性能基准</h2>
+<h3>模糊去重（8TB RedPajama v2）</h3>
+<ul>
+<li><strong>CPU（256 核）</strong>：120 小时</li>
+<li><strong>GPU（8× A100）</strong>：7.5 小时</li>
+<li><strong>加速比</strong>：16×</li>
+</ul>
+<h3>精确去重（1TB）</h3>
+<ul>
+<li><strong>CPU（64 核）</strong>：8 小时</li>
+<li><strong>GPU（4× A100）</strong>：0.5 小时</li>
+<li><strong>加速比</strong>：16×</li>
+</ul>
+<h3>质量过滤（100GB）</h3>
+<ul>
+<li><strong>CPU（32 核）</strong>：2 小时</li>
+<li><strong>GPU（2× A100）</strong>：0.2 小时</li>
+<li><strong>加速比</strong>：10×</li>
+</ul>
+<h2>成本对比</h2>
+<p><strong>基于 CPU 的数据整理</strong>（AWS c5.18xlarge × 10）：</p>
+<ul>
+<li>费用：$3.60/小时 × 10 = $36/小时</li>
+<li>处理 8TB 耗时：120 小时</li>
+<li><strong>合计</strong>：$4,320</li>
+</ul>
+<p><strong>基于 GPU 的数据整理</strong>（AWS p4d.24xlarge × 2）：</p>
+<ul>
+<li>费用：$32.77/小时 × 2 = $65.54/小时</li>
+<li>处理 8TB 耗时：7.5 小时</li>
+<li><strong>合计</strong>：$491.55</li>
+</ul>
+<p><strong>节省</strong>：降低 89%（节省 $3,828）</p>
+<h2>支持的数据格式</h2>
+<ul>
+<li><strong>输入</strong>：Parquet、JSONL、CSV</li>
+<li><strong>输出</strong>：Parquet（推荐）、JSONL</li>
+<li><strong>WebDataset</strong>：用于多模态的 TAR 归档</li>
+</ul>
+<h2>使用场景</h2>
+<p><strong>生产部署</strong>：</p>
+<ul>
+<li>NVIDIA 使用 NeMo Curator 准备 Nemotron-4 训练数据</li>
+<li>已整理的开源数据集：RedPajama v2、The Pile</li>
+</ul>
+<h2>参考资料</h2>
+<ul>
+<li><strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/nemo-curator/references/filtering.html">过滤指南</a></strong> - 30+ 质量过滤器与启发式规则</li>
+<li><strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/nemo-curator/references/deduplication.html">去重指南</a></strong> - 精确、模糊、语义去重方法</li>
+</ul>
+<h2>资源</h2>
+<ul>
+<li><strong>GitHub</strong>：https://github.com/NVIDIA/NeMo-Curator ⭐ 500+</li>
+<li><strong>文档</strong>：https://docs.nvidia.com/nemo-framework/user-guide/latest/datacuration/</li>
+<li><strong>版本</strong>：0.4.0+</li>
+<li><strong>许可证</strong>：Apache 2.0</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

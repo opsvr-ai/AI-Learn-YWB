@@ -1,0 +1,632 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Qdrant Vector Search — 用于 RAG 和语义搜索的高性能向量相似度搜索引擎 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Qdrant Vector Search — 用于 RAG 和语义搜索的高性能向量相似度搜索引擎</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Qdrant Vector Search</h1>
+<p>用于 RAG 和语义搜索的高性能向量相似度搜索引擎。适用于构建需要快速最近邻搜索、带过滤的混合搜索，或基于 Rust 高性能的可扩展向量存储的生产级 RAG 系统。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 使用 <code>hermes skills install official/mlops/qdrant</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/mlops/qdrant</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Orchestra Research</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>依赖</td>
+<td><code>qdrant-client&gt;=1.12.0</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>RAG</code>, <code>Vector Search</code>, <code>Qdrant</code>, <code>Semantic Search</code>, <code>Embeddings</code>, <code>Similarity Search</code>, <code>HNSW</code>, <code>Production</code>, <code>Distributed</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 skill 激活时 agent 所看到的指令内容。
+</div>
+<h1>Qdrant - 向量相似度搜索引擎</h1>
+<p>用 Rust 编写的高性能向量数据库，适用于生产级 RAG 和语义搜索。</p>
+<h2>何时使用 Qdrant</h2>
+<p><strong>在以下情况下使用 Qdrant：</strong></p>
+<ul>
+<li>构建需要低延迟的生产级 RAG 系统</li>
+<li>需要混合搜索（向量 + 元数据过滤）</li>
+<li>需要通过分片/副本实现水平扩展</li>
+<li>希望本地部署并完全掌控数据</li>
+<li>每条记录需要多向量存储（稠密 + 稀疏）</li>
+<li>构建实时推荐系统</li>
+</ul>
+<p><strong>核心特性：</strong></p>
+<ul>
+<li><strong>Rust 驱动</strong>：内存安全，高性能</li>
+<li><strong>丰富过滤</strong>：在搜索时按任意 payload 字段过滤</li>
+<li><strong>多向量</strong>：每个点支持稠密、稀疏、多稠密向量</li>
+<li><strong>量化</strong>：标量、乘积、二值量化，节省内存</li>
+<li><strong>分布式</strong>：Raft 共识、分片、副本</li>
+<li><strong>REST + gRPC</strong>：两套 API 功能完全对等</li>
+</ul>
+<p><strong>以下情况请使用替代方案：</strong></p>
+<ul>
+<li><strong>Chroma</strong>：更简单的配置，嵌入式使用场景</li>
+<li><strong>FAISS</strong>：追求极致原始速度，研究/批处理场景</li>
+<li><strong>Pinecone</strong>：完全托管，零运维偏好</li>
+<li><strong>Weaviate</strong>：偏好 GraphQL，内置向量化器</li>
+</ul>
+<h2>快速开始</h2>
+<h3>安装</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Python 客户端
+pip install qdrant-client
+<h1>Docker（推荐用于开发）</h1>
+<p>docker run -p 6333:6333 -p 6334:6334 qdrant/qdrant</p>
+<h1>Docker 持久化存储</h1>
+<p>docker run -p 6333:6333 -p 6334:6334 \
+-v $(pwd)/qdrant_storage:/qdrant/storage \
+qdrant/qdrant</p>
+</div>
+<h3>基本用法</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from qdrant_client import QdrantClient
+from qdrant_client.models import Distance, VectorParams, PointStruct
+<h1>连接到 Qdrant</h1>
+<p>client = QdrantClient(host=&quot;localhost&quot;, port=6333)</p>
+<h1>创建集合</h1>
+<p>client.create_collection(
+collection_name=&quot;documents&quot;,
+vectors_config=VectorParams(size=384, distance=Distance.COSINE)
+)</p>
+<h1>插入带 payload 的向量</h1>
+<p>client.upsert(
+collection_name=&quot;documents&quot;,
+points=[
+PointStruct(
+id=1,
+vector=[0.1, 0.2, ...],  # 384 维向量
+payload={&quot;title&quot;: &quot;Doc 1&quot;, &quot;category&quot;: &quot;tech&quot;}
+),
+PointStruct(
+id=2,
+vector=[0.3, 0.4, ...],
+payload={&quot;title&quot;: &quot;Doc 2&quot;, &quot;category&quot;: &quot;science&quot;}
+)
+]
+)</p>
+<h1>带过滤的搜索</h1>
+<p>results = client.search(
+collection_name=&quot;documents&quot;,
+query_vector=[0.15, 0.25, ...],
+query_filter={
+&quot;must&quot;: [{&quot;key&quot;: &quot;category&quot;, &quot;match&quot;: {&quot;value&quot;: &quot;tech&quot;}}]
+},
+limit=10
+)</p>
+<p>for point in results:
+print(f&quot;ID: {point.id}, Score: {point.score}, Payload: {point.payload}&quot;)</p>
+</div>
+<h2>核心概念</h2>
+<h3>Points（点）— 基本数据单元</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from qdrant_client.models import PointStruct
+<h1>Point = ID + 向量 + Payload</h1>
+<p>point = PointStruct(
+id=123,                              # 整数或 UUID 字符串
+vector=[0.1, 0.2, 0.3, ...],        # 稠密向量
+payload={                            # 任意 JSON 元数据
+&quot;title&quot;: &quot;Document title&quot;,
+&quot;category&quot;: &quot;tech&quot;,
+&quot;timestamp&quot;: 1699900000,
+&quot;tags&quot;: [&quot;python&quot;, &quot;ml&quot;]
+}
+)</p>
+<h1>批量 upsert（推荐）</h1>
+<p>client.upsert(
+collection_name=&quot;documents&quot;,
+points=[point1, point2, point3],
+wait=True  # 等待索引完成
+)</p>
+</div>
+<h3>Collections（集合）— 向量容器</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from qdrant_client.models import VectorParams, Distance, HnswConfigDiff
+<h1>使用 HNSW 配置创建集合</h1>
+<p>client.create_collection(
+collection_name=&quot;documents&quot;,
+vectors_config=VectorParams(
+size=384,                        # 向量维度
+distance=Distance.COSINE         # COSINE、EUCLID、DOT、MANHATTAN
+),
+hnsw_config=HnswConfigDiff(
+m=16,                            # 每个节点的连接数（默认 16）
+ef_construct=100,                # 构建时精度（默认 100）
+full_scan_threshold=10000        # 低于此值切换为暴力搜索
+),
+on_disk_payload=True                 # 将 payload 存储在磁盘上
+)</p>
+<h1>集合信息</h1>
+<p>info = client.get_collection(&quot;documents&quot;)
+print(f&quot;Points: {info.points_count}, Vectors: {info.vectors_count}&quot;)</p>
+</div>
+<h3>距离度量</h3>
+<table>
+<thead>
+<tr>
+<th>度量</th>
+<th>使用场景</th>
+<th>范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>COSINE</code></td>
+<td>文本 embedding、归一化向量</td>
+<td>0 到 2</td>
+</tr>
+<tr>
+<td><code>EUCLID</code></td>
+<td>空间数据、图像特征</td>
+<td>0 到 ∞</td>
+</tr>
+<tr>
+<td><code>DOT</code></td>
+<td>推荐系统、非归一化向量</td>
+<td>-∞ 到 ∞</td>
+</tr>
+<tr>
+<td><code>MANHATTAN</code></td>
+<td>稀疏特征、离散数据</td>
+<td>0 到 ∞</td>
+</tr>
+</tbody>
+</table>
+<h2>搜索操作</h2>
+<h3>基本搜索</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 简单最近邻搜索
+results = client.search(
+    collection_name="documents",
+    query_vector=[0.1, 0.2, ...],
+    limit=10,
+    with_payload=True,
+    with_vectors=False  # 不返回向量（更快）
+)
+</div>
+<h3>带过滤的搜索</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from qdrant_client.models import Filter, FieldCondition, MatchValue, Range
+<h1>复杂过滤</h1>
+<p>results = client.search(
+collection_name=&quot;documents&quot;,
+query_vector=query_embedding,
+query_filter=Filter(
+must=[
+FieldCondition(key=&quot;category&quot;, match=MatchValue(value=&quot;tech&quot;)),
+FieldCondition(key=&quot;timestamp&quot;, range=Range(gte=1699000000))
+],
+must_not=[
+FieldCondition(key=&quot;status&quot;, match=MatchValue(value=&quot;archived&quot;))
+]
+),
+limit=10
+)</p>
+<h1>简写过滤语法</h1>
+<p>results = client.search(
+collection_name=&quot;documents&quot;,
+query_vector=query_embedding,
+query_filter={
+&quot;must&quot;: [
+{&quot;key&quot;: &quot;category&quot;, &quot;match&quot;: {&quot;value&quot;: &quot;tech&quot;}},
+{&quot;key&quot;: &quot;price&quot;, &quot;range&quot;: {&quot;gte&quot;: 10, &quot;lte&quot;: 100}}
+]
+},
+limit=10
+)</p>
+</div>
+<h3>批量搜索</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from qdrant_client.models import SearchRequest
+<h1>单次请求中执行多个查询</h1>
+<p>results = client.search_batch(
+collection_name=&quot;documents&quot;,
+requests=[
+SearchRequest(vector=[0.1, ...], limit=5),
+SearchRequest(vector=[0.2, ...], limit=5, filter={&quot;must&quot;: [...]}),
+SearchRequest(vector=[0.3, ...], limit=10)
+]
+)</p>
+</div>
+<h2>RAG 集成</h2>
+<h3>与 sentence-transformers 集成</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from sentence_transformers import SentenceTransformer
+from qdrant_client import QdrantClient
+from qdrant_client.models import VectorParams, Distance, PointStruct
+<h1>初始化</h1>
+<p>encoder = SentenceTransformer(&quot;all-MiniLM-L6-v2&quot;)
+client = QdrantClient(host=&quot;localhost&quot;, port=6333)</p>
+<h1>创建集合</h1>
+<p>client.create_collection(
+collection_name=&quot;knowledge_base&quot;,
+vectors_config=VectorParams(size=384, distance=Distance.COSINE)
+)</p>
+<h1>索引文档</h1>
+<p>documents = [
+{&quot;id&quot;: 1, &quot;text&quot;: &quot;Python is a programming language&quot;, &quot;source&quot;: &quot;wiki&quot;},
+{&quot;id&quot;: 2, &quot;text&quot;: &quot;Machine learning uses algorithms&quot;, &quot;source&quot;: &quot;textbook&quot;},
+]</p>
+<p>points = [
+PointStruct(
+id=doc[&quot;id&quot;],
+vector=encoder.encode(doc[&quot;text&quot;]).tolist(),
+payload={&quot;text&quot;: doc[&quot;text&quot;], &quot;source&quot;: doc[&quot;source&quot;]}
+)
+for doc in documents
+]
+client.upsert(collection_name=&quot;knowledge_base&quot;, points=points)</p>
+<h1>RAG 检索</h1>
+<p>def retrieve(query: str, top_k: int = 5) -&amp;gt; list[dict]:
+query_vector = encoder.encode(query).tolist()
+results = client.search(
+collection_name=&quot;knowledge_base&quot;,
+query_vector=query_vector,
+limit=top_k
+)
+return [{&quot;text&quot;: r.payload[&quot;text&quot;], &quot;score&quot;: r.score} for r in results]</p>
+<h1>在 RAG 流水线中使用</h1>
+<p>context = retrieve(&quot;What is Python?&quot;)
+prompt = f&quot;Context: {context}\n\nQuestion: What is Python?&quot;</p>
+</div>
+<h3>与 LangChain 集成</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from langchain_community.vectorstores import Qdrant
+from langchain_community.embeddings import HuggingFaceEmbeddings
+<p>embeddings = HuggingFaceEmbeddings(model_name=&quot;all-MiniLM-L6-v2&quot;)
+vectorstore = Qdrant.from_documents(documents, embeddings, url=&quot;http://localhost:6333&quot;, collection_name=&quot;docs&quot;)
+retriever = vectorstore.as_retriever(search_kwargs={&quot;k&quot;: 5})</p>
+</div>
+<h3>与 LlamaIndex 集成</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from llama_index.vector_stores.qdrant import QdrantVectorStore
+from llama_index.core import VectorStoreIndex, StorageContext
+<p>vector_store = QdrantVectorStore(client=client, collection_name=&quot;llama_docs&quot;)
+storage_context = StorageContext.from_defaults(vector_store=vector_store)
+index = VectorStoreIndex.from_documents(documents, storage_context=storage_context)
+query_engine = index.as_query_engine()</p>
+</div>
+<h2>多向量支持</h2>
+<h3>命名向量（不同 embedding 模型）</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from qdrant_client.models import VectorParams, Distance
+<h1>包含多种向量类型的集合</h1>
+<p>client.create_collection(
+collection_name=&quot;hybrid_search&quot;,
+vectors_config={
+&quot;dense&quot;: VectorParams(size=384, distance=Distance.COSINE),
+&quot;sparse&quot;: VectorParams(size=30000, distance=Distance.DOT)
+}
+)</p>
+<h1>插入命名向量</h1>
+<p>client.upsert(
+collection_name=&quot;hybrid_search&quot;,
+points=[
+PointStruct(
+id=1,
+vector={
+&quot;dense&quot;: dense_embedding,
+&quot;sparse&quot;: sparse_embedding
+},
+payload={&quot;text&quot;: &quot;document text&quot;}
+)
+]
+)</p>
+<h1>搜索指定向量</h1>
+<p>results = client.search(
+collection_name=&quot;hybrid_search&quot;,
+query_vector=(&quot;dense&quot;, query_dense),  # 指定使用哪个向量
+limit=10
+)</p>
+</div>
+<h3>稀疏向量（BM25、SPLADE）</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from qdrant_client.models import SparseVectorParams, SparseIndexParams, SparseVector
+<h1>包含稀疏向量的集合</h1>
+<p>client.create_collection(
+collection_name=&quot;sparse_search&quot;,
+vectors_config={},
+sparse_vectors_config={&quot;text&quot;: SparseVectorParams(index=SparseIndexParams(on_disk=False))}
+)</p>
+<h1>插入稀疏向量</h1>
+<p>client.upsert(
+collection_name=&quot;sparse_search&quot;,
+points=[PointStruct(id=1, vector={&quot;text&quot;: SparseVector(indices=[1, 5, 100], values=[0.5, 0.8, 0.2])}, payload={&quot;text&quot;: &quot;document&quot;})]
+)</p>
+</div>
+<h2>量化（内存优化）</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from qdrant_client.models import ScalarQuantization, ScalarQuantizationConfig, ScalarType
+<h1>标量量化（内存减少 4 倍）</h1>
+<p>client.create_collection(
+collection_name=&quot;quantized&quot;,
+vectors_config=VectorParams(size=384, distance=Distance.COSINE),
+quantization_config=ScalarQuantization(
+scalar=ScalarQuantizationConfig(
+type=ScalarType.INT8,
+quantile=0.99,        # 裁剪异常值
+always_ram=True      # 将量化数据保留在 RAM 中
+)
+)
+)</p>
+<h1>带重新评分的搜索</h1>
+<p>results = client.search(
+collection_name=&quot;quantized&quot;,
+query_vector=query,
+search_params={&quot;quantization&quot;: {&quot;rescore&quot;: True}},  # 对 top 结果重新评分
+limit=10
+)</p>
+</div>
+<h2>Payload 索引</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from qdrant_client.models import PayloadSchemaType
+<h1>创建 payload 索引以加速过滤</h1>
+<p>client.create_payload_index(
+collection_name=&quot;documents&quot;,
+field_name=&quot;category&quot;,
+field_schema=PayloadSchemaType.KEYWORD
+)</p>
+<p>client.create_payload_index(
+collection_name=&quot;documents&quot;,
+field_name=&quot;timestamp&quot;,
+field_schema=PayloadSchemaType.INTEGER
+)</p>
+<h1>索引类型：KEYWORD、INTEGER、FLOAT、GEO、TEXT（全文）、BOOL</h1>
+</div>
+<h2>生产部署</h2>
+<h3>Qdrant Cloud</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from qdrant_client import QdrantClient
+<h1>连接到 Qdrant Cloud</h1>
+<p>client = QdrantClient(
+url=&quot;https://your-cluster.cloud.qdrant.io&quot;,
+api_key=&quot;your-api-key&quot;
+)</p>
+</div>
+<h3>性能调优</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 优化搜索速度（更高召回率）
+client.update_collection(
+    collection_name="documents",
+    hnsw_config=HnswConfigDiff(ef_construct=200, m=32)
+)
+<h1>优化索引速度（批量加载）</h1>
+<p>client.update_collection(
+collection_name=&quot;documents&quot;,
+optimizer_config={&quot;indexing_threshold&quot;: 20000}
+)</p>
+</div>
+<h2>最佳实践</h2>
+<ol>
+<li><strong>批量操作</strong> — 使用批量 upsert/search 提升效率</li>
+<li><strong>Payload 索引</strong> — 对过滤中使用的字段建立索引</li>
+<li><strong>量化</strong> — 对大型集合（&gt;100 万向量）启用量化</li>
+<li><strong>分片</strong> — 对超过 1000 万向量的集合使用分片</li>
+<li><strong>磁盘存储</strong> — 对大型 payload 启用 <code>on_disk_payload</code></li>
+<li><strong>连接池</strong> — 复用客户端实例</li>
+</ol>
+<h2>常见问题</h2>
+<p><strong>带过滤的搜索速度慢：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 为过滤字段创建 payload 索引
+client.create_payload_index(
+    collection_name="docs",
+    field_name="category",
+    field_schema=PayloadSchemaType.KEYWORD
+)
+</div>
+<p><strong>内存不足：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 启用量化和磁盘存储
+client.create_collection(
+    collection_name="large_collection",
+    vectors_config=VectorParams(size=384, distance=Distance.COSINE),
+    quantization_config=ScalarQuantization(...),
+    on_disk_payload=True
+)
+</div>
+<p><strong>连接问题：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 使用超时和重试
+client = QdrantClient(
+    host="localhost",
+    port=6333,
+    timeout=30,
+    prefer_grpc=True  # gRPC 性能更佳
+)
+</div>
+<h2>参考资料</h2>
+<ul>
+<li><strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/qdrant/references/advanced-usage.html">高级用法</a></strong> — 分布式模式、混合搜索、推荐系统</li>
+<li><strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/qdrant/references/troubleshooting.html">故障排查</a></strong> — 常见问题、调试、性能调优</li>
+</ul>
+<h2>资源</h2>
+<ul>
+<li><strong>GitHub</strong>：https://github.com/qdrant/qdrant（22k+ stars）</li>
+<li><strong>文档</strong>：https://qdrant.tech/documentation/</li>
+<li><strong>Python 客户端</strong>：https://github.com/qdrant/qdrant-client</li>
+<li><strong>Cloud</strong>：https://cloud.qdrant.io</li>
+<li><strong>版本</strong>：1.12.0+</li>
+<li><strong>许可证</strong>：Apache 2.0</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,321 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Android / Termux - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html" class="active">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / Getting Started / Android / Termux</div><p>这是在 Android 手机上通过 <a href="https://termux.dev/">Termux</a> 直接运行 Hermes Agent 的已验证路径。</p>
+<p>它为你提供手机上可用的本地 CLI，以及目前已知可在 Android 上干净安装的核心扩展功能。</p>
+<h2>已验证路径支持哪些功能？</h2>
+<p>已验证的 Termux 安装包含：</p>
+<ul>
+<li>Hermes CLI</li>
+<li>cron 支持</li>
+<li>PTY（伪终端）/后台终端支持</li>
+<li>Telegram gateway 支持（手动 / 尽力而为的后台运行）</li>
+<li>MCP 支持</li>
+<li>Honcho 记忆支持</li>
+<li>ACP 支持</li>
+</ul>
+<p>具体对应以下命令：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python -m pip install -e '.[termux]' -c constraints-termux.txt
+</div>
+<h2>哪些功能尚未纳入已验证路径？</h2>
+<p>部分功能仍依赖桌面/服务器风格的依赖项，这些依赖项尚未为 Android 发布，或尚未在手机上验证：</p>
+<ul>
+<li><code>.[all]</code> 目前不支持 Android</li>
+<li><code>voice</code> 扩展被 <code>faster-whisper -&gt; ctranslate2</code> 阻塞，<code>ctranslate2</code> 未发布 Android wheel 包</li>
+<li>自动浏览器 / Playwright 引导在 Termux 安装程序中被跳过</li>
+<li>基于 Docker 的终端隔离在 Termux 内不可用</li>
+<li>Android 可能仍会挂起 Termux 后台任务，因此 gateway 持久化是尽力而为，而非正常的托管服务</li>
+</ul>
+<p>这并不妨碍 Hermes 作为手机原生 CLI agent 正常工作——只是意味着推荐的移动端安装有意比桌面/服务器安装更精简。</p>
+<hr />
+<h2>方式一：一行安装命令</h2>
+<p>Hermes 现已内置 Termux 感知的安装路径：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
+</div>
+<p>在 Termux 上，安装程序会自动：</p>
+<ul>
+<li>使用 <code>pkg</code> 安装系统包</li>
+<li>使用 <code>python -m venv</code> 创建虚拟环境</li>
+<li>优先尝试较大的 <code>.[termux-all]</code> 扩展，失败后回退到较小的 <code>.[termux]</code> 扩展（再次失败则进行基础安装）——curl 安装程序自动按此顺序执行</li>
+<li>将 <code>hermes</code> 链接到 <code>$PREFIX/bin</code>，使其保留在 Termux PATH 中</li>
+<li>跳过未经验证的浏览器 / WhatsApp 引导</li>
+</ul>
+<p>如果你需要显式命令或需要调试失败的安装，请使用下方的手动安装路径。</p>
+<hr />
+<h2>方式二：手动安装（完全显式）</h2>
+<h3>1. 更新 Termux 并安装系统包</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pkg update
+pkg install -y git python clang rust make pkg-config libffi openssl nodejs ripgrep ffmpeg
+</div>
+<p>各包用途说明：</p>
+<ul>
+<li><code>python</code> — 运行时 + 虚拟环境支持</li>
+<li><code>git</code> — 克隆/更新仓库</li>
+<li><code>clang</code>、<code>rust</code>、<code>make</code>、<code>pkg-config</code>、<code>libffi</code>、<code>openssl</code> — 在 Android 上构建部分 Python 依赖所需</li>
+<li><code>nodejs</code> — 可选的 Node 运行时，用于已验证核心路径之外的实验</li>
+<li><code>ripgrep</code> — 快速文件搜索</li>
+<li><code>ffmpeg</code> — 媒体 / TTS 转换</li>
+</ul>
+<h3>2. 克隆 Hermes</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+git clone https://github.com/NousResearch/hermes-agent.git
+cd hermes-agent
+</div>
+<h3>3. 创建虚拟环境</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python -m venv venv
+source venv/bin/activate
+export ANDROID_API_LEVEL="$(getprop ro.build.version.sdk)"
+python -m pip install --upgrade pip setuptools wheel
+</div>
+<p><code>ANDROID_API_LEVEL</code> 对于基于 Rust / maturin 的包（如 <code>jiter</code>）非常重要。</p>
+<h3>4. 安装已验证的 Termux 包</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python -m pip install -e '.[termux]' -c constraints-termux.txt
+</div>
+<p>如果你只需要最小化的核心 agent，以下命令同样有效：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python -m pip install -e '.' -c constraints-termux.txt
+</div>
+<h3>5. 将 <code>hermes</code> 添加到 Termux PATH</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+ln -sf "$PWD/venv/bin/hermes" "$PREFIX/bin/hermes"
+</div>
+<p><code>$PREFIX/bin</code> 在 Termux 中已默认在 PATH 中，因此这样做可以让 <code>hermes</code> 命令在新 shell 中持续可用，无需每次重新激活虚拟环境。</p>
+<h3>6. 验证安装</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes version
+hermes doctor
+</div>
+<h3>7. 启动 Hermes</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes
+</div>
+<hr />
+<h2>推荐的后续配置</h2>
+<h3>配置模型</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes model
+</div>
+<p>或直接在 <code>~/.hermes/.env</code> 中设置密钥。</p>
+<h3>稍后重新运行完整的交互式设置向导</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes setup
+</div>
+<h3>手动安装可选的 Node 依赖</h3>
+<p>已验证的 Termux 路径有意跳过 Node/浏览器引导。如果你之后想尝试浏览器工具：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pkg install nodejs-lts
+npm install
+</div>
+<p>浏览器工具会自动将 Termux 目录（<code>/data/data/com.termux/files/usr/bin</code>）纳入 PATH 搜索，因此无需额外配置 PATH 即可发现 <code>agent-browser</code> 和 <code>npx</code>。</p>
+<p>在另有文档说明之前，请将 Android 上的浏览器 / WhatsApp 工具视为实验性功能。</p>
+<hr />
+<h2>故障排查</h2>
+<h3>安装 <code>.[all]</code> 时出现 <code>No solution found</code></h3>
+<p>改用已验证的 Termux 包：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python -m pip install -e '.[termux]' -c constraints-termux.txt
+</div>
+<p>当前阻塞原因是 <code>voice</code> 扩展：</p>
+<ul>
+<li><code>voice</code> 依赖 <code>faster-whisper</code></li>
+<li><code>faster-whisper</code> 依赖 <code>ctranslate2</code></li>
+<li><code>ctranslate2</code> 未发布 Android wheel 包</li>
+</ul>
+<h3><code>uv pip install</code> 在 Android 上失败</h3>
+<p>改用标准库 venv + <code>pip</code> 的 Termux 路径：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python -m venv venv
+source venv/bin/activate
+export ANDROID_API_LEVEL="$(getprop ro.build.version.sdk)"
+python -m pip install --upgrade pip setuptools wheel
+python -m pip install -e '.[termux]' -c constraints-termux.txt
+</div>
+<h3><code>jiter</code> / <code>maturin</code> 报错提示缺少 <code>ANDROID_API_LEVEL</code></h3>
+<p>在安装前显式设置 API 级别：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+export ANDROID_API_LEVEL="$(getprop ro.build.version.sdk)"
+python -m pip install -e '.[termux]' -c constraints-termux.txt
+</div>
+<h3><code>hermes doctor</code> 提示缺少 ripgrep 或 Node</h3>
+<p>使用 Termux 包安装：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pkg install ripgrep nodejs
+</div>
+<h3>安装 Python 包时构建失败</h3>
+<p>确保已安装构建工具链：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pkg install clang rust make pkg-config libffi openssl
+</div>
+<p>然后重试：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python -m pip install -e '.[termux]' -c constraints-termux.txt
+</div>
+<hr />
+<h2>手机上的已知限制</h2>
+<ul>
+<li>Docker 后端不可用</li>
+<li>通过 <code>faster-whisper</code> 进行的本地语音转录在已验证路径中不可用</li>
+<li>安装程序有意跳过浏览器自动化配置</li>
+<li>部分可选扩展可能可用，但目前仅 <code>.[termux]</code> 和 <code>.[termux-all]</code> 被记录为已验证的 Android 安装包</li>
+</ul>
+<p>如果你遇到新的 Android 特定问题，请在 GitHub 上提交 issue，并附上：</p>
+<ul>
+<li>你的 Android 版本</li>
+<li><code>termux-info</code></li>
+<li><code>python --version</code></li>
+<li><code>hermes doctor</code></li>
+<li>确切的安装命令及完整错误输出</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,648 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dspy — DSPy: declarative LM programs, auto-optimize prompts, RAG - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 命令</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & Skills</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">docs</a> / <a href="/hermes-docs/user-guide/">user-guide</a> / <a href="/hermes-docs/user-guide/skills/">skills</a> / <a href="/hermes-docs/user-guide/skills/bundled/">bundled</a> / <a href="/hermes-docs/user-guide/skills/bundled/mlops/">mlops</a> / Dspy — DSPy: declarative LM programs, auto-optimize prompts, RAG</div><p>{/<em> 本页面由 website/scripts/generate-skill-docs.py 从技能的 SKILL.md 自动生成。请编辑源 SKILL.md，而非本页面。 </em>/}</p>
+<h1>Dspy</h1>
+<p>DSPy: declarative LM programs, auto-optimize prompts, RAG.</p>
+<h2>技能元数据</h2>
+<table><thead><tr><th>---</th><th>---</th></tr></thead><tbody>
+<tr><td>来源</td><td>内置（默认安装）</td></tr>
+<tr><td>路径</td><td><code>skills/mlops/research/dspy</code></td></tr>
+<tr><td>版本</td><td><code>1.0.0</code></td></tr>
+<tr><td>作者</td><td>Orchestra Research</td></tr>
+<tr><td>许可证</td><td>MIT</td></tr>
+<tr><td>Dependencies</td><td><code>dspy</code>, <code>openai</code>, <code>anthropic</code></td></tr>
+<tr><td>平台</td><td>linux, macos, windows</td></tr>
+<tr><td>标签</td><td><code>Prompt Engineering</code>, <code>DSPy</code>, <code>Declarative Programming</code>, <code>RAG</code>, <code>Agents</code>, <code>Prompt Optimization</code>, <code>LM Programming</code>, <code>Stanford NLP</code>, <code>Automatic Optimization</code>, <code>Modular AI</code></td></tr>
+</tbody></table>
+<h2>参考：完整 SKILL.md</h2>
+<p>:::info</p>
+<p>以下是 Hermes 在此技能被触发时加载的完整技能定义。这是技能激活时代理所看到的指令。</p>
+<p>:::</p>
+<h1>DSPy: Declarative Language Model Programming</h1>
+<h2>何时使用 This Skill</h2>
+<p>Use DSPy when you need to:</p>
+<p>- <strong>Build complex AI systems</strong> with multiple components and workflows</p>
+<p>- <strong>Program LMs declaratively</strong> instead of manual prompt engineering</p>
+<p>- <strong>Optimize prompts automatically</strong> using data-driven methods</p>
+<p>- <strong>Create modular AI pipelines</strong> that are maintainable and portable</p>
+<p>- <strong>Improve model outputs systematically</strong> with optimizers</p>
+<p>- <strong>Build RAG systems, agents, or classifiers</strong> with better reliability</p>
+<p><strong>GitHub Stars</strong>: 22,000+ | <strong>Created By</strong>: Stanford NLP</p>
+<h2>安装</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Stable release
+pip install dspy
+
+# Latest development version
+pip install git+https://github.com/stanfordnlp/dspy.git
+
+# With specific LM providers
+pip install dspy[openai]        # OpenAI
+pip install dspy[anthropic]     # Anthropic Claude
+pip install dspy[all]           # All providers
+</div>
+<h2>Quick Start</h2>
+<h3>Basic Example: Question Answering</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import dspy
+
+# Configure your language model
+lm = dspy.Claude(model="claude-sonnet-4-5-20250929")
+dspy.settings.configure(lm=lm)
+
+# Define a signature (input → output)
+class QA(dspy.Signature):
+    """Answer questions with short factual answers."""
+    question = dspy.InputField()
+    answer = dspy.OutputField(desc="often between 1 and 5 words")
+
+# Create a module
+qa = dspy.Predict(QA)
+
+# Use it
+response = qa(question="What is the capital of France?")
+print(response.answer)  # "Paris"
+</div>
+<h3>Chain of Thought Reasoning</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import dspy
+
+lm = dspy.Claude(model="claude-sonnet-4-5-20250929")
+dspy.settings.configure(lm=lm)
+
+# Use ChainOfThought for better reasoning
+class MathProblem(dspy.Signature):
+    """Solve math word problems."""
+    problem = dspy.InputField()
+    answer = dspy.OutputField(desc="numerical answer")
+
+# ChainOfThought generates reasoning steps automatically
+cot = dspy.ChainOfThought(MathProblem)
+
+response = cot(problem="If John has 5 apples and gives 2 to Mary, how many does he have?")
+print(response.rationale)  # Shows reasoning steps
+print(response.answer)     # "3"
+</div>
+<h2>Core Concepts</h2>
+<h3>1. Signatures</h3>
+<p>Signatures define the structure of your AI task (inputs → outputs):</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Inline signature (simple)
+qa = dspy.Predict("question -> answer")
+
+# Class signature (detailed)
+class Summarize(dspy.Signature):
+    """Summarize text into key points."""
+    text = dspy.InputField()
+    summary = dspy.OutputField(desc="bullet points, 3-5 items")
+
+summarizer = dspy.ChainOfThought(Summarize)
+</div>
+<p><strong>When to use each:</strong></p>
+<p>- <strong>Inline</strong>: Quick prototyping, simple tasks</p>
+<p>- <strong>Class</strong>: Complex tasks, type hints, better documentation</p>
+<h3>2. Modules</h3>
+<p>Modules are reusable components that transform inputs to outputs:</p>
+<h4>dspy.Predict</h4>
+<p>Basic prediction module:</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+predictor = dspy.Predict("context, question -> answer")
+result = predictor(context="Paris is the capital of France",
+                   question="What is the capital?")
+</div>
+<h4>dspy.ChainOfThought</h4>
+<p>Generates reasoning steps before answering:</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cot = dspy.ChainOfThought("question -> answer")
+result = cot(question="Why is the sky blue?")
+print(result.rationale)  # Reasoning steps
+print(result.answer)     # Final answer
+</div>
+<h4>dspy.ReAct</h4>
+<p>Agent-like reasoning with tools:</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from dspy.predict import ReAct
+
+class SearchQA(dspy.Signature):
+    """Answer questions using search."""
+    question = dspy.InputField()
+    answer = dspy.OutputField()
+
+def search_tool(query: str) -> str:
+    """Search Wikipedia."""
+    # Your search implementation
+    return results
+
+react = ReAct(SearchQA, tools=[search_tool])
+result = react(question="When was Python created?")
+</div>
+<h4>dspy.ProgramOfThought</h4>
+<p>Generates and executes code for reasoning:</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pot = dspy.ProgramOfThought("question -> answer")
+result = pot(question="What is 15% of 240?")
+# Generates: answer = 240 * 0.15
+</div>
+<h3>3. Optimizers</h3>
+<p>Optimizers improve your modules automatically using training data:</p>
+<h4>BootstrapFewShot</h4>
+<p>Learns from examples:</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from dspy.teleprompt import BootstrapFewShot
+
+# Training data
+trainset = [
+    dspy.Example(question="What is 2+2?", answer="4").with_inputs("question"),
+    dspy.Example(question="What is 3+5?", answer="8").with_inputs("question"),
+]
+
+# Define metric
+def validate_answer(example, pred, trace=None):
+    return example.answer == pred.answer
+
+# Optimize
+optimizer = BootstrapFewShot(metric=validate_answer, max_bootstrapped_demos=3)
+optimized_qa = optimizer.compile(qa, trainset=trainset)
+
+# Now optimized_qa performs better!
+</div>
+<h4>MIPRO (Most Important Prompt Optimization)</h4>
+<p>Iteratively improves prompts:</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from dspy.teleprompt import MIPRO
+
+optimizer = MIPRO(
+    metric=validate_answer,
+    num_candidates=10,
+    init_temperature=1.0
+)
+
+optimized_cot = optimizer.compile(
+    cot,
+    trainset=trainset,
+    num_trials=100
+)
+</div>
+<h4>BootstrapFinetune</h4>
+<p>Creates datasets for model fine-tuning:</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from dspy.teleprompt import BootstrapFinetune
+
+optimizer = BootstrapFinetune(metric=validate_answer)
+optimized_module = optimizer.compile(qa, trainset=trainset)
+
+# Exports training data for fine-tuning
+</div>
+<h3>4. Building Complex Systems</h3>
+<h4>Multi-Stage Pipeline</h4>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import dspy
+
+class MultiHopQA(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.retrieve = dspy.Retrieve(k=3)
+        self.generate_query = dspy.ChainOfThought("question -> search_query")
+        self.generate_answer = dspy.ChainOfThought("context, question -> answer")
+
+    def forward(self, question):
+        # Stage 1: Generate search query
+        search_query = self.generate_query(question=question).search_query
+
+        # Stage 2: Retrieve context
+        passages = self.retrieve(search_query).passages
+        context = "\n".join(passages)
+
+        # Stage 3: Generate answer
+        answer = self.generate_answer(context=context, question=question).answer
+        return dspy.Prediction(answer=answer, context=context)
+
+# Use the pipeline
+qa_system = MultiHopQA()
+result = qa_system(question="Who wrote the book that inspired the movie Blade Runner?")
+</div>
+<h4>RAG System with Optimization</h4>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import dspy
+from dspy.retrieve.chromadb_rm import ChromadbRM
+
+# Configure retriever
+retriever = ChromadbRM(
+    collection_name="documents",
+    persist_directory="./chroma_db"
+)
+
+class RAG(dspy.Module):
+    def __init__(self, num_passages=3):
+        super().__init__()
+        self.retrieve = dspy.Retrieve(k=num_passages)
+        self.generate = dspy.ChainOfThought("context, question -> answer")
+
+    def forward(self, question):
+        context = self.retrieve(question).passages
+        return self.generate(context=context, question=question)
+
+# Create and optimize
+rag = RAG()
+
+# Optimize with training data
+from dspy.teleprompt import BootstrapFewShot
+
+optimizer = BootstrapFewShot(metric=validate_answer)
+optimized_rag = optimizer.compile(rag, trainset=trainset)
+</div>
+<h2>LM Provider 配置</h2>
+<h3>Anthropic Claude</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import dspy
+
+lm = dspy.Claude(
+    model="claude-sonnet-4-5-20250929",
+    api_key="your-api-key",  # Or set ANTHROPIC_API_KEY env var
+    max_tokens=1000,
+    temperature=0.7
+)
+dspy.settings.configure(lm=lm)
+</div>
+<h3>OpenAI</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+lm = dspy.OpenAI(
+    model="gpt-4",
+    api_key="your-api-key",
+    max_tokens=1000
+)
+dspy.settings.configure(lm=lm)
+</div>
+<h3>Local Models (Ollama)</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+lm = dspy.OllamaLocal(
+    model="llama3.1",
+    base_url="http://localhost:11434"
+)
+dspy.settings.configure(lm=lm)
+</div>
+<h3>Multiple Models</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Different models for different tasks
+cheap_lm = dspy.OpenAI(model="gpt-3.5-turbo")
+strong_lm = dspy.Claude(model="claude-sonnet-4-5-20250929")
+
+# Use cheap model for retrieval, strong model for reasoning
+with dspy.settings.context(lm=cheap_lm):
+    context = retriever(question)
+
+with dspy.settings.context(lm=strong_lm):
+    answer = generator(context=context, question=question)
+</div>
+<h2>Common Patterns</h2>
+<h3>Pattern 1: Structured Output</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from pydantic import BaseModel, Field
+
+class PersonInfo(BaseModel):
+    name: str = Field(description="Full name")
+    age: int = Field(description="Age in years")
+    occupation: str = Field(description="Current job")
+
+class ExtractPerson(dspy.Signature):
+    """Extract person information from text."""
+    text = dspy.InputField()
+    person: PersonInfo = dspy.OutputField()
+
+extractor = dspy.TypedPredictor(ExtractPerson)
+result = extractor(text="John Doe is a 35-year-old software engineer.")
+print(result.person.name)  # "John Doe"
+print(result.person.age)   # 35
+</div>
+<h3>Pattern 2: Assertion-Driven Optimization</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import dspy
+from dspy.primitives.assertions import assert_transform_module, backtrack_handler
+
+class MathQA(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.solve = dspy.ChainOfThought("problem -> solution: float")
+
+    def forward(self, problem):
+        solution = self.solve(problem=problem).solution
+
+        # Assert solution is numeric
+        dspy.Assert(
+            isinstance(float(solution), float),
+            "Solution must be a number",
+            backtrack=backtrack_handler
+        )
+
+        return dspy.Prediction(solution=solution)
+</div>
+<h3>Pattern 3: Self-Consistency</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import dspy
+from collections import Counter
+
+class ConsistentQA(dspy.Module):
+    def __init__(self, num_samples=5):
+        super().__init__()
+        self.qa = dspy.ChainOfThought("question -> answer")
+        self.num_samples = num_samples
+
+    def forward(self, question):
+        # Generate multiple answers
+        answers = []
+        for _ in range(self.num_samples):
+            result = self.qa(question=question)
+            answers.append(result.answer)
+
+        # Return most common answer
+        most_common = Counter(answers).most_common(1)[0][0]
+        return dspy.Prediction(answer=most_common)
+</div>
+<h3>Pattern 4: Retrieval with Reranking</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+class RerankedRAG(dspy.Module):
+    def __init__(self):
+        super().__init__()
+        self.retrieve = dspy.Retrieve(k=10)
+        self.rerank = dspy.Predict("question, passage -> relevance_score: float")
+        self.answer = dspy.ChainOfThought("context, question -> answer")
+
+    def forward(self, question):
+        # Retrieve candidates
+        passages = self.retrieve(question).passages
+
+        # Rerank passages
+        scored = []
+        for passage in passages:
+            score = float(self.rerank(question=question, passage=passage).relevance_score)
+            scored.append((score, passage))
+
+        # Take top 3
+        top_passages = [p for _, p in sorted(scored, reverse=True)[:3]]
+        context = "\n\n".join(top_passages)
+
+        # Generate answer
+        return self.answer(context=context, question=question)
+</div>
+<h2>Evaluation and Metrics</h2>
+<h3>Custom Metrics</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def exact_match(example, pred, trace=None):
+    """Exact match metric."""
+    return example.answer.lower() == pred.answer.lower()
+
+def f1_score(example, pred, trace=None):
+    """F1 score for text overlap."""
+    pred_tokens = set(pred.answer.lower().split())
+    gold_tokens = set(example.answer.lower().split())
+
+    if not pred_tokens:
+        return 0.0
+
+    precision = len(pred_tokens & gold_tokens) / len(pred_tokens)
+    recall = len(pred_tokens & gold_tokens) / len(gold_tokens)
+
+    if precision + recall == 0:
+        return 0.0
+
+    return 2 * (precision * recall) / (precision + recall)
+</div>
+<h3>Evaluation</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from dspy.evaluate import Evaluate
+
+# Create evaluator
+evaluator = Evaluate(
+    devset=testset,
+    metric=exact_match,
+    num_threads=4,
+    display_progress=True
+)
+
+# Evaluate model
+score = evaluator(qa_system)
+print(f"Accuracy: {score}")
+
+# Compare optimized vs unoptimized
+score_before = evaluator(qa)
+score_after = evaluator(optimized_qa)
+print(f"Improvement: {score_after - score_before:.2%}")
+</div>
+<h2>最佳实践</h2>
+<h3>1. Start Simple, Iterate</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Start with Predict
+qa = dspy.Predict("question -> answer")
+
+# Add reasoning if needed
+qa = dspy.ChainOfThought("question -> answer")
+
+# Add optimization when you have data
+optimized_qa = optimizer.compile(qa, trainset=data)
+</div>
+<h3>2. Use Descriptive Signatures</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ❌ Bad: Vague
+class Task(dspy.Signature):
+    input = dspy.InputField()
+    output = dspy.OutputField()
+
+# ✅ Good: Descriptive
+class SummarizeArticle(dspy.Signature):
+    """Summarize news articles into 3-5 key points."""
+    article = dspy.InputField(desc="full article text")
+    summary = dspy.OutputField(desc="bullet points, 3-5 items")
+</div>
+<h3>3. Optimize with Representative Data</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Create diverse training examples
+trainset = [
+    dspy.Example(question="factual", answer="...).with_inputs("question"),
+    dspy.Example(question="reasoning", answer="...").with_inputs("question"),
+    dspy.Example(question="calculation", answer="...").with_inputs("question"),
+]
+
+# Use validation set for metric
+def metric(example, pred, trace=None):
+    return example.answer in pred.answer
+</div>
+<h3>4. Save and Load Optimized Models</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Save
+optimized_qa.save("models/qa_v1.json")
+
+# Load
+loaded_qa = dspy.ChainOfThought("question -> answer")
+loaded_qa.load("models/qa_v1.json")
+</div>
+<h3>5. Monitor and Debug</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Enable tracing
+dspy.settings.configure(lm=lm, trace=[])
+
+# Run prediction
+result = qa(question="...")
+
+# Inspect trace
+for call in dspy.settings.trace:
+    print(f"Prompt: {call['prompt']}")
+    print(f"Response: {call['response']}")
+</div>
+<h2>Comparison to Other Approaches</h2>
+<table><thead><tr><th>Feature</th><th>Manual Prompting</th><th>LangChain</th><th>DSPy</th></tr></thead><tbody>
+<tr><td>Prompt Engineering</td><td>Manual</td><td>Manual</td><td>Automatic</td></tr>
+<tr><td>Optimization</td><td>Trial & error</td><td>None</td><td>Data-driven</td></tr>
+<tr><td>Modularity</td><td>Low</td><td>Medium</td><td>High</td></tr>
+<tr><td>Type Safety</td><td>No</td><td>Limited</td><td>Yes (Signatures)</td></tr>
+<tr><td>Portability</td><td>Low</td><td>Medium</td><td>High</td></tr>
+<tr><td>Learning Curve</td><td>Low</td><td>Medium</td><td>Medium-High</td></tr>
+</tbody></table>
+<p><strong>When to choose DSPy:</strong></p>
+<p>- You have training data or can generate it</p>
+<p>- You need systematic prompt improvement</p>
+<p>- You're building complex multi-stage systems</p>
+<p>- You want to optimize across different LMs</p>
+<p><strong>When to choose alternatives:</strong></p>
+<p>- Quick prototypes (manual prompting)</p>
+<p>- Simple chains with existing tools (LangChain)</p>
+<p>- Custom optimization logic needed</p>
+<h2>Resources</h2>
+<p>- <strong>Documentation</strong>: https://dspy.ai</p>
+<p>- <strong>GitHub</strong>: https://github.com/stanfordnlp/dspy (22k+ stars)</p>
+<p>- <strong>Discord</strong>: https://discord.gg/XCGy2WDCQB</p>
+<p>- <strong>Twitter</strong>: @DSPyOSS</p>
+<p>- <strong>Paper</strong>: "DSPy: Compiling Declarative Language Model Calls into Self-Improving Pipelines"</p>
+<h2>See Also</h2>
+<p>- <code>references/modules.md</code> - Detailed module guide (Predict, ChainOfThought, ReAct, ProgramOfThought)</p>
+<p>- <code>references/optimizers.md</code> - Optimization algorithms (BootstrapFewShot, MIPRO, BootstrapFinetune)</p>
+<p>- <code>references/examples.md</code> - Real-world examples (RAG, agents, classifiers)</p>  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

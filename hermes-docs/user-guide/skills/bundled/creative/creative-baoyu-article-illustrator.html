@@ -1,0 +1,287 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Baoyu Article Illustrator — Article illustrations: type × style × palette consistency - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 命令</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & Skills</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">docs</a> / <a href="/hermes-docs/user-guide/">user-guide</a> / <a href="/hermes-docs/user-guide/skills/">skills</a> / <a href="/hermes-docs/user-guide/skills/bundled/">bundled</a> / <a href="/hermes-docs/user-guide/skills/bundled/creative/">creative</a> / Baoyu Article Illustrator — Article illustrations: type × style × palette consistency</div><p>{/<em> 本页面由 website/scripts/generate-skill-docs.py 从技能的 SKILL.md 自动生成。请编辑源 SKILL.md，而非本页面。 </em>/}</p>
+<h1>Baoyu Article Illustrator</h1>
+<p>Article illustrations: type × style × palette consistency.</p>
+<h2>技能元数据</h2>
+<table><thead><tr><th>---</th><th>---</th></tr></thead><tbody>
+<tr><td>来源</td><td>内置（默认安装）</td></tr>
+<tr><td>路径</td><td><code>skills/creative/baoyu-article-illustrator</code></td></tr>
+<tr><td>版本</td><td><code>1.57.0</code></td></tr>
+<tr><td>作者</td><td>宝玉 (JimLiu)</td></tr>
+<tr><td>许可证</td><td>MIT</td></tr>
+<tr><td>平台</td><td>linux, macos, windows</td></tr>
+<tr><td>标签</td><td><code>article-illustration</code>, <code>creative</code>, <code>image-generation</code></td></tr>
+</tbody></table>
+<h2>参考：完整 SKILL.md</h2>
+<p>:::info</p>
+<p>以下是 Hermes 在此技能被触发时加载的完整技能定义。这是技能激活时代理所看到的指令。</p>
+<p>:::</p>
+<h1>Article Illustrator</h1>
+<p>Adapted from <a href="https://github.com/JimLiu/baoyu-skills">baoyu-article-illustrator</a> for Hermes Agent's tool ecosystem.</p>
+<p>Analyze articles, identify illustration positions, generate images with <strong>Type × Style × Palette</strong> consistency.</p>
+<h2>何时使用</h2>
+<p>Trigger this skill when the user asks to illustrate an article, add images to an article, generate illustrations for content, or uses phrases like "为文章配图", "illustrate article", or "add images". The user provides an article (file path or pasted content) and optionally specifies type, style, palette, or density.</p>
+<h2>Three Dimensions</h2>
+<table><thead><tr><th>Dimension</th><th>Controls</th><th>示例</th></tr></thead><tbody>
+<tr><td><strong>Type</strong></td><td>Information structure</td><td>infographic, scene, flowchart, comparison, framework, timeline</td></tr>
+<tr><td><strong>Style</strong></td><td>Rendering approach</td><td>notion, warm, minimal, blueprint, watercolor, elegant</td></tr>
+<tr><td><strong>Palette</strong></td><td>Color scheme (optional)</td><td>macaron, warm, neon — overrides style's default colors</td></tr>
+</tbody></table>
+<p>Combine freely: <code>type=infographic, style=vector-illustration, palette=macaron</code>.</p>
+<p>Or use presets: <code>edu-visual</code> → type + style + palette in one shot. See <a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-article-illustrator/references/style-presets.md">style-presets.md</a>.</p>
+<h2>Types</h2>
+<table><thead><tr><th>Type</th><th>Best For</th></tr></thead><tbody>
+<tr><td><code>infographic</code></td><td>Data, metrics, technical</td></tr>
+<tr><td><code>scene</code></td><td>Narratives, emotional</td></tr>
+<tr><td><code>flowchart</code></td><td>Processes, workflows</td></tr>
+<tr><td><code>comparison</code></td><td>Side-by-side, options</td></tr>
+<tr><td><code>framework</code></td><td>Models, architecture</td></tr>
+<tr><td><code>timeline</code></td><td>History, evolution</td></tr>
+</tbody></table>
+<h2>Styles</h2>
+<p>See <a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-article-illustrator/references/styles.md">references/styles.md</a> for Core Styles, the full gallery, and Type × Style compatibility.</p>
+<h2>Output Structure</h2>
+<p><!-- ascii-guard-ignore --></p>
+<div class="code-block"><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{output-dir}/
+├── source-{slug}.{ext}    # Only for pasted content
+├── outline.md
+├── prompts/
+│   └── NN-{type}-{slug}.md
+└── NN-{type}-{slug}.png
+</div>
+<p><!-- ascii-guard-ignore-end --></p>
+<p><strong>默认 output directory</strong>:</p>
+<table><thead><tr><th>Input</th><th>Output Directory</th><th>Markdown Insert Path</th></tr></thead><tbody>
+<tr><td>Article file path</td><td><code>{article-dir}/imgs/</code></td><td><code>imgs/NN-{type}-{slug}.png</code></td></tr>
+<tr><td>Pasted content</td><td><code>illustrations/{topic-slug}/</code> (cwd)</td><td><code>illustrations/{topic-slug}/NN-{type}-{slug}.png</code></td></tr>
+</tbody></table>
+<p>If the user asks for a different layout (e.g., images alongside the article, or a <code>illustrations/</code> subdirectory), honor that.</p>
+<p><strong>Slug</strong>: 2-4 words, kebab-case. <strong>Conflict</strong>: append <code>-YYYYMMDD-HHMMSS</code>.</p>
+<h2>Core Principles</h2>
+<p>- <strong>Visualize concepts, not metaphors</strong> — if the article uses a metaphor (e.g., "电锯切西瓜"), illustrate the underlying concept, not the literal image.</p>
+<p>- <strong>Labels use article data</strong> — actual numbers, terms, and quotes from the article, not generic placeholders.</p>
+<p>- <strong>Prompt files are reproducibility records</strong> — every illustration must have a saved prompt file under <code>prompts/</code> before any image is generated.</p>
+<p>- <strong>Strip secrets</strong> — scan source content for API keys, tokens, or credentials before writing anything to disk.</p>
+<h2>Workflow</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+- [ ] Step 1: Detect reference images (if provided)
+- [ ] Step 2: Analyze content
+- [ ] Step 3: Confirm settings (clarify tool, one question at a time)
+- [ ] Step 4: Generate outline
+- [ ] Step 5: Generate prompts
+- [ ] Step 6: Generate images (image_generate)
+- [ ] Step 7: Finalize
+</div>
+<h3>Step 1: Detect Reference Images</h3>
+<p>If the user supplies reference images (paths pasted inline, attachments, or a URL):</p>
+<p>1. For each reference, call <code>vision_analyze</code> with the path/URL and a question asking for style, palette, composition, and subject. Record the returned description in <code>{output-dir}/references/NN-ref-{slug}.md</code> via <code>write_file</code>.</p>
+<p>2. <strong>Do not</strong> try to copy the binary via <code>write_file</code> / <code>read_file</code> — those are text-only. If you want a local copy for the record, use <code>terminal</code> (<code>cp "$src" "{output-dir}/references/NN-ref-{slug}.{ext}"</code>). The skill itself never needs to read the binary; it works off the vision description.</p>
+<p>3. Since <code>image_generate</code> doesn't take image inputs, the vision description is what gets embedded in prompts during Step 5.</p>
+<p>Full procedures: <a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-article-illustrator/references/workflow.md#step-1-detect-reference-images">references/workflow.md</a>.</p>
+<h3>Step 2: Analyze</h3>
+<table><thead><tr><th>Analysis</th><th>Output</th></tr></thead><tbody>
+<tr><td>Content type</td><td>Technical / Tutorial / Methodology / Narrative</td></tr>
+<tr><td>Purpose</td><td>information / visualization / imagination</td></tr>
+<tr><td>Core arguments</td><td>2-5 main points</td></tr>
+<tr><td>Positions</td><td>Where illustrations add value</td></tr>
+</tbody></table>
+<p>Read source (file path → <code>read_file</code>, or pasted text) and write the analysis to <code>{output-dir}/analysis.md</code> using <code>write_file</code>.</p>
+<p>Full procedures: <a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-article-illustrator/references/workflow.md#step-2-analyze">references/workflow.md</a>.</p>
+<h3>Step 3: Confirm Settings</h3>
+<p>Use the <code>clarify</code> tool. Since <code>clarify</code> handles one question at a time, ask the most important question first. Skip any question whose answer is already present in the user's request.</p>
+<table><thead><tr><th>Order</th><th>Question</th><th>选项</th></tr></thead><tbody>
+<tr><td>Q1</td><td><strong>Preset or Type</strong></td><td>[Recommended preset], [alt preset], or manual: infographic, scene, flowchart, comparison, framework, timeline, mixed</td></tr>
+<tr><td>Q2</td><td><strong>Density</strong></td><td>minimal (1-2), balanced (3-5), per-section (Recommended), rich (6+)</td></tr>
+<tr><td>Q3</td><td><strong>Style</strong> <em>(skip if preset chosen in Q1)</em></td><td>[Recommended], minimal-flat, sci-fi, hand-drawn, editorial, scene, poster</td></tr>
+<tr><td>Q4</td><td><strong>Palette</strong> <em>(optional)</em></td><td>默认 (style colors), macaron, warm, neon</td></tr>
+<tr><td>Q5</td><td><strong>Language</strong> <em>(only if article language is ambiguous)</em></td><td>article language / user language</td></tr>
+</tbody></table>
+<p>Don't ask more than 2-3 <code>clarify</code> questions in a row. If the user already specified these in their request, skip entirely.</p>
+<p>Full procedures: <a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-article-illustrator/references/workflow.md#step-3-confirm-settings">references/workflow.md</a>.</p>
+<h3>Step 4: Generate Outline → `outline.md`</h3>
+<p>Save <code>{output-dir}/outline.md</code> using <code>write_file</code> with frontmatter (type, density, style, palette, image_count) and one entry per illustration:</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+## Illustration 1
+**Position**: [section/paragraph]
+**Purpose**: [why]
+**Visual Content**: [what to show]
+**Filename**: 01-infographic-concept-name.png
+</div>
+<p>Full template: <a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-article-illustrator/references/workflow.md#step-4-generate-outline">references/workflow.md</a>.</p>
+<h3>Step 5: Generate Prompts</h3>
+<p><strong>BLOCKING</strong>: Every illustration must have a saved prompt file before any image is generated — the prompt file is the reproducibility record.</p>
+<p>For each illustration:</p>
+<p>1. Create a prompt file per <a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-article-illustrator/references/prompt-construction.md">references/prompt-construction.md</a>.</p>
+<p>2. Save to <code>{output-dir}/prompts/NN-{type}-{slug}.md</code> using <code>write_file</code> with YAML frontmatter.</p>
+<p>3. Prompts MUST use type-specific templates with structured sections (ZONES / LABELS / COLORS / STYLE / ASPECT).</p>
+<p>4. LABELS MUST include article-specific data: actual numbers, terms, metrics, quotes.</p>
+<p>5. Process references (<code>direct</code>/<code>style</code>/<code>palette</code>) per prompt frontmatter — for <code>direct</code> usage, embed a textual description of the reference in the prompt (since <code>image_generate</code> doesn't take reference-image inputs).</p>
+<h3>Step 6: Generate Images</h3>
+<p>For each prompt file:</p>
+<p>1. Call <code>image_generate(prompt=..., aspect_ratio=...)</code>. <code>image_generate</code> returns a JSON result containing an image URL; it does NOT write to disk and does NOT accept an output path.</p>
+<p>2. Map the prompt's <code>ASPECT</code> to <code>image_generate</code>'s enum: <code>16:9</code> → <code>landscape</code>, <code>9:16</code> → <code>portrait</code>, <code>1:1</code> → <code>square</code>. Custom ratios → nearest named aspect.</p>
+<p>3. Download the returned URL to <code>{output-dir}/NN-{type}-{slug}.png</code> via <code>terminal</code> (e.g. <code>curl -sSL -o "{output-dir}/NN-{type}-{slug}.png" "{url}"</code>).</p>
+<p>4. On generation failure, auto-retry once.</p>
+<p>Note: the underlying image-generation backend is user-configured (default: FAL FLUX 2 Klein 9B) and is NOT agent-selectable via <code>image_generate</code>. Do not write model names into prompts expecting them to route.</p>
+<h3>Step 7: Finalize</h3>
+<p>Insert <code>!<a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-article-illustrator/{relative-path}/NN-{type}-{slug}.png">description</a></code> after the corresponding paragraph. Alt text: concise description in the article's language.</p>
+<p>Report:</p>
+<div class="code-block"><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Article Illustration Complete!
+Article: [path] | Type: [type] | Density: [level] | Style: [style] | Palette: [palette or default]
+Images: X/N generated
+</div>
+<h2>Modification</h2>
+<table><thead><tr><th>Action</th><th>Steps</th></tr></thead><tbody>
+<tr><td>Edit</td><td>Update prompt → Regenerate → Update reference</td></tr>
+<tr><td>Add</td><td>Position → Prompt → Generate → Update outline → Insert</td></tr>
+<tr><td>Delete</td><td>Delete files → Remove reference → Update outline</td></tr>
+</tbody></table>
+<h2>References</h2>
+<table><thead><tr><th>File</th><th>Content</th></tr></thead><tbody>
+<tr><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-article-illustrator/references/workflow.md">references/workflow.md</a></td><td>Detailed procedures</td></tr>
+<tr><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-article-illustrator/references/usage.md">references/usage.md</a></td><td>Invocation examples</td></tr>
+<tr><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-article-illustrator/references/styles.md">references/styles.md</a></td><td>Style gallery + Palette gallery</td></tr>
+<tr><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-article-illustrator/references/style-presets.md">references/style-presets.md</a></td><td>Preset shortcuts (type + style + palette)</td></tr>
+<tr><td><a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/creative/baoyu-article-illustrator/references/prompt-construction.md">references/prompt-construction.md</a></td><td>Prompt templates</td></tr>
+</tbody></table>
+<h2>Pitfalls</h2>
+<p>1. <strong>Data integrity is paramount</strong> — never summarize, paraphrase, or alter source statistics. "73% increase" stays "73% increase".</p>
+<p>2. <strong>Strip secrets</strong> — scan source content for API keys, tokens, or credentials before including in any output file.</p>
+<p>3. <strong>Don't illustrate metaphors literally</strong> — visualize the underlying concept.</p>
+<p>4. <strong>Prompt files are mandatory</strong> — no image generation without a saved prompt file. The file is what lets you regenerate or switch backends later.</p>
+<p>5. <strong><code>image_generate</code> aspect ratios</strong> — the tool supports <code>landscape</code>, <code>portrait</code>, and <code>square</code>. Custom ratios map to the nearest option.</p>
+<p>6. <strong><code>image_generate</code> returns a URL, not a local file</strong> — always download via <code>terminal</code> (<code>curl</code>) before inserting local image paths into the article.</p>
+<p>7. <strong>No backend selection from the agent</strong> — <code>image_generate</code> uses whatever model the user configured (default: FAL FLUX 2 Klein 9B). Don't write <code>"use <model> to generate this"</code> into prompts expecting it to route.</p>  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

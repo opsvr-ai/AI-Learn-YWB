@@ -1,0 +1,403 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home Assistant - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Home Assistant</div><p>Hermes Agent 通过以下两种方式与 <a href="https://www.home-assistant.io/">Home Assistant</a> 集成：</p>
+<ol>
+<li><strong>Gateway 平台</strong> — 通过 WebSocket 订阅实时状态变更并响应事件</li>
+<li><strong>智能家居工具</strong> — 四个可供 LLM 调用的工具，通过 REST API 查询和控制设备</li>
+</ol>
+<h2>配置</h2>
+<h3>1. 创建长期访问令牌</h3>
+<ol>
+<li>打开您的 Home Assistant 实例</li>
+<li>进入<strong>个人资料</strong>（点击侧边栏中的用户名）</li>
+<li>滚动至<strong>长期访问令牌</strong></li>
+<li>点击<strong>创建令牌</strong>，命名为&quot;Hermes Agent&quot;</li>
+<li>复制令牌</li>
+</ol>
+<h3>2. 配置环境变量</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Add to ~/.hermes/.env
+
+# Required: your Long-Lived Access Token
+HASS_TOKEN=your-long-lived-access-token
+
+# Optional: HA URL (default: http://homeassistant.local:8123)
+HASS_URL=http://192.168.1.100:8123
+</div>
+<div class="tip"><strong>ℹ️ 信息</strong>
+设置 <code>HASS_TOKEN</code> 后，<code>homeassistant</code> 工具集将自动启用。Gateway 平台和设备控制工具均通过这一个令牌激活。
+</div>
+<h3>3. 启动 Gateway</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway
+</div>
+<p>Home Assistant 将作为已连接平台出现，与其他消息平台（Telegram、Discord 等）并列显示。</p>
+<h2>可用工具</h2>
+<p>Hermes Agent 注册了四个智能家居控制工具：</p>
+<h3><code>ha_list_entities</code></h3>
+<p>列出 Home Assistant 实体，可按域（domain）或区域（area）过滤。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>domain</code> <em>（可选）</em> — 按实体域过滤：<code>light</code>、<code>switch</code>、<code>climate</code>、<code>sensor</code>、<code>binary_sensor</code>、<code>cover</code>、<code>fan</code>、<code>media_player</code> 等。</li>
+<li><code>area</code> <em>（可选）</em> — 按区域/房间名称过滤（与友好名称匹配）：<code>living room</code>、<code>kitchen</code>、<code>bedroom</code> 等。</li>
+</ul>
+<p><strong>示例：</strong></p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+List all lights in the living room
+</div>
+<p>返回实体 ID、状态及友好名称。</p>
+<h3><code>ha_get_state</code></h3>
+<p>获取单个实体的详细状态，包括所有属性（亮度、颜色、温度设定值、传感器读数等）。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>entity_id</code> <em>（必填）</em> — 要查询的实体，例如 <code>light.living_room</code>、<code>climate.thermostat</code>、<code>sensor.temperature</code></li>
+</ul>
+<p><strong>示例：</strong></p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+What's the current state of climate.thermostat?
+</div>
+<p>返回：状态、所有属性、最后变更/更新时间戳。</p>
+<h3><code>ha_list_services</code></h3>
+<p>列出可用于设备控制的服务（操作）。显示每种设备类型可执行的操作及其接受的参数。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>domain</code> <em>（可选）</em> — 按域过滤，例如 <code>light</code>、<code>climate</code>、<code>switch</code></li>
+</ul>
+<p><strong>示例：</strong></p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+What services are available for climate devices?
+</div>
+<h3><code>ha_call_service</code></h3>
+<p>调用 Home Assistant 服务以控制设备。</p>
+<p><strong>参数：</strong></p>
+<ul>
+<li><code>domain</code> <em>（必填）</em> — 服务域：<code>light</code>、<code>switch</code>、<code>climate</code>、<code>cover</code>、<code>media_player</code>、<code>fan</code>、<code>scene</code>、<code>script</code></li>
+<li><code>service</code> <em>（必填）</em> — 服务名称：<code>turn_on</code>、<code>turn_off</code>、<code>toggle</code>、<code>set_temperature</code>、<code>set_hvac_mode</code>、<code>open_cover</code>、<code>close_cover</code>、<code>set_volume_level</code></li>
+<li><code>entity_id</code> <em>（可选）</em> — 目标实体，例如 <code>light.living_room</code></li>
+<li><code>data</code> <em>（可选）</em> — 以 JSON 对象形式传入的附加参数</li>
+</ul>
+<p><strong>示例：</strong></p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Turn on the living room lights
+→ ha_call_service(domain="light", service="turn_on", entity_id="light.living_room")
+</div>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Set the thermostat to 22 degrees in heat mode
+→ ha_call_service(domain="climate", service="set_temperature",
+    entity_id="climate.thermostat", data={"temperature": 22, "hvac_mode": "heat"})
+</div>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Set living room lights to blue at 50% brightness
+→ ha_call_service(domain="light", service="turn_on",
+    entity_id="light.living_room", data={"brightness": 128, "color_name": "blue"})
+</div>
+<h2>Gateway 平台：实时事件</h2>
+<p>Home Assistant gateway 适配器通过 WebSocket 连接并订阅 <code>state_changed</code> 事件。当设备状态发生变更且符合过滤条件时，该事件将作为消息转发给 agent。</p>
+<h3>事件过滤</h3>
+<div class="tip warning"><strong>⚠️ 必要配置</strong>
+默认情况下，<strong>不转发任何事件</strong>。您必须配置 <code>watch_domains</code>、<code>watch_entities</code> 或 <code>watch_all</code> 中的至少一项才能接收事件。若未设置过滤器，启动时将记录警告日志，所有状态变更将被静默丢弃。
+</div>
+<p>在 <code>~/.hermes/config.yaml</code> 中，于 Home Assistant 平台的 <code>extra</code> 部分配置 agent 接收的事件：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+platforms:
+  homeassistant:
+    enabled: true
+    extra:
+      watch_domains:
+        - climate
+        - binary_sensor
+        - alarm_control_panel
+        - light
+      watch_entities:
+        - sensor.front_door_battery
+      ignore_entities:
+        - sensor.uptime
+        - sensor.cpu_usage
+        - sensor.memory_usage
+      cooldown_seconds: 30
+</div>
+<table>
+<thead>
+<tr>
+<th>设置</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>watch_domains</code></td>
+<td><em>（无）</em></td>
+<td>仅监听这些实体域（例如 <code>climate</code>、<code>light</code>、<code>binary_sensor</code>）</td>
+</tr>
+<tr>
+<td><code>watch_entities</code></td>
+<td><em>（无）</em></td>
+<td>仅监听这些特定实体 ID</td>
+</tr>
+<tr>
+<td><code>watch_all</code></td>
+<td><code>false</code></td>
+<td>设为 <code>true</code> 以接收<strong>所有</strong>状态变更（不推荐用于大多数场景）</td>
+</tr>
+<tr>
+<td><code>ignore_entities</code></td>
+<td><em>（无）</em></td>
+<td>始终忽略这些实体（在域/实体过滤器之前应用）</td>
+</tr>
+<tr>
+<td><code>cooldown_seconds</code></td>
+<td><code>30</code></td>
+<td>同一实体两次事件之间的最小间隔秒数</td>
+</tr>
+</tbody>
+</table>
+<div class="tip"><strong>💡 提示</strong>
+从一组精简的域开始 — <code>climate</code>、<code>binary_sensor</code> 和 <code>alarm_control_panel</code> 已覆盖最常用的自动化场景。按需添加更多域。使用 <code>ignore_entities</code> 屏蔽 CPU 温度或运行时间计数器等噪声传感器。
+</div>
+<h3>事件格式化</h3>
+<p>状态变更将根据域格式化为人类可读的消息：</p>
+<table>
+<thead>
+<tr>
+<th>域</th>
+<th>格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>climate</code></td>
+<td>&quot;HVAC mode changed from 'off' to 'heat' (current: 21, target: 23)&quot;</td>
+</tr>
+<tr>
+<td><code>sensor</code></td>
+<td>&quot;changed from 21°C to 22°C&quot;</td>
+</tr>
+<tr>
+<td><code>binary_sensor</code></td>
+<td>&quot;triggered&quot; / &quot;cleared&quot;</td>
+</tr>
+<tr>
+<td><code>light</code>、<code>switch</code>、<code>fan</code></td>
+<td>&quot;turned on&quot; / &quot;turned off&quot;</td>
+</tr>
+<tr>
+<td><code>alarm_control_panel</code></td>
+<td>&quot;alarm state changed from 'armed_away' to 'triggered'&quot;</td>
+</tr>
+<tr>
+<td><em>（其他）</em></td>
+<td>&quot;changed from 'old' to 'new'&quot;</td>
+</tr>
+</tbody>
+</table>
+<h3>Agent 响应</h3>
+<p>Agent 发出的消息将以 <strong>Home Assistant 持久通知</strong>的形式推送（通过 <code>persistent_notification.create</code>），标题为&quot;Hermes Agent&quot;，显示在 HA 通知面板中。</p>
+<h3>连接管理</h3>
+<ul>
+<li><strong>WebSocket</strong> 每 30 秒发送一次心跳，用于实时事件</li>
+<li><strong>自动重连</strong>，退避策略：5s → 10s → 30s → 60s</li>
+<li><strong>REST API</strong> 用于出站通知（独立会话，避免与 WebSocket 冲突）</li>
+<li><strong>鉴权</strong> — HA 事件始终已授权（无需用户白名单，<code>HASS_TOKEN</code> 负责验证连接）</li>
+</ul>
+<h2>安全性</h2>
+<p>Home Assistant 工具强制执行安全限制：</p>
+<div class="tip warning"><strong>⚠️ 已屏蔽的域</strong>
+<p>以下服务域已被<strong>屏蔽</strong>，以防止在 HA 主机上执行任意代码：</p>
+<ul>
+<li><code>shell_command</code> — 任意 shell 命令</li>
+<li><code>command_line</code> — 执行命令的传感器/开关</li>
+<li><code>python_script</code> — 脚本化 Python 执行</li>
+<li><code>pyscript</code> — 更广泛的脚本集成</li>
+<li><code>hassio</code> — 插件控制、主机关机/重启</li>
+<li><code>rest_command</code> — 来自 HA 服务器的 HTTP 请求（SSRF 向量）</li>
+</ul>
+<p>尝试调用这些域中的服务将返回错误。</p>
+
+</div>
+<p>实体 ID 将通过正则表达式 <code>^[a-z_][a-z0-9_]*\.[a-z0-9_]+$</code> 进行验证，以防止注入攻击。</p>
+<h2>自动化示例</h2>
+<h3>晨间例程</h3>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+User: Start my morning routine
+
+Agent:
+1. ha_call_service(domain="light", service="turn_on",
+     entity_id="light.bedroom", data={"brightness": 128})
+2. ha_call_service(domain="climate", service="set_temperature",
+     entity_id="climate.thermostat", data={"temperature": 22})
+3. ha_call_service(domain="media_player", service="turn_on",
+     entity_id="media_player.kitchen_speaker")
+</div>
+<h3>安全检查</h3>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+User: Is the house secure?
+
+Agent:
+1. ha_list_entities(domain="binary_sensor")
+     → checks door/window sensors
+2. ha_get_state(entity_id="alarm_control_panel.home")
+     → checks alarm status
+3. ha_list_entities(domain="lock")
+     → checks lock states
+4. Reports: "All doors closed, alarm is armed_away, all locks engaged."
+</div>
+<h3>响应式自动化（通过 Gateway 事件）</h3>
+<p>作为 gateway 平台连接后，agent 可对事件作出响应：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+[Home Assistant] Front Door: triggered (was cleared)
+
+Agent automatically:
+1. ha_get_state(entity_id="binary_sensor.front_door")
+2. ha_call_service(domain="light", service="turn_on",
+     entity_id="light.hallway")
+3. Sends notification: "Front door opened. Hallway lights turned on."
+</div>
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

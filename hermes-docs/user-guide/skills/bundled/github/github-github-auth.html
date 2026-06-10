@@ -1,0 +1,408 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Github Auth — GitHub auth setup: HTTPS tokens, SSH keys, gh CLI login - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Github Auth — GitHub auth setup: HTTPS tokens, SSH keys, gh CLI login</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Github Auth</h1>
+<p>GitHub auth 设置：HTTPS 令牌、SSH 密钥、gh CLI 登录。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>内置（默认安装）</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>skills/github/github-auth</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.1.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Hermes Agent</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>GitHub</code>, <code>Authentication</code>, <code>Git</code>, <code>gh-cli</code>, <code>SSH</code>, <code>Setup</code></td>
+</tr>
+<tr>
+<td>相关 skill</td>
+<td><a href="/user-guide/skills/bundled/github/github-github-pr-workflow"><code>github-pr-workflow</code></a>, <a href="/user-guide/skills/bundled/github/github-github-code-review"><code>github-code-review</code></a>, <a href="/user-guide/skills/bundled/github/github-github-issues"><code>github-issues</code></a>, <a href="/user-guide/skills/bundled/github/github-github-repo-management"><code>github-repo-management</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>GitHub 认证设置</h1>
+<p>此 skill 用于配置认证，使 agent 能够操作 GitHub 仓库、PR、issue 和 CI。涵盖两条路径：</p>
+<ul>
+<li><strong><code>git</code>（始终可用）</strong> — 使用 HTTPS 个人访问令牌（personal access token）或 SSH 密钥</li>
+<li><strong><code>gh</code> CLI（如已安装）</strong> — 更丰富的 GitHub API 访问，认证流程更简单</li>
+</ul>
+<h2>检测流程</h2>
+<p>当用户要求你操作 GitHub 时，首先执行以下检查：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Check what's available
+git --version
+gh --version 2&gt;/dev/null || echo "gh not installed"
+<h1>Check if already authenticated</h1>
+<p>gh auth status 2&amp;gt;/dev/null || echo &quot;gh not authenticated&quot;
+git config --global credential.helper 2&amp;gt;/dev/null || echo &quot;no git credential helper&quot;</p>
+</div>
+<p><strong>决策树：</strong></p>
+<ol>
+<li>若 <code>gh auth status</code> 显示已认证 → 直接使用 <code>gh</code> 处理所有操作</li>
+<li>若 <code>gh</code> 已安装但未认证 → 使用下方&quot;gh auth&quot;方法</li>
+<li>若 <code>gh</code> 未安装 → 使用下方&quot;仅 git&quot;方法（无需 sudo）</li>
+</ol>
+<hr />
+<h2>方法一：仅 Git 认证（无 gh，无 sudo）</h2>
+<p>适用于任何已安装 <code>git</code> 的机器，无需 root 权限。</p>
+<h3>选项 A：HTTPS 配合个人访问令牌（推荐）</h3>
+<p>最通用的方法——适用于所有环境，无需 SSH 配置。</p>
+<p><strong>第一步：创建个人访问令牌</strong></p>
+<p>告知用户访问：<strong>https://github.com/settings/tokens</strong></p>
+<ul>
+<li>点击&quot;Generate new token (classic)&quot;</li>
+<li>填写名称，如&quot;hermes-agent&quot;</li>
+<li>选择权限范围（scope）：
+<ul>
+<li><code>repo</code>（完整仓库访问——读、写、推送、PR）</li>
+<li><code>workflow</code>（触发和管理 GitHub Actions）</li>
+<li><code>read:org</code>（如需操作组织仓库）</li>
+</ul>
+</li>
+<li>设置有效期（90 天是合理的默认值）</li>
+<li>复制令牌——此后不会再次显示</li>
+</ul>
+<p><strong>第二步：配置 git 存储令牌</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Set up the credential helper to cache credentials
+# "store" saves to ~/.git-credentials in plaintext (simple, persistent)
+git config --global credential.helper store
+<h1>Now do a test operation that triggers auth — git will prompt for credentials</h1>
+<h1>Username: &amp;lt;their-github-username&amp;gt;</h1>
+<h1>Password: &amp;lt;paste the personal access token, NOT their GitHub password&amp;gt;</h1>
+<p>git ls-remote https://github.com/&amp;lt;their-username&amp;gt;/&amp;lt;any-repo&amp;gt;.git</p>
+</div>
+<p>首次输入凭据后，将被保存并在后续所有操作中复用。</p>
+<p><strong>替代方案：cache helper（凭据在内存中过期）</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Cache in memory for 8 hours (28800 seconds) instead of saving to disk
+git config --global credential.helper 'cache --timeout=28800'
+</div>
+<p><strong>替代方案：直接将令牌写入远程 URL（按仓库设置）</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Embed token in the remote URL (avoids credential prompts entirely)
+git remote set-url origin https://&lt;username&gt;:&lt;token&gt;@github.com/&lt;owner&gt;/&lt;repo&gt;.git
+</div>
+<p><strong>第三步：配置 git 身份信息</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Required for commits — set name and email
+git config --global user.name "Their Name"
+git config --global user.email "their-email@example.com"
+</div>
+<p><strong>第四步：验证</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Test push access (this should work without any prompts now)
+git ls-remote https://github.com/&lt;their-username&gt;/&lt;any-repo&gt;.git
+<h1>Verify identity</h1>
+<p>git config --global user.name
+git config --global user.email</p>
+</div>
+<h3>选项 B：SSH 密钥认证</h3>
+<p>适合偏好 SSH 或已有密钥的用户。</p>
+<p><strong>第一步：检查现有 SSH 密钥</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+ls -la ~/.ssh/id_*.pub 2&gt;/dev/null || echo "No SSH keys found"
+</div>
+<p><strong>第二步：如需则生成密钥</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Generate an ed25519 key (modern, secure, fast)
+ssh-keygen -t ed25519 -C "their-email@example.com" -f ~/.ssh/id_ed25519 -N ""
+<h1>Display the public key for them to add to GitHub</h1>
+<p>cat ~/.ssh/id_ed25519.pub</p>
+</div>
+<p>告知用户在以下地址添加公钥：<strong>https://github.com/settings/keys</strong></p>
+<ul>
+<li>点击&quot;New SSH key&quot;</li>
+<li>粘贴公钥内容</li>
+<li>填写标题，如&quot;hermes-agent-&amp;lt;machine-name&gt;&quot;</li>
+</ul>
+<p><strong>第三步：测试连接</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+ssh -T git@github.com
+# Expected: "Hi &lt;username&gt;! You've successfully authenticated..."
+</div>
+<p><strong>第四步：配置 git 使用 SSH 访问 GitHub</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Rewrite HTTPS GitHub URLs to SSH automatically
+git config --global url."git@github.com:".insteadOf "https://github.com/"
+</div>
+<p><strong>第五步：配置 git 身份信息</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+git config --global user.name "Their Name"
+git config --global user.email "their-email@example.com"
+</div>
+<hr />
+<h2>方法二：gh CLI 认证</h2>
+<p>若已安装 <code>gh</code>，一步即可完成 API 访问和 git 凭据配置。</p>
+<h3>浏览器交互登录（桌面环境）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+gh auth login
+# Select: GitHub.com
+# Select: HTTPS
+# Authenticate via browser
+</div>
+<h3>基于令牌登录（无头环境 / SSH 服务器）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+echo "&lt;THEIR_TOKEN&gt;" | gh auth login --with-token
+<h1>Set up git credentials through gh</h1>
+<p>gh auth setup-git</p>
+</div>
+<h3>验证</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+gh auth status
+</div>
+<hr />
+<h2>不使用 gh 调用 GitHub API</h2>
+<p>当 <code>gh</code> 不可用时，仍可使用 <code>curl</code> 配合个人访问令牌访问完整的 GitHub API。其他 GitHub skill 的降级方案均采用此方式。</p>
+<h3>为 API 调用设置令牌</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Option 1: Export as env var (preferred — keeps it out of commands)
+export GITHUB_TOKEN="&lt;token&gt;"
+<h1>Then use in curl calls:</h1>
+<p>curl -s -H &quot;Authorization: token $GITHUB_TOKEN&quot; \
+https://api.github.com/user</p>
+</div>
+<h3>从 Git 凭据中提取令牌</h3>
+<p>若已通过 <code>credential.helper store</code> 配置 git 凭据，可提取令牌：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Read from git credential store
+grep "github.com" ~/.git-credentials 2&gt;/dev/null | head -1 | sed 's|https://[^:]*:\([^@]*\)@.*|\1|'
+</div>
+<h3>辅助函数：检测认证方式</h3>
+<p>在任何 GitHub 工作流开始时使用此模式：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Try gh first, fall back to git + curl
+if command -v gh &amp;&gt;/dev/null &amp;&amp; gh auth status &amp;&gt;/dev/null; then
+  echo "AUTH_METHOD=gh"
+elif [ -n "$GITHUB_TOKEN" ]; then
+  echo "AUTH_METHOD=curl"
+elif [ -f ~/.hermes/.env ] &amp;&amp; grep -q "^GITHUB_TOKEN=" ~/.hermes/.env; then
+  export GITHUB_TOKEN=$(grep "^GITHUB_TOKEN=" ~/.hermes/.env | head -1 | cut -d= -f2 | tr -d '\n\r')
+  echo "AUTH_METHOD=curl"
+elif grep -q "github.com" ~/.git-credentials 2&gt;/dev/null; then
+  export GITHUB_TOKEN=$(grep "github.com" ~/.git-credentials | head -1 | sed 's|https://[^:]*:\([^@]*\)@.*|\1|')
+  echo "AUTH_METHOD=curl"
+else
+  echo "AUTH_METHOD=none"
+  echo "Need to set up authentication first"
+fi
+</div>
+<hr />
+<h2>故障排查</h2>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git push</code> 要求输入密码</td>
+<td>GitHub 已禁用密码认证。请使用个人访问令牌作为密码，或切换至 SSH</td>
+</tr>
+<tr>
+<td><code>remote: Permission to X denied</code></td>
+<td>令牌可能缺少 <code>repo</code> scope——请重新生成并选择正确的 scope</td>
+</tr>
+<tr>
+<td><code>fatal: Authentication failed</code></td>
+<td>缓存的凭据可能已过期——运行 <code>git credential reject</code> 后重新认证</td>
+</tr>
+<tr>
+<td><code>ssh: connect to host github.com port 22: Connection refused</code></td>
+<td>尝试通过 HTTPS 端口使用 SSH：在 <code>~/.ssh/config</code> 中为 <code>Host github.com</code> 添加 <code>Port 443</code> 和 <code>Hostname ssh.github.com</code></td>
+</tr>
+<tr>
+<td>凭据不持久</td>
+<td>检查 <code>git config --global credential.helper</code>——必须为 <code>store</code> 或 <code>cache</code></td>
+</tr>
+<tr>
+<td>多个 GitHub 账号</td>
+<td>在 <code>~/.ssh/config</code> 中为不同主机别名配置不同 SSH 密钥，或使用按仓库设置的凭据 URL</td>
+</tr>
+<tr>
+<td><code>gh: command not found</code> 且无 sudo</td>
+<td>使用上方方法一（仅 git）——无需安装任何软件</td>
+</tr>
+</tbody>
+</table>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

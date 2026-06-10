@@ -1,0 +1,363 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Architecture Diagram — 深色主题 SVG 架构/云/基础设施图表（HTML 格式） - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Architecture Diagram — 深色主题 SVG 架构/云/基础设施图表（HTML 格式）</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Architecture Diagram</h1>
+<p>深色主题 SVG 架构/云/基础设施图表，以 HTML 格式输出。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>内置（默认安装）</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>skills/creative/architecture-diagram</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Cocoon AI (hello@cocoon-ai.com)，由 Hermes Agent 移植</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>architecture</code>, <code>diagrams</code>, <code>SVG</code>, <code>HTML</code>, <code>visualization</code>, <code>infrastructure</code>, <code>cloud</code></td>
+</tr>
+<tr>
+<td>相关 skill</td>
+<td><a href="/user-guide/skills/optional/creative/creative-concept-diagrams"><code>concept-diagrams</code></a>, <a href="/user-guide/skills/bundled/creative/creative-excalidraw"><code>excalidraw</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发该 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>Architecture Diagram Skill</h1>
+<p>生成专业的深色主题技术架构图，输出为包含内联 SVG 图形的独立 HTML 文件。无需外部工具、无需 API 密钥、无需渲染库——只需写入 HTML 文件并在浏览器中打开即可。</p>
+<h2>适用范围</h2>
+<p><strong>最适合：</strong></p>
+<ul>
+<li>软件系统架构（前端/后端/数据库层）</li>
+<li>云基础设施（VPC、区域、子网、托管服务）</li>
+<li>微服务/服务网格拓扑</li>
+<li>数据库 + API 映射、部署图</li>
+<li>任何具有技术基础设施主题、适合深色网格背景风格的内容</li>
+</ul>
+<p><strong>以下场景请优先考虑其他工具：</strong></p>
+<ul>
+<li>物理、化学、数学、生物或其他科学学科</li>
+<li>实物对象（车辆、硬件、解剖结构、截面图）</li>
+<li>平面图、叙事流程、教育/教科书风格的视觉内容</li>
+<li>手绘白板草图（建议使用 <code>excalidraw</code>）</li>
+<li>动画说明（建议使用动画相关 skill）</li>
+</ul>
+<p>如果有更专业的 skill 适用于该主题，请优先使用。如果没有合适的，本 skill 也可作为通用 SVG 图表的备选方案——输出内容将带有下述深色技术风格。</p>
+<p>基于 <a href="https://github.com/Cocoon-AI/architecture-diagram-generator">Cocoon AI 的 architecture-diagram-generator</a>（MIT 许可证）。</p>
+<h2>工作流程</h2>
+<ol>
+<li>用户描述其系统架构（组件、连接关系、技术栈）</li>
+<li>按照下方设计规范生成 HTML 文件</li>
+<li>使用 <code>write_file</code> 保存为 <code>.html</code> 文件（例如 <code>~/architecture-diagram.html</code>）</li>
+<li>用户在任意浏览器中打开——支持离线使用，无需任何依赖</li>
+</ol>
+<h3>输出位置</h3>
+<p>将图表保存到用户指定路径，或默认保存至当前工作目录：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+./[project-name]-architecture.html
+</div>
+<h3>预览</h3>
+<p>保存后，建议用户通过以下命令打开：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# macOS
+open ./my-architecture.html
+# Linux
+xdg-open ./my-architecture.html
+</div>
+<h2>设计规范与视觉语言</h2>
+<h3>颜色方案（语义映射）</h3>
+<p>使用特定的 <code>rgba</code> 填充色和十六进制描边色对组件进行分类：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">组件类型</th>
+<th style="text-align:left">填充色（rgba）</th>
+<th style="text-align:left">描边色（Hex）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>前端</strong></td>
+<td style="text-align:left"><code>rgba(8, 51, 68, 0.4)</code></td>
+<td style="text-align:left"><code>#22d3ee</code>（cyan-400）</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>后端</strong></td>
+<td style="text-align:left"><code>rgba(6, 78, 59, 0.4)</code></td>
+<td style="text-align:left"><code>#34d399</code>（emerald-400）</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>数据库</strong></td>
+<td style="text-align:left"><code>rgba(76, 29, 149, 0.4)</code></td>
+<td style="text-align:left"><code>#a78bfa</code>（violet-400）</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>AWS/云</strong></td>
+<td style="text-align:left"><code>rgba(120, 53, 15, 0.3)</code></td>
+<td style="text-align:left"><code>#fbbf24</code>（amber-400）</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>安全</strong></td>
+<td style="text-align:left"><code>rgba(136, 19, 55, 0.4)</code></td>
+<td style="text-align:left"><code>#fb7185</code>（rose-400）</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>消息总线</strong></td>
+<td style="text-align:left"><code>rgba(251, 146, 60, 0.3)</code></td>
+<td style="text-align:left"><code>#fb923c</code>（orange-400）</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>外部</strong></td>
+<td style="text-align:left"><code>rgba(30, 41, 59, 0.5)</code></td>
+<td style="text-align:left"><code>#94a3b8</code>（slate-400）</td>
+</tr>
+</tbody>
+</table>
+<h3>字体与背景</h3>
+<ul>
+<li><strong>字体：</strong> JetBrains Mono（等宽字体），从 Google Fonts 加载</li>
+<li><strong>字号：</strong> 12px（名称）、9px（副标签）、8px（注释）、7px（极小标签）</li>
+<li><strong>背景：</strong> Slate-950（<code>#020617</code>），带有细腻的 40px 网格图案</li>
+</ul>
+<div class="code-block"><span class="code-lang">svg</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+&lt;!-- 背景网格图案 --&gt;
+&lt;pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"&gt;
+  &lt;path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/&gt;
+&lt;/pattern&gt;
+</div>
+<h2>技术实现细节</h2>
+<h3>组件渲染</h3>
+<p>组件为圆角矩形（<code>rx=&quot;6&quot;</code>），描边宽度 1.5px。为防止箭头透过半透明填充色显现，使用<strong>双矩形遮罩技术</strong>：</p>
+<ol>
+<li>绘制不透明背景矩形（<code>#0f172a</code>）</li>
+<li>在其上方绘制半透明样式矩形</li>
+</ol>
+<h3>连接规则</h3>
+<ul>
+<li><strong>Z 轴顺序：</strong> 在 SVG 早期绘制箭头（在网格之后），使其渲染在组件框的下方</li>
+<li><strong>箭头头部：</strong> 通过 SVG marker 定义</li>
+<li><strong>安全流：</strong> 使用 rose 色（<code>#fb7185</code>）虚线</li>
+<li><strong>边界：</strong>
+<ul>
+<li><em>安全组：</em> 虚线（<code>4,4</code>），rose 色</li>
+<li><em>区域：</em> 大虚线（<code>8,4</code>），amber 色，<code>rx=&quot;12&quot;</code></li>
+</ul>
+</li>
+</ul>
+<h3>间距与布局规则</h3>
+<ul>
+<li><strong>标准高度：</strong> 60px（服务）；80–120px（大型组件）</li>
+<li><strong>垂直间距：</strong> 组件之间最小 40px</li>
+<li><strong>消息总线：</strong> 必须放置在服务之间的间隙中，不得与其重叠</li>
+<li><strong>图例位置：</strong> <strong>关键。</strong> 必须放置在所有边界框的外部。计算所有边界的最低 Y 坐标，并将图例放置在其下方至少 20px 处。</li>
+</ul>
+<h2>文档结构</h2>
+<p>生成的 HTML 文件遵循四段式布局：</p>
+<ol>
+<li><strong>页眉：</strong> 带有脉冲点指示器的标题和副标题</li>
+<li><strong>主 SVG：</strong> 包含在圆角边框卡片中的图表</li>
+<li><strong>摘要卡片：</strong> 图表下方的三张卡片网格，用于展示高层次详情</li>
+<li><strong>页脚：</strong> 简洁的元数据信息</li>
+</ol>
+<h3>信息卡片模式</h3>
+<div class="code-block"><span class="code-lang">html</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+&lt;div class="card"&gt;
+  &lt;div class="card-header"&gt;
+    &lt;div class="card-dot cyan"&gt;&lt;/div&gt;
+    &lt;h3&gt;Title&lt;/h3&gt;
+  &lt;/div&gt;
+  &lt;ul&gt;
+    &lt;li&gt;• Item one&lt;/li&gt;
+    &lt;li&gt;• Item two&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+</div>
+<h2>输出要求</h2>
+<ul>
+<li><strong>单文件：</strong> 一个自包含的 <code>.html</code> 文件</li>
+<li><strong>无外部依赖：</strong> 所有 CSS 和 SVG 必须内联（Google Fonts 除外）</li>
+<li><strong>无 JavaScript：</strong> 所有动画（如脉冲点）使用纯 CSS 实现</li>
+<li><strong>兼容性：</strong> 必须在任何现代浏览器中正确渲染</li>
+</ul>
+<h2>模板参考</h2>
+<p>加载完整 HTML 模板以获取精确的结构、CSS 和 SVG 组件示例：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+skill_view(name="architecture-diagram", file_path="templates/template.html")
+</div>
+<p>模板包含每种组件类型（前端、后端、数据库、云、安全）、箭头样式（标准、虚线、曲线）、安全组、区域边界和图例的完整示例——生成图表时请以此作为结构参考。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

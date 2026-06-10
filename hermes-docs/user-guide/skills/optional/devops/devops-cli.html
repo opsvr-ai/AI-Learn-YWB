@@ -1,0 +1,300 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inference Sh Cli — 通过 inference 运行 150+ AI 应用 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Inference Sh Cli — 通过 inference 运行 150+ AI 应用</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Inference Sh Cli</h1>
+<p>通过 inference.sh CLI（infsh）运行 150+ AI 应用——图像生成、视频创作、LLM、搜索、3D、社交自动化。使用终端工具。触发词：inference.sh、infsh、ai apps、flux、veo、image generation、video generation、seedream、seedance、tavily</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选——使用 <code>hermes skills install official/devops/cli</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/devops/cli</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>okaris</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>AI</code>, <code>image-generation</code>, <code>video</code>, <code>LLM</code>, <code>search</code>, <code>inference</code>, <code>FLUX</code>, <code>Veo</code>, <code>Claude</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在该 skill 被触发时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>inference.sh CLI</h1>
+<p>通过简单的 CLI 在云端运行 150+ AI 应用。无需 GPU。</p>
+<p>所有命令均使用<strong>终端工具</strong>来运行 <code>infsh</code> 命令。</p>
+<h2>使用场景</h2>
+<ul>
+<li>用户要求生成图像（FLUX、Reve、Seedream、Grok、Gemini image）</li>
+<li>用户要求生成视频（Veo、Wan、Seedance、OmniHuman）</li>
+<li>用户询问 inference.sh 或 infsh</li>
+<li>用户希望运行 AI 应用而无需管理各个提供商的 API</li>
+<li>用户要求 AI 驱动的搜索（Tavily、Exa）</li>
+<li>用户需要生成头像/口型同步</li>
+</ul>
+<h2>前置条件</h2>
+<p><code>infsh</code> CLI 必须已安装并完成认证。使用以下命令检查：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+infsh me
+</div>
+<p>如未安装：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -fsSL https://cli.inference.sh | sh
+infsh login
+</div>
+<p>完整安装详情请参阅 <code>references/authentication.md</code>。</p>
+<h2>工作流程</h2>
+<h3>1. 始终先搜索</h3>
+<p>不要猜测应用名称——始终通过搜索找到正确的应用 ID：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+infsh app list --search flux
+infsh app list --search video
+infsh app list --search image
+</div>
+<h3>2. 运行应用</h3>
+<p>使用搜索结果中的精确应用 ID。始终使用 <code>--json</code> 获取机器可读的输出：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+infsh app run &lt;app-id&gt; --input '{"prompt": "your prompt here"}' --json
+</div>
+<h3>3. 解析输出</h3>
+<p>JSON 输出包含指向生成媒体的 URL。使用 <code>MEDIA:&lt;url&gt;</code> 格式将其呈现给用户以内联显示。</p>
+<h2>常用命令</h2>
+<h3>图像生成</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 搜索图像应用
+infsh app list --search image
+<h1>FLUX Dev with LoRA</h1>
+<p>infsh app run falai/flux-dev-lora --input '{&quot;prompt&quot;: &quot;sunset over mountains&quot;, &quot;num_images&quot;: 1}' --json</p>
+<h1>Gemini 图像生成</h1>
+<p>infsh app run google/gemini-2-5-flash-image --input '{&quot;prompt&quot;: &quot;futuristic city&quot;, &quot;num_images&quot;: 1}' --json</p>
+<h1>Seedream (ByteDance)</h1>
+<p>infsh app run bytedance/seedream-5-lite --input '{&quot;prompt&quot;: &quot;nature scene&quot;}' --json</p>
+<h1>Grok Imagine (xAI)</h1>
+<p>infsh app run xai/grok-imagine-image --input '{&quot;prompt&quot;: &quot;abstract art&quot;}' --json</p>
+</div>
+<h3>视频生成</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 搜索视频应用
+infsh app list --search video
+<h1>Veo 3.1 (Google)</h1>
+<p>infsh app run google/veo-3-1-fast --input '{&quot;prompt&quot;: &quot;drone shot of coastline&quot;}' --json</p>
+<h1>Seedance (ByteDance)</h1>
+<p>infsh app run bytedance/seedance-1-5-pro --input '{&quot;prompt&quot;: &quot;dancing figure&quot;, &quot;resolution&quot;: &quot;1080p&quot;}' --json</p>
+<h1>Wan 2.5</h1>
+<p>infsh app run falai/wan-2-5 --input '{&quot;prompt&quot;: &quot;person walking through city&quot;}' --json</p>
+</div>
+<h3>本地文件上传</h3>
+<p>CLI 会在提供路径时自动上传本地文件：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 放大本地图像
+infsh app run falai/topaz-image-upscaler --input '{"image": "/path/to/photo.jpg", "upscale_factor": 2}' --json
+<h1>从本地文件生成图生视频</h1>
+<p>infsh app run falai/wan-2-5-i2v --input '{&quot;image&quot;: &quot;/path/to/image.png&quot;, &quot;prompt&quot;: &quot;make it move&quot;}' --json</p>
+<h1>带音频的头像</h1>
+<p>infsh app run bytedance/omnihuman-1-5 --input '{&quot;audio&quot;: &quot;/path/to/audio.mp3&quot;, &quot;image&quot;: &quot;/path/to/face.jpg&quot;}' --json</p>
+</div>
+<h3>搜索与研究</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+infsh app list --search search
+infsh app run tavily/tavily-search --input '{"query": "latest AI news"}' --json
+infsh app run exa/exa-search --input '{"query": "machine learning papers"}' --json
+</div>
+<h3>其他类别</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 3D 生成
+infsh app list --search 3d
+<h1>音频 / TTS</h1>
+<p>infsh app list --search tts</p>
+<h1>Twitter/X 自动化</h1>
+<p>infsh app list --search twitter</p>
+</div>
+<h2>注意事项</h2>
+<ol>
+<li><strong>不要猜测应用 ID</strong>——始终先运行 <code>infsh app list --search &lt;term&gt;</code>。应用 ID 会变更，新应用也会频繁添加。</li>
+<li><strong>始终使用 <code>--json</code></strong>——原始输出难以解析。<code>--json</code> 标志提供包含 URL 的结构化输出。</li>
+<li><strong>检查认证状态</strong>——如果命令因认证错误失败，请运行 <code>infsh login</code> 或确认 <code>INFSH_API_KEY</code> 已设置。</li>
+<li><strong>长时间运行的应用</strong>——视频生成可能需要 30-120 秒。终端工具的超时时间应该足够，但请提前告知用户可能需要等待片刻。</li>
+<li><strong>输入格式</strong>——<code>--input</code> 标志接受 JSON 字符串。请确保正确转义引号。</li>
+</ol>
+<h2>参考文档</h2>
+<ul>
+<li><code>references/authentication.md</code> — 安装、登录、API 密钥</li>
+<li><code>references/app-discovery.md</code> — 搜索和浏览应用目录</li>
+<li><code>references/running-apps.md</code> — 运行应用、输入格式、输出处理</li>
+<li><code>references/cli-reference.md</code> — 完整 CLI 命令参考</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,1679 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 提供商 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 集成 / AI 提供商</div><p>本页介绍如何为 Hermes Agent 配置推理提供商——从 OpenRouter、Anthropic 等云端 API，到 Ollama、vLLM 等自托管端点，再到高级路由与故障转移配置。使用 Hermes 至少需要配置一个提供商。</p>
+<h2>推理提供商</h2>
+<p>你需要至少一种方式连接到 LLM。使用 <code>hermes model</code> 交互式切换提供商和模型，或直接配置：</p>
+<table>
+<thead>
+<tr>
+<th>提供商</th>
+<th>配置方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Nous Portal</strong></td>
+<td><code>hermes model</code>（OAuth，订阅制）</td>
+</tr>
+<tr>
+<td><strong>OpenAI Codex</strong></td>
+<td><code>hermes model</code>（ChatGPT OAuth，使用 Codex 模型）</td>
+</tr>
+<tr>
+<td><strong>GitHub Copilot</strong></td>
+<td><code>hermes model</code>（OAuth 设备码流程，<code>COPILOT_GITHUB_TOKEN</code>、<code>GH_TOKEN</code> 或 <code>gh auth token</code>）</td>
+</tr>
+<tr>
+<td><strong>GitHub Copilot ACP</strong></td>
+<td><code>hermes model</code>（在本地生成 <code>copilot --acp --stdio</code> 子进程）</td>
+</tr>
+<tr>
+<td><strong>Anthropic</strong></td>
+<td><code>hermes model</code>（Claude Max + 额外用量积分，通过 OAuth；也支持 Anthropic API key 或手动 setup-token——见下方说明）</td>
+</tr>
+<tr>
+<td><strong>OpenRouter</strong></td>
+<td><code>~/.hermes/.env</code> 中的 <code>OPENROUTER_API_KEY</code></td>
+</tr>
+<tr>
+<td><strong>NovitaAI</strong></td>
+<td><code>~/.hermes/.env</code> 中的 <code>NOVITA_API_KEY</code>（provider: <code>novita</code>，200+ 模型，Model API、Agent Sandbox、GPU Cloud）</td>
+</tr>
+<tr>
+<td><strong>z.ai / GLM</strong></td>
+<td><code>~/.hermes/.env</code> 中的 <code>GLM_API_KEY</code>（provider: <code>zai</code>）</td>
+</tr>
+<tr>
+<td><strong>Kimi / Moonshot</strong></td>
+<td><code>~/.hermes/.env</code> 中的 <code>KIMI_API_KEY</code>（provider: <code>kimi-coding</code>）</td>
+</tr>
+<tr>
+<td><strong>Kimi / Moonshot（中国）</strong></td>
+<td><code>~/.hermes/.env</code> 中的 <code>KIMI_CN_API_KEY</code>（provider: <code>kimi-coding-cn</code>；别名：<code>kimi-cn</code>、<code>moonshot-cn</code>）</td>
+</tr>
+<tr>
+<td><strong>Arcee AI</strong></td>
+<td><code>~/.hermes/.env</code> 中的 <code>ARCEEAI_API_KEY</code>（provider: <code>arcee</code>；别名：<code>arcee-ai</code>、<code>arceeai</code>）</td>
+</tr>
+<tr>
+<td><strong>GMI Cloud</strong></td>
+<td><code>~/.hermes/.env</code> 中的 <code>GMI_API_KEY</code>（provider: <code>gmi</code>；别名：<code>gmi-cloud</code>、<code>gmicloud</code>）</td>
+</tr>
+<tr>
+<td><strong>MiniMax</strong></td>
+<td><code>~/.hermes/.env</code> 中的 <code>MINIMAX_API_KEY</code>（provider: <code>minimax</code>）</td>
+</tr>
+<tr>
+<td><strong>MiniMax 中国</strong></td>
+<td><code>~/.hermes/.env</code> 中的 <code>MINIMAX_CN_API_KEY</code>（provider: <code>minimax-cn</code>）</td>
+</tr>
+<tr>
+<td><strong>xAI（Grok）— Responses API</strong></td>
+<td><code>~/.hermes/.env</code> 中的 <code>XAI_API_KEY</code>（provider: <code>xai</code>）</td>
+</tr>
+<tr>
+<td><strong>xAI Grok OAuth（SuperGrok）</strong></td>
+<td><code>hermes model</code> → &quot;xAI Grok OAuth (SuperGrok / Premium+)&quot;——浏览器登录，无需 API key。参见<a href="../guides/xai-grok-oauth.html">指南</a></td>
+</tr>
+<tr>
+<td><strong>Qwen Cloud（阿里 DashScope）</strong></td>
+<td><code>~/.hermes/.env</code> 中的 <code>DASHSCOPE_API_KEY</code>（provider: <code>alibaba</code>）</td>
+</tr>
+<tr>
+<td><strong>阿里云（Coding Plan）</strong></td>
+<td><code>DASHSCOPE_API_KEY</code>（provider: <code>alibaba-coding-plan</code>，别名：<code>alibaba_coding</code>）——独立计费 SKU，不同端点</td>
+</tr>
+<tr>
+<td><strong>Kilo Code</strong></td>
+<td><code>~/.hermes/.env</code> 中的 <code>KILOCODE_API_KEY</code>（provider: <code>kilocode</code>）</td>
+</tr>
+<tr>
+<td><strong>小米 MiMo</strong></td>
+<td><code>~/.hermes/.env</code> 中的 <code>XIAOMI_API_KEY</code>（provider: <code>xiaomi</code>，别名：<code>mimo</code>、<code>xiaomi-mimo</code>）</td>
+</tr>
+<tr>
+<td><strong>腾讯 TokenHub</strong></td>
+<td><code>~/.hermes/.env</code> 中的 <code>TOKENHUB_API_KEY</code>（provider: <code>tencent-tokenhub</code>，别名：<code>tencent</code>、<code>tokenhub</code>、<code>tencentmaas</code>）</td>
+</tr>
+<tr>
+<td><strong>OpenCode Zen</strong></td>
+<td><code>~/.hermes/.env</code> 中的 <code>OPENCODE_ZEN_API_KEY</code>（provider: <code>opencode-zen</code>）</td>
+</tr>
+<tr>
+<td><strong>OpenCode Go</strong></td>
+<td><code>~/.hermes/.env</code> 中的 <code>OPENCODE_GO_API_KEY</code>（provider: <code>opencode-go</code>）</td>
+</tr>
+<tr>
+<td><strong>DeepSeek</strong></td>
+<td><code>~/.hermes/.env</code> 中的 <code>DEEPSEEK_API_KEY</code>（provider: <code>deepseek</code>）</td>
+</tr>
+<tr>
+<td><strong>Hugging Face</strong></td>
+<td><code>~/.hermes/.env</code> 中的 <code>HF_TOKEN</code>（provider: <code>huggingface</code>，别名：<code>hf</code>）</td>
+</tr>
+<tr>
+<td><strong>Google / Gemini</strong></td>
+<td><code>~/.hermes/.env</code> 中的 <code>GOOGLE_API_KEY</code>（或 <code>GEMINI_API_KEY</code>）（provider: <code>gemini</code>）</td>
+</tr>
+<tr>
+<td><strong>Google Gemini（OAuth）</strong></td>
+<td><code>hermes model</code> → &quot;Google Gemini (OAuth)&quot;（provider: <code>google-gemini-cli</code>，支持免费层，浏览器 PKCE 登录）</td>
+</tr>
+<tr>
+<td><strong>LM Studio</strong></td>
+<td><code>hermes model</code> → &quot;LM Studio&quot;（provider: <code>lmstudio</code>，可选 <code>LM_API_KEY</code>）</td>
+</tr>
+<tr>
+<td><strong>自定义端点</strong></td>
+<td><code>hermes model</code> → 选择&quot;Custom endpoint&quot;（保存在 <code>config.yaml</code>）</td>
+</tr>
+</tbody>
+</table>
+<p>官方 API key 路径请参见专属的 <a href="/guides/google-gemini">Google Gemini 指南</a>。</p>
+<div class="tip"><strong>💡 模型 key 别名</strong>
+在 <code>model:</code> 配置节中，可以使用 <code>default:</code> 或 <code>model:</code> 作为模型 ID 的键名。<code>model: { default: my-model }</code> 和 <code>model: { model: my-model }</code> 效果完全相同。
+</div>
+<h3>Nous Portal</h3>
+<p><a href="https://portal.nousresearch.com">Nous Portal</a> 是 Nous Research 的统一订阅网关，也是<strong>运行 Hermes Agent 的推荐方式</strong>。一次 OAuth 登录即可访问 300+ 前沿智能体模型（Claude、GPT、Gemini、DeepSeek、Qwen、Kimi、GLM、MiniMax、Grok 等），以及 <a href="/user-guide/features/tool-gateway">Tool Gateway</a>（网页搜索、图像生成、TTS、浏览器自动化）和 <a href="https://chat.nousresearch.com">Nous Chat</a>——费用从你的 Nous 订阅中扣除，无需单独管理各提供商账户。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes setup --portal     # 全新安装——一条命令完成 OAuth + 提供商 + 网关配置
+hermes model              # 已有安装——从列表中选择"Nous Portal"
+hermes portal info        # 随时查看登录状态和路由信息
+</div>
+<p>还没有订阅？前往 <a href="https://portal.nousresearch.com/manage-subscription">portal.nousresearch.com/manage-subscription</a> 购买。</p>
+<p><strong>完整详情：</strong> 参见专属的 <a href="/integrations/nous-portal">Nous Portal 集成页面</a>（订阅内容、模型目录、故障排查）以及分步指南<a href="/guides/run-hermes-with-nous-portal">使用 Nous Portal 运行 Hermes Agent</a>。</p>
+<div class="tip"><strong>ℹ️ Codex 说明</strong>
+<p>OpenAI Codex 提供商通过设备码（device code）认证——打开一个 URL 并输入验证码。Hermes 将生成的凭据存储在 <code>~/.hermes/auth.json</code> 的自有认证存储中，并在存在 <code>~/.codex/auth.json</code> 时可导入现有的 Codex CLI 凭据。无需安装 Codex CLI。</p>
+<p>如果 token 刷新因终端错误（HTTP 4xx、<code>invalid_grant</code>、授权被撤销等）失败，Hermes 会将该刷新 token 标记为失效并停止重试，避免出现大量重复的认证失败。下一次请求会显示类型化的重新认证提示。运行 <code>hermes auth add codex-oauth</code>（或 <code>hermes model</code> → OpenAI Codex）开始新的设备码登录；成功交换后隔离状态自动解除。</p>
+
+</div>
+<div class="tip warning"><strong>⚠️ 警告</strong>
+即使使用 Nous Portal、Codex 或自定义端点，某些工具（视觉、网页摘要、MoA）仍会使用单独的&quot;辅助&quot;模型。默认情况下（<code>auxiliary.*.provider: &quot;auto&quot;</code>），Hermes 将这些任务路由到你的<strong>主聊天模型</strong>——即你在 <code>hermes model</code> 中选择的同一模型。你可以单独覆盖每个任务，将其路由到更便宜/更快的模型（例如 OpenRouter 上的 Gemini Flash）——参见<a href="/user-guide/configuration#auxiliary-models">辅助模型</a>。
+</div>
+<div class="tip"><strong>💡 Nous Tool Gateway</strong>
+付费 Nous Portal 订阅者还可访问 <strong><a href="/user-guide/features/tool-gateway">Tool Gateway</a></strong>——网页搜索、图像生成、TTS 和浏览器自动化，均通过你的订阅路由。无需额外 API key。全新安装时，<code>hermes setup --portal</code> 一条命令即可完成登录、设置 Nous 为提供商并开启网关。现有用户可通过 <code>hermes model</code> 或 <code>hermes tools</code> 按工具启用。随时使用 <code>hermes portal info</code> 查看路由状态。
+</div>
+<h3>模型管理的两个命令</h3>
+<p>Hermes 有<strong>两个</strong>模型命令，用途不同：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>运行位置</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>hermes model</code></strong></td>
+<td>终端（任何会话之外）</td>
+<td>完整配置向导——添加提供商、运行 OAuth、输入 API key、配置端点</td>
+</tr>
+<tr>
+<td><strong><code>/model</code></strong></td>
+<td>Hermes 聊天会话内部</td>
+<td>在<strong>已配置的</strong>提供商和模型之间快速切换</td>
+</tr>
+</tbody>
+</table>
+<p>如果你想切换到尚未配置的提供商（例如你只配置了 OpenRouter，想使用 Anthropic），需要使用 <code>hermes model</code>，而不是 <code>/model</code>。先退出会话（<code>Ctrl+C</code> 或 <code>/quit</code>），运行 <code>hermes model</code>，完成提供商配置，然后开启新会话。</p>
+<h3>Anthropic（原生）</h3>
+<p>通过 Anthropic API 直接使用 Claude 模型——无需 OpenRouter 代理。支持三种认证方式：</p>
+<div class="tip warning"><strong>⚡ 需要 Claude Max"额外用量"积分</strong>
+<p>通过 <code>hermes model</code> → Anthropic OAuth（或 <code>hermes auth add anthropic --type oauth</code>）认证时，Hermes 以 Claude Code 身份路由到你的 Anthropic 账户。<strong>仅当你订阅了 Claude Max 计划且购买了额外用量积分时才有效。</strong> Claude Max 基础计划的配额（Claude Code 默认包含的用量）不会被 Hermes 消耗——只有你额外购买的超额积分才会被使用。Claude Pro 订阅者无法使用此路径。</p>
+<p>如果你没有 Max + 额外积分，请改用 <code>ANTHROPIC_API_KEY</code>——请求将按 token 计费，从该 key 所属组织扣费（标准 API 定价，与任何 Claude 订阅无关）。</p>
+
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 使用 API key（按 token 计费）
+export ANTHROPIC_API_KEY=***
+hermes chat --provider anthropic --model claude-sonnet-4-6
+
+# 推荐：通过 `hermes model` 认证
+# 如果已使用 Claude Code，Hermes 会直接使用其凭据存储
+hermes model
+
+# 使用 setup-token 手动覆盖（备用/旧版）
+export ANTHROPIC_TOKEN=***  # setup-token 或手动 OAuth token
+hermes chat --provider anthropic
+
+# 自动检测 Claude Code 凭据（如果你已使用 Claude Code）
+hermes chat --provider anthropic  # 自动读取 Claude Code 凭据文件
+</div>
+<p>通过 <code>hermes model</code> 选择 Anthropic OAuth 时，Hermes 优先使用 Claude Code 自身的凭据存储，而不是将 token 复制到 <code>~/.hermes/.env</code>。这样可以保持 Claude 凭据的可刷新性。</p>
+<p>或永久设置：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  provider: "anthropic"
+  default: "claude-sonnet-4-6"
+</div>
+<div class="tip"><strong>💡 别名</strong>
+<code>--provider claude</code> 和 <code>--provider claude-code</code> 也可作为 <code>--provider anthropic</code> 的简写。
+</div>
+<h3>GitHub Copilot</h3>
+<p>Hermes 以一等提供商身份支持 GitHub Copilot，提供两种模式：</p>
+<p><strong><code>copilot</code> — 直连 Copilot API</strong>（推荐）。使用你的 GitHub Copilot 订阅，通过 Copilot API 访问 GPT-5.x、Claude、Gemini 等模型。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes chat --provider copilot --model gpt-5.4
+</div>
+<p><strong>认证选项</strong>（按以下顺序检查）：</p>
+<ol>
+<li><code>COPILOT_GITHUB_TOKEN</code> 环境变量</li>
+<li><code>GH_TOKEN</code> 环境变量</li>
+<li><code>GITHUB_TOKEN</code> 环境变量</li>
+<li><code>gh auth token</code> CLI 回退</li>
+</ol>
+<p>如果未找到 token，<code>hermes model</code> 会提供 <strong>OAuth 设备码登录</strong>——与 Copilot CLI 和 opencode 使用的流程相同。</p>
+<div class="tip warning"><strong>⚠️ Token 类型</strong>
+<p>Copilot API <strong>不</strong>支持经典个人访问 token（<code>ghp_*</code>）。支持的 token 类型：</p>
+<p>| 类型 | 前缀 | 获取方式 |
+|------|--------|------------|
+| OAuth token | <code>gho_</code> | <code>hermes model</code> → GitHub Copilot → 使用 GitHub 登录 |
+| 细粒度 PAT | <code>github_pat_</code> | GitHub 设置 → 开发者设置 → 细粒度 token（需要 <strong>Copilot Requests</strong> 权限） |
+| GitHub App token | <code>ghu_</code> | 通过 GitHub App 安装获取 |</p>
+<p>如果你的 <code>gh auth token</code> 返回 <code>ghp_*</code> token，请使用 <code>hermes model</code> 通过 OAuth 认证。</p>
+
+</div>
+<div class="tip"><strong>ℹ️ Hermes 中的 Copilot 认证行为</strong>
+<p>Hermes 将支持的 GitHub token（<code>gho_*</code>、<code>github_pat_*</code> 或 <code>ghu_*</code>）直接发送到 <code>api.githubcopilot.com</code>，并附带 Copilot 专用请求头（<code>Editor-Version</code>、<code>Copilot-Integration-Id</code>、<code>Openai-Intent</code>、<code>x-initiator</code>）。</p>
+<p>收到 HTTP 401 时，Hermes 在回退前会执行一次性凭据恢复：</p>
+<ol>
+<li>通过正常优先级链重新解析 token（<code>COPILOT_GITHUB_TOKEN</code> → <code>GH_TOKEN</code> → <code>GITHUB_TOKEN</code> → <code>gh auth token</code>）</li>
+<li>使用刷新后的请求头重建共享 OpenAI 客户端</li>
+<li>重试请求一次</li>
+</ol>
+<p>部分旧版社区代理使用 <code>api.github.com/copilot_internal/v2/token</code> 交换流程。该端点对某些账户类型可能不可用（返回 404）。因此 Hermes 以直接 token 认证为主路径，依靠运行时凭据刷新 + 重试保证健壮性。</p>
+
+</div>
+<p><strong>API 路由</strong>：GPT-5+ 模型（<code>gpt-5-mini</code> 除外）自动使用 Responses API。其他所有模型（GPT-4o、Claude、Gemini 等）使用 Chat Completions。模型从 Copilot 实时目录自动检测。</p>
+<p><strong><code>copilot-acp</code> — Copilot ACP 智能体后端</strong>。将本地 Copilot CLI 作为子进程启动：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes chat --provider copilot-acp --model copilot-acp
+# 需要 PATH 中存在 GitHub Copilot CLI 且已完成 `copilot login`
+</div>
+<p><strong>永久配置：</strong></p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  provider: "copilot"
+  default: "gpt-5.4"
+</div>
+<table>
+<thead>
+<tr>
+<th>环境变量</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>COPILOT_GITHUB_TOKEN</code></td>
+<td>Copilot API 的 GitHub token（最高优先级）</td>
+</tr>
+<tr>
+<td><code>HERMES_COPILOT_ACP_COMMAND</code></td>
+<td>覆盖 Copilot CLI 二进制路径（默认：<code>copilot</code>）</td>
+</tr>
+<tr>
+<td><code>HERMES_COPILOT_ACP_ARGS</code></td>
+<td>覆盖 ACP 参数（默认：<code>--acp --stdio</code>）</td>
+</tr>
+</tbody>
+</table>
+<h3>一等 API Key 提供商</h3>
+<p>这些提供商内置支持，具有专属提供商 ID。设置 API key 后使用 <code>--provider</code> 选择：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# NovitaAI Model API
+hermes chat --provider novita --model moonshotai/kimi-k2.5
+# 需要：~/.hermes/.env 中的 NOVITA_API_KEY
+
+# z.ai / ZhipuAI GLM
+hermes chat --provider zai --model glm-5
+# 需要：~/.hermes/.env 中的 GLM_API_KEY
+
+# Kimi / Moonshot AI（国际版：api.moonshot.ai）
+hermes chat --provider kimi-coding --model kimi-for-coding
+# 需要：~/.hermes/.env 中的 KIMI_API_KEY
+
+# Kimi / Moonshot AI（中国版：api.moonshot.cn）
+hermes chat --provider kimi-coding-cn --model kimi-k2.5
+# 需要：~/.hermes/.env 中的 KIMI_CN_API_KEY
+
+# MiniMax（全球端点）
+hermes chat --provider minimax --model MiniMax-M2.7
+# 需要：~/.hermes/.env 中的 MINIMAX_API_KEY
+
+# MiniMax（中国端点）
+hermes chat --provider minimax-cn --model MiniMax-M2.7
+# 需要：~/.hermes/.env 中的 MINIMAX_CN_API_KEY
+
+# Qwen Cloud / DashScope（Qwen 模型）
+hermes chat --provider alibaba --model qwen3.5-plus
+# 需要：~/.hermes/.env 中的 DASHSCOPE_API_KEY
+
+# 小米 MiMo
+hermes chat --provider xiaomi --model mimo-v2-pro
+# 需要：~/.hermes/.env 中的 XIAOMI_API_KEY
+
+# 腾讯 TokenHub（Hy3 Preview）
+hermes chat --provider tencent-tokenhub --model hy3-preview
+# 需要：~/.hermes/.env 中的 TOKENHUB_API_KEY
+
+# Arcee AI（Trinity 模型）
+hermes chat --provider arcee --model trinity-large-thinking
+# 需要：~/.hermes/.env 中的 ARCEEAI_API_KEY
+
+# GMI Cloud
+# 使用 GMI /v1/models 端点返回的精确模型 ID。
+hermes chat --provider gmi --model zai-org/GLM-5.1-FP8
+# 需要：~/.hermes/.env 中的 GMI_API_KEY
+</div>
+<p>或在 <code>config.yaml</code> 中永久设置提供商：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  provider: "gmi"
+  default: "zai-org/GLM-5.1-FP8"
+</div>
+<p>基础 URL 可通过 <code>NOVITA_BASE_URL</code>、<code>GLM_BASE_URL</code>、<code>KIMI_BASE_URL</code>、<code>MINIMAX_BASE_URL</code>、<code>MINIMAX_CN_BASE_URL</code>、<code>DASHSCOPE_BASE_URL</code>、<code>XIAOMI_BASE_URL</code>、<code>GMI_BASE_URL</code> 或 <code>TOKENHUB_BASE_URL</code> 环境变量覆盖。</p>
+<div class="tip"><strong>📝 Z.AI 端点自动检测</strong>
+使用 Z.AI / GLM 提供商时，Hermes 会自动探测多个端点（全球版、中国版、编程版）以找到接受你 API key 的端点。无需手动设置 <code>GLM_BASE_URL</code>——可用端点会被自动检测并缓存。
+</div>
+<h3>xAI（Grok）— Responses API + Prompt 缓存</h3>
+<p>xAI 通过 Responses API（<code>codex_responses</code> 传输）接入，自动支持 Grok 4 模型的推理——无需 <code>reasoning_effort</code> 参数，服务端默认进行推理。在 <code>~/.hermes/.env</code> 中设置 <code>XAI_API_KEY</code> 并在 <code>hermes model</code> 中选择 xAI，或直接用 <code>grok</code> 作为快捷方式输入 <code>/model grok-4-1-fast-reasoning</code>。</p>
+<p>SuperGrok 和 X Premium+ 订阅者可以用浏览器 OAuth 登录，无需 API key——在 <code>hermes model</code> 中选择 <strong>xAI Grok OAuth (SuperGrok / Premium+)</strong>，或运行 <code>hermes auth add xai-oauth</code>。同一 OAuth bearer token 会被 xAI 直连工具（TTS、图像生成、视频生成、转录）自动复用。完整流程参见 <a href="../guides/xai-grok-oauth.html">xAI Grok OAuth 指南</a>——如果 Hermes 运行在远程主机上，还需参见 <a href="../guides/oauth-over-ssh.html">SSH / 远程主机上的 OAuth</a> 了解所需的 <code>ssh -L</code> 隧道配置。</p>
+<p>使用 xAI 作为提供商时（任何包含 <code>x.ai</code> 的基础 URL），Hermes 会在每次 API 请求中自动发送 <code>x-grok-conv-id</code> 请求头以启用 prompt（提示词）缓存。这会将同一会话的请求路由到同一服务器，使 xAI 基础设施能够复用已缓存的系统 prompt 和对话历史。</p>
+<p>无需任何配置——检测到 xAI 端点且存在会话 ID 时，缓存自动激活。这可降低多轮对话的延迟和成本。</p>
+<p>xAI 还提供专属 TTS 端点（<code>/v1/tts</code>）。在 <code>hermes tools</code> → 语音与 TTS 中选择 <strong>xAI TTS</strong>，或参见<a href="../user-guide/features/tts.html#text-to-speech">语音与 TTS</a> 页面了解配置。</p>
+<h3>NovitaAI</h3>
+<p><a href="https://novita.ai">NovitaAI</a> 是面向开发者和智能体的 AI 原生云平台。三条产品线：200+ 模型的 Model API、用于构建和运行 AI 智能体的 Agent Sandbox，以及可扩展计算的 GPU Cloud，均可从同一平台访问。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 使用任意可用模型
+hermes chat --provider novita --model moonshotai/kimi-k2.5
+# 需要：~/.hermes/.env 中的 NOVITA_API_KEY
+
+# 短别名
+hermes chat --provider novita-ai --model deepseek/deepseek-v3-0324
+</div>
+<p>或在 <code>config.yaml</code> 中永久设置：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  provider: "novita"
+  default: "moonshotai/kimi-k2.5"
+  base_url: "https://api.novita.ai/openai/v1"
+</div>
+<p>在 <a href="https://novita.ai/settings/key-management">novita.ai/settings/key-management</a> 获取 API key。基础 URL 可通过 <code>NOVITA_BASE_URL</code> 覆盖。</p>
+<h3>Ollama Cloud — 托管 Ollama 模型，OAuth + API Key</h3>
+<p><a href="https://ollama.com/cloud">Ollama Cloud</a> 托管与本地 Ollama 相同的开源模型目录，无需 GPU。在 <code>hermes model</code> 中选择 <strong>Ollama Cloud</strong>，粘贴来自 <a href="https://ollama.com/settings/keys">ollama.com/settings/keys</a> 的 API key，Hermes 会自动发现可用模型。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes model
+# → 选择"Ollama Cloud"
+# → 粘贴你的 OLLAMA_API_KEY
+# → 从已发现的模型中选择（gpt-oss:120b、glm-4.6:cloud、qwen3-coder:480b-cloud 等）
+</div>
+<p>或直接编辑 <code>config.yaml</code>：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  provider: "ollama-cloud"
+  default: "gpt-oss:120b"
+</div>
+<p>模型目录从 <code>ollama.com/v1/models</code> 动态获取，缓存一小时。<code>model:tag</code> 格式（如 <code>qwen3-coder:480b-cloud</code>）在规范化过程中保留——不要使用连字符。</p>
+<div class="tip"><strong>💡 Ollama Cloud 与本地 Ollama</strong>
+两者使用相同的 OpenAI 兼容 API。Cloud 是一等提供商（<code>--provider ollama-cloud</code>，<code>OLLAMA_API_KEY</code>）；本地 Ollama 通过自定义端点流程访问（基础 URL <code>http://localhost:11434/v1</code>，无需 key）。对于无法在本地运行的大模型使用 Cloud；对于隐私保护或离线工作使用本地。
+</div>
+<h3>AWS Bedrock</h3>
+<p>通过 AWS Bedrock 使用 Anthropic Claude、Amazon Nova、DeepSeek v3.2、Meta Llama 4 等模型。使用 AWS SDK（<code>boto3</code>）凭据链——无需 API key，使用标准 AWS 认证即可。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 最简方式——~/.aws/credentials 中的命名 profile
+hermes chat --provider bedrock --model us.anthropic.claude-sonnet-4-6
+
+# 或使用显式环境变量
+AWS_PROFILE=myprofile AWS_REGION=us-east-1 hermes chat --provider bedrock --model us.anthropic.claude-sonnet-4-6
+</div>
+<p>或在 <code>config.yaml</code> 中永久设置：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  provider: "bedrock"
+  default: "us.anthropic.claude-sonnet-4-6"
+bedrock:
+  region: "us-east-1"          # 或设置 AWS_REGION
+  # profile: "myprofile"       # 或设置 AWS_PROFILE
+  # discovery: true            # 从 IAM 自动发现区域
+  # guardrail:                 # 可选的 Bedrock Guardrails
+  #   guardrail_identifier: "your-guardrail-id"
+  #   guardrail_version: "DRAFT"
+</div>
+<p>认证使用标准 boto3 链：显式 <code>AWS_ACCESS_KEY_ID</code>/<code>AWS_SECRET_ACCESS_KEY</code>、<code>~/.aws/credentials</code> 中的 <code>AWS_PROFILE</code>、EC2/ECS/Lambda 上的 IAM 角色、IMDS 或 SSO。如果已通过 AWS CLI 认证，无需设置任何环境变量。</p>
+<p>Bedrock 底层使用 <strong>Converse API</strong>——请求被转换为 Bedrock 的模型无关格式，因此同一配置适用于 Claude、Nova、DeepSeek 和 Llama 模型。仅在调用非默认区域端点时才需设置 <code>BEDROCK_BASE_URL</code>。</p>
+<p>参见 <a href="/guides/aws-bedrock">AWS Bedrock 指南</a>，了解 IAM 配置、区域选择和跨区域推理的详细步骤。</p>
+<h3>Qwen Portal（OAuth）</h3>
+<p>阿里巴巴 Qwen Portal，支持基于浏览器的 OAuth 登录。在 <code>hermes model</code> 中选择 <strong>Qwen OAuth (Portal)</strong>，通过浏览器登录，Hermes 会持久化刷新 token。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes model
+# → 选择"Qwen OAuth (Portal)"
+# → 浏览器打开；使用阿里巴巴账户登录
+# → 确认——凭据保存到 ~/.hermes/auth.json
+
+hermes chat   # 使用 portal.qwen.ai/v1 端点
+</div>
+<p>或配置 <code>config.yaml</code>：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  provider: "qwen-oauth"
+  default: "qwen3-coder-plus"
+</div>
+<p>仅在 portal 端点迁移时才需设置 <code>HERMES_QWEN_BASE_URL</code>（默认：<code>https://portal.qwen.ai/v1</code>）。</p>
+<div class="tip"><strong>💡 Qwen OAuth 与 Qwen Cloud（阿里 DashScope）</strong>
+<code>qwen-oauth</code> 使用面向消费者的 Qwen Portal，通过 OAuth 登录——适合个人用户。<code>alibaba</code> 提供商使用 Qwen Cloud（阿里 DashScope），需要 <code>DASHSCOPE_API_KEY</code>——适合程序化/生产工作负载。两者都路由到 Qwen 系列模型，但端点不同。
+</div>
+<h3>阿里云（Coding Plan）</h3>
+<p>如果你订阅了阿里巴巴的 <strong>Coding Plan</strong>（独立于标准 DashScope API 访问的计费 SKU），Hermes 将其作为独立的一等提供商暴露：<code>alibaba-coding-plan</code>。端点：<code>https://coding-intl.dashscope.aliyuncs.com/v1</code>。与常规 <code>alibaba</code> 提供商一样兼容 OpenAI，但基础 URL 和计费面不同。</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  provider: alibaba_coding     # alibaba-coding-plan 的别名
+  model: qwen3-coder-plus
+</div>
+<p>或通过 CLI：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes chat --provider alibaba_coding --model qwen3-coder-plus
+</div>
+<p><code>alibaba_coding</code> 使用与 <code>alibaba</code> 条目相同的 <code>DASHSCOPE_API_KEY</code>——无需单独的 key，只是路由目标不同。在此提供商注册之前，在 <code>config.yaml</code> 中设置 <code>provider: alibaba_coding</code> 的用户会静默回退到 OpenRouter 路由。</p>
+<h3>MiniMax（OAuth）</h3>
+<p>通过浏览器 OAuth 登录使用 MiniMax-M2.7——无需 API key。在 <code>hermes model</code> 中选择 <strong>MiniMax (OAuth)</strong>，通过浏览器登录，Hermes 会持久化访问 token 和刷新 token。底层使用 Anthropic Messages 兼容端点（<code>/anthropic</code>）。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes model
+# → 选择"MiniMax (OAuth)"
+# → 浏览器打开；使用 MiniMax 账户登录（全球或中国区）
+# → 确认——凭据保存到 ~/.hermes/auth.json
+
+hermes chat   # 使用 api.minimax.io/anthropic 端点
+</div>
+<p>或配置 <code>config.yaml</code>：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  provider: "minimax-oauth"
+  default: "MiniMax-M2.7"
+</div>
+<p>支持的模型：<code>MiniMax-M2.7</code>（主模型）和 <code>MiniMax-M2.7-highspeed</code>（默认辅助模型）。OAuth 路径忽略 <code>MINIMAX_API_KEY</code> / <code>MINIMAX_BASE_URL</code>。</p>
+<div class="tip"><strong>💡 MiniMax OAuth 与 API key</strong>
+<code>minimax-oauth</code> 使用 MiniMax 面向消费者的 portal，通过 OAuth 登录——无需设置计费。<code>minimax</code> 和 <code>minimax-cn</code> 提供商使用 <code>MINIMAX_API_KEY</code> / <code>MINIMAX_CN_API_KEY</code>——用于程序化访问。完整流程参见 <a href="/guides/minimax-oauth">MiniMax OAuth 指南</a>。
+</div>
+<h3>NVIDIA NIM</h3>
+<p>通过 <a href="https://build.nvidia.com">build.nvidia.com</a>（免费 API key）或本地 NIM 端点使用 Nemotron 及其他开源模型。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 云端（build.nvidia.com）
+hermes chat --provider nvidia --model nvidia/nemotron-3-super-120b-a12b
+# 需要：~/.hermes/.env 中的 NVIDIA_API_KEY
+
+# 本地 NIM 端点——覆盖基础 URL
+NVIDIA_BASE_URL=http://localhost:8000/v1 hermes chat --provider nvidia --model nvidia/nemotron-3-super-120b-a12b
+</div>
+<p>或在 <code>config.yaml</code> 中永久设置：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  provider: "nvidia"
+  default: "nvidia/nemotron-3-super-120b-a12b"
+</div>
+<div class="tip"><strong>💡 本地 NIM</strong>
+对于本地部署（DGX Spark、本地 GPU），设置 <code>NVIDIA_BASE_URL=http://localhost:8000/v1</code>。NIM 暴露与 build.nvidia.com 相同的 OpenAI 兼容 chat completions API，因此在云端和本地之间切换只需修改一行环境变量。
+</div>
+<p>Hermes 会在每次向 <code>build.nvidia.com</code> 发送请求时自动附加 NIM 计费来源请求头——无需任何配置。这会在 NVIDIA 计费仪表板中将消耗路由到正确的来源。</p>
+<h3>GMI Cloud</h3>
+<p>通过 <a href="https://www.gmicloud.ai/">GMI Cloud</a> 使用开源和推理模型——OpenAI 兼容 API，API key 认证。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# GMI Cloud
+hermes chat --provider gmi --model deepseek-ai/DeepSeek-R1
+# 需要：~/.hermes/.env 中的 GMI_API_KEY
+</div>
+<p>或在 <code>config.yaml</code> 中永久设置：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  provider: "gmi"
+  default: "deepseek-ai/DeepSeek-R1"
+</div>
+<p>基础 URL 可通过 <code>GMI_BASE_URL</code> 覆盖（默认：<code>https://api.gmi-serving.com/v1</code>）。</p>
+<h3>StepFun</h3>
+<p>通过 <a href="https://platform.stepfun.com">StepFun</a> 使用 Step 系列模型——OpenAI 兼容 API，API key 认证。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# StepFun
+hermes chat --provider stepfun --model step-3.5-flash
+# 需要：~/.hermes/.env 中的 STEPFUN_API_KEY
+</div>
+<p>或在 <code>config.yaml</code> 中永久设置：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  provider: "stepfun"
+  default: "step-3.5-flash"
+</div>
+<p>基础 URL 可通过 <code>STEPFUN_BASE_URL</code> 覆盖（默认：<code>https://api.stepfun.com/v1</code>）。</p>
+<h3>Hugging Face 推理提供商</h3>
+<p><a href="https://huggingface.co/docs/inference-providers">Hugging Face Inference Providers</a> 通过统一的 OpenAI 兼容端点（<code>router.huggingface.co/v1</code>）路由到 20+ 开源模型。请求自动路由到最快的可用后端（Groq、Together、SambaNova 等），并支持自动故障转移。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 使用任意可用模型
+hermes chat --provider huggingface --model Qwen/Qwen3-235B-A22B-Thinking-2507
+# 需要：~/.hermes/.env 中的 HF_TOKEN
+
+# 短别名
+hermes chat --provider hf --model deepseek-ai/DeepSeek-V3.2
+</div>
+<p>或在 <code>config.yaml</code> 中永久设置：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  provider: "huggingface"
+  default: "Qwen/Qwen3-235B-A22B-Thinking-2507"
+</div>
+<p>在 <a href="https://huggingface.co/settings/tokens">huggingface.co/settings/tokens</a> 获取 token——确保启用&quot;Make calls to Inference Providers&quot;权限。包含免费层（每月 $0.10 积分，不加价）。</p>
+<p>可在模型名称后附加路由后缀：<code>:fastest</code>（默认）、<code>:cheapest</code>，或 <code>:provider_name</code> 强制指定后端。</p>
+<p>基础 URL 可通过 <code>HF_BASE_URL</code> 覆盖。</p>
+<h3>通过 OAuth 使用 Google Gemini（<code>google-gemini-cli</code>）</h3>
+<p><code>google-gemini-cli</code> 提供商使用 Google 的 Cloud Code Assist 后端——与 Google 自己的 <code>gemini-cli</code> 工具使用的 API 相同。支持<strong>免费层</strong>（个人账户每日配额充足）和<strong>付费层</strong>（通过 GCP 项目的 Standard/Enterprise）。</p>
+<p><strong>快速开始：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes model
+# → 选择"Google Gemini (OAuth)"
+# → 查看政策警告，确认
+# → 浏览器打开 accounts.google.com，登录
+# → 完成——Hermes 在首次请求时自动开通免费层
+</div>
+<p>Hermes 默认使用 Google 的<strong>公开</strong> <code>gemini-cli</code> 桌面 OAuth 客户端——与 Google 在其开源 <code>gemini-cli</code> 中包含的凭据相同。桌面 OAuth 客户端不是机密客户端（PKCE 提供安全保障）。你无需安装 <code>gemini-cli</code> 或注册自己的 GCP OAuth 客户端。</p>
+<p><strong>认证工作原理：</strong></p>
+<ul>
+<li>针对 <code>accounts.google.com</code> 的 PKCE 授权码流程</li>
+<li>浏览器回调地址 <code>http://127.0.0.1:8085/oauth2callback</code>（端口占用时自动回退到临时端口）</li>
+<li>Token 存储在 <code>~/.hermes/auth/google_oauth.json</code>（chmod 0600，原子写入，跨进程 <code>fcntl</code> 锁）</li>
+<li>到期前 60 秒自动刷新</li>
+<li>无头环境（SSH、<code>HERMES_HEADLESS=1</code>）→ 粘贴模式回退</li>
+<li>并发刷新去重——两个并发请求不会触发双重刷新</li>
+<li><code>invalid_grant</code>（刷新 token 被撤销）→ 凭据文件被清除，提示用户重新登录</li>
+</ul>
+<p><strong>推理工作原理：</strong></p>
+<ul>
+<li>流量发送到 <code>https://cloudcode-pa.googleapis.com/v1internal:generateContent</code>
+（流式传输为 <code>:streamGenerateContent?alt=sse</code>），而非付费的 <code>v1beta/openai</code> 端点</li>
+<li>请求体封装为 <code>{project, model, user_prompt_id, request}</code></li>
+<li>OpenAI 格式的 <code>messages[]</code>、<code>tools[]</code>、<code>tool_choice</code> 被转换为 Gemini 原生的
+<code>contents[]</code>、<code>tools[].functionDeclarations</code>、<code>toolConfig</code> 格式</li>
+<li>响应转换回 OpenAI 格式，Hermes 其余部分无感知</li>
+</ul>
+<p><strong>层级与项目 ID：</strong></p>
+<table>
+<thead>
+<tr>
+<th>你的情况</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>个人 Google 账户，使用免费层</td>
+<td>无需操作——登录即可开始聊天</td>
+</tr>
+<tr>
+<td>Workspace / Standard / Enterprise 账户</td>
+<td>将 <code>HERMES_GEMINI_PROJECT_ID</code> 或 <code>GOOGLE_CLOUD_PROJECT</code> 设置为你的 GCP 项目 ID</td>
+</tr>
+<tr>
+<td>VPC-SC 保护的组织</td>
+<td>Hermes 检测到 <code>SECURITY_POLICY_VIOLATED</code> 后自动强制使用 <code>standard-tier</code></td>
+</tr>
+</tbody>
+</table>
+<p>免费层在首次使用时自动开通 Google 托管项目。无需 GCP 配置。</p>
+<p><strong>配额监控：</strong></p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/gquota
+</div>
+<p>以进度条显示每个模型的剩余 Code Assist 配额：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Gemini Code Assist quota  (project: 123-abc)
+
+  gemini-2.5-pro                      ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░   85%
+  gemini-2.5-flash [input]            ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░   92%
+</div>
+<div class="tip warning"><strong>⚠️ 政策风险</strong>
+Google 认为将 Gemini CLI OAuth 客户端用于第三方软件违反政策。部分用户反映账户受到限制。为降低风险，建议改用 <code>gemini</code> 提供商并通过 API key 访问。Hermes 会在 OAuth 开始前显示警告并要求明确确认。
+</div>
+<p><strong>自定义 OAuth 客户端（可选）：</strong></p>
+<p>如果你希望注册自己的 Google OAuth 客户端——例如将配额和授权范围限定在自己的 GCP 项目内——请设置：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+HERMES_GEMINI_CLIENT_ID=your-client.apps.googleusercontent.com
+HERMES_GEMINI_CLIENT_SECRET=...   # 桌面客户端可选
+</div>
+<p>在 <a href="https://console.cloud.google.com/apis/credentials">console.cloud.google.com/apis/credentials</a> 注册一个<strong>桌面应用</strong> OAuth 客户端，并启用 Generative Language API。</p>
+<h2>自定义与自托管 LLM 提供商</h2>
+<p>Hermes Agent 可与<strong>任何 OpenAI 兼容 API 端点</strong>配合使用。只要服务器实现了 <code>/v1/chat/completions</code>，就可以将 Hermes 指向它。这意味着你可以使用本地模型、GPU 推理服务器、多提供商路由器或任何第三方 API。</p>
+<h3>通用配置</h3>
+<p>配置自定义端点的三种方式：</p>
+<p><strong>交互式配置（推荐）：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes model
+# 选择"Custom endpoint (self-hosted / VLLM / etc.)"
+# 输入：API 基础 URL、API key、模型名称
+</div>
+<p><strong>手动配置（<code>config.yaml</code>）：</strong></p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 在 ~/.hermes/config.yaml 中
+model:
+  default: your-model-name
+  provider: custom
+  base_url: http://localhost:8000/v1
+  api_key: your-key-or-leave-empty-for-local
+</div>
+<div class="tip warning"><strong>⚠️ 旧版环境变量</strong>
+<code>.env</code> 中的 <code>OPENAI_BASE_URL</code> 和 <code>LLM_MODEL</code> 已<strong>移除</strong>。Hermes 的任何部分都不再读取这两个变量——<code>config.yaml</code> 是模型和端点配置的唯一来源。如果你的 <code>.env</code> 中有过时条目，下次运行 <code>hermes setup</code> 或配置迁移时会自动清除。请使用 <code>hermes model</code> 或直接编辑 <code>config.yaml</code>。
+</div>
+<p>两种方式都会持久化到 <code>config.yaml</code>，该文件是模型、提供商和基础 URL 的唯一来源。</p>
+<h3>使用 <code>/model</code> 切换模型</h3>
+<div class="tip warning"><strong>⚠️ hermes model 与 /model</strong>
+<p><strong><code>hermes model</code></strong>（在终端中运行，任何聊天会话之外）是<strong>完整的提供商配置向导</strong>。用于添加新提供商、运行 OAuth 流程、输入 API key 和配置自定义端点。</p>
+<p><strong><code>/model</code></strong>（在活跃的 Hermes 聊天会话中输入）只能在<strong>已配置的</strong>提供商和模型之间<strong>切换</strong>。它无法添加新提供商、运行 OAuth 或提示输入 API key。如果你只配置了一个提供商（如 OpenRouter），<code>/model</code> 只会显示该提供商的模型。</p>
+<p><strong>添加新提供商：</strong> 退出会话（<code>Ctrl+C</code> 或 <code>/quit</code>），运行 <code>hermes model</code>，配置新提供商，然后开启新会话。</p>
+
+</div>
+<p>配置好至少一个自定义端点后，可以在会话中途切换模型：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/model custom:qwen-2.5          # 切换到自定义端点上的某个模型
+/model custom                    # 从端点自动检测模型
+/model openrouter:claude-sonnet-4 # 切换回云端提供商
+</div>
+<p>如果你配置了<strong>命名自定义提供商</strong>（见下文），使用三段式语法：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/model custom:local:qwen-2.5    # 使用"local"自定义提供商和 qwen-2.5 模型
+/model custom:work:llama3       # 使用"work"自定义提供商和 llama3
+</div>
+<p>切换提供商时，Hermes 会将基础 URL 和提供商持久化到配置中，使更改在重启后保留。从自定义端点切换到内置提供商时，过时的基础 URL 会自动清除。</p>
+<div class="tip"><strong>💡 提示</strong>
+<code>/model custom</code>（不带模型名称）会查询端点的 <code>/models</code> API，如果只加载了一个模型则自动选择。适用于运行单个模型的本地服务器。
+</div>
+<p>以下所有内容遵循相同模式——只需更改 URL、key 和模型名称。</p>
+<hr />
+<h3>Ollama — 本地模型，零配置</h3>
+<p><a href="https://ollama.com/">Ollama</a> 用一条命令在本地运行开源模型。最适合：快速本地实验、隐私敏感工作、离线使用。通过 OpenAI 兼容 API 支持工具调用。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 安装并运行模型
+ollama pull qwen2.5-coder:32b
+ollama serve   # 在端口 11434 启动
+</div>
+<p>然后配置 Hermes：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes model
+# 选择"Custom endpoint (self-hosted / VLLM / etc.)"
+# 输入 URL：http://localhost:11434/v1
+# 跳过 API key（Ollama 不需要）
+# 输入模型名称（如 qwen2.5-coder:32b）
+</div>
+<p>或直接配置 <code>config.yaml</code>：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  default: qwen2.5-coder:32b
+  provider: custom
+  base_url: http://localhost:11434/v1
+  context_length: 32768   # 见下方警告
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 方式 1：通过环境变量设置服务器全局值（推荐）
+OLLAMA_CONTEXT_LENGTH=32768 ollama serve
+
+# 方式 2：对于 systemd 管理的 Ollama
+sudo systemctl edit ollama.service
+# 添加：Environment="OLLAMA_CONTEXT_LENGTH=32768"
+# 然后：sudo systemctl daemon-reload &amp;&amp; sudo systemctl restart ollama
+
+# 方式 3：烘焙到自定义模型中（每个模型持久生效）
+echo -e "FROM qwen2.5-coder:32b\nPARAMETER num_ctx 32768" &gt; Modelfile
+ollama create qwen2.5-coder-32k -f Modelfile
+</div>
+<div class="tip warning"><strong>⚡ Ollama 默认上下文长度非常短</strong>
+<p>Ollama <strong>默认不使用</strong>模型的完整上下文窗口。根据你的显存，默认值为：</p>
+<p>| 可用显存 | 默认上下文 |
+|----------------|----------------|
+| 小于 24 GB | <strong>4,096 tokens</strong> |
+| 24–48 GB | 32,768 tokens |
+| 48+ GB | 256,000 tokens |</p>
+<p>对于带工具的智能体使用，<strong>至少需要 16k–32k 上下文</strong>。在 4k 时，系统 prompt 加工具 schema 就可能填满窗口，没有空间留给对话。</p>
+<p><strong>如何增加</strong>（选择其一）：</p>
+<p><strong>无法通过 OpenAI 兼容 API</strong>（<code>/v1/chat/completions</code>）设置上下文长度。必须在服务端或通过 Modelfile 配置。这是将 Ollama 与 Hermes 等工具集成时最常见的困惑来源。</p>
+
+</div>
+<p><strong>验证上下文设置是否正确：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+ollama ps
+# 查看 CONTEXT 列——应显示你配置的值
+</div>
+<div class="tip"><strong>💡 提示</strong>
+使用 <code>ollama list</code> 列出可用模型。使用 <code>ollama pull &lt;model&gt;</code> 从 <a href="https://ollama.com/library">Ollama 库</a> 拉取任意模型。Ollama 自动处理 GPU 卸载——大多数配置无需手动设置。
+</div>
+<hr />
+<h3>vLLM — 高性能 GPU 推理</h3>
+<p><a href="https://docs.vllm.ai/">vLLM</a> 是生产 LLM 服务的标准方案。最适合：GPU 硬件上的最大吞吐量、大模型服务、连续批处理。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install vllm
+vllm serve meta-llama/Llama-3.1-70B-Instruct \
+  --port 8000 \
+  --max-model-len 65536 \
+  --tensor-parallel-size 2 \
+  --enable-auto-tool-choice \
+  --tool-call-parser hermes
+</div>
+<p>然后配置 Hermes：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes model
+# 选择"Custom endpoint (self-hosted / VLLM / etc.)"
+# 输入 URL：http://localhost:8000/v1
+# 跳过 API key（或输入你配置 vLLM 时设置的 --api-key）
+# 输入模型名称：meta-llama/Llama-3.1-70B-Instruct
+</div>
+<p><strong>上下文长度：</strong> vLLM 默认读取模型的 <code>max_position_embeddings</code>。如果超出显存，会报错并要求降低 <code>--max-model-len</code>。也可使用 <code>--max-model-len auto</code> 自动找到能放入显存的最大值。设置 <code>--gpu-memory-utilization 0.95</code>（默认 0.9）可将更多上下文放入显存。</p>
+<p><strong>工具调用需要显式标志：</strong></p>
+<table>
+<thead>
+<tr>
+<th>标志</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--enable-auto-tool-choice</code></td>
+<td><code>tool_choice: &quot;auto&quot;</code> 所必需（Hermes 的默认值）</td>
+</tr>
+<tr>
+<td><code>--tool-call-parser &lt;name&gt;</code></td>
+<td>模型工具调用格式的解析器</td>
+</tr>
+</tbody>
+</table>
+<p>支持的解析器：<code>hermes</code>（Qwen 2.5、Hermes 2/3）、<code>llama3_json</code>（Llama 3.x）、<code>mistral</code>、<code>deepseek_v3</code>、<code>deepseek_v31</code>、<code>xlam</code>、<code>pythonic</code>。没有这些标志，工具调用将无法工作——模型会将工具调用以文本形式输出。</p>
+<div class="tip"><strong>💡 提示</strong>
+vLLM 支持人类可读的大小：<code>--max-model-len 64k</code>（小写 k = 1000，大写 K = 1024）。
+</div>
+<hr />
+<h3>SGLang — 带 RadixAttention 的快速服务</h3>
+<p><a href="https://github.com/sgl-project/sglang">SGLang</a> 是 vLLM 的替代方案，具有用于 KV 缓存复用的 RadixAttention。最适合：多轮对话（前缀缓存）、约束解码、结构化输出。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install "sglang[all]"
+python -m sglang.launch_server \
+  --model meta-llama/Llama-3.1-70B-Instruct \
+  --port 30000 \
+  --context-length 65536 \
+  --tp 2 \
+  --tool-call-parser qwen
+</div>
+<p>然后配置 Hermes：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes model
+# 选择"Custom endpoint (self-hosted / VLLM / etc.)"
+# 输入 URL：http://localhost:30000/v1
+# 输入模型名称：meta-llama/Llama-3.1-70B-Instruct
+</div>
+<p><strong>上下文长度：</strong> SGLang 默认从模型配置读取。使用 <code>--context-length</code> 覆盖。如果需要超过模型声明的最大值，设置 <code>SGLANG_ALLOW_OVERWRITE_LONGER_CONTEXT_LEN=1</code>。</p>
+<p><strong>工具调用：</strong> 使用 <code>--tool-call-parser</code> 并选择适合你模型系列的解析器：<code>qwen</code>（Qwen 2.5）、<code>llama3</code>、<code>llama4</code>、<code>deepseekv3</code>、<code>mistral</code>、<code>glm</code>。没有此标志，工具调用将以纯文本返回。</p>
+<div class="tip warning"><strong>⚡ SGLang 默认最大输出 128 tokens</strong>
+如果响应看起来被截断，在请求中添加 <code>max_tokens</code> 或在服务器上设置 <code>--default-max-tokens</code>。SGLang 的默认值是每次响应仅 128 tokens（如果请求中未指定）。
+</div>
+<hr />
+<h3>llama.cpp / llama-server — CPU 与 Metal 推理</h3>
+<p><a href="https://github.com/ggml-org/llama.cpp">llama.cpp</a> 在 CPU、Apple Silicon（Metal）和消费级 GPU 上运行量化模型。最适合：无数据中心 GPU 的模型运行、Mac 用户、边缘部署。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 构建并启动 llama-server
+cmake -B build &amp;&amp; cmake --build build --config Release
+./build/bin/llama-server \
+  --jinja -fa \
+  -c 32768 \
+  -ngl 99 \
+  -m models/qwen2.5-coder-32b-instruct-Q4_K_M.gguf \
+  --port 8080 --host 0.0.0.0
+</div>
+<p><strong>上下文长度（<code>-c</code>）：</strong> 近期版本默认为 <code>0</code>，从 GGUF 元数据读取模型的训练上下文。对于训练上下文超过 128k 的模型，这可能因尝试分配完整 KV 缓存而导致 OOM。请显式设置 <code>-c</code> 为你需要的值（32k–64k 是智能体使用的合理范围）。如果使用并行槽（<code>-np</code>），总上下文在槽之间分配——<code>-c 32768 -np 4</code> 时每个槽只有 8k。</p>
+<p>然后配置 Hermes 指向它：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes model
+# 选择"Custom endpoint (self-hosted / VLLM / etc.)"
+# 输入 URL：http://localhost:8080/v1
+# 跳过 API key（本地服务器不需要）
+# 输入模型名称——或留空以在只加载一个模型时自动检测
+</div>
+<p>这会将端点保存到 <code>config.yaml</code>，在会话间持久保留。</p>
+<div class="tip warning"><strong>⚡ `--jinja` 是工具调用的必要条件</strong>
+<p>没有 <code>--jinja</code>，llama-server 会完全忽略 <code>tools</code> 参数。模型会尝试在响应文本中写入 JSON 来调用工具，但 Hermes 不会将其识别为工具调用——你会看到原始 JSON（如 <code>{&quot;name&quot;: &quot;web_search&quot;, ...}</code>）作为消息打印出来，而不是实际执行搜索。</p>
+<p>原生工具调用支持（最佳性能）：Llama 3.x、Qwen 2.5（包括 Coder）、Hermes 2/3、Mistral、DeepSeek、Functionary。其他所有模型使用通用处理器，可以工作但效率可能较低。完整列表参见 <a href="https://github.com/ggml-org/llama.cpp/blob/master/docs/function-calling.html">llama.cpp 函数调用文档</a>。</p>
+<p>可通过检查 <code>http://localhost:8080/props</code> 验证工具支持是否已激活——<code>chat_template</code> 字段应存在。</p>
+
+</div>
+<div class="tip"><strong>💡 提示</strong>
+从 <a href="https://huggingface.co/models?library=gguf">Hugging Face</a> 下载 GGUF 模型。Q4_K_M 量化在质量与内存使用之间提供最佳平衡。
+</div>
+<hr />
+<h3>LM Studio — 带本地模型的桌面应用</h3>
+<p><a href="https://lmstudio.ai/">LM Studio</a> 是一款带 GUI 的本地模型运行桌面应用。最适合：偏好可视化界面的用户、快速模型测试、macOS/Windows/Linux 开发者。</p>
+<p>从 LM Studio 应用启动服务器（开发者标签页 → 启动服务器），或使用 CLI：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+lms server start                        # 在端口 1234 启动
+lms load qwen2.5-coder --context-length 32768
+</div>
+<p>然后配置 Hermes：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes model
+# 选择"LM Studio"
+# 按 Enter 使用 http://localhost:1234/v1
+# 从已发现的模型中选择
+# 如果启用了 LM Studio 服务器认证，在提示时输入 LM_API_KEY
+</div>
+<p>Hermes 会自动以 64K 上下文长度加载 LM Studio 模型。</p>
+<p>在 LM Studio 中更改上下文长度：</p>
+<ol>
+<li>点击模型选择器旁的齿轮图标</li>
+<li>将&quot;Context Length&quot;设置为至少 64000 以获得流畅体验</li>
+<li>重新加载模型使更改生效</li>
+<li>如果你的机器无法容纳 64000，考虑使用上下文长度更大的小模型。</li>
+</ol>
+<p>或使用 CLI：<code>lms load model-name --context-length 64000</code></p>
+<p>可使用 CLI 估算模型是否能放入内存：<code>lms load model-name --context-length 64000 --estimate-only</code></p>
+<p>设置每个模型的持久默认值：我的模型标签页 → 模型上的齿轮图标 → 设置上下文大小。
+:::</p>
+<p><strong>工具调用：</strong> 自 LM Studio 0.3.6 起支持。具有原生工具调用训练的模型（Qwen 2.5、Llama 3.x、Mistral、Hermes）会被自动检测并显示工具徽章。其他模型使用通用回退，可靠性可能较低。</p>
+<hr />
+<h3>WSL2 网络（Windows 用户）</h3>
+<p>由于 Hermes Agent 需要 Unix 环境，Windows 用户在 WSL2 内运行它。如果你的模型服务器（Ollama、LM Studio 等）运行在 <strong>Windows 主机</strong>上，需要桥接网络——WSL2 使用具有独立子网的虚拟网络适配器，因此 WSL2 内的 <code>localhost</code> 指向 Linux 虚拟机，<strong>而非</strong> Windows 主机。</p>
+<div class="tip"><strong>💡 都在 WSL2 内？没问题。</strong>
+如果你的模型服务器也在 WSL2 内运行（vLLM、SGLang 和 llama-server 的常见情况），<code>localhost</code> 可以正常工作——它们共享同一网络命名空间。跳过本节。
+</div>
+<h4>方式 1：镜像网络模式（推荐）</h4>
+<p>适用于 <strong>Windows 11 22H2+</strong>，镜像模式使 <code>localhost</code> 在 Windows 和 WSL2 之间双向工作——最简单的解决方案。</p>
+<ol>
+<li>创建或编辑 <code>%USERPROFILE%\.wslconfig</code>（如 <code>C:\Users\YourName\.wslconfig</code>）：</li>
+</ol>
+<div class="code-block"><span class="code-lang">ini</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+   [wsl2]
+   networkingMode=mirrored
+</div>
+<ol start="2">
+<li>从 PowerShell 重启 WSL：</li>
+</ol>
+<div class="code-block"><span class="code-lang">powershell</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+   wsl --shutdown
+</div>
+<ol start="3">
+<li>重新打开 WSL2 终端。<code>localhost</code> 现在可以访问 Windows 服务：</li>
+</ol>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+   curl http://localhost:11434/v1/models   # Windows 上的 Ollama——正常工作
+</div>
+<div class="code-block"><span class="code-lang">powershell</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Set-NetFirewallHyperVVMSetting -Name '{40E0AC32-46A5-438A-A0B2-2B479E8F2E90}' -DefaultInboundAction Allow
+</div>
+<div class="tip"><strong>📝 Hyper-V 防火墙</strong>
+在某些 Windows 11 版本上，Hyper-V 防火墙默认阻止镜像连接。如果启用镜像模式后 <code>localhost</code> 仍无法工作，在<strong>管理员 PowerShell</strong> 中运行：
+</div>
+<h4>方式 2：使用 Windows 主机 IP（Windows 10 / 旧版本）</h4>
+<p>如果无法使用镜像模式，从 WSL2 内部找到 Windows 主机 IP 并使用它代替 <code>localhost</code>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 获取 Windows 主机 IP（WSL2 虚拟网络的默认网关）
+ip route show | grep -i default | awk '{ print $3 }'
+# 示例输出：172.29.192.1
+</div>
+<p>在 Hermes 配置中使用该 IP：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  default: qwen2.5-coder:32b
+  provider: custom
+  base_url: http://172.29.192.1:11434/v1   # Windows 主机 IP，非 localhost
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+export WSL_HOST=$(ip route show | grep -i default | awk '{ print $3 }')
+echo "Windows host at: $WSL_HOST"
+curl http://$WSL_HOST:11434/v1/models   # 测试 Ollama
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+sudo apt install libnss-mdns
+curl http://$(hostname).local:11434/v1/models
+</div>
+<div class="tip"><strong>💡 动态获取</strong>
+<p>WSL2 重启后主机 IP 可能变化。可在 shell 中动态获取：</p>
+<p>或使用机器的 mDNS 名称（需要 WSL2 中的 <code>libnss-mdns</code>）：</p>
+
+</div>
+<h4>服务器绑定地址（NAT 模式必需）</h4>
+<p>如果使用<strong>方式 2</strong>（NAT 模式加主机 IP），Windows 上的模型服务器必须接受来自 <code>127.0.0.1</code> 以外的连接。默认情况下，大多数服务器只监听 localhost——NAT 模式下 WSL2 的连接来自不同的虚拟子网，会被拒绝。在镜像模式下，<code>localhost</code> 直接映射，因此默认的 <code>127.0.0.1</code> 绑定可以正常工作。</p>
+<table>
+<thead>
+<tr>
+<th>服务器</th>
+<th>默认绑定</th>
+<th>修复方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ollama</strong></td>
+<td><code>127.0.0.1</code></td>
+<td>启动 Ollama 前设置 <code>OLLAMA_HOST=0.0.0.0</code> 环境变量（Windows 系统设置 → 环境变量，或编辑 Ollama 服务）</td>
+</tr>
+<tr>
+<td><strong>LM Studio</strong></td>
+<td><code>127.0.0.1</code></td>
+<td>在开发者标签页 → 服务器设置中启用**&quot;Serve on Network&quot;**</td>
+</tr>
+<tr>
+<td><strong>llama-server</strong></td>
+<td><code>127.0.0.1</code></td>
+<td>在启动命令中添加 <code>--host 0.0.0.0</code></td>
+</tr>
+<tr>
+<td><strong>vLLM</strong></td>
+<td><code>0.0.0.0</code></td>
+<td>默认已绑定所有接口</td>
+</tr>
+<tr>
+<td><strong>SGLang</strong></td>
+<td><code>127.0.0.1</code></td>
+<td>在启动命令中添加 <code>--host 0.0.0.0</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Windows 上的 Ollama（详细步骤）：</strong> Ollama 作为 Windows 服务运行。设置 <code>OLLAMA_HOST</code>：</p>
+<ol>
+<li>打开<strong>系统属性</strong> → <strong>环境变量</strong></li>
+<li>添加新的<strong>系统变量</strong>：<code>OLLAMA_HOST</code> = <code>0.0.0.0</code></li>
+<li>重启 Ollama 服务（或重启电脑）</li>
+</ol>
+<h4>Windows 防火墙</h4>
+<p>Windows 防火墙将 WSL2 视为独立网络（在 NAT 和镜像模式下均如此）。如果按上述步骤操作后连接仍然失败，为模型服务器端口添加防火墙规则：</p>
+<div class="code-block"><span class="code-lang">powershell</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 在管理员 PowerShell 中运行——将 PORT 替换为你服务器的端口
+New-NetFirewallRule -DisplayName "Allow WSL2 to Model Server" -Direction Inbound -Action Allow -Protocol TCP -LocalPort 11434
+</div>
+<p>常用端口：Ollama <code>11434</code>、vLLM <code>8000</code>、SGLang <code>30000</code>、llama-server <code>8080</code>、LM Studio <code>1234</code>。</p>
+<h4>快速验证</h4>
+<p>从 WSL2 内部测试是否能访问模型服务器：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 将 URL 替换为你服务器的地址和端口
+curl http://localhost:11434/v1/models          # 镜像模式
+curl http://172.29.192.1:11434/v1/models       # NAT 模式（使用你的实际主机 IP）
+</div>
+<p>如果收到列出模型的 JSON 响应，说明配置正确。在 Hermes 配置中使用相同的 URL 作为 <code>base_url</code>。</p>
+<hr />
+<h3>本地模型故障排查</h3>
+<p>以下问题影响与 Hermes 配合使用的<strong>所有</strong>本地推理服务器。</p>
+<h4>从 WSL2 连接 Windows 托管模型服务器时&quot;连接被拒绝&quot;</h4>
+<p>如果你在 WSL2 内运行 Hermes 而模型服务器在 Windows 主机上，在 WSL2 默认 NAT 网络模式下 <code>http://localhost:&lt;port&gt;</code> 无法工作。参见上方的 <a href="#wsl2-networking-windows-users">WSL2 网络</a> 了解解决方案。</p>
+<h4>工具调用以文本形式出现而非执行</h4>
+<p>模型输出类似 <code>{&quot;name&quot;: &quot;web_search&quot;, &quot;arguments&quot;: {...}}</code> 的消息，而不是实际调用工具。</p>
+<p><strong>原因：</strong> 你的服务器未启用工具调用，或模型不支持通过服务器的工具调用实现。</p>
+<table>
+<thead>
+<tr>
+<th>服务器</th>
+<th>修复方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>llama.cpp</strong></td>
+<td>在启动命令中添加 <code>--jinja</code></td>
+</tr>
+<tr>
+<td><strong>vLLM</strong></td>
+<td>添加 <code>--enable-auto-tool-choice --tool-call-parser hermes</code></td>
+</tr>
+<tr>
+<td><strong>SGLang</strong></td>
+<td>添加 <code>--tool-call-parser qwen</code>（或适当的解析器）</td>
+</tr>
+<tr>
+<td><strong>Ollama</strong></td>
+<td>工具调用默认启用——确保你的模型支持（使用 <code>ollama show model-name</code> 检查）</td>
+</tr>
+<tr>
+<td><strong>LM Studio</strong></td>
+<td>更新到 0.3.6+ 并使用具有原生工具支持的模型</td>
+</tr>
+</tbody>
+</table>
+<h4>模型似乎忘记上下文或给出不连贯的响应</h4>
+<p><strong>原因：</strong> 上下文窗口太小。当对话超过上下文限制时，大多数服务器会静默丢弃较早的消息。Hermes 的系统 prompt 加工具 schema 单独就可能占用 4k–8k tokens。</p>
+<p><strong>诊断：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 检查 Hermes 认为的上下文大小
+# 查看启动行："Context limit: X tokens"
+
+# 检查服务器的实际上下文
+# Ollama：ollama ps（CONTEXT 列）
+# llama.cpp：curl http://localhost:8080/props | jq '.default_generation_settings.n_ctx'
+# vLLM：检查启动参数中的 --max-model-len
+</div>
+<p><strong>修复：</strong> 将上下文设置为至少 <strong>32,768 tokens</strong> 用于智能体使用。参见上方各服务器章节了解具体标志。</p>
+<h4>启动时显示&quot;Context limit: 2048 tokens&quot;</h4>
+<p>Hermes 从服务器的 <code>/v1/models</code> 端点自动检测上下文长度。如果服务器报告的值较低（或根本不报告），Hermes 使用模型声明的限制，该值可能不正确。</p>
+<p><strong>修复：</strong> 在 <code>config.yaml</code> 中显式设置：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  default: your-model
+  provider: custom
+  base_url: http://localhost:11434/v1
+  context_length: 32768
+</div>
+<h4>响应在句子中间被截断</h4>
+<p><strong>可能原因：</strong></p>
+<ol>
+<li><strong>服务器上的输出上限（<code>max_tokens</code>）过低</strong> — SGLang 默认每次响应 128 tokens。在服务器上设置 <code>--default-max-tokens</code>，或在 config.yaml 中配置 <code>model.max_tokens</code>。注意：<code>max_tokens</code> 只控制响应长度——与对话历史可以有多长无关（那是 <code>context_length</code>）。</li>
+<li><strong>上下文耗尽</strong> — 模型填满了上下文窗口。增加 <code>model.context_length</code> 或在 Hermes 中启用<a href="/user-guide/configuration#context-compression">上下文压缩</a>。</li>
+</ol>
+<hr />
+<h3>LiteLLM Proxy — 多提供商网关</h3>
+<p><a href="https://docs.litellm.ai/">LiteLLM</a> 是一个 OpenAI 兼容代理，将 100+ LLM 提供商统一在单一 API 后面。最适合：无需更改配置即可切换提供商、负载均衡、故障转移链、预算控制。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 安装并启动
+pip install "litellm[proxy]"
+litellm --model anthropic/claude-sonnet-4 --port 4000
+
+# 或使用配置文件支持多个模型：
+litellm --config litellm_config.yaml --port 4000
+</div>
+<p>然后通过 <code>hermes model</code> → 自定义端点 → <code>http://localhost:4000/v1</code> 配置 Hermes。</p>
+<p>带故障转移的 <code>litellm_config.yaml</code> 示例：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model_list:
+  - model_name: "best"
+    litellm_params:
+      model: anthropic/claude-sonnet-4
+      api_key: sk-ant-...
+  - model_name: "best"
+    litellm_params:
+      model: openai/gpt-4o
+      api_key: sk-...
+router_settings:
+  routing_strategy: "latency-based-routing"
+</div>
+<hr />
+<h3>ClawRouter — 成本优化路由</h3>
+<p><a href="https://github.com/BlockRunAI/ClawRouter">ClawRouter</a> 由 BlockRunAI 开发，是一个本地路由代理，根据查询复杂度自动选择模型。它从 14 个维度对请求进行分类，并路由到能处理该任务的最便宜模型。支付方式为 USDC 加密货币（无需 API key）。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 安装并启动
+npx @blockrun/clawrouter    # 在端口 8402 启动
+</div>
+<p>然后通过 <code>hermes model</code> → 自定义端点 → <code>http://localhost:8402/v1</code> → 模型名称 <code>blockrun/auto</code> 配置 Hermes。</p>
+<p>路由配置文件：</p>
+<table>
+<thead>
+<tr>
+<th>配置文件</th>
+<th>策略</th>
+<th>节省</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>blockrun/auto</code></td>
+<td>质量/成本均衡</td>
+<td>74-100%</td>
+</tr>
+<tr>
+<td><code>blockrun/eco</code></td>
+<td>尽可能便宜</td>
+<td>95-100%</td>
+</tr>
+<tr>
+<td><code>blockrun/premium</code></td>
+<td>最佳质量模型</td>
+<td>0%</td>
+</tr>
+<tr>
+<td><code>blockrun/free</code></td>
+<td>仅免费模型</td>
+<td>100%</td>
+</tr>
+<tr>
+<td><code>blockrun/agentic</code></td>
+<td>针对工具使用优化</td>
+<td>不定</td>
+</tr>
+</tbody>
+</table>
+<div class="tip"><strong>📝 注意</strong>
+ClawRouter 需要在 Base 或 Solana 上有 USDC 充值的钱包用于支付。所有请求通过 BlockRun 的后端 API 路由。运行 <code>npx @blockrun/clawrouter doctor</code> 检查钱包状态。
+</div>
+<hr />
+<h3>其他兼容提供商</h3>
+<p>任何具有 OpenAI 兼容 API 的服务均可使用。一些常用选项：</p>
+<table>
+<thead>
+<tr>
+<th>提供商</th>
+<th>基础 URL</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://together.ai">Together AI</a></td>
+<td><code>https://api.together.xyz/v1</code></td>
+<td>云托管开源模型</td>
+</tr>
+<tr>
+<td><a href="https://groq.com">Groq</a></td>
+<td><code>https://api.groq.com/openai/v1</code></td>
+<td>超快推理</td>
+</tr>
+<tr>
+<td><a href="https://deepseek.com">DeepSeek</a></td>
+<td><code>https://api.deepseek.com/v1</code></td>
+<td>DeepSeek 模型</td>
+</tr>
+<tr>
+<td><a href="https://fireworks.ai">Fireworks AI</a></td>
+<td><code>https://api.fireworks.ai/inference/v1</code></td>
+<td>快速开源模型托管</td>
+</tr>
+<tr>
+<td><a href="https://www.gmicloud.ai/">GMI Cloud</a></td>
+<td><code>https://api.gmi-serving.com/v1</code></td>
+<td>托管 OpenAI 兼容推理</td>
+</tr>
+<tr>
+<td><a href="https://cerebras.ai">Cerebras</a></td>
+<td><code>https://api.cerebras.ai/v1</code></td>
+<td>晶圆级芯片推理</td>
+</tr>
+<tr>
+<td><a href="https://mistral.ai">Mistral AI</a></td>
+<td><code>https://api.mistral.ai/v1</code></td>
+<td>Mistral 模型</td>
+</tr>
+<tr>
+<td><a href="https://openai.com">OpenAI</a></td>
+<td><code>https://api.openai.com/v1</code></td>
+<td>直连 OpenAI</td>
+</tr>
+<tr>
+<td><a href="https://azure.microsoft.com">Azure OpenAI</a></td>
+<td><code>https://YOUR.openai.azure.com/</code></td>
+<td>企业级 OpenAI</td>
+</tr>
+<tr>
+<td><a href="https://localai.io">LocalAI</a></td>
+<td><code>http://localhost:8080/v1</code></td>
+<td>自托管，多模型</td>
+</tr>
+<tr>
+<td><a href="https://jan.ai">Jan</a></td>
+<td><code>http://localhost:1337/v1</code></td>
+<td>带本地模型的桌面应用</td>
+</tr>
+</tbody>
+</table>
+<p>通过 <code>hermes model</code> → 自定义端点，或在 <code>config.yaml</code> 中配置任意上述服务：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  default: meta-llama/Llama-3.1-70B-Instruct-Turbo
+  provider: custom
+  base_url: https://api.together.xyz/v1
+  api_key: your-together-key
+</div>
+<hr />
+<h3>上下文长度检测</h3>
+<div class="tip"><strong>📝 两个设置，容易混淆</strong>
+<p><strong><code>context_length</code></strong> 是<strong>总上下文窗口</strong>——输入和输出 token 的合计预算（例如 Claude Opus 4.6 为 200,000）。Hermes 用它来决定何时压缩历史记录以及验证 API 请求。</p>
+<p><strong><code>model.max_tokens</code></strong> 是<strong>输出上限</strong>——模型在<em>单次响应</em>中最多可生成的 token 数。与对话历史可以有多长无关。行业标准名称 <code>max_tokens</code> 是常见的混淆来源；Anthropic 的原生 API 已将其重命名为 <code>max_output_tokens</code> 以更清晰。</p>
+<p>当自动检测获取的窗口大小不正确时，设置 <code>context_length</code>。
+仅当需要限制单次响应长度时，才设置 <code>model.max_tokens</code>。</p>
+
+</div>
+<p>Hermes 使用多源解析链来检测模型和提供商的正确上下文窗口：</p>
+<ol>
+<li><strong>配置覆盖</strong> — config.yaml 中的 <code>model.context_length</code>（最高优先级）</li>
+<li><strong>自定义提供商按模型</strong> — <code>custom_providers[].models.&lt;id&gt;.context_length</code></li>
+<li><strong>持久缓存</strong> — 之前发现的值（重启后保留）</li>
+<li><strong>端点 <code>/models</code></strong> — 查询服务器 API（本地/自定义端点）</li>
+<li><strong>Anthropic <code>/v1/models</code></strong> — 查询 Anthropic API 获取 <code>max_input_tokens</code>（仅 API key 用户）</li>
+<li><strong>OpenRouter API</strong> — 来自 OpenRouter 的实时模型元数据</li>
+<li><strong>Nous Portal</strong> — 将 Nous 模型 ID 后缀匹配到 OpenRouter 元数据</li>
+<li><strong><a href="https://models.dev">models.dev</a></strong> — 社区维护的注册表，包含 100+ 提供商 3800+ 模型的提供商特定上下文长度</li>
+<li><strong>回退默认值</strong> — 广泛的模型系列模式（默认 128K）</li>
+</ol>
+<p>大多数配置开箱即用。该系统具有提供商感知能力——同一模型在不同服务商处可能有不同的上下文限制（例如 <code>claude-opus-4.6</code> 在 Anthropic 直连时为 1M，在 GitHub Copilot 上为 128K）。</p>
+<p>要显式设置上下文长度，在模型配置中添加 <code>context_length</code>：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  default: "qwen3.5:9b"
+  base_url: "http://localhost:8080/v1"
+  context_length: 131072  # tokens
+</div>
+<p>对于自定义端点，也可以按模型设置上下文长度：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+custom_providers:
+  - name: "My Local LLM"
+    base_url: "http://localhost:11434/v1"
+    models:
+      qwen3.5:27b:
+        context_length: 32768
+      deepseek-r1:70b:
+        context_length: 65536
+</div>
+<p><code>hermes model</code> 在配置自定义端点时会提示输入上下文长度。留空则自动检测。</p>
+<div class="tip"><strong>💡 何时手动设置</strong>
+<ul>
+<li>你使用的 Ollama 自定义 <code>num_ctx</code> 低于模型最大值</li>
+<li>你想将上下文限制在模型最大值以下（例如在 128k 模型上使用 8k 以节省显存）</li>
+<li>你在不暴露 <code>/v1/models</code> 的代理后面运行</li>
+</ul>
+
+</div>
+<hr />
+<h3>命名自定义提供商</h3>
+<p>如果你使用多个自定义端点（例如本地开发服务器和远程 GPU 服务器），可以在 <code>config.yaml</code> 中将它们定义为命名自定义提供商：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+custom_providers:
+  - name: local
+    base_url: http://localhost:8080/v1
+    # api_key 省略——Hermes 对无 key 的本地服务器使用"no-key-required"
+  - name: work
+    base_url: https://gpu-server.internal.corp/v1
+    key_env: CORP_API_KEY
+    api_mode: chat_completions   # 由 `hermes model` → 自定义端点向导显式设置；自动检测仍作为回退
+  - name: anthropic-proxy
+    base_url: https://proxy.example.com/anthropic
+    key_env: ANTHROPIC_PROXY_KEY
+    api_mode: anthropic_messages  # 用于 Anthropic 兼容代理
+</div>
+<p>某些 OpenAI 兼容端点需要特定于提供商的请求体字段。在对应的自定义提供商中添加 <code>extra_body</code> 映射，Hermes 会将其合并到该端点的每个 chat-completions 请求中：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+custom_providers:
+  - name: gemma-local
+    base_url: http://localhost:8080/v1
+    model: google/gemma-4-31b-it
+    extra_body:
+      enable_thinking: true
+      reasoning_effort: high
+</div>
+<p>使用你服务器文档中的格式。例如，vLLM Gemma 部署和某些 NVIDIA NIM 端点期望 <code>enable_thinking</code> 在 <code>chat_template_kwargs</code> 下，而不是作为顶级 <code>extra_body</code> 字段：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+extra_body:
+  chat_template_kwargs:
+    enable_thinking: true
+</div>
+<p><code>hermes model</code> → 自定义端点向导现在会显式提示 <code>api_mode</code> 并将你的答案持久化到 <code>config.yaml</code>。当字段留空时，基于 URL 的自动检测（例如 <code>/anthropic</code> 路径 → <code>anthropic_messages</code>）仍作为回退。</p>
+<p>使用三段式语法在会话中途切换：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/model custom:local:qwen-2.5       # 使用"local"端点和 qwen-2.5
+/model custom:work:llama3-70b      # 使用"work"端点和 llama3-70b
+/model custom:anthropic-proxy:claude-sonnet-4  # 使用代理
+</div>
+<p>也可以从交互式 <code>hermes model</code> 菜单中选择命名自定义提供商。</p>
+<hr />
+<h3>实战配置：Together AI、Groq、Perplexity</h3>
+<p><a href="#other-compatible-providers">其他兼容提供商</a> 中列出的云提供商都使用 OpenAI 的 REST 方言，因此在 <code>custom_providers:</code> 下的接入方式相同。以下是三个可直接使用的配置示例。每个示例放入 <code>~/.hermes/config.yaml</code>，对应的 API key 放入 <code>~/.hermes/.env</code>。</p>
+<h4>Together AI</h4>
+<p>托管开源模型（Llama、MiniMax、Gemma、DeepSeek、Qwen），价格显著低于一方 API。适合多模型场景的默认选择。</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ~/.hermes/config.yaml
+custom_providers:
+  - name: together
+    base_url: https://api.together.xyz/v1
+    key_env: TOGETHER_API_KEY
+    # api_mode: chat_completions  # 默认——无需设置
+
+model:
+  default: MiniMaxAI/MiniMax-M2.7   # 或 together.ai/models 中的任意模型
+  provider: custom:together
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ~/.hermes/.env
+TOGETHER_API_KEY=your-together-key
+</div>
+<p>会话中途切换模型：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/model custom:together:meta-llama/Llama-3.3-70B-Instruct-Turbo
+/model custom:together:google/gemma-4-31b-it
+/model custom:together:deepseek-ai/DeepSeek-V3
+</div>
+<p>Together 的 <code>/v1/models</code> 端点可用，因此 <code>hermes model</code> 可以自动发现可用模型。</p>
+<h4>Groq</h4>
+<p>超快推理（Llama-3.3-70B 约 500 tok/s）。模型目录较小，但对延迟敏感的交互式使用效果出色。</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ~/.hermes/config.yaml
+custom_providers:
+  - name: groq
+    base_url: https://api.groq.com/openai/v1
+    key_env: GROQ_API_KEY
+
+model:
+  default: llama-3.3-70b-versatile
+  provider: custom:groq
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ~/.hermes/.env
+GROQ_API_KEY=your-groq-key
+</div>
+<h4>Perplexity</h4>
+<p>当你需要自动进行实时网页搜索和引用的模型时很有用。对可用模型有严格限制——查看 <a href="https://www.perplexity.ai/settings/api">perplexity.ai/settings/api</a> 获取当前列表。</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ~/.hermes/config.yaml
+custom_providers:
+  - name: perplexity
+    base_url: https://api.perplexity.ai
+    key_env: PERPLEXITY_API_KEY
+
+model:
+  default: sonar
+  provider: custom:perplexity
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ~/.hermes/.env
+PERPLEXITY_API_KEY=your-perplexity-key
+</div>
+<h4>在单个配置中使用多个提供商</h4>
+<p>三个示例可以组合使用——同时使用所有提供商，并通过 <code>/model custom:&lt;name&gt;:&lt;model&gt;</code> 按轮次切换：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+custom_providers:
+  - name: together
+    base_url: https://api.together.xyz/v1
+    key_env: TOGETHER_API_KEY
+  - name: groq
+    base_url: https://api.groq.com/openai/v1
+    key_env: GROQ_API_KEY
+  - name: perplexity
+    base_url: https://api.perplexity.ai
+    key_env: PERPLEXITY_API_KEY
+
+model:
+  default: MiniMaxAI/MiniMax-M2.7
+  provider: custom:together      # 启动时使用 Together；之后可自由切换
+</div>
+<div class="tip"><strong>💡 故障排查</strong>
+<ul>
+<li><code>hermes doctor</code> 对于上述任何名称都不应打印 <code>Unknown provider</code> 警告（在 #15083 的 CLI 验证器修复之后）。</li>
+<li>如果某个提供商的 <code>/v1/models</code> 端点不可达（Perplexity 是常见情况），<code>hermes model</code> 会在警告后持久化模型而不是硬性拒绝——参见 #15136。</li>
+<li>要完全跳过 <code>custom_providers:</code> 并使用带 <code>CUSTOM_BASE_URL</code> 环境变量的裸 <code>provider: custom</code>，参见 #15103。</li>
+</ul>
+
+</div>
+<hr />
+<h3>选择合适的配置</h3>
+<table>
+<thead>
+<tr>
+<th>使用场景</th>
+<th>推荐方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>只想让它工作</strong></td>
+<td>OpenRouter（默认）或 Nous Portal</td>
+</tr>
+<tr>
+<td><strong>本地模型，简单配置</strong></td>
+<td>Ollama</td>
+</tr>
+<tr>
+<td><strong>生产 GPU 服务</strong></td>
+<td>vLLM 或 SGLang</td>
+</tr>
+<tr>
+<td><strong>Mac / 无 GPU</strong></td>
+<td>Ollama 或 llama.cpp</td>
+</tr>
+<tr>
+<td><strong>多提供商路由</strong></td>
+<td>LiteLLM Proxy 或 OpenRouter</td>
+</tr>
+<tr>
+<td><strong>成本优化</strong></td>
+<td>ClawRouter 或带 <code>sort: &quot;price&quot;</code> 的 OpenRouter</td>
+</tr>
+<tr>
+<td><strong>最大隐私保护</strong></td>
+<td>Ollama、vLLM 或 llama.cpp（完全本地）</td>
+</tr>
+<tr>
+<td><strong>企业 / Azure</strong></td>
+<td>Azure OpenAI 加自定义端点</td>
+</tr>
+<tr>
+<td><strong>中国 AI 模型</strong></td>
+<td>z.ai（GLM）、Kimi/Moonshot（<code>kimi-coding</code> 或 <code>kimi-coding-cn</code>）、MiniMax、小米 MiMo 或腾讯 TokenHub（一等提供商）</td>
+</tr>
+</tbody>
+</table>
+<div class="tip"><strong>💡 提示</strong>
+可以随时使用 <code>hermes model</code> 切换提供商——无需重启。无论使用哪个提供商，你的对话历史、记忆和技能都会保留。
+</div>
+<h2>可选 API Key</h2>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>提供商</th>
+<th>环境变量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>网页抓取</td>
+<td><a href="https://firecrawl.dev/">Firecrawl</a></td>
+<td><code>FIRECRAWL_API_KEY</code>、<code>FIRECRAWL_API_URL</code></td>
+</tr>
+<tr>
+<td>浏览器自动化</td>
+<td><a href="https://browserbase.com/">Browserbase</a></td>
+<td><code>BROWSERBASE_API_KEY</code>、<code>BROWSERBASE_PROJECT_ID</code></td>
+</tr>
+<tr>
+<td>图像生成</td>
+<td><a href="https://fal.ai/">FAL</a></td>
+<td><code>FAL_KEY</code></td>
+</tr>
+<tr>
+<td>高级 TTS 语音</td>
+<td><a href="https://elevenlabs.io/">ElevenLabs</a></td>
+<td><code>ELEVENLABS_API_KEY</code></td>
+</tr>
+<tr>
+<td>OpenAI TTS + 语音转录</td>
+<td><a href="https://platform.openai.com/api-keys">OpenAI</a></td>
+<td><code>VOICE_TOOLS_OPENAI_KEY</code></td>
+</tr>
+<tr>
+<td>Mistral TTS + 语音转录</td>
+<td><a href="https://console.mistral.ai/">Mistral</a></td>
+<td><code>MISTRAL_API_KEY</code></td>
+</tr>
+<tr>
+<td>跨会话用户建模</td>
+<td><a href="https://honcho.dev/">Honcho</a></td>
+<td><code>HONCHO_API_KEY</code></td>
+</tr>
+<tr>
+<td>语义长期记忆</td>
+<td><a href="https://supermemory.ai">Supermemory</a></td>
+<td><code>SUPERMEMORY_API_KEY</code></td>
+</tr>
+</tbody>
+</table>
+<h3>自托管 Firecrawl</h3>
+<p>默认情况下，Hermes 使用 <a href="https://firecrawl.dev/">Firecrawl 云 API</a> 进行网页搜索和抓取。如果你希望在本地运行 Firecrawl，可以将 Hermes 指向自托管实例。完整配置说明参见 Firecrawl 的 <a href="https://github.com/firecrawl/firecrawl/blob/main/SELF_HOST.html">SELF_HOST.md</a>。</p>
+<p><strong>优势：</strong> 无需 API key，无速率限制，无按页计费，完全数据主权。</p>
+<p><strong>劣势：</strong> 云版本使用 Firecrawl 专有的&quot;Fire-engine&quot;进行高级反爬虫绕过（Cloudflare、CAPTCHA、IP 轮换）。自托管版本使用基础 fetch + Playwright，某些受保护的网站可能失败。搜索使用 DuckDuckGo 而非 Google。</p>
+<p><strong>配置步骤：</strong></p>
+<ol>
+<li>克隆并启动 Firecrawl Docker 栈（5 个容器：API、Playwright、Redis、RabbitMQ、PostgreSQL——需要约 4-8 GB RAM）：</li>
+</ol>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+   git clone https://github.com/firecrawl/firecrawl
+   cd firecrawl
+   # 在 .env 中设置：USE_DB_AUTHENTICATION=false, HOST=0.0.0.0, PORT=3002
+   docker compose up -d
+</div>
+<ol start="2">
+<li>将 Hermes 指向你的实例（无需 API key）：</li>
+</ol>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+   hermes config set FIRECRAWL_API_URL http://localhost:3002
+</div>
+<p>如果你的自托管实例启用了认证，也可以同时设置 <code>FIRECRAWL_API_KEY</code> 和 <code>FIRECRAWL_API_URL</code>。</p>
+<h2>OpenRouter 提供商路由</h2>
+<p>使用 OpenRouter 时，可以控制请求如何在提供商之间路由。在 <code>~/.hermes/config.yaml</code> 中添加 <code>provider_routing</code> 节：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+provider_routing:
+  sort: "throughput"          # "price"（默认）、"throughput" 或 "latency"
+  # only: ["anthropic"]      # 仅使用这些提供商
+  # ignore: ["deepinfra"]    # 跳过这些提供商
+  # order: ["anthropic", "google"]  # 按此顺序尝试提供商
+  # require_parameters: true  # 仅使用支持所有请求参数的提供商
+  # data_collection: "deny"   # 排除可能存储/训练数据的提供商
+</div>
+<p><strong>快捷方式：</strong> 在任意模型名称后附加 <code>:nitro</code> 进行吞吐量排序（如 <code>anthropic/claude-sonnet-4:nitro</code>），或附加 <code>:floor</code> 进行价格排序。</p>
+<h2>OpenRouter Pareto Code 路由器</h2>
+<p>OpenRouter 提供一个实验性编程模型路由器 <code>openrouter/pareto-code</code>，自动将请求路由到满足编程质量标准的最便宜模型（按 <a href="https://artificialanalysis.ai/">Artificial Analysis</a> 排名）。选择此模型并在 <code>~/.hermes/config.yaml</code> 中调整 <code>min_coding_score</code> 参数：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  provider: openrouter
+  model: openrouter/pareto-code
+
+openrouter:
+  min_coding_score: 0.65   # 0.0–1.0；越高 = 越强（越贵）的编程模型。默认 0.65。
+</div>
+<p>说明：</p>
+<ul>
+<li><code>min_coding_score</code> <strong>仅</strong>在 <code>model.model</code> 为 <code>openrouter/pareto-code</code> 时发送。对其他任何模型该值无效。</li>
+<li>设置为空字符串（或删除该行）让 OpenRouter 选择最强的可用编程模型——这是省略 plugins 块时的文档行为。</li>
+<li>在给定日期内，按分数选择是确定性的，但随着 Pareto 前沿移动（新模型、基准更新），实际选择的模型可能变化。</li>
+<li>参见 OpenRouter 的 <a href="https://openrouter.ai/docs/guides/routing/routers/pareto-router">Pareto Router 文档</a> 了解完整路由器行为。</li>
+<li>要将 Pareto Code 路由器用于特定<strong>辅助任务</strong>（压缩、视觉等）而非主智能体，在该任务下设置 <code>extra_body.plugins</code>——参见<a href="/user-guide/configuration#openrouter-routing--pareto-code-for-auxiliary-tasks">辅助模型 → OpenRouter 路由与辅助任务的 Pareto Code</a>。</li>
+</ul>
+<h2>故障转移提供商</h2>
+<p>配置一个备用提供商链，当主模型失败时（速率限制、服务器错误、认证失败）Hermes 按顺序尝试。规范格式是顶级 <code>fallback_providers:</code> 列表：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+fallback_providers:
+  - provider: openrouter
+    model: anthropic/claude-sonnet-4
+  - provider: anthropic
+    model: claude-sonnet-4
+    # base_url: http://localhost:8000/v1    # 可选，用于自定义端点
+    # api_mode: chat_completions           # 可选覆盖
+</div>
+<p>为向后兼容，旧版单对 <code>fallback_model:</code> 字典仍被接受：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+fallback_model:
+  provider: openrouter
+  model: anthropic/claude-sonnet-4
+</div>
+<p>激活时，故障转移在不丢失对话的情况下中途切换模型和提供商。链按条目逐一尝试；每个会话激活一次。</p>
+<p>支持的提供商：<code>openrouter</code>、<code>nous</code>、<code>openai-codex</code>、<code>copilot</code>、<code>copilot-acp</code>、<code>anthropic</code>、<code>gemini</code>、<code>google-gemini-cli</code>、<code>qwen-oauth</code>、<code>huggingface</code>、<code>zai</code>、<code>kimi-coding</code>、<code>kimi-coding-cn</code>、<code>minimax</code>、<code>minimax-cn</code>、<code>minimax-oauth</code>、<code>deepseek</code>、<code>nvidia</code>、<code>xai</code>、<code>xai-oauth</code>、<code>ollama-cloud</code>、<code>bedrock</code>、<code>azure-foundry</code>、<code>opencode-zen</code>、<code>opencode-go</code>、<code>kilocode</code>、<code>xiaomi</code>、<code>arcee</code>、<code>gmi</code>、<code>stepfun</code>、<code>lmstudio</code>、<code>alibaba</code>、<code>alibaba-coding-plan</code>、<code>tencent-tokenhub</code>、<code>custom</code>。</p>
+<div class="tip"><strong>💡 提示</strong>
+故障转移仅通过 <code>config.yaml</code> 配置——或通过 <code>hermes fallback</code> 交互式配置。有关触发时机、链推进方式以及与辅助任务和委托的交互，参见<a href="/user-guide/features/fallback-providers">故障转移提供商</a>。
+</div>
+<hr />
+<h2>另请参阅</h2>
+<ul>
+<li><a href="/user-guide/configuration">配置</a> — 通用配置（目录结构、配置优先级、终端后端、记忆、压缩等）</li>
+<li><a href="/reference/environment-variables">环境变量</a> — 所有环境变量的完整参考</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

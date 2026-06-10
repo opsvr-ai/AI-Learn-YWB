@@ -1,0 +1,340 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>扩展 CLI - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 开发者指南 / 扩展 CLI</div><p>Hermes 在 <code>HermesCLI</code> 上暴露了受保护的扩展 hook（钩子），使包装 CLI 可以添加 widget、快捷键和布局自定义，而无需覆盖超过 1000 行的 <code>run()</code> 方法。这样可以让你的扩展与内部变更解耦。</p>
+<h2>扩展点</h2>
+<p>共有五个扩展接缝可用：</p>
+<table>
+<thead>
+<tr>
+<th>Hook</th>
+<th>用途</th>
+<th>何时覆盖</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>_get_extra_tui_widgets()</code></td>
+<td>向布局注入 widget</td>
+<td>需要持久 UI 元素（面板、状态栏、迷你播放器）时</td>
+</tr>
+<tr>
+<td><code>_register_extra_tui_keybindings(kb, *, input_area)</code></td>
+<td>添加键盘快捷键</td>
+<td>需要热键（切换面板、传输控制、模态快捷键）时</td>
+</tr>
+<tr>
+<td><code>_build_tui_layout_children(**widgets)</code></td>
+<td>完全控制 widget 排序</td>
+<td>需要重新排序或包装现有 widget 时（少见）</td>
+</tr>
+<tr>
+<td><code>process_command()</code></td>
+<td>添加自定义斜杠命令</td>
+<td>需要处理 <code>/mycommand</code> 时（已有 hook）</td>
+</tr>
+<tr>
+<td><code>_build_tui_style_dict()</code></td>
+<td>自定义 prompt_toolkit 样式</td>
+<td>需要自定义颜色或样式时（已有 hook）</td>
+</tr>
+</tbody>
+</table>
+<p>前三个是新增的受保护 hook，后两个已存在。</p>
+<h2>快速开始：包装 CLI</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+#!/usr/bin/env python3
+"""my_cli.py — Example wrapper CLI that extends Hermes."""
+
+from cli import HermesCLI
+from prompt_toolkit.layout import FormattedTextControl, Window
+from prompt_toolkit.filters import Condition
+
+
+class MyCLI(HermesCLI):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self._panel_visible = False
+
+    def _get_extra_tui_widgets(self):
+        """Add a toggleable info panel above the status bar."""
+        cli_ref = self
+        return [
+            Window(
+                FormattedTextControl(lambda: "📊 My custom panel content"),
+                height=1,
+                filter=Condition(lambda: cli_ref._panel_visible),
+            ),
+        ]
+
+    def _register_extra_tui_keybindings(self, kb, *, input_area):
+        """F2 toggles the custom panel."""
+        cli_ref = self
+
+        @kb.add("f2")
+        def _toggle_panel(event):
+            cli_ref._panel_visible = not cli_ref._panel_visible
+
+    def process_command(self, cmd: str) -&gt; bool:
+        """Add a /panel slash command."""
+        if cmd.strip().lower() == "/panel":
+            self._panel_visible = not self._panel_visible
+            state = "visible" if self._panel_visible else "hidden"
+            print(f"Panel is now {state}")
+            return True
+        return super().process_command(cmd)
+
+
+if __name__ == "__main__":
+    cli = MyCLI()
+    cli.run()
+</div>
+<p>运行：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cd ~/.hermes/hermes-agent
+source .venv/bin/activate
+python my_cli.py
+</div>
+<h2>Hook 参考</h2>
+<h3><code>_get_extra_tui_widgets()</code></h3>
+<p>返回要插入 TUI 布局的 prompt_toolkit widget 列表。Widget 出现在<strong>间隔区与状态栏之间</strong>——位于输入区上方、主输出区下方。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def _get_extra_tui_widgets(self) -&gt; list:
+    return []  # default: no extra widgets
+</div>
+<p>每个 widget 应为 prompt_toolkit 容器（如 <code>Window</code>、<code>ConditionalContainer</code>、<code>HSplit</code>）。使用 <code>ConditionalContainer</code> 或 <code>filter=Condition(...)</code> 可使 widget 支持切换显示。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from prompt_toolkit.layout import ConditionalContainer, Window, FormattedTextControl
+from prompt_toolkit.filters import Condition
+
+def _get_extra_tui_widgets(self):
+    return [
+        ConditionalContainer(
+            Window(FormattedTextControl("Status: connected"), height=1),
+            filter=Condition(lambda: self._show_status),
+        ),
+    ]
+</div>
+<h3><code>_register_extra_tui_keybindings(kb, *, input_area)</code></h3>
+<p>在 Hermes 注册自身快捷键之后、布局构建之前调用。将你的快捷键添加到 <code>kb</code>。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def _register_extra_tui_keybindings(self, kb, *, input_area):
+    pass  # default: no extra keybindings
+</div>
+<p>参数：</p>
+<ul>
+<li><strong><code>kb</code></strong> — prompt_toolkit 应用的 <code>KeyBindings</code> 实例</li>
+<li><strong><code>input_area</code></strong> — 主 <code>TextArea</code> widget，用于读取或操作用户输入</li>
+</ul>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def _register_extra_tui_keybindings(self, kb, *, input_area):
+    cli_ref = self
+
+    @kb.add("f3")
+    def _clear_input(event):
+        input_area.text = ""
+
+    @kb.add("f4")
+    def _insert_template(event):
+        input_area.text = "/search "
+</div>
+<p><strong>避免与内置快捷键冲突</strong>：<code>Enter</code>（提交）、<code>Escape Enter</code>（换行）、<code>Ctrl-C</code>（中断）、<code>Ctrl-D</code>（退出）、<code>Tab</code>（接受自动建议）。F2 及以上的功能键和 Ctrl 组合键通常是安全的。</p>
+<h3><code>_build_tui_layout_children(**widgets)</code></h3>
+<p>仅在需要完全控制 widget 排序时才覆盖此方法。大多数扩展应使用 <code>_get_extra_tui_widgets()</code> 代替。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def _build_tui_layout_children(self, *, sudo_widget, secret_widget,
+    approval_widget, clarify_widget, model_picker_widget=None,
+    spinner_widget=None, spacer, status_bar, input_rule_top,
+    image_bar, input_area, input_rule_bot, voice_status_bar,
+    completions_menu) -&gt; list:
+</div>
+<p>默认实现返回（值为 <code>None</code> 的 widget 会被过滤掉）：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+[
+    Window(height=0),       # anchor
+    sudo_widget,            # sudo password prompt (conditional)
+    secret_widget,          # secret input prompt (conditional)
+    approval_widget,        # dangerous command approval (conditional)
+    clarify_widget,         # clarify question UI (conditional)
+    model_picker_widget,    # model picker overlay (conditional)
+    spinner_widget,         # thinking spinner (conditional)
+    spacer,                 # fills remaining vertical space
+    *self._get_extra_tui_widgets(),  # YOUR WIDGETS GO HERE
+    status_bar,             # model/token/context status line
+    input_rule_top,         # ─── border above input
+    image_bar,              # attached images indicator
+    input_area,             # user text input
+    input_rule_bot,         # ─── border below input
+    voice_status_bar,       # voice mode status (conditional)
+    completions_menu,       # autocomplete dropdown
+]
+</div>
+<h2>布局示意图</h2>
+<p>默认布局从上到下：</p>
+<ol>
+<li><strong>输出区</strong> — 滚动的对话历史</li>
+<li><strong>间隔区</strong></li>
+<li><strong>额外 widget</strong> — 来自 <code>_get_extra_tui_widgets()</code></li>
+<li><strong>状态栏</strong> — 模型、上下文占比、已用时间</li>
+<li><strong>图片栏</strong> — 已附加图片数量</li>
+<li><strong>输入区</strong> — 用户 prompt（提示词）</li>
+<li><strong>语音状态</strong> — 录音指示器</li>
+<li><strong>补全菜单</strong> — 自动补全建议</li>
+</ol>
+<h2>使用技巧</h2>
+<ul>
+<li><strong>状态变更后刷新显示</strong>：调用 <code>self._invalidate()</code> 触发 prompt_toolkit 重绘。</li>
+<li><strong>访问 agent 状态</strong>：<code>self.agent</code>、<code>self.model</code>、<code>self.conversation_history</code> 均可直接使用。</li>
+<li><strong>自定义样式</strong>：覆盖 <code>_build_tui_style_dict()</code> 并为自定义样式类添加条目。</li>
+<li><strong>斜杠命令</strong>：覆盖 <code>process_command()</code>，处理自己的命令，其余一律调用 <code>super().process_command(cmd)</code>。</li>
+<li><strong>不要覆盖 <code>run()</code></strong>，除非绝对必要——扩展 hook 的存在正是为了避免这种耦合。</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Debugging Hermes Tui Commands — Debug Hermes TUI slash commands: Python, gateway, Ink UI - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 命令</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & Skills</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">docs</a> / <a href="/hermes-docs/user-guide/">user-guide</a> / <a href="/hermes-docs/user-guide/skills/">skills</a> / <a href="/hermes-docs/user-guide/skills/bundled/">bundled</a> / <a href="/hermes-docs/user-guide/skills/bundled/software-development/">software-development</a> / Debugging Hermes Tui Commands — Debug Hermes TUI slash commands: Python, gateway, Ink UI</div><p>{/<em> 本页面由 website/scripts/generate-skill-docs.py 从技能的 SKILL.md 自动生成。请编辑源 SKILL.md，而非本页面。 </em>/}</p>
+<h1>Debugging Hermes Tui Commands</h1>
+<p>Debug Hermes TUI slash commands: Python, gateway, Ink UI.</p>
+<h2>技能元数据</h2>
+<table><thead><tr><th>---</th><th>---</th></tr></thead><tbody>
+<tr><td>来源</td><td>内置（默认安装）</td></tr>
+<tr><td>路径</td><td><code>skills/software-development/debugging-hermes-tui-commands</code></td></tr>
+<tr><td>版本</td><td><code>1.0.0</code></td></tr>
+<tr><td>作者</td><td>Hermes Agent</td></tr>
+<tr><td>许可证</td><td>MIT</td></tr>
+<tr><td>平台</td><td>linux, macos, windows</td></tr>
+<tr><td>标签</td><td><code>debugging</code>, <code>hermes-agent</code>, <code>tui</code>, <code>slash-commands</code>, <code>typescript</code>, <code>python</code></td></tr>
+<tr><td>相关技能</td><td><a href="/hermes-docs/user-guide/skills/bundled/software-development/software-development-python-debugpy"><code>python-debugpy</code></a>, <a href="/hermes-docs/user-guide/skills/bundled/software-development/software-development-node-inspect-debugger"><code>node-inspect-debugger</code></a>, <a href="/hermes-docs/user-guide/skills/bundled/software-development/software-development-systematic-debugging"><code>systematic-debugging</code></a></td></tr>
+</tbody></table>
+<h2>参考：完整 SKILL.md</h2>
+<p>:::info</p>
+<p>以下是 Hermes 在此技能被触发时加载的完整技能定义。这是技能激活时代理所看到的指令。</p>
+<p>:::</p>
+<h1>Debugging Hermes TUI Slash Commands</h1>
+<h2>概述</h2>
+<p>Hermes slash commands span three layers — Python command registry, tui_gateway JSON-RPC bridge, and the Ink/TypeScript frontend. When a command misbehaves (missing from autocomplete, works in CLI but not TUI, config persists but UI doesn't update), the bug is almost always one layer being out of sync with another.</p>
+<p>Use this skill when you encounter issues with slash commands in the Hermes TUI, particularly when commands aren't showing in autocomplete, aren't working properly in the TUI, or need to be added/updated.</p>
+<h2>何时使用</h2>
+<p>- A slash command exists in one part of the codebase but doesn't work fully</p>
+<p>- A command needs to be added to both backend and frontend</p>
+<p>- Command autocomplete isn't working for specific commands</p>
+<p>- Command behavior is inconsistent between CLI and TUI</p>
+<p>- A command persists config but doesn't apply live in the TUI</p>
+<h2>Architecture 概述</h2>
+<p><!-- ascii-guard-ignore --></p>
+<div class="code-block"><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Python backend (hermes_cli/commands.py)     <- canonical COMMAND_REGISTRY
+       │
+       ▼
+TUI gateway (tui_gateway/server.py)         <- slash.exec / command.dispatch
+       │
+       ▼
+TUI frontend (ui-tui/src/app/slash/)        <- local handlers + fallthrough
+</div>
+<p><!-- ascii-guard-ignore-end --></p>
+<p>Command definitions must be registered consistently across Python and TypeScript to work properly. The Python <code>COMMAND_REGISTRY</code> is the source of truth for: CLI dispatch, gateway help, Telegram BotCommand menu, Slack subcommand map, and autocomplete data shipped to Ink.</p>
+<h2>Investigation Steps</h2>
+<p>1. <strong>Check if the command exists in the TUI frontend:</strong></p>
+<p>   ```bash</p>
+<p>   search_files --pattern "/commandname" --file_glob "*.ts" --path ui-tui/</p>
+<p>   search_files --pattern "/commandname" --file_glob "*.tsx" --path ui-tui/</p>
+<p>   ```</p>
+<p>2. <strong>Examine the TUI command definition:</strong></p>
+<p>   ```bash</p>
+<p>   read_file ui-tui/src/app/slash/commands/core.ts</p>
+<p>   # If not there:</p>
+<p>   search_files --pattern "commandname" --path ui-tui/src/app/slash/commands --target files</p>
+<p>   ```</p>
+<p>3. <strong>Check if the command exists in the Python backend:</strong></p>
+<p>   ```bash</p>
+<p>   search_files --pattern "CommandDef" --file_glob "*.py" --path hermes_cli/</p>
+<p>   search_files --pattern "commandname" --path hermes_cli/commands.py --context 3</p>
+<p>   ```</p>
+<p>4. <strong>Examine the gateway implementation:</strong></p>
+<p>   ```bash</p>
+<p>   search_files --pattern "complete.slash|slash.exec" --path tui_gateway/</p>
+<p>   ```</p>
+<h2>Fix: Missing Command Autocomplete</h2>
+<p>If a command exists in the TUI but doesn't show in autocomplete:</p>
+<p>1. Add a <code>CommandDef</code> entry to <code>COMMAND_REGISTRY</code> in <code>hermes_cli/commands.py</code>:</p>
+<p>   ```python</p>
+<p>   CommandDef("commandname", "Description of the command", "Session",</p>
+<p>              cli_only=True, aliases=("alias",),</p>
+<p>              args_hint="[arg1|arg2|arg3]",</p>
+<p>              subcommands=("arg1", "arg2", "arg3")),</p>
+<p>   ```</p>
+<p>2. Pick <code>cli_only</code> vs gateway availability carefully:</p>
+<p>   - <code>cli_only=True</code> — only in the interactive CLI/TUI</p>
+<p>   - <code>gateway_only=True</code> — only in messaging platforms</p>
+<p>   - neither — available everywhere</p>
+<p>   - <code>gateway_config_gate="display.foo"</code> — config-gated availability in the gateway</p>
+<p>3. Ensure <code>subcommands</code> matches the expected tab-completion options shown by the TUI.</p>
+<p>4. If the command runs server-side, add a handler in <code>HermesCLI.process_command()</code> in <code>cli.py</code>:</p>
+<p>   ```python</p>
+<p>   elif canonical == "commandname":</p>
+<p>       self._handle_commandname(cmd_original)</p>
+<p>   ```</p>
+<p>5. For gateway-available commands, add a handler in <code>gateway/run.py</code>:</p>
+<p>   ```python</p>
+<p>   if canonical == "commandname":</p>
+<p>       return await self._handle_commandname(event)</p>
+<p>   ```</p>
+<h2>Common Issues</h2>
+<p>1. <strong>Command shows in TUI but not in autocomplete.</strong> The command is defined in the TUI codebase but missing from <code>COMMAND_REGISTRY</code> in <code>hermes_cli/commands.py</code>. Autocomplete data ships from Python.</p>
+<p>2. <strong>Command shows in autocomplete but doesn't work.</strong> Check the command handler in <code>tui_gateway/server.py</code> and the frontend handler in <code>ui-tui/src/app/createSlashHandler.ts</code>. If the command is local-only in Ink, it must be handled in <code>app.tsx</code> built-in branch; otherwise it falls through to <code>slash.exec</code> and must have a Python handler.</p>
+<p>3. <strong>Command behavior differs between CLI and TUI.</strong> The command might have different implementations. Check both <code>cli.py::process_command</code> and the TUI's local handler. Local TUI handlers take precedence over gateway dispatch.</p>
+<p>4. <strong>Command persists config but doesn't apply live.</strong> For TUI-local commands, updating <code>config.set</code> is not enough. Also patch the relevant nanostore state immediately (usually <code>patchUiState(...)</code>) and pass any new state through rendering components. Example: <code>/details collapsed</code> must update live detail visibility, not just save <code>details_mode</code>; in-session global <code>/details <mode></code> may need a separate command-override flag so live commands can override built-in section defaults while startup/config sync preserves default-expanded thinking/tools behavior.</p>
+<p>5. <strong>Gateway dispatch silently ignores the command.</strong> The gateway only dispatches commands it knows about. Check <code>GATEWAY_KNOWN_COMMANDS</code> (derived from <code>COMMAND_REGISTRY</code> automatically) includes the canonical name. If the command is <code>cli_only</code> with a <code>gateway_config_gate</code>, verify the gated config value is truthy.</p>
+<h2>Debugging Tactics</h2>
+<p>When surface-level inspection doesn't reveal the bug:</p>
+<p>- <strong>Python side hangs or misbehaves:</strong> use the <code>python-debugpy</code> skill to break inside <code>_SlashWorker.exec</code> or the command handler. <code>remote-pdb</code> set at the handler entry is the fastest path.</p>
+<p>- <strong>Ink side not reacting:</strong> use the <code>node-inspect-debugger</code> skill to break in <code>app.tsx</code>'s slash dispatch or the local command branch. <code>sb('dist/app.js', <line>)</code> after <code>npm run build</code>.</p>
+<p>- <strong>Registry mismatch / unclear which side is wrong:</strong> compare the canonical <code>COMMAND_REGISTRY</code> entry against the TUI's local command list side-by-side.</p>
+<h2>Pitfalls</h2>
+<p>- Don't forget to set the appropriate category for the command in <code>CommandDef</code> (e.g., "Session", "配置", "Tools & Skills", "Info", "Exit")</p>
+<p>- Make sure any aliases are properly registered in the <code>aliases</code> tuple — no other file changes are needed, everything downstream (Telegram menu, Slack mapping, autocomplete, help) derives from it</p>
+<p>- For commands with subcommands, ensure the <code>subcommands</code> tuple in <code>CommandDef</code> matches what's in the TUI code</p>
+<p>- <code>cli_only=True</code> commands won't work in gateway/messaging platforms — unless you add a <code>gateway_config_gate</code> and the gate is truthy</p>
+<p>- After adding live UI state, search every consumer of the old prop/helper and thread the new state through all render paths, not just the active streaming path. TUI detail rendering has at least two important paths: live <code>StreamingAssistant</code>/<code>ToolTrail</code> and transcript/pending <code>MessageLine</code> rows. A <code>/clean</code> pass should explicitly check both.</p>
+<p>- Rebuild the TUI (<code>npm --prefix ui-tui run build</code>) before testing — tsx watch mode may lag on first launch</p>
+<h2>Verification</h2>
+<p>After fixing:</p>
+<p>1. Rebuild the TUI:</p>
+<p>   ```bash</p>
+<p>   cd /home/bb/hermes-agent && npm --prefix ui-tui run build</p>
+<p>   ```</p>
+<p>2. Run the TUI and test the command:</p>
+<p>   ```bash</p>
+<p>   hermes --tui</p>
+<p>   ```</p>
+<p>3. Type <code>/</code> and verify the command appears in autocomplete suggestions with the expected description and args hint.</p>
+<p>4. Execute the command and confirm:</p>
+<p>   - Expected behavior fires</p>
+<p>   - Any persisted config updates correctly (<code>read_file ~/.hermes/config.yaml</code>)</p>
+<p>   - Live UI state reflects the change immediately (not just after restart)</p>
+<p>5. If the command is also gateway-available, test it from at least one messaging platform (or run the gateway tests: <code>scripts/run_tests.sh tests/gateway/</code>).</p>  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

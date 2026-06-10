@@ -1,0 +1,384 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ACP 编辑器集成 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / ACP 编辑器集成</div><p>Hermes Agent 可作为 ACP 服务器运行，让兼容 ACP 的编辑器通过 stdio 与 Hermes 通信并渲染：</p>
+<ul>
+<li>聊天消息</li>
+<li>工具活动</li>
+<li>文件差异</li>
+<li>终端命令</li>
+<li>审批 prompt（提示词）</li>
+<li>流式思考 / 响应块</li>
+</ul>
+<p>当你希望 Hermes 表现得像编辑器原生的编码 agent，而非独立 CLI 或消息机器人时，ACP 是合适的选择。</p>
+<h2>Hermes 在 ACP 模式下暴露的内容</h2>
+<p>Hermes 使用专为编辑器工作流设计的精选 <code>hermes-acp</code> 工具集运行，包括：</p>
+<ul>
+<li>文件工具：<code>read_file</code>、<code>write_file</code>、<code>patch</code>、<code>search_files</code></li>
+<li>终端工具：<code>terminal</code>、<code>process</code></li>
+<li>网页/浏览器工具</li>
+<li>记忆、待办事项、会话搜索</li>
+<li>skills</li>
+<li><code>execute_code</code> 和 <code>delegate_task</code></li>
+<li>视觉</li>
+</ul>
+<p>它有意排除了不适合典型编辑器 UX 的功能，例如消息投递和 cronjob 管理。</p>
+<h2>安装</h2>
+<p>正常安装 Hermes 后，添加 ACP 扩展：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install -e '.[acp]'
+</div>
+<p>这将安装 <code>agent-client-protocol</code> 依赖并启用：</p>
+<ul>
+<li><code>hermes acp</code></li>
+<li><code>hermes-acp</code></li>
+<li><code>python -m acp_adapter</code></li>
+</ul>
+<p>对于 Zed registry 安装，Zed 通过官方 ACP Registry 条目启动 Hermes。该条目使用 <code>uvx</code> 发行版运行：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+uvx --from 'hermes-agent[acp]==&lt;version&gt;' hermes-acp
+</div>
+<p>使用 registry 安装路径前，请确保 <code>uv</code> 已在 <code>PATH</code> 中可用。</p>
+<h2>启动 ACP 服务器</h2>
+<p>以下任意命令均可以 ACP 模式启动 Hermes：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes acp
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes-acp
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python -m acp_adapter
+</div>
+<p>Hermes 将日志输出到 stderr，以保留 stdout 用于 ACP JSON-RPC 流量。</p>
+<p>非交互式检查：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes acp --version
+hermes acp --check
+</div>
+<h3>浏览器工具（可选）</h3>
+<p>浏览器工具（<code>browser_navigate</code>、<code>browser_click</code> 等）依赖 <code>agent-browser</code> npm 包和 Chromium，这些不包含在 Python wheel 中。通过以下命令安装：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes acp --setup-browser           # 交互式（下载约 400 MB 前会提示确认）
+hermes acp --setup-browser --yes     # 非交互式接受下载
+</div>
+<p>这是独立命令。Zed registry 的终端认证流程（<code>hermes acp --setup</code>）在模型选择后也会将浏览器引导作为后续问题提供，因此大多数用户无需直接运行 <code>--setup-browser</code>。</p>
+<p>具体操作：</p>
+<ul>
+<li>若缺少 Node.js 22 LTS，将其安装到 <code>~/.hermes/node/</code></li>
+<li>将 <code>npm install -g agent-browser @askjo/camofox-browser</code> 安装到该前缀（无需 sudo — <code>npm</code> 的 <code>--prefix</code> 指向用户可写的 Hermes 管理 Node）</li>
+<li>安装 Playwright Chromium，或在检测到系统 Chrome/Chromium 时使用已有版本</li>
+</ul>
+<p>该引导过程是幂等的——重复运行速度很快，已完成的步骤会被跳过。</p>
+<h2>编辑器设置</h2>
+<h3>VS Code</h3>
+<p>安装 <a href="https://marketplace.visualstudio.com/items?itemName=formulahendry.acp-client">ACP Client</a> 扩展。</p>
+<p>连接步骤：</p>
+<ol>
+<li>从活动栏打开 ACP Client 面板。</li>
+<li>从内置 agent 列表中选择 <strong>Hermes Agent</strong>。</li>
+<li>连接并开始聊天。</li>
+</ol>
+<p>如需手动定义 Hermes，通过 VS Code 设置在 <code>acp.agents</code> 下添加：</p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{
+  "acp.agents": {
+    "Hermes Agent": {
+      "command": "hermes",
+      "args": ["acp"]
+    }
+  }
+}
+</div>
+<h3>Zed</h3>
+<p>Zed v0.221.x 及更新版本通过官方 ACP Registry 安装外部 agent。</p>
+<ol>
+<li>打开 Agent 面板。</li>
+<li>点击 <strong>Add Agent</strong>，或运行 <code>zed: acp registry</code> 命令。</li>
+<li>搜索 <strong>Hermes Agent</strong>。</li>
+<li>安装后启动新的 Hermes 外部 agent 线程。</li>
+</ol>
+<p>前提条件：</p>
+<ul>
+<li>先通过 <code>hermes model</code> 配置 Hermes provider 凭据，或在 <code>~/.hermes/.env</code> / <code>~/.hermes/config.yaml</code> 中设置。</li>
+<li>安装 <code>uv</code>，以便 registry 启动器可以运行 <code>uvx --from 'hermes-agent[acp]==&lt;version&gt;' hermes-acp</code>。</li>
+</ul>
+<p>在 registry 条目可用之前进行本地开发时，在 Zed 设置中使用自定义 agent 服务器：</p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{
+  "agent_servers": {
+    "hermes-agent": {
+      "type": "custom",
+      "command": "hermes",
+      "args": ["acp"]
+    }
+  }
+}
+</div>
+<h3>JetBrains</h3>
+<p>使用兼容 ACP 的插件并将其指向：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/path/to/hermes-agent/acp_registry
+</div>
+<h2>Registry 清单</h2>
+<p>Hermes 官方 ACP Registry 元数据的源文件位于：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+acp_registry/agent.json
+acp_registry/icon.svg
+</div>
+<p>上游 registry PR 将这些文件复制到 <code>agentclientprotocol/registry</code> 中的顶层 <code>hermes-agent/</code> 目录。</p>
+<p>Registry 条目使用直接指向 <code>hermes-agent</code> PyPI 发行版的 <code>uvx</code> 发行版：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+uvx --from 'hermes-agent[acp]==&lt;version&gt;' hermes-acp
+</div>
+<p>Registry CI 会验证固定版本是否存在于 PyPI，因此清单的 <code>version</code> 和 uvx <code>package</code> 固定版本必须始终与 <code>pyproject.toml</code> 匹配。<code>scripts/release.py</code> 会自动保持它们同步。</p>
+<h2>配置与凭据</h2>
+<p>ACP 模式使用与 CLI 相同的 Hermes 配置：</p>
+<ul>
+<li><code>~/.hermes/.env</code></li>
+<li><code>~/.hermes/config.yaml</code></li>
+<li><code>~/.hermes/skills/</code></li>
+<li><code>~/.hermes/state.db</code></li>
+</ul>
+<p>Provider 解析使用 Hermes 的正常运行时解析器，因此 ACP 继承当前配置的 provider 和凭据。Hermes 还为首次运行的 registry 客户端提供终端认证方法（<code>--setup</code>）；这将打开 Hermes 的交互式模型/provider 设置。</p>
+<h2>会话行为</h2>
+<p>ACP 会话在服务器运行期间由 ACP 适配器的内存会话管理器跟踪。</p>
+<p>每个会话存储：</p>
+<ul>
+<li>会话 ID</li>
+<li>工作目录</li>
+<li>已选模型</li>
+<li>当前对话历史</li>
+<li>取消事件</li>
+</ul>
+<p>底层 <code>AIAgent</code> 仍使用 Hermes 的正常持久化/日志路径，但 ACP 的 <code>list/load/resume/fork</code> 仅限于当前运行的 ACP 服务器进程。</p>
+<h2>工作目录行为</h2>
+<p>ACP 会话将编辑器的 cwd 绑定到 Hermes 任务 ID，使文件和终端工具相对于编辑器工作区运行，而非服务器进程的 cwd。</p>
+<h2>审批</h2>
+<p>危险的终端命令可作为审批 prompt 路由回编辑器。ACP 审批选项比 CLI 流程更简单：</p>
+<ul>
+<li>允许一次</li>
+<li>始终允许</li>
+<li>拒绝</li>
+</ul>
+<p>超时或出错时，审批桥接会拒绝请求。</p>
+<h3>会话范围的编辑自动审批</h3>
+<p>ACP 在<em>允许一次</em>和<em>始终允许</em>之间提供第三层：<strong>允许本次会话</strong>。在编辑器的权限提示中选择此选项，会将审批记录在当前 ACP 会话内——该会话中所有后续匹配命令无需提示即可通过，但新的 ACP 会话（或重启编辑器）会重置状态，并在第一次时重新提示。</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>编辑器标签</th>
+<th>范围</th>
+<th>重启后是否持久化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>allow_once</code></td>
+<td>允许一次</td>
+<td>本次工具调用</td>
+<td>否</td>
+</tr>
+<tr>
+<td><code>allow_session</code></td>
+<td>允许本次会话</td>
+<td>本 ACP 会话中所有匹配调用</td>
+<td>否——会话结束时清除</td>
+</tr>
+<tr>
+<td><code>allow_always</code></td>
+<td>始终允许</td>
+<td>所有未来会话</td>
+<td>是（写入 Hermes 永久允许列表）</td>
+</tr>
+<tr>
+<td><code>deny</code></td>
+<td>拒绝</td>
+<td>本次工具调用</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+<p><code>allow_session</code> 是编辑器工作流的正确默认选项——你在任务期间信任 agent，但不想授予长期允许列表条目。安全权衡很直接：范围越广，编辑器打断你的次数越少，行为异常的 agent（或 prompt 注入）在被发现前能造成的损害也越大。对不熟悉的命令从 <code>allow_once</code> 开始；在看到 agent 多次正确运行相同模式后升级为 <code>allow_session</code>；将 <code>allow_always</code> 保留给你永远信任的真正幂等命令（例如 <code>git status</code>）。</p>
+<p>ACP 桥接将这些选项映射到 Hermes 的内部审批语义——<code>allow_always</code> 与 CLI 相同地写入永久允许列表条目，而 <code>allow_session</code> 仅影响当前 ACP 会话的进程内审批缓存。</p>
+<h2>故障排查</h2>
+<h3>ACP agent 未出现在编辑器中</h3>
+<p>检查：</p>
+<ul>
+<li>在 Zed 中，使用 <code>zed: acp registry</code> 打开 ACP Registry 并搜索 <strong>Hermes Agent</strong>。</li>
+<li>对于手动/本地开发，验证自定义 <code>agent_servers</code> 命令是否指向 <code>hermes acp</code>。</li>
+<li>Hermes 已安装且在 PATH 中。</li>
+<li>ACP 扩展已安装（<code>pip install -e '.[acp]'</code>）。</li>
+<li>如果从官方 Zed registry 条目启动，<code>uv</code> 已安装。</li>
+</ul>
+<h3>ACP 启动后立即报错</h3>
+<p>尝试以下检查：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes acp --version
+hermes acp --check
+hermes doctor
+hermes status
+</div>
+<h3>缺少凭据</h3>
+<p>ACP 模式使用 Hermes 现有的 provider 设置。通过以下方式配置凭据：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes model
+</div>
+<p>或编辑 <code>~/.hermes/.env</code>。Registry 客户端也可以触发 Hermes 的终端认证流程，该流程运行相同的交互式 provider/模型设置。</p>
+<h3>Zed registry 启动器找不到 uv</h3>
+<p>从官方 uv 安装文档安装 <code>uv</code>，然后从 Zed 重试 Hermes Agent 线程。</p>
+<h2>另请参阅</h2>
+<ul>
+<li><a href="../../developer-guide/acp-internals.html">ACP 内部机制</a></li>
+<li><a href="../../developer-guide/provider-runtime.html">Provider 运行时解析</a></li>
+<li><a href="../../developer-guide/tools-runtime.html">工具运行时</a></li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

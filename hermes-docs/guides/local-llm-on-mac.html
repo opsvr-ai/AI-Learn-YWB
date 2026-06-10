@@ -1,0 +1,485 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>在 Mac 上运行本地 LLM - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 实用指南 / 在 Mac 上运行本地 LLM</div><p>本指南介绍如何在 macOS 上运行一个兼容 OpenAI API 的本地 LLM 服务器。你将获得完整的隐私保护、零 API 费用，以及 Apple Silicon 上出乎意料的出色性能。</p>
+<p>我们涵盖两个后端：</p>
+<table>
+<thead>
+<tr>
+<th>后端</th>
+<th>安装方式</th>
+<th>优势</th>
+<th>格式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>llama.cpp</strong></td>
+<td><code>brew install llama.cpp</code></td>
+<td>首 token 延迟最低，量化 KV 缓存节省内存</td>
+<td>GGUF</td>
+</tr>
+<tr>
+<td><strong>omlx</strong></td>
+<td><a href="https://omlx.ai">omlx.ai</a></td>
+<td>token 生成速度最快，原生 Metal 优化</td>
+<td>MLX (safetensors)</td>
+</tr>
+</tbody>
+</table>
+<p>两者均暴露兼容 OpenAI 的 <code>/v1/chat/completions</code> 端点。Hermes 支持任意一个——只需将其指向 <code>http://localhost:8080</code> 或 <code>http://localhost:8000</code>。</p>
+<div class="tip"><strong>ℹ️ 仅限 Apple Silicon</strong>
+本指南面向搭载 Apple Silicon（M1 及更新）的 Mac。Intel Mac 可使用 llama.cpp，但无 GPU 加速——性能会明显更慢。
+</div>
+<hr />
+<h2>选择模型</h2>
+<p>入门推荐 <strong>Qwen3.5-9B</strong>——这是一个强推理模型，量化后可在 8GB+ 统一内存上轻松运行。</p>
+<table>
+<thead>
+<tr>
+<th>变体</th>
+<th>磁盘占用</th>
+<th>所需内存（128K 上下文）</th>
+<th>后端</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Qwen3.5-9B-Q4_K_M (GGUF)</td>
+<td>5.3 GB</td>
+<td>~10 GB（含量化 KV 缓存）</td>
+<td>llama.cpp</td>
+</tr>
+<tr>
+<td>Qwen3.5-9B-mlx-lm-mxfp4 (MLX)</td>
+<td>~5 GB</td>
+<td>~12 GB</td>
+<td>omlx</td>
+</tr>
+</tbody>
+</table>
+<p><strong>内存估算规则：</strong> 模型大小 + KV 缓存。9B Q4 模型约 5 GB。128K 上下文下 Q4 量化的 KV 缓存额外占用约 4–5 GB。若使用默认（f16）KV 缓存，则会膨胀至约 16 GB。llama.cpp 中的量化 KV 缓存参数是内存受限系统的关键技巧。</p>
+<p>对于更大的模型（27B、35B），你需要 32 GB+ 的统一内存。9B 是 8–16 GB 机器的最佳选择。</p>
+<hr />
+<h2>方案 A：llama.cpp</h2>
+<p>llama.cpp 是移植性最强的本地 LLM 运行时。在 macOS 上，它开箱即用地通过 Metal 进行 GPU 加速。</p>
+<h3>安装</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+brew install llama.cpp
+</div>
+<p>安装后即可全局使用 <code>llama-server</code> 命令。</p>
+<h3>下载模型</h3>
+<p>你需要 GGUF 格式的模型。最简便的来源是通过 <code>huggingface-cli</code> 从 Hugging Face 下载：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+brew install huggingface-cli
+</div>
+<p>然后下载：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+huggingface-cli download unsloth/Qwen3.5-9B-GGUF Qwen3.5-9B-Q4_K_M.gguf --local-dir ~/models
+</div>
+<div class="tip"><strong>💡 受限模型</strong>
+Hugging Face 上的部分模型需要身份验证。如果遇到 401 或 404 错误，请先运行 <code>huggingface-cli login</code>。
+</div>
+<h3>启动服务器</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+llama-server -m ~/models/Qwen3.5-9B-Q4_K_M.gguf \
+  -ngl 99 \
+  -c 131072 \
+  -np 1 \
+  -fa on \
+  --cache-type-k q4_0 \
+  --cache-type-v q4_0 \
+  --host 0.0.0.0
+</div>
+<p>各参数说明：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-ngl 99</code></td>
+<td>将所有层卸载到 GPU（Metal）。设置较大的数值以确保没有层留在 CPU 上。</td>
+</tr>
+<tr>
+<td><code>-c 131072</code></td>
+<td>上下文窗口大小（128K token）。内存不足时可减小此值。</td>
+</tr>
+<tr>
+<td><code>-np 1</code></td>
+<td>并行槽数量。单用户使用时保持为 1——更多槽会分摊内存预算。</td>
+</tr>
+<tr>
+<td><code>-fa on</code></td>
+<td>Flash attention。减少内存占用并加速长上下文推理。</td>
+</tr>
+<tr>
+<td><code>--cache-type-k q4_0</code></td>
+<td>将 key 缓存量化为 4-bit。<strong>这是最大的内存节省手段。</strong></td>
+</tr>
+<tr>
+<td><code>--cache-type-v q4_0</code></td>
+<td>将 value 缓存量化为 4-bit。与上一项合用，相比 f16 可将 KV 缓存内存减少约 75%。</td>
+</tr>
+<tr>
+<td><code>--host 0.0.0.0</code></td>
+<td>监听所有网络接口。若不需要网络访问，可改为 <code>127.0.0.1</code>。</td>
+</tr>
+</tbody>
+</table>
+<p>当你看到以下输出时，服务器已就绪：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+main: server is listening on http://0.0.0.0:8080
+srv  update_slots: all slots are idle
+</div>
+<h3>内存受限系统的优化</h3>
+<p><code>--cache-type-k q4_0 --cache-type-v q4_0</code> 参数是内存有限系统最重要的优化手段。以下是 128K 上下文下的影响对比：</p>
+<table>
+<thead>
+<tr>
+<th>KV 缓存类型</th>
+<th>KV 缓存内存（128K 上下文，9B 模型）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>f16（默认）</td>
+<td>~16 GB</td>
+</tr>
+<tr>
+<td>q8_0</td>
+<td>~8 GB</td>
+</tr>
+<tr>
+<td><strong>q4_0</strong></td>
+<td><strong>~4 GB</strong></td>
+</tr>
+</tbody>
+</table>
+<p>在 8 GB Mac 上，使用 <code>q4_0</code> KV 缓存并将上下文缩减为 <code>-c 32768</code>（32K）。在 16 GB 上，可以轻松使用 128K 上下文。在 32 GB+ 上，可以运行更大的模型或多个并行槽。</p>
+<p>如果仍然内存不足，优先减小上下文大小（<code>-c</code>），然后尝试更小的量化级别（Q3_K_M 代替 Q4_K_M）。</p>
+<h3>测试</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s http://localhost:8080/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "Qwen3.5-9B-Q4_K_M.gguf",
+    "messages": [{"role": "user", "content": "Hello!"}],
+    "max_tokens": 50
+  }' | jq .choices[0].message.content
+</div>
+<h3>获取模型名称</h3>
+<p>如果忘记了模型名称，可查询 models 端点：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s http://localhost:8080/v1/models | jq '.data[].id'
+</div>
+<hr />
+<h2>方案 B：通过 omlx 使用 MLX</h2>
+<p><a href="https://omlx.ai">omlx</a> 是一款 macOS 原生应用，用于管理和提供 MLX 模型服务。MLX 是 Apple 自研的机器学习框架，专为 Apple Silicon 统一内存架构优化。</p>
+<h3>安装</h3>
+<p>从 <a href="https://omlx.ai">omlx.ai</a> 下载并安装。它提供图形界面用于模型管理，并内置服务器。</p>
+<h3>下载模型</h3>
+<p>使用 omlx 应用浏览并下载模型。搜索 <code>Qwen3.5-9B-mlx-lm-mxfp4</code> 并下载。模型存储在本地（通常位于 <code>~/.omlx/models/</code>）。</p>
+<h3>启动服务器</h3>
+<p>omlx 默认在 <code>http://127.0.0.1:8000</code> 上提供服务。通过应用 UI 启动服务，或在可用时使用 CLI。</p>
+<h3>测试</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s http://127.0.0.1:8000/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "Qwen3.5-9B-mlx-lm-mxfp4",
+    "messages": [{"role": "user", "content": "Hello!"}],
+    "max_tokens": 50
+  }' | jq .choices[0].message.content
+</div>
+<h3>列出可用模型</h3>
+<p>omlx 可同时提供多个模型的服务：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s http://127.0.0.1:8000/v1/models | jq '.data[].id'
+</div>
+<hr />
+<h2>基准测试：llama.cpp vs MLX</h2>
+<p>两个后端在同一台机器（Apple M5 Max，128 GB 统一内存）上测试，使用相同模型（Qwen3.5-9B），量化级别相当（GGUF 使用 Q4_K_M，MLX 使用 mxfp4）。五个不同 prompt，每个运行三次，后端顺序测试以避免资源竞争。</p>
+<h3>结果</h3>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>llama.cpp (Q4_K_M)</th>
+<th>MLX (mxfp4)</th>
+<th>胜者</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>TTFT（首 token 延迟，均值）</strong></td>
+<td><strong>67 ms</strong></td>
+<td>289 ms</td>
+<td>llama.cpp（快 4.3 倍）</td>
+</tr>
+<tr>
+<td><strong>TTFT（p50）</strong></td>
+<td><strong>66 ms</strong></td>
+<td>286 ms</td>
+<td>llama.cpp（快 4.3 倍）</td>
+</tr>
+<tr>
+<td><strong>生成速度（均值）</strong></td>
+<td>70 tok/s</td>
+<td><strong>96 tok/s</strong></td>
+<td>MLX（快 37%）</td>
+</tr>
+<tr>
+<td><strong>生成速度（p50）</strong></td>
+<td>70 tok/s</td>
+<td><strong>96 tok/s</strong></td>
+<td>MLX（快 37%）</td>
+</tr>
+<tr>
+<td><strong>总耗时（512 token）</strong></td>
+<td>7.3s</td>
+<td><strong>5.5s</strong></td>
+<td>MLX（快 25%）</td>
+</tr>
+</tbody>
+</table>
+<h3>含义解读</h3>
+<ul>
+<li>
+<p><strong>llama.cpp</strong> 在 prompt 处理上表现突出——其 flash attention + 量化 KV 缓存流水线可在约 66ms 内返回第一个 token。如果你在构建对响应速度敏感的交互式应用（聊天机器人、自动补全），这是显著优势。</p>
+</li>
+<li>
+<p><strong>MLX</strong> 一旦开始生成，token 速度快约 37%。对于批量任务、长文本生成，或任何更关注总完成时间而非初始延迟的场景，MLX 完成得更快。</p>
+</li>
+<li>
+<p>两个后端都<strong>极为稳定</strong>——多次运行间的方差可忽略不计。这些数据可作为可靠参考。</p>
+</li>
+</ul>
+<h3>如何选择？</h3>
+<table>
+<thead>
+<tr>
+<th>使用场景</th>
+<th>推荐</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>交互式聊天、低延迟工具</td>
+<td>llama.cpp</td>
+</tr>
+<tr>
+<td>长文本生成、批量处理</td>
+<td>MLX (omlx)</td>
+</tr>
+<tr>
+<td>内存受限（8–16 GB）</td>
+<td>llama.cpp（量化 KV 缓存无可匹敌）</td>
+</tr>
+<tr>
+<td>同时提供多个模型服务</td>
+<td>omlx（内置多模型支持）</td>
+</tr>
+<tr>
+<td>最大兼容性（含 Linux）</td>
+<td>llama.cpp</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>连接 Hermes</h2>
+<p>本地服务器启动后：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes model
+</div>
+<p>选择 <strong>Custom endpoint</strong>，按提示操作。系统会询问 base URL 和模型名称——使用你所配置的后端对应的值即可。</p>
+<hr />
+<h2>超时设置</h2>
+<p>Hermes 会自动检测本地端点（localhost、局域网 IP）并放宽其流式传输超时限制。大多数情况下无需额外配置。</p>
+<p>如果仍然遇到超时错误（例如在慢速硬件上使用超大上下文），可以覆盖流式读取超时：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 在 .env 中——将默认的 120s 提高到 30 分钟
+HERMES_STREAM_READ_TIMEOUT=1800
+</div>
+<table>
+<thead>
+<tr>
+<th>超时类型</th>
+<th>默认值</th>
+<th>本地自动调整</th>
+<th>环境变量覆盖</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>流式读取（socket 级别）</td>
+<td>120s</td>
+<td>提升至 1800s</td>
+<td><code>HERMES_STREAM_READ_TIMEOUT</code></td>
+</tr>
+<tr>
+<td>停滞流检测</td>
+<td>180s</td>
+<td>完全禁用</td>
+<td><code>HERMES_STREAM_STALE_TIMEOUT</code></td>
+</tr>
+<tr>
+<td>API 调用（非流式）</td>
+<td>1800s</td>
+<td>无需调整</td>
+<td><code>HERMES_API_TIMEOUT</code></td>
+</tr>
+</tbody>
+</table>
+<p>流式读取超时最容易引发问题——它是接收下一个数据块的 socket 级别截止时间。在大上下文的预填充（prefill）阶段，本地模型可能在处理 prompt 时数分钟内没有任何输出。自动检测机制会透明地处理这一情况。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

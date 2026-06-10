@@ -1,0 +1,611 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notion — Notion API + ntn CLI：页面、数据库、Markdown、Workers - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Notion — Notion API + ntn CLI：页面、数据库、Markdown、Workers</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Notion</h1>
+<p>Notion API + ntn CLI：页面、数据库、Markdown、Workers。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>内置（默认安装）</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>skills/productivity/notion</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>2.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>community</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Notion</code>, <code>Productivity</code>, <code>Notes</code>, <code>Database</code>, <code>API</code>, <code>CLI</code>, <code>Workers</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>Notion</h1>
+<p>通过两种方式与 Notion 交互。两种方式使用同一个集成 token——根据可用情况选择。</p>
+<p>◆ <strong><code>ntn</code> CLI</strong> — Notion 官方 CLI。语法更简洁，支持单行文件上传，Workers 必须使用此方式。截至 2026 年 5 月仅支持 macOS + Linux（Windows 支持&quot;即将推出&quot;）。<strong>已安装时为默认方式。</strong>
+◆ <strong>HTTP + curl</strong> — 全平台可用，包括 Windows。<strong><code>ntn</code> 未安装时的默认回退方式。</strong></p>
+<h2>配置</h2>
+<h3>1. 获取集成 token（两种方式均需要）</h3>
+<ol>
+<li>在 https://notion.so/my-integrations 创建集成</li>
+<li>复制 API 密钥（以 <code>ntn_</code> 或 <code>secret_</code> 开头）</li>
+<li>存储到 <code>~/.hermes/.env</code>：<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+NOTION_API_KEY=ntn_your_key_here
+</li>
+</ol>
+</div>
+4. **在 Notion 中将目标页面/数据库共享给该集成：** 页面菜单 `...` → `Connect to` → 你的集成名称。若未执行此步骤，即使页面存在，API 也会返回 404。
+<h3>2. 安装 <code>ntn</code>（macOS / Linux 上的首选方式）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 推荐方式
+curl -fsSL https://ntn.dev | bash
+<h1>或通过 npm 安装（需要 Node 22+，npm 10+）</h1>
+<p>npm install --global ntn</p>
+<p>ntn --version    # 验证安装</p>
+</div>
+<p><strong>跳过 <code>ntn login</code>——改用集成 token。</strong> 此方式支持无头运行，无需浏览器：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+export NOTION_API_TOKEN=$NOTION_API_KEY      # ntn 读取 NOTION_API_TOKEN
+export NOTION_KEYRING=0                       # 不尝试使用系统密钥链
+</div>
+<p>将上述 export 添加到你的 shell 配置文件（或 <code>~/.hermes/.env</code>），使每个会话都能继承这些变量。</p>
+<h3>3. 运行时选择路径</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+if command -v ntn &gt;/dev/null 2&gt;&amp;1; then
+  # 使用 ntn
+else
+  # 回退到 curl
+fi
+</div>
+<p>Windows 用户：在原生 <code>ntn</code> 发布之前完全跳过第 2 步——Path B 可正常使用。如果现在就想要 CLI 体验，可在 WSL2 中安装 <code>ntn</code>。</p>
+<h2>API 基础</h2>
+<p>所有 HTTP 请求均需携带 <code>Notion-Version: 2025-09-03</code>。<code>ntn</code> 会自动处理此项。在此版本中，用户所称的&quot;数据库&quot;在 API 中称为 <strong>data sources（数据源）</strong>。</p>
+<h2>Path A — <code>ntn</code> CLI（首选，macOS / Linux）</h2>
+<h3>原始 API 调用（curl 的简写）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+ntn api v1/users                                  # GET
+ntn api v1/pages parent[page_id]=abc123 \         # POST，内联请求体
+  properties[title][0][text][content]="Notes"
+ntn api v1/pages/abc123 -X PATCH archived:=true   # PATCH；:= 表示非字符串类型（布尔/数字/null）
+</div>
+<p>语法说明：</p>
+<ul>
+<li><code>key=value</code> — 字符串字段</li>
+<li><code>key[nested]=value</code> — 嵌套对象字段</li>
+<li><code>key:=value</code> — 类型赋值（布尔值、数字、null、数组）</li>
+</ul>
+<h3>搜索</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+ntn api v1/search query="page title"
+</div>
+<h3>读取页面元数据</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+ntn api v1/pages/{page_id}
+</div>
+<h3>以 Markdown 格式读取页面（适合 agent 使用）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+ntn api v1/pages/{page_id}/markdown
+</div>
+<h3>以块（block）形式读取页面内容</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+ntn api v1/blocks/{page_id}/children
+</div>
+<h3>从 Markdown 创建页面</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+ntn api v1/pages \
+  parent[page_id]=xxx \
+  properties[title][0][text][content]="Notes from meeting" \
+  markdown="# Agenda
+<ul>
+<li>Q3 roadmap</li>
+<li>Hiring&quot;</li>
+</ul>
+</div>
+<h3>用 Markdown 更新页面</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+ntn api v1/pages/{page_id}/markdown -X PATCH \
+  markdown="## Update
+<p>Shipped the prototype.&quot;</p>
+</div>
+<h3>查询数据库（data source）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+ntn api v1/data_sources/{data_source_id}/query -X POST \
+  filter[property]=Status filter[select][equals]=Active
+</div>
+<p>对于包含 <code>sorts</code>、多个过滤条件或复合逻辑的复杂查询，通过管道传入 JSON：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+echo '{"filter": {"property": "Status", "select": {"equals": "Active"}}, "sorts": [{"property": "Date", "direction": "descending"}]}' | \
+  ntn api v1/data_sources/{data_source_id}/query -X POST --json -
+</div>
+<h3>文件上传（单行命令——CLI 最大优势）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+ntn files create &lt; photo.png
+ntn files create --external-url https://example.com/photo.png
+ntn files list
+</div>
+<p>对比三步 HTTP 流程（创建上传 → PUT 字节 → 引用）。</p>
+<h3>常用环境变量</h3>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NOTION_API_TOKEN</code></td>
+<td>认证 token（覆盖密钥链）——设置为你的集成 token</td>
+</tr>
+<tr>
+<td><code>NOTION_KEYRING=0</code></td>
+<td>使用 <code>~/.config/notion/auth.json</code> 存储凭据，而非系统密钥链</td>
+</tr>
+<tr>
+<td><code>NOTION_WORKSPACE_ID</code></td>
+<td>跳过工作区选择提示</td>
+</tr>
+</tbody>
+</table>
+<h2>Path B — HTTP + curl（跨平台，Windows 默认方式）</h2>
+<p>所有请求遵循以下模式：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s -X GET "https://api.notion.com/v1/..." \
+  -H "Authorization: Bearer $NOTION_API_KEY" \
+  -H "Notion-Version: 2025-09-03" \
+  -H "Content-Type: application/json"
+</div>
+<p>Windows 10+ 自带的 <code>curl</code> 可直接使用。PowerShell 用户也可使用 <code>Invoke-RestMethod</code>。</p>
+<h3>搜索</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s -X POST "https://api.notion.com/v1/search" \
+  -H "Authorization: Bearer $NOTION_API_KEY" \
+  -H "Notion-Version: 2025-09-03" \
+  -H "Content-Type: application/json" \
+  -d '{"query": "page title"}'
+</div>
+<h3>读取页面元数据</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s "https://api.notion.com/v1/pages/{page_id}" \
+  -H "Authorization: Bearer $NOTION_API_KEY" \
+  -H "Notion-Version: 2025-09-03"
+</div>
+<h3>以 Markdown 格式读取页面（适合 agent 使用）</h3>
+<p>比块 JSON 更易于输入模型处理。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s "https://api.notion.com/v1/pages/{page_id}/markdown" \
+  -H "Authorization: Bearer $NOTION_API_KEY" \
+  -H "Notion-Version: 2025-09-03"
+</div>
+<h3>以块形式读取页面内容（需要结构化数据时使用）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s "https://api.notion.com/v1/blocks/{page_id}/children" \
+  -H "Authorization: Bearer $NOTION_API_KEY" \
+  -H "Notion-Version: 2025-09-03"
+</div>
+<h3>从 Markdown 创建页面</h3>
+<p><code>POST /v1/pages</code> 接受 <code>markdown</code> 请求体参数。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s -X POST "https://api.notion.com/v1/pages" \
+  -H "Authorization: Bearer $NOTION_API_KEY" \
+  -H "Notion-Version: 2025-09-03" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "parent": {"page_id": "xxx"},
+    "properties": {"title": [{"text": {"content": "Notes from meeting"}}]},
+    "markdown": "# Agenda\n\n- Q3 roadmap\n- Hiring\n\n## Decisions\n- Ship MVP Friday"
+  }'
+</div>
+<h3>用 Markdown 更新页面</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s -X PATCH "https://api.notion.com/v1/pages/{page_id}/markdown" \
+  -H "Authorization: Bearer $NOTION_API_KEY" \
+  -H "Notion-Version: 2025-09-03" \
+  -H "Content-Type: application/json" \
+  -d '{"markdown": "## Update\n\nShipped the prototype."}'
+</div>
+<h3>在数据库中创建页面（带类型属性）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s -X POST "https://api.notion.com/v1/pages" \
+  -H "Authorization: Bearer $NOTION_API_KEY" \
+  -H "Notion-Version: 2025-09-03" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "parent": {"database_id": "xxx"},
+    "properties": {
+      "Name": {"title": [{"text": {"content": "New Item"}}]},
+      "Status": {"select": {"name": "Todo"}}
+    }
+  }'
+</div>
+<h3>查询数据库（data source）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s -X POST "https://api.notion.com/v1/data_sources/{data_source_id}/query" \
+  -H "Authorization: Bearer $NOTION_API_KEY" \
+  -H "Notion-Version: 2025-09-03" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "filter": {"property": "Status", "select": {"equals": "Active"}},
+    "sorts": [{"property": "Date", "direction": "descending"}]
+  }'
+</div>
+<h3>创建数据库</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s -X POST "https://api.notion.com/v1/data_sources" \
+  -H "Authorization: Bearer $NOTION_API_KEY" \
+  -H "Notion-Version: 2025-09-03" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "parent": {"page_id": "xxx"},
+    "title": [{"text": {"content": "My Database"}}],
+    "properties": {
+      "Name": {"title": {}},
+      "Status": {"select": {"options": [{"name": "Todo"}, {"name": "Done"}]}},
+      "Date": {"date": {}}
+    }
+  }'
+</div>
+<h3>更新页面属性</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s -X PATCH "https://api.notion.com/v1/pages/{page_id}" \
+  -H "Authorization: Bearer $NOTION_API_KEY" \
+  -H "Notion-Version: 2025-09-03" \
+  -H "Content-Type: application/json" \
+  -d '{"properties": {"Status": {"select": {"name": "Done"}}}}'
+</div>
+<h3>向页面追加块</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s -X PATCH "https://api.notion.com/v1/blocks/{page_id}/children" \
+  -H "Authorization: Bearer $NOTION_API_KEY" \
+  -H "Notion-Version: 2025-09-03" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "children": [
+      {"object": "block", "type": "paragraph", "paragraph": {"rich_text": [{"text": {"content": "Hello from Hermes!"}}]}}
+    ]
+  }'
+</div>
+<h3>文件上传（三步流程）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 1. 创建上传
+curl -s -X POST "https://api.notion.com/v1/file_uploads" \
+  -H "Authorization: Bearer $NOTION_API_KEY" \
+  -H "Notion-Version: 2025-09-03" \
+  -H "Content-Type: application/json" \
+  -d '{"filename": "photo.png", "content_type": "image/png"}'
+<h1>2. 将字节 PUT 到上面返回的 upload_url</h1>
+<p>curl -s -X PUT &quot;{upload_url}&quot; --data-binary @photo.png</p>
+<h1>3. 在页面/块 payload 中引用 {file_upload_id}</h1>
+</div>
+<h2>属性类型</h2>
+<p>数据库条目的常用属性格式：</p>
+<ul>
+<li><strong>标题（Title）：</strong> <code>{&quot;title&quot;: [{&quot;text&quot;: {&quot;content&quot;: &quot;...&quot;}}]}</code></li>
+<li><strong>富文本（Rich text）：</strong> <code>{&quot;rich_text&quot;: [{&quot;text&quot;: {&quot;content&quot;: &quot;...&quot;}}]}</code></li>
+<li><strong>单选（Select）：</strong> <code>{&quot;select&quot;: {&quot;name&quot;: &quot;Option&quot;}}</code></li>
+<li><strong>多选（Multi-select）：</strong> <code>{&quot;multi_select&quot;: [{&quot;name&quot;: &quot;A&quot;}, {&quot;name&quot;: &quot;B&quot;}]}</code></li>
+<li><strong>日期（Date）：</strong> <code>{&quot;date&quot;: {&quot;start&quot;: &quot;2026-01-15&quot;, &quot;end&quot;: &quot;2026-01-16&quot;}}</code></li>
+<li><strong>复选框（Checkbox）：</strong> <code>{&quot;checkbox&quot;: true}</code></li>
+<li><strong>数字（Number）：</strong> <code>{&quot;number&quot;: 42}</code></li>
+<li><strong>URL：</strong> <code>{&quot;url&quot;: &quot;https://...&quot;}</code></li>
+<li><strong>邮箱（Email）：</strong> <code>{&quot;email&quot;: &quot;user@example.com&quot;}</code></li>
+<li><strong>关联（Relation）：</strong> <code>{&quot;relation&quot;: [{&quot;id&quot;: &quot;page_id&quot;}]}</code></li>
+</ul>
+<h2>API 版本 2025-09-03 — 数据库与 Data Sources</h2>
+<ul>
+<li><strong>数据库已更名为 data sources。</strong> 查询和检索请使用 <code>/data_sources/</code> 端点。</li>
+<li><strong>每个数据库有两个 ID：</strong> <code>database_id</code> 和 <code>data_source_id</code>。
+<ul>
+<li>创建页面时使用 <code>database_id</code>：<code>parent: {&quot;database_id&quot;: &quot;...&quot;}</code></li>
+<li>查询时使用 <code>data_source_id</code>：<code>POST /v1/data_sources/{id}/query</code></li>
+</ul>
+</li>
+<li>搜索返回的数据库对象类型为 <code>&quot;object&quot;: &quot;data_source&quot;</code>，包含 <code>data_source_id</code> 字段。</li>
+</ul>
+<h2>Notion Workers（高级功能，需要 <code>ntn</code>）</h2>
+<p>Workers 是由 Notion 托管的 TypeScript 程序。一个 worker 可以暴露以下任意组合：</p>
+<ul>
+<li><strong>Syncs（同步）</strong> — 按计划（默认 30 分钟）从外部 API 拉取数据到 Notion 数据库。</li>
+<li><strong>Tools（工具）</strong> — 在 Notion 的 Custom Agents 中作为可调用工具出现。</li>
+<li><strong>Webhooks</strong> — 接收来自外部服务（GitHub、Stripe 等）的 HTTP 事件并在 Notion 中执行操作。</li>
+</ul>
+<p><strong>套餐/平台限制：</strong></p>
+<ul>
+<li>CLI 在所有套餐上均可使用。<strong>部署 Workers 需要 Business 或 Enterprise 套餐。</strong></li>
+<li>截至 2026 年 5 月，<code>ntn</code> 仅支持 macOS/Linux。Windows 用户需使用 WSL2 或等待原生支持。</li>
+<li>2026 年 8 月 11 日前免费；之后按 Notion 积分计费。</li>
+</ul>
+<h3>最简 Worker</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+ntn workers new my-worker      # 脚手架
+cd my-worker
+# 编辑 src/index.ts
+ntn workers deploy --name my-worker
+</div>
+<p><code>src/index.ts</code>：</p>
+<div class="code-block"><span class="code-lang">typescript</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import { Worker } from "@notionhq/workers";
+<p>const worker = new Worker();
+export default worker;</p>
+<p>worker.tool(&quot;greet&quot;, {
+title: &quot;Greet a User&quot;,
+description: &quot;Returns a friendly greeting&quot;,
+inputSchema: { type: &quot;object&quot;, properties: { name: { type: &quot;string&quot; } }, required: [&quot;name&quot;] },
+execute: async ({ name }) =&amp;gt; <code>Hello, ${name}!</code>,
+});</p>
+</div>
+<h3>Webhook 能力</h3>
+<div class="code-block"><span class="code-lang">typescript</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+worker.webhook("onGithubPush", {
+  title: "GitHub Push Handler",
+  execute: async (events, { notion }) =&gt; {
+    for (const event of events) {
+      // event.body, event.rawBody（用于签名验证），event.headers
+      console.log("got delivery", event.deliveryId);
+    }
+  },
+});
+</div>
+<p>部署后：<code>ntn workers webhooks list</code> 显示 Notion 生成的 URL。将该 URL 视为机密——除非添加签名验证，否则任何人都可以向其 POST 事件。</p>
+<h3>Worker 生命周期命令</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+ntn workers deploy
+ntn workers list
+ntn workers exec &lt;capability-key&gt; -d '{"name": "world"}'
+ntn workers sync trigger &lt;key&gt;            # 立即运行同步
+ntn workers sync pause &lt;key&gt;
+ntn workers env set GITHUB_WEBHOOK_SECRET=...
+ntn workers runs list                     # 最近的调用记录
+ntn workers runs logs &lt;run-id&gt;
+ntn workers webhooks list
+</div>
+<p>需要构建 Worker 时，使用 <code>ntn workers new</code> 创建脚手架，在 <code>src/index.ts</code> 中编写代码，通过 <code>ntn workers env set</code> 设置密钥，然后部署。Notion 文档 https://developers.notion.com/workers 涵盖完整 API 接口。</p>
+<h2>Notion 风格 Markdown（用于 <code>/markdown</code> 端点）</h2>
+<p>标准 CommonMark 加上用于 Notion 特定块的类 XML 标签。缩进使用<strong>制表符（tab）</strong>。</p>
+<p><strong>CommonMark 之外的块：</strong></p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+&lt;callout icon="🎯" color="blue_bg"&gt;
+	Ship the MVP by **Friday**.
+&lt;/callout&gt;
+<p>&amp;lt;details color=&quot;gray&quot;&amp;gt;
+&amp;lt;summary&amp;gt;Toggle title&amp;lt;/summary&amp;gt;
+Children indented one tab
+&amp;lt;/details&amp;gt;</p>
+<p>&amp;lt;columns&amp;gt;
+&amp;lt;column&amp;gt;Left side&amp;lt;/column&amp;gt;
+&amp;lt;column&amp;gt;Right side&amp;lt;/column&amp;gt;
+&amp;lt;/columns&amp;gt;</p>
+<p>&amp;lt;table_of_contents color=&quot;gray&quot;/&amp;gt;</p>
+</div>
+<p><strong>内联：</strong></p>
+<ul>
+<li>提及（Mention）：<code>&lt;mention-user url=&quot;...&quot;/&gt;</code>、<code>&lt;mention-page url=&quot;...&quot;&gt;Title&lt;/mention-page&gt;</code>、<code>&lt;mention-date start=&quot;2026-05-15&quot;/&gt;</code></li>
+<li>下划线：<code>&lt;span underline=&quot;true&quot;&gt;text&lt;/span&gt;</code></li>
+<li>颜色：<code>&lt;span color=&quot;blue&quot;&gt;text&lt;/span&gt;</code>，或块级别在第一行使用 <code>{color=&quot;blue&quot;}</code></li>
+<li>数学公式：内联 <code>$x^2$</code>，块级 <code>$$ ... $$</code></li>
+<li>引用：<code>[^https://example.com]</code></li>
+</ul>
+<p><strong>颜色：</strong> <code>gray brown orange yellow green blue purple pink red</code>，以及带 <code>*_bg</code> 后缀的背景色变体。</p>
+<p>5/6 级标题会折叠为 H4。多个连续 <code>&gt;</code> 行渲染为独立引用块——在单个 <code>&gt;</code> 内使用 <code>&lt;br&gt;</code> 实现多行引用。</p>
+<h2>选择合适的路径</h2>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>macOS / Linux</th>
+<th>Windows</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>读写页面、搜索、查询数据库</td>
+<td><code>ntn api ...</code></td>
+<td>curl</td>
+</tr>
+<tr>
+<td>读取页面供 agent 摘要</td>
+<td><code>ntn api v1/pages/{id}/markdown</code></td>
+<td>curl <code>/markdown</code> 端点</td>
+</tr>
+<tr>
+<td>上传文件</td>
+<td><code>ntn files create &lt; file</code></td>
+<td>三步 HTTP 流程</td>
+</tr>
+<tr>
+<td>一次性 API 探索</td>
+<td><code>ntn api ...</code></td>
+<td>curl</td>
+</tr>
+<tr>
+<td>构建由 Notion 托管的同步/webhook/agent 工具</td>
+<td><code>ntn workers ...</code></td>
+<td>WSL2 + <code>ntn workers ...</code></td>
+</tr>
+</tbody>
+</table>
+<h2>注意事项</h2>
+<ul>
+<li>页面/数据库 ID 为 UUID 格式（带或不带连字符均可接受）。</li>
+<li>速率限制：平均约 3 次请求/秒。CLI 不会绕过此限制。</li>
+<li>API 无法设置数据库<strong>视图</strong>过滤器——该功能仅限 UI 操作。</li>
+<li>创建 data sources 时使用 <code>&quot;is_inline&quot;: true</code> 可将其嵌入页面。</li>
+<li>始终为 curl 传入 <code>-s</code> 以抑制进度条（使 agent 输出更整洁）。</li>
+<li>读取数据时通过 <code>jq</code> 管道处理：<code>... | jq '.results[0].properties'</code>。</li>
+<li>Notion 现已推出 MCP 服务器（<code>Notion MCP</code>，在数据库操作上比上一版本的 token 效率提升约 91%）——如需在会话中进行流式 Notion 访问，可通过 Hermes 的 MCP 支持接入，但上述路径已足以应对大多数一次性任务。</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

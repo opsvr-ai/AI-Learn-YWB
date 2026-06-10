@@ -1,0 +1,348 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blackbox — 将编码任务委托给 Blackbox AI CLI 代理 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Blackbox — 将编码任务委托给 Blackbox AI CLI 代理</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Blackbox</h1>
+<p>将编码任务委托给 Blackbox AI CLI 代理。这是一个内置评判机制的多模型代理，可将任务分发给多个 LLM 并选出最佳结果。需要安装 blackbox CLI 及 Blackbox AI API 密钥。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/autonomous-ai-agents/blackbox</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/autonomous-ai-agents/blackbox</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Hermes Agent (Nous Research)</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Coding-Agent</code>, <code>Blackbox</code>, <code>Multi-Agent</code>, <code>Judge</code>, <code>Multi-Model</code></td>
+</tr>
+<tr>
+<td>相关 skill</td>
+<td><a href="/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-claude-code"><code>claude-code</code></a>, <a href="/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-codex"><code>codex</code></a>, <a href="/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-hermes-agent"><code>hermes-agent</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是代理在 skill 激活时所看到的指令内容。
+</div>
+<h1>Blackbox CLI</h1>
+<p>通过 Hermes 终端将编码任务委托给 <a href="https://www.blackbox.ai/">Blackbox AI</a>。Blackbox 是一个多模型编码代理 CLI，可将任务分发给多个 LLM（Claude、Codex、Gemini、Blackbox Pro），并使用评判机制选出最佳实现。</p>
+<p>该 CLI 为<a href="https://github.com/blackboxaicode/cli">开源项目</a>（GPL-3.0，TypeScript，fork 自 Gemini CLI），支持交互式会话、非交互式单次执行、检查点（checkpointing）、MCP 以及视觉模型切换。</p>
+<h2>前置条件</h2>
+<ul>
+<li>已安装 Node.js 20+</li>
+<li>已安装 Blackbox CLI：<code>npm install -g @blackboxai/cli</code></li>
+<li>或从源码安装：<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+git clone https://github.com/blackboxaicode/cli.git
+cd cli &amp;&amp; npm install &amp;&amp; npm install -g .
+</li>
+</ul>
+</div>
+- 从 [app.blackbox.ai/dashboard](https://app.blackbox.ai/dashboard) 获取 API 密钥
+- 配置：运行 `blackbox configure` 并输入 API 密钥
+- 在终端调用中使用 `pty=true` — Blackbox CLI 是交互式终端应用
+<h2>单次任务</h2>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal(command="blackbox --prompt 'Add JWT authentication with refresh tokens to the Express API'", workdir="/path/to/project", pty=true)
+</div>
+<p>快速临时工作：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal(command="cd $(mktemp -d) &amp;&amp; git init &amp;&amp; blackbox --prompt 'Build a REST API for todos with SQLite'", pty=true)
+</div>
+<h2>后台模式（长时任务）</h2>
+<p>对于需要数分钟的任务，使用后台模式以便监控进度：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Start in background with PTY
+terminal(command="blackbox --prompt 'Refactor the auth module to use OAuth 2.0'", workdir="~/project", background=true, pty=true)
+# Returns session_id
+<h1>Monitor progress</h1>
+<p>process(action=&quot;poll&quot;, session_id=&quot;&amp;lt;id&amp;gt;&quot;)
+process(action=&quot;log&quot;, session_id=&quot;&amp;lt;id&amp;gt;&quot;)</p>
+<h1>Send input if Blackbox asks a question</h1>
+<p>process(action=&quot;submit&quot;, session_id=&quot;&amp;lt;id&amp;gt;&quot;, data=&quot;yes&quot;)</p>
+<h1>Kill if needed</h1>
+<p>process(action=&quot;kill&quot;, session_id=&quot;&amp;lt;id&amp;gt;&quot;)</p>
+</div>
+<h2>检查点与恢复</h2>
+<p>Blackbox CLI 内置检查点支持，可暂停并恢复任务：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# After a task completes, Blackbox shows a checkpoint tag
+# Resume with a follow-up task:
+terminal(command="blackbox --resume-checkpoint 'task-abc123-2026-03-06' --prompt 'Now add rate limiting to the endpoints'", workdir="~/project", pty=true)
+</div>
+<h2>会话命令</h2>
+<p>在交互式会话中，可使用以下命令：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/compress</code></td>
+<td>压缩对话历史以节省 token</td>
+</tr>
+<tr>
+<td><code>/clear</code></td>
+<td>清除历史并重新开始</td>
+</tr>
+<tr>
+<td><code>/stats</code></td>
+<td>查看当前 token 用量</td>
+</tr>
+<tr>
+<td><code>Ctrl+C</code></td>
+<td>取消当前操作</td>
+</tr>
+</tbody>
+</table>
+<h2>PR 审查</h2>
+<p>克隆到临时目录以避免修改工作树：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal(command="REVIEW=$(mktemp -d) &amp;&amp; git clone https://github.com/user/repo.git $REVIEW &amp;&amp; cd $REVIEW &amp;&amp; gh pr checkout 42 &amp;&amp; blackbox --prompt 'Review this PR against main. Check for bugs, security issues, and code quality.'", pty=true)
+</div>
+<h2>并行工作</h2>
+<p>为独立任务启动多个 Blackbox 实例：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal(command="blackbox --prompt 'Fix the login bug'", workdir="/tmp/issue-1", background=true, pty=true)
+terminal(command="blackbox --prompt 'Add unit tests for auth'", workdir="/tmp/issue-2", background=true, pty=true)
+<h1>Monitor all</h1>
+<p>process(action=&quot;list&quot;)</p>
+</div>
+<h2>多模型模式</h2>
+<p>Blackbox 的独特功能是将同一任务分发给多个模型并对结果进行评判。通过 <code>blackbox configure</code> 配置要使用的模型 — 选择多个提供商以启用 Chairman/judge 工作流，CLI 将评估不同模型的输出并选出最佳结果。</p>
+<h2>关键参数</h2>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--prompt &quot;task&quot;</code></td>
+<td>非交互式单次执行</td>
+</tr>
+<tr>
+<td><code>--resume-checkpoint &quot;tag&quot;</code></td>
+<td>从已保存的检查点恢复</td>
+</tr>
+<tr>
+<td><code>--yolo</code></td>
+<td>自动批准所有操作和模型切换</td>
+</tr>
+<tr>
+<td><code>blackbox session</code></td>
+<td>启动交互式聊天会话</td>
+</tr>
+<tr>
+<td><code>blackbox configure</code></td>
+<td>更改设置、提供商、模型</td>
+</tr>
+<tr>
+<td><code>blackbox info</code></td>
+<td>显示系统信息</td>
+</tr>
+</tbody>
+</table>
+<h2>视觉支持</h2>
+<p>Blackbox 自动检测输入中的图像，并可切换至多模态分析。VLM 模式：</p>
+<ul>
+<li><code>&quot;once&quot;</code> — 仅针对当前查询切换模型</li>
+<li><code>&quot;session&quot;</code> — 在整个会话期间切换</li>
+<li><code>&quot;persist&quot;</code> — 保持当前模型（不切换）</li>
+</ul>
+<h2>Token 限制</h2>
+<p>通过 <code>.blackboxcli/settings.json</code> 控制 token 用量：</p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{
+  "sessionTokenLimit": 32000
+}
+</div>
+<h2>规则</h2>
+<ol>
+<li><strong>始终使用 <code>pty=true</code></strong> — Blackbox CLI 是交互式终端应用，没有 PTY 将会挂起</li>
+<li><strong>使用 <code>workdir</code></strong> — 确保代理专注于正确的目录</li>
+<li><strong>长任务使用后台模式</strong> — 使用 <code>background=true</code> 并通过 <code>process</code> 工具监控</li>
+<li><strong>不要干预</strong> — 使用 <code>poll</code>/<code>log</code> 监控，不要因为速度慢就终止会话</li>
+<li><strong>报告结果</strong> — 完成后检查变更内容并向用户汇总</li>
+<li><strong>积分需要花钱</strong> — Blackbox 使用积分制；多模型模式消耗积分更快</li>
+<li><strong>检查前置条件</strong> — 在尝试委托前确认 <code>blackbox</code> CLI 已安装</li>
+</ol>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,473 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Openclaw Migration — 将用户的 OpenClaw 自定义配置迁移到 Hermes Agent - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Openclaw Migration — 将用户的 OpenClaw 自定义配置迁移到 Hermes Agent</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Openclaw Migration</h1>
+<p>将用户的 OpenClaw 自定义配置迁移到 Hermes Agent。从 <code>~/.openclaw</code> 导入 Hermes 兼容的记忆、<code>SOUL.md</code>、命令白名单、用户技能及所选工作区资产，并精确报告无法迁移的内容及原因。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/migration/openclaw-migration</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/migration/openclaw-migration</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Hermes Agent (Nous Research)</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Migration</code>, <code>OpenClaw</code>, <code>Hermes</code>, <code>Memory</code>, <code>Persona</code>, <code>Import</code></td>
+</tr>
+<tr>
+<td>相关 skill</td>
+<td><a href="/user-guide/skills/bundled/autonomous-ai-agents/autonomous-ai-agents-hermes-agent"><code>hermes-agent</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 skill 激活时 agent 所看到的指令内容。
+</div>
+<h1>OpenClaw -&gt; Hermes 迁移</h1>
+<p>当用户希望以最少的手动清理将其 OpenClaw 配置迁移到 Hermes Agent 时，使用此 skill。</p>
+<h2>CLI 命令</h2>
+<p>如需快速、非交互式迁移，使用内置 CLI 命令：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes claw migrate              # Full interactive migration
+hermes claw migrate --dry-run    # Preview what would be migrated
+hermes claw migrate --preset user-data   # Migrate without secrets
+hermes claw migrate --overwrite  # Overwrite existing conflicts
+hermes claw migrate --source /custom/path/.openclaw  # Custom source
+</div>
+<p>CLI 命令运行与下文所述相同的迁移脚本。当需要交互式、引导式迁移并支持 dry-run（预览）和逐项冲突解决时，请通过 agent 使用此 skill。</p>
+<p><strong>首次设置：</strong> <code>hermes setup</code> 向导会自动检测 <code>~/.openclaw</code>，并在配置开始前提供迁移选项。</p>
+<h2>此 skill 的功能</h2>
+<p>它使用 <code>scripts/openclaw_to_hermes.py</code> 来：</p>
+<ul>
+<li>将 <code>SOUL.md</code> 导入 Hermes 主目录，保存为 <code>SOUL.md</code></li>
+<li>将 OpenClaw 的 <code>MEMORY.md</code> 和 <code>USER.md</code> 转换为 Hermes 记忆条目</li>
+<li>将 OpenClaw 命令审批模式合并到 Hermes <code>command_allowlist</code></li>
+<li>迁移 Hermes 兼容的消息设置，例如 <code>TELEGRAM_ALLOWED_USERS</code> 和 <code>MESSAGING_CWD</code></li>
+<li>将 OpenClaw skill 复制到 <code>~/.hermes/skills/openclaw-imports/</code></li>
+<li>可选地将 OpenClaw 工作区指令文件复制到所选 Hermes 工作区</li>
+<li>将兼容的工作区资产（如 <code>workspace/tts/</code>）镜像到 <code>~/.hermes/tts/</code></li>
+<li>归档没有直接 Hermes 目标的非机密文档</li>
+<li>生成结构化报告，列出已迁移项、冲突项、跳过项及原因</li>
+</ul>
+<h2>路径解析</h2>
+<p>辅助脚本位于此 skill 目录下：</p>
+<ul>
+<li><code>scripts/openclaw_to_hermes.py</code></li>
+</ul>
+<p>从 Skills Hub 安装此 skill 后，通常位于：</p>
+<ul>
+<li><code>~/.hermes/skills/migration/openclaw-migration/scripts/openclaw_to_hermes.py</code></li>
+</ul>
+<p>请勿猜测更短的路径，如 <code>~/.hermes/skills/openclaw-migration/...</code>。</p>
+<p>运行辅助脚本前：</p>
+<ol>
+<li>优先使用 <code>~/.hermes/skills/migration/openclaw-migration/</code> 下的已安装路径。</li>
+<li>如果该路径失败，检查已安装的 skill 目录，并相对于已安装的 <code>SKILL.md</code> 解析脚本路径。</li>
+<li>仅在已安装位置缺失或 skill 被手动移动时，才使用 <code>find</code> 作为备用方案。</li>
+<li>调用终端工具时，不要传入 <code>workdir: &quot;~&quot;</code>。请使用绝对目录（如用户主目录），或完全省略 <code>workdir</code>。</li>
+</ol>
+<p>使用 <code>--migrate-secrets</code> 时，还将导入一小组 Hermes 兼容的白名单 secret，目前包括：</p>
+<ul>
+<li><code>TELEGRAM_BOT_TOKEN</code></li>
+</ul>
+<h2>默认工作流</h2>
+<ol>
+<li>首先通过 dry run 进行检查。</li>
+<li>呈现简洁摘要，说明哪些内容可以迁移、哪些不能迁移、哪些将被归档。</li>
+<li>如果 <code>clarify</code> 工具可用，使用它处理用户决策，而非要求自由格式的文字回复。</li>
+<li>如果 dry run 发现已导入 skill 目录存在冲突，在执行前询问处理方式。</li>
+<li>在执行前，请用户在两种支持的迁移模式中选择一种。</li>
+<li>仅在用户希望迁移工作区指令文件时，才询问目标工作区路径。</li>
+<li>使用匹配的 preset 和标志执行迁移。</li>
+<li>汇总结果，重点说明：
+<ul>
+<li>已迁移的内容</li>
+<li>已归档待手动审查的内容</li>
+<li>已跳过的内容及原因</li>
+</ul>
+</li>
+</ol>
+<h2>用户交互协议</h2>
+<p>Hermes CLI 支持 <code>clarify</code> 工具进行交互式提示，但有以下限制：</p>
+<ul>
+<li>每次只能处理一个选择</li>
+<li>最多 4 个预定义选项</li>
+<li>自动提供 <code>Other</code> 自由文本选项</li>
+</ul>
+<p>它<strong>不</strong>支持在单个提示中进行真正的多选复选框操作。</p>
+<p>每次 <code>clarify</code> 调用：</p>
+<ul>
+<li>必须包含非空的 <code>question</code></li>
+<li>仅对真实可选提示包含 <code>choices</code></li>
+<li><code>choices</code> 限制为 2-4 个纯字符串选项</li>
+<li>不得输出占位符或截断选项，如 <code>...</code></li>
+<li>不得在选项中填充或添加额外空白</li>
+<li>不得在问题中包含虚假表单字段，如 <code>在此输入目录</code>、空白行或下划线 <code>_____</code></li>
+<li>对于开放式路径问题，只询问纯文本句子；用户在面板下方的普通 CLI 提示符中输入</li>
+</ul>
+<p>如果 <code>clarify</code> 调用返回错误，检查错误文本，修正 payload，并使用有效的 <code>question</code> 和干净的 choices 重试一次。</p>
+<p>当 <code>clarify</code> 可用且 dry run 揭示任何需要用户决策的情况时，<strong>下一个动作必须是 <code>clarify</code> 工具调用</strong>。
+不得以如下普通助手消息结束对话：</p>
+<ul>
+<li>&quot;让我来呈现选项&quot;</li>
+<li>&quot;您希望怎么做？&quot;</li>
+<li>&quot;以下是选项&quot;</li>
+</ul>
+<p>如果需要用户决策，在生成更多文字之前通过 <code>clarify</code> 收集。
+如果存在多个未解决的决策，不要在它们之间插入解释性助手消息。收到一个 <code>clarify</code> 响应后，下一个动作通常应是下一个必要的 <code>clarify</code> 调用。</p>
+<p>当 dry run 报告以下情况时，将 <code>workspace-agents</code> 视为未解决的决策：</p>
+<ul>
+<li><code>kind=&quot;workspace-agents&quot;</code></li>
+<li><code>status=&quot;skipped&quot;</code></li>
+<li>原因包含 <code>No workspace target was provided</code></li>
+</ul>
+<p>在这种情况下，必须在执行前询问工作区指令问题。不得静默地将其视为跳过的决策。</p>
+<p>由于上述限制，使用以下简化决策流程：</p>
+<ol>
+<li>对于 <code>SOUL.md</code> 冲突，使用 <code>clarify</code>，选项如：
+<ul>
+<li><code>keep existing</code></li>
+<li><code>overwrite with backup</code></li>
+<li><code>review first</code></li>
+</ul>
+</li>
+<li>如果 dry run 显示一个或多个 <code>kind=&quot;skill&quot;</code> 项的 <code>status=&quot;conflict&quot;</code>，使用 <code>clarify</code>，选项如：
+<ul>
+<li><code>keep existing skills</code></li>
+<li><code>overwrite conflicting skills with backup</code></li>
+<li><code>import conflicting skills under renamed folders</code></li>
+</ul>
+</li>
+<li>对于工作区指令，使用 <code>clarify</code>，选项如：
+<ul>
+<li><code>skip workspace instructions</code></li>
+<li><code>copy to a workspace path</code></li>
+<li><code>decide later</code></li>
+</ul>
+</li>
+<li>如果用户选择复制工作区指令，追加一个开放式 <code>clarify</code> 问题，要求提供<strong>绝对路径</strong>。</li>
+<li>如果用户选择 <code>skip workspace instructions</code> 或 <code>decide later</code>，继续执行而不添加 <code>--workspace-target</code>。</li>
+<li>对于迁移模式，使用 <code>clarify</code>，提供以下 3 个选项：
+<ul>
+<li><code>user-data only</code></li>
+<li><code>full compatible migration</code></li>
+<li><code>cancel</code></li>
+</ul>
+</li>
+<li><code>user-data only</code> 表示：迁移用户数据和兼容配置，但<strong>不</strong>导入白名单 secret。</li>
+<li><code>full compatible migration</code> 表示：迁移相同的兼容用户数据，并在存在时导入白名单 secret。</li>
+<li>如果 <code>clarify</code> 不可用，以普通文本提出相同问题，但仍将答案限制为 <code>user-data only</code>、<code>full compatible migration</code> 或 <code>cancel</code>。</li>
+</ol>
+<p>执行门控：</p>
+<ul>
+<li>当由 <code>No workspace target was provided</code> 导致的 <code>workspace-agents</code> 跳过仍未解决时，不得执行。</li>
+<li>唯一有效的解决方式为：
+<ul>
+<li>用户明确选择 <code>skip workspace instructions</code></li>
+<li>用户明确选择 <code>decide later</code></li>
+<li>用户在选择 <code>copy to a workspace path</code> 后提供了工作区路径</li>
+</ul>
+</li>
+<li>dry run 中缺少工作区目标本身并不构成执行许可。</li>
+<li>当任何必要的 <code>clarify</code> 决策仍未解决时，不得执行。</li>
+</ul>
+<p>使用以下精确的 <code>clarify</code> payload 形式作为默认模式：</p>
+<ul>
+<li><code>{&quot;question&quot;:&quot;Your existing SOUL.md conflicts with the imported one. What should I do?&quot;,&quot;choices&quot;:[&quot;keep existing&quot;,&quot;overwrite with backup&quot;,&quot;review first&quot;]}</code></li>
+<li><code>{&quot;question&quot;:&quot;One or more imported OpenClaw skills already exist in Hermes. How should I handle those skill conflicts?&quot;,&quot;choices&quot;:[&quot;keep existing skills&quot;,&quot;overwrite conflicting skills with backup&quot;,&quot;import conflicting skills under renamed folders&quot;]}</code></li>
+<li><code>{&quot;question&quot;:&quot;Choose migration mode: migrate only user data, or run the full compatible migration including allowlisted secrets?&quot;,&quot;choices&quot;:[&quot;user-data only&quot;,&quot;full compatible migration&quot;,&quot;cancel&quot;]}</code></li>
+<li><code>{&quot;question&quot;:&quot;Do you want to copy the OpenClaw workspace instructions file into a Hermes workspace?&quot;,&quot;choices&quot;:[&quot;skip workspace instructions&quot;,&quot;copy to a workspace path&quot;,&quot;decide later&quot;]}</code></li>
+<li><code>{&quot;question&quot;:&quot;Please provide an absolute path where the workspace instructions should be copied.&quot;}</code></li>
+</ul>
+<h2>决策到命令的映射</h2>
+<p>将用户决策精确映射到命令标志：</p>
+<ul>
+<li>如果用户对 <code>SOUL.md</code> 选择 <code>keep existing</code>，<strong>不</strong>添加 <code>--overwrite</code>。</li>
+<li>如果用户选择 <code>overwrite with backup</code>，添加 <code>--overwrite</code>。</li>
+<li>如果用户选择 <code>review first</code>，在执行前停止并审查相关文件。</li>
+<li>如果用户选择 <code>keep existing skills</code>，添加 <code>--skill-conflict skip</code>。</li>
+<li>如果用户选择 <code>overwrite conflicting skills with backup</code>，添加 <code>--skill-conflict overwrite</code>。</li>
+<li>如果用户选择 <code>import conflicting skills under renamed folders</code>，添加 <code>--skill-conflict rename</code>。</li>
+<li>如果用户选择 <code>user-data only</code>，使用 <code>--preset user-data</code> 执行，<strong>不</strong>添加 <code>--migrate-secrets</code>。</li>
+<li>如果用户选择 <code>full compatible migration</code>，使用 <code>--preset full --migrate-secrets</code> 执行。</li>
+<li>仅在用户明确提供绝对工作区路径时，才添加 <code>--workspace-target</code>。</li>
+<li>如果用户选择 <code>skip workspace instructions</code> 或 <code>decide later</code>，不添加 <code>--workspace-target</code>。</li>
+</ul>
+<p>执行前，用简洁语言重述精确的命令计划，并确保其与用户的选择一致。</p>
+<h2>运行后报告规则</h2>
+<p>执行后，将脚本的 JSON 输出作为事实来源。</p>
+<ol>
+<li>所有计数基于 <code>report.summary</code>。</li>
+<li>仅当 <code>status</code> 恰好为 <code>migrated</code> 时，才将该项列入&quot;已成功迁移&quot;。</li>
+<li>除非报告显示该项为 <code>migrated</code>，否则不得声称冲突已解决。</li>
+<li>除非 <code>kind=&quot;soul&quot;</code> 的报告项 <code>status=&quot;migrated&quot;</code>，否则不得声称 <code>SOUL.md</code> 已被覆盖。</li>
+<li>如果 <code>report.summary.conflict &gt; 0</code>，包含冲突部分，而非静默暗示成功。</li>
+<li>如果计数与列出的项不一致，在回复前修正列表以匹配报告。</li>
+<li>在可用时包含报告中的 <code>output_dir</code> 路径，以便用户检查 <code>report.json</code>、<code>summary.md</code>、备份和归档文件。</li>
+<li>对于记忆或用户档案溢出，除非报告明确显示归档路径，否则不得声称条目已被归档。如果 <code>details.overflow_file</code> 存在，说明完整溢出列表已导出到该位置。</li>
+<li>如果 skill 以重命名文件夹导入，报告最终目标并提及 <code>details.renamed_from</code>。</li>
+<li>如果 <code>report.skill_conflict_mode</code> 存在，将其作为所选已导入 skill 冲突策略的事实来源。</li>
+<li>如果某项 <code>status=&quot;skipped&quot;</code>，不得将其描述为已覆盖、已备份、已迁移或已解决。</li>
+<li>如果 <code>kind=&quot;soul&quot;</code> 的 <code>status=&quot;skipped&quot;</code> 且原因为 <code>Target already matches source</code>，说明其保持不变，不提及备份。</li>
+<li>如果重命名的已导入 skill 的 <code>details.backup</code> 为空，不得暗示现有 Hermes skill 已被重命名或备份。仅说明已导入的副本被放置在新目标位置，并将 <code>details.renamed_from</code> 作为保持原位的已有文件夹引用。</li>
+</ol>
+<h2>迁移 preset</h2>
+<p>正常使用时优先选择以下两个 preset：</p>
+<ul>
+<li><code>user-data</code></li>
+<li><code>full</code></li>
+</ul>
+<p><code>user-data</code> 包含：</p>
+<ul>
+<li><code>soul</code></li>
+<li><code>workspace-agents</code></li>
+<li><code>memory</code></li>
+<li><code>user-profile</code></li>
+<li><code>messaging-settings</code></li>
+<li><code>command-allowlist</code></li>
+<li><code>skills</code></li>
+<li><code>tts-assets</code></li>
+<li><code>archive</code></li>
+</ul>
+<p><code>full</code> 包含 <code>user-data</code> 中的所有内容，另加：</p>
+<ul>
+<li><code>secret-settings</code></li>
+</ul>
+<p>辅助脚本仍支持类别级别的 <code>--include</code> / <code>--exclude</code>，但将其视为高级备用方案，而非默认用户体验。</p>
+<h2>命令</h2>
+<p>完整发现的 dry run：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 ~/.hermes/skills/migration/openclaw-migration/scripts/openclaw_to_hermes.py
+</div>
+<p>使用终端工具时，优先使用绝对调用模式，例如：</p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{"command":"python3 /home/USER/.hermes/skills/migration/openclaw-migration/scripts/openclaw_to_hermes.py","workdir":"/home/USER"}
+</div>
+<p>使用 user-data preset 的 dry run：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 ~/.hermes/skills/migration/openclaw-migration/scripts/openclaw_to_hermes.py --preset user-data
+</div>
+<p>执行 user-data 迁移：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 ~/.hermes/skills/migration/openclaw-migration/scripts/openclaw_to_hermes.py --execute --preset user-data --skill-conflict skip
+</div>
+<p>执行完整兼容迁移：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 ~/.hermes/skills/migration/openclaw-migration/scripts/openclaw_to_hermes.py --execute --preset full --migrate-secrets --skill-conflict skip
+</div>
+<p>包含工作区指令的执行：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 ~/.hermes/skills/migration/openclaw-migration/scripts/openclaw_to_hermes.py --execute --preset user-data --skill-conflict rename --workspace-target "/absolute/workspace/path"
+</div>
+<p>默认情况下不要使用 <code>$PWD</code> 或主目录作为工作区目标。请先明确询问工作区路径。</p>
+<h2>重要规则</h2>
+<ol>
+<li>除非用户明确表示立即执行，否则在写入前先运行 dry run。</li>
+<li>默认不迁移 secret。Token、认证 blob、设备凭据和原始 gateway 配置应保留在 Hermes 之外，除非用户明确要求迁移 secret。</li>
+<li>除非用户明确要求，否则不得静默覆盖非空的 Hermes 目标。辅助脚本在启用覆盖时会保留备份。</li>
+<li>始终向用户提供跳过项报告。该报告是迁移的一部分，而非可选附加内容。</li>
+<li>优先使用主 OpenClaw 工作区（<code>~/.openclaw/workspace/</code>）而非 <code>workspace.default/</code>。仅在主文件缺失时才使用默认工作区作为备用。</li>
+<li>即使在 secret 迁移模式下，也只迁移具有干净 Hermes 目标的 secret。不支持的认证 blob 仍须报告为已跳过。</li>
+<li>如果 dry run 显示大型资产复制、冲突的 <code>SOUL.md</code> 或溢出的记忆条目，在执行前单独指出这些情况。</li>
+<li>如果用户不确定，默认选择 <code>user-data only</code>。</li>
+<li>仅在用户明确提供目标工作区路径时，才包含 <code>workspace-agents</code>。</li>
+<li>将类别级别的 <code>--include</code> / <code>--exclude</code> 视为高级逃生通道，而非正常流程。</li>
+<li>如果 <code>clarify</code> 可用，不得在 dry run 摘要结尾使用含糊的&quot;您希望怎么做？&quot;。改用结构化的后续提示。</li>
+<li>当真实选择提示可用时，不要使用开放式 <code>clarify</code> 提示。优先使用可选选项，仅对绝对路径或文件审查请求使用自由文本。</li>
+<li>dry run 后，如果仍有未解决的决策，不得在摘要后停止。立即对最高优先级的阻塞决策使用 <code>clarify</code>。</li>
+<li>后续问题的优先顺序：
+<ul>
+<li><code>SOUL.md</code> 冲突</li>
+<li>已导入 skill 冲突</li>
+<li>迁移模式</li>
+<li>工作区指令目标</li>
+</ul>
+</li>
+<li>不得在同一消息中承诺稍后呈现选项。通过实际调用 <code>clarify</code> 来呈现它们。</li>
+<li>在收到迁移模式答案后，明确检查 <code>workspace-agents</code> 是否仍未解决。如果是，下一个动作必须是工作区指令的 <code>clarify</code> 调用。</li>
+<li>在任何 <code>clarify</code> 答案之后，如果还有其他必要决策待处理，不要叙述刚刚决定的内容。立即提出下一个必要问题。</li>
+</ol>
+<h2>预期结果</h2>
+<p>成功运行后，用户应拥有：</p>
+<ul>
+<li>已导入的 Hermes persona 状态</li>
+<li>已填充转换后 OpenClaw 知识的 Hermes 记忆文件</li>
+<li>在 <code>~/.hermes/skills/openclaw-imports/</code> 下可用的 OpenClaw skill</li>
+<li>显示任何冲突、遗漏或不支持数据的迁移报告</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

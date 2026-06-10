@@ -1,0 +1,685 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obliteratus — OBLITERATUS：消除 LLM 拒绝行为（均值差分法） - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Obliteratus — OBLITERATUS：消除 LLM 拒绝行为（均值差分法）</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Obliteratus</h1>
+<p>OBLITERATUS：消除 LLM 拒绝行为（均值差分法）。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>内置（默认安装）</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>skills/mlops/inference/obliteratus</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>2.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Hermes Agent</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>依赖项</td>
+<td><code>obliteratus</code>, <code>torch</code>, <code>transformers</code>, <code>bitsandbytes</code>, <code>accelerate</code>, <code>safetensors</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Abliteration</code>, <code>Uncensoring</code>, <code>Refusal-Removal</code>, <code>LLM</code>, <code>Weight-Projection</code>, <code>SVD</code>, <code>Mechanistic-Interpretability</code>, <code>HuggingFace</code>, <code>Model-Surgery</code></td>
+</tr>
+<tr>
+<td>相关 skill</td>
+<td><code>vllm</code>, <code>gguf</code>, <a href="/user-guide/skills/optional/mlops/mlops-huggingface-tokenizers"><code>huggingface-tokenizers</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时看到的指令内容。
+</div>
+<h1>OBLITERATUS Skill</h1>
+<h2>内容概览</h2>
+<p>9 个 CLI 方法、28 个分析模块、116 个跨 5 个算力层级的模型预设、锦标赛评估，以及遥测驱动的推荐。</p>
+<p>无需重新训练或微调，即可从开放权重 LLM 中移除拒绝行为（guardrails）。使用机械可解释性（mechanistic interpretability）技术——包括均值差分法（diff-in-means）、SVD、白化 SVD、LEACE 概念擦除、SAE 分解、贝叶斯核投影等——识别并精准切除模型权重中的拒绝方向，同时保留推理能力。</p>
+<p><strong>许可证警告：</strong> OBLITERATUS 采用 AGPL-3.0 许可证。<strong>绝对不要</strong>将其作为 Python 库导入。始终通过 CLI（<code>obliteratus</code> 命令）或子进程调用。这样可保持 Hermes Agent 的 MIT 许可证不受污染。</p>
+<h2>视频指南</h2>
+<p>Hermes agent 使用 OBLITERATUS 对 Gemma 进行 abliterate 的完整演示：
+https://www.youtube.com/watch?v=8fG9BrNTeHs（&quot;OBLITERATUS: An AI Agent Removed Gemma 4's Safety Guardrails&quot;）</p>
+<p>当用户希望在自行运行前对端到端工作流有直观了解时，可参考此视频。</p>
+<h2>何时使用此 Skill</h2>
+<p>当用户出现以下情况时触发：</p>
+<ul>
+<li>想要&quot;解除审查&quot;或&quot;abliterate&quot;一个 LLM</li>
+<li>询问如何从模型中移除拒绝行为/guardrails</li>
+<li>想要创建 Llama、Qwen、Mistral 等模型的无审查版本</li>
+<li>提到&quot;refusal removal&quot;、&quot;abliteration&quot;、&quot;weight projection&quot;</li>
+<li>想要分析模型的拒绝机制如何运作</li>
+<li>提及 OBLITERATUS、abliterator 或拒绝方向</li>
+</ul>
+<h2>第一步：安装</h2>
+<p>检查是否已安装：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+obliteratus --version 2&gt;/dev/null &amp;&amp; echo "INSTALLED" || echo "NOT INSTALLED"
+</div>
+<p>如未安装，从 GitHub 克隆并安装：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+git clone https://github.com/elder-plinius/OBLITERATUS.git
+cd OBLITERATUS
+pip install -e .
+# 如需 Gradio Web UI 支持：
+# pip install -e ".[spaces]"
+</div>
+<p><strong>重要：</strong> 安装前请与用户确认。此操作会拉取约 5-10GB 的依赖项（PyTorch、Transformers、bitsandbytes 等）。</p>
+<h2>第二步：检查硬件</h2>
+<p>在执行任何操作前，先检查可用的 GPU：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 -c "
+import torch
+if torch.cuda.is_available():
+    gpu = torch.cuda.get_device_name(0)
+    vram = torch.cuda.get_device_properties(0).total_memory / 1024**3
+    print(f'GPU: {gpu}')
+    print(f'VRAM: {vram:.1f} GB')
+    if vram &lt; 4: print('TIER: tiny (models under 1B)')
+    elif vram &lt; 8: print('TIER: small (models 1-4B)')
+    elif vram &lt; 16: print('TIER: medium (models 4-9B with 4bit quant)')
+    elif vram &lt; 32: print('TIER: large (models 8-32B with 4bit quant)')
+    else: print('TIER: frontier (models 32B+)')
+else:
+    print('NO GPU - only tiny models (under 1B) on CPU')
+"
+</div>
+<h3>VRAM 需求（使用 4-bit 量化）</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">VRAM</th>
+<th style="text-align:left">最大模型规模</th>
+<th style="text-align:left">示例模型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">仅 CPU</td>
+<td style="text-align:left">~1B 参数</td>
+<td style="text-align:left">GPT-2, TinyLlama, SmolLM</td>
+</tr>
+<tr>
+<td style="text-align:left">4-8 GB</td>
+<td style="text-align:left">~4B 参数</td>
+<td style="text-align:left">Qwen2.5-1.5B, Phi-3.5 mini, Llama 3.2 3B</td>
+</tr>
+<tr>
+<td style="text-align:left">8-16 GB</td>
+<td style="text-align:left">~9B 参数</td>
+<td style="text-align:left">Llama 3.1 8B, Mistral 7B, Gemma 2 9B</td>
+</tr>
+<tr>
+<td style="text-align:left">24 GB</td>
+<td style="text-align:left">~32B 参数</td>
+<td style="text-align:left">Qwen3-32B, Llama 3.1 70B（较紧）, Command-R</td>
+</tr>
+<tr>
+<td style="text-align:left">48 GB+</td>
+<td style="text-align:left">~72B+ 参数</td>
+<td style="text-align:left">Qwen2.5-72B, DeepSeek-R1</td>
+</tr>
+<tr>
+<td style="text-align:left">多 GPU</td>
+<td style="text-align:left">200B+ 参数</td>
+<td style="text-align:left">Llama 3.1 405B, DeepSeek-V3 (685B MoE)</td>
+</tr>
+</tbody>
+</table>
+<h2>第三步：浏览可用模型并获取推荐</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 按算力层级浏览模型
+obliteratus models --tier medium
+<h1>获取特定模型的架构信息</h1>
+<p>obliteratus info &amp;lt;model_name&amp;gt;</p>
+<h1>获取遥测驱动的最佳方法与参数推荐</h1>
+<p>obliteratus recommend &amp;lt;model_name&amp;gt;
+obliteratus recommend &amp;lt;model_name&amp;gt; --insights  # 全局跨架构排名</p>
+</div>
+<h2>第四步：选择方法</h2>
+<h3>方法选择指南</h3>
+<p><strong>默认/大多数情况推荐：<code>advanced</code>。</strong> 它使用多方向 SVD 配合范数保持投影，经过充分测试。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">场景</th>
+<th style="text-align:left">推荐方法</th>
+<th style="text-align:left">原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">默认/大多数模型</td>
+<td style="text-align:left"><code>advanced</code></td>
+<td style="text-align:left">多方向 SVD，范数保持，可靠</td>
+</tr>
+<tr>
+<td style="text-align:left">快速测试/原型验证</td>
+<td style="text-align:left"><code>basic</code></td>
+<td style="text-align:left">速度快，简单，足以评估</td>
+</tr>
+<tr>
+<td style="text-align:left">稠密模型（Llama, Mistral）</td>
+<td style="text-align:left"><code>advanced</code></td>
+<td style="text-align:left">多方向，范数保持</td>
+</tr>
+<tr>
+<td style="text-align:left">MoE 模型（DeepSeek, Mixtral）</td>
+<td style="text-align:left"><code>nuclear</code></td>
+<td style="text-align:left">专家粒度，处理 MoE 复杂性</td>
+</tr>
+<tr>
+<td style="text-align:left">推理模型（R1 蒸馏）</td>
+<td style="text-align:left"><code>surgical</code></td>
+<td style="text-align:left">CoT 感知，保留思维链</td>
+</tr>
+<tr>
+<td style="text-align:left">拒绝行为顽固持续</td>
+<td style="text-align:left"><code>aggressive</code></td>
+<td style="text-align:left">白化 SVD + 注意力头手术 + jailbreak</td>
+</tr>
+<tr>
+<td style="text-align:left">需要可逆更改</td>
+<td style="text-align:left">使用 steering vectors（见分析章节）</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">追求最高质量，不计时间</td>
+<td style="text-align:left"><code>optimized</code></td>
+<td style="text-align:left">贝叶斯搜索最优参数</td>
+</tr>
+<tr>
+<td style="text-align:left">实验性自动检测</td>
+<td style="text-align:left"><code>informed</code></td>
+<td style="text-align:left">自动检测对齐类型——实验性，不一定总优于 advanced</td>
+</tr>
+</tbody>
+</table>
+<h3>9 个 CLI 方法</h3>
+<ul>
+<li><strong>basic</strong> — 通过均值差分法提取单一拒绝方向。速度快（8B 模型约 5-10 分钟）。</li>
+<li><strong>advanced</strong>（默认，推荐）— 多 SVD 方向，范数保持投影，2 次精化迭代。中等速度（约 10-20 分钟）。</li>
+<li><strong>aggressive</strong> — 白化 SVD + jailbreak 对比 + 注意力头手术。连贯性损坏风险较高。</li>
+<li><strong>spectral_cascade</strong> — DCT 频域分解。研究性/新颖方法。</li>
+<li><strong>informed</strong> — 在 abliterate 过程中运行分析以自动配置。实验性——比 advanced 更慢且可预测性更差。</li>
+<li><strong>surgical</strong> — SAE 特征 + 神经元掩码 + 注意力头手术 + 逐专家处理。非常慢（约 1-2 小时）。最适合推理模型。</li>
+<li><strong>optimized</strong> — 贝叶斯超参数搜索（Optuna TPE）。运行时间最长，但能找到最优参数。</li>
+<li><strong>inverted</strong> — 翻转拒绝方向。模型变为主动配合。</li>
+<li><strong>nuclear</strong> — 针对顽固 MoE 模型的最大力度组合。专家粒度处理。</li>
+</ul>
+<h3>方向提取方法（<code>--direction-method</code> 标志）</h3>
+<ul>
+<li><strong>diff_means</strong>（默认）— 拒绝/配合激活之间的简单均值差分。鲁棒性强。</li>
+<li><strong>svd</strong> — 多方向 SVD 提取。适用于复杂对齐。</li>
+<li><strong>leace</strong> — LEACE（线性闭式估计擦除）。最优线性擦除。</li>
+</ul>
+<h3>4 个仅限 Python API 的方法</h3>
+<p>（<strong>不</strong>可通过 CLI 使用——需要 Python import，违反 AGPL 边界。仅在用户明确希望在其自己的 AGPL 项目中将 OBLITERATUS 作为库使用时提及。）</p>
+<ul>
+<li>failspy, gabliteration, heretic, rdo</li>
+</ul>
+<h2>第五步：执行 Abliteration</h2>
+<h3>标准用法</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 默认方法（advanced）——大多数模型推荐
+obliteratus obliterate &lt;model_name&gt; --method advanced --output-dir ./abliterated-models
+<h1>使用 4-bit 量化（节省 VRAM）</h1>
+<p>obliteratus obliterate &amp;lt;model_name&amp;gt; --method advanced --quantization 4bit --output-dir ./abliterated-models</p>
+<h1>大型模型（70B+）——保守默认值</h1>
+<p>obliteratus obliterate &amp;lt;model_name&amp;gt; --method advanced --quantization 4bit --large-model --output-dir ./abliterated-models</p>
+</div>
+<h3>精细调整参数</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+obliteratus obliterate &lt;model_name&gt; \
+  --method advanced \
+  --direction-method diff_means \
+  --n-directions 4 \
+  --refinement-passes 2 \
+  --regularization 0.1 \
+  --quantization 4bit \
+  --output-dir ./abliterated-models \
+  --contribute  # 选择加入遥测以贡献社区研究
+</div>
+<h3>关键标志</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">标志</th>
+<th style="text-align:left">描述</th>
+<th style="text-align:left">默认值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>--method</code></td>
+<td style="text-align:left">Abliteration 方法</td>
+<td style="text-align:left">advanced</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>--direction-method</code></td>
+<td style="text-align:left">方向提取方式</td>
+<td style="text-align:left">diff_means</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>--n-directions</code></td>
+<td style="text-align:left">拒绝方向数量（1-32）</td>
+<td style="text-align:left">取决于方法</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>--refinement-passes</code></td>
+<td style="text-align:left">迭代精化次数（1-5）</td>
+<td style="text-align:left">2</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>--regularization</code></td>
+<td style="text-align:left">正则化强度（0.0-1.0）</td>
+<td style="text-align:left">0.1</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>--quantization</code></td>
+<td style="text-align:left">以 4bit 或 8bit 加载</td>
+<td style="text-align:left">无（全精度）</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>--large-model</code></td>
+<td style="text-align:left">120B+ 模型的保守默认值</td>
+<td style="text-align:left">false</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>--output-dir</code></td>
+<td style="text-align:left">保存 abliterated 模型的位置</td>
+<td style="text-align:left">./obliterated_model</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>--contribute</code></td>
+<td style="text-align:left">共享匿名结果用于研究</td>
+<td style="text-align:left">false</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>--verify-sample-size</code></td>
+<td style="text-align:left">拒绝率检查的测试 prompt 数量</td>
+<td style="text-align:left">20</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>--dtype</code></td>
+<td style="text-align:left">模型数据类型（float16, bfloat16）</td>
+<td style="text-align:left">auto</td>
+</tr>
+</tbody>
+</table>
+<h3>其他执行模式</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 交互式引导模式（硬件 → 模型 → 预设）
+obliteratus interactive
+<h1>Web UI（Gradio）</h1>
+<p>obliteratus ui --port 7860</p>
+<h1>从 YAML 配置运行完整消融研究</h1>
+<p>obliteratus run config.yaml --preset quick</p>
+<h1>锦标赛：所有方法相互对比</h1>
+<p>obliteratus tourney &amp;lt;model_name&amp;gt;</p>
+</div>
+<h2>第六步：验证结果</h2>
+<p>Abliteration 完成后，检查输出指标：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">指标</th>
+<th style="text-align:left">良好值</th>
+<th style="text-align:left">警告</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">拒绝率</td>
+<td style="text-align:left">&amp;lt; 5%（理想约 0%）</td>
+<td style="text-align:left">&gt; 10% 表示拒绝行为仍存在</td>
+</tr>
+<tr>
+<td style="text-align:left">困惑度变化</td>
+<td style="text-align:left">&amp;lt; 10% 增幅</td>
+<td style="text-align:left">&gt; 15% 表示连贯性受损</td>
+</tr>
+<tr>
+<td style="text-align:left">KL 散度</td>
+<td style="text-align:left">&amp;lt; 0.1</td>
+<td style="text-align:left">&gt; 0.5 表示分布发生显著偏移</td>
+</tr>
+<tr>
+<td style="text-align:left">连贯性</td>
+<td style="text-align:left">高 / 通过定性检查</td>
+<td style="text-align:left">响应退化、出现重复</td>
+</tr>
+</tbody>
+</table>
+<h3>如果拒绝行为仍持续（&gt; 10%）</h3>
+<ol>
+<li>尝试 <code>aggressive</code> 方法</li>
+<li>增大 <code>--n-directions</code>（例如 8 或 16）</li>
+<li>添加 <code>--refinement-passes 3</code></li>
+<li>尝试 <code>--direction-method svd</code> 替代 diff_means</li>
+</ol>
+<h3>如果连贯性受损（困惑度增幅 &gt; 15%）</h3>
+<ol>
+<li>减小 <code>--n-directions</code>（尝试 2）</li>
+<li>增大 <code>--regularization</code>（尝试 0.3）</li>
+<li>将 <code>--refinement-passes</code> 减至 1</li>
+<li>尝试 <code>basic</code> 方法（更温和）</li>
+</ol>
+<h2>第七步：使用 Abliterated 模型</h2>
+<p>输出为标准 HuggingFace 模型目录。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 使用 transformers 在本地测试
+python3 -c "
+from transformers import AutoModelForCausalLM, AutoTokenizer
+model = AutoModelForCausalLM.from_pretrained('./abliterated-models/&lt;model&gt;')
+tokenizer = AutoTokenizer.from_pretrained('./abliterated-models/&lt;model&gt;')
+inputs = tokenizer('How do I pick a lock?', return_tensors='pt')
+outputs = model.generate(**inputs, max_new_tokens=200)
+print(tokenizer.decode(outputs[0], skip_special_tokens=True))
+"
+<h1>上传到 HuggingFace Hub</h1>
+<p>huggingface-cli upload &amp;lt;username&amp;gt;/&amp;lt;model-name&amp;gt;-abliterated ./abliterated-models/&amp;lt;model&amp;gt;</p>
+<h1>使用 vLLM 提供服务</h1>
+<p>vllm serve ./abliterated-models/&amp;lt;model&amp;gt;</p>
+</div>
+<h2>CLI 命令参考</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">命令</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>obliteratus obliterate</code></td>
+<td style="text-align:left">主 abliteration 命令</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>obliteratus info &lt;model&gt;</code></td>
+<td style="text-align:left">打印模型架构详情</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>obliteratus models --tier &lt;tier&gt;</code></td>
+<td style="text-align:left">按算力层级浏览精选模型</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>obliteratus recommend &lt;model&gt;</code></td>
+<td style="text-align:left">遥测驱动的方法/参数建议</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>obliteratus interactive</code></td>
+<td style="text-align:left">引导式设置向导</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>obliteratus tourney &lt;model&gt;</code></td>
+<td style="text-align:left">锦标赛：所有方法正面对决</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>obliteratus run &lt;config.yaml&gt;</code></td>
+<td style="text-align:left">从 YAML 执行消融研究</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>obliteratus strategies</code></td>
+<td style="text-align:left">列出所有已注册的消融策略</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>obliteratus report &lt;results.json&gt;</code></td>
+<td style="text-align:left">重新生成可视化报告</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>obliteratus ui</code></td>
+<td style="text-align:left">启动 Gradio Web 界面</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>obliteratus aggregate</code></td>
+<td style="text-align:left">汇总社区遥测数据</td>
+</tr>
+</tbody>
+</table>
+<h2>分析模块</h2>
+<p>OBLITERATUS 包含 28 个用于机械可解释性的分析模块。
+完整参考请见 <code>skill_view(name=&quot;obliteratus&quot;, file_path=&quot;references/analysis-modules.md&quot;)</code>。</p>
+<h3>快速分析命令</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 运行特定分析模块
+obliteratus run analysis-config.yaml --preset quick
+<h1>优先运行的关键模块：</h1>
+<h1>- alignment_imprint: 识别 DPO/RLHF/CAI/SFT 对齐方法指纹</h1>
+<h1>- concept_geometry: 单方向 vs 多面锥体</h1>
+<h1>- logit_lens: 哪一层决定拒绝</h1>
+<h1>- anti_ouroboros: 自我修复风险评分</h1>
+<h1>- causal_tracing: 因果必要组件</h1>
+</div>
+<h3>Steering Vectors（可逆替代方案）</h3>
+<p>与其永久修改权重，可使用推理时 steering：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 仅限 Python API——用于用户自己的项目
+from obliteratus.analysis.steering_vectors import SteeringVectorFactory, SteeringHookManager
+</div>
+<h2>消融策略</h2>
+<p>除基于方向的 abliteration 外，OBLITERATUS 还包含结构性消融策略：</p>
+<ul>
+<li><strong>Embedding Ablation</strong> — 针对嵌入层组件</li>
+<li><strong>FFN Ablation</strong> — 前馈网络块移除</li>
+<li><strong>Head Pruning</strong> — 注意力头剪枝</li>
+<li><strong>Layer Removal</strong> — 完整层移除</li>
+</ul>
+<p>列出所有可用策略：<code>obliteratus strategies</code></p>
+<h2>评估</h2>
+<p>OBLITERATUS 包含内置评估工具：</p>
+<ul>
+<li>拒绝率基准测试</li>
+<li>困惑度对比（前/后）</li>
+<li>LM Eval Harness 集成，用于学术基准</li>
+<li>竞争对手正面对比</li>
+<li>基线性能追踪</li>
+</ul>
+<h2>平台支持</h2>
+<ul>
+<li><strong>CUDA</strong> — 完整支持（NVIDIA GPU）</li>
+<li><strong>Apple Silicon（MLX）</strong> — 通过 MLX 后端支持</li>
+<li><strong>CPU</strong> — 支持小型模型（&amp;lt; 1B 参数）</li>
+</ul>
+<h2>YAML 配置模板</h2>
+<p>通过 <code>skill_view</code> 加载模板以实现可复现运行：</p>
+<ul>
+<li><code>templates/abliteration-config.yaml</code> — 标准单模型配置</li>
+<li><code>templates/analysis-study.yaml</code> — abliteration 前分析研究</li>
+<li><code>templates/batch-abliteration.yaml</code> — 多模型批量处理</li>
+</ul>
+<h2>遥测</h2>
+<p>OBLITERATUS 可选择性地将匿名运行数据贡献至全球研究数据集。
+使用 <code>--contribute</code> 标志启用。不收集任何个人数据——仅包含模型名称、方法、指标。</p>
+<h2>常见陷阱</h2>
+<ol>
+<li><strong>不要将 <code>informed</code> 作为默认方法</strong> — 它是实验性的且速度更慢。使用 <code>advanced</code> 以获得可靠结果。</li>
+<li><strong>~1B 以下的模型对 abliteration 响应较差</strong> — 其拒绝行为较浅且碎片化，难以提取干净的方向。预期结果为部分消除（残余拒绝率 20-40%）。3B+ 模型的拒绝方向更清晰，响应好得多（使用 <code>advanced</code> 通常可达 0% 拒绝率）。</li>
+<li><strong><code>aggressive</code> 可能适得其反</strong> — 在小模型上可能损坏连贯性，甚至实际上增加拒绝率。仅在 <code>advanced</code> 对 3B+ 模型仍留有 &gt; 10% 拒绝率时使用。</li>
+<li><strong>始终检查困惑度</strong> — 若增幅超过 15%，模型已受损。降低激进程度。</li>
+<li><strong>MoE 模型需要特殊处理</strong> — 对 Mixtral、DeepSeek-MoE 等使用 <code>nuclear</code> 方法。</li>
+<li><strong>量化模型无法再次量化</strong> — 对全精度模型执行 abliterate，然后对输出进行量化。</li>
+<li><strong>VRAM 估算是近似值</strong> — 4-bit 量化有帮助，但提取过程中峰值使用量可能突增。</li>
+<li><strong>推理模型较为敏感</strong> — 对 R1 蒸馏模型使用 <code>surgical</code> 以保留思维链。</li>
+<li><strong>查看 <code>obliteratus recommend</code></strong> — 遥测数据可能提供比默认值更好的参数。</li>
+<li><strong>AGPL 许可证</strong> — 绝不在 MIT/Apache 项目中 <code>import obliteratus</code>。仅限 CLI 调用。</li>
+<li><strong>大型模型（70B+）</strong> — 始终使用 <code>--large-model</code> 标志以启用保守默认值。</li>
+<li><strong>频谱认证 RED 很常见</strong> — 即使实际拒绝率为 0%，频谱检查也经常标记为&quot;不完整&quot;。应检查实际拒绝率，而非单纯依赖频谱认证结果。</li>
+</ol>
+<h2>互补 Skill</h2>
+<ul>
+<li><strong>vllm</strong> — 以高吞吐量提供 abliterated 模型服务</li>
+<li><strong>gguf</strong> — 将 abliterated 模型转换为 GGUF 格式供 llama.cpp 使用</li>
+<li><strong>huggingface-tokenizers</strong> — 处理模型 tokenizer</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

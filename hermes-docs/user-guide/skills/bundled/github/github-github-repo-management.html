@@ -1,0 +1,652 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Github 仓库管理 — 克隆/创建/fork 仓库；管理远程、发布 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Github 仓库管理 — 克隆/创建/fork 仓库；管理远程、发布</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Github 仓库管理</h1>
+<p>克隆/创建/fork 仓库；管理远程、发布。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>内置（默认安装）</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>skills/github/github-repo-management</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.1.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Hermes Agent</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>GitHub</code>, <code>Repositories</code>, <code>Git</code>, <code>Releases</code>, <code>Secrets</code>, <code>Configuration</code></td>
+</tr>
+<tr>
+<td>相关 skill</td>
+<td><a href="/user-guide/skills/bundled/github/github-github-auth"><code>github-auth</code></a>, <a href="/user-guide/skills/bundled/github/github-github-pr-workflow"><code>github-pr-workflow</code></a>, <a href="/user-guide/skills/bundled/github/github-github-issues"><code>github-issues</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>GitHub 仓库管理</h1>
+<p>创建、克隆、fork、配置和管理 GitHub 仓库。每个章节优先展示 <code>gh</code> 命令，然后是 <code>git</code> + <code>curl</code> 的备用方案。</p>
+<h2>前提条件</h2>
+<ul>
+<li>已通过 GitHub 认证（参见 <code>github-auth</code> skill）</li>
+</ul>
+<h3>初始化设置</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+if command -v gh &amp;&gt;/dev/null &amp;&amp; gh auth status &amp;&gt;/dev/null; then
+  AUTH="gh"
+else
+  AUTH="git"
+  if [ -z "$GITHUB_TOKEN" ]; then
+    if [ -f ~/.hermes/.env ] &amp;&amp; grep -q "^GITHUB_TOKEN=" ~/.hermes/.env; then
+      GITHUB_TOKEN=$(grep "^GITHUB_TOKEN=" ~/.hermes/.env | head -1 | cut -d= -f2 | tr -d '\n\r')
+    elif grep -q "github.com" ~/.git-credentials 2&gt;/dev/null; then
+      GITHUB_TOKEN=$(grep "github.com" ~/.git-credentials 2&gt;/dev/null | head -1 | sed 's|https://[^:]*:\([^@]*\)@.*|\1|')
+    fi
+  fi
+fi
+<h1>Get your GitHub username (needed for several operations)</h1>
+<p>if [ &quot;$AUTH&quot; = &quot;gh&quot; ]; then
+GH_USER=$(gh api user --jq '.login')
+else
+GH_USER=$(curl -s -H &quot;Authorization: token $GITHUB_TOKEN&quot; https://api.github.com/user | python3 -c &quot;import sys,json; print(json.load(sys.stdin)['login'])&quot;)
+fi</p>
+</div>
+<p>如果已在某个仓库内：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+REMOTE_URL=$(git remote get-url origin)
+OWNER_REPO=$(echo "$REMOTE_URL" | sed -E 's|.*github\.com[:/]||; s|\.git$||')
+OWNER=$(echo "$OWNER_REPO" | cut -d/ -f1)
+REPO=$(echo "$OWNER_REPO" | cut -d/ -f2)
+</div>
+<hr />
+<h2>1. 克隆仓库</h2>
+<p>克隆使用纯 <code>git</code> 命令——两种方式完全一致：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Clone via HTTPS (works with credential helper or token-embedded URL)
+git clone https://github.com/owner/repo-name.git
+<h1>Clone into a specific directory</h1>
+<p>git clone https://github.com/owner/repo-name.git ./my-local-dir</p>
+<h1>Shallow clone (faster for large repos)</h1>
+<p>git clone --depth 1 https://github.com/owner/repo-name.git</p>
+<h1>Clone a specific branch</h1>
+<p>git clone --branch develop https://github.com/owner/repo-name.git</p>
+<h1>Clone via SSH (if SSH is configured)</h1>
+<p>git clone git@github.com:owner/repo-name.git</p>
+</div>
+<p><strong>使用 gh（简写）：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+gh repo clone owner/repo-name
+gh repo clone owner/repo-name -- --depth 1
+</div>
+<h2>2. 创建仓库</h2>
+<p><strong>使用 gh：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Create a public repo and clone it
+gh repo create my-new-project --public --clone
+<h1>Private, with description and license</h1>
+<p>gh repo create my-new-project --private --description &quot;A useful tool&quot; --license MIT --clone</p>
+<h1>Under an organization</h1>
+<p>gh repo create my-org/my-new-project --public --clone</p>
+<h1>From existing local directory</h1>
+<p>cd /path/to/existing/project
+gh repo create my-project --source . --public --push</p>
+</div>
+<p><strong>使用 git + curl：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Create the remote repo via API
+curl -s -X POST \
+  -H "Authorization: token $GITHUB_TOKEN" \
+  https://api.github.com/user/repos \
+  -d '{
+    "name": "my-new-project",
+    "description": "A useful tool",
+    "private": false,
+    "auto_init": true,
+    "license_template": "mit"
+  }'
+<h1>Clone it</h1>
+<p>git clone https://github.com/$GH_USER/my-new-project.git
+cd my-new-project</p>
+<h1>-- OR -- push an existing local directory to the new repo</h1>
+<p>cd /path/to/existing/project
+git init
+git add .
+git commit -m &quot;Initial commit&quot;
+git remote add origin https://github.com/$GH_USER/my-new-project.git
+git push -u origin main</p>
+</div>
+<p>在组织下创建：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s -X POST \
+  -H "Authorization: token $GITHUB_TOKEN" \
+  https://api.github.com/orgs/my-org/repos \
+  -d '{"name": "my-new-project", "private": false}'
+</div>
+<h3>从模板创建</h3>
+<p><strong>使用 gh：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+gh repo create my-new-app --template owner/template-repo --public --clone
+</div>
+<p><strong>使用 curl：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s -X POST \
+  -H "Authorization: token $GITHUB_TOKEN" \
+  https://api.github.com/repos/owner/template-repo/generate \
+  -d '{"owner": "'"$GH_USER"'", "name": "my-new-app", "private": false}'
+</div>
+<h2>3. Fork 仓库</h2>
+<p><strong>使用 gh：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+gh repo fork owner/repo-name --clone
+</div>
+<p><strong>使用 git + curl：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Create the fork via API
+curl -s -X POST \
+  -H "Authorization: token $GITHUB_TOKEN" \
+  https://api.github.com/repos/owner/repo-name/forks
+<h1>Wait a moment for GitHub to create it, then clone</h1>
+<p>sleep 3
+git clone https://github.com/$GH_USER/repo-name.git
+cd repo-name</p>
+<h1>Add the original repo as &quot;upstream&quot; remote</h1>
+<p>git remote add upstream https://github.com/owner/repo-name.git</p>
+</div>
+<h3>保持 Fork 同步</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Pure git — works everywhere
+git fetch upstream
+git checkout main
+git merge upstream/main
+git push origin main
+</div>
+<p><strong>使用 gh（快捷方式）：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+gh repo sync $GH_USER/repo-name
+</div>
+<h2>4. 仓库信息</h2>
+<p><strong>使用 gh：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+gh repo view owner/repo-name
+gh repo list --limit 20
+gh search repos "machine learning" --language python --sort stars
+</div>
+<p><strong>使用 curl：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# View repo details
+curl -s \
+  -H "Authorization: token $GITHUB_TOKEN" \
+  https://api.github.com/repos/$OWNER/$REPO \
+  | python3 -c "
+import sys, json
+r = json.load(sys.stdin)
+print(f\"Name: {r['full_name']}\")
+print(f\"Description: {r['description']}\")
+print(f\"Stars: {r['stargazers_count']}  Forks: {r['forks_count']}\")
+print(f\"Default branch: {r['default_branch']}\")
+print(f\"Language: {r['language']}\")"
+<h1>List your repos</h1>
+<p>curl -s \
+-H &quot;Authorization: token $GITHUB_TOKEN&quot; \
+&quot;https://api.github.com/user/repos?per_page=20&amp;amp;sort=updated&quot; \
+| python3 -c &quot;
+import sys, json
+for r in json.load(sys.stdin):
+vis = 'private' if r['private'] else 'public'
+print(f\&quot;  {r['full_name']:40}  {vis:8}  {r.get('language', ''):10}  ★{r['stargazers_count']}\&quot;)&quot;</p>
+<h1>Search repos</h1>
+<p>curl -s \
+&quot;https://api.github.com/search/repositories?q=machine+learning+language:python&amp;amp;sort=stars&amp;amp;per_page=10&quot; \
+| python3 -c &quot;
+import sys, json
+for r in json.load(sys.stdin)['items']:
+print(f\&quot;  {r['full_name']:40}  ★{r['stargazers_count']:6}  {r['description'][:60] if r['description'] else ''}\&quot;)&quot;</p>
+</div>
+<h2>5. 仓库设置</h2>
+<p><strong>使用 gh：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+gh repo edit --description "Updated description" --visibility public
+gh repo edit --enable-wiki=false --enable-issues=true
+gh repo edit --default-branch main
+gh repo edit --add-topic "machine-learning,python"
+gh repo edit --enable-auto-merge
+</div>
+<p><strong>使用 curl：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s -X PATCH \
+  -H "Authorization: token $GITHUB_TOKEN" \
+  https://api.github.com/repos/$OWNER/$REPO \
+  -d '{
+    "description": "Updated description",
+    "has_wiki": false,
+    "has_issues": true,
+    "allow_auto_merge": true
+  }'
+<h1>Update topics</h1>
+<p>curl -s -X PUT \
+-H &quot;Authorization: token $GITHUB_TOKEN&quot; \
+-H &quot;Accept: application/vnd.github.mercy-preview+json&quot; \
+https://api.github.com/repos/$OWNER/$REPO/topics \
+-d '{&quot;names&quot;: [&quot;machine-learning&quot;, &quot;python&quot;, &quot;automation&quot;]}'</p>
+</div>
+<h2>6. 分支保护</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# View current protection
+curl -s \
+  -H "Authorization: token $GITHUB_TOKEN" \
+  https://api.github.com/repos/$OWNER/$REPO/branches/main/protection
+<h1>Set up branch protection</h1>
+<p>curl -s -X PUT \
+-H &quot;Authorization: token $GITHUB_TOKEN&quot; \
+https://api.github.com/repos/$OWNER/$REPO/branches/main/protection \
+-d '{
+&quot;required_status_checks&quot;: {
+&quot;strict&quot;: true,
+&quot;contexts&quot;: [&quot;ci/test&quot;, &quot;ci/lint&quot;]
+},
+&quot;enforce_admins&quot;: false,
+&quot;required_pull_request_reviews&quot;: {
+&quot;required_approving_review_count&quot;: 1
+},
+&quot;restrictions&quot;: null
+}'</p>
+</div>
+<h2>7. Secrets 管理（GitHub Actions）</h2>
+<p><strong>使用 gh：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+gh secret set API_KEY --body "your-secret-value"
+gh secret set SSH_KEY &lt; ~/.ssh/id_rsa
+gh secret list
+gh secret delete API_KEY
+</div>
+<p><strong>使用 curl：</strong></p>
+<p>通过 API 设置 secret 需要使用仓库公钥加密——步骤较为繁琐：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Get the repo's public key for encrypting secrets
+curl -s \
+  -H "Authorization: token $GITHUB_TOKEN" \
+  https://api.github.com/repos/$OWNER/$REPO/actions/secrets/public-key
+<h1>Encrypt and set (requires Python with PyNaCl)</h1>
+<p>python3 -c &quot;
+from base64 import b64encode
+from nacl import encoding, public
+import json, sys</p>
+<h1>Get the public key</h1>
+<p>key_id = '&amp;lt;key_id_from_above&amp;gt;'
+public_key = '&amp;lt;base64_key_from_above&amp;gt;'</p>
+<h1>Encrypt</h1>
+<p>sealed = public.SealedBox(
+public.PublicKey(public_key.encode('utf-8'), encoding.Base64Encoder)
+).encrypt('your-secret-value'.encode('utf-8'))
+print(json.dumps({
+'encrypted_value': b64encode(sealed).decode('utf-8'),
+'key_id': key_id
+}))&quot;</p>
+<h1>Then PUT the encrypted secret</h1>
+<p>curl -s -X PUT \
+-H &quot;Authorization: token $GITHUB_TOKEN&quot; \
+https://api.github.com/repos/$OWNER/$REPO/actions/secrets/API_KEY \
+-d '&amp;lt;output from python script above&amp;gt;'</p>
+<h1>List secrets (names only, values hidden)</h1>
+<p>curl -s \
+-H &quot;Authorization: token $GITHUB_TOKEN&quot; \
+https://api.github.com/repos/$OWNER/$REPO/actions/secrets \
+| python3 -c &quot;
+import sys, json
+for s in json.load(sys.stdin)['secrets']:
+print(f\&quot;  {s['name']:30}  updated: {s['updated_at']}\&quot;)&quot;</p>
+</div>
+<p>注意：对于 secret 管理，<code>gh secret set</code> 要简便得多。如果需要设置 secret 但 <code>gh</code> 不可用，建议仅为此操作安装它。</p>
+<h2>8. 发布（Releases）</h2>
+<p><strong>使用 gh：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+gh release create v1.0.0 --title "v1.0.0" --generate-notes
+gh release create v2.0.0-rc1 --draft --prerelease --generate-notes
+gh release create v1.0.0 ./dist/binary --title "v1.0.0" --notes "Release notes"
+gh release list
+gh release download v1.0.0 --dir ./downloads
+</div>
+<p><strong>使用 curl：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Create a release
+curl -s -X POST \
+  -H "Authorization: token $GITHUB_TOKEN" \
+  https://api.github.com/repos/$OWNER/$REPO/releases \
+  -d '{
+    "tag_name": "v1.0.0",
+    "name": "v1.0.0",
+    "body": "## Changelog\n- Feature A\n- Bug fix B",
+    "draft": false,
+    "prerelease": false,
+    "generate_release_notes": true
+  }'
+<h1>List releases</h1>
+<p>curl -s \
+-H &quot;Authorization: token $GITHUB_TOKEN&quot; \
+https://api.github.com/repos/$OWNER/$REPO/releases \
+| python3 -c &quot;
+import sys, json
+for r in json.load(sys.stdin):
+tag = r.get('tag_name', 'no tag')
+print(f\&quot;  {tag:15}  {r['name']:30}  {'draft' if r['draft'] else 'published'}\&quot;)&quot;</p>
+<h1>Upload a release asset (binary file)</h1>
+<p>RELEASE_ID=&amp;lt;id_from_create_response&amp;gt;
+curl -s -X POST \
+-H &quot;Authorization: token $GITHUB_TOKEN&quot; \
+-H &quot;Content-Type: application/octet-stream&quot; \
+&quot;https://uploads.github.com/repos/$OWNER/$REPO/releases/$RELEASE_ID/assets?name=binary-amd64&quot; \
+--data-binary @./dist/binary-amd64</p>
+</div>
+<h2>9. GitHub Actions 工作流</h2>
+<p><strong>使用 gh：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+gh workflow list
+gh run list --limit 10
+gh run view &lt;RUN_ID&gt;
+gh run view &lt;RUN_ID&gt; --log-failed
+gh run rerun &lt;RUN_ID&gt;
+gh run rerun &lt;RUN_ID&gt; --failed
+gh workflow run ci.yml --ref main
+gh workflow run deploy.yml -f environment=staging
+</div>
+<p><strong>使用 curl：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# List workflows
+curl -s \
+  -H "Authorization: token $GITHUB_TOKEN" \
+  https://api.github.com/repos/$OWNER/$REPO/actions/workflows \
+  | python3 -c "
+import sys, json
+for w in json.load(sys.stdin)['workflows']:
+    print(f\"  {w['id']:10}  {w['name']:30}  {w['state']}\")"
+<h1>List recent runs</h1>
+<p>curl -s \
+-H &quot;Authorization: token $GITHUB_TOKEN&quot; \
+&quot;https://api.github.com/repos/$OWNER/$REPO/actions/runs?per_page=10&quot; \
+| python3 -c &quot;
+import sys, json
+for r in json.load(sys.stdin)['workflow_runs']:
+print(f\&quot;  Run {r['id']}  {r['name']:30}  {r['conclusion'] or r['status']}\&quot;)&quot;</p>
+<h1>Download failed run logs</h1>
+<p>RUN_ID=&amp;lt;run_id&amp;gt;
+curl -s -L \
+-H &quot;Authorization: token $GITHUB_TOKEN&quot; \
+https://api.github.com/repos/$OWNER/$REPO/actions/runs/$RUN_ID/logs \
+-o /tmp/ci-logs.zip
+cd /tmp &amp;amp;&amp;amp; unzip -o ci-logs.zip -d ci-logs</p>
+<h1>Re-run a failed workflow</h1>
+<p>curl -s -X POST \
+-H &quot;Authorization: token $GITHUB_TOKEN&quot; \
+https://api.github.com/repos/$OWNER/$REPO/actions/runs/$RUN_ID/rerun</p>
+<h1>Re-run only failed jobs</h1>
+<p>curl -s -X POST \
+-H &quot;Authorization: token $GITHUB_TOKEN&quot; \
+https://api.github.com/repos/$OWNER/$REPO/actions/runs/$RUN_ID/rerun-failed-jobs</p>
+<h1>Trigger a workflow manually (workflow_dispatch)</h1>
+<p>WORKFLOW_ID=&amp;lt;workflow_id_or_filename&amp;gt;
+curl -s -X POST \
+-H &quot;Authorization: token $GITHUB_TOKEN&quot; \
+https://api.github.com/repos/$OWNER/$REPO/actions/workflows/$WORKFLOW_ID/dispatches \
+-d '{&quot;ref&quot;: &quot;main&quot;, &quot;inputs&quot;: {&quot;environment&quot;: &quot;staging&quot;}}'</p>
+</div>
+<h2>10. Gists</h2>
+<p><strong>使用 gh：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+gh gist create script.py --public --desc "Useful script"
+gh gist list
+</div>
+<p><strong>使用 curl：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Create a gist
+curl -s -X POST \
+  -H "Authorization: token $GITHUB_TOKEN" \
+  https://api.github.com/gists \
+  -d '{
+    "description": "Useful script",
+    "public": true,
+    "files": {
+      "script.py": {"content": "print(\"hello\")"}
+    }
+  }'
+<h1>List your gists</h1>
+<p>curl -s \
+-H &quot;Authorization: token $GITHUB_TOKEN&quot; \
+https://api.github.com/gists \
+| python3 -c &quot;
+import sys, json
+for g in json.load(sys.stdin):
+files = ', '.join(g['files'].keys())
+print(f\&quot;  {g['id']}  {g['description'] or '(no desc)':40}  {files}\&quot;)&quot;</p>
+</div>
+<h2>快速参考表</h2>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>gh</th>
+<th>git + curl</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>克隆</td>
+<td><code>gh repo clone o/r</code></td>
+<td><code>git clone https://github.com/o/r.git</code></td>
+</tr>
+<tr>
+<td>创建仓库</td>
+<td><code>gh repo create name --public</code></td>
+<td><code>curl POST /user/repos</code></td>
+</tr>
+<tr>
+<td>Fork</td>
+<td><code>gh repo fork o/r --clone</code></td>
+<td><code>curl POST /repos/o/r/forks</code> + <code>git clone</code></td>
+</tr>
+<tr>
+<td>仓库信息</td>
+<td><code>gh repo view o/r</code></td>
+<td><code>curl GET /repos/o/r</code></td>
+</tr>
+<tr>
+<td>编辑设置</td>
+<td><code>gh repo edit --...</code></td>
+<td><code>curl PATCH /repos/o/r</code></td>
+</tr>
+<tr>
+<td>创建发布</td>
+<td><code>gh release create v1.0</code></td>
+<td><code>curl POST /repos/o/r/releases</code></td>
+</tr>
+<tr>
+<td>列出工作流</td>
+<td><code>gh workflow list</code></td>
+<td><code>curl GET /repos/o/r/actions/workflows</code></td>
+</tr>
+<tr>
+<td>重跑 CI</td>
+<td><code>gh run rerun ID</code></td>
+<td><code>curl POST /repos/o/r/actions/runs/ID/rerun</code></td>
+</tr>
+<tr>
+<td>设置 secret</td>
+<td><code>gh secret set KEY</code></td>
+<td><code>curl PUT /repos/o/r/actions/secrets/KEY</code>（需加密）</td>
+</tr>
+</tbody>
+</table>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

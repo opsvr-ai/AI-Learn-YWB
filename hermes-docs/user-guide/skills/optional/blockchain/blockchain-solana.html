@@ -1,0 +1,321 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solana - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Solana</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Solana</h1>
+<p>使用 USD 定价查询 Solana 区块链数据——钱包余额、带价值的代币投资组合、交易详情、NFT、巨鲸检测及实时网络状态。使用 Solana RPC + CoinGecko，无需 API 密钥。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/blockchain/solana</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/blockchain/solana</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>0.2.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Deniz Alagoz (gizdusum)，由 Hermes Agent 增强</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Solana</code>, <code>Blockchain</code>, <code>Crypto</code>, <code>Web3</code>, <code>RPC</code>, <code>DeFi</code>, <code>NFT</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>Solana 区块链 Skill</h1>
+<p>通过 CoinGecko 查询附带 USD 定价的 Solana 链上数据。
+8 个命令：钱包投资组合、代币信息、交易记录、活动记录、NFT、
+巨鲸检测、网络状态及价格查询。</p>
+<p>无需 API 密钥。仅使用 Python 标准库（urllib、json、argparse）。</p>
+<hr />
+<h2>使用场景</h2>
+<ul>
+<li>用户查询 Solana 钱包余额、代币持仓或投资组合价值</li>
+<li>用户想通过签名查看某笔具体交易</li>
+<li>用户想获取 SPL 代币元数据、价格、供应量或持仓大户</li>
+<li>用户想查看某地址的近期交易历史</li>
+<li>用户想查看某钱包持有的 NFT</li>
+<li>用户想查找大额 SOL 转账（巨鲸检测）</li>
+<li>用户想了解 Solana 网络健康状态、TPS、epoch 或 SOL 价格</li>
+<li>用户询问&quot;BONK/JUP/SOL 的价格是多少？&quot;</li>
+</ul>
+<hr />
+<h2>前置条件</h2>
+<p>辅助脚本仅使用 Python 标准库（urllib、json、argparse），无需外部包。</p>
+<p>价格数据来自 CoinGecko 免费 API（无需密钥，速率限制约为每分钟 10-30 次请求）。如需更快查询，请使用 <code>--no-prices</code> 标志。</p>
+<hr />
+<h2>快速参考</h2>
+<p>RPC 端点（默认）：https://api.mainnet-beta.solana.com
+覆盖方式：export SOLANA_RPC_URL=https://your-private-rpc.com</p>
+<p>辅助脚本路径：~/.hermes/skills/blockchain/solana/scripts/solana_client.py</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 solana_client.py wallet   &lt;address&gt; [--limit N] [--all] [--no-prices]
+python3 solana_client.py tx       &lt;signature&gt;
+python3 solana_client.py token    &lt;mint_address&gt;
+python3 solana_client.py activity &lt;address&gt; [--limit N]
+python3 solana_client.py nft      &lt;address&gt;
+python3 solana_client.py whales   [--min-sol N]
+python3 solana_client.py stats
+python3 solana_client.py price    &lt;mint_or_symbol&gt;
+</div>
+<hr />
+<h2>操作步骤</h2>
+<h3>0. 环境检查</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 --version
+<h1>可选：设置私有 RPC 以获得更好的速率限制</h1>
+<p>export SOLANA_RPC_URL=&quot;https://api.mainnet-beta.solana.com&quot;</p>
+<h1>确认连通性</h1>
+<p>python3 ~/.hermes/skills/blockchain/solana/scripts/solana_client.py stats</p>
+</div>
+<h3>1. 钱包投资组合</h3>
+<p>获取 SOL 余额、带 USD 价值的 SPL 代币持仓、NFT 数量及投资组合总值。代币按价值排序，过滤粉尘（dust），已知代币按名称标注（BONK、JUP、USDC 等）。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 ~/.hermes/skills/blockchain/solana/scripts/solana_client.py \
+  wallet 9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM
+</div>
+<p>标志说明：</p>
+<ul>
+<li><code>--limit N</code> — 显示前 N 个代币（默认：20）</li>
+<li><code>--all</code> — 显示所有代币，不过滤粉尘，不限数量</li>
+<li><code>--no-prices</code> — 跳过 CoinGecko 价格查询（更快，仅 RPC）</li>
+</ul>
+<p>输出内容：SOL 余额 + USD 价值、按价值排序的代币列表及价格、粉尘数量、NFT 摘要、USD 投资组合总值。</p>
+<h3>2. 交易详情</h3>
+<p>通过 base58 签名查看完整交易信息，显示 SOL 和 USD 的余额变化。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 ~/.hermes/skills/blockchain/solana/scripts/solana_client.py \
+  tx 5j7s8K...your_signature_here
+</div>
+<p>输出内容：slot、时间戳、手续费、状态、余额变化（SOL + USD）、程序调用。</p>
+<h3>3. 代币信息</h3>
+<p>获取 SPL 代币元数据、当前价格、市值、供应量、精度、铸造/冻结权限及前 5 大持仓地址。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 ~/.hermes/skills/blockchain/solana/scripts/solana_client.py \
+  token DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263
+</div>
+<p>输出内容：名称、符号、精度、供应量、价格、市值、前 5 大持仓地址及占比。</p>
+<h3>4. 近期活动</h3>
+<p>列出某地址的近期交易（默认：最近 10 条，最多：25 条）。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 ~/.hermes/skills/blockchain/solana/scripts/solana_client.py \
+  activity 9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM --limit 25
+</div>
+<h3>5. NFT 投资组合</h3>
+<p>列出某钱包持有的 NFT（启发式判断：amount=1 且 decimals=0 的 SPL 代币）。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 ~/.hermes/skills/blockchain/solana/scripts/solana_client.py \
+  nft 9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM
+</div>
+<p>注意：此启发式方法无法检测压缩 NFT（cNFT）。</p>
+<h3>6. 巨鲸检测器</h3>
+<p>扫描最新区块中的大额 SOL 转账及其 USD 价值。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 ~/.hermes/skills/blockchain/solana/scripts/solana_client.py \
+  whales --min-sol 500
+</div>
+<p>注意：仅扫描最新区块——为时间点快照，非历史数据。</p>
+<h3>7. 网络状态</h3>
+<p>实时 Solana 网络健康状态：当前 slot、epoch、TPS、供应量、验证者版本、SOL 价格及市值。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 ~/.hermes/skills/blockchain/solana/scripts/solana_client.py stats
+</div>
+<h3>8. 价格查询</h3>
+<p>通过铸造地址或已知符号快速查询任意代币价格。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 ~/.hermes/skills/blockchain/solana/scripts/solana_client.py price BONK
+python3 ~/.hermes/skills/blockchain/solana/scripts/solana_client.py price JUP
+python3 ~/.hermes/skills/blockchain/solana/scripts/solana_client.py price SOL
+python3 ~/.hermes/skills/blockchain/solana/scripts/solana_client.py price DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263
+</div>
+<p>已知符号：SOL、USDC、USDT、BONK、JUP、WETH、JTO、mSOL、stSOL、
+PYTH、HNT、RNDR、WEN、W、TNSR、DRIFT、bSOL、JLP、WIF、MEW、BOME、PENGU。</p>
+<hr />
+<h2>注意事项</h2>
+<ul>
+<li><strong>CoinGecko 速率限制</strong> — 免费套餐约每分钟 10-30 次请求。价格查询每个代币消耗 1 次请求。持有大量代币的钱包可能无法获取所有代币价格。如需提速，请使用 <code>--no-prices</code>。</li>
+<li><strong>公共 RPC 速率限制</strong> — Solana 主网公共 RPC 对请求有限制。生产环境请将 SOLANA_RPC_URL 设置为私有端点（Helius、QuickNode、Triton）。</li>
+<li><strong>NFT 检测为启发式</strong> — amount=1 且 decimals=0。压缩 NFT（cNFT）和 Token-2022 NFT 不会出现。</li>
+<li><strong>巨鲸检测器仅扫描最新区块</strong> — 非历史数据，结果因查询时刻而异。</li>
+<li><strong>交易历史</strong> — 公共 RPC 保留约 2 天的数据，较旧的交易可能不可用。</li>
+<li><strong>代币名称</strong> — 约 25 个知名代币按名称标注，其他代币显示缩写铸造地址。如需完整信息，请使用 <code>token</code> 命令。</li>
+<li><strong>429 重试</strong> — RPC 和 CoinGecko 调用在遇到速率限制错误时均会以指数退避方式最多重试 2 次。</li>
+</ul>
+<hr />
+<h2>验证</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 应输出当前 Solana slot、TPS 及 SOL 价格
+python3 ~/.hermes/skills/blockchain/solana/scripts/solana_client.py stats
+</div>
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

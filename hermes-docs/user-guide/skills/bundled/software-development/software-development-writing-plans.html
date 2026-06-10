@@ -1,0 +1,373 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Writing Plans — Write implementation plans: bite-sized tasks, paths, code - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 命令</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & Skills</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">docs</a> / <a href="/hermes-docs/user-guide/">user-guide</a> / <a href="/hermes-docs/user-guide/skills/">skills</a> / <a href="/hermes-docs/user-guide/skills/bundled/">bundled</a> / <a href="/hermes-docs/user-guide/skills/bundled/software-development/">software-development</a> / Writing Plans — Write implementation plans: bite-sized tasks, paths, code</div><p>{/<em> 本页面由 website/scripts/generate-skill-docs.py 从技能的 SKILL.md 自动生成。请编辑源 SKILL.md，而非本页面。 </em>/}</p>
+<h1>Writing Plans</h1>
+<p>Write implementation plans: bite-sized tasks, paths, code.</p>
+<h2>技能元数据</h2>
+<table><thead><tr><th>---</th><th>---</th></tr></thead><tbody>
+<tr><td>来源</td><td>内置（默认安装）</td></tr>
+<tr><td>路径</td><td><code>skills/software-development/writing-plans</code></td></tr>
+<tr><td>版本</td><td><code>1.1.0</code></td></tr>
+<tr><td>作者</td><td>Hermes Agent (adapted from obra/superpowers)</td></tr>
+<tr><td>许可证</td><td>MIT</td></tr>
+<tr><td>平台</td><td>linux, macos, windows</td></tr>
+<tr><td>标签</td><td><code>planning</code>, <code>design</code>, <code>implementation</code>, <code>workflow</code>, <code>documentation</code></td></tr>
+<tr><td>相关技能</td><td><a href="/hermes-docs/user-guide/skills/bundled/software-development/software-development-subagent-driven-development"><code>subagent-driven-development</code></a>, <a href="/hermes-docs/user-guide/skills/bundled/software-development/software-development-test-driven-development"><code>test-driven-development</code></a>, <a href="/hermes-docs/user-guide/skills/bundled/software-development/software-development-requesting-code-review"><code>requesting-code-review</code></a></td></tr>
+</tbody></table>
+<h2>参考：完整 SKILL.md</h2>
+<p>:::info</p>
+<p>以下是 Hermes 在此技能被触发时加载的完整技能定义。这是技能激活时代理所看到的指令。</p>
+<p>:::</p>
+<h1>Writing Implementation Plans</h1>
+<h2>概述</h2>
+<p>Write comprehensive implementation plans assuming the implementer has zero context for the codebase and questionable taste. Document everything they need: which files to touch, complete code, testing commands, docs to check, how to verify. Give them bite-sized tasks. DRY. YAGNI. TDD. Frequent commits.</p>
+<p>Assume the implementer is a skilled developer but knows almost nothing about the toolset or problem domain. Assume they don't know good test design very well.</p>
+<p><strong>Core principle:</strong> A good plan makes implementation obvious. If someone has to guess, the plan is incomplete.</p>
+<h2>何时使用</h2>
+<p><strong>Always use before:</strong></p>
+<p>- Implementing multi-step features</p>
+<p>- Breaking down complex requirements</p>
+<p>- Delegating to subagents via subagent-driven-development</p>
+<p><strong>Don't skip when:</strong></p>
+<p>- Feature seems simple (assumptions cause bugs)</p>
+<p>- You plan to implement it yourself (future you needs guidance)</p>
+<p>- Working alone (documentation matters)</p>
+<h2>Bite-Sized Task Granularity</h2>
+<p><strong>Each task = 2-5 minutes of focused work.</strong></p>
+<p>Every step is one action:</p>
+<p>- "Write the failing test" — step</p>
+<p>- "Run it to make sure it fails" — step</p>
+<p>- "Implement the minimal code to make the test pass" — step</p>
+<p>- "Run the tests and make sure they pass" — step</p>
+<p>- "Commit" — step</p>
+<p><strong>Too big:</strong></p>
+<div class="code-block"><span class="code-lang">markdown</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+### Task 1: Build authentication system
+[50 lines of code across 5 files]
+</div>
+<p><strong>Right size:</strong></p>
+<div class="code-block"><span class="code-lang">markdown</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+### Task 1: Create User model with email field
+[10 lines, 1 file]
+
+### Task 2: Add password hash field to User
+[8 lines, 1 file]
+
+### Task 3: Create password hashing utility
+[15 lines, 1 file]
+</div>
+<h2>Plan Document Structure</h2>
+<h3>Header (必需)</h3>
+<p>Every plan MUST start with:</p>
+<div class="code-block"><span class="code-lang">markdown</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# [Feature Name] Implementation Plan
+
+> **For Hermes:** Use subagent-driven-development skill to implement this plan task-by-task.
+
+**Goal:** [One sentence describing what this builds]
+
+**Architecture:** [2-3 sentences about approach]
+
+**Tech Stack:** [Key technologies/libraries]
+
+---
+</div>
+<h3>Task Structure</h3>
+<p>Each task follows this format:</p>
+<div class="code-block"><span class="code-lang">`markdown</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+### Task N: [Descriptive Name]
+
+**Objective:** What this task accomplishes (one sentence)
+
+**Files:**
+- Create: `exact/path/to/new_file.py`
+- Modify: `exact/path/to/existing.py:45-67` (line numbers if known)
+- Test: `tests/path/to/test_file.py`
+
+**Step 1: Write failing test**
+
+</div>
+<p>def test_specific_behavior():</p>
+<p>    result = function(input)</p>
+<p>    assert result == expected</p>
+<div class="code-block"><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+
+**Step 2: Run test to verify failure**
+
+Run: `pytest tests/path/test.py::test_specific_behavior -v`
+Expected: FAIL — "function not defined"
+
+**Step 3: Write minimal implementation**
+
+</div>
+<p>def function(input):</p>
+<p>    return expected</p>
+<div class="code-block"><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+
+**Step 4: Run test to verify pass**
+
+Run: `pytest tests/path/test.py::test_specific_behavior -v`
+Expected: PASS
+
+**Step 5: Commit**
+
+</div>
+<p>git add tests/path/test.py src/path/file.py</p>
+<p>git commit -m "feat: add specific feature"</p>
+<div class="code-block"><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+
+</div>
+<h2>Writing Process</h2>
+<h3>Step 1: Understand Requirements</h3>
+<p>Read and understand:</p>
+<p>- Feature requirements</p>
+<p>- Design documents or user description</p>
+<p>- Acceptance criteria</p>
+<p>- Constraints</p>
+<h3>Step 2: Explore the Codebase</h3>
+<p>Use Hermes tools to understand the project:</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Understand project structure
+search_files("*.py", target="files", path="src/")
+
+# Look at similar features
+search_files("similar_pattern", path="src/", file_glob="*.py")
+
+# Check existing tests
+search_files("*.py", target="files", path="tests/")
+
+# Read key files
+read_file("src/app.py")
+</div>
+<h3>Step 3: Design Approach</h3>
+<p>Decide:</p>
+<p>- Architecture pattern</p>
+<p>- File organization</p>
+<p>- Dependencies needed</p>
+<p>- Testing strategy</p>
+<h3>Step 4: Write Tasks</h3>
+<p>Create tasks in order:</p>
+<p>1. 设置/infrastructure</p>
+<p>2. Core functionality (TDD for each)</p>
+<p>3. Edge cases</p>
+<p>4. Integration</p>
+<p>5. Cleanup/documentation</p>
+<h3>Step 5: Add Complete Details</h3>
+<p>For each task, include:</p>
+<p>- <strong>Exact file paths</strong> (not "the config file" but <code>src/config/settings.py</code>)</p>
+<p>- <strong>Complete code examples</strong> (not "add validation" but the actual code)</p>
+<p>- <strong>Exact commands</strong> with expected output</p>
+<p>- <strong>Verification steps</strong> that prove the task works</p>
+<h3>Step 6: Review the Plan</h3>
+<p>Check:</p>
+<p>- [ ] Tasks are sequential and logical</p>
+<p>- [ ] Each task is bite-sized (2-5 min)</p>
+<p>- [ ] File paths are exact</p>
+<p>- [ ] Code examples are complete (copy-pasteable)</p>
+<p>- [ ] Commands are exact with expected output</p>
+<p>- [ ] No missing context</p>
+<p>- [ ] DRY, YAGNI, TDD principles applied</p>
+<h3>Step 7: Save the Plan</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mkdir -p docs/plans
+# Save plan to docs/plans/YYYY-MM-DD-feature-name.md
+git add docs/plans/
+git commit -m "docs: add implementation plan for [feature]"
+</div>
+<h2>Principles</h2>
+<h3>DRY (Don't Repeat Yourself)</h3>
+<p><strong>Bad:</strong> Copy-paste validation in 3 places</p>
+<p><strong>Good:</strong> Extract validation function, use everywhere</p>
+<h3>YAGNI (You Aren't Gonna Need It)</h3>
+<p><strong>Bad:</strong> Add "flexibility" for future requirements</p>
+<p><strong>Good:</strong> Implement only what's needed now</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Bad — YAGNI violation
+class User:
+    def __init__(self, name, email):
+        self.name = name
+        self.email = email
+        self.preferences = {}  # Not needed yet!
+        self.metadata = {}     # Not needed yet!
+
+# Good — YAGNI
+class User:
+    def __init__(self, name, email):
+        self.name = name
+        self.email = email
+</div>
+<h3>TDD (Test-Driven Development)</h3>
+<p>Every task that produces code should include the full TDD cycle:</p>
+<p>1. Write failing test</p>
+<p>2. Run to verify failure</p>
+<p>3. Write minimal code</p>
+<p>4. Run to verify pass</p>
+<p>See <code>test-driven-development</code> skill for details.</p>
+<h3>Frequent Commits</h3>
+<p>Commit after every task:</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+git add [files]
+git commit -m "type: description"
+</div>
+<h2>Common Mistakes</h2>
+<h3>Vague Tasks</h3>
+<p><strong>Bad:</strong> "Add authentication"</p>
+<p><strong>Good:</strong> "Create User model with email and password_hash fields"</p>
+<h3>Incomplete Code</h3>
+<p><strong>Bad:</strong> "Step 1: Add validation function"</p>
+<p><strong>Good:</strong> "Step 1: Add validation function" followed by the complete function code</p>
+<h3>Missing Verification</h3>
+<p><strong>Bad:</strong> "Step 3: Test it works"</p>
+<p><strong>Good:</strong> "Step 3: Run <code>pytest tests/test_auth.py -v</code>, expected: 3 passed"</p>
+<h3>Missing File Paths</h3>
+<p><strong>Bad:</strong> "Create the model file"</p>
+<p><strong>Good:</strong> "Create: <code>src/models/user.py</code>"</p>
+<h2>Execution Handoff</h2>
+<p>After saving the plan, offer the execution approach:</p>
+<p><strong>"Plan complete and saved. Ready to execute using subagent-driven-development — I'll dispatch a fresh subagent per task with two-stage review (spec compliance then code quality). Shall I proceed?"</strong></p>
+<p>When executing, use the <code>subagent-driven-development</code> skill:</p>
+<p>- Fresh <code>delegate_task</code> per task with full context</p>
+<p>- Spec compliance review after each task</p>
+<p>- Code quality review after spec passes</p>
+<p>- Proceed only when both reviews approve</p>
+<h2>Remember</h2>
+<div class="code-block"><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Bite-sized tasks (2-5 min each)
+Exact file paths
+Complete code (copy-pasteable)
+Exact commands with expected output
+Verification steps
+DRY, YAGNI, TDD
+Frequent commits
+</div>
+<p><strong>A good plan makes implementation obvious.</strong></p>  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

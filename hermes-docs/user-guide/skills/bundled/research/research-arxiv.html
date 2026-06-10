@@ -1,0 +1,533 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arxiv — 通过关键词、作者、分类或 ID 搜索 arXiv 论文 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Arxiv — 通过关键词、作者、分类或 ID 搜索 arXiv 论文</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Arxiv</h1>
+<p>通过关键词、作者、分类或 ID 搜索 arXiv 论文。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>内置（默认安装）</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>skills/research/arxiv</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Hermes Agent</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Research</code>, <code>Arxiv</code>, <code>Papers</code>, <code>Academic</code>, <code>Science</code>, <code>API</code></td>
+</tr>
+<tr>
+<td>相关 skill</td>
+<td><a href="/user-guide/skills/bundled/productivity/productivity-ocr-and-documents"><code>ocr-and-documents</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>arXiv 学术研究</h1>
+<p>通过 arXiv 免费 REST API 搜索并获取学术论文。无需 API key，无需额外依赖——仅使用 curl。</p>
+<h2>快速参考</h2>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>搜索论文</td>
+<td><code>curl &quot;https://export.arxiv.org/api/query?search_query=all:QUERY&amp;max_results=5&quot;</code></td>
+</tr>
+<tr>
+<td>获取指定论文</td>
+<td><code>curl &quot;https://export.arxiv.org/api/query?id_list=2402.03300&quot;</code></td>
+</tr>
+<tr>
+<td>阅读摘要（网页）</td>
+<td><code>web_extract(urls=[&quot;https://arxiv.org/abs/2402.03300&quot;])</code></td>
+</tr>
+<tr>
+<td>阅读完整论文（PDF）</td>
+<td><code>web_extract(urls=[&quot;https://arxiv.org/pdf/2402.03300&quot;])</code></td>
+</tr>
+</tbody>
+</table>
+<h2>搜索论文</h2>
+<p>API 返回 Atom XML 格式数据。可使用 <code>grep</code>/<code>sed</code> 解析，或通过管道传给 <code>python3</code> 获得整洁输出。</p>
+<h3>基本搜索</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s "https://export.arxiv.org/api/query?search_query=all:GRPO+reinforcement+learning&amp;max_results=5"
+</div>
+<h3>整洁输出（将 XML 解析为可读格式）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s "https://export.arxiv.org/api/query?search_query=all:GRPO+reinforcement+learning&amp;max_results=5&amp;sortBy=submittedDate&amp;sortOrder=descending" | python3 -c "
+import sys, xml.etree.ElementTree as ET
+ns = {'a': 'http://www.w3.org/2005/Atom'}
+root = ET.parse(sys.stdin).getroot()
+for i, entry in enumerate(root.findall('a:entry', ns)):
+    title = entry.find('a:title', ns).text.strip().replace('\n', ' ')
+    arxiv_id = entry.find('a:id', ns).text.strip().split('/abs/')[-1]
+    published = entry.find('a:published', ns).text[:10]
+    authors = ', '.join(a.find('a:name', ns).text for a in entry.findall('a:author', ns))
+    summary = entry.find('a:summary', ns).text.strip()[:200]
+    cats = ', '.join(c.get('term') for c in entry.findall('a:category', ns))
+    print(f'{i+1}. [{arxiv_id}] {title}')
+    print(f'   Authors: {authors}')
+    print(f'   Published: {published} | Categories: {cats}')
+    print(f'   Abstract: {summary}...')
+    print(f'   PDF: https://arxiv.org/pdf/{arxiv_id}')
+    print()
+"
+</div>
+<h2>搜索查询语法</h2>
+<table>
+<thead>
+<tr>
+<th>前缀</th>
+<th>搜索范围</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>all:</code></td>
+<td>所有字段</td>
+<td><code>all:transformer+attention</code></td>
+</tr>
+<tr>
+<td><code>ti:</code></td>
+<td>标题</td>
+<td><code>ti:large+language+models</code></td>
+</tr>
+<tr>
+<td><code>au:</code></td>
+<td>作者</td>
+<td><code>au:vaswani</code></td>
+</tr>
+<tr>
+<td><code>abs:</code></td>
+<td>摘要</td>
+<td><code>abs:reinforcement+learning</code></td>
+</tr>
+<tr>
+<td><code>cat:</code></td>
+<td>分类</td>
+<td><code>cat:cs.AI</code></td>
+</tr>
+<tr>
+<td><code>co:</code></td>
+<td>备注</td>
+<td><code>co:accepted+NeurIPS</code></td>
+</tr>
+</tbody>
+</table>
+<h3>布尔运算符</h3>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# AND（使用 + 时的默认行为）
+search_query=all:transformer+attention
+<h1>OR</h1>
+<p>search_query=all:GPT+OR+all:BERT</p>
+<h1>AND NOT</h1>
+<p>search_query=all:language+model+ANDNOT+all:vision</p>
+<h1>精确短语</h1>
+<p>search_query=ti:&quot;chain+of+thought&quot;</p>
+<h1>组合使用</h1>
+<p>search_query=au:hinton+AND+cat:cs.LG</p>
+</div>
+<h2>排序与分页</h2>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>选项</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sortBy</code></td>
+<td><code>relevance</code>, <code>lastUpdatedDate</code>, <code>submittedDate</code></td>
+</tr>
+<tr>
+<td><code>sortOrder</code></td>
+<td><code>ascending</code>, <code>descending</code></td>
+</tr>
+<tr>
+<td><code>start</code></td>
+<td>结果偏移量（从 0 开始）</td>
+</tr>
+<tr>
+<td><code>max_results</code></td>
+<td>结果数量（默认 10，最大 30000）</td>
+</tr>
+</tbody>
+</table>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# cs.AI 分类下最新的 10 篇论文
+curl -s "https://export.arxiv.org/api/query?search_query=cat:cs.AI&amp;sortBy=submittedDate&amp;sortOrder=descending&amp;max_results=10"
+</div>
+<h2>获取指定论文</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 通过 arXiv ID
+curl -s "https://export.arxiv.org/api/query?id_list=2402.03300"
+<h1>多篇论文</h1>
+<p>curl -s &quot;https://export.arxiv.org/api/query?id_list=2402.03300,2401.12345,2403.00001&quot;</p>
+</div>
+<h2>生成 BibTeX</h2>
+<p>获取论文元数据后，生成 BibTeX 条目：</p>
+<p>&amp;#123;% raw %&amp;#125;</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s "https://export.arxiv.org/api/query?id_list=1706.03762" | python3 -c "
+import sys, xml.etree.ElementTree as ET
+ns = {'a': 'http://www.w3.org/2005/Atom', 'arxiv': 'http://arxiv.org/schemas/atom'}
+root = ET.parse(sys.stdin).getroot()
+entry = root.find('a:entry', ns)
+if entry is None: sys.exit('Paper not found')
+title = entry.find('a:title', ns).text.strip().replace('\n', ' ')
+authors = ' and '.join(a.find('a:name', ns).text for a in entry.findall('a:author', ns))
+year = entry.find('a:published', ns).text[:4]
+raw_id = entry.find('a:id', ns).text.strip().split('/abs/')[-1]
+cat = entry.find('arxiv:primary_category', ns)
+primary = cat.get('term') if cat is not None else 'cs.LG'
+last_name = entry.find('a:author', ns).find('a:name', ns).text.split()[-1]
+print(f'@article{{{last_name}{year}_{raw_id.replace(\".\", \"\")},')
+print(f'  title     = {{{title}}},')
+print(f'  author    = {{{authors}}},')
+print(f'  year      = {{{year}}},')
+print(f'  eprint    = {{{raw_id}}},')
+print(f'  archivePrefix = {{arXiv}},')
+print(f'  primaryClass  = {{{primary}}},')
+print(f'  url       = {{https://arxiv.org/abs/{raw_id}}}')
+print('}')
+"
+</div>
+&#123;% endraw %&#125;
+<h2>阅读论文内容</h2>
+<p>找到论文后，按以下方式阅读：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 摘要页（速度快，包含元数据和摘要）
+web_extract(urls=["https://arxiv.org/abs/2402.03300"])
+<h1>完整论文（PDF → 通过 Firecrawl 转为 markdown）</h1>
+<p>web_extract(urls=[&quot;https://arxiv.org/pdf/2402.03300&quot;])</p>
+</div>
+<p>本地 PDF 处理请参阅 <code>ocr-and-documents</code> skill。</p>
+<h2>常用分类</h2>
+<table>
+<thead>
+<tr>
+<th>分类</th>
+<th>领域</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cs.AI</code></td>
+<td>人工智能</td>
+</tr>
+<tr>
+<td><code>cs.CL</code></td>
+<td>计算与语言（NLP）</td>
+</tr>
+<tr>
+<td><code>cs.CV</code></td>
+<td>计算机视觉</td>
+</tr>
+<tr>
+<td><code>cs.LG</code></td>
+<td>机器学习</td>
+</tr>
+<tr>
+<td><code>cs.CR</code></td>
+<td>密码学与安全</td>
+</tr>
+<tr>
+<td><code>stat.ML</code></td>
+<td>机器学习（统计）</td>
+</tr>
+<tr>
+<td><code>math.OC</code></td>
+<td>优化与控制</td>
+</tr>
+<tr>
+<td><code>physics.comp-ph</code></td>
+<td>计算物理</td>
+</tr>
+</tbody>
+</table>
+<p>完整列表：https://arxiv.org/category_taxonomy</p>
+<h2>辅助脚本</h2>
+<p><code>scripts/search_arxiv.py</code> 脚本负责处理 XML 解析并提供整洁输出：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python scripts/search_arxiv.py "GRPO reinforcement learning"
+python scripts/search_arxiv.py "transformer attention" --max 10 --sort date
+python scripts/search_arxiv.py --author "Yann LeCun" --max 5
+python scripts/search_arxiv.py --category cs.AI --sort date
+python scripts/search_arxiv.py --id 2402.03300
+python scripts/search_arxiv.py --id 2402.03300,2401.12345
+</div>
+<p>无需额外依赖——仅使用 Python 标准库。</p>
+<hr />
+<h2>Semantic Scholar（引用、相关论文、作者主页）</h2>
+<p>arXiv 不提供引用数据或推荐功能。请使用 <strong>Semantic Scholar API</strong>——免费，基本使用无需 API key（1 次请求/秒），返回 JSON 格式。</p>
+<h3>获取论文详情及引用信息</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 通过 arXiv ID
+curl -s "https://api.semanticscholar.org/graph/v1/paper/arXiv:2402.03300?fields=title,authors,citationCount,referenceCount,influentialCitationCount,year,abstract" | python3 -m json.tool
+<h1>通过 Semantic Scholar 论文 ID 或 DOI</h1>
+<p>curl -s &quot;https://api.semanticscholar.org/graph/v1/paper/DOI:10.1234/example?fields=title,citationCount&quot;</p>
+</div>
+<h3>获取引用该论文的文献（被引情况）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s "https://api.semanticscholar.org/graph/v1/paper/arXiv:2402.03300/citations?fields=title,authors,year,citationCount&amp;limit=10" | python3 -m json.tool
+</div>
+<h3>获取该论文的参考文献（引用情况）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s "https://api.semanticscholar.org/graph/v1/paper/arXiv:2402.03300/references?fields=title,authors,year,citationCount&amp;limit=10" | python3 -m json.tool
+</div>
+<h3>搜索论文（arXiv 搜索的替代方案，返回 JSON）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s "https://api.semanticscholar.org/graph/v1/paper/search?query=GRPO+reinforcement+learning&amp;limit=5&amp;fields=title,authors,year,citationCount,externalIds" | python3 -m json.tool
+</div>
+<h3>获取论文推荐</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s -X POST "https://api.semanticscholar.org/recommendations/v1/papers/" \
+  -H "Content-Type: application/json" \
+  -d '{"positivePaperIds": ["arXiv:2402.03300"], "negativePaperIds": []}' | python3 -m json.tool
+</div>
+<h3>作者主页</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s "https://api.semanticscholar.org/graph/v1/author/search?query=Yann+LeCun&amp;fields=name,hIndex,citationCount,paperCount" | python3 -m json.tool
+</div>
+<h3>常用 Semantic Scholar 字段</h3>
+<p><code>title</code>、<code>authors</code>、<code>year</code>、<code>abstract</code>、<code>citationCount</code>、<code>referenceCount</code>、<code>influentialCitationCount</code>、<code>isOpenAccess</code>、<code>openAccessPdf</code>、<code>fieldsOfStudy</code>、<code>publicationVenue</code>、<code>externalIds</code>（包含 arXiv ID、DOI 等）</p>
+<hr />
+<h2>完整研究工作流</h2>
+<ol>
+<li><strong>发现论文</strong>：<code>python scripts/search_arxiv.py &quot;your topic&quot; --sort date --max 10</code></li>
+<li><strong>评估影响力</strong>：<code>curl -s &quot;https://api.semanticscholar.org/graph/v1/paper/arXiv:ID?fields=citationCount,influentialCitationCount&quot;</code></li>
+<li><strong>阅读摘要</strong>：<code>web_extract(urls=[&quot;https://arxiv.org/abs/ID&quot;])</code></li>
+<li><strong>阅读完整论文</strong>：<code>web_extract(urls=[&quot;https://arxiv.org/pdf/ID&quot;])</code></li>
+<li><strong>查找相关工作</strong>：<code>curl -s &quot;https://api.semanticscholar.org/graph/v1/paper/arXiv:ID/references?fields=title,citationCount&amp;limit=20&quot;</code></li>
+<li><strong>获取推荐</strong>：向 Semantic Scholar 推荐接口发送 POST 请求</li>
+<li><strong>追踪作者</strong>：<code>curl -s &quot;https://api.semanticscholar.org/graph/v1/author/search?query=NAME&quot;</code></li>
+</ol>
+<h2>速率限制</h2>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>速率</th>
+<th>认证</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>arXiv</td>
+<td>约 1 次请求 / 3 秒</td>
+<td>无需认证</td>
+</tr>
+<tr>
+<td>Semantic Scholar</td>
+<td>1 次请求 / 秒</td>
+<td>无需认证（有 API key 可达 100 次/秒）</td>
+</tr>
+</tbody>
+</table>
+<h2>注意事项</h2>
+<ul>
+<li>arXiv 返回 Atom XML——使用辅助脚本或解析代码片段获得整洁输出</li>
+<li>Semantic Scholar 返回 JSON——通过管道传给 <code>python3 -m json.tool</code> 提升可读性</li>
+<li>arXiv ID 格式：旧格式（<code>hep-th/0601001</code>）与新格式（<code>2402.03300</code>）</li>
+<li>PDF：<code>https://arxiv.org/pdf/{id}</code> — 摘要：<code>https://arxiv.org/abs/{id}</code></li>
+<li>HTML（如有）：<code>https://arxiv.org/html/{id}</code></li>
+<li>本地 PDF 处理请参阅 <code>ocr-and-documents</code> skill</li>
+</ul>
+<h2>ID 版本控制</h2>
+<ul>
+<li><code>arxiv.org/abs/1706.03762</code> 始终解析为<strong>最新</strong>版本</li>
+<li><code>arxiv.org/abs/1706.03762v1</code> 指向某个<strong>特定</strong>不可变版本</li>
+<li>生成引用时，请保留你实际阅读的版本后缀，以防引用漂移（后续版本可能对内容有重大修改）</li>
+<li>API 的 <code>&lt;id&gt;</code> 字段返回带版本号的 URL（例如 <code>http://arxiv.org/abs/1706.03762v7</code>）</li>
+</ul>
+<h2>已撤回论文</h2>
+<p>论文提交后可能被撤回。发生这种情况时：</p>
+<ul>
+<li><code>&lt;summary&gt;</code> 字段会包含撤回声明（注意查找 &quot;withdrawn&quot; 或 &quot;retracted&quot; 字样）</li>
+<li>元数据字段可能不完整</li>
+<li>在将某条结果视为有效论文之前，请务必检查摘要内容</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

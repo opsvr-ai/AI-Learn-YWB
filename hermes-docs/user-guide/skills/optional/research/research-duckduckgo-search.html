@@ -1,0 +1,454 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Duckduckgo Search — 通过 DuckDuckGo 免费搜索网络 — 文本、新闻、图片、视频 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Duckduckgo Search — 通过 DuckDuckGo 免费搜索网络 — 文本、新闻、图片、视频</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Duckduckgo Search</h1>
+<p>通过 DuckDuckGo 免费搜索网络 — 文本、新闻、图片、视频。无需 API 密钥。已安装时优先使用 <code>ddgs</code> CLI；仅在确认当前运行时中 <code>ddgs</code> 可用后，才使用 Python DDGS 库。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 使用 <code>hermes skills install official/research/duckduckgo-search</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/research/duckduckgo-search</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.3.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>gamedevCloudy</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>search</code>, <code>duckduckgo</code>, <code>web-search</code>, <code>free</code>, <code>fallback</code></td>
+</tr>
+<tr>
+<td>相关 skill</td>
+<td><a href="/user-guide/skills/bundled/research/research-arxiv"><code>arxiv</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 skill 激活时 agent 所看到的指令内容。
+</div>
+<h1>DuckDuckGo Search</h1>
+<p>使用 DuckDuckGo 进行免费网络搜索。<strong>无需 API 密钥。</strong></p>
+<p>当 <code>web_search</code> 不可用或不适用时（例如未设置 <code>FIRECRAWL_API_KEY</code>），优先使用此 skill。也可在明确需要 DuckDuckGo 结果时作为独立搜索路径使用。</p>
+<h2>检测流程</h2>
+<p>在选择方案前，先检查实际可用的工具：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Check CLI availability
+command -v ddgs &gt;/dev/null &amp;&amp; echo "DDGS_CLI=installed" || echo "DDGS_CLI=missing"
+</div>
+<p>决策树：</p>
+<ol>
+<li>若 <code>ddgs</code> CLI 已安装，优先使用 <code>terminal</code> + <code>ddgs</code></li>
+<li>若 <code>ddgs</code> CLI 未安装，不要假设 <code>execute_code</code> 能导入 <code>ddgs</code></li>
+<li>若用户明确需要 DuckDuckGo，先在相关环境中安装 <code>ddgs</code></li>
+<li>否则回退到内置的 web/browser 工具</li>
+</ol>
+<p>重要运行时说明：</p>
+<ul>
+<li>Terminal 与 <code>execute_code</code> 是独立的运行时</li>
+<li>shell 中安装成功不代表 <code>execute_code</code> 能导入 <code>ddgs</code></li>
+<li>永远不要假设 <code>execute_code</code> 内已预装第三方 Python 包</li>
+</ul>
+<h2>安装</h2>
+<p>仅在明确需要 DuckDuckGo 搜索且运行时尚未提供时，才安装 <code>ddgs</code>。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Python package + CLI entrypoint
+pip install ddgs
+<h1>Verify CLI</h1>
+<p>ddgs --help</p>
+</div>
+<p>若工作流依赖 Python 导入，请在使用 <code>from ddgs import DDGS</code> 前，先验证该运行时能否导入 <code>ddgs</code>。</p>
+<h2>方法一：CLI 搜索（推荐）</h2>
+<p>当 <code>ddgs</code> 命令存在时，通过 <code>terminal</code> 使用它。这是推荐路径，因为它避免了假设 <code>execute_code</code> 沙箱中已安装 <code>ddgs</code> Python 包。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Text search
+ddgs text -q "python async programming" -m 5
+<h1>News search</h1>
+<p>ddgs news -q &quot;artificial intelligence&quot; -m 5</p>
+<h1>Image search</h1>
+<p>ddgs images -q &quot;landscape photography&quot; -m 10</p>
+<h1>Video search</h1>
+<p>ddgs videos -q &quot;python tutorial&quot; -m 5</p>
+<h1>With region filter</h1>
+<p>ddgs text -q &quot;best restaurants&quot; -m 5 -r us-en</p>
+<h1>Recent results only (d=day, w=week, m=month, y=year)</h1>
+<p>ddgs text -q &quot;latest AI news&quot; -m 5 -t w</p>
+<h1>JSON output for parsing</h1>
+<p>ddgs text -q &quot;fastapi tutorial&quot; -m 5 -o json</p>
+</div>
+<h3>CLI 参数</h3>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-q</code></td>
+<td>查询词 — <strong>必填</strong></td>
+<td><code>-q &quot;search terms&quot;</code></td>
+</tr>
+<tr>
+<td><code>-m</code></td>
+<td>最大结果数</td>
+<td><code>-m 5</code></td>
+</tr>
+<tr>
+<td><code>-r</code></td>
+<td>地区</td>
+<td><code>-r us-en</code></td>
+</tr>
+<tr>
+<td><code>-t</code></td>
+<td>时间范围</td>
+<td><code>-t w</code>（一周）</td>
+</tr>
+<tr>
+<td><code>-s</code></td>
+<td>安全搜索</td>
+<td><code>-s off</code></td>
+</tr>
+<tr>
+<td><code>-o</code></td>
+<td>输出格式</td>
+<td><code>-o json</code></td>
+</tr>
+</tbody>
+</table>
+<h2>方法二：Python API（仅在验证后使用）</h2>
+<p>仅在确认 <code>ddgs</code> 已安装于该运行时后，才在 <code>execute_code</code> 或其他 Python 运行时中使用 <code>DDGS</code> 类。不要默认认为 <code>execute_code</code> 包含第三方包。</p>
+<p>正确表述：</p>
+<ul>
+<li>&quot;在安装或确认包可用后，在 <code>execute_code</code> 中使用 <code>ddgs</code>&quot;</li>
+</ul>
+<p>避免表述：</p>
+<ul>
+<li>&quot;<code>execute_code</code> 包含 <code>ddgs</code>&quot;</li>
+<li>&quot;DuckDuckGo 搜索在 <code>execute_code</code> 中默认可用&quot;</li>
+</ul>
+<p><strong>重要：</strong> <code>max_results</code> 必须始终以<strong>关键字参数</strong>形式传入 — 所有方法中以位置参数传入均会报错。</p>
+<h3>文本搜索</h3>
+<p>适用场景：通用研究、公司信息、文档查询。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from ddgs import DDGS
+<p>with DDGS() as ddgs:
+for r in ddgs.text(&quot;python async programming&quot;, max_results=5):
+print(r[&quot;title&quot;])
+print(r[&quot;href&quot;])
+print(r.get(&quot;body&quot;, &quot;&quot;)[:200])
+print()</p>
+</div>
+<p>返回字段：<code>title</code>、<code>href</code>、<code>body</code></p>
+<h3>新闻搜索</h3>
+<p>适用场景：时事动态、突发新闻、最新更新。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from ddgs import DDGS
+<p>with DDGS() as ddgs:
+for r in ddgs.news(&quot;AI regulation 2026&quot;, max_results=5):
+print(r[&quot;date&quot;], &quot;-&quot;, r[&quot;title&quot;])
+print(r.get(&quot;source&quot;, &quot;&quot;), &quot;|&quot;, r[&quot;url&quot;])
+print(r.get(&quot;body&quot;, &quot;&quot;)[:200])
+print()</p>
+</div>
+<p>返回字段：<code>date</code>、<code>title</code>、<code>body</code>、<code>url</code>、<code>image</code>、<code>source</code></p>
+<h3>图片搜索</h3>
+<p>适用场景：视觉参考、产品图片、示意图。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from ddgs import DDGS
+<p>with DDGS() as ddgs:
+for r in ddgs.images(&quot;semiconductor chip&quot;, max_results=5):
+print(r[&quot;title&quot;])
+print(r[&quot;image&quot;])
+print(r.get(&quot;thumbnail&quot;, &quot;&quot;))
+print(r.get(&quot;source&quot;, &quot;&quot;))
+print()</p>
+</div>
+<p>返回字段：<code>title</code>、<code>image</code>、<code>thumbnail</code>、<code>url</code>、<code>height</code>、<code>width</code>、<code>source</code></p>
+<h3>视频搜索</h3>
+<p>适用场景：教程、演示、讲解视频。</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from ddgs import DDGS
+<p>with DDGS() as ddgs:
+for r in ddgs.videos(&quot;FastAPI tutorial&quot;, max_results=5):
+print(r[&quot;title&quot;])
+print(r.get(&quot;content&quot;, &quot;&quot;))
+print(r.get(&quot;duration&quot;, &quot;&quot;))
+print(r.get(&quot;provider&quot;, &quot;&quot;))
+print(r.get(&quot;published&quot;, &quot;&quot;))
+print()</p>
+</div>
+<p>返回字段：<code>title</code>、<code>content</code>、<code>description</code>、<code>duration</code>、<code>provider</code>、<code>published</code>、<code>statistics</code>、<code>uploader</code></p>
+<h3>快速参考</h3>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>适用场景</th>
+<th>关键字段</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>text()</code></td>
+<td>通用研究、公司信息</td>
+<td>title, href, body</td>
+</tr>
+<tr>
+<td><code>news()</code></td>
+<td>时事动态、最新更新</td>
+<td>date, title, source, body, url</td>
+</tr>
+<tr>
+<td><code>images()</code></td>
+<td>视觉内容、示意图</td>
+<td>title, image, thumbnail, url</td>
+</tr>
+<tr>
+<td><code>videos()</code></td>
+<td>教程、演示</td>
+<td>title, content, duration, provider</td>
+</tr>
+</tbody>
+</table>
+<h2>工作流：先搜索后提取</h2>
+<p>DuckDuckGo 返回标题、URL 和摘要，而非完整页面内容。如需获取完整页面内容，先搜索，再用 <code>web_extract</code>、browser 工具或 curl 提取最相关的 URL。</p>
+<p>CLI 示例：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+ddgs text -q "fastapi deployment guide" -m 3 -o json
+</div>
+<p>Python 示例，仅在确认该运行时已安装 <code>ddgs</code> 后使用：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from ddgs import DDGS
+<p>with DDGS() as ddgs:
+results = list(ddgs.text(&quot;fastapi deployment guide&quot;, max_results=3))
+for r in results:
+print(r[&quot;title&quot;], &quot;-&amp;gt;&quot;, r[&quot;href&quot;])</p>
+</div>
+<p>然后使用 <code>web_extract</code> 或其他内容获取工具提取最佳 URL 的内容。</p>
+<h2>限制</h2>
+<ul>
+<li><strong>频率限制</strong>：大量快速请求后，DuckDuckGo 可能进行限流。如有需要，在多次搜索之间添加短暂延迟。</li>
+<li><strong>无内容提取</strong>：<code>ddgs</code> 返回摘要，而非完整页面内容。如需完整文章/页面，请使用 <code>web_extract</code>、browser 工具或 curl。</li>
+<li><strong>结果质量</strong>：总体良好，但可配置性不如 Firecrawl 的搜索。</li>
+<li><strong>可用性</strong>：DuckDuckGo 可能屏蔽来自部分云 IP 的请求。若搜索返回空结果，请尝试不同关键词或等待几秒后重试。</li>
+<li><strong>字段可变性</strong>：不同结果或 <code>ddgs</code> 版本间返回字段可能有所不同。对可选字段使用 <code>.get()</code> 以避免 <code>KeyError</code>。</li>
+<li><strong>独立运行时</strong>：在 terminal 中成功安装 <code>ddgs</code> 不代表 <code>execute_code</code> 能自动导入它。</li>
+</ul>
+<h2>故障排查</h2>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>可能原因</th>
+<th>处理方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ddgs: command not found</code></td>
+<td>CLI 未安装在 shell 环境中</td>
+<td>安装 <code>ddgs</code>，或改用内置 web/browser 工具</td>
+</tr>
+<tr>
+<td><code>ModuleNotFoundError: No module named 'ddgs'</code></td>
+<td>Python 运行时未安装该包</td>
+<td>在准备好该运行时之前，不要在其中使用 Python DDGS</td>
+</tr>
+<tr>
+<td>搜索无结果</td>
+<td>临时限流或查询词不佳</td>
+<td>等待几秒后重试，或调整查询词</td>
+</tr>
+<tr>
+<td>CLI 正常但 <code>execute_code</code> 导入失败</td>
+<td>Terminal 与 <code>execute_code</code> 是不同的运行时</td>
+<td>继续使用 CLI，或单独准备 Python 运行时</td>
+</tr>
+</tbody>
+</table>
+<h2>常见陷阱</h2>
+<ul>
+<li><strong><code>max_results</code> 仅支持关键字参数</strong>：<code>ddgs.text(&quot;query&quot;, 5)</code> 会报错，请使用 <code>ddgs.text(&quot;query&quot;, max_results=5)</code>。</li>
+<li><strong>不要假设 CLI 已存在</strong>：使用前先检查 <code>command -v ddgs</code>。</li>
+<li><strong>不要假设 <code>execute_code</code> 能导入 <code>ddgs</code></strong>：除非该运行时已单独准备，否则 <code>from ddgs import DDGS</code> 可能抛出 <code>ModuleNotFoundError</code>。</li>
+<li><strong>包名</strong>：该包名为 <code>ddgs</code>（原名 <code>duckduckgo-search</code>），使用 <code>pip install ddgs</code> 安装。</li>
+<li><strong>不要混淆 <code>-q</code> 和 <code>-m</code></strong>（CLI）：<code>-q</code> 用于查询词，<code>-m</code> 用于最大结果数。</li>
+<li><strong>空结果</strong>：若 <code>ddgs</code> 返回空结果，可能是被限流。等待几秒后重试。</li>
+</ul>
+<h2>验证版本</h2>
+<p>已针对 <code>ddgs==9.11.2</code> 语义验证示例。Skill 指南现将 CLI 可用性与 Python 导入可用性视为独立问题，以确保文档化的工作流与实际运行时行为一致。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,355 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gitnexus Explorer - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Gitnexus Explorer</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Gitnexus Explorer</h1>
+<p>使用 GitNexus 为代码库建立索引，并通过 Web UI + Cloudflare 隧道提供交互式知识图谱服务。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 使用 <code>hermes skills install official/research/gitnexus-explorer</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/research/gitnexus-explorer</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Hermes Agent + Teknium</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>gitnexus</code>, <code>code-intelligence</code>, <code>knowledge-graph</code>, <code>visualization</code></td>
+</tr>
+<tr>
+<td>相关 skill</td>
+<td><a href="/user-guide/skills/bundled/mcp/mcp-native-mcp"><code>native-mcp</code></a>, <a href="/user-guide/skills/bundled/github/github-codebase-inspection"><code>codebase-inspection</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 skill 激活时 agent 所看到的指令内容。
+</div>
+<h1>GitNexus Explorer</h1>
+<p>将任意代码库索引为知识图谱，并提供交互式 Web UI，用于探索符号、调用链、聚类和执行流。通过 Cloudflare 隧道实现远程访问。</p>
+<h2>适用场景</h2>
+<ul>
+<li>用户希望可视化探索代码库架构</li>
+<li>用户请求生成某个仓库的知识图谱/依赖图</li>
+<li>用户希望与他人共享交互式代码库浏览器</li>
+</ul>
+<h2>前置条件</h2>
+<ul>
+<li><strong>Node.js</strong>（v18+）— GitNexus 和代理所需</li>
+<li><strong>git</strong> — 仓库必须包含 <code>.git</code> 目录</li>
+<li><strong>cloudflared</strong> — 用于隧道（如缺失，自动安装至 <code>~/.local/bin</code>）</li>
+</ul>
+<h2>规模警告</h2>
+<p>Web UI 在浏览器中渲染所有节点。文件数不超过约 5,000 的仓库运行良好。大型仓库（30k+ 节点）会导致浏览器标签页卡顿或崩溃。CLI/MCP 工具在任何规模下均可正常工作——仅 Web 可视化存在此限制。</p>
+<h2>步骤</h2>
+<h3>1. 克隆并构建 GitNexus（一次性设置）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+GITNEXUS_DIR="${GITNEXUS_DIR:-$HOME/.local/share/gitnexus}"
+<p>if [ ! -d &quot;$GITNEXUS_DIR/gitnexus-web/dist&quot; ]; then
+git clone https://github.com/abhigyanpatwari/GitNexus.git &quot;$GITNEXUS_DIR&quot;
+cd &quot;$GITNEXUS_DIR/gitnexus-shared&quot; &amp;amp;&amp;amp; npm install &amp;amp;&amp;amp; npm run build
+cd &quot;$GITNEXUS_DIR/gitnexus-web&quot; &amp;amp;&amp;amp; npm install
+fi</p>
+</div>
+<h3>2. 为远程访问修补 Web UI</h3>
+<p>Web UI 默认使用 <code>localhost:4747</code> 进行 API 调用。将其修补为使用同源地址，以便通过隧道/代理正常工作：</p>
+<p><strong>文件：<code>$GITNEXUS_DIR/gitnexus-web/src/config/ui-constants.ts</code></strong>
+将：</p>
+<div class="code-block"><span class="code-lang">typescript</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+export const DEFAULT_BACKEND_URL = 'http://localhost:4747';
+</div>
+改为：
+<div class="code-block"><span class="code-lang">typescript</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+export const DEFAULT_BACKEND_URL = typeof window !== 'undefined' &amp;&amp; window.location.hostname !== 'localhost' ? window.location.origin : 'http://localhost:4747';
+</div>
+<p><strong>文件：<code>$GITNEXUS_DIR/gitnexus-web/vite.config.ts</code></strong>
+在 <code>server: { }</code> 块内添加 <code>allowedHosts: true</code>（仅在使用开发模式而非生产构建时需要）：</p>
+<div class="code-block"><span class="code-lang">typescript</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+server: {
+    allowedHosts: true,
+    // ... existing config
+},
+</div>
+<p>然后构建生产包：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cd "$GITNEXUS_DIR/gitnexus-web" &amp;&amp; npx vite build
+</div>
+<h3>3. 为目标仓库建立索引</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cd /path/to/target-repo
+npx gitnexus analyze --skip-agents-md
+rm -rf .claude/    # remove Claude Code-specific artifacts
+</div>
+<p>添加 <code>--embeddings</code> 可启用语义搜索（速度较慢——需要数分钟而非数秒）。</p>
+<p>索引存储在仓库内的 <code>.gitnexus/</code> 目录中（已自动加入 <code>.gitignore</code>）。</p>
+<h3>4. 创建代理脚本</h3>
+<p>将以下内容写入文件（例如 <code>$GITNEXUS_DIR/proxy.mjs</code>）。它提供生产 Web UI 服务，并将 <code>/api/*</code> 代理至 GitNexus 后端——同源，无 CORS 问题，无需 sudo，无需 nginx。</p>
+<div class="code-block"><span class="code-lang">javascript</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import http from 'node:http';
+import fs from 'node:fs';
+import path from 'node:path';
+<p>const API_PORT = parseInt(process.env.API_PORT || '4747');
+const DIST_DIR = process.argv[2] || './dist';
+const PORT = parseInt(process.argv[3] || '8888');</p>
+<p>const MIME = {
+'.html': 'text/html', '.js': 'application/javascript', '.css': 'text/css',
+'.json': 'application/json', '.png': 'image/png', '.svg': 'image/svg+xml',
+'.ico': 'image/x-icon', '.woff2': 'font/woff2', '.woff': 'font/woff',
+'.wasm': 'application/wasm',
+};</p>
+<p>function proxyToApi(req, res) {
+const opts = {
+hostname: '127.0.0.1', port: API_PORT,
+path: req.url, method: req.method, headers: req.headers,
+};
+const proxy = http.request(opts, (upstream) =&amp;gt; {
+res.writeHead(upstream.statusCode, upstream.headers);
+upstream.pipe(res, { end: true });
+});
+proxy.on('error', () =&amp;gt; { res.writeHead(502); res.end('Backend unavailable'); });
+req.pipe(proxy, { end: true });
+}</p>
+<p>function serveStatic(req, res) {
+let filePath = path.join(DIST_DIR, req.url === '/' ? 'index.html' : req.url.split('?')[0]);
+if (!fs.existsSync(filePath)) filePath = path.join(DIST_DIR, 'index.html');
+const ext = path.extname(filePath);
+const mime = MIME[ext] || 'application/octet-stream';
+try {
+const data = fs.readFileSync(filePath);
+res.writeHead(200, { 'Content-Type': mime, 'Cache-Control': 'public, max-age=3600' });
+res.end(data);
+} catch { res.writeHead(404); res.end('Not found'); }
+}</p>
+<p>http.createServer((req, res) =&amp;gt; {
+if (req.url.startsWith('/api')) proxyToApi(req, res);
+else serveStatic(req, res);
+}).listen(PORT, () =&amp;gt; console.log(<code>GitNexus proxy on http://localhost:${PORT}</code>));</p>
+</div>
+<h3>5. 启动服务</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Terminal 1: GitNexus backend API
+npx gitnexus serve &amp;
+<h1>Terminal 2: Proxy (web UI + API on one port)</h1>
+<p>node &quot;$GITNEXUS_DIR/proxy.mjs&quot; &quot;$GITNEXUS_DIR/gitnexus-web/dist&quot; 8888 &amp;amp;</p>
+</div>
+<p>验证：<code>curl -s http://localhost:8888/api/repos</code> 应返回已索引的仓库。</p>
+<h3>6. 通过 Cloudflare 建立隧道（可选——用于远程访问）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Install cloudflared if needed (no sudo)
+if ! command -v cloudflared &amp;&gt;/dev/null; then
+  mkdir -p ~/.local/bin
+  curl -sL https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 \
+    -o ~/.local/bin/cloudflared
+  chmod +x ~/.local/bin/cloudflared
+  export PATH="$HOME/.local/bin:$PATH"
+fi
+<h1>Start tunnel (--config /dev/null avoids conflicts with existing named tunnels)</h1>
+<p>cloudflared tunnel --config /dev/null --url http://localhost:8888 --no-autoupdate --protocol http2</p>
+</div>
+<p>隧道 URL（例如 <code>https://random-words.trycloudflare.com</code>）将输出至 stderr。分享该链接——任何拥有链接的人均可探索图谱。</p>
+<h3>7. 清理</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Stop services
+pkill -f "gitnexus serve"
+pkill -f "proxy.mjs"
+pkill -f cloudflared
+<h1>Remove index from the target repo</h1>
+<p>cd /path/to/target-repo
+npx gitnexus clean
+rm -rf .claude/</p>
+</div>
+<h2>注意事项</h2>
+<ul>
+<li>
+<p><strong><code>cloudflared</code> 必须使用 <code>--config /dev/null</code></strong>：若用户在 <code>~/.cloudflared/config.yml</code> 中存在已命名的隧道配置，则不加此参数时，配置中的兜底 ingress 规则会对所有快速隧道请求返回 404。</p>
+</li>
+<li>
+<p><strong>隧道必须使用生产构建。</strong> Vite 开发服务器默认阻止非 localhost 主机（<code>allowedHosts</code>）。使用生产构建 + Node 代理可完全规避此问题。</p>
+</li>
+<li>
+<p><strong>Web UI 不会创建 <code>.claude/</code> 或 <code>CLAUDE.md</code>。</strong> 这些文件由 <code>npx gitnexus analyze</code> 创建。使用 <code>--skip-agents-md</code> 可抑制 markdown 文件的生成，再用 <code>rm -rf .claude/</code> 清除其余内容。这些是 Claude Code 集成产物，Hermes Agent 用户无需使用。</p>
+</li>
+<li>
+<p><strong>浏览器内存限制。</strong> Web UI 将整个图谱加载至浏览器内存。文件数超过 5k 的仓库可能出现卡顿，超过 30k 文件的仓库很可能导致标签页崩溃。</p>
+</li>
+<li>
+<p><strong>Embedding（嵌入）为可选项。</strong> <code>--embeddings</code> 可启用语义搜索，但在大型仓库上需要数分钟。如需快速探索可跳过；若希望通过 AI 对话面板进行自然语言查询，则可添加此选项。</p>
+</li>
+<li>
+<p><strong>多仓库支持。</strong> <code>gitnexus serve</code> 会服务所有已索引的仓库。可先为多个仓库建立索引，再启动一次 serve，Web UI 支持在各仓库间切换。</p>
+</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

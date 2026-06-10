@@ -1,0 +1,1064 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>大模型基础知识 — AI赋能日常工作</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <span class="icon">AI</span>
+      运维部AI学习平台
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">&#128172;</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">&#9000;</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">&#128218;</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">&#128214;</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">&#128273;</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">&#128214;</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">&#128172;</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">&#128202;</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="container">
+      <div class="breadcrumb"><a href="index.html">首页</a> / 大模型基础</div>
+      <h1>大模型基础知识</h1>
+      <p class="subtitle">从核心概念到前沿协议，系统性掌握AI工具的底层原理</p>
+    </div>
+  </div>
+
+  <!-- 概述 -->
+  <section class="section">
+    <div class="container">
+      <span class="section-label">Introduction</span>
+      <h2 class="section-title">为什么需要了解这些基础知识？</h2>
+      <p class="section-desc">你每天都在使用 Hermes-Agent 和 Claude Code，但有没有想过——它们为什么能理解你的需求？为什么能调用工具？为什么能自主完成复杂任务？理解底层原理，才能更好地驾驭这些工具。</p>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-icon blue">&#128161;</div>
+          <h4>从"会用"到"懂用"</h4>
+          <p>了解 Function Call 的原理，你就能写出更精准的工具调用提示词；理解 Agent 的循环机制，你就知道什么时候该用 Plan Mode、什么时候可以用 Auto Mode。</p>
+        </div>
+        <div class="card">
+          <div class="card-icon green">&#128640;</div>
+          <h4>从"使用者"到"设计者"</h4>
+          <p>理解了 MCP 协议，你可以为团队搭建内部工具 Server；掌握了 Skills 系统，你可以把团队最佳实践封装为可复用的技能包。</p>
+        </div>
+      </div>
+
+      <div class="highlight-box mt-3">
+        <h3>本页内容导航</h3>
+        <p>从基础到前沿，六个模块层层递进：<strong>LLM基础 → Prompt工程 → Function Call → MCP → Agent → A2A/Skills</strong>。每个模块都可以独立阅读，建议按顺序学习以获得完整的知识体系。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 模块一：大语言模型基础 -->
+  <section class="section">
+    <div class="container">
+      <span class="section-label">LLM Basics</span>
+      <h2 class="section-title">大语言模型基础</h2>
+      <p class="section-desc">理解大语言模型（Large Language Model）的核心概念，是掌握所有AI工具使用方法的基石。</p>
+      <div class="accordion">
+        <div class="accordion-item">
+          <button class="accordion-trigger">什么是大语言模型？ <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <p><strong>通俗理解</strong>：想象一座巨型图书馆里有一位"超级图书管理员"，她不仅读过馆里的每一本书、每一篇文章、每一段代码，还能在几秒钟内理解你的问题，从海量知识中提炼出你最需要的答案。这位"超级图书管理员"就是大语言模型。</p>
+            <p><strong>技术定义</strong>：大语言模型（Large Language Model，简称LLM）是一种基于深度学习的人工智能模型，通过在数以万亿计的文本数据上进行训练，学习人类语言的模式、结构、知识和推理方式。它采用"自回归预测"的方式工作——根据上文逐词（严格说是逐token）预测下一个最可能出现的词，从而生成连贯、有意义的文本。</p>
+            <p><strong>与传统软件的区别</strong>：传统软件是"规则驱动"的——开发者编写明确的if-else逻辑，软件按固定流程执行。大语言模型则是"模式驱动"的——它从数据中学习规律，面对新问题时灵活推理，不需要人工预设每一条规则。</p>
+            <p><strong>一个具体例子</strong>：你向模型输入："请用通俗的语言解释什么是机器学习。"模型经过内部计算后输出："机器学习就像是教小孩认动物——你给她看很多猫和狗的照片，告诉她哪个是猫哪个是狗，慢慢地她自己就能分辨了。计算机也是这样，我们给它大量数据让它'练习'，它就能学会识别模式。"——模型并不是从数据库中"检索"到这段答案，而是基于对语言的理解逐词"生成"出来的。</p>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">核心概念：Token、上下文窗口、Temperature <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <div class="grid-3">
+              <div class="card"><div class="card-icon blue">&#9830;</div><h4>Token（词元）</h4><p>大模型处理文本的最小单位，可以理解为一个"词片"。比如"人工智能"这个词可能被拆成2～3个token。一般来说，<strong>中文约1.5个字符 = 1个token，英文约0.75个单词 = 1个token</strong>。Token数量决定了API调用成本和上下文容量上限，是使用AI工具时必须关注的基础概念。</p></div>
+              <div class="card"><div class="card-icon green">&#9638;</div><h4>上下文窗口（Context Window）</h4><p>可以把上下文窗口理解为模型的"短期记忆容量"——模型在一次对话中能"看到"的最大文本量（包含你的输入和模型的输出）。不同模型的窗口大小差异很大，从4K到100万+tokens不等。当对话超出窗口限制时，你需要<strong>开启新对话</strong>或对前面的内容做<strong>摘要压缩</strong>。</p></div>
+              <div class="card"><div class="card-icon orange">&#9831;</div><h4>Temperature 与 Top-P</h4><p><strong>Temperature</strong>（温度）控制输出的随机性：低温度（0～0.3）让模型回答更精确、一致，适合写代码和查事实；高温度（0.7～1.0）让回答更有创意和多样性，适合头脑风暴。<strong>Top-P</strong>（核采样）是另一种控制多样性的方式，通常与Temperature配合使用。</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">大模型是怎么训练出来的？ <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <p style="margin-bottom:1.5rem;">大模型的训练是一个复杂的多阶段过程，可以类比为一个人的成长教育历程：</p>
+
+            <div style="max-width:700px;margin:0 auto 1.5rem;">
+              <svg viewBox="0 0 700 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;">
+                <defs>
+                  <marker id="arrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2563eb"/></marker>
+                  <linearGradient id="g1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1d4ed8"/></linearGradient>
+                  <linearGradient id="g2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#047857"/></linearGradient>
+                  <linearGradient id="g3" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#6d28d9"/></linearGradient>
+                  <linearGradient id="g4" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ea580c"/><stop offset="100%" stop-color="#c2410c"/></linearGradient>
+                </defs>
+                <rect x="10" y="10" width="140" height="80" rx="12" fill="url(#g1)" opacity="0.12"/>
+                <rect x="10" y="10" width="140" height="80" rx="12" fill="none" stroke="#2563eb" stroke-width="1.5"/>
+                <text x="80" y="42" text-anchor="middle" font-size="28">&#128218;</text>
+                <text x="80" y="66" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">预训练</text>
+                <text x="80" y="82" text-anchor="middle" font-size="10" fill="#3b82f6">海量数据自主学习</text>
+
+                <line x1="152" y1="50" x2="178" y2="50" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow1)"/>
+
+                <rect x="180" y="10" width="140" height="80" rx="12" fill="url(#g2)" opacity="0.12"/>
+                <rect x="180" y="10" width="140" height="80" rx="12" fill="none" stroke="#059669" stroke-width="1.5"/>
+                <text x="250" y="42" text-anchor="middle" font-size="28">&#127891;</text>
+                <text x="250" y="66" text-anchor="middle" font-size="12" font-weight="700" fill="#047857">指令微调</text>
+                <text x="250" y="82" text-anchor="middle" font-size="10" fill="#10b981">学会"听懂人话"</text>
+
+                <line x1="322" y1="50" x2="348" y2="50" stroke="#059669" stroke-width="2" marker-end="url(#arrow1)"/>
+
+                <rect x="350" y="10" width="140" height="80" rx="12" fill="url(#g3)" opacity="0.12"/>
+                <rect x="350" y="10" width="140" height="80" rx="12" fill="none" stroke="#7c3aed" stroke-width="1.5"/>
+                <text x="420" y="42" text-anchor="middle" font-size="28">&#128170;</text>
+                <text x="420" y="66" text-anchor="middle" font-size="12" font-weight="700" fill="#6d28d9">RLHF 对齐</text>
+                <text x="420" y="82" text-anchor="middle" font-size="10" fill="#8b5cf6">人类反馈优化</text>
+
+                <line x1="492" y1="50" x2="518" y2="50" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrow1)"/>
+
+                <rect x="520" y="10" width="140" height="80" rx="12" fill="url(#g4)" opacity="0.12"/>
+                <rect x="520" y="10" width="140" height="80" rx="12" fill="none" stroke="#ea580c" stroke-width="1.5"/>
+                <text x="590" y="42" text-anchor="middle" font-size="28">&#128200;</text>
+                <text x="590" y="66" text-anchor="middle" font-size="12" font-weight="700" fill="#c2410c">后训练</text>
+                <text x="590" y="82" text-anchor="middle" font-size="10" fill="#f97316">持续精进迭代</text>
+              </svg>
+              <p style="text-align:center;font-size:0.8rem;color:var(--gray-400);margin-top:6px;">图：大模型训练的四个阶段——数据 → 能力 → 对齐 → 进化</p>
+            </div>
+
+            <ol class="steps">
+              <li><h4>预训练（Pre-training）——"上完所有学"</h4><p>让模型在海量文本数据（互联网网页、书籍、论文、代码等）上自主学习语言模式。这一阶段耗时最长、算力消耗最大。模型学会了语法、事实知识和基本的推理模式，但还不会"对话"——它只会续写文本。</p></li>
+              <li><h4>指令微调（Instruction Fine-tuning）——"专业训练"</h4><p>用高质量的人工标注数据（包含明确的指令和对应的理想回答）对模型进行有监督训练，让模型学会"听懂人话"——理解指令意图并按指令要求完成任务，而不是简单地续写文本。</p></li>
+              <li><h4>RLHF（人类反馈强化学习）——"师傅带徒弟纠正"</h4><p>人类评估员对模型的多个回答进行打分排序，模型通过这些反馈学习什么样的回答是"好"的——更有用、更安全、更符合人类价值观。这就像师傅指出徒弟哪里说得好、哪里需要改进。</p></li>
+              <li><h4>后训练（Post-training）——"持续精进"</h4><p>在模型投入使用后，通过用户反馈、新数据加入、安全对齐等手段不断优化模型表现。最新的大模型（如Claude 4、GPT-4o）都经过了大量的后训练优化。</p></li>
+            </ol>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">主流大模型一览 <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <table class="compare-table">
+              <thead><tr><th>模型名称</th><th>开发公司</th><th>特点</th><th>适用场景</th></tr></thead>
+              <tbody>
+                <tr><td>GPT-4o</td><td>OpenAI</td><td>多模态能力强（文本+图像+语音），生态成熟，插件丰富</td><td>通用对话、内容创作、图像理解、办公自动化</td></tr>
+                <tr><td>Claude 4</td><td>Anthropic</td><td>安全性高，长上下文领先，推理严谨，适合代码与深度工作</td><td>编程开发（Claude Code）、长文档分析、安全敏感场景</td></tr>
+                <tr><td>Gemini 2.5</td><td>Google</td><td>与Google生态深度集成，多模态能力突出</td><td>搜索增强、数据分析、Google Workspace联动</td></tr>
+                <tr><td>DeepSeek</td><td>深度求索</td><td>国产开源标杆，性价比极高，推理能力出色</td><td>代码生成、数学推理、中文场景优化</td></tr>
+                <tr><td>GLM</td><td>智谱AI</td><td>国产自研架构，中文理解深入，多模态支持</td><td>企业级中文应用、智能客服、知识管理</td></tr>
+                <tr><td>Qwen（通义千问）</td><td>阿里云</td><td>阿里生态整合，开源版本丰富，企业级部署方案成熟</td><td>电商场景、企业办公、中文长文本处理</td></tr>
+              </tbody>
+            </table>
+            <div class="tip mt-3">公司AI平台已接入多种主流模型，你可以根据任务类型选择最合适的模型。例如：需要严谨的代码审查时选Claude，需要快速生成文案时选GPT-4o，处理中文长文档时可选GLM或Qwen。</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">大模型的优势与局限 <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <div class="grid-2">
+              <div class="card"><div class="card-icon green">&#10003;</div><h4>优势</h4><ul style="list-style:none;padding:0;line-height:2;"><li><strong>海量知识：</strong>模型训练涵盖了几乎所有公开领域的基础知识，能快速回答跨学科问题。</li><li><strong>多语言能力：</strong>支持数十种语言的理解与生成，中英文切换自如。</li><li><strong>推理能力：</strong>不仅仅是"查资料"，还能进行逻辑推理、归纳总结、方案设计。</li><li><strong>创造力：</strong>能生成全新的文本内容，从文案到代码到创意方案。</li></ul></div>
+              <div class="card"><div class="card-icon orange">&#9888;</div><h4>局限</h4><ul style="list-style:none;padding:0;line-height:2;"><li><strong>幻觉（Hallucination）：</strong>模型有时会"一本正经地胡说八道"，生成看似合理但事实错误的内容。</li><li><strong>知识截止日期：</strong>模型的知识停留在训练数据截止的时间点，不知道之后发生的事。</li><li><strong>数学计算弱点：</strong>纯粹的数字计算并非模型强项，复杂数学建议结合代码执行工具。</li><li><strong>偏见问题：</strong>训练数据中的人类偏见可能被模型学习并放大，需要警惕。</li></ul></div>
+            </div>
+            <div class="tip mt-3"><strong>如何应对局限？</strong>结合外部工具（Function Call / MCP协议）让模型调用计算器、搜索引擎、数据库来弥补不足；对关键输出进行人工审核；使用RAG（检索增强生成）技术为模型补充实时知识——这些都是我们日常使用AI工具时可以采用的实用策略。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 模块二：Prompt Engineering 提示词工程 -->
+  <section class="section section-gray">
+    <div class="container">
+      <span class="section-label">Prompt Engineering</span>
+      <h2 class="section-title">提示词工程</h2>
+      <p class="section-desc">提示词是与大模型沟通的语言。写好提示词，是高效使用AI的第一步。</p>
+      <div class="accordion">
+        <div class="accordion-item">
+          <button class="accordion-trigger">基础技巧 <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <div class="grid-3">
+              <div class="card"><div class="card-icon blue">&#9733;</div><h4>角色设定（Role Prompting）</h4><p>在提示词开头为模型设定一个具体角色和背景，能显著提升输出的专业性和针对性。</p><p style="color:var(--gray-500);font-size:0.9rem;margin-top:0.5rem;">示例："你是一位拥有10年经验的资深后端工程师，精通Python和分布式系统设计。请帮我..."</p><p>角色越具体，回答越精准。你可以设定角色的身份、经验年限、专业领域、甚至性格特点。</p></div>
+              <div class="card"><div class="card-icon green">&#9776;</div><h4>结构化指令（Structured Instructions）</h4><p>用清晰的章节分隔你的提示词，让模型准确理解你的需求层次。</p><p style="color:var(--gray-500);font-size:0.9rem;margin-top:0.5rem;">推荐结构：<br>## 背景 → ## 任务 → ## 要求 → ## 输出格式</p><p>这种方式比一段长长的自然语言描述有效得多——它避免了信息的混杂和遗漏。</p></div>
+              <div class="card"><div class="card-icon orange">&#9830;</div><h4>Few-shot Prompting（少样本提示）</h4><p>在提问前先给出2～3组"输入→理想输出"的示例，让模型理解你的格式和风格期望。</p><p style="color:var(--gray-500);font-size:0.9rem;margin-top:0.5rem;">示例："将以下口语转为正式书面语。示例1：'这事儿搞定了'→'此事已完成'。示例2：'有点难'→'存在一定难度'。现在请转换：'我觉得还行'"</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">进阶技巧 <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <div class="grid-3">
+              <div class="card"><div class="card-icon purple">&#9733;</div><h4>Chain-of-Thought（思维链）</h4><p>引导模型逐步推理，而不是直接给出答案。尤其适合数学题、逻辑推理和多步骤问题。</p><p style="color:var(--gray-500);font-size:0.9rem;margin-top:0.5rem;">在提示词末尾加上一句 <strong>"让我们一步一步思考。"</strong>就能激活模型的逐步推理能力，大幅提升复杂问题的准确率。</p><p>对于代码调试，还可以要求模型"先分析Bug可能的原因，再给出修复方案"。这比直接要求"修Bug"效果好得多。</p></div>
+              <div class="card"><div class="card-icon green">&#9638;</div><h4>结构化输出</h4><p>明确指定输出格式，让模型按照你的要求组织信息。</p><p style="color:var(--gray-500);font-size:0.9rem;margin-top:0.5rem;">你可以要求模型输出为JSON、Markdown表格、待办清单、甚至特定代码格式。例如："请用Markdown表格列出这三种方案的优缺点"或"请以JSON格式返回结果"。结构化输出不仅让结果更易读，还能直接对接自动化流程。</p></div>
+              <div class="card"><div class="card-icon orange">&#9831;</div><h4>思维树（Tree of Thoughts）</h4><p>同时探索多条推理路径，比较各路径的优劣，最终选择最优解。是思维链的升级版。</p><p style="color:var(--gray-500);font-size:0.9rem;margin-top:0.5rem;">使用方式：让模型对同一问题生成3种不同的解决思路，分别评估每种思路的可行性，最后给出综合推荐。适合复杂决策场景。</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">提示词与公司工具的配合 <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <div class="grid-2">
+              <div class="card"><div class="card-icon blue">&#9998;</div><h4>在 Hermes-Agent 中</h4><p>Hermes-Agent 提供了便捷的对话界面，你可以在输入框中直接编写结构化的提示词与AI交互。所有提示词技巧（角色设定、结构化指令、Few-shot、思维链等）都可以直接应用。</p><p style="margin-top:0.75rem;"><strong>实用技巧：</strong>将常用且效果好的提示词保存为模板，下次遇到类似任务时微调即可，大幅提升工作效率。公司内部也可以逐步建立团队共享的提示词模板库。</p></div>
+              <div class="card"><div class="card-icon green">&#9000;</div><h4>在 Claude Code 中</h4><p>Claude Code 将提示词工程提升到了一个新的层次：</p><ul style="margin-top:0.5rem;line-height:2;"><li><strong>CLAUDE.md</strong> 相当于持久化的系统提示词——你可以在其中定义项目规范、编码风格、技术栈偏好，Claude Code每次启动都会自动读取并遵循。</li><li><strong>任务级提示词</strong> 就是你每次提出的开发需求——越是清晰、结构化地描述需求，Claude Code越能准确执行。</li></ul></div>
+            </div>
+            <div class="tip mt-3"><strong>核心心法：</strong>好的提示词不是一次写成的——把它当作与AI的对话迭代过程：第一版提示词 → 观察输出 → 发现不足 → 调整提示词 → 获得更好的输出。反复迭代2～3轮，你就能找到最适合当前任务的提示词方案。记住：<strong>提示词是你和AI之间的"沟通协议"</strong>——协议越清晰，协作越高效。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 模块三：Function Call（函数调用） -->
+  <section class="section section-gray">
+    <div class="container">
+      <span class="section-label">Function Call</span>
+      <h2 class="section-title">函数调用 (Function Call)</h2>
+      <p class="section-desc">让大模型不仅会"说"，还会"做"——这是AI从聊天工具进化为智能助手的关键能力。</p>
+      <div class="accordion">
+        <div class="accordion-item">
+          <button class="accordion-trigger">什么是 Function Call？——从"对话"到"行动" <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <p>想象一下，你有一个非常聪明的顾问，但他只能动嘴、不能动手。你问他"今天北京天气怎么样？"，他能滔滔不绝地讲天气预报原理，但就是无法告诉你此刻外面是晴是雨——因为他没有"查天气"的能力。</p>
+            <p><strong>Function Call（函数调用）</strong>就像给这位顾问配了一个万能遥控器。你说"帮我查北京天气"，他按遥控器上的"天气预报"按钮，电视上立刻显示实时数据。顾问看了数据，转身对你说："北京今天25度，晴天，适合户外活动。"</p>
+            <p>这个"遥控器"就是 Function Call——让大模型能够<strong>实际执行操作</strong>，而不仅仅是生成文字。它是AI从"会聊天"到"能办事"的分水岭。</p>
+            <div class="highlight-box"><h3>Function Call 的本质</h3><p>大模型不是自己去调接口、查数据库、发邮件，而是输出一个"调用指令"（JSON格式），由你的程序去执行，执行结果再还给模型。<strong>模型是大脑，Function Call 是手。</strong>大脑负责思考和决策，手负责实际操作。</p></div>
+            <div class="tip"><strong>技术小贴士：</strong>严格来说，大模型本身并不知道它"调用了一个函数"。它只是按照训练时学到的格式，输出一段结构化的JSON文本。是你的程序识别了这段JSON，执行了对应的函数，然后把结果拼回对话中。整个过程对用户完全透明。</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">工作流程详解——六步完成一次"智能化操作" <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <p>Function Call 的完整流程像是一场精心编排的接力赛：用户发起请求，模型和服务程序交替传递信息，最终呈现给用户一个"好像AI什么都会"的体验。</p>
+            <ol class="steps">
+              <li><h4>用户发送请求 + 可用函数列表</h4><p>用户提问时，程序同时把一份"函数菜单"发给模型。菜单上写着每个函数的名称、功能描述和参数要求。比如：<code>get_weather(city: string)</code> —— 查询指定城市的天气。</p></li>
+              <li><h4>模型判断是否需要调用函数</h4><p>模型分析用户意图：这个问题我能直接回答吗？还是需要借助工具？如果用户问"1+1等于几"，模型直接回答；如果问"北京现在多少度"，模型意识到需要调用 <code>get_weather</code>。</p></li>
+              <li><h4>模型输出函数调用 JSON</h4><p>模型不输出自然语言，而是输出一段结构化指令：<code>{"name": "get_weather", "arguments": {"city": "北京"}}</code>。注意——此时模型还没有拿到任何真实天气数据。</p></li>
+              <li><h4>程序执行函数，获取真实数据</h4><p>你的程序（不是模型）收到这段JSON后，去真正调用天气API，拿到真实结果：<code>{"temperature": 25, "condition": "晴"}</code>。</p></li>
+              <li><h4>执行结果返回模型</h4><p>程序把API返回的真实数据作为新的上下文，追加到对话中，再次发给模型。</p></li>
+              <li><h4>模型结合结果生成最终回复</h4><p>模型拿到真实数据后，生成自然语言回复："北京今天25度，晴天，体感舒适，适合户外活动。"用户看到的就是这个最终答案。</p></li>
+            </ol>
+            <div style="max-width:750px;margin:1.5rem auto;background:var(--gray-50);border-radius:12px;padding:20px 24px;">
+              <svg viewBox="0 0 750 240" xmlns="http://www.w3.org/2000/svg" style="width:100%;">
+                <defs>
+                  <marker id="fc-arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#94a3b8"/></marker>
+                  <marker id="fc-arrow-blue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2563eb"/></marker>
+                  <marker id="fc-arrow-green" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#059669"/></marker>
+                </defs>
+                <circle cx="40" cy="70" r="22" fill="#e0e7ff" stroke="#2563eb" stroke-width="2"/>
+                <text x="40" y="76" text-anchor="middle" font-size="22">&#128100;</text>
+                <text x="40" y="108" text-anchor="middle" font-size="11" font-weight="700" fill="#1e40af">用户</text>
+                <line x1="63" y1="70" x2="125" y2="70" stroke="#2563eb" stroke-width="2" marker-end="url(#fc-arrow-blue)"/>
+                <text x="94" y="62" text-anchor="middle" font-size="9" fill="#64748b">1.发送请求</text>
+                <text x="94" y="82" text-anchor="middle" font-size="9" fill="#94a3b8">+函数列表</text>
+                <rect x="128" y="38" width="140" height="64" rx="10" fill="#e0e7ff" stroke="#2563eb" stroke-width="2"/>
+                <text x="198" y="62" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">LLM大模型</text>
+                <text x="198" y="82" text-anchor="middle" font-size="10" fill="#3b82f6">2.判断3.输出JSON</text>
+                <path d="M 268 70 L 310 70 L 310 140 L 125 140 L 125 108" fill="none" stroke="#059669" stroke-width="2" marker-end="url(#fc-arrow-green)"/>
+                <text x="310" y="108" text-anchor="middle" font-size="9" fill="#64748b">3.调用JSON</text>
+                <rect x="128" y="146" width="140" height="64" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="2"/>
+                <text x="198" y="170" text-anchor="middle" font-size="13" font-weight="700" fill="#047857">程序执行</text>
+                <text x="198" y="190" text-anchor="middle" font-size="10" fill="#10b981">4.调用真实API</text>
+                <line x1="268" y1="178" x2="360" y2="178" stroke="#059669" stroke-width="2" marker-end="url(#fc-arrow-green)"/>
+                <rect x="363" y="146" width="140" height="64" rx="10" fill="#fef3c7" stroke="#ea580c" stroke-width="2"/>
+                <text x="433" y="170" text-anchor="middle" font-size="13" font-weight="700" fill="#c2410c">外部API/工具</text>
+                <text x="433" y="190" text-anchor="middle" font-size="10" fill="#f97316">数据库天气文件</text>
+                <line x1="503" y1="190" x2="503" y2="215" stroke="#ea580c" stroke-width="1.5"/>
+                <line x1="503" y1="215" x2="198" y2="215" stroke="#ea580c" stroke-width="1.5"/>
+                <line x1="198" y1="215" x2="198" y2="210" stroke="#ea580c" stroke-width="1.5" marker-end="url(#fc-arrow)"/>
+                <text x="350" y="228" text-anchor="middle" font-size="9" fill="#94a3b8">5.返回真实数据</text>
+                <path d="M 198 146 L 198 108" fill="none" stroke="#059669" stroke-width="2" marker-end="url(#fc-arrow-green)"/>
+                <text x="178" y="132" text-anchor="middle" font-size="9" fill="#64748b">5.结果</text>
+                <line x1="128" y1="76" x2="63" y2="76" stroke="#2563eb" stroke-width="2" marker-end="url(#fc-arrow-blue)"/>
+                <text x="94" y="92" text-anchor="middle" font-size="9" fill="#64748b">6.生成回复</text>
+              </svg>
+              <p style="text-align:center;font-size:0.8rem;color:var(--gray-400);margin-top:6px;">图：Function Call六步交互流程——模型不自己调接口，而是输出调用指令，由程序代为执行</p>
+            </div>
+
+            <div class="tip">整个过程对用户是透明的——用户只看到"北京今天25度，晴天"，看不到中间的JSON交互。就像你点外卖，你只关心饭到了没，不需要知道骑手的GPS坐标和后厨的订单系统如何运作。</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">Function Call 能做什么？——实际应用场景 <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <p>Function Call 的应用范围极广，以下是最典型的四类场景。每个场景都遵循同样的模式：用户用自然语言提需求，AI自动调用对应工具，返回结构化结果。</p>
+            <div class="grid-4" style="margin-top:20px;">
+              <div class="card"><div class="card-icon blue">&#128202;</div><h4>查询数据库</h4><p>用户说"上个月销售额多少？"→ 模型自动生成SQL并调用 <code>query_database()</code> → 返回真实数字。无需用户会写SQL。</p></div>
+              <div class="card"><div class="card-icon green">&#128279;</div><h4>调用外部API</h4><p>用户说"帮我查这个快递到哪了"→ 模型调用 <code>track_package()</code> → 返回实时物流状态。连接成千上万个API。</p></div>
+              <div class="card"><div class="card-icon orange">&#128196;</div><h4>操作文件</h4><p>用户说"把这份Excel转成CSV"→ 模型调用 <code>convert_file()</code> → 返回下载链接。文件格式转换、批量重命名等都能搞定。</p></div>
+              <div class="card"><div class="card-icon purple">&#128276;</div><h4>发送通知</h4><p>用户说"提醒我下午3点开会"→ 模型调用 <code>create_reminder()</code> → 日程创建成功。打通日历、邮件、短信等通知渠道。</p></div>
+            </div>
+            <div class="tip" style="margin-top:16px;"><strong>核心优势：</strong>用户不需要知道数据库在哪、API怎么调、文件系统是什么。只要用自然语言说出需求，Function Call 就负责把"人话"翻译成"机器指令"，再把机器结果翻译回"人话"。</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">Function Call 与 MCP 的关系——能力的延伸 <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <p>Function Call 定义了"模型能调用函数"这个能力。但它只解决了"能不能"的问题，没有解决"怎么统一"的问题。现实情况是每个工具的接口都不一样——连接MySQL是一套写法，PostgreSQL是另一套，公司内部API又是另一套。</p>
+            <p>这就是 <strong>MCP（Model Context Protocol）</strong>要解决的问题。MCP 定义了一套标准协议——就像USB-C统一了充电接口——让任何AI应用都能用同样的方式连接任何工具。</p>
+            <div class="highlight-box"><h3>一句话总结关系</h3><p><strong>Function Call = 大模型的"手"</strong>，让AI有了执行操作的能力。<br><strong>MCP = 让这只手能拿任何工具的"标准接口"</strong>，不用每换一个工具就重新设计一只手。</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 模块四：MCP（模型上下文协议） -->
+  <section class="section">
+    <div class="container">
+      <span class="section-label">MCP</span>
+      <h2 class="section-title">模型上下文协议 (MCP)</h2>
+      <p class="section-desc">MCP 是AI应用的"USB-C接口标准"——让任何AI客户端都能无缝对接任何工具和数据源，告别逐个定制的时代。</p>
+      <div class="accordion">
+        <div class="accordion-item">
+          <button class="accordion-trigger">什么是 MCP？用一个类比完全理解 <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <p>想象一下——如果每个品牌的手机都需要自己专用的充电线，你的桌面会是怎样的灾难？直到 <strong>USB-C</strong> 出现，一根线充所有设备，世界清净了。</p>
+            <p><strong>MCP（Model Context Protocol）</strong>在AI领域做的事情，和USB-C在充电领域做的事情一模一样：<strong>统一了"AI如何连接外部工具"的接口标准。</strong></p>
+            <table class="compare-table" style="margin-top:20px;">
+              <thead><tr><th>维度</th><th>MCP 出现之前</th><th>MCP 出现之后</th></tr></thead>
+              <tbody>
+                <tr><td>连接方式</td><td>每个AI应用 × 每个工具都要单独写对接代码（N×M 问题）</td><td>任何AI应用（MCP Client）↔ 标准协议 ↔ 任何工具（MCP Server）</td></tr>
+                <tr><td>开发成本</td><td>每接一个新工具，从头写适配层</td><td>工具提供方只需实现MCP Server，所有AI客户端自动兼容</td></tr>
+                <tr><td>生态扩展</td><td>封闭、碎片化，每个平台各自为战</td><td>开放、可复用，社区共享MCP Server，即装即用</td></tr>
+              </tbody>
+            </table>
+            <div class="highlight-box" style="margin-top:20px;"><h3>MCP 的背景</h3><p>MCP 由 <strong>Anthropic</strong> 于2024年底提出并开源，是当前AI领域最受关注的开放协议之一。它借鉴了 LSP（Language Server Protocol，IDE领域统一编程语言支持的协议）的设计思想。<strong>Claude Code 和 Hermes-Agent 都深度集成了 MCP。</strong></p></div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">MCP 架构：Client-Server 模式 <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <p>MCP 采用经典的<strong>客户端-服务器（Client-Server）</strong>架构，结构清晰、职责分明：</p>
+            <div class="grid-3" style="margin-top:20px;">
+              <div class="card"><div class="card-icon blue">&#9000;</div><h4>MCP Client（客户端）</h4><p><strong>AI应用端</strong>，如 Claude Code、Hermes-Agent。它负责发起连接请求、发现可用工具、调用工具、读取资源。Client 是"提问者"和"使用者"。</p><p style="margin-top:8px;font-size:0.9rem;color:var(--gray-600);">举例：你在 Claude Code 里说"帮我查数据库"，Claude Code（Client）就去找数据库 MCP Server 要数据。</p></div>
+              <div class="card"><div class="card-icon green">&#128295;</div><h4>MCP Server（服务端）</h4><p><strong>工具提供端</strong>，如文件系统Server、数据库Server、浏览器Server。它暴露三种能力：<strong>Tools</strong>（可调用的操作）、<strong>Resources</strong>（可读取的数据）、<strong>Prompts</strong>（提示模板）。</p><p style="margin-top:8px;font-size:0.9rem;color:var(--gray-600);">举例：数据库 MCP Server 暴露 <code>execute_sql</code> 工具和 <code>schema</code> 资源，Client 调用它来查询数据。</p></div>
+              <div class="card"><div class="card-icon purple">&#128760;</div><h4>Transport（传输层）</h4><p><strong>通信通道</strong>。支持两种方式：<strong>stdio</strong>（标准输入输出，用于本地进程间通信）和 <strong>HTTP/SSE</strong>（用于远程服务通信）。本地工具用 stdio，远程服务用 HTTP。</p><p style="margin-top:8px;font-size:0.9rem;color:var(--gray-600);">举例：你本机的文件系统 MCP Server 通过 stdio 与 Claude Code 通信；公司内网的API Server 通过 HTTP 连接。</p></div>
+            <div style="margin:2rem auto;background:var(--gray-50);border-radius:14px;padding:28px 32px;">
+              <svg viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:580px;">
+                <defs>
+                  <marker id="mcp-arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#94a3b8"/></marker>
+                  <filter id="mcp-shadow"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-opacity="0.1"/></filter>
+                </defs>
+
+                <!-- ===== LEFT: Clients ===== -->
+                <!-- Claude Code -->
+                <rect x="30" y="60" width="170" height="64" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5" filter="url(#mcp-shadow)"/>
+                <text x="115" y="84" text-anchor="middle" font-size="16" font-weight="800" fill="#1e40af">Claude Code</text>
+                <text x="115" y="104" text-anchor="middle" font-size="11" fill="#3b82f6">MCP Client（客户端）</text>
+
+                <!-- Hermes -->
+                <rect x="30" y="142" width="170" height="64" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5" filter="url(#mcp-shadow)"/>
+                <text x="115" y="166" text-anchor="middle" font-size="16" font-weight="800" fill="#1e40af">Hermes-Agent</text>
+                <text x="115" y="186" text-anchor="middle" font-size="11" fill="#3b82f6">MCP Client（客户端）</text>
+
+                <!-- Other -->
+                <rect x="30" y="224" width="170" height="64" rx="10" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2" filter="url(#mcp-shadow)"/>
+                <text x="115" y="248" text-anchor="middle" font-size="15" font-weight="700" fill="#6d28d9">其他AI应用</text>
+                <text x="115" y="268" text-anchor="middle" font-size="11" fill="#8b5cf6">MCP Client（客户端）</text>
+
+                <!-- ===== Arrows Left→Center ===== -->
+                <line x1="204" y1="92" x2="258" y2="92" stroke="#2563eb" stroke-width="2" marker-end="url(#mcp-arr)"/>
+                <line x1="204" y1="174" x2="258" y2="174" stroke="#2563eb" stroke-width="2" marker-end="url(#mcp-arr)"/>
+                <line x1="204" y1="256" x2="258" y2="256" stroke="#7c3aed" stroke-width="2" marker-end="url(#mcp-arr)"/>
+
+                <!-- ===== CENTER: MCP Protocol ===== -->
+                <rect x="200" y="120" width="200" height="110" rx="20" fill="#fef3c7" stroke="#ea580c" stroke-width="3.5" filter="url(#mcp-shadow)"/>
+                <text x="300" y="152" text-anchor="middle" font-size="18" font-weight="900" fill="#c2410c">MCP 协议</text>
+                <text x="300" y="174" text-anchor="middle" font-size="12" fill="#f97316">Model Context</text>
+                <text x="300" y="192" text-anchor="middle" font-size="12" fill="#f97316">Protocol</text>
+                <text x="300" y="215" text-anchor="middle" font-size="11" fill="#b45309">传输: stdio / HTTP+SSE</text>
+
+                <!-- Arrows Center→Right -->
+                <line x1="404" y1="175" x2="458" y2="175" stroke="#ea580c" stroke-width="2" marker-end="url(#mcp-arr)"/>
+
+                <!-- ===== RIGHT: Servers ===== -->
+                <!-- Row 1 -->
+                <rect x="462" y="60" width="145" height="64" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="2.5" filter="url(#mcp-shadow)"/>
+                <text x="534" y="84" text-anchor="middle" font-size="15" font-weight="800" fill="#047857">文件系统</text>
+                <text x="534" y="104" text-anchor="middle" font-size="11" fill="#10b981">Filesystem</text>
+
+                <rect x="620" y="60" width="145" height="64" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="2.5" filter="url(#mcp-shadow)"/>
+                <text x="692" y="84" text-anchor="middle" font-size="15" font-weight="800" fill="#047857">数据库</text>
+                <text x="692" y="104" text-anchor="middle" font-size="11" fill="#10b981">Database</text>
+
+                <!-- Row 2 -->
+                <rect x="462" y="142" width="145" height="64" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="2.5" filter="url(#mcp-shadow)"/>
+                <text x="534" y="166" text-anchor="middle" font-size="15" font-weight="800" fill="#047857">浏览器</text>
+                <text x="534" y="186" text-anchor="middle" font-size="11" fill="#10b981">Browser</text>
+
+                <rect x="620" y="142" width="145" height="64" rx="10" fill="#d1fae5" stroke="#059669" stroke-width="2.5" filter="url(#mcp-shadow)"/>
+                <text x="692" y="166" text-anchor="middle" font-size="15" font-weight="800" fill="#047857">更多工具</text>
+                <text x="692" y="186" text-anchor="middle" font-size="11" fill="#10b981">Git / Slack / API ...</text>
+
+                <!-- ===== SECTION LABELS ===== -->
+                <text x="115" y="38" text-anchor="middle" font-size="13" font-weight="700" fill="#64748b">AI 客户端</text>
+                <rect x="15" y="44" width="200" height="1" fill="#e2e8f0"/>
+
+                <text x="300" y="38" text-anchor="middle" font-size="13" font-weight="700" fill="#64748b">标准协议</text>
+                <rect x="240" y="44" width="120" height="1" fill="#e2e8f0"/>
+
+                <text x="562" y="38" text-anchor="middle" font-size="13" font-weight="700" fill="#64748b">工具服务端</text>
+                <rect x="460" y="44" width="300" height="1" fill="#e2e8f0"/>
+
+                <!-- ===== BOTTOM LABEL ===== -->
+                <rect x="462" y="224" width="303" height="64" rx="8" fill="#f0fdf4" stroke="#10b981" stroke-width="1.5" stroke-dasharray="6,3"/>
+                <text x="614" y="252" text-anchor="middle" font-size="13" font-weight="700" fill="#047857">MCP Server 暴露三种能力：</text>
+                <text x="614" y="274" text-anchor="middle" font-size="12" fill="#10b981">Tools（工具调用）· Resources（数据读取）· Prompts（提示模板）</text>
+
+                <!-- ===== LEFT LABEL ===== -->
+                <rect x="30" y="308" width="170" height="40" rx="8" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5" stroke-dasharray="6,3"/>
+                <text x="115" y="333" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">负责发现、调用工具</text>
+              </svg>
+              <p style="text-align:center;font-size:0.85rem;color:var(--gray-400);margin-top:8px;">图：MCP Client-Server 架构——标准协议连接任何客户端与任何服务端，告别 N×M 集成困境</p>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">MCP 三大原语：Resources / Tools / Prompts <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <p>每个 MCP Server 都可以暴露三类能力，我们用<strong>图书馆</strong>作为类比来理解：</p>
+            <div class="grid-3" style="margin-top:20px;">
+              <div class="card"><div class="card-icon blue">&#128218;</div><h4>Resources（资源）</h4><p><strong>暴露数据</strong>——文件内容、数据库记录、API响应。模型可以"读取"这些数据。Resources 是只读的、结构化的数据入口。</p><p style="color:var(--blue-600);font-weight:600;">类比：图书馆的书架</p><p style="font-size:0.9rem;color:var(--gray-600);">走到书架前，找到想要的资料，翻阅内容。</p></div>
+              <div class="card"><div class="card-icon orange">&#9881;</div><h4>Tools（工具）</h4><p><strong>暴露操作</strong>——执行SQL查询、发送邮件、创建文件、调用API。模型可以"调用"这些操作。Tools 会改变外部世界状态。</p><p style="color:var(--orange-600);font-weight:600;">类比：图书馆的电脑</p><p style="font-size:0.9rem;color:var(--gray-600);">可以在电脑上检索书目、预约借书、查询馆藏位置。</p></div>
+              <div class="card"><div class="card-icon purple">&#128172;</div><h4>Prompts（提示模板）</h4><p><strong>暴露专业知识</strong>——"代码审查"模板、"翻译"模板。帮助用户快速开始专业任务，不用从头写Prompt。</p><p style="color:var(--purple-600);font-weight:600;">类比：图书馆的参考咨询台</p><p style="font-size:0.9rem;color:var(--gray-600);">图书管理员给你推荐书单，帮你少走弯路。</p></div>
+            </div>
+            <div class="tip" style="margin-top:20px;"><strong>三者的协作关系：</strong>一个典型的AI任务往往三者配合使用。比如"分析上周销售数据并生成报告"——先通过 Resources 读取数据库Schema了解表结构，再通过 Tools 执行SQL获取数据，最后用 Prompts 中的"数据分析报告"模板优化输出格式。</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">MCP 生态——有哪些现成的 Server？ <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <p>MCP 自发布以来，社区和各大厂商已经贡献了大量现成的 MCP Server：</p>
+            <div class="grid-2" style="margin-top:20px;">
+              <div class="card"><div class="card-icon blue">&#128451;</div><h4>文件系统 (Filesystem)</h4><p>安全地读写本地文件和目录。支持创建、读取、编辑、删除、搜索文件操作。</p></div>
+              <div class="card"><div class="card-icon green">&#128451;</div><h4>数据库 (PostgreSQL / SQLite)</h4><p>查询和分析数据库。AI可以直接执行SQL、读取表结构、分析数据趋势。</p></div>
+              <div class="card"><div class="card-icon orange">&#127760;</div><h4>浏览器 (Puppeteer / Playwright)</h4><p>自动化网页操作。AI可以打开网页、点击按钮、填写表单、截取页面截图。</p></div>
+              <div class="card"><div class="card-icon purple">&#128187;</div><h4>Git（版本控制）</h4><p>管理代码仓库。AI可以提交代码、创建分支、查看历史、生成commit信息。</p></div>
+              <div class="card"><div class="card-icon blue">&#128269;</div><h4>搜索引擎 (Brave / Google)</h4><p>搜索网络信息。AI可以实时搜索网页、获取最新资讯，突破训练数据的时效限制。</p></div>
+              <div class="card"><div class="card-icon green">&#128230;</div><h4>办公套件 (Drive / Slack)</h4><p>集成办公工具。AI可以读取云端文档、发送Slack消息、管理日历。</p></div>
+            </div>
+            <div class="tip" style="margin-top:16px;"><strong>内网应用：</strong>公司内网也可以搭建自己的 MCP Server——比如连接内部数据库、运维平台、监控系统，让 Hermes-Agent 和 Claude Code 等所有AI工具都能通过统一的MCP接口直接查询和操作内部系统。一次开发，全平台通用。</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button class="accordion-trigger">Function Call → MCP → Agent 的关系——三层递进 <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <p>这三个概念不是彼此独立的，而是构成了<strong>AI能力逐层递进的技术路线</strong>：</p>
+            <table class="compare-table" style="margin-top:20px;">
+              <thead><tr><th>层级</th><th>概念</th><th>解决的问题</th><th>类比</th></tr></thead>
+              <tbody>
+                <tr><td><strong>第一层</strong></td><td><strong>Function Call</strong></td><td>定义了"模型能调用函数"这个<strong>能力</strong></td><td>给AI装上了"手"</td></tr>
+                <tr><td><strong>第二层</strong></td><td><strong>MCP</strong></td><td>标准化了"函数如何被发现、描述和调用"的<strong>协议</strong></td><td>让这只手有了"标准接口"，什么工具都能拿</td></tr>
+                <tr><td><strong>第三层</strong></td><td><strong>Agent</strong></td><td>利用 Function Call + MCP，形成<strong>自主的目标→规划→执行→验证循环</strong></td><td>手+标准接口+大脑的自主判断 = 能独立完成复杂任务的智能体</td></tr>
+              </tbody>
+            </table>
+            <div class="highlight-box" style="margin-top:20px;"><h3>一句话串起三层</h3><p>Function Call 给了AI"做事的能力"，MCP 给了"做事的标准方式"，Agent 则把这两者整合成"自主完成任务的全流程"。你使用的 Hermes-Agent 和 Claude Code，本质上就是内置了这三层能力的 Agent 产品。</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- 模块五：AI Agent（智能体） -->
+<section class="section section-gray">
+  <div class="container">
+    <span class="section-label">Agent</span>
+    <h2 class="section-title">AI Agent（智能体）</h2>
+    <p class="section-desc">当大模型学会使用工具、制定计划、反思纠错，它就从"回答问题"进化为"完成复杂任务"——这就是 Agent。</p>
+
+    <div class="accordion">
+      <div class="accordion-item">
+        <button class="accordion-trigger">
+          什么是 Agent？——从"问答机器"到"自主助理"
+          <span class="arrow">&#9654;</span>
+        </button>
+        <div class="accordion-content">
+          <p>要想理解 Agent，可以先看一个类比：<strong>普通大模型像图书馆咨询员</strong>——你问什么它答什么，答完就结束。而 <strong>Agent 像一个项目经理</strong>——你给一个目标，它自己制定计划、协调资源、执行步骤、检查结果、修正错误，直到目标达成才停下。</p>
+          <p>从技术上看，AI Agent 是一个能够<strong>感知环境、推理目标、规划行动、使用工具、执行步骤、观察结果、迭代修正</strong>的系统。它的核心是一个循环：<strong>感知 (Sense) → 思考 (Think) → 行动 (Act) → 观察 (Observe)</strong>，不断循环直到目标达成。</p>
+
+          <div class="highlight-box">
+            <h3>Agent = 大模型（大脑）+ 工具调用（手）+ 记忆系统（笔记本）+ 规划能力（计划表）+ 验证机制（质检员）</h3>
+            <p>五个组件缺一不可：大脑负责理解与推理，手负责执行操作，笔记本负责记录上下文，计划表负责拆解任务，质检员负责验证每一步的结果是否正确。</p>
+          </div>
+
+          <p>最简单的例子：你问大模型"今天天气怎么样？"——它只能告诉你它不知道。但如果你给大模型装上一个能查询天气的"工具"，再告诉它"用户问天气时就去调用那个工具"——这就成了一个最简单的 Agent。它不再是只靠记忆回答，而是<strong>知道自己不知道什么，并主动去获取答案</strong>。</p>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-trigger">
+          Agent 的核心循环——像空调恒温器，但更聪明
+          <span class="arrow">&#9654;</span>
+        </button>
+        <div class="accordion-content">
+          <p>Agent 的工作方式像一个升级版的<strong>空调恒温器</strong>：恒温器感知温度 (Sense)，对比设定温度决定升温还是降温 (Think)，启动压缩机 (Act)，再检查温度变化 (Observe)，反复调整直到温度达到设定值。</p>
+
+          <div style="max-width:520px;margin:1.5rem auto;background:var(--gray-50);border-radius:12px;padding:20px 24px;">
+            <svg viewBox="0 0 520 350" xmlns="http://www.w3.org/2000/svg" style="width:100%;">
+              <defs>
+                <marker id="ag-arr" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#94a3b8"/></marker>
+              </defs>
+              <!-- Central circle -->
+              <circle cx="260" cy="175" r="55" fill="#e0e7ff" stroke="#2563eb" stroke-width="3"/>
+              <text x="260" y="165" text-anchor="middle" font-size="14" font-weight="800" fill="#1e40af">Agent</text>
+              <text x="260" y="188" text-anchor="middle" font-size="9" fill="#3b82f6">循环引擎</text>
+
+              <!-- 1. Sense - Top -->
+              <rect x="175" y="18" width="170" height="56" rx="10" fill="#eff6ff" stroke="#3b82f6" stroke-width="2"/>
+              <text x="260" y="40" text-anchor="middle" font-size="24">&#128065;</text>
+              <text x="260" y="62" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">1.感知 Perceive</text>
+              <line x1="260" y1="74" x2="260" y2="118" stroke="#3b82f6" stroke-width="2" marker-end="url(#ag-arr)"/>
+              <text x="270" y="100" font-size="9" fill="#64748b">理解目标</text>
+
+              <!-- 2. Think - Right -->
+              <rect x="370" y="140" width="130" height="56" rx="10" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+              <text x="435" y="162" text-anchor="middle" font-size="24">&#129504;</text>
+              <text x="435" y="184" text-anchor="middle" font-size="13" font-weight="700" fill="#047857">2.思考 Reason</text>
+              <line x1="318" y1="175" x2="368" y2="175" stroke="#10b981" stroke-width="2" marker-end="url(#ag-arr)"/>
+
+              <!-- 3. Plan - Bottom right -->
+              <rect x="345" y="252" width="155" height="56" rx="10" fill="#f0fdf4" stroke="#22c55e" stroke-width="2"/>
+              <text x="422" y="274" text-anchor="middle" font-size="24">&#128203;</text>
+              <text x="422" y="296" text-anchor="middle" font-size="13" font-weight="700" fill="#166534">3.规划 Plan</text>
+              <path d="M 260 232 L 260 255 L 343 280" fill="none" stroke="#22c55e" stroke-width="2" marker-end="url(#ag-arr)"/>
+
+              <!-- 4. Act - Bottom -->
+              <rect x="175" y="282" width="155" height="56" rx="10" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+              <text x="252" y="304" text-anchor="middle" font-size="24">&#9889;</text>
+              <text x="252" y="326" text-anchor="middle" font-size="13" font-weight="700" fill="#b45309">4.行动 Act</text>
+              <path d="M 343 310 L 332 310" fill="none" stroke="#f59e0b" stroke-width="2" marker-end="url(#ag-arr)"/>
+
+              <!-- 5. Observe - Left -->
+              <rect x="20" y="140" width="150" height="56" rx="10" fill="#fef2f2" stroke="#ef4444" stroke-width="2"/>
+              <text x="95" y="162" text-anchor="middle" font-size="24">&#128270;</text>
+              <text x="95" y="184" text-anchor="middle" font-size="13" font-weight="700" fill="#b91c1c">5.观察 Observe</text>
+              <path d="M 175 175 L 172 175" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#ag-arr)"/>
+
+              <!-- 6. Iterate - Top left -->
+              <rect x="25" y="42" width="140" height="56" rx="10" fill="#f5f3ff" stroke="#8b5cf6" stroke-width="2"/>
+              <text x="95" y="64" text-anchor="middle" font-size="24">&#128260;</text>
+              <text x="95" y="86" text-anchor="middle" font-size="13" font-weight="700" fill="#6d28d9">6.迭代 Iterate</text>
+              <path d="M 95 98 L 95 138" fill="none" stroke="#8b5cf6" stroke-width="2" marker-end="url(#ag-arr)"/>
+              <path d="M 165 70 L 173 70" fill="none" stroke="#8b5cf6" stroke-width="2" marker-end="url(#ag-arr)"/>
+
+              <!-- Center subtitle -->
+              <text x="260" y="248" text-anchor="middle" font-size="9" fill="#94a3b8">感知→思考→规划→行动→观察→迭代</text>
+            </svg>
+            <p style="text-align:center;font-size:0.8rem;color:var(--gray-400);margin-top:6px;">图：Agent核心循环——六步形成一个闭环，不断迭代直到目标达成</p>
+          </div>
+
+          <ol class="steps">
+            <li>
+              <h4>感知 (Perceive)</h4>
+              <p>理解用户的目标是什么，当前环境状态是什么——有哪些文件？项目结构是怎样的？之前做了什么？</p>
+            </li>
+            <li>
+              <h4>思考 (Reason)</h4>
+              <p>分析"要做到这个目标需要做什么"，把大目标拆解成若干个小步骤。就像项目经理拿到需求后先分解 WBS（工作分解结构）。</p>
+            </li>
+            <li>
+              <h4>规划 (Plan)</h4>
+              <p>制定具体的执行步骤，决定每一步调用哪个工具。先读哪个文件？先运行哪个命令？先搜索什么？</p>
+            </li>
+            <li>
+              <h4>行动 (Act)</h4>
+              <p>实际执行：调用工具、读写文件、运行终端命令、搜索代码库。这是"动手"的阶段。</p>
+            </li>
+            <li>
+              <h4>观察 (Observe)</h4>
+              <p>检查执行结果：命令成功了吗？返回的数据符合预期吗？文件内容正确吗？这一步没做好的 Agent 会"一条路走到黑"。</p>
+            </li>
+            <li>
+              <h4>迭代 (Iterate)</h4>
+              <p>如果结果不符合预期，调整方案重新执行；如果符合预期，继续下一步。这是一次"内省"——Agent 在不断问自己"我做对了吗？要不要换个方法？"</p>
+            </li>
+          </ol>
+
+          <div class="tip">
+            <strong>这个循环不是固定的</strong>
+            简单的任务可能一次就搞定，复杂的任务可能循环几十次。关键在于 Agent 能否自主判断"什么时候算完成了"——这个判断力，就来自大模型的推理能力加上清晰的任务定义。
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-trigger">
+          Agent 能力层次——从"鹦鹉学舌"到"多兵种协同"
+          <span class="arrow">&#9654;</span>
+        </button>
+        <div class="accordion-content">
+          <p>不是所有"AI助手"都是 Agent。Agent 的能力有一个清晰的进阶路径，像游戏里的等级一样：</p>
+
+          <table class="compare-table mt-3">
+            <thead>
+              <tr>
+                <th>能力层级</th>
+                <th>核心特征</th>
+                <th>典型能力</th>
+                <th>代表产品</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>L1 简单响应</td>
+                <td>一问一答，无工具，无记忆</td>
+                <td>回答知识性问题、翻译、摘要</td>
+                <td>基础聊天机器人</td>
+              </tr>
+              <tr>
+                <td>L2 工具使用</td>
+                <td>能调用外部工具获取实时信息</td>
+                <td>查询天气、搜索网页、读取文档</td>
+                <td>Function Call 增强的助手</td>
+              </tr>
+              <tr>
+                <td>L3 自主规划</td>
+                <td>拆解复杂目标，制定多步计划，自主选择工具</td>
+                <td>"帮我分析数据并生成报告"、"帮我重构这个模块"</td>
+                <td>Claude Code（Plan Mode）、Hermes-Agent</td>
+              </tr>
+              <tr>
+                <td>L4 多Agent协作</td>
+                <td>多个Agent分工协作，并行处理，互相审查</td>
+                <td>一个Agent写代码，一个审查，一个写测试，同时进行</td>
+                <td>Claude Code（Subagent Mode）、多Agent框架</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p class="mt-3">从 L1 到 L4，本质上是从<strong>"被动的知识输出"</strong>到<strong>"主动的目标执行"</strong>的进化。你日常使用的 Hermes-Agent 处于 L3，Claude Code 则横跨 L3 和 L4——既有自主规划能力，也能派出子代理并行工作。</p>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-trigger">
+          Claude Code 作为 Agent 实例拆解——看看你每天用的工具内部怎么运作
+          <span class="arrow">&#9654;</span>
+        </button>
+        <div class="accordion-content">
+          <p>Claude Code 是一个完整的 Agent 实现。把它拆开来看，你就能理解 Agent 各组件在实际产品中是怎么落地的：</p>
+
+          <div class="grid-2 mt-3">
+            <div class="card">
+              <div class="card-icon blue">&#129504;</div>
+              <h3>大脑：Claude 大模型</h3>
+              <p>理解你的需求、生成代码、推理分析。就像 Agent 的"CEO"——做所有核心决策。模型越强，Agent 能做越复杂的事。</p>
+            </div>
+            <div class="card">
+              <div class="card-icon green">&#128295;</div>
+              <h3>工具：文件系统 + 终端 + Git + MCP</h3>
+              <p>读写文件、运行命令、管理版本、通过 MCP 接入数据库/API/外部服务。这是 Agent 的"手"——没有手的 CEO 再聪明也干不了活。</p>
+            </div>
+            <div class="card">
+              <div class="card-icon orange">&#128221;</div>
+              <h3>记忆：CLAUDE.md + Memory + 上下文</h3>
+              <p>CLAUDE.md 记录项目知识，Memory 保存持久偏好，对话上下文追踪当前任务。这是 Agent 的"笔记本"——没笔记本的助手每句话都得从头解释。</p>
+            </div>
+            <div class="card">
+              <div class="card-icon purple">&#128203;</div>
+              <h3>规划：Plan Mode + TodoWrite</h3>
+              <p>Plan Mode 让 Agent 先设计方案再执行，TodoWrite 追踪每个子任务的完成状态。这是 Agent 的"计划表"——先想再做，不盲目行动。</p>
+            </div>
+            <div class="card">
+              <div class="card-icon blue">&#9889;</div>
+              <h3>执行：读写 + 运行 + Git</h3>
+              <p>在获得批准后，Agent 直接操作文件系统、执行 shell 命令、创建 commit。它是真的在"干活"，而不只是"建议你干什么"。</p>
+            </div>
+            <div class="card">
+              <div class="card-icon green">&#9745;</div>
+              <h3>验证：测试 + 类型检查 + Review</h3>
+              <p>改完代码后自动运行测试、执行类型检查、用 /review 自我审查。这是 Agent 的"质检员"——不写 Bug 代码的关键保障。</p>
+            </div>
+            <div class="card">
+              <div class="card-icon orange">&#128260;</div>
+              <h3>反思：Bug 修复 + /compact + 方案调整</h3>
+              <p>遇到错误时分析原因并改进，上下文溢出时用 /compact 压缩，方案不对时主动调整。这是 Agent 的"自省能力"——真正智能的标志。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-trigger">
+          Agent 的关键挑战——能力越大，责任越大
+          <span class="arrow">&#9654;</span>
+        </button>
+        <div class="accordion-content">
+          <p>Agent 的强大能力是一把双刃剑——能力越强，出错的影响也越大。以下是三个最关键的挑战和应对策略：</p>
+
+          <div class="grid-3 mt-3">
+            <div class="card">
+              <div class="card-icon orange">&#128123;</div>
+              <h3>幻觉放大</h3>
+              <p>单个回答的幻觉已经挺麻烦了。Agent 执行多步操作时，一步出错可能导致连锁反应——后面的所有步骤都建立在错误的基础上。就像盖房子第一层歪了，后面全歪。</p>
+              <p class="mt-2"><strong>对策：</strong>用 Plan Mode 先审方案再执行，关键步骤设置人工确认点，每步完成后检查输出是否符合预期。</p>
+            </div>
+            <div class="card">
+              <div class="card-icon purple">&#128200;</div>
+              <h3>上下文溢出</h3>
+              <p>复杂任务可能消耗几万甚至几十万 Token。当上下文太长，Agent 会"忘记"前面的信息，推理质量下降。就像一个人同时记着太多事，效率反而变低。</p>
+              <p class="mt-2"><strong>对策：</strong>用 /compact 压缩关键信息，用 Subagent 分流子任务到独立上下文，把大任务拆成多个小会话。</p>
+            </div>
+            <div class="card">
+              <div class="card-icon blue">&#128274;</div>
+              <h3>安全风险</h3>
+              <p>Agent 有文件系统读写权限和命令执行能力——如果被引导执行恶意命令，后果严重。就像你把公司服务器密码给了一个聪明但不够谨慎的新人。</p>
+              <p class="mt-2"><strong>对策：</strong>权限最小化原则（只给必要的目录访问）、操作确认机制、关键变更走 Code Review 流程、不在 Agent 中输入密码和密钥。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 模块六：A2A（Agent-to-Agent）与 Skills -->
+<section class="section">
+  <div class="container">
+    <span class="section-label">A2A &amp; Skills</span>
+    <h2 class="section-title">Agent间协作（A2A）与技能系统（Skills）</h2>
+    <p class="section-desc">当单个Agent的能力达到瓶颈，多Agent协作是下一步。A2A定义了Agent之间如何沟通，Skills定义了如何为Agent注入专业能力。</p>
+
+    <div class="accordion">
+      <div class="accordion-item">
+        <button class="accordion-trigger">
+          A2A 协议——让Agent之间说同一种语言
+          <span class="arrow">&#9654;</span>
+        </button>
+        <div class="accordion-content">
+          <p>A2A（Agent-to-Agent）由 Google 于 2025 年提出，是一套<strong>开放协议</strong>，定义了不同 Agent 之间如何发现彼此、交换任务、传递结果。</p>
+          <p>类比：如果 MCP 是 AI 和工具之间的 <strong>USB-C 接口</strong>（统一了连接方式），A2A 就是 Agent 之间的 <strong>TCP/IP 协议</strong>（统一了通信方式）——让不同厂商、不同框架开发的 Agent 能够互相协作，就像一个公司的不同部门即使用不同系统也能通过标准流程协同工作。</p>
+
+          <div class="grid-3 mt-3">
+            <div class="card">
+              <div class="card-icon blue">&#127979;</div>
+              <h3>Agent Card（名片）</h3>
+              <p>每个 Agent 公开自己的"能力名片"——描述自己能做什么、接口是什么、怎么调用。其他 Agent 通过这张名片"发现"它，就像在通讯录里找到对口的同事。</p>
+            </div>
+            <div class="card">
+              <div class="card-icon green">&#128203;</div>
+              <h3>Task（任务）</h3>
+              <p>标准化的任务格式，包含目标描述、输入数据、预期输出、进度状态。不管哪个 Agent 接收，看到 Task 就知道"要什么、给我什么、做到哪了"。</p>
+            </div>
+            <div class="card">
+              <div class="card-icon purple">&#128230;</div>
+              <h3>Artifact（产物）</h3>
+              <p>任务执行过程中产生的中间结果和最终成果。Artifact 可以是一段代码、一份报告、一个文件——有统一的格式，让上下游 Agent 都能读懂。</p>
+            </div>
+          </div>
+
+          <div class="tip mt-3">
+            <strong>当前实际情况</strong>
+            A2A 协议仍在早期发展阶段。目前你日常使用的 Claude Code 和 Hermes-Agent 主要在<strong>单个 Agent</strong> 层面工作，多 Agent 协作更多通过 Subagent 机制实现。但 A2A 代表的方向是明确的——未来的 AI 工作流一定是多个 Agent 协同完成的。
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-trigger">
+          多 Agent 协作模式——三种经典配合方式
+          <span class="arrow">&#9654;</span>
+        </button>
+        <div class="accordion-content">
+          <p>多 Agent 协作就像<strong>一个项目团队的三种工作方式</strong>：可以是按流程串行，可以分头并行，也可以互相辩论。选择哪种取决于任务的特性：</p>
+
+          <div class="grid-3 mt-3" style="grid-template-columns: 1fr 1fr 1fr;">
+            <div class="card">
+              <div class="card-icon blue">&#128256;</div>
+              <h3>顺序编排（Orchestration）</h3>
+              <p>一个主 Agent 像导演一样按步骤调度不同的专业 Agent。就像流水线：需求分析 Agent → 架构设计 Agent → 编码 Agent → 测试 Agent。</p>
+              <p class="mt-2"><strong>适合：</strong>流程化任务，前后步骤有依赖关系。</p>
+            </div>
+            <div class="card">
+              <div class="card-icon green">&#8691;</div>
+              <h3>并行分发（Parallel Dispatch）</h3>
+              <p>主 Agent 将大任务拆解后同时分发给多个 Agent 并行处理，最后汇总结果。就像让三个工程师同时开发三个微服务。</p>
+              <p class="mt-2"><strong>适合：</strong>可并行化的任务，子任务之间相互独立。</p>
+            </div>
+            <div class="card">
+              <div class="card-icon orange">&#9878;</div>
+              <h3>辩论式（Debate/Critique）</h3>
+              <p>一个 Agent 生成方案，另一个 Agent 批判审查，迭代改进。就像代码写手和代码审查者来回过招，直到质量达标。</p>
+              <p class="mt-2"><strong>适合：</strong>质量要求高的任务，需要多角度审视。</p>
+            </div>
+          </div>
+
+          <div class="tip mt-3">
+            <strong>你已经在用了</strong>
+            Claude Code 的 Subagent 机制就是<strong>并行分发模式</strong>的实践——Claude 自动判断哪些子任务可以并行，派出多个子代理同时工作。当你看到输出中写着"正在派出子代理去搜索..."，那就是并行分发在运作。
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-trigger">
+          Subagent 深度解析——Claude Code 里的"分身术"
+          <span class="arrow">&#9654;</span>
+        </button>
+        <div class="accordion-content">
+          <p>如果你用过 Claude Code，你可能注意到它会"派出子代理去搜索某个信息"——<strong>这就是 Subagent 在工作</strong>。理解它有助于你更好地使用 Claude Code。</p>
+
+          <div class="grid-2 mt-3">
+            <div class="card">
+              <div class="card-icon blue">&#128101;</div>
+              <h3>什么是 Subagent</h3>
+              <p>Subagent 是主 Agent 创建的<strong>子任务执行者</strong>。它有独立的上下文窗口（不被主对话污染），执行完任务后返回结果，然后自动销毁。</p>
+              <p class="mt-2"><strong>三大优势：</strong></p>
+              <ul style="padding-left:18px;color:var(--gray-500);font-size:0.9rem;line-height:1.6;">
+                <li><strong>上下文隔离</strong>——子任务不占用主对话的 Token 配额</li>
+                <li><strong>并行执行</strong>——多个子代理同时工作，速度快</li>
+                <li><strong>专业分工</strong>——不同任务用不同类型的子代理</li>
+              </ul>
+            </div>
+            <div class="card">
+              <div class="card-icon purple">&#128218;</div>
+              <h3>Subagent 类型</h3>
+              <p>Claude Code 有不同类型的子代理，各司其职：</p>
+              <ul style="padding-left:18px;color:var(--gray-500);font-size:0.9rem;line-height:1.6;margin-top:12px;">
+                <li><strong>Explore</strong>——只读搜索文件和代码符号</li>
+                <li><strong>Plan</strong>——设计方案，不写代码</li>
+                <li><strong>General</strong>——通用任务，可读写可执行</li>
+                <li><strong>code-reviewer</strong>——专项代码审查</li>
+                <li><strong>code-explorer</strong>——深度代码库探索</li>
+                <li><strong>code-simplifier</strong>——代码简化和重构</li>
+              </ul>
+            </div>
+          </div>
+
+          <p class="mt-3" style="font-weight:600;color:var(--gray-900);font-size:0.95rem;">常见 Subagent 使用场景</p>
+
+          <table class="compare-table mt-2">
+            <thead>
+              <tr>
+                <th>类型</th>
+                <th>能力范围</th>
+                <th>典型使用场景</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Explore</td>
+                <td>只读，搜索文件 / 代码符号</td>
+                <td>"在全项目中找到所有调用旧 API 的地方"</td>
+              </tr>
+              <tr>
+                <td>Plan</td>
+                <td>设计方案，不执行</td>
+                <td>"先设计用户认证模块的架构方案"</td>
+              </tr>
+              <tr>
+                <td>code-reviewer</td>
+                <td>审查代码质量</td>
+                <td>"/review 帮我检查最近的改动有没有问题"</td>
+              </tr>
+              <tr>
+                <td>General</td>
+                <td>读写文件、执行命令</td>
+                <td>"独立实现这个数据处理的小功能"</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-trigger">
+          Skills 技能系统——为Agent注入专业能力的"岗前培训"
+          <span class="arrow">&#9654;</span>
+        </button>
+        <div class="accordion-content">
+          <p>Skills 是<strong>可复用的专业知识包</strong>，用来扩展 Agent 能做什么。可以这样理解：<strong>Agent 像一个刚入职的聪明新人——智商够，但不懂你公司的规矩和流程。Skills 就是岗前培训手册</strong>，教他如何处理特定领域的专业任务。</p>
+
+          <div class="grid-3 mt-3">
+            <div class="card">
+              <div class="card-icon blue">&#128196;</div>
+              <h3>Skills 是什么</h3>
+              <p>Skills 是 Markdown 格式的专业指导文件，放在 <code>.claude/skills/</code> 目录下。每个 Skill 包含：触发条件（何时加载）、执行流程（怎么做）、最佳实践（怎么做更好）、注意事项（别踩什么坑）。</p>
+              <p class="mt-2">Agent 在遇到相关任务时<strong>自动加载</strong>对应的 Skill，就像你遇到某个工作场景时翻开对应的 SOP 手册。</p>
+            </div>
+            <div class="card">
+              <div class="card-icon orange">&#9878;</div>
+              <h3>Skills vs MCP</h3>
+              <p>很多人搞混这两个概念，其实分工明确：</p>
+              <p class="mt-2"><strong>Skills = 流程指导 + 领域知识</strong><br>教 Agent "怎么做" 和 "为什么这样做"。</p>
+              <p><strong>MCP = 工具接口</strong><br>给 Agent "用什么工具去做"。</p>
+              <p class="mt-2">两者互补：一个 Skill 可以调用 MCP 工具来完成任务。就像"装修指南"(Skill) + "工具箱"(MCP)。</p>
+            </div>
+            <div class="card">
+              <div class="card-icon green">&#128142;</div>
+              <h3>Skills 的价值</h3>
+              <p>
+                <strong>一次编写，团队复用</strong>——老员工写一次，新人直接用<br>
+                <strong>操作规范统一</strong>——所有人都按同一套流程执行<br>
+                <strong>最佳实践封装</strong>——把经验变成可复用的资产<br>
+                <strong>降低使用门槛</strong>——新人不需要记住所有细节
+              </p>
+            </div>
+          </div>
+
+          <div class="highlight-box mt-3">
+            <h3>你已经接触过 Skills</h3>
+            <p>在 <strong>Hermes-Agent</strong> 中，<code>skills.zip</code> 就是预打包的专业技能集。在 <strong>Claude Code</strong> 中，<code>.claude/skills/</code> 目录存放自定义技能。两者都遵循同样的 Skills 设计理念：将专业领域知识封装成"即插即用"的能力模块，让 Agent 在遇到相关任务时自动获得专业指导。</p>
+          </div>
+
+          <div class="tip mt-3">
+            <strong>举个例子</strong>
+            假设你有一个"代码审查" Skill，里面写了：① 检查命名规范 ② 检查空指针 ③ 检查 SQL 注入风险 ④ 检查错误处理是否完善。每次你让 Claude Code 做 Code Review，它自动加载这个 Skill，然后按照里面列出的检查清单逐项审查——而不是凭它自己的"直觉"。这就是 Skills 把隐性经验变成显性流程的价值。
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-trigger">
+          概念全景图——一张图理解所有概念的关系
+          <span class="arrow">&#9654;</span>
+        </button>
+        <div class="accordion-content">
+          <p>前面讲了 LLM、Function Call、MCP、Agent、A2A、Skills……这么多概念，它们之间到底是什么关系？下面用两条链路帮你串起来：</p>
+
+          <div class="highlight-box mt-3">
+            <h3>链路一：一次简单的 AI 对话怎么运作的</h3>
+            <p style="text-align:center;line-height:2.2;font-size:0.95rem;">
+              <strong>用户</strong> &rarr; 输入 Prompt &rarr; <strong>大模型 (LLM)</strong> &rarr; 发现需要外部数据 &rarr; 触发 <strong>Function Call</strong> &rarr; 通过 <strong>MCP 协议</strong>连接 &rarr; <strong>MCP Server</strong>（数据库 / 文件 / API）&rarr; 执行并返回结果 &rarr; <strong>大模型</strong> 整合信息 &rarr; 回复 <strong>用户</strong>
+            </p>
+          </div>
+
+          <div class="highlight-box mt-3">
+            <h3>链路二：当任务变得复杂，Agent 如何接管</h3>
+            <p style="text-align:center;line-height:2.2;font-size:0.95rem;">
+              <strong>用户</strong> 给出复杂目标 &rarr; <strong>Agent 接管</strong> &rarr; 制定执行计划 &rarr; 使用 <strong>Function Call / MCP</strong> 获取信息 &rarr; 派出 <strong>Subagent</strong> 并行处理子任务 &rarr; 验证每个结果 &rarr; 迭代修正 &rarr; 完成目标，汇报 <strong>用户</strong>
+            </p>
+          </div>
+
+          <div style="max-width:620px;margin:1.8rem auto;background:var(--gray-50);border-radius:12px;padding:20px 24px;">
+            <svg viewBox="0 0 620 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;">
+              <defs>
+                <linearGradient id="cs-g1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient>
+                <linearGradient id="cs-g2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#f97316"/><stop offset="100%" stop-color="#ea580c"/></linearGradient>
+                <linearGradient id="cs-g3" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#10b981"/><stop offset="100%" stop-color="#059669"/></linearGradient>
+                <linearGradient id="cs-g4" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#3b82f6"/><stop offset="100%" stop-color="#2563eb"/></linearGradient>
+                <linearGradient id="cs-g5" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#6366f1"/><stop offset="100%" stop-color="#4f46e5"/></linearGradient>
+                <linearGradient id="cs-g6" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#0ea5e9"/><stop offset="100%" stop-color="#0284c7"/></linearGradient>
+                <filter id="cs-sh"><feDropShadow dx="0" dy="1" stdDeviation="2" flood-opacity="0.12"/></filter>
+              </defs>
+              <!-- Title -->
+              <text x="310" y="24" text-anchor="middle" font-size="15" font-weight="800" fill="#1e293b">AI技术栈 概念层次图</text>
+              <text x="310" y="40" text-anchor="middle" font-size="10" fill="#94a3b8">从底层模型到上层协作，层层递进</text>
+
+              <!-- Layer 6: A2A / Skills (top) -->
+              <rect x="120" y="52" width="380" height="46" rx="8" fill="url(#cs-g1)" opacity="0.15" filter="url(#cs-sh)"/>
+              <rect x="120" y="52" width="380" height="46" rx="8" fill="none" stroke="#7c3aed" stroke-width="2"/>
+              <text x="310" y="72" text-anchor="middle" font-size="14" font-weight="800" fill="#6d28d9">A2A（Agent间协作）+ Skills（专业知识注入）</text>
+              <text x="310" y="88" text-anchor="middle" font-size="10" fill="#8b5cf6">让多个Agent协同工作，为每个Agent注入专业能力</text>
+
+              <line x1="310" y1="98" x2="310" y2="112" stroke="#7c3aed" stroke-width="1.5"/>
+              <text x="325" y="108" font-size="9" fill="#a78bfa">依赖</text>
+
+              <!-- Layer 5: Agent -->
+              <rect x="140" y="113" width="340" height="46" rx="8" fill="url(#cs-g2)" opacity="0.15" filter="url(#cs-sh)"/>
+              <rect x="140" y="113" width="340" height="46" rx="8" fill="none" stroke="#ea580c" stroke-width="2"/>
+              <text x="310" y="133" text-anchor="middle" font-size="14" font-weight="800" fill="#c2410c">Agent（智能体）</text>
+              <text x="310" y="149" text-anchor="middle" font-size="10" fill="#f97316">感知→思考→规划→行动→观察→迭代 自主执行复杂任务</text>
+
+              <line x1="310" y1="159" x2="310" y2="173" stroke="#ea580c" stroke-width="1.5"/>
+              <text x="325" y="169" font-size="9" fill="#fdba74">依赖</text>
+
+              <!-- Layer 4: MCP -->
+              <rect x="160" y="174" width="300" height="46" rx="8" fill="url(#cs-g3)" opacity="0.15" filter="url(#cs-sh)"/>
+              <rect x="160" y="174" width="300" height="46" rx="8" fill="none" stroke="#059669" stroke-width="2"/>
+              <text x="310" y="194" text-anchor="middle" font-size="14" font-weight="800" fill="#047857">MCP（模型上下文协议）</text>
+              <text x="310" y="210" text-anchor="middle" font-size="10" fill="#10b981">标准化工具接入，Client↔Server 统一接口</text>
+
+              <line x1="310" y1="220" x2="310" y2="234" stroke="#059669" stroke-width="1.5"/>
+              <text x="325" y="230" font-size="9" fill="#6ee7b7">依赖</text>
+
+              <!-- Layer 3: Function Call -->
+              <rect x="180" y="235" width="260" height="46" rx="8" fill="url(#cs-g4)" opacity="0.15" filter="url(#cs-sh)"/>
+              <rect x="180" y="235" width="260" height="46" rx="8" fill="none" stroke="#2563eb" stroke-width="2"/>
+              <text x="310" y="255" text-anchor="middle" font-size="14" font-weight="800" fill="#1e40af">Function Call（函数调用）</text>
+              <text x="310" y="271" text-anchor="middle" font-size="10" fill="#3b82f6">让大模型能调用外部工具，从"会说"到"会做"</text>
+
+              <line x1="310" y1="281" x2="310" y2="295" stroke="#2563eb" stroke-width="1.5"/>
+              <text x="325" y="291" font-size="9" fill="#93c5fd">依赖</text>
+
+              <!-- Layer 2: Prompt -->
+              <rect x="200" y="296" width="220" height="38" rx="8" fill="url(#cs-g5)" opacity="0.12" filter="url(#cs-sh)"/>
+              <rect x="200" y="296" width="220" height="38" rx="8" fill="none" stroke="#4f46e5" stroke-width="1.5"/>
+              <text x="310" y="312" text-anchor="middle" font-size="13" font-weight="800" fill="#4338ca">Prompt Engineering（提示词工程）</text>
+              <text x="310" y="326" text-anchor="middle" font-size="9" fill="#6366f1">引导AI正确理解意图</text>
+
+              <line x1="310" y1="334" x2="310" y2="344" stroke="#6366f1" stroke-width="1.5"/>
+
+              <!-- Layer 1: LLM (bottom) -->
+              <rect x="220" y="345" width="180" height="38" rx="8" fill="url(#cs-g6)" opacity="0.12" filter="url(#cs-sh)"/>
+              <rect x="220" y="345" width="180" height="38" rx="8" fill="none" stroke="#0284c7" stroke-width="1.5"/>
+              <text x="310" y="361" text-anchor="middle" font-size="13" font-weight="800" fill="#0369a1">LLM（大语言模型）</text>
+              <text x="310" y="375" text-anchor="middle" font-size="9" fill="#0ea5e9">智能的根基，理解与推理能力</text>
+            </svg>
+            <p style="text-align:center;font-size:0.8rem;color:var(--gray-400);margin-top:6px;">图：AI技术栈概念层次——下层是上层的基础，每个概念解决不同层面的问题</p>
+          </div>
+
+          <p class="mt-3" style="font-weight:600;color:var(--gray-900);">关键关系小结：</p>
+          <ul style="padding-left:20px;color:var(--gray-600);line-height:2;font-size:0.925rem;">
+            <li><strong>A2A</strong> 让多个 Agent 能够发现彼此、交换任务、协作完成任务</li>
+            <li><strong>Skills</strong> 为 Agent 注入专业领域知识，让它从"通用助手"变成"领域专家"</li>
+          </ul>
+
+          <div class="tip mt-3">
+            <strong>最后的总结</strong>
+            这些概念不是独立的——它们共同构成了现代 AI 应用的技术栈：<strong>LLM 提供智能，Prompt 引导方向，Function Call 赋予行动力，MCP 标准化工具接入，Agent 实现自主执行，A2A 连接多 Agent 协作，Skills 注入专业知识。</strong>你不需要一次性记住所有概念，先理解它们各自的定位，在日常使用中再慢慢体会。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div class="troubleshooting-bar" style="background:var(--blue-50);border-top:1px solid var(--blue-200);border-bottom:1px solid var(--blue-200);padding:20px 0;text-align:center;">
+  <div class="container">
+    <p style="margin:0;font-size:0.95rem;color:var(--gray-700);"><strong>&#128161; 遇到问题？</strong> AI 技术支持请联系：<strong>李龙（lilong）</strong>、<strong>司佳宇（sijy）</strong>。申请 API Key、配置工具或使用过程中遇到任何问题，欢迎随时沟通。也可在部门群内交流使用经验。</p>
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+
+<script src="js/main.js"></script>
+</body>
+</html>

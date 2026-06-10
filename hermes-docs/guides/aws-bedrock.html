@@ -1,0 +1,324 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AWS Bedrock - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 实用指南 / AWS Bedrock</div><p>Hermes Agent 通过 <strong>Converse API</strong> 原生支持 Amazon Bedrock——而非 OpenAI 兼容端点。这让你可以完整访问 Bedrock 生态系统：IAM 身份验证、Guardrails、跨区域推理配置文件以及所有基础模型。</p>
+<h2>前提条件</h2>
+<ul>
+<li><strong>AWS 凭证</strong> — <a href="https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html">boto3 凭证链</a>支持的任意来源：
+<ul>
+<li>IAM 实例角色（EC2、ECS、Lambda — 零配置）</li>
+<li><code>AWS_ACCESS_KEY_ID</code> + <code>AWS_SECRET_ACCESS_KEY</code> 环境变量</li>
+<li><code>AWS_PROFILE</code>（用于 SSO 或命名配置文件）</li>
+<li><code>aws configure</code>（用于本地开发）</li>
+</ul>
+</li>
+<li><strong>boto3</strong> — 通过 <code>pip install hermes-agent[bedrock]</code> 安装</li>
+<li><strong>IAM 权限</strong> — 至少需要：
+<ul>
+<li><code>bedrock:InvokeModel</code> 和 <code>bedrock:InvokeModelWithResponseStream</code>（用于推理）</li>
+<li><code>bedrock:ListFoundationModels</code> 和 <code>bedrock:ListInferenceProfiles</code>（用于模型发现）</li>
+</ul>
+</li>
+</ul>
+<div class="tip"><strong>💡 EC2 / ECS / Lambda</strong>
+在 AWS 计算环境中，为实例附加带有 <code>AmazonBedrockFullAccess</code> 的 IAM 角色即可。无需 API 密钥，无需 <code>.env</code> 配置——Hermes 会自动检测实例角色。
+</div>
+<h2>快速开始</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 安装并启用 Bedrock 支持
+pip install hermes-agent[bedrock]
+
+# 选择 Bedrock 作为提供商
+hermes model
+# → 选择 "More providers..." → "AWS Bedrock"
+# → 选择你的区域和模型
+
+# 开始对话
+hermes chat
+</div>
+<h2>配置</h2>
+<p>运行 <code>hermes model</code> 后，你的 <code>~/.hermes/config.yaml</code> 将包含以下内容：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  default: us.anthropic.claude-sonnet-4-6
+  provider: bedrock
+  base_url: https://bedrock-runtime.us-east-2.amazonaws.com
+
+bedrock:
+  region: us-east-2
+</div>
+<h3>区域</h3>
+<p>通过以下任意方式设置 AWS 区域（优先级从高到低）：</p>
+<ol>
+<li><code>config.yaml</code> 中的 <code>bedrock.region</code></li>
+<li><code>AWS_REGION</code> 环境变量</li>
+<li><code>AWS_DEFAULT_REGION</code> 环境变量</li>
+<li>默认值：<code>us-east-1</code></li>
+</ol>
+<h3>Guardrails</h3>
+<p>要对所有模型调用应用 <a href="https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html">Amazon Bedrock Guardrails</a>：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+bedrock:
+  region: us-east-2
+  guardrail:
+    guardrail_identifier: "abc123def456"  # 来自 Bedrock 控制台
+    guardrail_version: "1"                # 版本号或 "DRAFT"
+    stream_processing_mode: "async"       # "sync" 或 "async"
+    trace: "disabled"                     # "enabled"、"disabled" 或 "enabled_full"
+</div>
+<h3>模型发现</h3>
+<p>Hermes 通过 Bedrock 控制平面自动发现可用模型。你可以自定义发现行为：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+bedrock:
+  discovery:
+    enabled: true
+    provider_filter: ["anthropic", "amazon"]  # 仅显示这些提供商
+    refresh_interval: 3600                     # 缓存 1 小时
+</div>
+<h2>可用模型</h2>
+<p>Bedrock 模型使用<strong>推理配置文件 ID</strong> 进行按需调用。<code>hermes model</code> 选择器会自动显示这些 ID，并将推荐模型置于顶部：</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>ID</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Claude Sonnet 4.6</td>
+<td><code>us.anthropic.claude-sonnet-4-6</code></td>
+<td>推荐——速度与能力的最佳平衡</td>
+</tr>
+<tr>
+<td>Claude Opus 4.6</td>
+<td><code>us.anthropic.claude-opus-4-6-v1</code></td>
+<td>能力最强</td>
+</tr>
+<tr>
+<td>Claude Haiku 4.5</td>
+<td><code>us.anthropic.claude-haiku-4-5-20251001-v1:0</code></td>
+<td>最快的 Claude</td>
+</tr>
+<tr>
+<td>Amazon Nova Pro</td>
+<td><code>us.amazon.nova-pro-v1:0</code></td>
+<td>Amazon 旗舰模型</td>
+</tr>
+<tr>
+<td>Amazon Nova Micro</td>
+<td><code>us.amazon.nova-micro-v1:0</code></td>
+<td>最快、最经济</td>
+</tr>
+<tr>
+<td>DeepSeek V3.2</td>
+<td><code>deepseek.v3.2</code></td>
+<td>强大的开源模型</td>
+</tr>
+<tr>
+<td>Llama 4 Scout 17B</td>
+<td><code>us.meta.llama4-scout-17b-instruct-v1:0</code></td>
+<td>Meta 最新模型</td>
+</tr>
+</tbody>
+</table>
+<div class="tip"><strong>ℹ️ 跨区域推理</strong>
+以 <code>us.</code> 为前缀的模型使用跨区域推理配置文件，可在多个 AWS 区域间提供更好的容量保障和自动故障转移。以 <code>global.</code> 为前缀的模型则在全球所有可用区域间路由。
+</div>
+<h2>会话中途切换模型</h2>
+<p>在对话过程中使用 <code>/model</code> 命令：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/model us.amazon.nova-pro-v1:0
+/model deepseek.v3.2
+/model us.anthropic.claude-opus-4-6-v1
+</div>
+<h2>诊断</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes doctor
+</div>
+<p>诊断工具会检查：</p>
+<ul>
+<li>AWS 凭证是否可用（环境变量、IAM 角色、SSO）</li>
+<li><code>boto3</code> 是否已安装</li>
+<li>Bedrock API 是否可达（ListFoundationModels）</li>
+<li>你所在区域的可用模型数量</li>
+</ul>
+<h2>Gateway（消息平台）</h2>
+<p>Bedrock 可与所有 Hermes gateway 平台配合使用（Telegram、Discord、Slack、飞书等）。将 Bedrock 配置为提供商后，正常启动 gateway 即可：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway setup
+hermes gateway start
+</div>
+<p>Gateway 读取 <code>config.yaml</code> 并使用相同的 Bedrock 提供商配置。</p>
+<h2>故障排查</h2>
+<h3>&quot;No API key found&quot; / &quot;No AWS credentials&quot;</h3>
+<p>Hermes 按以下顺序检查凭证：</p>
+<ol>
+<li><code>AWS_BEARER_TOKEN_BEDROCK</code></li>
+<li><code>AWS_ACCESS_KEY_ID</code> + <code>AWS_SECRET_ACCESS_KEY</code></li>
+<li><code>AWS_PROFILE</code></li>
+<li>EC2 实例元数据（IMDS）</li>
+<li>ECS 容器凭证</li>
+<li>Lambda 执行角色</li>
+</ol>
+<p>若均未找到，请运行 <code>aws configure</code> 或为你的计算实例附加 IAM 角色。</p>
+<h3>&quot;Invocation of model ID ... with on-demand throughput isn't supported&quot;</h3>
+<p>请使用<strong>推理配置文件 ID</strong>（以 <code>us.</code> 或 <code>global.</code> 为前缀），而非裸基础模型 ID。例如：</p>
+<ul>
+<li>❌ <code>anthropic.claude-sonnet-4-6</code></li>
+<li>✅ <code>us.anthropic.claude-sonnet-4-6</code></li>
+</ul>
+<h3>&quot;ThrottlingException&quot;</h3>
+<p>你已触及 Bedrock 单模型速率限制。Hermes 会自动进行退避重试。如需提高限额，请在 <a href="https://console.aws.amazon.com/servicequotas/">AWS Service Quotas 控制台</a>申请配额提升。</p>
+<h2>一键 AWS 部署</h2>
+<p>如需在 EC2 上通过 CloudFormation 进行全自动部署：</p>
+<p><strong><a href="https://github.com/JiaDe-Wu/sample-hermes-agent-on-aws-with-bedrock">sample-hermes-agent-on-aws-with-bedrock</a></strong> — 自动创建 VPC、IAM 角色、EC2 实例并配置 Bedrock。一键即可在任意区域完成部署。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

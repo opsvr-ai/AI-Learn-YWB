@@ -1,0 +1,741 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plugins - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html" class="active">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Plugins</div><p>Hermes 提供了一套插件系统，可在不修改核心代码的情况下添加自定义工具、hook（钩子）和集成。</p>
+<p>如果你想为自己、团队或某个项目创建自定义工具，这通常是正确的路径。开发者指南中的
+<a href="/developer-guide/adding-tools">Adding Tools</a> 页面针对的是存放在 <code>tools/</code> 和 <code>toolsets.py</code> 中的 Hermes 内置核心工具。</p>
+<p><strong>→ <a href="/guides/build-a-hermes-plugin">构建 Hermes Plugin</a></strong> — 包含完整可运行示例的分步指南。</p>
+<h2>快速概览</h2>
+<p>在 <code>~/.hermes/plugins/</code> 下放入一个目录，包含 <code>plugin.yaml</code> 和 Python 代码：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+~/.hermes/plugins/my-plugin/
+├── plugin.yaml      # manifest（清单）
+├── __init__.py      # register() — 将 schema 与处理器绑定
+├── schemas.py       # tool schema（LLM 所见的内容）
+└── tools.py         # tool 处理器（调用时实际执行的代码）
+</div>
+<p>启动 Hermes — 你的工具会与内置工具一同出现，模型可立即调用它们。</p>
+<h3>最小可运行示例</h3>
+<p>以下是一个完整插件，添加了一个 <code>hello_world</code> 工具，并通过 hook 记录每次工具调用。</p>
+<p><strong><code>~/.hermes/plugins/hello-world/plugin.yaml</code></strong></p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+name: hello-world
+version: "1.0"
+description: A minimal example plugin
+</div>
+<p><strong><code>~/.hermes/plugins/hello-world/__init__.py</code></strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+"""Minimal Hermes plugin — registers a tool and a hook."""
+
+import json
+
+
+def register(ctx):
+    # --- Tool: hello_world ---
+    schema = {
+        "name": "hello_world",
+        "description": "Returns a friendly greeting for the given name.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Name to greet",
+                }
+            },
+            "required": ["name"],
+        },
+    }
+
+    def handle_hello(params, **kwargs):
+        del kwargs
+        name = params.get("name", "World")
+        return json.dumps({"success": True, "greeting": f"Hello, {name}!"})
+
+    ctx.register_tool(
+        name="hello_world",
+        toolset="hello_world",
+        schema=schema,
+        handler=handle_hello,
+        description="Return a friendly greeting for the given name.",
+    )
+
+    # --- Hook: log every tool call ---
+    def on_tool_call(tool_name, params, result):
+        print(f"[hello-world] tool called: {tool_name}")
+
+    ctx.register_hook("post_tool_call", on_tool_call)
+</div>
+<p>将两个文件放入 <code>~/.hermes/plugins/hello-world/</code>，重启 Hermes，模型即可立即调用 <code>hello_world</code>。每次工具调用后，hook 会打印一行日志。</p>
+<p><code>./.hermes/plugins/</code> 下的项目本地插件默认禁用。仅对可信仓库启用，方法是在启动 Hermes 前设置 <code>HERMES_ENABLE_PROJECT_PLUGINS=true</code>。</p>
+<h2>插件能做什么</h2>
+<p>以下所有 <code>ctx.*</code> API 均可在插件的 <code>register(ctx)</code> 函数中使用。</p>
+<table>
+<thead>
+<tr>
+<th>能力</th>
+<th>方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>添加工具</td>
+<td><code>ctx.register_tool(name=..., toolset=..., schema=..., handler=...)</code></td>
+</tr>
+<tr>
+<td>添加 hook</td>
+<td><code>ctx.register_hook(&quot;post_tool_call&quot;, callback)</code></td>
+</tr>
+<tr>
+<td>添加斜杠命令</td>
+<td><code>ctx.register_command(name, handler, description)</code> — 在 CLI 和 gateway 会话中添加 <code>/name</code></td>
+</tr>
+<tr>
+<td>从命令中调度工具</td>
+<td><code>ctx.dispatch_tool(name, args)</code> — 调用已注册的工具，自动注入父 agent 上下文</td>
+</tr>
+<tr>
+<td>添加 CLI 命令</td>
+<td><code>ctx.register_cli_command(name, help, setup_fn, handler_fn)</code> — 添加 <code>hermes &lt;plugin&gt; &lt;subcommand&gt;</code></td>
+</tr>
+<tr>
+<td>注入消息</td>
+<td><code>ctx.inject_message(content, role=&quot;user&quot;)</code> — 参见 <a href="#injecting-messages">注入消息</a></td>
+</tr>
+<tr>
+<td>附带数据文件</td>
+<td><code>Path(__file__).parent / &quot;data&quot; / &quot;file.yaml&quot;</code></td>
+</tr>
+<tr>
+<td>打包 skill</td>
+<td><code>ctx.register_skill(name, path)</code> — 命名空间为 <code>plugin:skill</code>，通过 <code>skill_view(&quot;plugin:skill&quot;)</code> 加载</td>
+</tr>
+<tr>
+<td>按环境变量控制</td>
+<td>在 plugin.yaml 中设置 <code>requires_env: [API_KEY]</code> — 在 <code>hermes plugins install</code> 时提示输入</td>
+</tr>
+<tr>
+<td>通过 pip 分发</td>
+<td><code>[project.entry-points.&quot;hermes_agent.plugins&quot;]</code></td>
+</tr>
+<tr>
+<td>注册 gateway 平台（Discord、Telegram、IRC 等）</td>
+<td><code>ctx.register_platform(name, label, adapter_factory, check_fn, ...)</code> — 参见 <a href="/developer-guide/adding-platform-adapters">Adding Platform Adapters</a></td>
+</tr>
+<tr>
+<td>注册图像生成后端</td>
+<td><code>ctx.register_image_gen_provider(provider)</code> — 参见 <a href="/developer-guide/image-gen-provider-plugin">Image Generation Provider Plugins</a></td>
+</tr>
+<tr>
+<td>注册视频生成后端</td>
+<td><code>ctx.register_video_gen_provider(provider)</code> — 参见 <a href="/developer-guide/video-gen-provider-plugin">Video Generation Provider Plugins</a></td>
+</tr>
+<tr>
+<td>注册上下文压缩引擎</td>
+<td><code>ctx.register_context_engine(engine)</code> — 参见 <a href="/developer-guide/context-engine-plugin">Context Engine Plugins</a></td>
+</tr>
+<tr>
+<td>注册 memory 后端</td>
+<td>在 <code>plugins/memory/&lt;name&gt;/__init__.py</code> 中继承 <code>MemoryProvider</code> — 参见 <a href="/developer-guide/memory-provider-plugin">Memory Provider Plugins</a>（使用独立发现系统）</td>
+</tr>
+<tr>
+<td>调用宿主 LLM</td>
+<td><code>ctx.llm.complete(...)</code> / <code>ctx.llm.complete_structured(...)</code> — 借用用户当前激活的模型和认证，进行一次性补全，支持可选 JSON schema 验证。参见 <a href="/developer-guide/plugin-llm-access">Plugin LLM Access</a></td>
+</tr>
+<tr>
+<td>注册推理后端（LLM provider）</td>
+<td>在 <code>plugins/model-providers/&lt;name&gt;/__init__.py</code> 中调用 <code>register_provider(ProviderProfile(...))</code> — 参见 <a href="/developer-guide/model-provider-plugin">Model Provider Plugins</a>（使用独立发现系统）</td>
+</tr>
+</tbody>
+</table>
+<h2>插件发现</h2>
+<table>
+<thead>
+<tr>
+<th>来源</th>
+<th>路径</th>
+<th>使用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>内置</td>
+<td><code>&lt;repo&gt;/plugins/</code></td>
+<td>随 Hermes 附带 — 参见 <a href="/user-guide/features/built-in-plugins">Built-in Plugins</a></td>
+</tr>
+<tr>
+<td>用户</td>
+<td><code>~/.hermes/plugins/</code></td>
+<td>个人插件</td>
+</tr>
+<tr>
+<td>项目</td>
+<td><code>.hermes/plugins/</code></td>
+<td>项目专属插件（需要 <code>HERMES_ENABLE_PROJECT_PLUGINS=true</code>）</td>
+</tr>
+<tr>
+<td>pip</td>
+<td><code>hermes_agent.plugins</code> entry_points</td>
+<td>分发包</td>
+</tr>
+<tr>
+<td>Nix</td>
+<td><code>services.hermes-agent.extraPlugins</code> / <code>extraPythonPackages</code></td>
+<td>NixOS 声明式安装 — 参见 <a href="/getting-started/nix-setup#plugins">Nix Setup</a></td>
+</tr>
+</tbody>
+</table>
+<p>名称冲突时，后面的来源会覆盖前面的，因此与内置插件同名的用户插件会替换它。</p>
+<h3>插件子分类</h3>
+<p>在每个来源内，Hermes 还识别将插件路由到专用发现系统的子分类目录：</p>
+<table>
+<thead>
+<tr>
+<th>子目录</th>
+<th>内容</th>
+<th>发现系统</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>plugins/</code>（根目录）</td>
+<td>通用插件 — 工具、hook、斜杠命令、CLI 命令、打包 skill</td>
+<td><code>PluginManager</code>（kind: <code>standalone</code> 或 <code>backend</code>）</td>
+</tr>
+<tr>
+<td><code>plugins/platforms/&lt;name&gt;/</code></td>
+<td>Gateway 频道适配器（<code>ctx.register_platform()</code>）</td>
+<td><code>PluginManager</code>（kind: <code>platform</code>，深一层）</td>
+</tr>
+<tr>
+<td><code>plugins/image_gen/&lt;name&gt;/</code></td>
+<td>图像生成后端（<code>ctx.register_image_gen_provider()</code>）</td>
+<td><code>PluginManager</code>（kind: <code>backend</code>，深一层）</td>
+</tr>
+<tr>
+<td><code>plugins/memory/&lt;name&gt;/</code></td>
+<td>Memory provider（继承 <code>MemoryProvider</code>）</td>
+<td><strong>独立加载器</strong>，位于 <code>plugins/memory/__init__.py</code>（kind: <code>exclusive</code> — 同时只有一个激活）</td>
+</tr>
+<tr>
+<td><code>plugins/context_engine/&lt;name&gt;/</code></td>
+<td>上下文压缩引擎（<code>ctx.register_context_engine()</code>）</td>
+<td><strong>独立加载器</strong>，位于 <code>plugins/context_engine/__init__.py</code>（同时只有一个激活）</td>
+</tr>
+<tr>
+<td><code>plugins/model-providers/&lt;name&gt;/</code></td>
+<td>LLM provider profile（<code>register_provider(ProviderProfile(...))</code>）</td>
+<td><strong>独立加载器</strong>，位于 <code>providers/__init__.py</code>（首次调用 <code>get_provider_profile()</code> 时懒加载扫描）</td>
+</tr>
+</tbody>
+</table>
+<p><code>~/.hermes/plugins/model-providers/&lt;name&gt;/</code> 和 <code>~/.hermes/plugins/memory/&lt;name&gt;/</code> 下的用户插件会覆盖同名内置插件 — <code>register_provider()</code> / <code>register_memory_provider()</code> 中后写者胜出。放入一个目录即可替换内置实现，无需修改仓库。</p>
+<p>子分类插件在 <code>hermes plugins list</code> 和交互式 <code>hermes plugins</code> UI 中以<strong>路径派生的 key</strong> 显示 — 例如 <code>observability/langfuse</code>、<code>image_gen/openai</code>、<code>platforms/teams</code>。该 key（而非 manifest 中的 <code>name:</code>）是传给 <code>hermes plugins enable …</code> / <code>disable …</code> 的值，也是在 <code>config.yaml</code> 的 <code>plugins.enabled</code> 下填写的字符串。</p>
+<h2>插件默认关闭（少数例外）</h2>
+<p><strong>通用插件和用户安装的后端默认禁用</strong> — 发现系统会找到它们（因此它们会出现在 <code>hermes plugins</code> 和 <code>/plugins</code> 中），但在你将插件名称添加到 <code>~/.hermes/config.yaml</code> 的 <code>plugins.enabled</code> 之前，任何带有 hook 或工具的内容都不会加载。这可防止第三方代码在未经明确同意的情况下运行。</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+plugins:
+  enabled:
+    - my-tool-plugin
+    - disk-cleanup
+  disabled:       # 可选的拒绝列表 — 若名称同时出现在两个列表中，此列表始终优先
+    - noisy-plugin
+</div>
+<p>切换状态的三种方式：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes plugins                    # 交互式切换（空格勾选/取消勾选）
+hermes plugins enable &lt;name&gt;      # 添加到允许列表
+hermes plugins disable &lt;name&gt;     # 从允许列表移除并添加到禁用列表
+</div>
+<p>执行 <code>hermes plugins install owner/repo</code> 后，会询问 <code>Enable 'name' now? [y/N]</code> — 默认为否。脚本化安装时可用 <code>--enable</code> 或 <code>--no-enable</code> 跳过提示。</p>
+<h3>允许列表不控制的内容</h3>
+<p>某些类别的插件绕过 <code>plugins.enabled</code> — 它们是 Hermes 内置功能的一部分，若默认关闭会破坏基本功能：</p>
+<table>
+<thead>
+<tr>
+<th>插件类型</th>
+<th>激活方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>内置平台插件</strong>（IRC、Teams 等，位于 <code>plugins/platforms/</code>）</td>
+<td>自动加载，使所有内置 gateway 频道可用。实际频道通过 <code>config.yaml</code> 中的 <code>gateway.platforms.&lt;name&gt;.enabled</code> 开启。</td>
+</tr>
+<tr>
+<td><strong>内置后端</strong>（<code>plugins/image_gen/</code> 等下的图像生成 provider）</td>
+<td>自动加载，使默认后端&quot;开箱即用&quot;。通过 <code>config.yaml</code> 中的 <code>&lt;category&gt;.provider</code> 选择（例如 <code>image_gen.provider: openai</code>）。</td>
+</tr>
+<tr>
+<td><strong>Memory provider</strong>（<code>plugins/memory/</code>）</td>
+<td>全部发现；同时只有一个激活，由 <code>config.yaml</code> 中的 <code>memory.provider</code> 选择。</td>
+</tr>
+<tr>
+<td><strong>Context engine</strong>（<code>plugins/context_engine/</code>）</td>
+<td>全部发现；同时只有一个激活，由 <code>config.yaml</code> 中的 <code>context.engine</code> 选择。</td>
+</tr>
+<tr>
+<td><strong>Model provider</strong>（<code>plugins/model-providers/</code>）</td>
+<td><code>plugins/model-providers/</code> 下的所有内置 provider 在首次调用 <code>get_provider_profile()</code> 时发现并注册。用户通过 <code>--provider</code> 或 <code>config.yaml</code> 一次选择一个。</td>
+</tr>
+<tr>
+<td><strong>pip 安装的 <code>backend</code> 插件</strong></td>
+<td>通过 <code>plugins.enabled</code> 选择加入（与通用插件相同）。</td>
+</tr>
+<tr>
+<td><strong>用户安装的平台</strong>（位于 <code>~/.hermes/plugins/platforms/</code>）</td>
+<td>通过 <code>plugins.enabled</code> 选择加入 — 第三方 gateway 适配器需要明确同意。</td>
+</tr>
+</tbody>
+</table>
+<p>简而言之：<strong>内置的&quot;始终可用&quot;基础设施自动加载；第三方通用插件需选择加入。</strong> <code>plugins.enabled</code> 允许列表专门用于控制用户放入 <code>~/.hermes/plugins/</code> 的任意代码。</p>
+<h3>现有用户的迁移</h3>
+<p>当你升级到支持选择加入插件的 Hermes 版本（config schema v21+）时，已安装在 <code>~/.hermes/plugins/</code> 下且不在 <code>plugins.disabled</code> 中的用户插件会<strong>自动纳入</strong> <code>plugins.enabled</code>。你的现有配置继续正常工作。内置独立插件<strong>不会</strong>自动纳入 — 即使是现有用户也需要明确选择加入。（内置平台/后端插件从未需要纳入，因为它们从未被控制。）</p>
+<h2>可用 hook</h2>
+<p>插件可为以下生命周期事件注册回调。完整详情、回调签名和示例请参见 <strong><a href="/user-guide/features/hooks#plugin-hooks">Event Hooks 页面</a></strong>。</p>
+<table>
+<thead>
+<tr>
+<th>Hook</th>
+<th>触发时机</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="/user-guide/features/hooks#pre_tool_call"><code>pre_tool_call</code></a></td>
+<td>任意工具执行前</td>
+</tr>
+<tr>
+<td><a href="/user-guide/features/hooks#post_tool_call"><code>post_tool_call</code></a></td>
+<td>任意工具返回后</td>
+</tr>
+<tr>
+<td><a href="/user-guide/features/hooks#pre_llm_call"><code>pre_llm_call</code></a></td>
+<td>每轮一次，LLM 循环前 — 可返回 <code>{&quot;context&quot;: &quot;...&quot;}</code> 以<a href="/user-guide/features/hooks#pre_llm_call">向用户消息注入上下文</a></td>
+</tr>
+<tr>
+<td><a href="/user-guide/features/hooks#post_llm_call"><code>post_llm_call</code></a></td>
+<td>每轮一次，LLM 循环后（仅成功轮次）</td>
+</tr>
+<tr>
+<td><a href="/user-guide/features/hooks#on_session_start"><code>on_session_start</code></a></td>
+<td>新会话创建时（仅第一轮）</td>
+</tr>
+<tr>
+<td><a href="/user-guide/features/hooks#on_session_end"><code>on_session_end</code></a></td>
+<td>每次 <code>run_conversation</code> 调用结束时 + CLI 退出处理器</td>
+</tr>
+<tr>
+<td><a href="/user-guide/features/hooks#on_session_finalize"><code>on_session_finalize</code></a></td>
+<td>CLI/gateway 销毁活跃会话时（<code>/new</code>、GC、CLI 退出）</td>
+</tr>
+<tr>
+<td><a href="/user-guide/features/hooks#on_session_reset"><code>on_session_reset</code></a></td>
+<td>Gateway 换入新会话 key 时（<code>/new</code>、<code>/reset</code>、<code>/clear</code>、空闲轮换）</td>
+</tr>
+<tr>
+<td><a href="/user-guide/features/hooks#subagent_stop"><code>subagent_stop</code></a></td>
+<td><code>delegate_task</code> 完成后每个子 agent 触发一次</td>
+</tr>
+<tr>
+<td><a href="/user-guide/features/hooks#pre_gateway_dispatch"><code>pre_gateway_dispatch</code></a></td>
+<td>Gateway 收到用户消息，在认证和调度之前。返回 <code>{&quot;action&quot;: &quot;skip&quot; | &quot;rewrite&quot; | &quot;allow&quot;, ...}</code> 以影响流程。</td>
+</tr>
+</tbody>
+</table>
+<h2>插件类型</h2>
+<p>Hermes 有四种插件：</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>作用</th>
+<th>选择方式</th>
+<th>位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>通用插件</strong></td>
+<td>添加工具、hook、斜杠命令、CLI 命令</td>
+<td>多选（启用/禁用）</td>
+<td><code>~/.hermes/plugins/</code></td>
+</tr>
+<tr>
+<td><strong>Memory provider</strong></td>
+<td>替换或增强内置 memory</td>
+<td>单选（同时只有一个激活）</td>
+<td><code>plugins/memory/</code></td>
+</tr>
+<tr>
+<td><strong>Context engine</strong></td>
+<td>替换内置上下文压缩器</td>
+<td>单选（同时只有一个激活）</td>
+<td><code>plugins/context_engine/</code></td>
+</tr>
+<tr>
+<td><strong>Model provider</strong></td>
+<td>声明推理后端（OpenRouter、Anthropic 等）</td>
+<td>多注册，通过 <code>--provider</code> / <code>config.yaml</code> 选择</td>
+<td><code>plugins/model-providers/</code></td>
+</tr>
+</tbody>
+</table>
+<p>Memory provider 和 context engine 是 <strong>provider 插件</strong> — 每种类型同时只能有一个激活。Model provider 也是插件，但可以同时加载多个；用户通过 <code>--provider</code> 或 <code>config.yaml</code> 一次选择一个。通用插件可以任意组合启用。</p>
+<h2>可插拔接口 — 各场景对应文档</h2>
+<p>上表展示了四种插件类别，但在&quot;通用插件&quot;中，<code>PluginContext</code> 暴露了多个不同的扩展点 — Hermes 还接受 Python 插件系统之外的扩展（配置驱动的后端、shell hook 命令、外部服务器等）。使用下表找到适合你需求的文档：</p>
+<table>
+<thead>
+<tr>
+<th>想要添加…</th>
+<th>方式</th>
+<th>编写指南</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LLM 可调用的<strong>工具</strong></td>
+<td>Python 插件 — <code>ctx.register_tool()</code></td>
+<td><a href="/guides/build-a-hermes-plugin">Build a Hermes Plugin</a> · <a href="/developer-guide/adding-tools">Adding Tools</a></td>
+</tr>
+<tr>
+<td><strong>生命周期 hook</strong>（LLM 前后、会话开始/结束、工具过滤）</td>
+<td>Python 插件 — <code>ctx.register_hook()</code></td>
+<td><a href="/user-guide/features/hooks">Hooks reference</a> · <a href="/guides/build-a-hermes-plugin">Build a Hermes Plugin</a></td>
+</tr>
+<tr>
+<td>CLI / gateway 的<strong>斜杠命令</strong></td>
+<td>Python 插件 — <code>ctx.register_command()</code></td>
+<td><a href="/guides/build-a-hermes-plugin">Build a Hermes Plugin</a> · <a href="/developer-guide/extending-the-cli">Extending the CLI</a></td>
+</tr>
+<tr>
+<td><code>hermes &lt;thing&gt;</code> 的<strong>子命令</strong></td>
+<td>Python 插件 — <code>ctx.register_cli_command()</code></td>
+<td><a href="/developer-guide/extending-the-cli">Extending the CLI</a></td>
+</tr>
+<tr>
+<td>插件附带的<strong>skill</strong></td>
+<td>Python 插件 — <code>ctx.register_skill()</code></td>
+<td><a href="/developer-guide/creating-skills">Creating Skills</a></td>
+</tr>
+<tr>
+<td><strong>推理后端</strong>（LLM provider：OpenAI 兼容、Codex、Anthropic-Messages、Bedrock）</td>
+<td>Provider 插件 — 在 <code>plugins/model-providers/&lt;name&gt;/</code> 中调用 <code>register_provider(ProviderProfile(...))</code></td>
+<td><strong><a href="/developer-guide/model-provider-plugin">Model Provider Plugins</a></strong> · <a href="/developer-guide/adding-providers">Adding Providers</a></td>
+</tr>
+<tr>
+<td><strong>Gateway 频道</strong>（Discord / Telegram / IRC / Teams 等）</td>
+<td>平台插件 — 在 <code>plugins/platforms/&lt;name&gt;/</code> 中调用 <code>ctx.register_platform()</code></td>
+<td><a href="/developer-guide/adding-platform-adapters">Adding Platform Adapters</a></td>
+</tr>
+<tr>
+<td><strong>Memory 后端</strong>（Honcho、Mem0、Supermemory 等）</td>
+<td>Memory 插件 — 在 <code>plugins/memory/&lt;name&gt;/</code> 中继承 <code>MemoryProvider</code></td>
+<td><a href="/developer-guide/memory-provider-plugin">Memory Provider Plugins</a></td>
+</tr>
+<tr>
+<td><strong>上下文压缩策略</strong></td>
+<td>Context-engine 插件 — <code>ctx.register_context_engine()</code></td>
+<td><a href="/developer-guide/context-engine-plugin">Context Engine Plugins</a></td>
+</tr>
+<tr>
+<td><strong>图像生成后端</strong>（DALL·E、SDXL 等）</td>
+<td>后端插件 — <code>ctx.register_image_gen_provider()</code></td>
+<td><a href="/developer-guide/image-gen-provider-plugin">Image Generation Provider Plugins</a></td>
+</tr>
+<tr>
+<td><strong>视频生成后端</strong>（Veo、Kling、Pixverse、Grok-Imagine、Runway 等）</td>
+<td>后端插件 — <code>ctx.register_video_gen_provider()</code></td>
+<td><a href="/developer-guide/video-gen-provider-plugin">Video Generation Provider Plugins</a></td>
+</tr>
+<tr>
+<td><strong>TTS 后端</strong>（任意 CLI — Piper、VoxCPM、Kokoro、xtts、语音克隆脚本等）</td>
+<td>配置驱动（推荐）— 在 <code>config.yaml</code> 的 <code>tts.providers.&lt;name&gt;</code> 下以 <code>type: command</code> 声明。或 Python 后端插件 — 对需要超出 shell 模板的 Python SDK / 流式引擎使用 <code>ctx.register_tts_provider()</code>。</td>
+<td><a href="/user-guide/features/tts#custom-command-providers">TTS Setup</a> · <a href="/user-guide/features/tts#python-plugin-providers">Python plugin guide</a></td>
+</tr>
+<tr>
+<td><strong>STT 后端</strong>（自定义 whisper 二进制、本地 ASR CLI）</td>
+<td>配置驱动 — 将 <code>HERMES_LOCAL_STT_COMMAND</code> 环境变量设置为 shell 模板</td>
+<td><a href="/user-guide/features/tts#voice-message-transcription-stt">Voice Message Transcription (STT)</a></td>
+</tr>
+<tr>
+<td><strong>通过 MCP 使用外部工具</strong>（文件系统、GitHub、Linear、Notion、任意 MCP 服务器）</td>
+<td>配置驱动 — 在 <code>config.yaml</code> 中以 <code>command:</code> / <code>url:</code> 声明 <code>mcp_servers.&lt;name&gt;</code>。Hermes 自动发现服务器的工具并与内置工具一同注册。</td>
+<td><a href="/user-guide/features/mcp">MCP</a></td>
+</tr>
+<tr>
+<td><strong>额外 skill 来源</strong>（自定义 GitHub 仓库、私有 skill 索引）</td>
+<td>CLI — <code>hermes skills tap add &lt;repo&gt;</code></td>
+<td><a href="/user-guide/features/skills#skills-hub">Skills Hub</a> · <a href="/user-guide/features/skills#publishing-a-custom-skill-tap">发布自定义 tap</a></td>
+</tr>
+<tr>
+<td><strong>Gateway 事件 hook</strong>（在 <code>gateway:startup</code>、<code>session:start</code>、<code>agent:end</code>、<code>command:*</code> 时触发）</td>
+<td>将 <code>HOOK.yaml</code> + <code>handler.py</code> 放入 <code>~/.hermes/hooks/&lt;name&gt;/</code></td>
+<td><a href="/user-guide/features/hooks#gateway-event-hooks">Event Hooks</a></td>
+</tr>
+<tr>
+<td><strong>Shell hook</strong>（在事件时运行 shell 命令 — 通知、审计日志、桌面提醒）</td>
+<td>配置驱动 — 在 <code>config.yaml</code> 的 <code>hooks:</code> 下声明</td>
+<td><a href="/user-guide/features/hooks#shell-hooks">Shell Hooks</a></td>
+</tr>
+</tbody>
+</table>
+<div class="tip"><strong>📝 注意</strong>
+并非所有扩展都是 Python 插件。某些扩展接口有意使用<strong>配置驱动的 shell 命令</strong>（TTS、STT、shell hook），这样你已有的任意 CLI 无需编写 Python 即可成为插件。其他的是 agent 连接并自动注册工具的<strong>外部服务器</strong>（MCP）。还有一些是拥有自己 manifest 格式的<strong>即插即用目录</strong>（gateway hook）。根据你的集成风格选择合适的接口；上表中的编写指南各自涵盖了占位符、发现机制和示例。
+</div>
+<h2>NixOS 声明式插件</h2>
+<p>在 NixOS 上，插件可通过模块选项声明式安装 — 无需 <code>hermes plugins install</code>。完整详情请参见 <strong><a href="/getting-started/nix-setup#plugins">Nix Setup 指南</a></strong>。</p>
+<div class="code-block"><span class="code-lang">nix</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+services.hermes-agent = {
+  # 目录插件（包含 plugin.yaml 的源码树）
+  extraPlugins = [ (pkgs.fetchFromGitHub { ... }) ];
+  # 入口点插件（pip 包）
+  extraPythonPackages = [ (pkgs.python312Packages.buildPythonPackage { ... }) ];
+  # 在 config 中启用
+  settings.plugins.enabled = [ "my-plugin" ];
+};
+</div>
+<p>声明式插件以 <code>nix-managed-</code> 前缀符号链接 — 与手动安装的插件共存，从 Nix 配置中移除后自动清理。</p>
+<h2>管理插件</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes plugins                                       # 统一交互式 UI
+hermes plugins list                                  # 表格：已启用 / 已禁用 / 未启用
+hermes plugins install user/repo                     # 从 Git 安装，然后提示 Enable? [y/N]
+hermes plugins install user/repo --enable            # 安装并启用（无提示）
+hermes plugins install user/repo --no-enable         # 安装但保持禁用（无提示）
+hermes plugins update my-plugin                      # 拉取最新版本
+hermes plugins remove my-plugin                      # 卸载
+hermes plugins enable my-plugin                      # 添加到允许列表（普通插件）
+hermes plugins enable observability/langfuse         # 添加到允许列表（子分类插件）
+hermes plugins disable my-plugin                     # 从允许列表移除并添加到禁用列表
+</div>
+<p>对于子分类目录下的插件（例如 <code>plugins/observability/langfuse/</code>、<code>plugins/image_gen/openai/</code>），使用完整的 <code>&lt;category&gt;/&lt;plugin&gt;</code> key — 这正是 <code>hermes plugins list</code> 在 <strong>Name</strong> 列中显示的内容。</p>
+<h3>交互式 UI</h3>
+<p>不带参数运行 <code>hermes plugins</code> 会打开一个复合交互界面：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Plugins
+  ↑↓ navigate  SPACE toggle  ENTER configure/confirm  ESC done
+
+  General Plugins
+ → [✓] my-tool-plugin — Custom search tool
+   [ ] webhook-notifier — Event hooks
+   [ ] disk-cleanup — Auto-cleanup of ephemeral files [bundled]
+   [ ] observability/langfuse — Trace turns / LLM calls / tools to Langfuse [bundled]
+
+  Provider Plugins
+     Memory Provider          ▸ honcho
+     Context Engine           ▸ compressor
+</div>
+<ul>
+<li><strong>General Plugins 区域</strong> — 复选框，用空格切换。勾选 = 在 <code>plugins.enabled</code> 中，未勾选 = 在 <code>plugins.disabled</code> 中（明确关闭）。</li>
+<li><strong>Provider Plugins 区域</strong> — 显示当前选择。按 ENTER 进入单选选择器，选择一个激活的 provider。</li>
+<li>内置插件在同一列表中显示，带有 <code>[bundled]</code> 标签。</li>
+</ul>
+<p>Provider 插件的选择保存到 <code>config.yaml</code>：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+memory:
+  provider: "honcho"      # 空字符串 = 仅使用内置
+
+context:
+  engine: "compressor"    # 默认内置压缩器
+</div>
+<h3>已启用 vs. 已禁用 vs. 未设置</h3>
+<p>插件处于以下三种状态之一：</p>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>含义</th>
+<th>在 <code>plugins.enabled</code> 中？</th>
+<th>在 <code>plugins.disabled</code> 中？</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td>下次会话时加载</td>
+<td>是</td>
+<td>否</td>
+</tr>
+<tr>
+<td><code>disabled</code></td>
+<td>明确关闭 — 即使同时在 <code>enabled</code> 中也不会加载</td>
+<td>（无关）</td>
+<td>是</td>
+</tr>
+<tr>
+<td><code>not enabled</code></td>
+<td>已发现但从未选择加入</td>
+<td>否</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+<p>新安装或内置插件的默认状态为 <code>not enabled</code>。<code>hermes plugins list</code> 显示全部三种状态，便于区分明确关闭的插件和等待启用的插件。</p>
+<p>在运行中的会话里，<code>/plugins</code> 显示当前已加载的插件。</p>
+<h2>注入消息</h2>
+<p>插件可使用 <code>ctx.inject_message()</code> 向活跃对话注入消息：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+ctx.inject_message("New data arrived from the webhook", role="user")
+</div>
+<p><strong>签名：</strong> <code>ctx.inject_message(content: str, role: str = &quot;user&quot;) -&gt; bool</code></p>
+<p>工作原理：</p>
+<ul>
+<li>若 agent <strong>空闲</strong>（等待用户输入），消息会作为下一条输入排队并开始新一轮。</li>
+<li>若 agent <strong>处于轮次中</strong>（正在运行），消息会中断当前操作 — 与用户输入新消息并按下 Enter 效果相同。</li>
+<li>对于非 <code>&quot;user&quot;</code> 角色，内容会以 <code>[role]</code> 为前缀（例如 <code>[system] ...</code>）。</li>
+<li>若消息成功排队返回 <code>True</code>，若无 CLI 引用（例如在 gateway 模式下）则返回 <code>False</code>。</li>
+</ul>
+<p>这使得远程控制查看器、消息桥接或 webhook 接收器等插件能够从外部来源向对话注入消息。</p>
+<div class="tip"><strong>📝 注意</strong>
+<code>inject_message</code> 仅在 CLI 模式下可用。在 gateway 模式下，没有 CLI 引用，该方法返回 <code>False</code>。
+</div>
+<p>完整的处理器约定、schema 格式、hook 行为、错误处理和常见错误请参见 <strong><a href="/guides/build-a-hermes-plugin">完整指南</a></strong>。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

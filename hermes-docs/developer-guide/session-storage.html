@@ -1,0 +1,546 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>会话存储 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 开发者指南 / 会话存储</div><p>Hermes Agent 使用 SQLite 数据库（<code>~/.hermes/state.db</code>）跨 CLI 和 gateway 会话持久化会话元数据、完整消息历史及模型配置。这替代了早期的逐会话 JSONL 文件方案。</p>
+<p>源文件：<code>hermes_state.py</code></p>
+<h2>架构概览</h2>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+~/.hermes/state.db (SQLite, WAL mode)
+├── sessions              — 会话元数据、token 计数、计费信息
+├── messages              — 每个会话的完整消息历史
+├── messages_fts          — FTS5 虚拟表（content + tool_name + tool_calls）
+├── messages_fts_trigram  — 使用 trigram tokenizer 的 FTS5 虚拟表（CJK / 子串搜索）
+├── state_meta            — 键值元数据表
+└── schema_version        — 单行表，跟踪迁移状态
+</div>
+<p>关键设计决策：</p>
+<ul>
+<li><strong>WAL 模式</strong>：支持并发读取 + 单写入（gateway 多平台）</li>
+<li><strong>FTS5 虚拟表</strong>：跨所有会话消息的快速全文搜索</li>
+<li><strong>会话血缘</strong>：通过 <code>parent_session_id</code> 链实现（压缩触发的会话分割）</li>
+<li><strong>来源标记</strong>（<code>cli</code>、<code>telegram</code>、<code>discord</code> 等）：用于平台过滤</li>
+<li>批量运行器和 RL 轨迹不存储于此（独立系统）</li>
+</ul>
+<h2>SQLite Schema</h2>
+<h3>Sessions 表</h3>
+<div class="code-block"><span class="code-lang">sql</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+CREATE TABLE IF NOT EXISTS sessions (
+    id TEXT PRIMARY KEY,
+    source TEXT NOT NULL,
+    user_id TEXT,
+    model TEXT,
+    model_config TEXT,
+    system_prompt TEXT,
+    parent_session_id TEXT,
+    started_at REAL NOT NULL,
+    ended_at REAL,
+    end_reason TEXT,
+    message_count INTEGER DEFAULT 0,
+    tool_call_count INTEGER DEFAULT 0,
+    input_tokens INTEGER DEFAULT 0,
+    output_tokens INTEGER DEFAULT 0,
+    cache_read_tokens INTEGER DEFAULT 0,
+    cache_write_tokens INTEGER DEFAULT 0,
+    reasoning_tokens INTEGER DEFAULT 0,
+    billing_provider TEXT,
+    billing_base_url TEXT,
+    billing_mode TEXT,
+    estimated_cost_usd REAL,
+    actual_cost_usd REAL,
+    cost_status TEXT,
+    cost_source TEXT,
+    pricing_version TEXT,
+    title TEXT,
+    api_call_count INTEGER DEFAULT 0,
+    FOREIGN KEY (parent_session_id) REFERENCES sessions(id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_sessions_source ON sessions(source);
+CREATE INDEX IF NOT EXISTS idx_sessions_parent ON sessions(parent_session_id);
+CREATE INDEX IF NOT EXISTS idx_sessions_started ON sessions(started_at DESC);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_sessions_title_unique
+    ON sessions(title) WHERE title IS NOT NULL;
+</div>
+<h3>Messages 表</h3>
+<div class="code-block"><span class="code-lang">sql</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+CREATE TABLE IF NOT EXISTS messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id TEXT NOT NULL REFERENCES sessions(id),
+    role TEXT NOT NULL,
+    content TEXT,
+    tool_call_id TEXT,
+    tool_calls TEXT,
+    tool_name TEXT,
+    timestamp REAL NOT NULL,
+    token_count INTEGER,
+    finish_reason TEXT,
+    reasoning TEXT,
+    reasoning_content TEXT,
+    reasoning_details TEXT,
+    codex_reasoning_items TEXT,
+    codex_message_items TEXT
+);
+
+CREATE INDEX IF NOT EXISTS idx_messages_session ON messages(session_id, timestamp);
+</div>
+<p>说明：</p>
+<ul>
+<li><code>tool_calls</code> 以 JSON 字符串存储（序列化的 tool call 对象列表）</li>
+<li><code>reasoning_details</code>、<code>codex_reasoning_items</code> 和 <code>codex_message_items</code> 以 JSON 字符串存储</li>
+<li><code>reasoning</code> 存储提供商暴露的原始推理文本</li>
+<li>时间戳为 Unix epoch 浮点数（<code>time.time()</code>）</li>
+</ul>
+<h3>FTS5 全文搜索</h3>
+<div class="code-block"><span class="code-lang">sql</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+CREATE VIRTUAL TABLE IF NOT EXISTS messages_fts USING fts5(
+    content,
+    content=messages,
+    content_rowid=id
+);
+</div>
+<p>FTS5 表通过三个触发器与 <code>messages</code> 表保持同步，分别在 INSERT、UPDATE 和 DELETE 时触发：</p>
+<div class="code-block"><span class="code-lang">sql</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+CREATE TRIGGER IF NOT EXISTS messages_fts_insert AFTER INSERT ON messages BEGIN
+    INSERT INTO messages_fts(rowid, content) VALUES (new.id, new.content);
+END;
+
+CREATE TRIGGER IF NOT EXISTS messages_fts_delete AFTER DELETE ON messages BEGIN
+    INSERT INTO messages_fts(messages_fts, rowid, content)
+        VALUES('delete', old.id, old.content);
+END;
+
+CREATE TRIGGER IF NOT EXISTS messages_fts_update AFTER UPDATE ON messages BEGIN
+    INSERT INTO messages_fts(messages_fts, rowid, content)
+        VALUES('delete', old.id, old.content);
+    INSERT INTO messages_fts(rowid, content) VALUES (new.id, new.content);
+END;
+</div>
+<h2>Schema 版本与迁移</h2>
+<p>当前 schema 版本：<strong>11</strong></p>
+<p><code>schema_version</code> 表存储单个整数。简单的列添加由 <code>_reconcile_columns()</code> 声明式处理（对比实时列与 <code>SCHEMA_SQL</code> 并 ADD 缺失列）。版本门控链保留用于无法声明式表达的数据迁移及索引/FTS 变更：</p>
+<table>
+<thead>
+<tr>
+<th>版本</th>
+<th>变更</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>初始 schema（sessions、messages、FTS5）</td>
+</tr>
+<tr>
+<td>2</td>
+<td>向 messages 添加 <code>finish_reason</code> 列</td>
+</tr>
+<tr>
+<td>3</td>
+<td>向 sessions 添加 <code>title</code> 列</td>
+</tr>
+<tr>
+<td>4</td>
+<td>在 <code>title</code> 上添加唯一索引（允许 NULL，非 NULL 必须唯一）</td>
+</tr>
+<tr>
+<td>5</td>
+<td>添加计费列：<code>cache_read_tokens</code>、<code>cache_write_tokens</code>、<code>reasoning_tokens</code>、<code>billing_provider</code>、<code>billing_base_url</code>、<code>billing_mode</code>、<code>estimated_cost_usd</code>、<code>actual_cost_usd</code>、<code>cost_status</code>、<code>cost_source</code>、<code>pricing_version</code></td>
+</tr>
+<tr>
+<td>6</td>
+<td>向 messages 添加推理列：<code>reasoning</code>、<code>reasoning_details</code>、<code>codex_reasoning_items</code></td>
+</tr>
+<tr>
+<td>7</td>
+<td>向 messages 添加 <code>reasoning_content</code> 列</td>
+</tr>
+<tr>
+<td>8</td>
+<td>向 sessions 添加 <code>api_call_count</code> 列</td>
+</tr>
+<tr>
+<td>9</td>
+<td>向 messages 添加 <code>codex_message_items</code> 列，用于 Codex Responses 消息 id/phase 重放</td>
+</tr>
+<tr>
+<td>10</td>
+<td>添加 <code>messages_fts_trigram</code> 虚拟表（trigram tokenizer，用于 CJK / 子串搜索）并回填现有行</td>
+</tr>
+<tr>
+<td>11</td>
+<td>重新索引 <code>messages_fts</code> 和 <code>messages_fts_trigram</code> 以覆盖 <code>tool_name</code> + <code>tool_calls</code>，从外部内容模式切换为内联模式；删除旧触发器并回填所有消息行</td>
+</tr>
+</tbody>
+</table>
+<p>声明式列添加使用 <code>ALTER TABLE ADD COLUMN</code>，包裹在 try/except 中以处理列已存在的情况（幂等）。每个成功的迁移块完成后版本号递增。</p>
+<h2>写入竞争处理</h2>
+<p>多个 hermes 进程（gateway + CLI 会话 + worktree agent）共享同一个 <code>state.db</code>。<code>SessionDB</code> 类通过以下方式处理写入竞争：</p>
+<ul>
+<li><strong>短 SQLite 超时</strong>（1 秒），而非默认的 30 秒</li>
+<li><strong>应用层重试</strong>，带随机抖动（20–150ms，最多 15 次重试）</li>
+<li><strong>BEGIN IMMEDIATE</strong> 事务，在事务开始时暴露锁竞争</li>
+<li><strong>定期 WAL checkpoint</strong>，每 50 次成功写入执行一次（PASSIVE 模式）</li>
+</ul>
+<p>这避免了&quot;护卫效应&quot;——SQLite 确定性内部退避会导致所有竞争写入者在相同间隔重试。</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+_WRITE_MAX_RETRIES = 15
+_WRITE_RETRY_MIN_S = 0.020   # 20ms
+_WRITE_RETRY_MAX_S = 0.150   # 150ms
+_CHECKPOINT_EVERY_N_WRITES = 50
+</div>
+<h2>常用操作</h2>
+<h3>初始化</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from hermes_state import SessionDB
+
+db = SessionDB()                           # 默认：~/.hermes/state.db
+db = SessionDB(db_path=Path("/tmp/test.db"))  # 自定义路径
+</div>
+<h3>创建和管理会话</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 创建新会话
+db.create_session(
+    session_id="sess_abc123",
+    source="cli",
+    model="anthropic/claude-sonnet-4.6",
+    user_id="user_1",
+    parent_session_id=None,  # 或用于血缘追踪的上一个会话 ID
+)
+
+# 结束会话
+db.end_session("sess_abc123", end_reason="user_exit")
+
+# 重新打开会话（清除 ended_at/end_reason）
+db.reopen_session("sess_abc123")
+</div>
+<h3>存储消息</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+msg_id = db.append_message(
+    session_id="sess_abc123",
+    role="assistant",
+    content="Here's the answer...",
+    tool_calls=[{"id": "call_1", "function": {"name": "terminal", "arguments": "{}"}}],
+    token_count=150,
+    finish_reason="stop",
+    reasoning="Let me think about this...",
+)
+</div>
+<h3>检索消息</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 包含所有元数据的原始消息
+messages = db.get_messages("sess_abc123")
+
+# OpenAI 对话格式（用于 API 重放）
+conversation = db.get_messages_as_conversation("sess_abc123")
+# 返回：[{"role": "user", "content": "..."}, {"role": "assistant", ...}]
+</div>
+<h3>会话标题</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 设置标题（非 NULL 标题中必须唯一）
+db.set_session_title("sess_abc123", "Fix Docker Build")
+
+# 按标题解析（返回血缘中最新的）
+session_id = db.resolve_session_by_title("Fix Docker Build")
+
+# 自动生成血缘中的下一个标题
+next_title = db.get_next_title_in_lineage("Fix Docker Build")
+# 返回："Fix Docker Build #2"
+</div>
+<h2>全文搜索</h2>
+<p><code>search_messages()</code> 方法支持 FTS5 查询语法，并自动对用户输入进行清理。</p>
+<h3>基本搜索</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+results = db.search_messages("docker deployment")
+</div>
+<h3>FTS5 查询语法</h3>
+<table>
+<thead>
+<tr>
+<th>语法</th>
+<th>示例</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>关键词</td>
+<td><code>docker deployment</code></td>
+<td>两个词均包含（隐式 AND）</td>
+</tr>
+<tr>
+<td>引号短语</td>
+<td><code>&quot;exact phrase&quot;</code></td>
+<td>精确短语匹配</td>
+</tr>
+<tr>
+<td>布尔 OR</td>
+<td><code>docker OR kubernetes</code></td>
+<td>任一词</td>
+</tr>
+<tr>
+<td>布尔 NOT</td>
+<td><code>python NOT java</code></td>
+<td>排除词</td>
+</tr>
+<tr>
+<td>前缀</td>
+<td><code>deploy*</code></td>
+<td>前缀匹配</td>
+</tr>
+</tbody>
+</table>
+<h3>过滤搜索</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 仅搜索 CLI 会话
+results = db.search_messages("error", source_filter=["cli"])
+
+# 排除 gateway 会话
+results = db.search_messages("bug", exclude_sources=["telegram", "discord"])
+
+# 仅搜索用户消息
+results = db.search_messages("help", role_filter=["user"])
+</div>
+<h3>搜索结果格式</h3>
+<p>每条结果包含：</p>
+<ul>
+<li><code>id</code>、<code>session_id</code>、<code>role</code>、<code>timestamp</code></li>
+<li><code>snippet</code> — FTS5 生成的片段，带 <code>&gt;&gt;&gt;match&lt;&lt;&lt;</code> 标记</li>
+<li><code>context</code> — 匹配前后各 1 条消息（内容截断至 200 字符）</li>
+<li><code>source</code>、<code>model</code>、<code>session_started</code> — 来自父会话</li>
+</ul>
+<p><code>_sanitize_fts5_query()</code> 方法处理边缘情况：</p>
+<ul>
+<li>去除不匹配的引号和特殊字符</li>
+<li>将含连字符的词包裹在引号中（<code>chat-send</code> → <code>&quot;chat-send&quot;</code>）</li>
+<li>移除悬空的布尔运算符（<code>hello AND</code> → <code>hello</code>）</li>
+</ul>
+<h2>会话血缘</h2>
+<p>会话可通过 <code>parent_session_id</code> 形成链。这发生在 gateway 中上下文压缩触发会话分割时。</p>
+<h3>查询：查找会话血缘</h3>
+<div class="code-block"><span class="code-lang">sql</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+-- 查找会话的所有祖先
+WITH RECURSIVE lineage AS (
+    SELECT * FROM sessions WHERE id = ?
+    UNION ALL
+    SELECT s.* FROM sessions s
+    JOIN lineage l ON s.id = l.parent_session_id
+)
+SELECT id, title, started_at, parent_session_id FROM lineage;
+
+-- 查找会话的所有后代
+WITH RECURSIVE descendants AS (
+    SELECT * FROM sessions WHERE id = ?
+    UNION ALL
+    SELECT s.* FROM sessions s
+    JOIN descendants d ON s.parent_session_id = d.id
+)
+SELECT id, title, started_at FROM descendants;
+</div>
+<h3>查询：带预览的最近会话</h3>
+<div class="code-block"><span class="code-lang">sql</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+SELECT s.*,
+    COALESCE(
+        (SELECT SUBSTR(m.content, 1, 63)
+         FROM messages m
+         WHERE m.session_id = s.id AND m.role = 'user' AND m.content IS NOT NULL
+         ORDER BY m.timestamp, m.id LIMIT 1),
+        ''
+    ) AS preview,
+    COALESCE(
+        (SELECT MAX(m2.timestamp) FROM messages m2 WHERE m2.session_id = s.id),
+        s.started_at
+    ) AS last_active
+FROM sessions s
+ORDER BY s.started_at DESC
+LIMIT 20;
+</div>
+<h3>查询：Token 使用统计</h3>
+<div class="code-block"><span class="code-lang">sql</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+-- 按模型统计总 token 数
+SELECT model,
+       COUNT(*) as session_count,
+       SUM(input_tokens) as total_input,
+       SUM(output_tokens) as total_output,
+       SUM(estimated_cost_usd) as total_cost
+FROM sessions
+WHERE model IS NOT NULL
+GROUP BY model
+ORDER BY total_cost DESC;
+
+-- token 使用量最高的会话
+SELECT id, title, model, input_tokens + output_tokens AS total_tokens,
+       estimated_cost_usd
+FROM sessions
+ORDER BY total_tokens DESC
+LIMIT 10;
+</div>
+<h2>导出与清理</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 导出单个会话及其消息
+data = db.export_session("sess_abc123")
+
+# 导出所有会话（含消息）为字典列表
+all_data = db.export_all(source="cli")
+
+# 删除旧会话（仅删除已结束的会话）
+deleted_count = db.prune_sessions(older_than_days=90)
+deleted_count = db.prune_sessions(older_than_days=30, source="telegram")
+
+# 清除消息但保留会话记录
+db.clear_messages("sess_abc123")
+
+# 删除会话及所有消息
+db.delete_session("sess_abc123")
+</div>
+<h2>数据库位置</h2>
+<p>默认路径：<code>~/.hermes/state.db</code></p>
+<p>该路径由 <code>hermes_constants.get_hermes_home()</code> 推导，默认解析为 <code>~/.hermes/</code>，或 <code>HERMES_HOME</code> 环境变量的值。</p>
+<p>数据库文件、WAL 文件（<code>state.db-wal</code>）和共享内存文件（<code>state.db-shm</code>）均创建于同一目录。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

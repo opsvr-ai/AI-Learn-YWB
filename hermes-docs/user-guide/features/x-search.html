@@ -1,0 +1,310 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>X (Twitter) 搜索 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / X (Twitter) 搜索</div><p><code>x_search</code> 工具让 agent 可以直接搜索 X (Twitter) 的帖子、账号和话题串。其底层依托 xAI 在 Responses API（<code>https://api.x.ai/v1/responses</code>）上内置的 <code>x_search</code> 工具——Grok 在服务端执行搜索，并返回带有原始帖子引用的综合结果。</p>
+<p><strong>当你明确需要 X 上的当前讨论、反应或观点时，请使用此工具而非 <code>web_search</code>。</strong> 对于一般网页内容，继续使用 <code>web_search</code> / <code>web_extract</code>。</p>
+<h2>认证</h2>
+<p>满足以下<strong>任一</strong> xAI 凭据路径时，<code>x_search</code> 即会注册：</p>
+<table>
+<thead>
+<tr>
+<th>凭据</th>
+<th>来源</th>
+<th>配置方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SuperGrok / X Premium+ OAuth</strong>（推荐）</td>
+<td>在 <code>accounts.x.ai</code> 浏览器登录，自动刷新</td>
+<td><code>hermes auth add xai-oauth</code> — 参见 <a href="../../guides/xai-grok-oauth.html">xAI Grok OAuth (SuperGrok / X Premium+)</a></td>
+</tr>
+<tr>
+<td><strong><code>XAI_API_KEY</code></strong></td>
+<td>付费 xAI API 密钥</td>
+<td>在 <code>~/.hermes/.env</code> 中设置</td>
+</tr>
+</tbody>
+</table>
+<p>两者使用相同的 endpoint 和相同的请求体，区别仅在于 bearer token。<strong>当两者同时配置时，SuperGrok OAuth 优先</strong>，x_search 将消耗你的订阅配额而非付费 API 用量。</p>
+<p>工具的 <code>check_fn</code> 在每次重建模型工具列表时都会运行 xAI 凭据解析器。返回 <code>True</code> 表示 bearer token 可获取、非空，且（若已过期）已成功刷新。刷新失败的已撤销 token 会将该工具从 schema 中隐藏，模型将无法感知其存在。</p>
+<h2>启用工具</h2>
+<p>当 xAI 凭据（OAuth token 或 <code>XAI_API_KEY</code>）存在时自动启用。如不需要，可通过 <code>hermes tools</code> → Search → x_search 显式禁用。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes tools
+# → 🐦 X (Twitter) Search   (press space to toggle on)
+</div>
+<p>选择器提供两种凭据选项：</p>
+<ol>
+<li><strong>xAI Grok OAuth (SuperGrok / Premium+)</strong> — 若尚未登录，将打开浏览器跳转至 <code>accounts.x.ai</code></li>
+<li><strong>xAI API key</strong> — 提示输入 <code>XAI_API_KEY</code></li>
+</ol>
+<p>任一选项均可满足门控条件。你可以使用已有的任意凭据，工具行为完全相同。若两者均已配置，调用时 OAuth 优先。</p>
+<h2>配置</h2>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ~/.hermes/config.yaml
+x_search:
+  # 用于 Responses 调用的 xAI 模型。
+  # grok-4.20-reasoning 是推荐的默认值；任何支持
+  # x_search 工具访问权限的 Grok 模型均可使用。
+  model: grok-4.20-reasoning
+
+  # 请求超时时间（秒）。复杂查询的 x_search 可能需要 60–120 秒，
+  # 默认值较为宽松。最小值：30。
+  timeout_seconds: 180
+
+  # 遇到 5xx / ReadTimeout / ConnectionError 时的自动重试次数。
+  # 每次重试按指数退避（1.5 倍尝试秒数，上限 5 秒）。
+  retries: 2
+</div>
+<h2>工具参数</h2>
+<p>agent 调用 <code>x_search</code> 时使用以下参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>query</code></td>
+<td>string（必填）</td>
+<td>在 X 上要查找的内容。</td>
+</tr>
+<tr>
+<td><code>allowed_x_handles</code></td>
+<td>string 数组</td>
+<td>可选，<strong>仅</strong>包含指定账号的列表（最多 10 个）。前缀 <code>@</code> 会被自动去除。</td>
+</tr>
+<tr>
+<td><code>excluded_x_handles</code></td>
+<td>string 数组</td>
+<td>可选，要排除的账号列表（最多 10 个）。与 <code>allowed_x_handles</code> 互斥。</td>
+</tr>
+<tr>
+<td><code>from_date</code></td>
+<td>string</td>
+<td>可选，<code>YYYY-MM-DD</code> 格式的起始日期。</td>
+</tr>
+<tr>
+<td><code>to_date</code></td>
+<td>string</td>
+<td>可选，<code>YYYY-MM-DD</code> 格式的结束日期。</td>
+</tr>
+<tr>
+<td><code>enable_image_understanding</code></td>
+<td>boolean</td>
+<td>让 xAI 分析匹配帖子中附带的图片。</td>
+</tr>
+<tr>
+<td><code>enable_video_understanding</code></td>
+<td>boolean</td>
+<td>让 xAI 分析匹配帖子中附带的视频。</td>
+</tr>
+</tbody>
+</table>
+<p>工具返回的 JSON 包含：</p>
+<ul>
+<li><code>answer</code> — Grok 生成的综合文本回答</li>
+<li><code>citations</code> — Responses API 顶层字段返回的引用</li>
+<li><code>inline_citations</code> — 从消息正文中提取的 <code>url_citation</code> 注释（每条包含 <code>url</code>、<code>title</code>、<code>start_index</code>、<code>end_index</code>）</li>
+<li><code>degraded</code> — 当设置了任意缩小范围的过滤器（<code>allowed_x_handles</code>、<code>excluded_x_handles</code>、<code>from_date</code>、<code>to_date</code>）且两个引用渠道均返回空时为 <code>true</code>。此时 <code>answer</code> 是基于模型自身知识合成的，而非来自 X 索引，应视为无来源内容。否则为 <code>false</code>（包括&quot;未设置过滤器&quot;的情况——宽泛的无来源回答只是一个回答，而非过滤器未命中）</li>
+<li><code>degraded_reason</code> — 列出哪些过滤器处于激活状态的简短字符串，当 <code>degraded</code> 为 <code>false</code> 时为 <code>null</code></li>
+<li><code>credential_source</code> — OAuth 解析成功时为 <code>&quot;xai-oauth&quot;</code>，API 密钥解析成功时为 <code>&quot;xai&quot;</code></li>
+<li><code>model</code>、<code>query</code>、<code>provider</code>、<code>tool</code>、<code>success</code></li>
+</ul>
+<h3>日期验证</h3>
+<p><code>from_date</code> / <code>to_date</code> 在发起 HTTP 调用前会在客户端进行验证：</p>
+<ul>
+<li>若提供，两者均须能解析为 <code>YYYY-MM-DD</code> 格式。</li>
+<li>当两者同时设置时，<code>from_date</code> 必须不晚于 <code>to_date</code>。</li>
+<li><code>from_date</code> 不得晚于今天（UTC）——尚未开始的时间窗口内不可能存在帖子，调用必然返回零引用。</li>
+<li><code>to_date</code> 允许为未来日期（调用方可能合理地请求&quot;从昨天到明天&quot;以捕获即将发布的帖子）。</li>
+</ul>
+<p>验证失败会以结构化的 <code>{&quot;error&quot;: &quot;...&quot;}</code> 工具结果返回，不会向 xAI 发起 HTTP 调用。</p>
+<h2>示例</h2>
+<p>与 agent 对话：</p>
+<blockquote>
+<p>X 上的人们对新的 Grok 图像功能有什么看法？重点关注 @xai 的回应。</p>
+</blockquote>
+<p>agent 将：</p>
+<ol>
+<li>以 <code>query=&quot;reactions to new Grok image features&quot;</code>、<code>allowed_x_handles=[&quot;xai&quot;]</code> 调用 <code>x_search</code></li>
+<li>获取综合回答及指向具体帖子的引用列表</li>
+<li>回复包含答案和参考来源</li>
+</ol>
+<h2>故障排查</h2>
+<h3>&quot;No xAI credentials available&quot;</h3>
+<p>当两种认证路径均失败时，工具会显示此错误。请在 <code>~/.hermes/.env</code> 中设置 <code>XAI_API_KEY</code>，或运行 <code>hermes auth add xai-oauth</code> 并完成浏览器登录。然后重启会话，让 agent 重新加载工具注册表。</p>
+<h3>&quot;<code>x_search</code> is not enabled for this model&quot;</h3>
+<p>配置的 <code>x_search.model</code> 没有访问服务端 <code>x_search</code> 工具的权限。请切换至 <code>grok-4.20-reasoning</code>（默认值）或其他支持该工具的 Grok 模型。当前支持列表请查阅 <a href="https://docs.x.ai/">xAI 文档</a>。</p>
+<h3>工具未出现在 schema 中</h3>
+<p>可能有两个原因：</p>
+<ol>
+<li><strong>工具集未启用。</strong> 运行 <code>hermes tools</code>，确认 <code>🐦 X (Twitter) Search</code> 已勾选。</li>
+<li><strong>无 xAI 凭据。</strong> <code>check_fn</code> 返回 False，schema 保持隐藏。运行 <code>hermes auth status</code> 确认 xai-oauth 登录状态，并检查 <code>XAI_API_KEY</code> 是否已设置（如使用 API 密钥路径）。</li>
+</ol>
+<h3><code>degraded: true</code> — 回答无引用来源</h3>
+<p>当你使用了 <code>allowed_x_handles</code>、<code>excluded_x_handles</code> 或日期范围，且响应返回 <code>degraded: true</code> 时，说明 xAI 的 X 索引未找到匹配帖子，但 Grok 仍基于自身训练数据生成了综合回答。该回答无来源支撑——请勿将其视为真实的 X 内容。</p>
+<p>值得排查的原因：</p>
+<ul>
+<li><strong>账号名拼写错误。</strong> 去掉 <code>@</code>，仔细核对拼写，并确认该账号存在。</li>
+<li><strong>日期范围过窄</strong>，或滑过了今日帖子；请扩大范围后重试。</li>
+<li><strong>xAI 索引缺口。</strong> 部分活跃账号即使定期发帖，也会间歇性地无法在 <code>x_search</code> 中出现。请等待几分钟后重试，或在需要精确获取某账号时间线时使用 <code>xurl</code> 技能直接调用 X API。</li>
+</ul>
+<h2>另请参阅</h2>
+<ul>
+<li><a href="../../guides/xai-grok-oauth.html">xAI Grok OAuth (SuperGrok / Premium+)</a> — OAuth 配置指南</li>
+<li><a href="web-search.html">Web 搜索与提取</a> — 用于一般（非 X）网页搜索</li>
+<li><a href="../../reference/tools-reference.html">工具参考</a> — 完整工具目录</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

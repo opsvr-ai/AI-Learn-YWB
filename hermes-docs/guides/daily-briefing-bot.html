@@ -1,0 +1,347 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>教程：每日简报机器人 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html" class="active">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 实用指南 / 教程：每日简报机器人</div><p>在本教程中，你将构建一个个人简报机器人，它每天早晨自动启动，研究你关心的主题，汇总发现，并将简洁的简报直接推送到你的 Telegram 或 Discord。</p>
+<p>完成后，你将拥有一个完全自动化的工作流，结合了 <strong>网页搜索</strong>、<strong>cron 调度</strong>、<strong>委托（delegation）</strong> 和 <strong>消息推送</strong> — 无需编写代码。</p>
+<h2>我们要构建什么</h2>
+<p>流程如下：</p>
+<ol>
+<li><strong>上午 8:00</strong> — cron 调度器触发任务</li>
+<li><strong>Hermes 启动</strong>一个全新的 agent 会话，使用你的 prompt（提示词）</li>
+<li><strong>网页搜索</strong>拉取你关注主题的最新新闻</li>
+<li><strong>汇总</strong>将内容提炼为简洁的简报格式</li>
+<li><strong>推送</strong>将简报发送到你的 Telegram 或 Discord</li>
+</ol>
+<p>整个流程无需人工干预。你只需在早晨喝咖啡时阅读简报即可。</p>
+<h2>前提条件</h2>
+<p>开始之前，请确保：</p>
+<ul>
+<li><strong>已安装 Hermes Agent</strong> — 参见<a href="/getting-started/installation">安装指南</a></li>
+<li><strong>Gateway 正在运行</strong> — gateway 守护进程负责处理 cron 执行：</li>
+</ul>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+  hermes gateway install   # Install as a user service
+  sudo hermes gateway install --system   # Linux servers: boot-time system service
+  # or
+  hermes gateway           # Run in foreground
+</div>
+<ul>
+<li><strong>Firecrawl API 密钥</strong> — 在环境变量中设置 <code>FIRECRAWL_API_KEY</code> 以启用网页搜索</li>
+<li><strong>已配置消息推送</strong>（可选但推荐）— 已设置 <a href="/user-guide/messaging/telegram">Telegram</a> 或 Discord 并配置了 home channel</li>
+</ul>
+<div class="tip"><strong>💡 没有消息推送？没关系</strong>
+你仍然可以使用 <code>deliver: &quot;local&quot;</code> 跟随本教程。简报将保存至 <code>~/.hermes/cron/output/</code>，你可以随时查阅。
+</div>
+<h2>第一步：手动测试工作流</h2>
+<p>在自动化之前，先确认简报功能正常。启动聊天会话：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes
+</div>
+<p>然后输入以下 prompt：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Search for the latest news about AI agents and open source LLMs.
+Summarize the top 3 stories in a concise briefing format with links.
+</div>
+<p>Hermes 将搜索网页、阅读结果，并生成类似以下内容：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+☀️ Your AI Briefing — March 8, 2026
+
+1. Qwen 3 Released with 235B Parameters
+   Alibaba's latest open-weight model matches GPT-4.5 on several
+   benchmarks while remaining fully open source.
+   → https://qwenlm.github.io/blog/qwen3/
+
+2. LangChain Launches Agent Protocol Standard
+   A new open standard for agent-to-agent communication gains
+   adoption from 15 major frameworks in its first week.
+   → https://blog.langchain.dev/agent-protocol/
+
+3. EU AI Act Enforcement Begins for General-Purpose Models
+   The first compliance deadlines hit, with open source models
+   receiving exemptions under the 10M parameter threshold.
+   → https://artificialintelligenceact.eu/updates/
+
+---
+3 stories • Sources searched: 8 • Generated by Hermes Agent
+</div>
+<p>如果运行正常，你就可以开始自动化了。</p>
+<div class="tip"><strong>💡 反复调整格式</strong>
+尝试不同的 prompt，直到得到你满意的输出。可以添加诸如&quot;使用 emoji 标题&quot;或&quot;每条摘要不超过 2 句话&quot;之类的指令。最终确定的内容将写入 cron 任务。
+</div>
+<h2>第二步：创建 Cron 任务</h2>
+<p>现在让我们将其设置为每天早晨自动运行。有两种方式可以实现。</p>
+<p>在创建 cron 任务之前，请确保 Hermes 已全局配置了默认模型和 provider。如果你希望某个任务使用不同的值，可在创建时设置该任务专属的 model/provider 覆盖项。</p>
+<h3>方式 A：自然语言（在聊天中）</h3>
+<p>直接告诉 Hermes 你想要什么：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Every morning at 8am, search the web for the latest news about AI agents
+and open source LLMs. Summarize the top 3 stories in a concise briefing
+with links. Use a friendly, professional tone. Deliver to telegram.
+</div>
+<p>Hermes 将使用统一的 <code>cronjob</code> 工具为你创建 cron 任务。</p>
+<h3>方式 B：CLI 斜杠命令</h3>
+<p>使用 <code>/cron</code> 命令进行更精细的控制：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/cron add "0 8 * * *" "Search the web for the latest news about AI agents and open source LLMs. Find at least 5 recent articles from the past 24 hours. Summarize the top 3 most important stories in a concise daily briefing format. For each story include: a clear headline, a 2-sentence summary, and the source URL. Use a friendly, professional tone. Format with emoji bullet points and end with a total story count."
+</div>
+<h3>黄金法则：自包含的 Prompt</h3>
+<div class="tip warning"><strong>⚠️ 关键概念</strong>
+Cron 任务在<strong>全新会话</strong>中运行 — 不保留之前对话的任何记忆，也不了解你&quot;之前设置&quot;的任何内容。你的 prompt 必须包含 agent 完成任务所需的<strong>一切信息</strong>。
+</div>
+<p><strong>糟糕的 prompt：</strong></p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Do my usual morning briefing.
+</div>
+<p><strong>好的 prompt：</strong></p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Search the web for the latest news about AI agents and open source LLMs.
+Find at least 5 recent articles from the past 24 hours. Summarize the
+top 3 most important stories in a concise daily briefing format. For each
+story include: a clear headline, a 2-sentence summary, and the source URL.
+Use a friendly, professional tone. Format with emoji bullet points.
+</div>
+<p>好的 prompt 明确说明了<strong>搜索什么</strong>、<strong>多少篇文章</strong>、<strong>什么格式</strong>以及<strong>什么语气</strong>。它在一次输入中包含了 agent 所需的全部信息。</p>
+<h2>第三步：自定义简报</h2>
+<p>基础简报运行正常后，你可以进一步发挥创意。</p>
+<h3>多主题简报</h3>
+<p>在一份简报中涵盖多个领域：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/cron add "0 8 * * *" "Create a morning briefing covering three topics. For each topic, search the web for recent news from the past 24 hours and summarize the top 2 stories with links.
+
+Topics:
+1. AI and machine learning — focus on open source models and agent frameworks
+2. Cryptocurrency — focus on Bitcoin, Ethereum, and regulatory news
+3. Space exploration — focus on SpaceX, NASA, and commercial space
+
+Format as a clean briefing with section headers and emoji. End with today's date and a motivational quote."
+</div>
+<h3>使用委托进行并行研究</h3>
+<p>若要加快简报生成速度，可以告诉 Hermes 将每个主题委托给子 agent：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/cron add "0 8 * * *" "Create a morning briefing by delegating research to sub-agents. Delegate three parallel tasks:
+
+1. Delegate: Search for the top 2 AI/ML news stories from the past 24 hours with links
+2. Delegate: Search for the top 2 cryptocurrency news stories from the past 24 hours with links
+3. Delegate: Search for the top 2 space exploration news stories from the past 24 hours with links
+
+Collect all results and combine them into a single clean briefing with section headers, emoji formatting, and source links. Add today's date as a header."
+</div>
+<p>每个子 agent 独立并行搜索，然后主 agent 将所有内容合并为一份精美的简报。详见<a href="/user-guide/features/delegation">委托文档</a>了解其工作原理。</p>
+<h3>仅工作日调度</h3>
+<p>不需要周末简报？使用针对周一至周五的 cron 表达式：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/cron add "0 8 * * 1-5" "Search for the latest AI and tech news..."
+</div>
+<h3>每日两次简报</h3>
+<p>获取早晨概览和傍晚回顾：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/cron add "0 8 * * *" "Morning briefing: search for AI news from the past 12 hours..."
+/cron add "0 18 * * *" "Evening recap: search for AI news from the past 12 hours..."
+</div>
+<h3>通过 Memory 添加个人上下文</h3>
+<p>如果你启用了 <a href="/user-guide/features/memory">memory（记忆）</a>，可以存储跨会话持久保留的偏好设置。但请记住 — cron 任务在全新会话中运行，不保留对话记忆。若要添加个人上下文，请直接将其写入 prompt：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/cron add "0 8 * * *" "You are creating a briefing for a senior ML engineer who cares about: PyTorch ecosystem, transformer architectures, open-weight models, and AI regulation in the EU. Skip stories about product launches or funding rounds unless they involve open source.
+
+Search for the latest news on these topics. Summarize the top 3 stories with links. Be concise and technical — this reader doesn't need basic explanations."
+</div>
+<div class="tip"><strong>💡 定制受众角色</strong>
+在 prompt 中加入简报受众的详细信息，能显著提升内容相关性。告诉 agent 你的角色、兴趣以及需要跳过的内容。
+</div>
+<h2>第四步：管理你的任务</h2>
+<h3>列出所有已调度任务</h3>
+<p>在聊天中：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/cron list
+</div>
+<p>或在终端中：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes cron list
+</div>
+<p>你将看到类似以下的输出：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+ID          | Name              | Schedule    | Next Run           | Deliver
+------------|-------------------|-------------|--------------------|--------
+a1b2c3d4    | Morning Briefing  | 0 8 * * *   | 2026-03-09 08:00   | telegram
+e5f6g7h8    | Evening Recap     | 0 18 * * *  | 2026-03-08 18:00   | telegram
+</div>
+<h3>删除任务</h3>
+<p>在聊天中：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/cron remove a1b2c3d4
+</div>
+<p>或通过对话方式：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Remove my morning briefing cron job.
+</div>
+<p>Hermes 将使用 <code>cronjob(action=&quot;list&quot;)</code> 查找任务，并使用 <code>cronjob(action=&quot;remove&quot;)</code> 将其删除。</p>
+<h3>检查 Gateway 状态</h3>
+<p>确认调度器正在运行：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes cron status
+</div>
+<p>如果 gateway 未运行，你的任务将不会执行。将其安装为后台服务以确保可靠性：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway install
+# or on Linux servers
+sudo hermes gateway install --system
+</div>
+<h2>进一步探索</h2>
+<p>你已经构建了一个可运行的每日简报机器人。以下是一些可以继续探索的方向：</p>
+<ul>
+<li><strong><a href="/user-guide/features/cron">定时任务（Cron）</a></strong> — 调度格式、重复限制和推送选项的完整参考</li>
+<li><strong><a href="/user-guide/features/delegation">委托</a></strong> — 深入了解并行子 agent 工作流</li>
+<li><strong><a href="/user-guide/messaging">消息推送平台</a></strong> — 设置 Telegram、Discord 或其他推送目标</li>
+<li><strong><a href="/user-guide/features/memory">Memory</a></strong> — 跨会话的持久上下文</li>
+<li><strong><a href="/guides/tips">技巧与最佳实践</a></strong> — 更多 prompt 工程建议</li>
+</ul>
+<div class="tip"><strong>💡 还能调度什么？</strong>
+简报机器人的模式适用于任何场景：竞争对手监控、GitHub 仓库摘要、天气预报、投资组合追踪、服务器健康检查，甚至每日笑话。只要你能用 prompt 描述它，就能调度它。
+</div>
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

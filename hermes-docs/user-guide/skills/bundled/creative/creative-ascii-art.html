@@ -1,0 +1,478 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ascii Art — ASCII art: pyfiglet, cowsay, boxes, image-to-ascii - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Ascii Art — ASCII art: pyfiglet, cowsay, boxes, image-to-ascii</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Ascii Art</h1>
+<p>ASCII art：pyfiglet、cowsay、boxes、image-to-ascii。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>内置（默认安装）</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>skills/creative/ascii-art</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>4.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>0xbyt4, Hermes Agent</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>ASCII</code>, <code>Art</code>, <code>Banners</code>, <code>Creative</code>, <code>Unicode</code>, <code>Text-Art</code>, <code>pyfiglet</code>, <code>figlet</code>, <code>cowsay</code>, <code>boxes</code></td>
+</tr>
+<tr>
+<td>相关 skill</td>
+<td><a href="/user-guide/skills/bundled/creative/creative-excalidraw"><code>excalidraw</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>ASCII Art Skill</h1>
+<p>多种工具，满足不同的 ASCII art 需求。所有工具均为本地 CLI 程序或免费 REST API——无需 API 密钥。</p>
+<h2>工具 1：文字横幅（pyfiglet——本地）</h2>
+<p>将文本渲染为大型 ASCII art 横幅。内置 571 种字体。</p>
+<h3>安装</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install pyfiglet --break-system-packages -q
+</div>
+<h3>用法</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 -m pyfiglet "YOUR TEXT" -f slant
+python3 -m pyfiglet "TEXT" -f doom -w 80    # Set width
+python3 -m pyfiglet --list_fonts             # List all 571 fonts
+</div>
+<h3>推荐字体</h3>
+<table>
+<thead>
+<tr>
+<th>风格</th>
+<th>字体</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>简洁现代</td>
+<td><code>slant</code></td>
+<td>项目名称、标题</td>
+</tr>
+<tr>
+<td>粗体块状</td>
+<td><code>doom</code></td>
+<td>标题、Logo</td>
+</tr>
+<tr>
+<td>大而易读</td>
+<td><code>big</code></td>
+<td>横幅</td>
+</tr>
+<tr>
+<td>经典横幅</td>
+<td><code>banner3</code></td>
+<td>宽屏显示</td>
+</tr>
+<tr>
+<td>紧凑</td>
+<td><code>small</code></td>
+<td>副标题</td>
+</tr>
+<tr>
+<td>赛博朋克</td>
+<td><code>cyberlarge</code></td>
+<td>科技主题</td>
+</tr>
+<tr>
+<td>3D 效果</td>
+<td><code>3-d</code></td>
+<td>启动画面</td>
+</tr>
+<tr>
+<td>哥特风</td>
+<td><code>gothic</code></td>
+<td>戏剧性文字</td>
+</tr>
+</tbody>
+</table>
+<h3>提示</h3>
+<ul>
+<li>预览 2-3 种字体，让用户选择喜欢的</li>
+<li>短文本（1-8 个字符）与 <code>doom</code> 或 <code>block</code> 等精细字体搭配效果最佳</li>
+<li>长文本更适合 <code>small</code> 或 <code>mini</code> 等紧凑字体</li>
+</ul>
+<h2>工具 2：文字横幅（asciified API——远程，无需安装）</h2>
+<p>将文本转换为 ASCII art 的免费 REST API。支持 250+ 种 FIGlet 字体。直接返回纯文本——无需解析。当 pyfiglet 未安装时使用，或作为快速替代方案。</p>
+<h3>用法（通过终端 curl）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Basic text banner (default font)
+curl -s "https://asciified.thelicato.io/api/v2/ascii?text=Hello+World"
+<h1>With a specific font</h1>
+<p>curl -s &quot;https://asciified.thelicato.io/api/v2/ascii?text=Hello&amp;amp;font=Slant&quot;
+curl -s &quot;https://asciified.thelicato.io/api/v2/ascii?text=Hello&amp;amp;font=Doom&quot;
+curl -s &quot;https://asciified.thelicato.io/api/v2/ascii?text=Hello&amp;amp;font=Star+Wars&quot;
+curl -s &quot;https://asciified.thelicato.io/api/v2/ascii?text=Hello&amp;amp;font=3-D&quot;
+curl -s &quot;https://asciified.thelicato.io/api/v2/ascii?text=Hello&amp;amp;font=Banner3&quot;</p>
+<h1>List all available fonts (returns JSON array)</h1>
+<p>curl -s &quot;https://asciified.thelicato.io/api/v2/fonts&quot;</p>
+</div>
+<h3>提示</h3>
+<ul>
+<li>在 text 参数中将空格 URL 编码为 <code>+</code></li>
+<li>响应为纯文本 ASCII art——无 JSON 包装，可直接显示</li>
+<li>字体名称区分大小写；使用 fonts 端点获取精确名称</li>
+<li>在任何带有 curl 的终端中均可使用——无需 Python 或 pip</li>
+</ul>
+<h2>工具 3：Cowsay（消息艺术）</h2>
+<p>经典工具，将文本包裹在带有 ASCII 角色的对话气泡中。</p>
+<h3>安装</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+sudo apt install cowsay -y    # Debian/Ubuntu
+# brew install cowsay         # macOS
+</div>
+<h3>用法</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cowsay "Hello World"
+cowsay -f tux "Linux rules"       # Tux the penguin
+cowsay -f dragon "Rawr!"          # Dragon
+cowsay -f stegosaurus "Roar!"     # Stegosaurus
+cowthink "Hmm..."                  # Thought bubble
+cowsay -l                          # List all characters
+</div>
+<h3>可用角色（50+）</h3>
+<p><code>beavis.zen</code>, <code>bong</code>, <code>bunny</code>, <code>cheese</code>, <code>daemon</code>, <code>default</code>, <code>dragon</code>,
+<code>dragon-and-cow</code>, <code>elephant</code>, <code>eyes</code>, <code>flaming-skull</code>, <code>ghostbusters</code>,
+<code>hellokitty</code>, <code>kiss</code>, <code>kitty</code>, <code>koala</code>, <code>luke-koala</code>, <code>mech-and-cow</code>,
+<code>meow</code>, <code>moofasa</code>, <code>moose</code>, <code>ren</code>, <code>sheep</code>, <code>skeleton</code>, <code>small</code>,
+<code>stegosaurus</code>, <code>stimpy</code>, <code>supermilker</code>, <code>surgery</code>, <code>three-eyes</code>,
+<code>turkey</code>, <code>turtle</code>, <code>tux</code>, <code>udder</code>, <code>vader</code>, <code>vader-koala</code>, <code>www</code></p>
+<h3>眼睛/舌头修饰符</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cowsay -b "Borg"       # =_= eyes
+cowsay -d "Dead"       # x_x eyes
+cowsay -g "Greedy"     # $_$ eyes
+cowsay -p "Paranoid"   # @_@ eyes
+cowsay -s "Stoned"     # *_* eyes
+cowsay -w "Wired"      # O_O eyes
+cowsay -e "OO" "Msg"   # Custom eyes
+cowsay -T "U " "Msg"   # Custom tongue
+</div>
+<h2>工具 4：Boxes（装饰性边框）</h2>
+<p>在任意文本周围绘制装饰性 ASCII art 边框/框架。内置 70+ 种设计。</p>
+<h3>安装</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+sudo apt install boxes -y    # Debian/Ubuntu
+# brew install boxes         # macOS
+</div>
+<h3>用法</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+echo "Hello World" | boxes                    # Default box
+echo "Hello World" | boxes -d stone           # Stone border
+echo "Hello World" | boxes -d parchment       # Parchment scroll
+echo "Hello World" | boxes -d cat             # Cat border
+echo "Hello World" | boxes -d dog             # Dog border
+echo "Hello World" | boxes -d unicornsay      # Unicorn
+echo "Hello World" | boxes -d diamonds        # Diamond pattern
+echo "Hello World" | boxes -d c-cmt           # C-style comment
+echo "Hello World" | boxes -d html-cmt        # HTML comment
+echo "Hello World" | boxes -a c               # Center text
+boxes -l                                       # List all 70+ designs
+</div>
+<h3>与 pyfiglet 或 asciified 组合使用</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python3 -m pyfiglet "HERMES" -f slant | boxes -d stone
+# Or without pyfiglet installed:
+curl -s "https://asciified.thelicato.io/api/v2/ascii?text=HERMES&amp;font=Slant" | boxes -d stone
+</div>
+<h2>工具 5：TOIlet（彩色文字艺术）</h2>
+<p>类似 pyfiglet，但支持 ANSI 颜色效果和视觉滤镜。非常适合终端视觉效果。</p>
+<h3>安装</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+sudo apt install toilet toilet-fonts -y    # Debian/Ubuntu
+# brew install toilet                      # macOS
+</div>
+<h3>用法</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+toilet "Hello World"                    # Basic text art
+toilet -f bigmono12 "Hello"            # Specific font
+toilet --gay "Rainbow!"                 # Rainbow coloring
+toilet --metal "Metal!"                 # Metallic effect
+toilet -F border "Bordered"             # Add border
+toilet -F border --gay "Fancy!"         # Combined effects
+toilet -f pagga "Block"                 # Block-style font (unique to toilet)
+toilet -F list                          # List available filters
+</div>
+<h3>滤镜</h3>
+<p><code>crop</code>、<code>gay</code>（彩虹）、<code>metal</code>、<code>flip</code>、<code>flop</code>、<code>180</code>、<code>left</code>、<code>right</code>、<code>border</code></p>
+<p><strong>注意</strong>：toilet 输出带颜色的 ANSI 转义码——在终端中正常显示，但在某些场景下可能无法渲染（例如纯文本文件、部分聊天平台）。</p>
+<h2>工具 6：图片转 ASCII Art</h2>
+<p>将图片（PNG、JPEG、GIF、WEBP）转换为 ASCII art。</p>
+<h3>方案 A：ascii-image-converter（推荐，现代化）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Install
+sudo snap install ascii-image-converter
+# OR: go install github.com/TheZoraiz/ascii-image-converter@latest
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+ascii-image-converter image.png                  # Basic
+ascii-image-converter image.png -C               # Color output
+ascii-image-converter image.png -d 60,30         # Set dimensions
+ascii-image-converter image.png -b               # Braille characters
+ascii-image-converter image.png -n               # Negative/inverted
+ascii-image-converter https://url/image.jpg      # Direct URL
+ascii-image-converter image.png --save-txt out   # Save as text
+</div>
+<h3>方案 B：jp2a（轻量级，仅支持 JPEG）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+sudo apt install jp2a -y
+jp2a --width=80 image.jpg
+jp2a --colors image.jpg              # Colorized
+</div>
+<h2>工具 7：搜索预制 ASCII Art</h2>
+<p>从网络搜索精选 ASCII art。使用 <code>terminal</code> 配合 <code>curl</code>。</p>
+<h3>来源 A：ascii.co.uk（推荐用于预制艺术）</h3>
+<p>大量按主题分类的经典 ASCII art 合集。艺术内容位于 HTML <code>&lt;pre&gt;</code> 标签内。使用 curl 获取页面，再用简短的 Python 代码提取艺术内容。</p>
+<p><strong>URL 格式：</strong> <code>https://ascii.co.uk/art/{subject}</code></p>
+<p><strong>第一步——获取页面：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s 'https://ascii.co.uk/art/cat' -o /tmp/ascii_art.html
+</div>
+<p><strong>第二步——从 pre 标签中提取艺术内容：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import re, html
+with open('/tmp/ascii_art.html') as f:
+    text = f.read()
+arts = re.findall(r'&lt;pre[^&gt;]*&gt;(.*?)&lt;/pre&gt;', text, re.DOTALL)
+for art in arts:
+    clean = re.sub(r'&lt;[^&gt;]+&gt;', '', art)
+    clean = html.unescape(clean).strip()
+    if len(clean) &gt; 30:
+        print(clean)
+        print('\n---\n')
+</div>
+<p><strong>可用主题</strong>（用作 URL 路径）：</p>
+<ul>
+<li>动物：<code>cat</code>、<code>dog</code>、<code>horse</code>、<code>bird</code>、<code>fish</code>、<code>dragon</code>、<code>snake</code>、<code>rabbit</code>、<code>elephant</code>、<code>dolphin</code>、<code>butterfly</code>、<code>owl</code>、<code>wolf</code>、<code>bear</code>、<code>penguin</code>、<code>turtle</code></li>
+<li>物品：<code>car</code>、<code>ship</code>、<code>airplane</code>、<code>rocket</code>、<code>guitar</code>、<code>computer</code>、<code>coffee</code>、<code>beer</code>、<code>cake</code>、<code>house</code>、<code>castle</code>、<code>sword</code>、<code>crown</code>、<code>key</code></li>
+<li>自然：<code>tree</code>、<code>flower</code>、<code>sun</code>、<code>moon</code>、<code>star</code>、<code>mountain</code>、<code>ocean</code>、<code>rainbow</code></li>
+<li>角色：<code>skull</code>、<code>robot</code>、<code>angel</code>、<code>wizard</code>、<code>pirate</code>、<code>ninja</code>、<code>alien</code></li>
+<li>节日：<code>christmas</code>、<code>halloween</code>、<code>valentine</code></li>
+</ul>
+<p><strong>提示：</strong></p>
+<ul>
+<li>保留艺术家签名/缩写——这是重要的礼仪</li>
+<li>每个页面包含多件艺术作品——为用户挑选最合适的</li>
+<li>通过 curl 可靠运行，无需 JavaScript</li>
+</ul>
+<h3>来源 B：GitHub Octocat API（有趣的彩蛋）</h3>
+<p>返回一个带有智慧语录的随机 GitHub Octocat。无需认证。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s https://api.github.com/octocat
+</div>
+<h2>工具 8：有趣的 ASCII 实用工具（通过 curl）</h2>
+<p>这些免费服务直接返回 ASCII art——非常适合作为有趣的附加内容。</p>
+<h3>QR 码转 ASCII Art</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s "qrenco.de/Hello+World"
+curl -s "qrenco.de/https://example.com"
+</div>
+<h3>天气转 ASCII Art</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -s "wttr.in/London"          # Full weather report with ASCII graphics
+curl -s "wttr.in/Moon"            # Moon phase in ASCII art
+curl -s "v2.wttr.in/London"       # Detailed version
+</div>
+<h2>工具 9：LLM 生成自定义艺术（兜底方案）</h2>
+<p>当上述工具无法满足需求时，直接使用以下 Unicode 字符生成 ASCII art：</p>
+<h3>字符调色板</h3>
+<p><strong>方框绘制：</strong> <code>╔ ╗ ╚ ╝ ║ ═ ╠ ╣ ╦ ╩ ╬ ┌ ┐ └ ┘ │ ─ ├ ┤ ┬ ┴ ┼ ╭ ╮ ╰ ╯</code></p>
+<p><strong>块元素：</strong> <code>░ ▒ ▓ █ ▄ ▀ ▌ ▐ ▖ ▗ ▘ ▝ ▚ ▞</code></p>
+<p><strong>几何与符号：</strong> <code>◆ ◇ ◈ ● ○ ◉ ■ □ ▲ △ ▼ ▽ ★ ☆ ✦ ✧ ◀ ▶ ◁ ▷ ⬡ ⬢ ⌂</code></p>
+<h3>规则</h3>
+<ul>
+<li>最大宽度：每行 60 个字符（终端安全）</li>
+<li>最大高度：横幅 15 行，场景 25 行</li>
+<li>仅限等宽字体：输出必须在等宽字体下正确渲染</li>
+</ul>
+<h2>决策流程</h2>
+<ol>
+<li><strong>将文本作为横幅</strong> → 若已安装 pyfiglet 则使用，否则通过 curl 调用 asciified API</li>
+<li><strong>将消息包裹在有趣的角色艺术中</strong> → cowsay</li>
+<li><strong>添加装饰性边框/框架</strong> → boxes（可与 pyfiglet/asciified 组合使用）</li>
+<li><strong>特定事物的艺术</strong>（猫、火箭、龙）→ 通过 curl + 解析使用 ascii.co.uk</li>
+<li><strong>将图片转换为 ASCII</strong> → ascii-image-converter 或 jp2a</li>
+<li><strong>QR 码</strong> → 通过 curl 使用 qrenco.de</li>
+<li><strong>天气/月相艺术</strong> → 通过 curl 使用 wttr.in</li>
+<li><strong>自定义/创意内容</strong> → 使用 Unicode 调色板进行 LLM 生成</li>
+<li><strong>任何工具未安装</strong> → 安装它，或回退到下一个选项</li>
+</ol>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,461 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gateway 内部机制 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 开发者指南 / Gateway 内部机制</div><p>消息 gateway 是一个长期运行的进程，通过统一架构将 Hermes 连接到 20 余个外部消息平台。</p>
+<h2>关键文件</h2>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gateway/run.py</code></td>
+<td><code>GatewayRunner</code> — 主循环、斜杠命令、消息分发（大文件；请查看 git 获取当前行数）</td>
+</tr>
+<tr>
+<td><code>gateway/session.py</code></td>
+<td><code>SessionStore</code> — 会话持久化与会话键构造</td>
+</tr>
+<tr>
+<td><code>gateway/delivery.py</code></td>
+<td>向目标平台/频道投递出站消息</td>
+</tr>
+<tr>
+<td><code>gateway/pairing.py</code></td>
+<td>用于用户授权的 DM 配对流程</td>
+</tr>
+<tr>
+<td><code>gateway/channel_directory.py</code></td>
+<td>将聊天 ID 映射为可读名称，用于 cron 投递</td>
+</tr>
+<tr>
+<td><code>gateway/hooks.py</code></td>
+<td>Hook（钩子）发现、加载与生命周期事件分发</td>
+</tr>
+<tr>
+<td><code>gateway/mirror.py</code></td>
+<td>为 <code>send_message</code> 提供跨会话消息镜像</td>
+</tr>
+<tr>
+<td><code>gateway/status.py</code></td>
+<td>面向 profile 范围的 gateway 实例的 token 锁管理</td>
+</tr>
+<tr>
+<td><code>gateway/builtin_hooks/</code></td>
+<td>始终注册的 hook 扩展点（当前未内置任何 hook）</td>
+</tr>
+<tr>
+<td><code>gateway/platforms/</code></td>
+<td>平台适配器（每个消息平台一个）</td>
+</tr>
+</tbody>
+</table>
+<h2>架构概览</h2>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+┌─────────────────────────────────────────────────┐
+│                  GatewayRunner                  │
+│                                                 │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐       │
+│  │ Telegram │  │ Discord  │  │  Slack   │       │
+│  │ Adapter  │  │ Adapter  │  │ Adapter  │       │
+│  └────┬─────┘  └────┬─────┘  └────┬─────┘       │
+│       │             │             │             │
+│       └─────────────┼─────────────┘             │
+│                     ▼                           │
+│              _handle_message()                  │
+│                     │                           │
+│         ┌───────────┼───────────┐               │
+│         ▼           ▼           ▼               │
+│  Slash command   AIAgent    Queue/BG            │
+│    dispatch      creation   sessions            │
+│                     │                           │
+│                     ▼                           │
+│                 SessionStore                    │
+│              (SQLite persistence)               │
+└───────┴─────────────┴─────────────┴─────────────┘
+</div>
+<h2>消息流程</h2>
+<p>当消息从任意平台到达时：</p>
+<ol>
+<li><strong>平台适配器</strong>接收原始事件，将其规范化为 <code>MessageEvent</code></li>
+<li><strong>基础适配器</strong>检查活跃会话守卫：
+<ul>
+<li>若该会话的 agent 正在运行 → 将消息加入队列，设置中断事件</li>
+<li>若为 <code>/approve</code>、<code>/deny</code>、<code>/stop</code> → 绕过守卫（内联分发）</li>
+</ul>
+</li>
+<li><strong>GatewayRunner._handle_message()</strong> 接收事件：
+<ul>
+<li>通过 <code>_session_key_for_source()</code> 解析会话键（格式：<code>agent:main:{platform}:{chat_type}:{chat_id}</code>）</li>
+<li>检查授权（见下方授权章节）</li>
+<li>检查是否为斜杠命令 → 分发至命令处理器</li>
+<li>检查 agent 是否已在运行 → 拦截 <code>/stop</code>、<code>/status</code> 等命令</li>
+<li>否则 → 创建 <code>AIAgent</code> 实例并运行对话</li>
+</ul>
+</li>
+<li><strong>响应</strong>通过平台适配器回传</li>
+</ol>
+<h3>会话键格式</h3>
+<p>会话键编码了完整的路由上下文：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+agent:main:{platform}:{chat_type}:{chat_id}
+</div>
+<p>示例：<code>agent:main:telegram:private:123456789</code></p>
+<p>支持线程的平台（Telegram 论坛话题、Discord 线程、Slack 线程）可能在 chat_id 部分包含线程 ID。<strong>切勿手动构造会话键</strong> — 请始终使用 <code>gateway/session.py</code> 中的 <code>build_session_key()</code>。</p>
+<h3>两级消息守卫</h3>
+<p>当 agent 正在运行时，传入消息会依次经过两级守卫：</p>
+<ol>
+<li>
+<p><strong>第一级 — 基础适配器</strong>（<code>gateway/platforms/base.py</code>）：检查 <code>_active_sessions</code>。若会话处于活跃状态，将消息加入 <code>_pending_messages</code> 队列并设置中断事件。此级在消息到达 gateway runner <em>之前</em>进行拦截。</p>
+</li>
+<li>
+<p><strong>第二级 — Gateway runner</strong>（<code>gateway/run.py</code>）：检查 <code>_running_agents</code>。拦截特定命令（<code>/stop</code>、<code>/new</code>、<code>/queue</code>、<code>/status</code>、<code>/approve</code>、<code>/deny</code>）并进行相应路由。其余所有消息触发 <code>running_agent.interrupt()</code>。</p>
+</li>
+</ol>
+<p>必须在 agent 被阻塞时到达 runner 的命令（如 <code>/approve</code>）通过 <code>await self._message_handler(event)</code> <strong>内联</strong>分发 — 绕过后台任务系统以避免竞态条件。</p>
+<h2>授权</h2>
+<p>Gateway 使用多层授权检查，按顺序评估：</p>
+<ol>
+<li><strong>平台级全量放行标志</strong>（如 <code>TELEGRAM_ALLOW_ALL_USERS</code>）— 若设置，该平台所有用户均被授权</li>
+<li><strong>平台白名单</strong>（如 <code>TELEGRAM_ALLOWED_USERS</code>）— 逗号分隔的用户 ID</li>
+<li><strong>DM 配对</strong> — 已认证用户可通过配对码为新用户授权</li>
+<li><strong>全局放行标志</strong>（<code>GATEWAY_ALLOW_ALL_USERS</code>）— 若设置，所有平台的所有用户均被授权</li>
+<li><strong>默认：拒绝</strong> — 未授权用户被拒绝</li>
+</ol>
+<h3>DM 配对流程</h3>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Admin: /pair
+Gateway: "Pairing code: ABC123. Share with the user."
+New user: ABC123
+Gateway: "Paired! You're now authorized."
+</div>
+<p>配对状态持久化于 <code>gateway/pairing.py</code>，重启后仍然有效。</p>
+<h2>斜杠命令分发</h2>
+<p>Gateway 中所有斜杠命令均经过相同的解析流程：</p>
+<ol>
+<li><code>hermes_cli/commands.py</code> 中的 <code>resolve_command()</code> 将输入映射为规范名称（处理别名、前缀匹配）</li>
+<li>规范名称与 <code>GATEWAY_KNOWN_COMMANDS</code> 进行比对</li>
+<li><code>_handle_message()</code> 中的处理器根据规范名称进行分发</li>
+<li>部分命令受配置门控（<code>CommandDef</code> 上的 <code>gateway_config_gate</code>）</li>
+</ol>
+<h3>运行中 Agent 守卫</h3>
+<p>在 agent 处理消息期间不得执行的命令会被提前拒绝：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+if _quick_key in self._running_agents:
+    if canonical == "model":
+        return "⏳ Agent is running — wait for it to finish or /stop first."
+</div>
+<p>绕过命令（<code>/stop</code>、<code>/new</code>、<code>/approve</code>、<code>/deny</code>、<code>/queue</code>、<code>/status</code>）具有特殊处理逻辑。</p>
+<h2>配置来源</h2>
+<p>Gateway 从多个来源读取配置：</p>
+<table>
+<thead>
+<tr>
+<th>来源</th>
+<th>提供内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>~/.hermes/.env</code></td>
+<td>API 密钥、bot token、平台凭据</td>
+</tr>
+<tr>
+<td><code>~/.hermes/config.yaml</code></td>
+<td>模型设置、工具配置、显示选项</td>
+</tr>
+<tr>
+<td>环境变量</td>
+<td>覆盖上述任意配置</td>
+</tr>
+</tbody>
+</table>
+<p>与 CLI（使用带硬编码默认值的 <code>load_cli_config()</code>）不同，gateway 通过 YAML 加载器直接读取 <code>config.yaml</code>。这意味着存在于 CLI 默认值字典但不在用户配置文件中的配置键，在 CLI 和 gateway 之间可能表现不同。</p>
+<h2>平台适配器</h2>
+<p>每个消息平台在 <code>gateway/platforms/</code> 下均有对应适配器：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+gateway/platforms/
+├── base.py              # BaseAdapter — 所有平台的共享逻辑
+├── telegram.py          # Telegram Bot API（长轮询或 webhook）
+├── discord.py           # Discord bot（通过 discord.py）
+├── slack.py             # Slack Socket Mode
+├── whatsapp.py          # WhatsApp Business Cloud API
+├── signal.py            # Signal（通过 signal-cli REST API）
+├── matrix.py            # Matrix（通过 mautrix，可选 E2EE）
+├── mattermost.py        # Mattermost WebSocket API
+├── email.py             # 电子邮件（通过 IMAP/SMTP）
+├── sms.py               # 短信（通过 Twilio）
+├── dingtalk.py          # 钉钉 WebSocket
+├── feishu.py            # 飞书/Lark WebSocket 或 webhook
+├── wecom.py             # 企业微信（WeCom）回调
+├── weixin.py            # 微信（个人版，通过 iLink Bot API）
+├── bluebubbles.py       # Apple iMessage（通过 BlueBubbles macOS 服务端）
+├── qqbot/               # QQ Bot（腾讯 QQ，通过官方 API v2，子包：adapter.py、crypto.py、keyboards.py 等）
+├── yuanbao.py           # 元宝（腾讯）私信/群组适配器
+├── feishu_comment.py    # 飞书文档/云盘评论回复处理器
+├── msgraph_webhook.py   # Microsoft Graph 变更通知 webhook（Teams、Outlook 等）
+├── webhook.py           # 入站/出站 webhook 适配器
+├── api_server.py        # REST API 服务器适配器
+└── homeassistant.py     # Home Assistant 对话集成
+</div>
+<p>适配器实现统一接口：</p>
+<ul>
+<li><code>connect()</code> / <code>disconnect()</code> — 生命周期管理</li>
+<li><code>send_message()</code> — 出站消息投递</li>
+<li><code>on_message()</code> — 入站消息规范化 → <code>MessageEvent</code></li>
+</ul>
+<h3>Token 锁</h3>
+<p>使用唯一凭据连接的适配器在 <code>connect()</code> 中调用 <code>acquire_scoped_lock()</code>，在 <code>disconnect()</code> 中调用 <code>release_scoped_lock()</code>。这可防止两个 profile 同时使用同一 bot token。</p>
+<h2>投递路径</h2>
+<p>出站投递（<code>gateway/delivery.py</code>）处理以下场景：</p>
+<ul>
+<li><strong>直接回复</strong> — 将响应发回原始聊天</li>
+<li><strong>主频道投递</strong> — 将 cron 任务输出和后台结果路由至已配置的主频道</li>
+<li><strong>显式目标投递</strong> — <code>send_message</code> 工具指定 <code>telegram:-1001234567890</code>，或通过 <a href="/guides/pipe-script-output"><code>hermes send</code> CLI</a> 封装同一工具供 shell 脚本使用</li>
+<li><strong>跨平台投递</strong> — 投递至与原始消息不同的平台</li>
+</ul>
+<p>Cron 任务投递<strong>不会</strong>镜像到 gateway 会话历史中 — 它们仅存在于各自的 cron 会话中。这是有意为之的设计选择，以避免消息交替违规。</p>
+<h2>Hooks</h2>
+<p>Gateway hook 是响应生命周期事件的 Python 模块。</p>
+<h3>Gateway Hook 事件</h3>
+<table>
+<thead>
+<tr>
+<th>事件</th>
+<th>触发时机</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gateway:startup</code></td>
+<td>Gateway 进程启动时</td>
+</tr>
+<tr>
+<td><code>session:start</code></td>
+<td>新对话会话开始时</td>
+</tr>
+<tr>
+<td><code>session:end</code></td>
+<td>会话完成或超时时</td>
+</tr>
+<tr>
+<td><code>session:reset</code></td>
+<td>用户通过 <code>/new</code> 重置会话时</td>
+</tr>
+<tr>
+<td><code>agent:start</code></td>
+<td>Agent 开始处理消息时</td>
+</tr>
+<tr>
+<td><code>agent:step</code></td>
+<td>Agent 完成一次工具调用迭代时</td>
+</tr>
+<tr>
+<td><code>agent:end</code></td>
+<td>Agent 完成并返回响应时</td>
+</tr>
+<tr>
+<td><code>command:*</code></td>
+<td>任意斜杠命令被执行时</td>
+</tr>
+</tbody>
+</table>
+<p>Hook 从 <code>gateway/builtin_hooks/</code>（扩展点 — 当前发行版中为空；<code>_register_builtin_hooks()</code> 是一个空操作存根）和 <code>~/.hermes/hooks/</code>（用户安装）中发现。每个 hook 是一个包含 <code>HOOK.yaml</code> 清单和 <code>handler.py</code> 的目录。</p>
+<h2>内存提供者集成</h2>
+<p>当内存提供者插件（如 Honcho）启用时：</p>
+<ol>
+<li>Gateway 为每条消息创建一个带会话 ID 的 <code>AIAgent</code></li>
+<li><code>MemoryManager</code> 使用会话上下文初始化提供者</li>
+<li>提供者工具（如 <code>honcho_profile</code>、<code>viking_search</code>）通过以下路径路由：</li>
+</ol>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+AIAgent._invoke_tool()
+  → self._memory_manager.handle_tool_call(name, args)
+    → provider.handle_tool_call(name, args)
+</div>
+<ol start="4">
+<li>会话结束/重置时，<code>on_session_end()</code> 触发以进行清理和最终数据刷写</li>
+</ol>
+<h3>内存刷写生命周期</h3>
+<p>当会话被重置、恢复或过期时：</p>
+<ol>
+<li>内置内存刷写至磁盘</li>
+<li>内存提供者的 <code>on_session_end()</code> hook 触发</li>
+<li>临时 <code>AIAgent</code> 运行仅含内存的对话轮次</li>
+<li>上下文随后被丢弃或归档</li>
+</ol>
+<h2>后台维护</h2>
+<p>Gateway 在处理消息的同时运行周期性维护任务：</p>
+<ul>
+<li><strong>Cron 计时</strong> — 检查任务计划并触发到期任务</li>
+<li><strong>会话过期</strong> — 超时后清理废弃会话</li>
+<li><strong>内存刷写</strong> — 在会话过期前主动刷写内存</li>
+<li><strong>缓存刷新</strong> — 刷新模型列表和提供者状态</li>
+</ul>
+<h2>进程管理</h2>
+<p>Gateway 作为长期运行进程运行，管理方式如下：</p>
+<ul>
+<li><code>hermes gateway start</code> / <code>hermes gateway stop</code> — 手动控制</li>
+<li><code>systemctl</code>（Linux）或 <code>launchctl</code>（macOS）— 服务管理</li>
+<li>PID 文件位于 <code>~/.hermes/gateway.pid</code> — 面向 profile 的进程追踪</li>
+</ul>
+<p><strong>Profile 范围 vs 全局</strong>：<code>start_gateway()</code> 使用 profile 范围的 PID 文件。<code>hermes gateway stop</code> 仅停止当前 profile 的 gateway。<code>hermes gateway stop --all</code> 使用全局 <code>ps aux</code> 扫描来终止所有 gateway 进程（用于更新时）。</p>
+<h2>相关文档</h2>
+<ul>
+<li><a href="./session-storage.html">会话存储</a></li>
+<li><a href="./cron-internals.html">Cron 内部机制</a></li>
+<li><a href="./acp-internals.html">ACP 内部机制</a></li>
+<li><a href="./agent-loop.html">Agent 循环内部机制</a></li>
+<li><a href="/user-guide/messaging">消息 Gateway（用户指南）</a></li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

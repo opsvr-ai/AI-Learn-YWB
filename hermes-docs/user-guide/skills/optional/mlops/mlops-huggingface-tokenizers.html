@@ -1,0 +1,683 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Huggingface Tokenizers — 为研究和生产优化的快速 tokenizer - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Huggingface Tokenizers — 为研究和生产优化的快速 tokenizer</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Huggingface Tokenizers</h1>
+<p>为研究和生产优化的快速 tokenizer（分词器）。基于 Rust 的实现可在 &amp;lt;20 秒内对 1GB 文本完成分词。支持 BPE、WordPiece 和 Unigram 算法。可训练自定义词表、追踪对齐关系、处理 padding（填充）/truncation（截断）。与 transformers 无缝集成。当需要高性能分词或训练自定义 tokenizer 时使用。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/mlops/huggingface-tokenizers</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/mlops/huggingface-tokenizers</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Orchestra Research</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>依赖</td>
+<td><code>tokenizers</code>, <code>transformers</code>, <code>datasets</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Tokenization</code>, <code>HuggingFace</code>, <code>BPE</code>, <code>WordPiece</code>, <code>Unigram</code>, <code>Fast Tokenization</code>, <code>Rust</code>, <code>Custom Tokenizer</code>, <code>Alignment Tracking</code>, <code>Production</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 skill 激活时 agent 所看到的指令内容。
+</div>
+<h1>HuggingFace Tokenizers — 高性能 NLP 分词</h1>
+<p>具备 Rust 性能与 Python 易用性的快速、生产就绪 tokenizer。</p>
+<h2>何时使用 HuggingFace Tokenizers</h2>
+<p><strong>在以下情况下使用 HuggingFace Tokenizers：</strong></p>
+<ul>
+<li>需要极快的分词速度（每 GB 文本 &amp;lt;20 秒）</li>
+<li>从头训练自定义 tokenizer</li>
+<li>需要对齐追踪（token → 原始文本位置）</li>
+<li>构建生产级 NLP 流水线</li>
+<li>需要高效地对大型语料库进行分词</li>
+</ul>
+<p><strong>性能</strong>：</p>
+<ul>
+<li><strong>速度</strong>：CPU 上对 1GB 文本分词 &amp;lt;20 秒</li>
+<li><strong>实现</strong>：Rust 核心，提供 Python/Node.js 绑定</li>
+<li><strong>效率</strong>：比纯 Python 实现快 10–100 倍</li>
+</ul>
+<p><strong>改用其他方案的情况</strong>：</p>
+<ul>
+<li><strong>SentencePiece</strong>：语言无关，被 T5/ALBERT 使用</li>
+<li><strong>tiktoken</strong>：OpenAI 用于 GPT 模型的 BPE tokenizer</li>
+<li><strong>transformers AutoTokenizer</strong>：仅加载预训练模型时使用（内部使用本库）</li>
+</ul>
+<h2>快速开始</h2>
+<h3>安装</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 安装 tokenizers
+pip install tokenizers
+<h1>与 transformers 集成</h1>
+<p>pip install tokenizers transformers</p>
+</div>
+<h3>加载预训练 tokenizer</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from tokenizers import Tokenizer
+<h1>从 HuggingFace Hub 加载</h1>
+<p>tokenizer = Tokenizer.from_pretrained(&quot;bert-base-uncased&quot;)</p>
+<h1>对文本编码</h1>
+<p>output = tokenizer.encode(&quot;Hello, how are you?&quot;)
+print(output.tokens)  # ['hello', ',', 'how', 'are', 'you', '?']
+print(output.ids)     # [7592, 1010, 2129, 2024, 2017, 1029]</p>
+<h1>解码还原</h1>
+<p>text = tokenizer.decode(output.ids)
+print(text)  # &quot;hello, how are you?&quot;</p>
+</div>
+<h3>训练自定义 BPE tokenizer</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from tokenizers import Tokenizer
+from tokenizers.models import BPE
+from tokenizers.trainers import BpeTrainer
+from tokenizers.pre_tokenizers import Whitespace
+<h1>使用 BPE 模型初始化 tokenizer</h1>
+<p>tokenizer = Tokenizer(BPE(unk_token=&quot;[UNK]&quot;))
+tokenizer.pre_tokenizer = Whitespace()</p>
+<h1>配置训练器</h1>
+<p>trainer = BpeTrainer(
+vocab_size=30000,
+special_tokens=[&quot;[UNK]&quot;, &quot;[CLS]&quot;, &quot;[SEP]&quot;, &quot;[PAD]&quot;, &quot;[MASK]&quot;],
+min_frequency=2
+)</p>
+<h1>在文件上训练</h1>
+<p>files = [&quot;train.txt&quot;, &quot;validation.txt&quot;]
+tokenizer.train(files, trainer)</p>
+<h1>保存</h1>
+<p>tokenizer.save(&quot;my-tokenizer.json&quot;)</p>
+</div>
+<p><strong>训练时间</strong>：100MB 语料约 1–2 分钟，1GB 语料约 10–20 分钟</p>
+<h3>批量编码与 padding</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 启用 padding
+tokenizer.enable_padding(pad_id=3, pad_token="[PAD]")
+<h1>批量编码</h1>
+<p>texts = [&quot;Hello world&quot;, &quot;This is a longer sentence&quot;]
+encodings = tokenizer.encode_batch(texts)</p>
+<p>for encoding in encodings:
+print(encoding.ids)</p>
+<h1>[101, 7592, 2088, 102, 3, 3, 3]</h1>
+<h1>[101, 2023, 2003, 1037, 2936, 6251, 102]</h1>
+</div>
+<h2>分词算法</h2>
+<h3>BPE（字节对编码）</h3>
+<p><strong>工作原理</strong>：</p>
+<ol>
+<li>从字符级词表开始</li>
+<li>找出最频繁的字符对</li>
+<li>合并为新 token，加入词表</li>
+<li>重复直到达到词表大小</li>
+</ol>
+<p><strong>使用者</strong>：GPT-2、GPT-3、RoBERTa、BART、DeBERTa</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from tokenizers import Tokenizer
+from tokenizers.models import BPE
+from tokenizers.trainers import BpeTrainer
+from tokenizers.pre_tokenizers import ByteLevel
+<p>tokenizer = Tokenizer(BPE(unk_token=&quot;&amp;lt;|endoftext|&amp;gt;&quot;))
+tokenizer.pre_tokenizer = ByteLevel()</p>
+<p>trainer = BpeTrainer(
+vocab_size=50257,
+special_tokens=[&quot;&amp;lt;|endoftext|&amp;gt;&quot;],
+min_frequency=2
+)</p>
+<p>tokenizer.train(files=[&quot;data.txt&quot;], trainer=trainer)</p>
+</div>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>能较好地处理 OOV 词（拆分为子词）</li>
+<li>词表大小灵活</li>
+<li>适合形态丰富的语言</li>
+</ul>
+<p><strong>权衡</strong>：</p>
+<ul>
+<li>分词结果依赖合并顺序</li>
+<li>可能意外拆分常见词</li>
+</ul>
+<h3>WordPiece</h3>
+<p><strong>工作原理</strong>：</p>
+<ol>
+<li>从字符词表开始</li>
+<li>对合并对打分：<code>frequency(pair) / (frequency(first) × frequency(second))</code></li>
+<li>合并得分最高的对</li>
+<li>重复直到达到词表大小</li>
+</ol>
+<p><strong>使用者</strong>：BERT、DistilBERT、MobileBERT</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from tokenizers import Tokenizer
+from tokenizers.models import WordPiece
+from tokenizers.trainers import WordPieceTrainer
+from tokenizers.pre_tokenizers import Whitespace
+from tokenizers.normalizers import BertNormalizer
+<p>tokenizer = Tokenizer(WordPiece(unk_token=&quot;[UNK]&quot;))
+tokenizer.normalizer = BertNormalizer(lowercase=True)
+tokenizer.pre_tokenizer = Whitespace()</p>
+<p>trainer = WordPieceTrainer(
+vocab_size=30522,
+special_tokens=[&quot;[UNK]&quot;, &quot;[CLS]&quot;, &quot;[SEP]&quot;, &quot;[PAD]&quot;, &quot;[MASK]&quot;],
+continuing_subword_prefix=&quot;##&quot;
+)</p>
+<p>tokenizer.train(files=[&quot;corpus.txt&quot;], trainer=trainer)</p>
+</div>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>优先进行有意义的合并（高分 = 语义相关）</li>
+<li>在 BERT 中取得了最优结果</li>
+</ul>
+<p><strong>权衡</strong>：</p>
+<ul>
+<li>若无子词匹配，未知词变为 <code>[UNK]</code></li>
+<li>保存词表而非合并规则（文件较大）</li>
+</ul>
+<h3>Unigram</h3>
+<p><strong>工作原理</strong>：</p>
+<ol>
+<li>从大词表（所有子串）开始</li>
+<li>用当前词表计算语料损失</li>
+<li>移除对损失影响最小的 token</li>
+<li>重复直到达到词表大小</li>
+</ol>
+<p><strong>使用者</strong>：ALBERT、T5、mBART、XLNet（通过 SentencePiece）</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from tokenizers import Tokenizer
+from tokenizers.models import Unigram
+from tokenizers.trainers import UnigramTrainer
+<p>tokenizer = Tokenizer(Unigram())</p>
+<p>trainer = UnigramTrainer(
+vocab_size=8000,
+special_tokens=[&quot;&amp;lt;unk&amp;gt;&quot;, &quot;&amp;lt;s&amp;gt;&quot;, &quot;&amp;lt;/s&amp;gt;&quot;],
+unk_token=&quot;&amp;lt;unk&amp;gt;&quot;
+)</p>
+<p>tokenizer.train(files=[&quot;data.txt&quot;], trainer=trainer)</p>
+</div>
+<p><strong>优点</strong>：</p>
+<ul>
+<li>概率化（找到最可能的分词方式）</li>
+<li>适合无词边界的语言</li>
+<li>能处理多样的语言学上下文</li>
+</ul>
+<p><strong>权衡</strong>：</p>
+<ul>
+<li>训练计算开销较大</li>
+<li>需要调整的超参数更多</li>
+</ul>
+<h2>分词流水线</h2>
+<p>完整流水线：<strong>归一化 → 预分词 → 模型 → 后处理</strong></p>
+<h3>归一化（Normalization）</h3>
+<p>清洗并标准化文本：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from tokenizers.normalizers import NFD, StripAccents, Lowercase, Sequence
+<p>tokenizer.normalizer = Sequence([
+NFD(),           # Unicode 归一化（分解）
+Lowercase(),     # 转为小写
+StripAccents()   # 去除重音符号
+])</p>
+<h1>输入：&quot;Héllo WORLD&quot;</h1>
+<h1>归一化后：&quot;hello world&quot;</h1>
+</div>
+<p><strong>常用归一化器</strong>：</p>
+<ul>
+<li><code>NFD</code>, <code>NFC</code>, <code>NFKD</code>, <code>NFKC</code> — Unicode 归一化形式</li>
+<li><code>Lowercase()</code> — 转为小写</li>
+<li><code>StripAccents()</code> — 去除重音（é → e）</li>
+<li><code>Strip()</code> — 去除空白</li>
+<li><code>Replace(pattern, content)</code> — 正则替换</li>
+</ul>
+<h3>预分词（Pre-tokenization）</h3>
+<p>将文本拆分为类词单元：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from tokenizers.pre_tokenizers import Whitespace, Punctuation, Sequence, ByteLevel
+<h1>按空白和标点拆分</h1>
+<p>tokenizer.pre_tokenizer = Sequence([
+Whitespace(),
+Punctuation()
+])</p>
+<h1>输入：&quot;Hello, world!&quot;</h1>
+<h1>预分词后：[&quot;Hello&quot;, &quot;,&quot;, &quot;world&quot;, &quot;!&quot;]</h1>
+</div>
+<p><strong>常用预分词器</strong>：</p>
+<ul>
+<li><code>Whitespace()</code> — 按空格、制表符、换行符拆分</li>
+<li><code>ByteLevel()</code> — GPT-2 风格的字节级拆分</li>
+<li><code>Punctuation()</code> — 隔离标点</li>
+<li><code>Digits(individual_digits=True)</code> — 逐个拆分数字</li>
+<li><code>Metaspace()</code> — 将空格替换为 ▁（SentencePiece 风格）</li>
+</ul>
+<h3>后处理（Post-processing）</h3>
+<p>为模型输入添加特殊 token：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from tokenizers.processors import TemplateProcessing
+<h1>BERT 风格：[CLS] sentence [SEP]</h1>
+<p>tokenizer.post_processor = TemplateProcessing(
+single=&quot;[CLS] $A [SEP]&quot;,
+pair=&quot;[CLS] $A [SEP] $B [SEP]&quot;,
+special_tokens=[
+(&quot;[CLS]&quot;, 1),
+(&quot;[SEP]&quot;, 2),
+],
+)</p>
+</div>
+<p><strong>常见模式</strong>：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# GPT-2：sentence &lt;|endoftext|&gt;
+TemplateProcessing(
+    single="$A &lt;|endoftext|&gt;",
+    special_tokens=[("&lt;|endoftext|&gt;", 50256)]
+)
+<h1>RoBERTa：&amp;lt;s&amp;gt; sentence &amp;lt;/s&amp;gt;</h1>
+<p>TemplateProcessing(
+single=&quot;&amp;lt;s&amp;gt; $A &amp;lt;/s&amp;gt;&quot;,
+pair=&quot;&amp;lt;s&amp;gt; $A &amp;lt;/s&amp;gt; &amp;lt;/s&amp;gt; $B &amp;lt;/s&amp;gt;&quot;,
+special_tokens=[(&quot;&amp;lt;s&amp;gt;&quot;, 0), (&quot;&amp;lt;/s&amp;gt;&quot;, 2)]
+)</p>
+</div>
+<h2>对齐追踪</h2>
+<p>追踪 token 在原始文本中的位置：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+output = tokenizer.encode("Hello, world!")
+<h1>获取 token 偏移量</h1>
+<p>for token, offset in zip(output.tokens, output.offsets):
+start, end = offset
+print(f&quot;{token:10} → [{start:2}, {end:2}): {text[start:end]!r}&quot;)</p>
+<h1>输出：</h1>
+<h1>hello      → [ 0,  5): 'Hello'</h1>
+<h1>,          → [ 5,  6): ','</h1>
+<h1>world      → [ 7, 12): 'world'</h1>
+<h1>!          → [12, 13): '!'</h1>
+</div>
+<p><strong>使用场景</strong>：</p>
+<ul>
+<li>命名实体识别（将预测结果映射回文本）</li>
+<li>问答（提取答案片段）</li>
+<li>Token 分类（将标签对齐到原始位置）</li>
+</ul>
+<h2>与 transformers 集成</h2>
+<h3>使用 AutoTokenizer 加载</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from transformers import AutoTokenizer
+<h1>AutoTokenizer 自动使用快速 tokenizer</h1>
+<p>tokenizer = AutoTokenizer.from_pretrained(&quot;bert-base-uncased&quot;)</p>
+<h1>检查是否使用快速 tokenizer</h1>
+<p>print(tokenizer.is_fast)  # True</p>
+<h1>访问底层 tokenizers.Tokenizer</h1>
+<p>fast_tokenizer = tokenizer.backend_tokenizer
+print(type(fast_tokenizer))  # &amp;lt;class 'tokenizers.Tokenizer'&amp;gt;</p>
+</div>
+<h3>将自定义 tokenizer 转换为 transformers 格式</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from tokenizers import Tokenizer
+from transformers import PreTrainedTokenizerFast
+<h1>训练自定义 tokenizer</h1>
+<p>tokenizer = Tokenizer(BPE())</p>
+<h1>... 训练 tokenizer ...</h1>
+<p>tokenizer.save(&quot;my-tokenizer.json&quot;)</p>
+<h1>封装为 transformers 格式</h1>
+<p>transformers_tokenizer = PreTrainedTokenizerFast(
+tokenizer_file=&quot;my-tokenizer.json&quot;,
+unk_token=&quot;[UNK]&quot;,
+pad_token=&quot;[PAD]&quot;,
+cls_token=&quot;[CLS]&quot;,
+sep_token=&quot;[SEP]&quot;,
+mask_token=&quot;[MASK]&quot;
+)</p>
+<h1>像使用任何 transformers tokenizer 一样使用</h1>
+<p>outputs = transformers_tokenizer(
+&quot;Hello world&quot;,
+padding=True,
+truncation=True,
+max_length=512,
+return_tensors=&quot;pt&quot;
+)</p>
+</div>
+<h2>常见模式</h2>
+<h3>从迭代器训练（大型数据集）</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from datasets import load_dataset
+<h1>加载数据集</h1>
+<p>dataset = load_dataset(&quot;wikitext&quot;, &quot;wikitext-103-raw-v1&quot;, split=&quot;train&quot;)</p>
+<h1>创建批量迭代器</h1>
+<p>def batch_iterator(batch_size=1000):
+for i in range(0, len(dataset), batch_size):
+yield dataset[i:i + batch_size][&quot;text&quot;]</p>
+<h1>训练 tokenizer</h1>
+<p>tokenizer.train_from_iterator(
+batch_iterator(),
+trainer=trainer,
+length=len(dataset)  # 用于进度条
+)</p>
+</div>
+<p><strong>性能</strong>：约 10–20 分钟处理 1GB</p>
+<h3>启用 truncation 和 padding</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 启用 truncation
+tokenizer.enable_truncation(max_length=512)
+<h1>启用 padding</h1>
+<p>tokenizer.enable_padding(
+pad_id=tokenizer.token_to_id(&quot;[PAD]&quot;),
+pad_token=&quot;[PAD]&quot;,
+length=512  # 固定长度，或 None 表示批次最大长度
+)</p>
+<h1>同时编码</h1>
+<p>output = tokenizer.encode(&quot;This is a long sentence that will be truncated...&quot;)
+print(len(output.ids))  # 512</p>
+</div>
+<h3>多进程处理</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from tokenizers import Tokenizer
+from multiprocessing import Pool
+<h1>加载 tokenizer</h1>
+<p>tokenizer = Tokenizer.from_file(&quot;tokenizer.json&quot;)</p>
+<p>def encode_batch(texts):
+return tokenizer.encode_batch(texts)</p>
+<h1>并行处理大型语料库</h1>
+<p>with Pool(8) as pool:
+# 将语料库拆分为块
+chunk_size = 1000
+chunks = [corpus[i:i+chunk_size] for i in range(0, len(corpus), chunk_size)]</p>
+<pre><code># 并行编码
+results = pool.map(encode_batch, chunks)
+</code></pre>
+</div>
+<p><strong>加速比</strong>：8 核下约 5–8 倍</p>
+<h2>性能基准</h2>
+<h3>训练速度</h3>
+<table>
+<thead>
+<tr>
+<th>语料大小</th>
+<th>BPE（30k 词表）</th>
+<th>WordPiece（30k）</th>
+<th>Unigram（8k）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10 MB</td>
+<td>15 秒</td>
+<td>18 秒</td>
+<td>25 秒</td>
+</tr>
+<tr>
+<td>100 MB</td>
+<td>1.5 分钟</td>
+<td>2 分钟</td>
+<td>4 分钟</td>
+</tr>
+<tr>
+<td>1 GB</td>
+<td>15 分钟</td>
+<td>20 分钟</td>
+<td>40 分钟</td>
+</tr>
+</tbody>
+</table>
+<p><strong>硬件</strong>：16 核 CPU，在英文 Wikipedia 上测试</p>
+<h3>分词速度</h3>
+<table>
+<thead>
+<tr>
+<th>实现方式</th>
+<th>1 GB 语料</th>
+<th>吞吐量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>纯 Python</td>
+<td>~20 分钟</td>
+<td>~50 MB/分钟</td>
+</tr>
+<tr>
+<td>HF Tokenizers</td>
+<td>~15 秒</td>
+<td>~4 GB/分钟</td>
+</tr>
+<tr>
+<td><strong>加速比</strong></td>
+<td><strong>80×</strong></td>
+<td><strong>80×</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>测试</strong>：英文文本，平均句长 20 词</p>
+<h3>内存占用</h3>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>内存</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>加载 tokenizer</td>
+<td>~10 MB</td>
+</tr>
+<tr>
+<td>训练 BPE（30k 词表）</td>
+<td>~200 MB</td>
+</tr>
+<tr>
+<td>编码 100 万句</td>
+<td>~500 MB</td>
+</tr>
+</tbody>
+</table>
+<h2>支持的模型</h2>
+<p>可通过 <code>from_pretrained()</code> 获取的预训练 tokenizer：</p>
+<p><strong>BERT 系列</strong>：</p>
+<ul>
+<li><code>bert-base-uncased</code>, <code>bert-large-cased</code></li>
+<li><code>distilbert-base-uncased</code></li>
+<li><code>roberta-base</code>, <code>roberta-large</code></li>
+</ul>
+<p><strong>GPT 系列</strong>：</p>
+<ul>
+<li><code>gpt2</code>, <code>gpt2-medium</code>, <code>gpt2-large</code></li>
+<li><code>distilgpt2</code></li>
+</ul>
+<p><strong>T5 系列</strong>：</p>
+<ul>
+<li><code>t5-small</code>, <code>t5-base</code>, <code>t5-large</code></li>
+<li><code>google/flan-t5-xxl</code></li>
+</ul>
+<p><strong>其他</strong>：</p>
+<ul>
+<li><code>facebook/bart-base</code>, <code>facebook/mbart-large-cc25</code></li>
+<li><code>albert-base-v2</code>, <code>albert-xlarge-v2</code></li>
+<li><code>xlm-roberta-base</code>, <code>xlm-roberta-large</code></li>
+</ul>
+<p>浏览全部：https://huggingface.co/models?library=tokenizers</p>
+<h2>参考资料</h2>
+<ul>
+<li><strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/huggingface-tokenizers/references/training.html">训练指南</a></strong> — 训练自定义 tokenizer、配置训练器、处理大型数据集</li>
+<li><strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/huggingface-tokenizers/references/algorithms.html">算法深度解析</a></strong> — BPE、WordPiece、Unigram 详细说明</li>
+<li><strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/huggingface-tokenizers/references/pipeline.html">流水线组件</a></strong> — 归一化器、预分词器、后处理器、解码器</li>
+<li><strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/huggingface-tokenizers/references/integration.html">Transformers 集成</a></strong> — AutoTokenizer、PreTrainedTokenizerFast、特殊 token</li>
+</ul>
+<h2>资源</h2>
+<ul>
+<li><strong>文档</strong>：https://huggingface.co/docs/tokenizers</li>
+<li><strong>GitHub</strong>：https://github.com/huggingface/tokenizers ⭐ 9,000+</li>
+<li><strong>版本</strong>：0.20.0+</li>
+<li><strong>课程</strong>：https://huggingface.co/learn/nlp-course/chapter6/1</li>
+<li><strong>论文</strong>：BPE（Sennrich et al., 2016）、WordPiece（Schuster &amp; Nakajima, 2012）</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

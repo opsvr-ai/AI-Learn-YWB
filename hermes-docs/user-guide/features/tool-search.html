@@ -1,0 +1,250 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>工具搜索 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / 工具搜索</div><p>当你的会话挂载了大量 MCP 服务器或非核心插件工具时，它们的 JSON Schema 会在每次交互中消耗相当大比例的上下文窗口——即使其中只有少数几个与用户的实际请求相关。</p>
+<p><strong>工具搜索（Tool Search）</strong> 是 Hermes 针对此问题提供的可选渐进式披露层。启用后，MCP 和插件工具会被三个桥接工具替换到模型可见的工具数组中，模型仅在需要时按需加载具体工具的 Schema。</p>
+<div class="tip"><strong>ℹ️ Hermes 内置工具不会被延迟加载</strong>
+构成 Hermes 核心能力集的工具（<code>terminal</code>、<code>read_file</code>、<code>write_file</code>、<code>patch</code>、<code>search_files</code>、<code>todo</code>、<code>memory</code>、<code>browser_*</code>、<code>web_search</code>、<code>web_extract</code>、<code>clarify</code>、<code>execute_code</code>、<code>delegate_task</code>、<code>session_search</code>、<code>send_message</code> 等 <code>_HERMES_CORE_TOOLS</code>）<strong>始终</strong>直接加载。只有 MCP 工具和非核心插件工具有资格被延迟加载。
+</div>
+<h2>工作原理</h2>
+<p>当工具搜索在某一轮激活时，模型会看到三个新工具替代了被延迟的那些：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+tool_search(query, limit?)     — 搜索延迟工具目录
+tool_describe(name)            — 加载某个工具的完整 Schema
+tool_call(name, arguments)     — 调用某个延迟工具
+</div>
+<p>典型的交互流程如下：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+模型: tool_search("create a github issue")
+  → { matches: [{ name: "mcp_github_create_issue", ... }, ...] }
+模型: tool_describe("mcp_github_create_issue")
+  → { parameters: { type: "object", properties: { ... } } }
+模型: tool_call("mcp_github_create_issue", { title: "...", body: "..." })
+  → { ok: true, issue_number: 42 }
+</div>
+<p>当模型调用 <code>tool_call</code> 时，Hermes <strong>解除桥接</strong>并直接调度底层工具，就好像模型直接调用了该工具一样。工具调用前的 Hook、护栏、审批提示和调用后的 Hook 均针对真实工具名运行——而非 <code>tool_call</code>。CLI 和 Gateway 中的活动信息也会解除包装，让你看到底层工具而非桥接器。</p>
+<h2>何时激活？</h2>
+<p>默认情况下，工具搜索以 <code>auto</code> 模式运行：仅当可延迟的工具 Schema 会消耗活动模型上下文窗口至少 <strong>10%</strong> 时才激活。低于该阈值时，工具数组的组装为纯透传模式，不产生额外开销。</p>
+<p>这一决策在每次构建工具数组时重新评估，因此：</p>
+<ul>
+<li>只有少量 MCP 工具且使用长上下文模型的会话永远不会激活工具搜索。</li>
+<li>挂载了大量 MCP 服务器（通常 15+ 个工具）的会话会开始激活它。</li>
+<li>中途移除 MCP 服务器后，下次组装时能正确恢复到直接暴露模式。</li>
+</ul>
+<h2>配置</h2>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+tools:
+  tool_search:
+    enabled: auto       # auto（默认）、on 或 off
+    threshold_pct: 10   # 上下文窗口百分比——仅在 auto 模式下使用
+    search_default_limit: 5
+    max_search_limit: 20
+</div>
+<table>
+<thead>
+<tr>
+<th>键</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>enabled</code></td>
+<td><code>auto</code></td>
+<td><code>auto</code> 超过阈值后激活；<code>on</code> 只要存在至少一个可延迟工具就始终激活；<code>off</code> 完全禁用。</td>
+</tr>
+<tr>
+<td><code>threshold_pct</code></td>
+<td><code>10</code></td>
+<td><code>auto</code> 模式触发的上下文长度百分比。范围 0–100。</td>
+</tr>
+<tr>
+<td><code>search_default_limit</code></td>
+<td><code>5</code></td>
+<td>模型未指定 <code>limit</code> 时 <code>tool_search</code> 返回的匹配数。</td>
+</tr>
+<tr>
+<td><code>max_search_limit</code></td>
+<td><code>20</code></td>
+<td>模型通过 <code>limit</code> 参数可请求的硬上限。范围 1–50。</td>
+</tr>
+</tbody>
+</table>
+<p>你也可以使用传统的布尔值格式：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+tools:
+  tool_search: true   # 等同于 {enabled: auto}
+</div>
+<h2>何时不使用？</h2>
+<p>工具搜索以固定的每轮 Token 开销（三个桥接工具的 Schema，约 300 Token）和至少一次额外的往返（搜索 → 描述 → 调用）来换取被延迟 Schema 的节省。当你拥有大量工具但每轮只用少量工具时，这是明显的优势；当工具总数较少时则成为额外开销。</p>
+<p><code>auto</code> 默认值为你处理了这些判断。如果你无条件设置 <code>enabled: on</code>，在小型工具集上会有轻微每轮开销。</p>
+<h2>不可避免的权衡</h2>
+<p>这些来自提示缓存完整性的不变约束——它们是任何渐进式披露设计的固有特性，而非此实现特有：</p>
+<ul>
+<li><strong>冷工具需要一次额外往返。</strong> 模型首次需要某个延迟工具时，需要多花一两次模型调用来查找并加载其 Schema。静态侧的 Token 节省是真实的，但部分会在运行时被抵消。</li>
+<li><strong>延迟 Schema 无缓存优势。</strong> 加载后的 <code>tool_describe</code> 结果会进入对话历史（因此在后续轮次中会被缓存），但永远不会从系统提示缓存前缀中受益。</li>
+<li><strong>模型质量依赖。</strong> 工具搜索假设模型能够为它需要的工具编写合理的搜索查询。较小的模型在这方面表现较差；已发布的数字（Opus 4 上不使用 vs 使用工具搜索，准确率从 49% 提升至 74%）显示了优势，但也说明仍有约 26 个百分点的准确率属于检索失败。</li>
+<li><strong>工具集编辑会失效缓存。</strong> 在会话中增加或移除工具会改变桥接工具的描述（包含被延迟工具的数量）和目录，因此提示缓存会失效。这与任何工具集编辑的权衡相同。</li>
+</ul>
+<h2>实现细节</h2>
+<ul>
+<li><strong>检索方式：</strong> 对工具名 + 描述 + 参数名进行分词后的 BM25 检索。当 BM25 返回零正分匹配时，回退到工具名的字面子串匹配，以防止零 IDF 退化情况（例如在目录中搜索 <code>&quot;github&quot;</code>，而每个工具名都包含 &quot;github&quot;）。</li>
+<li><strong>目录跨轮次无状态。</strong> 每次组装时从当前工具定义列表重建——无需会话键控的 <code>Map</code>。这避免了存储的目录与实时工具注册表不同步的 Bug。</li>
+<li><strong>目录范围限定于会话的工具集。</strong> <code>tool_search</code>、<code>tool_describe</code> 和 <code>tool_call</code> 只能看到和调用会话实际被授权使用的工具。被限制在工具集子集中的子 Agent、Kanban Worker 或 Gateway 会话无法通过桥接器发现或调用该子集之外的工具——延迟目录是会话自身已启用/禁用工具集中的可延迟部分，而非整个进程注册表。</li>
+<li><strong>无 JS 沙箱。</strong> Hermes 采用更简单的&quot;结构化工具&quot;模式（search/describe/call 作为普通函数）。其他某些实现提供的 JS 沙箱&quot;代码模式&quot;攻击面较大，我们选择跳过。</li>
+</ul>
+<h2>参见</h2>
+<ul>
+<li><code>tools/tool_search.py</code> — 实现代码</li>
+<li><code>tests/tools/test_tool_search.py</code> — 回归测试套件</li>
+<li>原始实现 PR 中的 <code>openclaw-tool-search-report</code> PDF，了解塑造该设计的研究背景</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

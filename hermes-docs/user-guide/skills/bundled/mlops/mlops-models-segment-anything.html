@@ -1,0 +1,672 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Segment Anything Model — SAM：通过点、框、掩码实现零样本图像分割 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Segment Anything Model — SAM：通过点、框、掩码实现零样本图像分割</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Segment Anything Model</h1>
+<p>SAM：通过点、框、掩码实现零样本图像分割。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>内置（默认安装）</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>skills/mlops/models/segment-anything</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Orchestra Research</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>依赖项</td>
+<td><code>segment-anything</code>, <code>transformers&gt;=4.30.0</code>, <code>torch&gt;=1.7.0</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Multimodal</code>, <code>Image Segmentation</code>, <code>Computer Vision</code>, <code>SAM</code>, <code>Zero-Shot</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 skill 激活时 agent 所看到的指令内容。
+</div>
+<h1>Segment Anything Model (SAM)</h1>
+<p>Meta AI Segment Anything Model 零样本图像分割综合使用指南。</p>
+<h2>何时使用 SAM</h2>
+<p><strong>在以下情况使用 SAM：</strong></p>
+<ul>
+<li>需要在无需任务特定训练的情况下分割图像中的任意对象</li>
+<li>构建支持点/框 prompt（提示词）的交互式标注工具</li>
+<li>为其他视觉模型生成训练数据</li>
+<li>需要零样本迁移到新图像域</li>
+<li>构建目标检测/分割流水线</li>
+<li>处理医学、卫星或特定领域图像</li>
+</ul>
+<p><strong>核心特性：</strong></p>
+<ul>
+<li><strong>零样本分割</strong>：无需微调即可适用于任意图像域</li>
+<li><strong>灵活的 prompt</strong>：支持点、边界框或先前掩码</li>
+<li><strong>自动分割</strong>：自动生成所有对象掩码</li>
+<li><strong>高质量</strong>：在来自 1100 万张图像的 11 亿个掩码上训练</li>
+<li><strong>多种模型规格</strong>：ViT-B（最快）、ViT-L、ViT-H（最精确）</li>
+<li><strong>ONNX 导出</strong>：可在浏览器和边缘设备上部署</li>
+</ul>
+<p><strong>以下情况请使用替代方案：</strong></p>
+<ul>
+<li><strong>YOLO/Detectron2</strong>：用于带类别的实时目标检测</li>
+<li><strong>Mask2Former</strong>：用于带类别的语义/全景分割</li>
+<li><strong>GroundingDINO + SAM</strong>：用于文本 prompt 驱动的分割</li>
+<li><strong>SAM 2</strong>：用于视频分割任务</li>
+</ul>
+<h2>快速开始</h2>
+<h3>安装</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 从 GitHub 安装
+pip install git+https://github.com/facebookresearch/segment-anything.git
+<h1>可选依赖</h1>
+<p>pip install opencv-python pycocotools matplotlib</p>
+<h1>或使用 HuggingFace transformers</h1>
+<p>pip install transformers</p>
+</div>
+<h3>下载检查点</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ViT-H（最大，最精确）- 2.4GB
+wget https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth
+<h1>ViT-L（中等）- 1.2GB</h1>
+<p>wget https://dl.fbaipublicfiles.com/segment_anything/sam_vit_l_0b3195.pth</p>
+<h1>ViT-B（最小，最快）- 375MB</h1>
+<p>wget https://dl.fbaipublicfiles.com/segment_anything/sam_vit_b_01ec64.pth</p>
+</div>
+<h3>使用 SamPredictor 的基本用法</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import numpy as np
+from segment_anything import sam_model_registry, SamPredictor
+<h1>加载模型</h1>
+<p>sam = sam_model_registry<a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/mlops/models/segment-anything/checkpoint=%22sam_vit_h_4b8939.pth%22">&quot;vit_h&quot;</a>
+sam.to(device=&quot;cuda&quot;)</p>
+<h1>创建预测器</h1>
+<p>predictor = SamPredictor(sam)</p>
+<h1>设置图像（一次性计算嵌入）</h1>
+<p>image = cv2.imread(&quot;image.jpg&quot;)
+image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+predictor.set_image(image)</p>
+<h1>使用点 prompt 进行预测</h1>
+<p>input_point = np.array([[500, 375]])  # (x, y) 坐标
+input_label = np.array([1])  # 1 = 前景，0 = 背景</p>
+<p>masks, scores, logits = predictor.predict(
+point_coords=input_point,
+point_labels=input_label,
+multimask_output=True  # 返回 3 个掩码选项
+)</p>
+<h1>选择最佳掩码</h1>
+<p>best_mask = masks[np.argmax(scores)]</p>
+</div>
+<h3>HuggingFace Transformers</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import torch
+from PIL import Image
+from transformers import SamModel, SamProcessor
+<h1>加载模型和处理器</h1>
+<p>model = SamModel.from_pretrained(&quot;facebook/sam-vit-huge&quot;)
+processor = SamProcessor.from_pretrained(&quot;facebook/sam-vit-huge&quot;)
+model.to(&quot;cuda&quot;)</p>
+<h1>使用点 prompt 处理图像</h1>
+<p>image = Image.open(&quot;image.jpg&quot;)
+input_points = [[[450, 600]]]  # 批量点</p>
+<p>inputs = processor(image, input_points=input_points, return_tensors=&quot;pt&quot;)
+inputs = {k: v.to(&quot;cuda&quot;) for k, v in inputs.items()}</p>
+<h1>生成掩码</h1>
+<p>with torch.no_grad():
+outputs = model(**inputs)</p>
+<h1>将掩码后处理还原至原始尺寸</h1>
+<p>masks = processor.image_processor.post_process_masks(
+outputs.pred_masks.cpu(),
+inputs[&quot;original_sizes&quot;].cpu(),
+inputs[&quot;reshaped_input_sizes&quot;].cpu()
+)</p>
+</div>
+<h2>核心概念</h2>
+<h3>模型架构</h3>
+<!-- ascii-guard-ignore -->
+<!-- ascii-guard-ignore -->
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+SAM Architecture:
+┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
+│  Image Encoder  │────▶│ Prompt Encoder  │────▶│  Mask Decoder   │
+│     (ViT)       │     │ (Points/Boxes)  │     │ (Transformer)   │
+└─────────────────┘     └─────────────────┘     └─────────────────┘
+        │                       │                       │
+   Image Embeddings      Prompt Embeddings         Masks + IoU
+   (computed once)       (per prompt)             predictions
+</div>
+<!-- ascii-guard-ignore-end -->
+<!-- ascii-guard-ignore-end -->
+<h3>模型变体</h3>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>检查点</th>
+<th>大小</th>
+<th>速度</th>
+<th>精度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ViT-H</td>
+<td><code>vit_h</code></td>
+<td>2.4 GB</td>
+<td>最慢</td>
+<td>最佳</td>
+</tr>
+<tr>
+<td>ViT-L</td>
+<td><code>vit_l</code></td>
+<td>1.2 GB</td>
+<td>中等</td>
+<td>良好</td>
+</tr>
+<tr>
+<td>ViT-B</td>
+<td><code>vit_b</code></td>
+<td>375 MB</td>
+<td>最快</td>
+<td>良好</td>
+</tr>
+</tbody>
+</table>
+<h3>Prompt 类型</h3>
+<table>
+<thead>
+<tr>
+<th>Prompt</th>
+<th>描述</th>
+<th>使用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>点（前景）</td>
+<td>点击对象</td>
+<td>单对象选择</td>
+</tr>
+<tr>
+<td>点（背景）</td>
+<td>点击对象外部</td>
+<td>排除区域</td>
+</tr>
+<tr>
+<td>边界框</td>
+<td>对象周围的矩形</td>
+<td>较大对象</td>
+</tr>
+<tr>
+<td>先前掩码</td>
+<td>低分辨率掩码输入</td>
+<td>迭代精化</td>
+</tr>
+</tbody>
+</table>
+<h2>交互式分割</h2>
+<h3>点 prompt</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 单个前景点
+input_point = np.array([[500, 375]])
+input_label = np.array([1])
+<p>masks, scores, logits = predictor.predict(
+point_coords=input_point,
+point_labels=input_label,
+multimask_output=True
+)</p>
+<h1>多个点（前景 + 背景）</h1>
+<p>input_points = np.array([[500, 375], [600, 400], [450, 300]])
+input_labels = np.array([1, 1, 0])  # 2 个前景，1 个背景</p>
+<p>masks, scores, logits = predictor.predict(
+point_coords=input_points,
+point_labels=input_labels,
+multimask_output=False  # prompt 明确时使用单掩码
+)</p>
+</div>
+<h3>框 prompt</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 边界框 [x1, y1, x2, y2]
+input_box = np.array([425, 600, 700, 875])
+<p>masks, scores, logits = predictor.predict(
+box=input_box,
+multimask_output=False
+)</p>
+</div>
+<h3>组合 prompt</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 框 + 点，实现精确控制
+masks, scores, logits = predictor.predict(
+    point_coords=np.array([[500, 375]]),
+    point_labels=np.array([1]),
+    box=np.array([400, 300, 700, 600]),
+    multimask_output=False
+)
+</div>
+<h3>迭代精化</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 初始预测
+masks, scores, logits = predictor.predict(
+    point_coords=np.array([[500, 375]]),
+    point_labels=np.array([1]),
+    multimask_output=True
+)
+<h1>使用先前掩码添加额外点进行精化</h1>
+<p>masks, scores, logits = predictor.predict(
+point_coords=np.array([[500, 375], [550, 400]]),
+point_labels=np.array([1, 0]),  # 添加背景点
+mask_input=logits[np.argmax(scores)][None, :, :],  # 使用最佳掩码
+multimask_output=False
+)</p>
+</div>
+<h2>自动掩码生成</h2>
+<h3>基本自动分割</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from segment_anything import SamAutomaticMaskGenerator
+<h1>创建生成器</h1>
+<p>mask_generator = SamAutomaticMaskGenerator(sam)</p>
+<h1>生成所有掩码</h1>
+<p>masks = mask_generator.generate(image)</p>
+<h1>每个掩码包含：</h1>
+<h1>- segmentation: 二值掩码</h1>
+<h1>- bbox: [x, y, w, h]</h1>
+<h1>- area: 像素数量</h1>
+<h1>- predicted_iou: 质量分数</h1>
+<h1>- stability_score: 鲁棒性分数</h1>
+<h1>- point_coords: 生成点</h1>
+</div>
+<h3>自定义生成</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mask_generator = SamAutomaticMaskGenerator(
+    model=sam,
+    points_per_side=32,          # 网格密度（越大 = 掩码越多）
+    pred_iou_thresh=0.88,        # 质量阈值
+    stability_score_thresh=0.95,  # 稳定性阈值
+    crop_n_layers=1,             # 多尺度裁剪
+    crop_n_points_downscale_factor=2,
+    min_mask_region_area=100,    # 移除微小掩码
+)
+<p>masks = mask_generator.generate(image)</p>
+</div>
+<h3>过滤掩码</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 按面积排序（最大优先）
+masks = sorted(masks, key=lambda x: x['area'], reverse=True)
+<h1>按预测 IoU 过滤</h1>
+<p>high_quality = [m for m in masks if m['predicted_iou'] &amp;gt; 0.9]</p>
+<h1>按稳定性分数过滤</h1>
+<p>stable_masks = [m for m in masks if m['stability_score'] &amp;gt; 0.95]</p>
+</div>
+<h2>批量推理</h2>
+<h3>多张图像</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 高效处理多张图像
+images = [cv2.imread(f"image_{i}.jpg") for i in range(10)]
+<p>all_masks = []
+for image in images:
+predictor.set_image(image)
+masks, _, _ = predictor.predict(
+point_coords=np.array([[500, 375]]),
+point_labels=np.array([1]),
+multimask_output=True
+)
+all_masks.append(masks)</p>
+</div>
+<h3>每张图像多个 prompt</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 高效处理多个 prompt（单次图像编码）
+predictor.set_image(image)
+<h1>批量点 prompt</h1>
+<p>points = [
+np.array([[100, 100]]),
+np.array([[200, 200]]),
+np.array([[300, 300]])
+]</p>
+<p>all_masks = []
+for point in points:
+masks, scores, _ = predictor.predict(
+point_coords=point,
+point_labels=np.array([1]),
+multimask_output=True
+)
+all_masks.append(masks[np.argmax(scores)])</p>
+</div>
+<h2>ONNX 部署</h2>
+<h3>导出模型</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python scripts/export_onnx_model.py \
+    --checkpoint sam_vit_h_4b8939.pth \
+    --model-type vit_h \
+    --output sam_onnx.onnx \
+    --return-single-mask
+</div>
+<h3>使用 ONNX 模型</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import onnxruntime
+<h1>加载 ONNX 模型</h1>
+<p>ort_session = onnxruntime.InferenceSession(&quot;sam_onnx.onnx&quot;)</p>
+<h1>运行推理（图像嵌入单独计算）</h1>
+<p>masks = ort_session.run(
+None,
+{
+&quot;image_embeddings&quot;: image_embeddings,
+&quot;point_coords&quot;: point_coords,
+&quot;point_labels&quot;: point_labels,
+&quot;mask_input&quot;: np.zeros((1, 1, 256, 256), dtype=np.float32),
+&quot;has_mask_input&quot;: np.array([0], dtype=np.float32),
+&quot;orig_im_size&quot;: np.array([h, w], dtype=np.float32)
+}
+)</p>
+</div>
+<h2>常见工作流</h2>
+<h3>工作流 1：标注工具</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import cv2
+<h1>加载模型</h1>
+<p>predictor = SamPredictor(sam)
+predictor.set_image(image)</p>
+<p>def on_click(event, x, y, flags, param):
+if event == cv2.EVENT_LBUTTONDOWN:
+# 前景点
+masks, scores, _ = predictor.predict(
+point_coords=np.array([[x, y]]),
+point_labels=np.array([1]),
+multimask_output=True
+)
+# 显示最佳掩码
+display_mask(masks[np.argmax(scores)])</p>
+</div>
+<h3>工作流 2：对象提取</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def extract_object(image, point):
+    """提取指定点处的对象并设置透明背景。"""
+    predictor.set_image(image)
+<pre><code>masks, scores, _ = predictor.predict(
+    point_coords=np.array([point]),
+    point_labels=np.array([1]),
+    multimask_output=True
+)
+
+best_mask = masks[np.argmax(scores)]
+
+# 创建 RGBA 输出
+rgba = np.zeros((image.shape[0], image.shape[1], 4), dtype=np.uint8)
+rgba[:, :, :3] = image
+rgba[:, :, 3] = best_mask * 255
+
+return rgba
+</code></pre>
+</div>
+<h3>工作流 3：医学图像分割</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 处理医学图像（灰度转 RGB）
+medical_image = cv2.imread("scan.png", cv2.IMREAD_GRAYSCALE)
+rgb_image = cv2.cvtColor(medical_image, cv2.COLOR_GRAY2RGB)
+<p>predictor.set_image(rgb_image)</p>
+<h1>分割感兴趣区域</h1>
+<p>masks, scores, _ = predictor.predict(
+box=np.array([x1, y1, x2, y2]),  # ROI 边界框
+multimask_output=True
+)</p>
+</div>
+<h2>输出格式</h2>
+<h3>掩码数据结构</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# SamAutomaticMaskGenerator 输出
+{
+    "segmentation": np.ndarray,  # H×W 二值掩码
+    "bbox": [x, y, w, h],        # 边界框
+    "area": int,                 # 像素数量
+    "predicted_iou": float,      # 0-1 质量分数
+    "stability_score": float,    # 0-1 鲁棒性分数
+    "crop_box": [x, y, w, h],    # 生成裁剪区域
+    "point_coords": [[x, y]],    # 输入点
+}
+</div>
+<h3>COCO RLE 格式</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from pycocotools import mask as mask_utils
+<h1>将掩码编码为 RLE</h1>
+<p>rle = mask_utils.encode(np.asfortranarray(mask.astype(np.uint8)))
+rle[&quot;counts&quot;] = rle[&quot;counts&quot;].decode(&quot;utf-8&quot;)</p>
+<h1>将 RLE 解码为掩码</h1>
+<p>decoded_mask = mask_utils.decode(rle)</p>
+</div>
+<h2>性能优化</h2>
+<h3>GPU 内存</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 在 VRAM 有限时使用较小模型
+sam = sam_model_registry["vit_b"](https://github.com/NousResearch/hermes-agent/blob/main/skills/mlops/models/segment-anything/checkpoint="sam_vit_b_01ec64.pth")
+<h1>批量处理图像</h1>
+<h1>在大批量之间清空 CUDA 缓存</h1>
+<p>torch.cuda.empty_cache()</p>
+</div>
+<h3>速度优化</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 使用半精度
+sam = sam.half()
+<h1>减少自动生成的点数</h1>
+<p>mask_generator = SamAutomaticMaskGenerator(
+model=sam,
+points_per_side=16,  # 默认为 32
+)</p>
+<h1>使用 ONNX 进行部署</h1>
+<h1>导出时加 --return-single-mask 以加快推理速度</h1>
+</div>
+<h2>常见问题</h2>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>内存不足</td>
+<td>使用 ViT-B 模型，缩小图像尺寸</td>
+</tr>
+<tr>
+<td>推理缓慢</td>
+<td>使用 ViT-B，减小 points_per_side</td>
+</tr>
+<tr>
+<td>掩码质量差</td>
+<td>尝试不同 prompt，使用框 + 点组合</td>
+</tr>
+<tr>
+<td>边缘伪影</td>
+<td>使用 stability_score 过滤</td>
+</tr>
+<tr>
+<td>小对象漏检</td>
+<td>增大 points_per_side</td>
+</tr>
+</tbody>
+</table>
+<h2>参考资料</h2>
+<ul>
+<li><strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/mlops/models/segment-anything/references/advanced-usage.html">高级用法</a></strong> - 批处理、微调、集成</li>
+<li><strong><a href="https://github.com/NousResearch/hermes-agent/blob/main/skills/mlops/models/segment-anything/references/troubleshooting.html">故障排查</a></strong> - 常见问题与解决方案</li>
+</ul>
+<h2>资源</h2>
+<ul>
+<li><strong>GitHub</strong>：https://github.com/facebookresearch/segment-anything</li>
+<li><strong>论文</strong>：https://arxiv.org/abs/2304.02643</li>
+<li><strong>演示</strong>：https://segment-anything.com</li>
+<li><strong>SAM 2（视频）</strong>：https://github.com/facebookresearch/segment-anything-2</li>
+<li><strong>HuggingFace</strong>：https://huggingface.co/facebook/sam-vit-huge</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

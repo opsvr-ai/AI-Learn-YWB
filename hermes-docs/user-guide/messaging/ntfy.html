@@ -1,0 +1,312 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ntfy - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / ntfy</div><p><a href="https://ntfy.sh/">ntfy</a> 是一个简单的基于 HTTP 的发布-订阅通知服务。它可与 <code>ntfy.sh</code> 上的免费公共服务器或任何自托管实例配合使用，支持任何能发起 HTTP 请求的客户端——手机、浏览器、脚本、手表。</p>
+<p>ntfy 是 Hermes 的轻量级推送渠道的理想选择：通过 <a href="https://ntfy.sh/docs/subscribe/phone/">ntfy 移动应用</a> 订阅一个 topic（主题），向该 topic 发送消息与 agent 对话，然后在手机上收到回复。</p>
+<h2>前提条件</h2>
+<ul>
+<li>一个 topic 名称（任意唯一字符串——<code>hermes-myname-2026</code> 即可）</li>
+<li>已安装 <a href="https://ntfy.sh/docs/subscribe/phone/">ntfy 移动应用</a> 并订阅该 topic</li>
+<li>可选：自托管的 ntfy 服务器，或用于私有/保留 topic 的 <code>ntfy.sh</code> 账户 token</li>
+</ul>
+<p>仅此而已。无需 SDK、无需守护进程、无需 Node.js。适配器使用 <code>httpx</code>，该库已是 Hermes 的依赖项。</p>
+<h2>配置 Hermes</h2>
+<h3>通过设置向导</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway setup
+</div>
+<p>选择 <strong>ntfy</strong> 并按提示操作。</p>
+<h3>通过环境变量</h3>
+<p>将以下内容添加到 <code>~/.hermes/.env</code>：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+NTFY_TOPIC=hermes-myname-2026
+NTFY_ALLOWED_USERS=hermes-myname-2026
+NTFY_HOME_CHANNEL=hermes-myname-2026
+</div>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>是否必填</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NTFY_TOPIC</code></td>
+<td>是</td>
+<td>要订阅的 topic（接收消息）</td>
+</tr>
+<tr>
+<td><code>NTFY_SERVER_URL</code></td>
+<td>可选</td>
+<td>服务器 URL（默认：<code>https://ntfy.sh</code>）——指向自托管 ntfy 以保护隐私</td>
+</tr>
+<tr>
+<td><code>NTFY_TOKEN</code></td>
+<td>可选</td>
+<td>Bearer token（如 <code>tk_xyz</code>）或用于 Basic 认证的 <code>user:pass</code></td>
+</tr>
+<tr>
+<td><code>NTFY_PUBLISH_TOPIC</code></td>
+<td>可选</td>
+<td>用于发送回复的不同 topic（默认与 <code>NTFY_TOPIC</code> 相同）</td>
+</tr>
+<tr>
+<td><code>NTFY_MARKDOWN</code></td>
+<td>可选</td>
+<td>设为 <code>true</code> 以使用 <code>X-Markdown: true</code> 请求头发送回复</td>
+</tr>
+<tr>
+<td><code>NTFY_ALLOWED_USERS</code></td>
+<td>推荐</td>
+<td>允许的 topic 名称（逗号分隔，视为用户 ID；见下文）</td>
+</tr>
+<tr>
+<td><code>NTFY_ALLOW_ALL_USERS</code></td>
+<td>可选</td>
+<td>设为 <code>true</code> 以允许所有发布者——仅在具有读取 token 的私有 topic 下安全</td>
+</tr>
+<tr>
+<td><code>NTFY_HOME_CHANNEL</code></td>
+<td>可选</td>
+<td>cron 任务/通知投递的默认 topic</td>
+</tr>
+<tr>
+<td><code>NTFY_HOME_CHANNEL_NAME</code></td>
+<td>可选</td>
+<td>主渠道的可读标签</td>
+</tr>
+</tbody>
+</table>
+<h2>身份模型——部署前请阅读</h2>
+<p>ntfy 没有原生的已认证用户身份。已发布消息中的 <code>title</code> 字段由<strong>发布者控制</strong>，可以是发布者想要的任何内容。Hermes 适配器<strong>不</strong>使用 <code>title</code> 进行授权——否则任何知道 topic 的发布者都可以伪造允许的用户。</p>
+<p>相反，<strong>topic 名称本身即为身份</strong>。发布到该 topic 的每条消息都被视为来自同一个逻辑用户（即该 topic）。因此 <code>NTFY_ALLOWED_USERS</code> 通常就是 topic 名称本身——一个控制整个渠道访问的单条目白名单。</p>
+<p>这意味着<strong>任何知道 topic 的人都可以与 agent 对话</strong>。要将其变为真正的信任边界：</p>
+<ul>
+<li><strong>自托管 ntfy</strong> 并通过<a href="https://docs.ntfy.sh/config/#access-control">访问控制</a>锁定 topic。只有持有读/写 token 的授权客户端才能发布。</li>
+<li>或<strong>在 ntfy.sh 上使用私有 topic</strong>（<a href="https://docs.ntfy.sh/publish/#reserved-topics">保留 topic</a> 需要账户），并通过 <code>NTFY_TOKEN</code> 保护。</li>
+<li>或<strong>选择一个长且难以猜测的 topic 名称</strong>（<code>hermes-7d4f9c8b-2026</code>），将其视为共享密钥。这是最轻量的方案，但 topic 名称可能通过日志或截图泄露。</li>
+</ul>
+<p>在任何情况下，除非底层 topic 已启用访问控制，否则不要通过 ntfy 传输敏感数据。</p>
+<h2>快速开始——从手机与 agent 对话</h2>
+<ol>
+<li>选择一个 topic 名称：<code>hermes-myname-2026</code></li>
+<li>在手机上：安装 <a href="https://ntfy.sh/docs/subscribe/phone/">ntfy 应用</a>，点击 <strong>+</strong>，输入 <code>hermes-myname-2026</code></li>
+<li>在主机上：</li>
+</ol>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+   echo 'NTFY_TOPIC=hermes-myname-2026' &gt;&gt; ~/.hermes/.env
+   echo 'NTFY_ALLOWED_USERS=hermes-myname-2026' &gt;&gt; ~/.hermes/.env
+   hermes gateway restart
+</div>
+<ol start="4">
+<li>从 ntfy 应用向该 topic 发送一条消息。agent 的回复将以推送通知的形式送达。</li>
+</ol>
+<h2>在 cron 任务中使用 ntfy</h2>
+<p>设置 <code>NTFY_HOME_CHANNEL</code> 后，cron 任务即可投递到 ntfy：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cronjob(
+    action="create",
+    schedule="every 1h",
+    deliver="ntfy",          # uses NTFY_HOME_CHANNEL
+    prompt="Check for alerts and summarise."
+)
+</div>
+<p>或显式指定目标 topic：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+send_message(target="ntfy:alerts-channel", message="Done!")
+</div>
+<p>即使 cron 在 gateway 进程外运行，此功能也有效——插件注册了一个 <code>standalone_sender_fn</code>，会自行建立 HTTP 连接。</p>
+<h2>自托管 ntfy</h2>
+<p>如需完全掌控：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Docker
+docker run -p 80:80 -it binwiederhier/ntfy serve
+
+# Native
+go install heckel.io/ntfy/v2@latest
+ntfy serve
+</div>
+<p>然后将 Hermes 指向该实例：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+NTFY_SERVER_URL=https://ntfy.mydomain.com
+NTFY_TOPIC=hermes
+NTFY_TOKEN=tk_abc123  # if you've set up access control
+</div>
+<p>自托管可提供 topic 访问控制、消息持久化策略、附件和 emoji 标签。参见 <a href="https://docs.ntfy.sh/install/">ntfy 服务器文档</a>。</p>
+<h2>Markdown 格式化</h2>
+<p>当发布者设置 <code>X-Markdown: true</code> 请求头时，ntfy 客户端会渲染 Markdown。要为 Hermes 的出站回复启用此功能：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+NTFY_MARKDOWN=true
+</div>
+<p>或在 <code>config.yaml</code> 中配置：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+platforms:
+  ntfy:
+    extra:
+      markdown: true
+</div>
+<p>移动应用支持 CommonMark 的子集——粗体、斜体、列表、链接、围栏代码块。确切支持范围参见 <a href="https://docs.ntfy.sh/publish/#markdown-formatting">ntfy 的 Markdown 文档</a>。</p>
+<h2>仅出站设置（只推送通知，不接收消息）</h2>
+<p>如果只希望 Hermes <em>推送</em>通知到 ntfy（cron 摘要、告警），而不接受任何回复消息，可将 <code>NTFY_TOPIC</code> 和 <code>NTFY_PUBLISH_TOPIC</code> 设为相同值，并完全省略 <code>NTFY_ALLOWED_USERS</code>。没有白名单时，agent 不会响应任何入站消息——手机可收到推送，但对话是单向的。</p>
+<h2>限制</h2>
+<ul>
+<li><strong>消息大小</strong>：ntfy 将消息体上限设为 4096 个字符。超出时 Hermes 会截断并发出警告。</li>
+<li><strong>无输入状态指示</strong>：协议不支持此功能；<code>send_typing</code> 为空操作。</li>
+<li><strong>无线程或附件</strong>：ntfy 是纯推送通知。长回复保留在消息体中，不会分线程展开。</li>
+<li><strong>无原生用户身份</strong>：参见上文的身份模型章节。</li>
+</ul>
+<h2>故障排查</h2>
+<p><strong>认证失败 / 401</strong> — <code>NTFY_TOKEN</code> 有误，或该 token 对此 topic 没有发布/订阅权限。适配器在收到 401 时会停止重连循环，gateway 运行时状态将显示 <code>fatal: ntfy_unauthorized</code>。修正 token 后重启 gateway。</p>
+<p><strong>Topic 未找到 / 404</strong> — <code>NTFY_TOPIC</code> 在所配置的服务器上不存在。对于 ntfy.sh，topic 在首次发布时自动创建，因此 404 意味着你指向的自托管服务器尚未创建该 topic。适配器会停止重连循环并显示 <code>fatal: ntfy_topic_not_found</code>。</p>
+<p><strong>已连接但收不到消息</strong> — 检查 <code>NTFY_ALLOWED_USERS</code> 是否包含 topic 名称本身。在 ntfy 的身份模型中，topic 即用户；白名单为空时所有消息都会被拒绝。</p>
+<p><strong>每 60 秒重连一次</strong> — 流式 keepalive 默认为 55 秒；ntfy 可能存在间歇性网络问题。适配器采用指数退避（2 → 5 → 10 → 30 → 60 秒），一旦流保持存活 ≥60 秒则重置为 0。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

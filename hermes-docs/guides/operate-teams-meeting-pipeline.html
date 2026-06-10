@@ -1,0 +1,464 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>操作 Teams 会议流水线 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 实用指南 / 操作 Teams 会议流水线</div><p>本指南适用于已通过 <a href="/user-guide/messaging/teams-meetings">Teams Meetings</a> 启用该功能之后的操作阶段。</p>
+<p>本页内容：</p>
+<ul>
+<li>操作员 CLI 流程</li>
+<li>日常订阅维护</li>
+<li>故障排查</li>
+<li>上线检查</li>
+<li>上线工作表</li>
+</ul>
+<h2>核心操作员命令</h2>
+<h3>验证配置快照</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes teams-pipeline validate
+</div>
+<p>每次配置变更后首先执行此命令。</p>
+<h3>检查 token 健康状态</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes teams-pipeline token-health
+hermes teams-pipeline token-health --force-refresh
+</div>
+<p>当怀疑 auth（认证）状态过期时，使用 <code>--force-refresh</code>。</p>
+<h3>检查订阅</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes teams-pipeline subscriptions
+</div>
+<h3>续期即将到期的订阅</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes teams-pipeline maintain-subscriptions
+hermes teams-pipeline maintain-subscriptions --dry-run
+</div>
+<h3>自动化订阅续期（生产环境必须配置）</h3>
+<p><strong>Microsoft Graph 订阅最多 72 小时后过期。</strong> 若无任何续期操作，会议通知将在 3 天后静默停止，流水线看起来像是&quot;故障&quot;。这是所有基于 Graph 的集成中最常见的运维故障模式。</p>
+<p>你<strong>必须</strong>按计划运行 <code>maintain-subscriptions</code>。从以下三种方式中选择一种：</p>
+<h4>方式一：Hermes cron（若已运行 Hermes gateway，推荐此方式）</h4>
+<p>Hermes 内置 cron 调度器。<code>--no-agent</code> 模式以脚本作为任务执行（而非使用 LLM），<code>--script</code> 必须指向 <code>~/.hermes/scripts/</code> 下的文件。首先创建脚本：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mkdir -p ~/.hermes/scripts
+cat &gt; ~/.hermes/scripts/maintain-teams-subscriptions.sh &lt;&lt;'EOF'
+#!/usr/bin/env bash
+exec hermes teams-pipeline maintain-subscriptions
+EOF
+chmod +x ~/.hermes/scripts/maintain-teams-subscriptions.sh
+</div>
+<p>然后注册一个每 12 小时运行一次的纯脚本 cron 任务（相对于 72 小时过期窗口有 6 倍余量）：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes cron create "0 */12 * * *" \
+  --name "teams-pipeline-maintain-subscriptions" \
+  --no-agent \
+  --script maintain-teams-subscriptions.sh \
+  --deliver local
+</div>
+<p>验证注册情况并查看下次运行时间：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes cron list
+hermes cron status        # 调度器状态
+</div>
+<h4>方式二：systemd timer（推荐用于 Linux 生产部署）</h4>
+<p>创建 <code>/etc/systemd/system/hermes-teams-pipeline-maintain.service</code>：</p>
+<div class="code-block"><span class="code-lang">ini</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+[Unit]
+Description=Hermes Teams pipeline subscription maintenance
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=hermes
+EnvironmentFile=/etc/hermes/env
+ExecStart=/usr/local/bin/hermes teams-pipeline maintain-subscriptions
+</div>
+<p>以及 <code>/etc/systemd/system/hermes-teams-pipeline-maintain.timer</code>：</p>
+<div class="code-block"><span class="code-lang">ini</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+[Unit]
+Description=Run Hermes Teams pipeline subscription maintenance every 12 hours
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=12h
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+</div>
+<p>启用：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+sudo systemctl daemon-reload
+sudo systemctl enable --now hermes-teams-pipeline-maintain.timer
+systemctl list-timers hermes-teams-pipeline-maintain.timer
+</div>
+<h4>方式三：普通 crontab</h4>
+<div class="code-block"><span class="code-lang">cron</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+0 */12 * * * /usr/local/bin/hermes teams-pipeline maintain-subscriptions &gt;&gt; /var/log/hermes/teams-pipeline-maintain.log 2&gt;&amp;1
+</div>
+<p>确保 cron 环境中包含 <code>MSGRAPH_*</code> 凭据。最简单的方法：在 crontab 调用的包装脚本顶部 source <code>~/.hermes/.env</code>。</p>
+<h4>验证续期是否正常工作</h4>
+<p>设置好计划任务后，在首次计划运行后检查续期活动：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes teams-pipeline subscriptions   # 应显示 expirationDateTime 已推进
+hermes teams-pipeline maintain-subscriptions --dry-run   # 大多数时候应显示"0 expiring soon"
+</div>
+<p>如果你发现 Graph webhook 在恰好约 72 小时后神秘地&quot;停止工作&quot;，这是首先要检查的地方：续期任务是否实际运行了？</p>
+<h3>查看最近的任务</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes teams-pipeline list
+hermes teams-pipeline list --status failed
+hermes teams-pipeline show &lt;job-id&gt;
+</div>
+<h3>重放已存储的任务</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes teams-pipeline run &lt;job-id&gt;
+</div>
+<h3>干运行会议产物拉取</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes teams-pipeline fetch --meeting-id &lt;meeting-id&gt;
+hermes teams-pipeline fetch --join-web-url "&lt;join-url&gt;"
+</div>
+<h2>日常运行手册</h2>
+<h3>首次设置后</h3>
+<p>按顺序执行：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes teams-pipeline validate
+hermes teams-pipeline token-health --force-refresh
+hermes teams-pipeline subscriptions
+</div>
+<p>然后触发或等待一个真实的会议事件，并确认：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes teams-pipeline list
+hermes teams-pipeline show &lt;job-id&gt;
+</div>
+<h3>每日或定期检查</h3>
+<ul>
+<li>运行 <code>hermes teams-pipeline maintain-subscriptions --dry-run</code></li>
+<li>检查 <code>hermes teams-pipeline list --status failed</code></li>
+<li>确认 Teams 投递目标仍为正确的聊天或频道</li>
+</ul>
+<h3>变更 webhook URL 或投递目标前</h3>
+<ul>
+<li>更新公共通知 URL 或 Teams 目标配置</li>
+<li>运行 <code>hermes teams-pipeline validate</code></li>
+<li>续期或重新创建受影响的订阅</li>
+<li>确认新事件落入预期的接收端</li>
+</ul>
+<h2>故障排查</h2>
+<h3>未创建任何任务</h3>
+<p>检查：</p>
+<ul>
+<li><code>msgraph_webhook</code> 是否已启用</li>
+<li>公共通知 URL 是否指向 <code>/msgraph/webhook</code></li>
+<li>订阅中的 client state 是否与 <code>MSGRAPH_WEBHOOK_CLIENT_STATE</code> 匹配</li>
+<li>订阅是否在远端仍然存在且未过期</li>
+</ul>
+<h3>任务停留在重试状态或在摘要生成前失败</h3>
+<p>检查：</p>
+<ul>
+<li>转录权限及可用性</li>
+<li>录制权限及产物可用性</li>
+<li>若启用了录制回退，检查 <code>ffmpeg</code> 是否可用</li>
+<li>Graph token 健康状态</li>
+</ul>
+<h3>摘要已生成但未投递到 Teams</h3>
+<p>检查：</p>
+<ul>
+<li><code>platforms.teams.enabled: true</code></li>
+<li><code>delivery_mode</code></li>
+<li>webhook 模式下的 <code>incoming_webhook_url</code></li>
+<li>Graph 模式下的 <code>chat_id</code> 或 <code>team_id</code> 加 <code>channel_id</code></li>
+<li>若使用 Graph 发帖，检查 Teams auth 配置</li>
+</ul>
+<h3>重复或意外的重放</h3>
+<p>检查：</p>
+<ul>
+<li>是否手动通过 <code>hermes teams-pipeline run</code> 重放了任务</li>
+<li>该会议的 sink 记录是否已存在</li>
+<li>是否在本地配置中有意启用了重发路径</li>
+</ul>
+<h2>上线检查清单</h2>
+<ul>
+<li>[ ] Graph 凭据已存在且正确</li>
+<li>[ ] <code>msgraph_webhook</code> 已启用且可从公网访问</li>
+<li>[ ] <code>MSGRAPH_WEBHOOK_CLIENT_STATE</code> 已设置且与订阅匹配</li>
+<li>[ ] 转录订阅已创建</li>
+<li>[ ] 若需要 STT 回退，录制订阅已创建</li>
+<li>[ ] 若启用录制回退，<code>ffmpeg</code> 已安装</li>
+<li>[ ] Teams 出站投递目标已配置并验证</li>
+<li>[ ] Notion 和 Linear 接收端仅在实际需要时配置</li>
+<li>[ ] <code>hermes teams-pipeline validate</code> 返回 OK 快照</li>
+<li>[ ] <code>hermes teams-pipeline token-health --force-refresh</code> 执行成功</li>
+<li>[ ] <strong><code>maintain-subscriptions</code> 已配置计划任务</strong>（Hermes cron、systemd timer 或 crontab——参见<a href="#automating-subscription-renewal-required-for-production">自动化订阅续期</a>）。若未配置，Graph 订阅将在 72 小时内静默过期。</li>
+<li>[ ] 一个真实的端到端会议事件已生成存储任务</li>
+<li>[ ] 至少一条摘要已到达预期的投递接收端</li>
+</ul>
+<h2>投递模式决策指南</h2>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>适用场景</th>
+<th>权衡</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>incoming_webhook</code></td>
+<td>仅需简单地向 Teams 发帖</td>
+<td>配置最简单，控制较少</td>
+</tr>
+<tr>
+<td><code>graph</code></td>
+<td>需要通过 Graph 向频道或聊天发帖</td>
+<td>控制更多，auth 和目标配置更复杂</td>
+</tr>
+</tbody>
+</table>
+<h2>操作员工作表</h2>
+<p>上线前填写：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>公共通知 URL</td>
+<td></td>
+</tr>
+<tr>
+<td>Graph 租户 ID</td>
+<td></td>
+</tr>
+<tr>
+<td>Graph 客户端 ID</td>
+<td></td>
+</tr>
+<tr>
+<td>Webhook client state</td>
+<td></td>
+</tr>
+<tr>
+<td>转录资源订阅</td>
+<td></td>
+</tr>
+<tr>
+<td>录制资源订阅</td>
+<td></td>
+</tr>
+<tr>
+<td>Teams 投递模式</td>
+<td></td>
+</tr>
+<tr>
+<td>Teams 聊天 ID 或团队/频道</td>
+<td></td>
+</tr>
+<tr>
+<td>Notion 数据库 ID</td>
+<td></td>
+</tr>
+<tr>
+<td>Linear 团队 ID</td>
+<td></td>
+</tr>
+<tr>
+<td>Store 路径覆盖（如有）</td>
+<td></td>
+</tr>
+<tr>
+<td>每日检查负责人</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2>变更审查工作表</h2>
+<p>变更部署前使用：</p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>答案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>是否正在变更公共 webhook URL？</td>
+<td></td>
+</tr>
+<tr>
+<td>是否正在轮换 Graph 凭据？</td>
+<td></td>
+</tr>
+<tr>
+<td>是否正在变更 Teams 投递模式？</td>
+<td></td>
+</tr>
+<tr>
+<td>是否正在迁移到新的 Teams 聊天或频道？</td>
+<td></td>
+</tr>
+<tr>
+<td>订阅是否需要重新创建或续期？</td>
+<td></td>
+</tr>
+<tr>
+<td>是否需要重新进行端到端验证？</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2>相关文档</h2>
+<ul>
+<li><a href="/user-guide/messaging/teams-meetings">Teams Meetings 设置</a></li>
+<li><a href="/user-guide/messaging/teams">Microsoft Teams bot 设置</a></li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

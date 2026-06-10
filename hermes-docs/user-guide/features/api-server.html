@@ -1,0 +1,562 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API 服务器 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html" class="active">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / API 服务器</div><p>API 服务器将 hermes-agent 作为 OpenAI 兼容的 HTTP 端点暴露出来。任何支持 OpenAI 格式的前端——Open WebUI、LobeChat、LibreChat、NextChat、ChatBox 以及数百个其他工具——都可以连接到 hermes-agent 并将其用作后端。</p>
+<p>你的 agent 使用完整工具集（终端、文件操作、网络搜索、记忆、技能）处理请求，并返回最终响应。在流式传输时，工具进度指示器会内联显示，让前端能够展示 agent 正在执行的操作。</p>
+<div class="tip"><strong>💡 一个后端同时覆盖模型与工具</strong>
+Hermes 本身需要配置好 provider（提供商）和工具后端，API 服务器才能发挥作用。<a href="/user-guide/features/tool-gateway">Nous Portal</a> 订阅同时处理两者——300+ 个模型，以及通过 Tool Gateway 提供的网络/图像/TTS/浏览器功能。在启动 API 服务器之前运行一次 <code>hermes setup --portal</code>，Open WebUI 或 LobeChat 等前端即可获得一个完整配备工具的后端。
+</div>
+<h2>快速开始</h2>
+<h3>1. 启用 API 服务器</h3>
+<p>在 <code>~/.hermes/.env</code> 中添加：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+API_SERVER_ENABLED=true
+API_SERVER_KEY=change-me-local-dev
+# 可选：仅当浏览器需要直接调用 Hermes 时
+# API_SERVER_CORS_ORIGINS=http://localhost:3000
+</div>
+<h3>2. 启动 gateway</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway
+</div>
+<p>你将看到：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+[API Server] API server listening on http://127.0.0.1:8642
+</div>
+<h3>3. 连接前端</h3>
+<p>将任何 OpenAI 兼容客户端指向 <code>http://localhost:8642/v1</code>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 使用 curl 测试
+curl http://localhost:8642/v1/chat/completions \
+  -H "Authorization: Bearer change-me-local-dev" \
+  -H "Content-Type: application/json" \
+  -d '{"model": "hermes-agent", "messages": [{"role": "user", "content": "Hello!"}]}'
+</div>
+<p>或连接 Open WebUI、LobeChat 或其他任意前端——参见 <a href="/user-guide/messaging/open-webui">Open WebUI 集成指南</a>获取分步说明。</p>
+<h2>端点</h2>
+<h3>POST /v1/chat/completions</h3>
+<p>标准 OpenAI Chat Completions 格式。无状态——完整对话通过每次请求的 <code>messages</code> 数组传入。</p>
+<p><strong>请求：</strong></p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{
+  "model": "hermes-agent",
+  "messages": [
+    {"role": "system", "content": "You are a Python expert."},
+    {"role": "user", "content": "Write a fibonacci function"}
+  ],
+  "stream": false
+}
+</div>
+<p><strong>响应：</strong></p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{
+  "id": "chatcmpl-abc123",
+  "object": "chat.completion",
+  "created": 1710000000,
+  "model": "hermes-agent",
+  "choices": [{
+    "index": 0,
+    "message": {"role": "assistant", "content": "Here's a fibonacci function..."},
+    "finish_reason": "stop"
+  }],
+  "usage": {"prompt_tokens": 50, "completion_tokens": 200, "total_tokens": 250}
+}
+</div>
+<p><strong>内联图像输入：</strong> 用户消息可以将 <code>content</code> 作为 <code>text</code> 和 <code>image_url</code> 部分的数组发送。支持远程 <code>http(s)</code> URL 和 <code>data:image/...</code> URL：</p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{
+  "model": "hermes-agent",
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {"type": "text", "text": "What is in this image?"},
+        {"type": "image_url", "image_url": {"url": "https://example.com/cat.png", "detail": "high"}}
+      ]
+    }
+  ]
+}
+</div>
+<p>上传的文件（<code>file</code> / <code>input_file</code> / <code>file_id</code>）和非图像 <code>data:</code> URL 将返回 <code>400 unsupported_content_type</code>。</p>
+<p><strong>流式传输</strong>（<code>&quot;stream&quot;: true</code>）：返回逐 token 响应块的 Server-Sent Events（SSE）。对于 <strong>Chat Completions</strong>，流使用标准 <code>chat.completion.chunk</code> 事件，以及 Hermes 自定义的 <code>hermes.tool.progress</code> 事件用于工具启动的 UX 展示。对于 <strong>Responses</strong>，流使用 OpenAI Responses 事件类型，如 <code>response.created</code>、<code>response.output_text.delta</code>、<code>response.output_item.added</code>、<code>response.output_item.done</code> 和 <code>response.completed</code>。</p>
+<p><strong>流中的工具进度：</strong></p>
+<ul>
+<li><strong>Chat Completions</strong>：Hermes 发出 <code>event: hermes.tool.progress</code> 以提供工具启动可见性，同时不污染持久化的 assistant 文本。</li>
+<li><strong>Responses</strong>：Hermes 在 SSE 流期间发出符合规范的 <code>function_call</code> 和 <code>function_call_output</code> 输出项，让客户端能够实时渲染结构化工具 UI。</li>
+</ul>
+<h3>POST /v1/responses</h3>
+<p>OpenAI Responses API 格式。通过 <code>previous_response_id</code> 支持服务端对话状态——服务器存储完整的对话历史（包括工具调用和结果），因此多轮上下文无需客户端自行管理。</p>
+<p><strong>请求：</strong></p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{
+  "model": "hermes-agent",
+  "input": "What files are in my project?",
+  "instructions": "You are a helpful coding assistant.",
+  "store": true
+}
+</div>
+<p><strong>响应：</strong></p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{
+  "id": "resp_abc123",
+  "object": "response",
+  "status": "completed",
+  "model": "hermes-agent",
+  "output": [
+    {"type": "function_call", "name": "terminal", "arguments": "{\"command\": \"ls\"}", "call_id": "call_1"},
+    {"type": "function_call_output", "call_id": "call_1", "output": "README.md src/ tests/"},
+    {"type": "message", "role": "assistant", "content": [{"type": "output_text", "text": "Your project has..."}]}
+  ],
+  "usage": {"input_tokens": 50, "output_tokens": 200, "total_tokens": 250}
+}
+</div>
+<p><strong>内联图像输入：</strong> <code>input[].content</code> 可以包含 <code>input_text</code> 和 <code>input_image</code> 部分。支持远程 URL 和 <code>data:image/...</code> URL：</p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{
+  "model": "hermes-agent",
+  "input": [
+    {
+      "role": "user",
+      "content": [
+        {"type": "input_text", "text": "Describe this screenshot."},
+        {"type": "input_image", "image_url": "data:image/png;base64,iVBORw0K..."}
+      ]
+    }
+  ]
+}
+</div>
+<p>上传的文件（<code>input_file</code> / <code>file_id</code>）和非图像 <code>data:</code> URL 将返回 <code>400 unsupported_content_type</code>。</p>
+<h4>使用 previous_response_id 进行多轮对话</h4>
+<p>链式响应以在多轮之间保持完整上下文（包括工具调用）：</p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{
+  "input": "Now show me the README",
+  "previous_response_id": "resp_abc123"
+}
+</div>
+<p>服务器从存储的响应链重建完整对话——所有之前的工具调用和结果均被保留。链式请求还共享同一个 session，因此多轮对话在仪表板和 session 历史中显示为单个条目。</p>
+<h4>命名对话</h4>
+<p>使用 <code>conversation</code> 参数代替追踪响应 ID：</p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{"input": "Hello", "conversation": "my-project"}
+{"input": "What's in src/?", "conversation": "my-project"}
+{"input": "Run the tests", "conversation": "my-project"}
+</div>
+<p>服务器自动链接到该对话中的最新响应。类似于 gateway session 的 <code>/title</code> 命令。</p>
+<h3>GET /v1/responses/{id}</h3>
+<p>通过 ID 检索之前存储的响应。</p>
+<h3>DELETE /v1/responses/{id}</h3>
+<p>删除存储的响应。</p>
+<h3>GET /v1/models</h3>
+<p>将 agent 列为可用模型。广播的模型名称默认为 <a href="/user-guide/profiles">profile</a> 名称（默认 profile 则为 <code>hermes-agent</code>）。大多数前端进行模型发现时需要此端点。</p>
+<h3>GET /v1/capabilities</h3>
+<p>返回 API 服务器稳定接口的机器可读描述，供外部 UI、编排器和插件桥接使用。</p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{
+  "object": "hermes.api_server.capabilities",
+  "platform": "hermes-agent",
+  "model": "hermes-agent",
+  "auth": {"type": "bearer", "required": true},
+  "features": {
+    "chat_completions": true,
+    "responses_api": true,
+    "run_submission": true,
+    "run_status": true,
+    "run_events_sse": true,
+    "run_stop": true
+  }
+}
+</div>
+<p>在集成仪表板、浏览器 UI 或控制平面时使用此端点，以便它们能够发现当前运行的 Hermes 版本是否支持 runs、流式传输、取消和 session 连续性，而无需依赖私有 Python 内部实现。</p>
+<h3>GET /health</h3>
+<p>健康检查。返回 <code>{&quot;status&quot;: &quot;ok&quot;}</code>。也可通过 <strong>GET /v1/health</strong> 访问，供期望 <code>/v1/</code> 前缀的 OpenAI 兼容客户端使用。</p>
+<h3>GET /health/detailed</h3>
+<p>扩展健康检查，同时报告活跃 session、运行中的 agent 和资源使用情况。适用于监控/可观测性工具。</p>
+<h2>Runs API（流式友好的替代方案）</h2>
+<p>除 <code>/v1/chat/completions</code> 和 <code>/v1/responses</code> 外，服务器还暴露了一个 <strong>runs</strong> API，适用于客户端希望订阅进度事件而非自行管理流式传输的长时 session。</p>
+<h3>POST /v1/runs</h3>
+<p>创建新的 agent run。返回可用于订阅进度事件的 <code>run_id</code>。</p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{
+  "run_id": "run_abc123",
+  "status": "started"
+}
+</div>
+<p>Runs 接受简单的 <code>input</code> 字符串，以及可选的 <code>session_id</code>、<code>instructions</code>、<code>conversation_history</code> 或 <code>previous_response_id</code>。当提供 <code>session_id</code> 时，Hermes 会在 run 状态中暴露它，以便外部 UI 将 run 与自己的对话 ID 关联。</p>
+<h3>GET /v1/runs/{run_id}</h3>
+<p>轮询当前 run 状态。适用于需要状态但不想保持 SSE 连接的仪表板，或在导航后重新连接的 UI。</p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{
+  "object": "hermes.run",
+  "run_id": "run_abc123",
+  "status": "completed",
+  "session_id": "space-session",
+  "model": "hermes-agent",
+  "output": "Done.",
+  "usage": {"input_tokens": 50, "output_tokens": 200, "total_tokens": 250}
+}
+</div>
+<p>状态在终态（<code>completed</code>、<code>failed</code> 或 <code>cancelled</code>）之后会短暂保留，以供轮询和 UI 对账使用。</p>
+<h3>GET /v1/runs/{run_id}/events</h3>
+<p>run 的工具调用进度、token 增量和生命周期事件的 Server-Sent Events 流。专为需要附加/分离而不丢失状态的仪表板和厚客户端设计。</p>
+<h3>POST /v1/runs/{run_id}/stop</h3>
+<p>中断正在运行的 agent 轮次。端点立即返回 <code>{&quot;status&quot;: &quot;stopping&quot;}</code>，同时 Hermes 要求活跃 agent 在下一个安全中断点停止。</p>
+<h2>Jobs API（后台计划任务）</h2>
+<p>服务器暴露了一个轻量级 jobs CRUD 接口，用于从远程客户端管理计划/后台 agent run。所有端点均受同一 bearer 认证保护。</p>
+<h3>GET /api/jobs</h3>
+<p>列出所有计划任务。</p>
+<h3>POST /api/jobs</h3>
+<p>创建新的计划任务。请求体接受与 <code>hermes cron</code> 相同的结构——prompt（提示词）、schedule（计划）、skills（技能）、provider 覆盖、投递目标。</p>
+<h3>GET /api/jobs/{job_id}</h3>
+<p>获取单个任务的定义和最后一次运行状态。</p>
+<h3>PATCH /api/jobs/{job_id}</h3>
+<p>更新现有任务的字段（prompt、schedule 等）。部分更新会被合并。</p>
+<h3>DELETE /api/jobs/{job_id}</h3>
+<p>删除任务。同时取消任何正在进行的 run。</p>
+<h3>POST /api/jobs/{job_id}/pause</h3>
+<p>暂停任务而不删除它。下次计划运行的时间戳将被挂起，直到恢复。</p>
+<h3>POST /api/jobs/{job_id}/resume</h3>
+<p>恢复之前暂停的任务。</p>
+<h3>POST /api/jobs/{job_id}/run</h3>
+<p>立即触发任务运行，不受计划限制。</p>
+<h2>系统 Prompt 处理</h2>
+<p>当前端发送 <code>system</code> 消息（Chat Completions）或 <code>instructions</code> 字段（Responses API）时，hermes-agent 会将其<strong>叠加在</strong>核心系统 prompt 之上。你的 agent 保留所有工具、记忆和技能——前端的系统 prompt 只是添加额外指令。</p>
+<p>这意味着你可以按前端自定义行为，而不会失去能力：</p>
+<ul>
+<li>Open WebUI 系统 prompt：&quot;You are a Python expert. Always include type hints.&quot;</li>
+<li>agent 仍然拥有终端、文件工具、网络搜索、记忆等。</li>
+</ul>
+<h2>认证</h2>
+<p>通过 <code>Authorization</code> 请求头进行 Bearer token 认证：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Authorization: Bearer ***
+</div>
+<p>通过 <code>API_SERVER_KEY</code> 环境变量配置密钥。如果需要浏览器直接调用 Hermes，还需将 <code>API_SERVER_CORS_ORIGINS</code> 设置为明确的允许列表。</p>
+<div class="tip warning"><strong>⚠️ 安全</strong>
+<p>API 服务器提供对 hermes-agent 工具集的完整访问权限，<strong>包括终端命令</strong>。当绑定到非回环地址（如 <code>0.0.0.0</code>）时，<strong>必须</strong>设置 <code>API_SERVER_KEY</code>。同时保持 <code>API_SERVER_CORS_ORIGINS</code> 范围尽量小，以控制浏览器访问。</p>
+<p>默认绑定地址（<code>127.0.0.1</code>）仅供本地使用。浏览器访问默认禁用；仅为明确的可信来源启用。</p>
+
+</div>
+<h2>配置</h2>
+<h3>环境变量</h3>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>API_SERVER_ENABLED</code></td>
+<td><code>false</code></td>
+<td>启用 API 服务器</td>
+</tr>
+<tr>
+<td><code>API_SERVER_PORT</code></td>
+<td><code>8642</code></td>
+<td>HTTP 服务器端口</td>
+</tr>
+<tr>
+<td><code>API_SERVER_HOST</code></td>
+<td><code>127.0.0.1</code></td>
+<td>绑定地址（默认仅限本地）</td>
+</tr>
+<tr>
+<td><code>API_SERVER_KEY</code></td>
+<td><em>（无）</em></td>
+<td>认证用 Bearer token</td>
+</tr>
+<tr>
+<td><code>API_SERVER_CORS_ORIGINS</code></td>
+<td><em>（无）</em></td>
+<td>逗号分隔的允许浏览器来源</td>
+</tr>
+<tr>
+<td><code>API_SERVER_MODEL_NAME</code></td>
+<td><em>（profile 名称）</em></td>
+<td><code>/v1/models</code> 上的模型名称。默认为 profile 名称，默认 profile 则为 <code>hermes-agent</code>。</td>
+</tr>
+</tbody>
+</table>
+<h3>config.yaml</h3>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 暂不支持——请使用环境变量。
+# config.yaml 支持将在未来版本中推出。
+</div>
+<h2>安全响应头</h2>
+<p>所有响应均包含安全响应头：</p>
+<ul>
+<li><code>X-Content-Type-Options: nosniff</code> — 防止 MIME 类型嗅探</li>
+<li><code>Referrer-Policy: no-referrer</code> — 防止 referrer 泄露</li>
+</ul>
+<h2>CORS</h2>
+<p>API 服务器默认<strong>不</strong>启用浏览器 CORS。</p>
+<p>如需直接浏览器访问，请设置明确的允许列表：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+API_SERVER_CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+</div>
+<p>启用 CORS 后：</p>
+<ul>
+<li><strong>预检响应</strong>包含 <code>Access-Control-Max-Age: 600</code>（10 分钟缓存）</li>
+<li><strong>SSE 流式响应</strong>包含 CORS 头，使浏览器 EventSource 客户端能够正常工作</li>
+<li><strong><code>Idempotency-Key</code></strong> 是允许的请求头——客户端可发送它用于去重（响应按 key 缓存 5 分钟）</li>
+</ul>
+<p>大多数已记录的前端（如 Open WebUI）采用服务器到服务器连接，完全不需要 CORS。</p>
+<h2>兼容前端</h2>
+<p>任何支持 OpenAI API 格式的前端均可使用。已测试/记录的集成：</p>
+<table>
+<thead>
+<tr>
+<th>前端</th>
+<th>Stars</th>
+<th>连接方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="/user-guide/messaging/open-webui">Open WebUI</a></td>
+<td>126k</td>
+<td>提供完整指南</td>
+</tr>
+<tr>
+<td>LobeChat</td>
+<td>73k</td>
+<td>自定义 provider 端点</td>
+</tr>
+<tr>
+<td>LibreChat</td>
+<td>34k</td>
+<td>librechat.yaml 中的自定义端点</td>
+</tr>
+<tr>
+<td>AnythingLLM</td>
+<td>56k</td>
+<td>通用 OpenAI provider</td>
+</tr>
+<tr>
+<td>NextChat</td>
+<td>87k</td>
+<td>BASE_URL 环境变量</td>
+</tr>
+<tr>
+<td>ChatBox</td>
+<td>39k</td>
+<td>API Host 设置</td>
+</tr>
+<tr>
+<td>Jan</td>
+<td>26k</td>
+<td>远程模型配置</td>
+</tr>
+<tr>
+<td>HF Chat-UI</td>
+<td>8k</td>
+<td>OPENAI_BASE_URL</td>
+</tr>
+<tr>
+<td>big-AGI</td>
+<td>7k</td>
+<td>自定义端点</td>
+</tr>
+<tr>
+<td>OpenAI Python SDK</td>
+<td>—</td>
+<td><code>OpenAI(base_url=&quot;http://localhost:8642/v1&quot;)</code></td>
+</tr>
+<tr>
+<td>curl</td>
+<td>—</td>
+<td>直接 HTTP 请求</td>
+</tr>
+</tbody>
+</table>
+<h2>使用 Profiles 的多用户设置</h2>
+<p>要为多个用户提供各自隔离的 Hermes 实例（独立的配置、记忆、技能），请使用 <a href="/user-guide/profiles">profiles</a>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 为每个用户创建 profile
+hermes profile create alice
+hermes profile create bob
+
+# 在不同端口上配置每个 profile 的 API 服务器。API_SERVER_* 是环境变量
+# （不是 config.yaml 键），因此将它们写入每个 profile 的 .env：
+cat &gt;&gt; ~/.hermes/profiles/alice/.env &lt;&lt;EOF
+API_SERVER_ENABLED=true
+API_SERVER_PORT=8643
+API_SERVER_KEY=alice-secret
+EOF
+
+cat &gt;&gt; ~/.hermes/profiles/bob/.env &lt;&lt;EOF
+API_SERVER_ENABLED=true
+API_SERVER_PORT=8644
+API_SERVER_KEY=bob-secret
+EOF
+
+# 启动每个 profile 的 gateway
+hermes -p alice gateway &amp;
+hermes -p bob gateway &amp;
+</div>
+<p>每个 profile 的 API 服务器自动将 profile 名称作为模型 ID 广播：</p>
+<ul>
+<li><code>http://localhost:8643/v1/models</code> → 模型 <code>alice</code></li>
+<li><code>http://localhost:8644/v1/models</code> → 模型 <code>bob</code></li>
+</ul>
+<p>在 Open WebUI 中，将每个添加为单独的连接。模型下拉列表显示 <code>alice</code> 和 <code>bob</code> 作为不同模型，每个均由完全隔离的 Hermes 实例支持。详见 <a href="/user-guide/messaging/open-webui#multi-user-setup-with-profiles">Open WebUI 指南</a>。</p>
+<h2>限制</h2>
+<ul>
+<li><strong>响应存储</strong> — 存储的响应（用于 <code>previous_response_id</code>）持久化在 SQLite 中，gateway 重启后仍然存在。最多存储 100 个响应（LRU 淘汰）。</li>
+<li><strong>不支持文件上传</strong> — 两个端点（<code>/v1/chat/completions</code> 和 <code>/v1/responses</code>）均支持内联图像，但不支持通过 API 上传文件（<code>file</code>、<code>input_file</code>、<code>file_id</code>）和非图像文档输入。</li>
+<li><strong>model 字段仅为展示用途</strong> — 请求中的 <code>model</code> 字段会被接受，但实际使用的 LLM 模型在服务端的 config.yaml 中配置。</li>
+</ul>
+<h2>代理模式</h2>
+<p>API 服务器还作为 <strong>gateway 代理模式</strong>的后端。当另一个 Hermes gateway 实例配置了指向此 API 服务器的 <code>GATEWAY_PROXY_URL</code> 时，它会将所有消息转发到这里，而不是运行自己的 agent。这支持分离部署——例如，一个处理 Matrix E2EE 的 Docker 容器将请求中继到宿主机侧的 agent。</p>
+<p>完整设置指南参见 <a href="/user-guide/messaging/matrix#proxy-mode-e2ee-on-macos">Matrix 代理模式</a>。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

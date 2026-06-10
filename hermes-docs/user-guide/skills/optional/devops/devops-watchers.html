@@ -1,0 +1,292 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Watchers — 使用水印去重轮询 RSS、JSON API 和 GitHub - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Watchers — 使用水印去重轮询 RSS、JSON API 和 GitHub</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Watchers</h1>
+<p>使用水印去重轮询 RSS、JSON API 和 GitHub。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/devops/watchers</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/devops/watchers</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Hermes Agent</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>cron</code>, <code>polling</code>, <code>rss</code>, <code>github</code>, <code>http</code>, <code>automation</code>, <code>monitoring</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>Watchers</h1>
+<p>按固定间隔轮询（polling）外部数据源，仅对新条目作出响应。提供三个现成脚本及一个共享水印（watermark）辅助模块；可将其接入 cron 任务，也可从终端临时运行。</p>
+<h2>使用场景</h2>
+<ul>
+<li>用户希望监控 RSS/Atom feed 并在有新条目时收到通知</li>
+<li>用户希望监控 GitHub 仓库的 issues / pulls / releases / commits</li>
+<li>用户希望轮询任意 JSON 端点并在有新条目时收到通知</li>
+<li>用户请求&quot;为 X 创建一个 watcher&quot;或&quot;当 X 变化时通知我&quot;</li>
+</ul>
+<h2>工作原理</h2>
+<p>一个 watcher 本质上是一个脚本，执行以下操作：</p>
+<ol>
+<li>从外部数据源获取数据</li>
+<li>与记录已处理 ID 的水印文件进行比对</li>
+<li>将新水印写回文件</li>
+<li>将新条目打印到 stdout（无变化则不输出）</li>
+</ol>
+<p>以下三个脚本均实现了上述逻辑。agent 通过终端工具运行它们——来自 cron 任务、webhook 或交互式对话——并报告新内容。</p>
+<h2>现成脚本</h2>
+<p>安装 skill 后，三个脚本均位于 <code>$HERMES_HOME/skills/devops/watchers/scripts/</code>。每个脚本读取 <code>WATCHER_STATE_DIR</code>（默认为 <code>$HERMES_HOME/watcher-state/</code>）作为状态文件目录，以 <code>--name</code> 参数作为键名。</p>
+<table>
+<thead>
+<tr>
+<th>脚本</th>
+<th>监控对象</th>
+<th>去重键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>watch_rss.py</code></td>
+<td>RSS 2.0 或 Atom feed URL</td>
+<td><code>&lt;guid&gt;</code> / <code>&lt;id&gt;</code></td>
+</tr>
+<tr>
+<td><code>watch_http_json.py</code></td>
+<td>任意返回对象列表的 JSON 端点</td>
+<td>可配置的 id 字段</td>
+</tr>
+<tr>
+<td><code>watch_github.py</code></td>
+<td>GitHub 仓库的 issues / pulls / releases / commits</td>
+<td><code>id</code> / <code>sha</code></td>
+</tr>
+</tbody>
+</table>
+<p>三个脚本的共同特性：</p>
+<ul>
+<li>首次运行记录基线——不会重放已有 feed 内容</li>
+<li>水印为有界 ID 集合（最多 500 条），以限制内存占用</li>
+<li>输出格式：每条条目为 <code>## &lt;title&gt;\n&lt;url&gt;\n\n&lt;optional body&gt;</code></li>
+<li>无新内容时 stdout 为空——调用方将此视为静默</li>
+<li>获取出错时返回非零退出码</li>
+</ul>
+<h2>用法</h2>
+<p>直接从终端工具运行 watcher：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python $HERMES_HOME/skills/devops/watchers/scripts/watch_rss.py \
+  --name hn --url https://news.ycombinator.com/rss --max 5
+</div>
+<p>监控 GitHub 仓库（在 <code>~/.hermes/.env</code> 中设置 <code>GITHUB_TOKEN</code> 以避免匿名请求限制 60 次/小时）：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python $HERMES_HOME/skills/devops/watchers/scripts/watch_github.py \
+  --name hermes-issues --repo NousResearch/hermes-agent --scope issues
+</div>
+<p>轮询任意 JSON API：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python $HERMES_HOME/skills/devops/watchers/scripts/watch_http_json.py \
+  --name api --url https://api.example.com/events \
+  --id-field event_id --items-path data.events
+</div>
+<h2>接入 cron</h2>
+<p>向 agent 发送如下 prompt（提示词）以调度 cron 任务：</p>
+<blockquote>
+<p>每 15 分钟运行一次 <code>watch_rss.py --name hn --url https://news.ycombinator.com/rss</code>。如果有输出，则汇总标题并推送；如果没有输出，则保持静默。</p>
+</blockquote>
+<p>agent 在 cron 任务的 agent 循环中通过终端工具调用脚本，无需修改 cron 内置的 <code>--script</code> 标志。</p>
+<h2>状态文件</h2>
+<p>每个 watcher 将状态写入 <code>$HERMES_HOME/watcher-state/&lt;name&gt;.json</code>。查看状态：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cat $HERMES_HOME/watcher-state/hn.json
+</div>
+<p>强制重放（下次运行视为首次轮询）：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+rm $HERMES_HOME/watcher-state/hn.json
+</div>
+<h2>自定义 watcher</h2>
+<p>三个脚本使用相同的模板：加载水印、获取数据、差异比对、保存、输出。<code>scripts/_watermark.py</code> 是共享辅助模块；导入它即可免费获得原子写入、有界 ID 集合及首次运行基线功能。参考任意一个脚本，即可了解所需的样板代码有多少。</p>
+<h2>常见问题</h2>
+<ol>
+<li><strong>每次 tick 都打印&quot;无新条目&quot;的标题。</strong> 调用方依赖 stdout 为空来判断静默。若在空 delta 时打印任何内容，将导致频道被刷屏。已提供的脚本已处理此问题；自定义脚本也必须如此。</li>
+<li><strong>期望首次运行就输出条目。</strong> 首次运行只记录基线，不会输出内容。如需初始摘要，可在首次运行后删除状态文件，或在自定义脚本中添加 <code>--prime-with-latest N</code> 标志。</li>
+<li><strong>水印无限增长。</strong> 共享辅助模块上限为 500 个 ID。对于高频更新的 feed 可适当提高；在存储受限的文件系统上可适当降低。</li>
+<li><strong>状态目录位于 agent 沙箱无法写入的位置。</strong> <code>$HERMES_HOME/watcher-state/</code> 始终可写。Docker/Modal 后端可能无法访问任意宿主机路径。</li>
+</ol>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

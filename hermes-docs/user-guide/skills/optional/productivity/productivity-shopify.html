@@ -1,0 +1,499 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopify — 通过 curl 使用 Shopify Admin 与 Storefront GraphQL API - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Shopify — 通过 curl 使用 Shopify Admin 与 Storefront GraphQL API</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Shopify</h1>
+<p>通过 curl 使用 Shopify Admin 与 Storefront GraphQL API。涵盖商品、订单、客户、库存、metafield。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/productivity/shopify</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/productivity/shopify</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>community</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Shopify</code>, <code>E-commerce</code>, <code>Commerce</code>, <code>API</code>, <code>GraphQL</code></td>
+</tr>
+<tr>
+<td>相关 skill</td>
+<td><a href="/user-guide/skills/bundled/productivity/productivity-airtable"><code>airtable</code></a>, <a href="/user-guide/skills/bundled/social-media/social-media-xurl"><code>xurl</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 skill 激活时 agent 所看到的指令内容。
+</div>
+<h1>Shopify — Admin 与 Storefront GraphQL API</h1>
+<p>通过 <code>curl</code> 直接操作 Shopify 店铺：列出商品、管理库存、拉取订单、更新客户、读取 metafield。无需 SDK，无需应用框架——只需 GraphQL 端点和自定义应用访问令牌。</p>
+<p>REST Admin API 自 2024-04 起已进入遗留状态，仅接受安全修复。<strong>所有管理操作请使用 GraphQL Admin</strong>。面向客户的只读查询（商品、集合、购物车）请使用 <strong>Storefront GraphQL</strong>。</p>
+<h2>前置条件</h2>
+<ol>
+<li>在 Shopify 管理后台：<strong>Settings → Apps and sales channels → Develop apps → Create an app</strong>。</li>
+<li>点击 <strong>Configure Admin API scopes</strong>，选择所需权限（见下方示例），保存。</li>
+<li><strong>Install app</strong> → Admin API 访问令牌仅显示一次。立即复制——Shopify 不会再次展示。令牌以 <code>shpat_</code> 开头。</li>
+<li>保存至 <code>~/.hermes/.env</code>：<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+SHOPIFY_ACCESS_TOKEN=shpat_xxxxxxxxxxxxxxxxxxxx
+SHOPIFY_STORE_DOMAIN=my-store.myshopify.com
+SHOPIFY_API_VERSION=2026-01
+</li>
+</ol>
+</div>
+<blockquote>
+<p><strong>注意：</strong> 自 2026 年 1 月 1 日起，在 Shopify 管理后台新建&quot;旧版自定义应用&quot;的功能已停用。新配置应使用 <strong>Dev Dashboard</strong>（<code>shopify.dev/docs/apps/build/dev-dashboard</code>）。已有的管理后台创建的应用继续有效。如果用户的店铺没有现有自定义应用且时间在 2026-01-01 之后，请引导其使用 Dev Dashboard 而非管理后台流程。</p>
+</blockquote>
+<p>常用权限范围（scope）按任务分类：</p>
+<ul>
+<li>商品 / 集合：<code>read_products</code>、<code>write_products</code></li>
+<li>库存：<code>read_inventory</code>、<code>write_inventory</code>、<code>read_locations</code></li>
+<li>订单：<code>read_orders</code>、<code>write_orders</code>（不含 <code>read_all_orders</code> 时仅返回最近 30 条）</li>
+<li>客户：<code>read_customers</code>、<code>write_customers</code></li>
+<li>草稿订单：<code>read_draft_orders</code>、<code>write_draft_orders</code></li>
+<li>履约：<code>read_fulfillments</code>、<code>write_fulfillments</code></li>
+<li>Metafield / metaobject：由对应资源的 scope 覆盖</li>
+</ul>
+<h2>API 基础</h2>
+<ul>
+<li><strong>端点：</strong> <code>https://$SHOPIFY_STORE_DOMAIN/admin/api/$SHOPIFY_API_VERSION/graphql.json</code></li>
+<li><strong>认证头：</strong> <code>X-Shopify-Access-Token: $SHOPIFY_ACCESS_TOKEN</code>（<strong>不是</strong> <code>Authorization: Bearer</code>）</li>
+<li><strong>方法：</strong> 始终为 <code>POST</code>，始终使用 <code>Content-Type: application/json</code>，请求体为 <code>{&quot;query&quot;: &quot;...&quot;, &quot;variables&quot;: {...}}</code></li>
+<li><strong>HTTP 200 不代表成功。</strong> GraphQL 在顶层 <code>errors</code> 数组和各字段的 <code>userErrors</code> 中返回错误。两者都需检查。</li>
+<li><strong>ID 为 GID 字符串：</strong> <code>gid://shopify/Product/10079467700516</code>、<code>gid://shopify/Variant/...</code>、<code>gid://shopify/Order/...</code>。原样传入——不要去掉前缀。</li>
+<li><strong>速率限制：</strong> 基于查询消耗（leaky bucket）计算。每个响应的 <code>extensions.cost</code> 包含 <code>requestedQueryCost</code>、<code>actualQueryCost</code>、<code>throttleStatus.{currentlyAvailable, maximumAvailable, restoreRate}</code>。当 <code>currentlyAvailable</code> 低于下一次查询消耗时退避。标准店铺 = 100 点桶，50/s 恢复；Plus = 1000/100。</li>
+</ul>
+<p>基础 curl 模式（可复用）：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+shop_gql() {
+  local query="$1"
+  local variables="${2:-{}}"
+  curl -sS -X POST \
+    "https://${SHOPIFY_STORE_DOMAIN}/admin/api/${SHOPIFY_API_VERSION:-2026-01}/graphql.json" \
+    -H "Content-Type: application/json" \
+    -H "X-Shopify-Access-Token: ${SHOPIFY_ACCESS_TOKEN}" \
+    --data "$(jq -nc --arg q "$query" --argjson v "$variables" '{query: $q, variables: $v}')"
+}
+</div>
+<p>通过管道传给 <code>jq</code> 以获得可读输出。<code>-sS</code> 保留错误可见性同时隐藏进度条。</p>
+<h2>发现</h2>
+<h3>店铺信息 + 当前 API 版本</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+shop_gql '{ shop { name myshopifyDomain primaryDomain { url } currencyCode plan { displayName } } }' | jq
+</div>
+<h3>列出所有支持的 API 版本</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+shop_gql '{ publicApiVersions { handle supported } }' | jq '.data.publicApiVersions[] | select(.supported)'
+</div>
+<h2>商品</h2>
+<h3>搜索商品（前 20 条匹配结果）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+shop_gql '
+query($q: String!) {
+  products(first: 20, query: $q) {
+    edges { node { id title handle status totalInventory variants(first: 5) { edges { node { id sku price inventoryQuantity } } } } }
+    pageInfo { hasNextPage endCursor }
+  }
+}' '{"q":"hoodie status:active"}' | jq
+</div>
+<p>查询语法支持 <code>title:</code>、<code>sku:</code>、<code>vendor:</code>、<code>product_type:</code>、<code>status:active</code>、<code>tag:</code>、<code>created_at:&gt;2025-01-01</code>。完整语法：https://shopify.dev/docs/api/usage/search-syntax</p>
+<h3>分页获取商品（游标）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+shop_gql '
+query($cursor: String) {
+  products(first: 100, after: $cursor) {
+    edges { cursor node { id handle } }
+    pageInfo { hasNextPage endCursor }
+  }
+}' '{"cursor":null}'
+# 后续调用：传入上一次的 endCursor
+</div>
+<h3>获取商品（含变体 + metafield）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+shop_gql '
+query($id: ID!) {
+  product(id: $id) {
+    id title handle descriptionHtml tags status
+    variants(first: 20) { edges { node { id sku price compareAtPrice inventoryQuantity selectedOptions { name value } } } }
+    metafields(first: 20) { edges { node { namespace key type value } } }
+  }
+}' '{"id":"gid://shopify/Product/10079467700516"}' | jq
+</div>
+<h3>创建含一个变体的商品</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+shop_gql '
+mutation($input: ProductCreateInput!) {
+  productCreate(product: $input) {
+    product { id handle }
+    userErrors { field message }
+  }
+}' '{"input":{"title":"Test Hoodie","status":"DRAFT","vendor":"Hermes","productType":"Apparel","tags":["test"]}}'
+</div>
+<p>新版本中变体有独立的 mutation：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 创建商品后添加变体
+shop_gql '
+mutation($productId: ID!, $variants: [ProductVariantsBulkInput!]!) {
+  productVariantsBulkCreate(productId: $productId, variants: $variants) {
+    productVariants { id sku price }
+    userErrors { field message }
+  }
+}' '{"productId":"gid://shopify/Product/...","variants":[{"optionValues":[{"optionName":"Size","name":"M"}],"price":"49.00","inventoryItem":{"sku":"HD-M","tracked":true}}]}'
+</div>
+<h3>更新价格 / SKU</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+shop_gql '
+mutation($productId: ID!, $variants: [ProductVariantsBulkInput!]!) {
+  productVariantsBulkUpdate(productId: $productId, variants: $variants) {
+    productVariants { id sku price }
+    userErrors { field message }
+  }
+}' '{"productId":"gid://shopify/Product/...","variants":[{"id":"gid://shopify/ProductVariant/...","price":"55.00"}]}'
+</div>
+<h2>订单</h2>
+<h3>列出最近订单（不含 <code>read_all_orders</code> 时默认最多 30 条）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+shop_gql '
+{
+  orders(first: 20, reverse: true, query: "financial_status:paid") {
+    edges { node {
+      id name createdAt displayFinancialStatus displayFulfillmentStatus
+      totalPriceSet { shopMoney { amount currencyCode } }
+      customer { id displayName email }
+      lineItems(first: 10) { edges { node { title quantity sku } } }
+    } }
+  }
+}' | jq
+</div>
+<p>常用订单查询过滤器：<code>financial_status:paid|pending|refunded</code>、<code>fulfillment_status:unfulfilled|fulfilled</code>、<code>created_at:&gt;2025-01-01</code>、<code>tag:gift</code>、<code>email:foo@example.com</code>。</p>
+<h3>获取单个订单（含收货地址）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+shop_gql '
+query($id: ID!) {
+  order(id: $id) {
+    id name email
+    shippingAddress { name address1 address2 city province country zip phone }
+    lineItems(first: 50) { edges { node { title quantity variant { sku } originalUnitPriceSet { shopMoney { amount currencyCode } } } } }
+    transactions { id kind status amountSet { shopMoney { amount currencyCode } } }
+  }
+}' '{"id":"gid://shopify/Order/...."}' | jq
+</div>
+<h2>客户</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 搜索
+shop_gql '
+{
+  customers(first: 10, query: "email:*@example.com") {
+    edges { node { id email displayName numberOfOrders amountSpent { amount currencyCode } } }
+  }
+}'
+<h1>创建</h1>
+<p>shop_gql '
+mutation($input: CustomerInput!) {
+customerCreate(input: $input) {
+customer { id email }
+userErrors { field message }
+}
+}' '{&quot;input&quot;:{&quot;email&quot;:&quot;test@example.com&quot;,&quot;firstName&quot;:&quot;Test&quot;,&quot;lastName&quot;:&quot;User&quot;,&quot;tags&quot;:[&quot;api-created&quot;]}}'</p>
+</div>
+<h2>库存</h2>
+<p>库存挂载在与变体关联的<strong>库存项目</strong>上，数量按<strong>仓库位置</strong>跟踪。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 获取某变体在所有仓库的库存
+shop_gql '
+query($id: ID!) {
+  productVariant(id: $id) {
+    id sku
+    inventoryItem {
+      id tracked
+      inventoryLevels(first: 10) {
+        edges { node { location { id name } quantities(names: ["available","on_hand","committed"]) { name quantity } } }
+      }
+    }
+  }
+}' '{"id":"gid://shopify/ProductVariant/..."}'
+</div>
+<p>调整库存（增量）— 使用 <code>inventoryAdjustQuantities</code>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+shop_gql '
+mutation($input: InventoryAdjustQuantitiesInput!) {
+  inventoryAdjustQuantities(input: $input) {
+    inventoryAdjustmentGroup { reason changes { name delta } }
+    userErrors { field message }
+  }
+}' '{
+  "input": {
+    "reason": "correction",
+    "name": "available",
+    "changes": [{"delta": 5, "inventoryItemId": "gid://shopify/InventoryItem/...", "locationId": "gid://shopify/Location/..."}]
+  }
+}'
+</div>
+<p>设置绝对库存（非增量）— <code>inventorySetQuantities</code>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+shop_gql '
+mutation($input: InventorySetQuantitiesInput!) {
+  inventorySetQuantities(input: $input) {
+    inventoryAdjustmentGroup { id }
+    userErrors { field message }
+  }
+}' '{"input":{"reason":"correction","name":"available","ignoreCompareQuantity":true,"quantities":[{"inventoryItemId":"gid://shopify/InventoryItem/...","locationId":"gid://shopify/Location/...","quantity":100}]}}'
+</div>
+<h2>Metafield 与 Metaobject</h2>
+<p>Metafield 用于为资源（商品、客户、订单、店铺）附加自定义数据。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 读取
+shop_gql '
+query($id: ID!) {
+  product(id: $id) {
+    metafields(first: 10, namespace: "custom") {
+      edges { node { key type value } }
+    }
+  }
+}' '{"id":"gid://shopify/Product/..."}'
+<h1>写入（适用于任意 owner 类型）</h1>
+<p>shop_gql '
+mutation($metafields: [MetafieldsSetInput!]!) {
+metafieldsSet(metafields: $metafields) {
+metafields { id key namespace }
+userErrors { field message code }
+}
+}' '{&quot;metafields&quot;:[{&quot;ownerId&quot;:&quot;gid://shopify/Product/...&quot;,&quot;namespace&quot;:&quot;custom&quot;,&quot;key&quot;:&quot;care_instructions&quot;,&quot;type&quot;:&quot;multi_line_text_field&quot;,&quot;value&quot;:&quot;Wash cold. Tumble dry low.&quot;}]}'</p>
+</div>
+<h2>Storefront API（公开只读）</h2>
+<p>使用不同的端点和令牌，适用于面向客户的应用或 Hydrogen 风格的 headless 配置。请求头有所不同：</p>
+<ul>
+<li><strong>端点：</strong> <code>https://$SHOPIFY_STORE_DOMAIN/api/$SHOPIFY_API_VERSION/graphql.json</code></li>
+<li><strong>认证头（公开）：</strong> <code>X-Shopify-Storefront-Access-Token: &lt;public token&gt;</code> — 可嵌入浏览器</li>
+<li><strong>认证头（私有）：</strong> <code>Shopify-Storefront-Private-Token: &lt;private token&gt;</code> — 仅限服务端</li>
+</ul>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -sS -X POST \
+  "https://${SHOPIFY_STORE_DOMAIN}/api/${SHOPIFY_API_VERSION:-2026-01}/graphql.json" \
+  -H "Content-Type: application/json" \
+  -H "X-Shopify-Storefront-Access-Token: ${SHOPIFY_STOREFRONT_TOKEN}" \
+  -d '{"query":"{ shop { name } products(first: 5) { edges { node { id title handle } } } }"}' | jq
+</div>
+<h2>批量操作</h2>
+<p>适用于超出速率限制的大批量数据导出（完整商品目录、全年订单）：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 1. 启动批量查询
+shop_gql '
+mutation {
+  bulkOperationRunQuery(query: """
+    { products { edges { node { id title handle variants { edges { node { sku price } } } } } } }
+  """) {
+    bulkOperation { id status }
+    userErrors { field message }
+  }
+}'
+<h1>2. 轮询状态</h1>
+<p>shop_gql '{ currentBulkOperation { id status errorCode objectCount fileSize url partialDataUrl } }'</p>
+<h1>3. 状态为 COMPLETED 时下载 JSONL 文件</h1>
+<p>curl -sS &quot;$URL&quot; &amp;gt; products.jsonl</p>
+</div>
+<p>每行 JSONL 为一个节点，嵌套连接以独立行输出并附带 <code>__parentId</code>。如有需要，在客户端重新组装。</p>
+<h2>Webhook</h2>
+<p>订阅事件以避免轮询：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+shop_gql '
+mutation($topic: WebhookSubscriptionTopic!, $sub: WebhookSubscriptionInput!) {
+  webhookSubscriptionCreate(topic: $topic, webhookSubscription: $sub) {
+    webhookSubscription { id topic endpoint { __typename ... on WebhookHttpEndpoint { callbackUrl } } }
+    userErrors { field message }
+  }
+}' '{"topic":"ORDERS_CREATE","sub":{"callbackUrl":"https://example.com/webhook","format":"JSON"}}'
+</div>
+<p>使用应用的 client secret（非访问令牌）验证传入 webhook 的 HMAC：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+echo -n "$REQUEST_BODY" | openssl dgst -sha256 -hmac "$APP_SECRET" -binary | base64
+# 与 X-Shopify-Hmac-Sha256 请求头比对
+</div>
+<h2>常见陷阱</h2>
+<ul>
+<li><strong>REST 端点仍然存在但已冻结。</strong> 不要针对 <code>/admin/api/.../products.json</code> 编写新集成，请使用 GraphQL。</li>
+<li><strong>令牌格式检查。</strong> Admin 令牌以 <code>shpat_</code> 开头，Storefront 公开令牌以 <code>shpua_</code> 开头。若令牌正确但请求头错误，每次请求都会返回 401 且无有效错误信息。</li>
+<li><strong>令牌有效但返回 403 = 缺少 scope。</strong> Shopify 返回 <code>{&quot;errors&quot;:[{&quot;message&quot;:&quot;Access denied for ...&quot;}]}</code>。在应用上重新配置 Admin API scope，然后重新安装以重新生成令牌。</li>
+<li><strong><code>userErrors</code> 为空 ≠ 成功。</strong> 还需检查 <code>data.&lt;mutation&gt;.&lt;resource&gt;</code> 是否非空。某些失败两者均不填充——请检查完整响应。</li>
+<li><strong>GID 与数字 ID。</strong> 旧版 REST 返回数字 ID；GraphQL 需要完整 GID 字符串。转换方式：<code>gid://shopify/Product/&lt;numeric&gt;</code>。</li>
+<li><strong>速率限制意外。</strong> 单次深度嵌套的 <code>products(first: 250)</code> 可能消耗 1000+ 点，在标准套餐店铺上立即触发限流。从小范围开始，读取 <code>extensions.cost</code>，再做调整。</li>
+<li><strong>分页排序。</strong> <code>products(first: N, reverse: true)</code> 按 <code>id DESC</code> 排序，而非 <code>created_at</code>。若需&quot;最新优先&quot;，请使用 <code>sortKey: CREATED_AT, reverse: true</code>。</li>
+<li><strong>历史数据需要 <code>read_all_orders</code>。</strong> 不含此 scope 时，<code>orders(...)</code> 会静默限制在 60 天窗口内。不会报错，只是结果比预期少。对于订单量大的 Shopify Plus 商户，请通过应用的受保护数据设置申请此 scope。</li>
+<li><strong>货币金额为字符串。</strong> 金额以 <code>&quot;49.00&quot;</code> 而非 <code>49.0</code> 返回。若关心零填充，不要盲目使用 <code>jq tonumber</code>。</li>
+<li><strong>多货币 Money 字段</strong> 同时包含 <code>shopMoney</code>（店铺货币）和 <code>presentmentMoney</code>（客户货币）。请保持一致地选择其中一个。</li>
+</ul>
+<h2>安全须知</h2>
+<p>Shopify 中的 mutation 操作是真实生效的——它们会创建商品、执行退款、取消订单、发货。在执行 <code>productDelete</code>、<code>orderCancel</code>、<code>refundCreate</code> 或任何批量 mutation 之前：请明确说明变更内容、所在店铺，并与用户确认。除非用户有独立的开发店铺，否则不存在生产数据的暂存副本。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,338 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Provider 运行时解析 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 开发者指南 / Provider 运行时解析</div><p>Hermes 拥有一个共享的 provider 运行时解析器，用于以下场景：</p>
+<ul>
+<li>CLI</li>
+<li>gateway</li>
+<li>cron 任务</li>
+<li>ACP</li>
+<li>辅助模型调用</li>
+</ul>
+<p>主要实现：</p>
+<ul>
+<li><code>hermes_cli/runtime_provider.py</code> — 凭据解析，<code>_resolve_custom_runtime()</code></li>
+<li><code>hermes_cli/auth.py</code> — provider 注册表，<code>resolve_provider()</code></li>
+<li><code>hermes_cli/model_switch.py</code> — 共享 <code>/model</code> 切换流水线（CLI + gateway）</li>
+<li><code>agent/auxiliary_client.py</code> — 辅助模型路由</li>
+<li><code>providers/</code> — ABC + 注册表入口点（<code>ProviderProfile</code>、<code>register_provider</code>、<code>get_provider_profile</code>、<code>list_providers</code>）</li>
+<li><code>plugins/model-providers/&lt;name&gt;/</code> — 每个 provider 的插件（内置），声明 <code>api_mode</code>、<code>base_url</code>、<code>env_vars</code>、<code>fallback_models</code> 并在首次访问时将自身注册到注册表。用户插件位于 <code>$HERMES_HOME/plugins/model-providers/&lt;name&gt;/</code>，会覆盖同名的内置插件。</li>
+</ul>
+<p><code>providers/</code> 中的 <code>get_provider_profile()</code> 为给定 provider id 返回一个 <code>ProviderProfile</code>。<code>runtime_provider.py</code> 在解析时调用它，以获取规范的 <code>base_url</code>、<code>env_vars</code> 优先级列表、<code>api_mode</code> 和 <code>fallback_models</code>，无需在多个文件中重复这些数据。在 <code>plugins/model-providers/&lt;your-provider&gt;/</code>（或 <code>$HERMES_HOME/plugins/model-providers/&lt;your-provider&gt;/</code>）下添加一个调用 <code>register_provider()</code> 的新插件，即可让 <code>runtime_provider.py</code> 自动识别它——无需在解析器本身中添加分支。</p>
+<p>如果你想添加一个新的一等推理 provider，请结合本页阅读 <a href="./adding-providers.html">添加 Provider</a> 和 <a href="./model-provider-plugin.html">Model Provider 插件指南</a>。</p>
+<h2>解析优先级</h2>
+<p>从高层来看，provider 解析使用以下顺序：</p>
+<ol>
+<li>显式 CLI/运行时请求</li>
+<li><code>config.yaml</code> 中的模型/provider 配置</li>
+<li>环境变量</li>
+<li>provider 特定的默认值或自动解析</li>
+</ol>
+<p>该顺序很重要，因为 Hermes 将已保存的模型/provider 选择视为正常运行的真实来源。这可以防止过时的 shell 导出变量悄悄覆盖用户在 <code>hermes model</code> 中最后选择的端点。</p>
+<h2>Provider</h2>
+<p>当前 provider 系列包括（完整内置集合见 <code>plugins/model-providers/</code>）：</p>
+<ul>
+<li>OpenRouter</li>
+<li>Nous Portal</li>
+<li>OpenAI Codex</li>
+<li>Copilot / Copilot ACP</li>
+<li>Anthropic（原生）</li>
+<li>Google / Gemini（<code>gemini</code>、<code>google-gemini-cli</code>）</li>
+<li>Alibaba / DashScope（<code>alibaba</code>、<code>alibaba-coding-plan</code>）</li>
+<li>DeepSeek</li>
+<li>Z.AI</li>
+<li>Kimi / Moonshot（<code>kimi-coding</code>、<code>kimi-coding-cn</code>）</li>
+<li>MiniMax（<code>minimax</code>、<code>minimax-cn</code>、<code>minimax-oauth</code>）</li>
+<li>Kilo Code</li>
+<li>Hugging Face</li>
+<li>OpenCode Zen / OpenCode Go</li>
+<li>AWS Bedrock</li>
+<li>Azure Foundry</li>
+<li>NVIDIA NIM</li>
+<li>xAI（Grok）</li>
+<li>Arcee</li>
+<li>GMI Cloud</li>
+<li>StepFun</li>
+<li>Qwen OAuth</li>
+<li>Xiaomi</li>
+<li>Ollama Cloud</li>
+<li>LM Studio</li>
+<li>Tencent TokenHub</li>
+<li>Custom（<code>provider: custom</code>）— 适用于任何 OpenAI 兼容端点的一等 provider</li>
+<li>命名自定义 provider（<code>config.yaml</code> 中的 <code>custom_providers</code> 列表）</li>
+</ul>
+<h2>运行时解析的输出</h2>
+<p>运行时解析器返回的数据包括：</p>
+<ul>
+<li><code>provider</code></li>
+<li><code>api_mode</code></li>
+<li><code>base_url</code></li>
+<li><code>api_key</code></li>
+<li><code>source</code></li>
+<li>provider 特定的元数据，如过期/刷新信息</li>
+</ul>
+<h2>为什么这很重要</h2>
+<p>该解析器是 Hermes 能够在以下场景之间共享认证/运行时逻辑的主要原因：</p>
+<ul>
+<li><code>hermes chat</code></li>
+<li>gateway 消息处理</li>
+<li>在全新会话中运行的 cron 任务</li>
+<li>ACP 编辑器会话</li>
+<li>辅助模型任务</li>
+</ul>
+<h2>OpenRouter 与自定义 OpenAI 兼容 base URL</h2>
+<p>Hermes 包含相关逻辑，以避免在存在多个 provider 密钥时（例如同时存在 <code>OPENROUTER_API_KEY</code> 和 <code>OPENAI_API_KEY</code>）将错误的 API key 泄露给自定义端点。</p>
+<p>每个 provider 的 API key 仅作用于其自身的 base URL：</p>
+<ul>
+<li><code>OPENROUTER_API_KEY</code> 仅发送至 <code>openrouter.ai</code> 端点</li>
+<li><code>OPENAI_API_KEY</code> 用于自定义端点及作为回退</li>
+</ul>
+<p>Hermes 还区分以下两种情况：</p>
+<ul>
+<li>用户主动选择的真实自定义端点</li>
+<li>未配置自定义端点时使用的 OpenRouter 回退路径</li>
+</ul>
+<p>这种区分对以下场景尤为重要：</p>
+<ul>
+<li>本地模型服务器</li>
+<li>非 OpenRouter 的 OpenAI 兼容 API</li>
+<li>无需重新运行 setup 即可切换 provider</li>
+<li>通过 config 保存的自定义端点，即使当前 shell 中未导出 <code>OPENAI_BASE_URL</code> 也应正常工作</li>
+</ul>
+<h2>原生 Anthropic 路径</h2>
+<p>Anthropic 不再仅限于&quot;通过 OpenRouter&quot;访问。</p>
+<p>当 provider 解析选择 <code>anthropic</code> 时，Hermes 使用：</p>
+<ul>
+<li><code>api_mode = anthropic_messages</code></li>
+<li>原生 Anthropic Messages API</li>
+<li><code>agent/anthropic_adapter.py</code> 进行转换</li>
+</ul>
+<p>原生 Anthropic 的凭据解析现在在两者同时存在时，优先使用可刷新的 Claude Code 凭据，而非复制的环境变量 token。实际效果为：</p>
+<ul>
+<li>包含可刷新认证的 Claude Code 凭据文件被视为首选来源</li>
+<li>手动设置的 <code>ANTHROPIC_TOKEN</code> / <code>CLAUDE_CODE_OAUTH_TOKEN</code> 值仍可作为显式覆盖</li>
+<li>Hermes 在调用原生 Messages API 前会预检 Anthropic 凭据刷新</li>
+<li>Hermes 在重建 Anthropic 客户端后，仍会在收到 401 时重试一次，作为回退路径</li>
+</ul>
+<h2>OpenAI Codex 路径</h2>
+<p>Codex 使用独立的 Responses API 路径：</p>
+<ul>
+<li><code>api_mode = codex_responses</code></li>
+<li>专用的凭据解析和认证存储支持</li>
+</ul>
+<h2>辅助模型路由</h2>
+<p>辅助任务包括：</p>
+<ul>
+<li>视觉</li>
+<li>网页提取摘要</li>
+<li>上下文压缩摘要</li>
+<li>skills hub 操作</li>
+<li>MCP 辅助操作</li>
+<li>记忆刷新</li>
+</ul>
+<p>这些任务可以使用各自独立的 provider/模型路由，而非主对话模型。</p>
+<p>当辅助任务配置的 provider 为 <code>main</code> 时，Hermes 通过与普通对话相同的共享运行时路径进行解析。实际效果为：</p>
+<ul>
+<li>环境变量驱动的自定义端点仍然有效</li>
+<li>通过 <code>hermes model</code> / <code>config.yaml</code> 保存的自定义端点同样有效</li>
+<li>辅助路由能够区分真实保存的自定义端点与 OpenRouter 回退</li>
+</ul>
+<h2>回退模型</h2>
+<p>Hermes 支持配置回退 provider 链——一个按顺序尝试的 <code>(provider, model)</code> 条目列表，当主模型遇到错误时依次尝试。旧版单对 <code>fallback_model</code> 字典仍被接受以保持向后兼容（并在首次写入时迁移）。</p>
+<h3>内部工作原理</h3>
+<ol>
+<li>
+<p><strong>存储</strong>：<code>AIAgent.__init__</code> 存储 <code>fallback_model</code> 字典并将 <code>_fallback_activated</code> 设为 <code>False</code>。</p>
+</li>
+<li>
+<p><strong>触发点</strong>：<code>_try_activate_fallback()</code> 在 <code>run_agent.py</code> 主重试循环的三处被调用：</p>
+<ul>
+<li>在无效 API 响应（None choices、缺少 content）达到最大重试次数后</li>
+<li>在不可重试的客户端错误（HTTP 401、403、404）时</li>
+<li>在瞬时错误（HTTP 429、500、502、503）达到最大重试次数后</li>
+</ul>
+</li>
+<li>
+<p><strong>激活流程</strong>（<code>_try_activate_fallback</code>）：</p>
+<ul>
+<li>若已激活或未配置，立即返回 <code>False</code></li>
+<li>调用 <code>auxiliary_client.py</code> 中的 <code>resolve_provider_client()</code> 构建带有正确认证的新客户端</li>
+<li>确定 <code>api_mode</code>：openai-codex 使用 <code>codex_responses</code>，anthropic 使用 <code>anthropic_messages</code>，其余使用 <code>chat_completions</code></li>
+<li>原地替换：<code>self.model</code>、<code>self.provider</code>、<code>self.base_url</code>、<code>self.api_mode</code>、<code>self.client</code>、<code>self._client_kwargs</code></li>
+<li>对于 anthropic 回退：构建原生 Anthropic 客户端而非 OpenAI 兼容客户端</li>
+<li>重新评估 prompt 缓存（对 OpenRouter 上的 Claude 模型启用）</li>
+<li>将 <code>_fallback_activated</code> 设为 <code>True</code>——防止再次触发</li>
+<li>将重试计数重置为 0 并继续循环</li>
+</ul>
+</li>
+<li>
+<p><strong>配置流程</strong>：</p>
+<ul>
+<li>CLI：<code>cli.py</code> 读取 <code>CLI_CONFIG[&quot;fallback_model&quot;]</code> → 传递给 <code>AIAgent(fallback_model=...)</code></li>
+<li>Gateway：<code>gateway/run.py._load_fallback_model()</code> 读取 <code>config.yaml</code> → 传递给 <code>AIAgent</code></li>
+<li>验证：<code>provider</code> 和 <code>model</code> 键均须非空，否则回退被禁用</li>
+</ul>
+</li>
+</ol>
+<h3>不支持回退的场景</h3>
+<ul>
+<li><strong>子代理委托</strong>（<code>tools/delegate_tool.py</code>）：子代理继承父代理的 provider，但不继承回退配置</li>
+<li><strong>辅助任务</strong>：使用各自独立的 provider 自动检测链（见上方辅助模型路由）</li>
+</ul>
+<p>Cron 任务<strong>支持</strong>回退：<code>run_job()</code> 从 <code>config.yaml</code> 读取 <code>fallback_providers</code>（或旧版 <code>fallback_model</code>）并传递给 <code>AIAgent(fallback_model=...)</code>，与 gateway 的 <code>_load_fallback_model()</code> 模式一致。参见 <a href="./cron-internals.html">Cron 内部机制</a>。</p>
+<h3>测试覆盖</h3>
+<p>参见 <code>tests/test_fallback_model.py</code>，其中包含覆盖所有支持 provider、单次触发语义及边界情况的完整测试。</p>
+<h2>相关文档</h2>
+<ul>
+<li><a href="./agent-loop.html">Agent 循环内部机制</a></li>
+<li><a href="./acp-internals.html">ACP 内部机制</a></li>
+<li><a href="./context-compression-and-caching.html">上下文压缩与 Prompt 缓存</a></li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

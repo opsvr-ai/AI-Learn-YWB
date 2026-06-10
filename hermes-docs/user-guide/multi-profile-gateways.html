@@ -1,0 +1,425 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>同时运行多个 Gateway - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / 同时运行多个 Gateway</div><p>在同一台机器上作为托管服务运行多个<a href="./profiles.html">配置文件</a>——每个配置有自己的机器人 Token、会话和记忆。本页涵盖运维相关事项：同时启动所有配置文件、跨配置文件查看日志、防止主机休眠，以及从常见的 launchd/systemd 异常中恢复。</p>
+<p>如果你只运行一个 Hermes Agent，则不需要此页面——基础知识请参见<a href="./profiles.html">配置文件</a>。</p>
+<h2>何时使用</h2>
+<p>当你需要两台或更多台 Hermes Agent 同时在线时适合使用此配置。常见原因：</p>
+<ul>
+<li>一个 Telegram 机器人上运行个人助手，另一个上运行编程 Agent</li>
+<li>每个家庭成员一个 Agent，或每个 Slack 工作区一个</li>
+<li>同一配置的沙箱和生产实例</li>
+<li>一个研究 Agent + 一个写作 Agent + 一个 Cron 驱动的机器人——各自拥有隔离的记忆和 Skills</li>
+</ul>
+<p>每个配置文件已经有自己的每个平台 LaunchAgent（<code>ai.hermes.gateway-&lt;name&gt;.plist</code>）或 systemd 用户服务（<code>hermes-gateway-&lt;name&gt;.service</code>）。本指南补充了集体管理它们的模式。</p>
+<h2>快速开始</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 创建配置文件（一次）
+hermes profile create coder
+hermes profile create personal-bot
+hermes profile create research
+
+# 配置每个配置文件
+coder setup
+personal-bot setup
+research setup
+
+# 将每个 Gateway 安装为托管服务
+coder gateway install
+personal-bot gateway install
+research gateway install
+
+# 启动所有配置文件
+coder gateway start
+personal-bot gateway start
+research gateway start
+</div>
+<p>这样就完成了——三个独立的 Agent，各自运行在自己的进程上，崩溃或用户登录时自动重启。</p>
+<h2>同时启动、停止或重启所有 Gateway</h2>
+<p>CLI 提供了针对单个配置文件的生命周期命令。如需对所有配置文件执行操作，可以用 shell 循环包装它们。将以下代码片段放到 <code>~/.local/bin/hermes-gateways</code> 并 <code>chmod +x</code>：</p>
+<div class="code-block"><span class="code-lang">sh</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+#!/bin/sh
+set -eu
+
+# 在此添加或删除配置文件名称
+profiles="default coder personal-bot research"
+
+usage() {
+  echo "用法: hermes-gateways {start|stop|restart|status|list}"
+}
+
+run_for_profile() {
+  profile="$1"
+  action="$2"
+  if [ "$profile" = "default" ]; then
+    hermes gateway "$action"
+  else
+    hermes -p "$profile" gateway "$action"
+  fi
+}
+
+action="${1:-}"
+case "$action" in
+  start|stop|restart|status)
+    for profile in $profiles; do
+      echo "==&gt; $action $profile"
+      run_for_profile "$profile" "$action"
+    done
+    ;;
+  list)
+    hermes gateway list
+    ;;
+  *)
+    usage
+    exit 2
+    ;;
+esac
+</div>
+<p>然后：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes-gateways start      # 启动每个已配置的配置文件
+hermes-gateways stop       # 停止每个已配置的配置文件
+hermes-gateways restart    # 重启所有
+hermes-gateways status     # 所有配置文件的状态
+hermes-gateways list       # 委托给 `hermes gateway list`
+</div>
+<div class="tip"><strong>💡 提示</strong>
+<code>default</code> 配置文件通过 <code>hermes gateway &lt;action&gt;</code>（不带 <code>-p</code>）而非 <code>hermes -p default gateway &lt;action&gt;</code> 来操作。上面的包装器同时处理了两种形式。
+</div>
+<h2>管理单个配置文件</h2>
+<p>每个配置文件安装的快捷命令：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+coder gateway run        # 前台运行（Ctrl-C 停止）
+coder gateway start      # 启动托管服务
+coder gateway stop       # 停止托管服务
+coder gateway restart    # 重启
+coder gateway status     # 查看状态
+coder gateway install    # 创建 LaunchAgent / systemd 单元
+coder gateway uninstall  # 删除服务文件
+</div>
+<p>这些等同于 <code>hermes -p coder gateway &lt;action&gt;</code>——当配置文件别名不在 <code>PATH</code> 中或需要从脚本动态指定时非常有用。</p>
+<h2>服务文件</h2>
+<p>每个配置文件安装自己唯一的服务，因此安装从不冲突：</p>
+<table>
+<thead>
+<tr>
+<th>平台</th>
+<th>路径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>macOS</td>
+<td><code>~/Library/LaunchAgents/ai.hermes.gateway-&lt;profile&gt;.plist</code></td>
+</tr>
+<tr>
+<td>Linux</td>
+<td><code>~/.config/systemd/user/hermes-gateway-&lt;profile&gt;.service</code></td>
+</tr>
+</tbody>
+</table>
+<p>默认配置文件保留历史名称：<code>ai.hermes.gateway.plist</code> / <code>hermes-gateway.service</code>。</p>
+<h2>查看日志</h2>
+<p>每个配置文件写入自己的日志文件：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 默认配置文件
+tail -f ~/.hermes/logs/gateway.log
+tail -f ~/.hermes/logs/gateway.error.log
+
+# 命名配置文件
+tail -f ~/.hermes/profiles/&lt;name&gt;/logs/gateway.log
+tail -f ~/.hermes/profiles/&lt;name&gt;/logs/gateway.error.log
+</div>
+<p>同时流式查看每个配置文件的日志：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+tail -f ~/.hermes/logs/gateway.log ~/.hermes/profiles/*/logs/gateway.log
+</div>
+<p>CLI 还提供了一个结构化日志查看器：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes logs -f                  # 跟踪默认配置文件
+hermes -p coder logs -f         # 跟踪单个配置文件
+hermes logs --help              # 过滤器、级别、JSON 输出
+</div>
+<h2>确认当前运行状态</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes profile list             # 配置文件 + 模型 + Gateway 状态
+hermes-gateways status          # 所有配置文件的完整状态
+launchctl list | grep hermes    # macOS — PID 和标签
+systemctl --user list-units 'hermes-gateway-*'   # Linux — 单元
+</div>
+<h2>编辑配置</h2>
+<p>每个配置文件在其自己的目录中保存配置：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+~/.hermes/profiles/&lt;name&gt;/
+├── .env              # API Key、机器人 Token（chmod 600）
+├── config.yaml       # 模型、提供商、工具集、Gateway 设置
+└── SOUL.md           # 人格 / 系统提示
+</div>
+<p>默认配置文件直接使用 <code>~/.hermes/</code> 中的相同三个文件。</p>
+<p>使用任意编辑器或通过 CLI 编辑：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes config set model.model anthropic/claude-sonnet-4    # 默认配置文件
+coder config set model.model openai/gpt-5                  # 命名配置文件
+</div>
+<p>编辑 <code>.env</code> 或 <code>config.yaml</code> 后，重启受影响的 Gateway：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+coder gateway restart
+# 或重启所有：
+hermes-gateways restart
+</div>
+<h2>保持主机不休眠</h2>
+<p>Gateway 进程可以全天运行，但操作系统仍会在空闲时尝试休眠。两种模式：</p>
+<h3>macOS — <code>caffeinate</code></h3>
+<p><code>caffeinate</code> 内置于 macOS，运行时阻止睡眠。无需安装。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+caffeinate -dis                    # 阻止显示器、空闲和系统睡眠
+caffeinate -dis -t 28800           # 同上，8 小时后自动退出
+caffeinate -i -w $(cat ~/.hermes/gateway.pid) &amp;   # 默认 Gateway 运行时保持唤醒
+
+# 持久：后台运行并遗忘
+nohup caffeinate -dis &gt;/dev/null 2&gt;&amp;1 &amp;
+disown
+
+# 查看 / 停止
+pmset -g assertions | grep -iE 'caffeinate|prevent|user is active'
+pkill caffeinate
+</div>
+<table>
+<thead>
+<tr>
+<th>标志</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-d</code></td>
+<td>阻止显示器睡眠</td>
+</tr>
+<tr>
+<td><code>-i</code></td>
+<td>阻止空闲系统睡眠（默认）</td>
+</tr>
+<tr>
+<td><code>-m</code></td>
+<td>阻止磁盘睡眠</td>
+</tr>
+<tr>
+<td><code>-s</code></td>
+<td>阻止系统睡眠（仅限电源供电的 Mac）</td>
+</tr>
+<tr>
+<td><code>-u</code></td>
+<td>模拟用户活动（防止屏幕锁定）</td>
+</tr>
+<tr>
+<td><code>-t N</code></td>
+<td><code>N</code> 秒后自动退出</td>
+</tr>
+<tr>
+<td><code>-w P</code></td>
+<td>当 PID <code>P</code> 退出时退出</td>
+</tr>
+</tbody>
+</table>
+<div class="tip warning"><strong>⚠️ 合盖仍然会让 Mac 睡眠</strong>
+<code>caffeinate</code> 无法覆盖 MacBook 上由硬件驱动的合盖睡眠。如需合盖运行，请更改节能/电池偏好设置或使用第三方工具。
+</div>
+<h3>Linux — <code>systemd-inhibit</code> 或 <code>loginctl</code></h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 在命令运行时阻止挂起
+systemd-inhibit --what=idle:sleep --who=hermes --why="gateways running" \
+  sleep infinity &amp;
+
+# 允许用户服务在注销后继续运行（推荐）
+sudo loginctl enable-linger "$USER"
+</div>
+<p>启用 lingering 后，你的 systemd 用户单元（包括 <code>hermes-gateway-&lt;profile&gt;.service</code>）在 SSH 断开和重启后继续运行。</p>
+<h2>Token 冲突安全</h2>
+<p>每个配置文件必须为每个平台使用唯一的机器人 Token。如果两个配置文件共享 Telegram、Discord、Slack、WhatsApp 或 Signal 的 Token，第二个 Gateway 会拒绝启动并显示命名冲突配置文件的错误。</p>
+<p>审计：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+grep -H 'TELEGRAM_BOT_TOKEN\|DISCORD_BOT_TOKEN' \
+     ~/.hermes/.env ~/.hermes/profiles/*/.env
+</div>
+<h2>更新代码</h2>
+<p><code>hermes update</code> 拉取最新代码一次，并将新的内置 Skills 同步到每个配置文件：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes update
+hermes-gateways restart
+</div>
+<p>用户修改过的 Skills 永远不会被覆盖。</p>
+<h2>故障排查</h2>
+<h3>&quot;Could not find service in domain for user gui: 501&quot;</h3>
+<p>你在 <code>hermes gateway stop</code> 之后运行了 <code>hermes gateway start</code>。CLI 的 <code>stop</code> 执行完整的 <code>launchctl unload</code>，这会从 launchd 注册表中移除服务。CLI 在 <code>start</code> 时会捕获此特定错误并自动重新加载 plist。服务正常启动。无需修复。</p>
+<h3>崩溃后 PID 残留</h3>
+<p>如果某个配置文件的 Gateway 显示 <code>not running</code> 但进程仍然存活：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+ps -ef | grep "hermes_cli.*-p &lt;profile&gt;"
+cat ~/.hermes/profiles/&lt;profile&gt;/gateway.pid
+kill -TERM &lt;pid&gt;          # 优雅停止
+kill -KILL &lt;pid&gt;          # 如果几秒后仍未停止
+&lt;profile&gt; gateway start
+</div>
+<h3>强制硬重置某个服务</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# macOS
+launchctl unload ~/Library/LaunchAgents/ai.hermes.gateway-&lt;profile&gt;.plist
+launchctl load   ~/Library/LaunchAgents/ai.hermes.gateway-&lt;profile&gt;.plist
+
+# Linux
+systemctl --user restart hermes-gateway-&lt;profile&gt;.service
+</div>
+<h3>健康检查</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes doctor                  # 默认配置文件
+hermes -p &lt;profile&gt; doctor     # 单个配置文件
+</div>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

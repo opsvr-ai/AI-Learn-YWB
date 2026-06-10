@@ -1,0 +1,309 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Git Worktrees - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html" class="active">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Git Worktrees</div><p>Hermes Agent 常用于大型、长期维护的仓库。当你需要：</p>
+<ul>
+<li>在同一项目中<strong>并行运行多个 agent</strong>，或</li>
+<li>将实验性重构与主分支隔离，</li>
+</ul>
+<p>Git <strong>worktrees</strong> 是为每个 agent 提供独立检出（checkout）而无需复制整个仓库的最安全方式。</p>
+<p>本页介绍如何将 worktrees 与 Hermes 结合使用，使每个会话拥有干净、隔离的工作目录。</p>
+<h2>为什么在 Hermes 中使用 Worktrees？</h2>
+<p>Hermes 将<strong>当前工作目录</strong>视为项目根目录：</p>
+<ul>
+<li>CLI：运行 <code>hermes</code> 或 <code>hermes chat</code> 时所在的目录</li>
+<li>Messaging gateway：由 <code>MESSAGING_CWD</code> 设置的目录</li>
+</ul>
+<p>如果在<strong>同一检出</strong>中运行多个 agent，它们的变更可能相互干扰：</p>
+<ul>
+<li>一个 agent 可能删除或覆盖另一个正在使用的文件。</li>
+<li>难以区分哪些变更属于哪个实验。</li>
+</ul>
+<p>使用 worktrees 后，每个 agent 拥有：</p>
+<ul>
+<li><strong>独立的分支和工作目录</strong></li>
+<li><strong>独立的 Checkpoint Manager 历史</strong>，用于 <code>/rollback</code></li>
+</ul>
+<p>另请参阅：<a href="./checkpoints-and-rollback.html">Checkpoints 与 /rollback</a>。</p>
+<h2>快速开始：创建 Worktree</h2>
+<p>在主仓库（包含 <code>.git/</code> 的目录）中，为功能分支创建新的 worktree：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 从主仓库根目录
+cd /path/to/your/repo
+
+# 在 ../repo-feature 中创建新分支和 worktree
+git worktree add ../repo-feature feature/hermes-experiment
+</div>
+<p>这将创建：</p>
+<ul>
+<li>新目录：<code>../repo-feature</code></li>
+<li>新分支：<code>feature/hermes-experiment</code>，已在该目录中检出</li>
+</ul>
+<p>现在可以 <code>cd</code> 进入新 worktree 并在其中运行 Hermes：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cd ../repo-feature
+
+# 在 worktree 中启动 Hermes
+hermes
+</div>
+<p>Hermes 将：</p>
+<ul>
+<li>将 <code>../repo-feature</code> 视为项目根目录。</li>
+<li>使用该目录进行上下文文件读取、代码编辑和工具调用。</li>
+<li>使用<strong>独立的 checkpoint 历史</strong>，<code>/rollback</code> 的作用范围限定在此 worktree。</li>
+</ul>
+<h2>并行运行多个 Agent</h2>
+<p>可以创建多个 worktree，每个对应独立的分支：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cd /path/to/your/repo
+
+git worktree add ../repo-experiment-a feature/hermes-a
+git worktree add ../repo-experiment-b feature/hermes-b
+</div>
+<p>在不同终端中分别运行：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 终端 1
+cd ../repo-experiment-a
+hermes
+
+# 终端 2
+cd ../repo-experiment-b
+hermes
+</div>
+<p>每个 Hermes 进程：</p>
+<ul>
+<li>在各自的分支上工作（<code>feature/hermes-a</code> 与 <code>feature/hermes-b</code>）。</li>
+<li>在不同的 shadow repo 哈希下写入 checkpoint（由 worktree 路径派生）。</li>
+<li>可独立使用 <code>/rollback</code>，互不影响。</li>
+</ul>
+<p>以下场景尤为适用：</p>
+<ul>
+<li>批量重构。</li>
+<li>对同一任务尝试不同方案。</li>
+<li>将 CLI 与 gateway 会话配对，针对同一上游仓库运行。</li>
+</ul>
+<h2>安全清理 Worktrees</h2>
+<p>实验完成后：</p>
+<ol>
+<li>决定是否保留该工作成果。</li>
+<li>如需保留：
+<ul>
+<li>按常规方式将分支合并到主分支。</li>
+</ul>
+</li>
+<li>移除 worktree：</li>
+</ol>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cd /path/to/your/repo
+
+# 移除 worktree 目录及其引用
+git worktree remove ../repo-feature
+</div>
+<p>注意事项：</p>
+<ul>
+<li><code>git worktree remove</code> 在 worktree 存在未提交变更时会拒绝移除，除非强制执行。</li>
+<li>移除 worktree <strong>不会</strong>自动删除分支；可使用常规 <code>git branch</code> 命令决定是否删除分支。</li>
+<li><code>~/.hermes/checkpoints/</code> 下的 Hermes checkpoint 数据在移除 worktree 时不会自动清理，但通常体积很小。</li>
+</ul>
+<h2>最佳实践</h2>
+<ul>
+<li><strong>每个 Hermes 实验对应一个 worktree</strong>
+<ul>
+<li>为每项重要变更创建专用的分支/worktree。</li>
+<li>这样可保持 diff 聚焦，PR 小而易于审查。</li>
+</ul>
+</li>
+<li><strong>以实验内容命名分支</strong>
+<ul>
+<li>例如：<code>feature/hermes-checkpoints-docs</code>、<code>feature/hermes-refactor-tests</code>。</li>
+</ul>
+</li>
+<li><strong>频繁提交</strong>
+<ul>
+<li>使用 git commit 记录高层级里程碑。</li>
+<li>使用 <a href="./checkpoints-and-rollback.html">checkpoints 与 /rollback</a> 作为工具驱动编辑之间的安全网。</li>
+</ul>
+</li>
+<li><strong>使用 worktrees 时避免从裸仓库根目录运行 Hermes</strong>
+<ul>
+<li>优先使用 worktree 目录，使每个 agent 拥有明确的作用范围。</li>
+</ul>
+</li>
+</ul>
+<h2>使用 <code>hermes -w</code>（自动 Worktree 模式）</h2>
+<p>Hermes 内置 <code>-w</code> 标志，可<strong>自动创建一个一次性 git worktree</strong> 及其独立分支。无需手动配置 worktree——只需 <code>cd</code> 进入仓库并运行：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cd /path/to/your/repo
+hermes -w
+</div>
+<p>Hermes 将：</p>
+<ul>
+<li>在仓库内的 <code>.worktrees/</code> 下创建临时 worktree。</li>
+<li>检出一个隔离分支（例如 <code>hermes/hermes-&lt;hash&gt;</code>）。</li>
+<li>在该 worktree 内运行完整的 CLI 会话。</li>
+</ul>
+<p>这是获得 worktree 隔离的最简便方式。也可与单次查询结合使用：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes -w -z "Fix issue #123"
+</div>
+<p>如需并行运行多个 agent，在多个终端中分别运行 <code>hermes -w</code>——每次调用都会自动获得独立的 worktree 和分支。</p>
+<h2>综合运用</h2>
+<ul>
+<li>使用 <strong>git worktrees</strong> 为每个 Hermes 会话提供独立的干净检出。</li>
+<li>使用<strong>分支</strong>记录实验的高层级历史。</li>
+<li>使用 <strong>checkpoints + <code>/rollback</code></strong> 在每个 worktree 内从错误中恢复。</li>
+</ul>
+<p>这种组合带来：</p>
+<ul>
+<li>强有力的保证，确保不同 agent 和实验互不干扰。</li>
+<li>快速迭代周期，轻松从错误编辑中恢复。</li>
+<li>干净、易于审查的 pull request。</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

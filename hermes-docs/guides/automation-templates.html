@@ -1,0 +1,727 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>自动化模板 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html" class="active">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 实用指南 / 自动化模板</div><p>常见自动化模式的复制粘贴配方。每个模板使用 Hermes 内置的 <a href="/user-guide/features/cron">cron 调度器</a> 实现基于时间的触发，使用 <a href="/user-guide/messaging/webhooks">webhook 平台</a> 实现事件驱动触发。</p>
+<p>所有模板适用于<strong>任意模型</strong>——不绑定单一提供商。</p>
+<div class="tip"><strong>💡 三种触发类型</strong>
+<p>| 触发方式 | 方式 | 工具 |
+|---------|-----|------|
+| <strong>定时</strong> | 按周期运行（每小时、每晚、每周） | <code>cronjob</code> 工具或 <code>/cron</code> 斜杠命令 |
+| <strong>GitHub 事件</strong> | PR 开启、推送、issue、CI 结果时触发 | Webhook 平台（<code>hermes webhook subscribe</code>） |
+| <strong>API 调用</strong> | 外部服务向你的端点 POST JSON | Webhook 平台（config.yaml 路由或 <code>hermes webhook subscribe</code>） |</p>
+<p>三种方式均支持投递到 Telegram、Discord、Slack、SMS、邮件、GitHub 评论或本地文件。</p>
+
+</div>
+<hr />
+<h2>开发工作流</h2>
+<h3>每晚待办事项分类</h3>
+<p>每晚自动对新 issue 进行标签分类、优先级排序和摘要汇总，并将摘要投递到团队频道。</p>
+<p><strong>触发方式：</strong> 定时（每晚）</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes cron create "0 2 * * *" \
+  "You are a project manager triaging the NousResearch/hermes-agent GitHub repo.
+
+1. Run: gh issue list --repo NousResearch/hermes-agent --state open --json number,title,labels,author,createdAt --limit 30
+2. Identify issues opened in the last 24 hours
+3. For each new issue:
+   - Suggest a priority label (P0-critical, P1-high, P2-medium, P3-low)
+   - Suggest a category label (bug, feature, docs, security)
+   - Write a one-line triage note
+4. Summarize: total open issues, new today, breakdown by priority
+
+Format as a clean digest. If no new issues, respond with [SILENT]." \
+  --name "Nightly backlog triage" \
+  --deliver telegram
+</div>
+<h3>自动 PR 代码审查</h3>
+<p>PR 开启时自动进行审查，并直接在 PR 上发布审查评论。</p>
+<p><strong>触发方式：</strong> GitHub webhook</p>
+<p><strong>方式 A——动态订阅（CLI）：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes webhook subscribe github-pr-review \
+  --events "pull_request" \
+  --prompt "Review this pull request:
+Repository: {repository.full_name}
+PR #{pull_request.number}: {pull_request.title}
+Author: {pull_request.user.login}
+Action: {action}
+Diff URL: {pull_request.diff_url}
+
+Fetch the diff with: curl -sL {pull_request.diff_url}
+
+Review for:
+- Security issues (injection, auth bypass, secrets in code)
+- Performance concerns (N+1 queries, unbounded loops, memory leaks)
+- Code quality (naming, duplication, error handling)
+- Missing tests for new behavior
+
+Post a concise review. If the PR is a trivial docs/typo change, say so briefly." \
+  --skill github-code-review \
+  --deliver github_comment
+</div>
+<p><strong>方式 B——静态路由（config.yaml）：</strong></p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+platforms:
+  webhook:
+    enabled: true
+    extra:
+      port: 8644
+      secret: "your-global-secret"
+      routes:
+        github-pr-review:
+          events: ["pull_request"]
+          secret: "github-webhook-secret"
+          prompt: |
+            Review PR #{pull_request.number}: {pull_request.title}
+            Repository: {repository.full_name}
+            Author: {pull_request.user.login}
+            Diff URL: {pull_request.diff_url}
+            Review for security, performance, and code quality.
+          skills: ["github-code-review"]
+          deliver: "github_comment"
+          deliver_extra:
+            repo: "{repository.full_name}"
+            pr_number: "{pull_request.number}"
+</div>
+<p>然后在 GitHub 中：<strong>Settings → Webhooks → Add webhook</strong> → Payload URL：<code>http://your-server:8644/webhooks/github-pr-review</code>，Content type：<code>application/json</code>，Secret：<code>github-webhook-secret</code>，Events：<strong>Pull requests</strong>。</p>
+<h3>文档偏差检测</h3>
+<p>每周扫描已合并的 PR，找出需要更新文档的 API 变更。</p>
+<p><strong>触发方式：</strong> 定时（每周）</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes cron create "0 9 * * 1" \
+  "Scan the NousResearch/hermes-agent repo for documentation drift.
+
+1. Run: gh pr list --repo NousResearch/hermes-agent --state merged --json number,title,files,mergedAt --limit 30
+2. Filter to PRs merged in the last 7 days
+3. For each merged PR, check if it modified:
+   - Tool schemas (tools/*.py) — may need docs/reference/tools-reference.md update
+   - CLI commands (hermes_cli/commands.py, hermes_cli/main.py) — may need docs/reference/cli-commands.md update
+   - Config options (hermes_cli/config.py) — may need docs/user-guide/configuration.md update
+   - Environment variables — may need docs/reference/environment-variables.md update
+4. Cross-reference: for each code change, check if the corresponding docs page was also updated in the same PR
+
+Report any gaps where code changed but docs didn't. If everything is in sync, respond with [SILENT]." \
+  --name "Docs drift detection" \
+  --deliver telegram
+</div>
+<h3>依赖安全审计</h3>
+<p>每日扫描项目依赖中的已知漏洞。</p>
+<p><strong>触发方式：</strong> 定时（每日）</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes cron create "0 6 * * *" \
+  "Run a dependency security audit on the hermes-agent project.
+
+1. cd ~/.hermes/hermes-agent &amp;&amp; source .venv/bin/activate
+2. Run: pip audit --format json 2&gt;/dev/null || pip audit 2&gt;&amp;1
+3. Run: npm audit --json 2&gt;/dev/null (in website/ directory if it exists)
+4. Check for any CVEs with CVSS score &gt;= 7.0
+
+If vulnerabilities found:
+- List each one with package name, version, CVE ID, severity
+- Check if an upgrade is available
+- Note if it's a direct dependency or transitive
+
+If no vulnerabilities, respond with [SILENT]." \
+  --name "Dependency audit" \
+  --deliver telegram
+</div>
+<hr />
+<h2>DevOps 与监控</h2>
+<h3>部署验证</h3>
+<p>每次部署后触发冒烟测试。CI/CD 流水线在部署完成时向 webhook POST 请求。</p>
+<p><strong>触发方式：</strong> API 调用（webhook）</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes webhook subscribe deploy-verify \
+  --events "deployment" \
+  --prompt "A deployment just completed:
+Service: {service}
+Environment: {environment}
+Version: {version}
+Deployed by: {deployer}
+
+Run these verification steps:
+1. Check if the service is responding: curl -s -o /dev/null -w '%{http_code}' {health_url}
+2. Search recent logs for errors: check the deployment payload for any error indicators
+3. Verify the version matches: curl -s {health_url}/version
+
+Report: deployment status (healthy/degraded/failed), response time, any errors found.
+If healthy, keep it brief. If degraded or failed, provide detailed diagnostics." \
+  --deliver telegram
+</div>
+<p>你的 CI/CD 流水线触发方式：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -X POST http://your-server:8644/webhooks/deploy-verify \
+  -H "Content-Type: application/json" \
+  -H "X-Hub-Signature-256: sha256=$(echo -n '{"service":"api","environment":"prod","version":"2.1.0","deployer":"ci","health_url":"https://api.example.com/health"}' | openssl dgst -sha256 -hmac 'your-secret' | cut -d' ' -f2)" \
+  -d '{"service":"api","environment":"prod","version":"2.1.0","deployer":"ci","health_url":"https://api.example.com/health"}'
+</div>
+<h3>告警分类</h3>
+<p>将监控告警与近期变更关联，起草响应方案。适用于 Datadog、PagerDuty、Grafana 或任何能 POST JSON 的告警系统。</p>
+<p><strong>触发方式：</strong> API 调用（webhook）</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes webhook subscribe alert-triage \
+  --prompt "Monitoring alert received:
+Alert: {alert.name}
+Severity: {alert.severity}
+Service: {alert.service}
+Message: {alert.message}
+Timestamp: {alert.timestamp}
+
+Investigate:
+1. Search the web for known issues with this error pattern
+2. Check if this correlates with any recent deployments or config changes
+3. Draft a triage summary with:
+   - Likely root cause
+   - Suggested first response steps
+   - Escalation recommendation (P1-P4)
+
+Be concise. This goes to the on-call channel." \
+  --deliver slack
+</div>
+<h3>可用性监控</h3>
+<p>每 30 分钟检查一次端点，仅在服务宕机时发送通知。</p>
+<p><strong>触发方式：</strong> 定时（每 30 分钟）</p>
+<div class="code-block"><span class="code-lang">python title="~/.hermes/scripts/check-uptime.py"</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import urllib.request, json, time
+
+ENDPOINTS = [
+    {"name": "API", "url": "https://api.example.com/health"},
+    {"name": "Web", "url": "https://www.example.com"},
+    {"name": "Docs", "url": "https://docs.example.com"},
+]
+
+results = []
+for ep in ENDPOINTS:
+    try:
+        start = time.time()
+        req = urllib.request.Request(ep["url"], headers={"User-Agent": "Hermes-Monitor/1.0"})
+        resp = urllib.request.urlopen(req, timeout=10)
+        elapsed = round((time.time() - start) * 1000)
+        results.append({"name": ep["name"], "status": resp.getcode(), "ms": elapsed})
+    except Exception as e:
+        results.append({"name": ep["name"], "status": "DOWN", "error": str(e)})
+
+down = [r for r in results if r.get("status") == "DOWN" or (isinstance(r.get("status"), int) and r["status"] &gt;= 500)]
+if down:
+    print("OUTAGE DETECTED")
+    for r in down:
+        print(f"  {r['name']}: {r.get('error', f'HTTP {r[\"status\"]}')} ")
+    print(f"\nAll results: {json.dumps(results, indent=2)}")
+else:
+    print("NO_ISSUES")
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes cron create "every 30m" \
+  "If the script reports OUTAGE DETECTED, summarize which services are down and suggest likely causes. If NO_ISSUES, respond with [SILENT]." \
+  --script ~/.hermes/scripts/check-uptime.py \
+  --name "Uptime monitor" \
+  --deliver telegram
+</div>
+<hr />
+<h2>研究与情报</h2>
+<h3>竞品仓库侦察</h3>
+<p>监控竞品仓库中有价值的 PR、功能和架构决策。</p>
+<p><strong>触发方式：</strong> 定时（每日）</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes cron create "0 8 * * *" \
+  "Scout these AI agent repositories for notable activity in the last 24 hours:
+
+Repos to check:
+- anthropics/claude-code
+- openai/codex
+- All-Hands-AI/OpenHands
+- Aider-AI/aider
+
+For each repo:
+1. gh pr list --repo &lt;repo&gt; --state all --json number,title,author,createdAt,mergedAt --limit 15
+2. gh issue list --repo &lt;repo&gt; --state open --json number,title,labels,createdAt --limit 10
+
+Focus on:
+- New features being developed
+- Architectural changes
+- Integration patterns we could learn from
+- Security fixes that might affect us too
+
+Skip routine dependency bumps and CI fixes. If nothing notable, respond with [SILENT].
+If there are findings, organize by repo with brief analysis of each item." \
+  --skill competitive-pr-scout \
+  --name "Competitor scout" \
+  --deliver telegram
+</div>
+<h3>AI 新闻摘要</h3>
+<p>每周汇总 AI/ML 领域动态。</p>
+<p><strong>触发方式：</strong> 定时（每周）</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes cron create "0 9 * * 1" \
+  "Generate a weekly AI news digest covering the past 7 days:
+
+1. Search the web for major AI announcements, model releases, and research breakthroughs
+2. Search for trending ML repositories on GitHub
+3. Check arXiv for highly-cited papers on language models and agents
+
+Structure:
+## Headlines (3-5 major stories)
+## Notable Papers (2-3 papers with one-sentence summaries)
+## Open Source (interesting new repos or major releases)
+## Industry Moves (funding, acquisitions, launches)
+
+Keep each item to 1-2 sentences. Include links. Total under 600 words." \
+  --name "Weekly AI digest" \
+  --deliver telegram
+</div>
+<h3>论文摘要与笔记</h3>
+<p>每日扫描 arXiv 并将摘要保存到笔记系统。</p>
+<p><strong>触发方式：</strong> 定时（每日）</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes cron create "0 8 * * *" \
+  "Search arXiv for the 3 most interesting papers on 'language model reasoning' OR 'tool-use agents' from the past day. For each paper, create an Obsidian note with the title, authors, abstract summary, key contribution, and potential relevance to Hermes Agent development." \
+  --skill arxiv --skill obsidian \
+  --name "Paper digest" \
+  --deliver local
+</div>
+<hr />
+<h2>GitHub 事件自动化</h2>
+<h3>Issue 自动打标签</h3>
+<p>自动对新 issue 打标签并回复。</p>
+<p><strong>触发方式：</strong> GitHub webhook</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes webhook subscribe github-issues \
+  --events "issues" \
+  --prompt "New GitHub issue received:
+Repository: {repository.full_name}
+Issue #{issue.number}: {issue.title}
+Author: {issue.user.login}
+Action: {action}
+Body: {issue.body}
+Labels: {issue.labels}
+
+If this is a new issue (action=opened):
+1. Read the issue title and body carefully
+2. Suggest appropriate labels (bug, feature, docs, security, question)
+3. If it's a bug report, check if you can identify the affected component from the description
+4. Post a helpful initial response acknowledging the issue
+
+If this is a label or assignment change, respond with [SILENT]." \
+  --deliver github_comment
+</div>
+<h3>CI 失败分析</h3>
+<p>分析 CI 失败原因并在 PR 上发布诊断信息。</p>
+<p><strong>触发方式：</strong> GitHub webhook</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# config.yaml route
+platforms:
+  webhook:
+    enabled: true
+    extra:
+      routes:
+        ci-failure:
+          events: ["check_run"]
+          secret: "ci-secret"
+          prompt: |
+            CI check failed:
+            Repository: {repository.full_name}
+            Check: {check_run.name}
+            Status: {check_run.conclusion}
+            PR: #{check_run.pull_requests.0.number}
+            Details URL: {check_run.details_url}
+
+            If conclusion is "failure":
+            1. Fetch the log from the details URL if accessible
+            2. Identify the likely cause of failure
+            3. Suggest a fix
+            If conclusion is "success", respond with [SILENT].
+          deliver: "github_comment"
+          deliver_extra:
+            repo: "{repository.full_name}"
+            pr_number: "{check_run.pull_requests.0.number}"
+</div>
+<h3>跨仓库自动移植变更</h3>
+<p>某仓库 PR 合并后，自动将等效变更移植到另一个仓库。</p>
+<p><strong>触发方式：</strong> GitHub webhook</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes webhook subscribe auto-port \
+  --events "pull_request" \
+  --prompt "PR merged in the source repository:
+Repository: {repository.full_name}
+PR #{pull_request.number}: {pull_request.title}
+Author: {pull_request.user.login}
+Action: {action}
+Merge commit: {pull_request.merge_commit_sha}
+
+If action is 'closed' and pull_request.merged is true:
+1. Fetch the diff: curl -sL {pull_request.diff_url}
+2. Analyze what changed
+3. Determine if this change needs to be ported to the Go SDK equivalent
+4. If yes, create a branch, apply the equivalent changes, and open a PR on the target repo
+5. Reference the original PR in the new PR description
+
+If action is not 'closed' or not merged, respond with [SILENT]." \
+  --skill github-pr-workflow \
+  --deliver log
+</div>
+<hr />
+<h2>业务运营</h2>
+<h3>Stripe 支付监控</h3>
+<p>跟踪支付事件并汇总失败情况。</p>
+<p><strong>触发方式：</strong> API 调用（webhook）</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes webhook subscribe stripe-payments \
+  --events "payment_intent.succeeded,payment_intent.payment_failed,charge.dispute.created" \
+  --prompt "Stripe event received:
+Event type: {type}
+Amount: {data.object.amount} cents ({data.object.currency})
+Customer: {data.object.customer}
+Status: {data.object.status}
+
+For payment_intent.payment_failed:
+- Identify the failure reason from {data.object.last_payment_error}
+- Suggest whether this is a transient issue (retry) or permanent (contact customer)
+
+For charge.dispute.created:
+- Flag as urgent
+- Summarize the dispute details
+
+For payment_intent.succeeded:
+- Brief confirmation only
+
+Keep responses concise for the ops channel." \
+  --deliver slack
+</div>
+<h3>每日营收摘要</h3>
+<p>每天早晨汇总关键业务指标。</p>
+<p><strong>触发方式：</strong> 定时（每日）</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes cron create "0 8 * * *" \
+  "Generate a morning business metrics summary.
+
+Search the web for:
+1. Current Bitcoin and Ethereum prices
+2. S&amp;P 500 status (pre-market or previous close)
+3. Any major tech/AI industry news from the last 12 hours
+
+Format as a brief morning briefing, 3-4 bullet points max.
+Deliver as a clean, scannable message." \
+  --name "Morning briefing" \
+  --deliver telegram
+</div>
+<hr />
+<h2>多技能工作流</h2>
+<h3>安全审计流水线</h3>
+<p>组合多个技能，每周进行全面安全审查。</p>
+<p><strong>触发方式：</strong> 定时（每周）</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes cron create "0 3 * * 0" \
+  "Run a comprehensive security audit of the hermes-agent codebase.
+
+1. Check for dependency vulnerabilities (pip audit, npm audit)
+2. Search the codebase for common security anti-patterns:
+   - Hardcoded secrets or API keys
+   - SQL injection vectors (string formatting in queries)
+   - Path traversal risks (user input in file paths without validation)
+   - Unsafe deserialization (pickle.loads, yaml.load without SafeLoader)
+3. Review recent commits (last 7 days) for security-relevant changes
+4. Check if any new environment variables were added without being documented
+
+Write a security report with findings categorized by severity (Critical, High, Medium, Low).
+If nothing found, report a clean bill of health." \
+  --skill codebase-security-audit \
+  --name "Weekly security audit" \
+  --deliver telegram
+</div>
+<h3>内容流水线</h3>
+<p>按计划研究、起草并准备内容。</p>
+<p><strong>触发方式：</strong> 定时（每周）</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes cron create "0 10 * * 3" \
+  "Research and draft a technical blog post outline about a trending topic in AI agents.
+
+1. Search the web for the most discussed AI agent topics this week
+2. Pick the most interesting one that's relevant to open-source AI agents
+3. Create an outline with:
+   - Hook/intro angle
+   - 3-4 key sections
+   - Technical depth appropriate for developers
+   - Conclusion with actionable takeaway
+4. Save the outline to ~/drafts/blog-$(date +%Y%m%d).md
+
+Keep the outline to ~300 words. This is a starting point, not a finished post." \
+  --name "Blog outline" \
+  --deliver local
+</div>
+<hr />
+<h2>快速参考</h2>
+<h3>Cron 调度语法</h3>
+<table>
+<thead>
+<tr>
+<th>表达式</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>every 30m</code></td>
+<td>每 30 分钟</td>
+</tr>
+<tr>
+<td><code>every 2h</code></td>
+<td>每 2 小时</td>
+</tr>
+<tr>
+<td><code>0 2 * * *</code></td>
+<td>每天凌晨 2:00</td>
+</tr>
+<tr>
+<td><code>0 9 * * 1</code></td>
+<td>每周一上午 9:00</td>
+</tr>
+<tr>
+<td><code>0 9 * * 1-5</code></td>
+<td>工作日上午 9:00</td>
+</tr>
+<tr>
+<td><code>0 3 * * 0</code></td>
+<td>每周日凌晨 3:00</td>
+</tr>
+<tr>
+<td><code>0 */6 * * *</code></td>
+<td>每 6 小时</td>
+</tr>
+</tbody>
+</table>
+<h3>投递目标</h3>
+<table>
+<thead>
+<tr>
+<th>目标</th>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>当前会话</td>
+<td><code>--deliver origin</code></td>
+<td>默认——投递到任务创建所在的位置</td>
+</tr>
+<tr>
+<td>本地文件</td>
+<td><code>--deliver local</code></td>
+<td>保存输出，不发送通知</td>
+</tr>
+<tr>
+<td>Telegram</td>
+<td><code>--deliver telegram</code></td>
+<td>主频道，或用 <code>telegram:CHAT_ID</code> 指定特定会话</td>
+</tr>
+<tr>
+<td>Discord</td>
+<td><code>--deliver discord</code></td>
+<td>主频道，或用 <code>discord:CHANNEL_ID</code> 指定</td>
+</tr>
+<tr>
+<td>Slack</td>
+<td><code>--deliver slack</code></td>
+<td>主频道</td>
+</tr>
+<tr>
+<td>SMS</td>
+<td><code>--deliver sms:+15551234567</code></td>
+<td>直接发送到手机号</td>
+</tr>
+<tr>
+<td>指定话题</td>
+<td><code>--deliver telegram:-100123:456</code></td>
+<td>Telegram 论坛话题</td>
+</tr>
+</tbody>
+</table>
+<h3>Webhook 模板变量</h3>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{pull_request.title}</code></td>
+<td>PR 标题</td>
+</tr>
+<tr>
+<td><code>{issue.number}</code></td>
+<td>Issue 编号</td>
+</tr>
+<tr>
+<td><code>{repository.full_name}</code></td>
+<td><code>owner/repo</code></td>
+</tr>
+<tr>
+<td><code>{action}</code></td>
+<td>事件动作（opened、closed 等）</td>
+</tr>
+<tr>
+<td><code>{__raw__}</code></td>
+<td>完整 JSON payload（截断至 4000 字符）</td>
+</tr>
+<tr>
+<td><code>{sender.login}</code></td>
+<td>触发事件的 GitHub 用户</td>
+</tr>
+</tbody>
+</table>
+<h3>[SILENT] 模式</h3>
+<p>当 cron 任务的响应包含 <code>[SILENT]</code> 时，投递将被抑制。使用此模式可避免在无事发生时产生通知噪音：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+If nothing noteworthy happened, respond with [SILENT].
+</div>
+<p>这样只有当 Agent 有内容需要汇报时，你才会收到通知。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

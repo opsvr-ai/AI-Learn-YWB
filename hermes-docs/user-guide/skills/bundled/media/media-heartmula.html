@@ -1,0 +1,368 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Heartmula — HeartMuLa：基于歌词与标签的类 Suno 歌曲生成 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Heartmula — HeartMuLa：基于歌词与标签的类 Suno 歌曲生成</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Heartmula</h1>
+<p>HeartMuLa：基于歌词与标签的类 Suno 歌曲生成。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>内置（默认安装）</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>skills/media/heartmula</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>music</code>, <code>audio</code>, <code>generation</code>, <code>ai</code>, <code>heartmula</code>, <code>heartcodec</code>, <code>lyrics</code>, <code>songs</code></td>
+</tr>
+<tr>
+<td>相关 skill</td>
+<td><code>audiocraft</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>HeartMuLa - 开源音乐生成</h1>
+<h2>概述</h2>
+<p>HeartMuLa 是一系列开源音乐基础模型（Apache-2.0），可根据歌词和标签生成音乐，支持多语言。能从歌词与标签生成完整歌曲，是开源领域中可与 Suno 媲美的方案。包含：</p>
+<ul>
+<li><strong>HeartMuLa</strong> — 音乐语言模型（3B/7B），从歌词与标签生成音乐</li>
+<li><strong>HeartCodec</strong> — 12.5Hz 音乐编解码器，用于高保真音频重建</li>
+<li><strong>HeartTranscriptor</strong> — 基于 Whisper 的歌词转录工具</li>
+<li><strong>HeartCLAP</strong> — 音频-文本对齐模型</li>
+</ul>
+<h2>使用场景</h2>
+<ul>
+<li>用户希望从文本描述生成音乐/歌曲</li>
+<li>用户需要开源的 Suno 替代方案</li>
+<li>用户需要本地/离线音乐生成</li>
+<li>用户询问 HeartMuLa、heartlib 或 AI 音乐生成相关内容</li>
+</ul>
+<h2>硬件要求</h2>
+<ul>
+<li><strong>最低配置</strong>：8GB 显存，配合 <code>--lazy_load true</code>（按需加载/卸载模型）</li>
+<li><strong>推荐配置</strong>：16GB+ 显存，可在单 GPU 上流畅运行</li>
+<li><strong>多 GPU</strong>：使用 <code>--mula_device cuda:0 --codec_device cuda:1</code> 将模型分布到多张 GPU</li>
+<li>3B 模型在 lazy_load 模式下峰值显存约为 6.2GB</li>
+</ul>
+<h2>安装步骤</h2>
+<h3>1. 克隆仓库</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cd ~/  # 或目标目录
+git clone https://github.com/HeartMuLa/heartlib.git
+cd heartlib
+</div>
+<h3>2. 创建虚拟环境（需要 Python 3.10）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+uv venv --python 3.10 .venv
+. .venv/bin/activate
+uv pip install -e .
+</div>
+<h3>3. 修复依赖兼容性问题</h3>
+<p><strong>重要</strong>：截至 2026 年 2 月，固定的依赖版本与较新的包存在冲突。请应用以下修复：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 升级 datasets（旧版本与当前 pyarrow 不兼容）
+uv pip install --upgrade datasets
+<h1>升级 transformers（需要兼容 huggingface-hub 1.x）</h1>
+<p>uv pip install --upgrade transformers</p>
+</div>
+<h3>4. 修补源代码（transformers 5.x 必须执行）</h3>
+<p><strong>补丁 1 — RoPE 缓存修复</strong>，文件：<code>src/heartlib/heartmula/modeling_heartmula.py</code>：</p>
+<p>在 <code>HeartMuLa</code> 类的 <code>setup_caches</code> 方法中，在 <code>reset_caches</code> 的 try/except 块之后、<code>with device:</code> 块之前，添加 RoPE 重新初始化代码：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Re-initialize RoPE caches that were skipped during meta-device loading
+from torchtune.models.llama3_1._position_embeddings import Llama3ScaledRoPE
+for module in self.modules():
+    if isinstance(module, Llama3ScaledRoPE) and not module.is_cache_built:
+        module.rope_init()
+        module.to(device)
+</div>
+<p><strong>原因</strong>：<code>from_pretrained</code> 首先在 meta 设备上创建模型；<code>Llama3ScaledRoPE.rope_init()</code> 在 meta 张量上跳过缓存构建，且在权重加载到真实设备后也不会重建。</p>
+<p><strong>补丁 2 — HeartCodec 加载修复</strong>，文件：<code>src/heartlib/pipelines/music_generation.py</code>：</p>
+<p>在所有 <code>HeartCodec.from_pretrained()</code> 调用中添加 <code>ignore_mismatched_sizes=True</code>（共 2 处：<code>__init__</code> 中的 eager 加载和 <code>codec</code> 属性中的 lazy 加载）。</p>
+<p><strong>原因</strong>：VQ codebook 的 <code>initted</code> buffer 在 checkpoint 中形状为 <code>[1]</code>，而模型中为 <code>[]</code>。数据相同，仅为标量与 0 维张量的差异，可安全忽略。</p>
+<h3>5. 下载模型检查点</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cd heartlib  # 项目根目录
+hf download --local-dir './ckpt' 'HeartMuLa/HeartMuLaGen'
+hf download --local-dir './ckpt/HeartMuLa-oss-3B' 'HeartMuLa/HeartMuLa-oss-3B-happy-new-year'
+hf download --local-dir './ckpt/HeartCodec-oss' 'HeartMuLa/HeartCodec-oss-20260123'
+</div>
+<p>三个检查点可并行下载，总大小为数 GB。</p>
+<h2>GPU / CUDA</h2>
+<p>HeartMuLa 默认使用 CUDA（<code>--mula_device cuda --codec_device cuda</code>）。如果用户已安装支持 CUDA 的 PyTorch 并拥有 NVIDIA GPU，则无需额外配置。</p>
+<ul>
+<li>已安装的 <code>torch==2.4.1</code> 开箱即支持 CUDA 12.1</li>
+<li><code>torchtune</code> 可能显示版本为 <code>0.4.0+cpu</code> — 这只是包元数据，实际仍通过 PyTorch 使用 CUDA</li>
+<li>如需确认 GPU 是否被使用，可查看输出中的 &quot;CUDA memory&quot; 行（例如 &quot;CUDA memory before unloading: 6.20 GB&quot;）</li>
+<li><strong>没有 GPU？</strong> 可使用 <code>--mula_device cpu --codec_device cpu</code> 在 CPU 上运行，但生成速度会<strong>极慢</strong>（单首歌曲可能需要 30-60 分钟以上，而 GPU 约需 4 分钟）。CPU 模式还需要大量内存（12GB+ 空闲）。如果用户没有 NVIDIA GPU，建议使用云 GPU 服务（Google Colab 免费 T4、Lambda Labs 等）或访问在线 demo：https://heartmula.github.io/</li>
+</ul>
+<h2>使用方法</h2>
+<h3>基本生成</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cd heartlib
+. .venv/bin/activate
+python ./examples/run_music_generation.py \
+  --model_path=./ckpt \
+  --version="3B" \
+  --lyrics="./assets/lyrics.txt" \
+  --tags="./assets/tags.txt" \
+  --save_path="./assets/output.mp3" \
+  --lazy_load true
+</div>
+<h3>输入格式</h3>
+<p><strong>标签</strong>（逗号分隔，无空格）：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+piano,happy,wedding,synthesizer,romantic
+</div>
+或
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+rock,energetic,guitar,drums,male-vocal
+</div>
+<p><strong>歌词</strong>（使用方括号结构标签）：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+[Intro]
+<p>[Verse]
+Your lyrics here...</p>
+<p>[Chorus]
+Chorus lyrics...</p>
+<p>[Bridge]
+Bridge lyrics...</p>
+<p>[Outro]</p>
+</div>
+<h3>关键参数</h3>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--max_audio_length_ms</code></td>
+<td>240000</td>
+<td>最大时长（毫秒，240s = 4 分钟）</td>
+</tr>
+<tr>
+<td><code>--topk</code></td>
+<td>50</td>
+<td>Top-k 采样</td>
+</tr>
+<tr>
+<td><code>--temperature</code></td>
+<td>1.0</td>
+<td>采样温度（temperature）</td>
+</tr>
+<tr>
+<td><code>--cfg_scale</code></td>
+<td>1.5</td>
+<td>无分类器引导（classifier-free guidance）缩放比例</td>
+</tr>
+<tr>
+<td><code>--lazy_load</code></td>
+<td>false</td>
+<td>按需加载/卸载模型（节省显存）</td>
+</tr>
+<tr>
+<td><code>--mula_dtype</code></td>
+<td>bfloat16</td>
+<td>HeartMuLa 的数据类型（推荐 bf16）</td>
+</tr>
+<tr>
+<td><code>--codec_dtype</code></td>
+<td>float32</td>
+<td>HeartCodec 的数据类型（推荐 fp32 以保证质量）</td>
+</tr>
+</tbody>
+</table>
+<h3>性能</h3>
+<ul>
+<li>RTF（实时率）≈ 1.0 — 生成一首 4 分钟的歌曲约需 4 分钟</li>
+<li>输出：MP3，48kHz 立体声，128kbps</li>
+</ul>
+<h2>注意事项</h2>
+<ol>
+<li><strong>不要对 HeartCodec 使用 bf16</strong> — 会降低音频质量。请使用 fp32（默认值）。</li>
+<li><strong>标签可能被忽略</strong> — 已知问题（#90）。歌词往往占主导地位；建议尝试调整标签顺序。</li>
+<li><strong>macOS 上 Triton 不可用</strong> — GPU 加速仅支持 Linux/CUDA。</li>
+<li>上游 issue 中报告了 <strong>RTX 5080 不兼容</strong>问题。</li>
+<li>依赖版本冲突需要按上述说明手动升级并打补丁。</li>
+</ol>
+<h2>相关链接</h2>
+<ul>
+<li>仓库：https://github.com/HeartMuLa/heartlib</li>
+<li>模型：https://huggingface.co/HeartMuLa</li>
+<li>论文：https://arxiv.org/abs/2601.10547</li>
+<li>许可证：Apache-2.0</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,352 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>配置模型 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html" class="active">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / 配置模型</div><p>Hermes 使用两类模型槽位：</p>
+<ul>
+<li><strong>主模型</strong> — agent 的思考核心。每条用户消息、每个工具调用循环、每次流式响应都经由该模型处理。</li>
+<li><strong>辅助模型</strong> — agent 卸载给较小模型的边缘任务。包括上下文压缩、视觉（图像分析）、网页摘要、审批评分、MCP 工具路由、会话标题生成和技能搜索。每项任务有独立槽位，可单独覆盖。</li>
+</ul>
+<p>本页介绍如何通过仪表板配置上述两类模型。如需使用配置文件或 CLI，请跳至底部的<a href="#alternative-methods">其他方法</a>。</p>
+<div class="tip"><strong>💡 最快路径：Nous Portal</strong>
+<a href="/user-guide/features/tool-gateway">Nous Portal</a> 在单一订阅下提供 300+ 个模型。全新安装后，运行 <code>hermes setup --portal</code> 即可登录并一键将 Nous 设为提供商。使用 <code>hermes portal info</code> 查看当前配置。
+</div>
+<h2>Models 页面</h2>
+<p>打开仪表板，点击侧边栏中的 <strong>Models</strong>。页面分为两个区域：</p>
+<ol>
+<li><strong>Model Settings</strong> — 顶部面板，用于为各槽位分配模型。</li>
+<li><strong>使用分析</strong> — 按排名显示所选时间段内运行过会话的所有模型，包含 token 数量、费用和能力标签。</li>
+</ol>
+<img src="images/overview.png" alt="Models 页面概览" style="max-width:100%;border-radius:8px;border:1px solid #e5e7eb;">
+<p>顶部卡片为 <strong>Model Settings</strong> 面板。主行始终显示 agent 将为新会话启动的模型。点击 <strong>Change</strong> 打开选择器。</p>
+<h2>设置主模型</h2>
+<p>点击主模型行上的 <strong>Change</strong>：</p>
+<img src="images/picker-dialog.png" alt="模型选择器对话框" style="max-width:100%;border-radius:8px;border:1px solid #e5e7eb;">
+<p>选择器分为两列：</p>
+<ul>
+<li><strong>左列</strong> — 已认证的提供商。仅显示已配置的提供商（已设置 API key、完成 OAuth 或定义了自定义端点）。若某提供商未出现，请前往 <strong>Keys</strong> 添加凭据。</li>
+<li><strong>右列</strong> — 所选提供商的精选模型列表。这些是 Hermes 针对该提供商推荐的 agentic 模型，而非原始的 <code>/models</code> 接口返回结果（OpenRouter 的原始列表包含 400+ 个模型，涵盖 TTS、图像生成器和重排序器）。</li>
+</ul>
+<p>在过滤框中输入提供商名称、slug 或模型 ID 进行筛选。</p>
+<p>选择模型后点击 <strong>Switch</strong>，Hermes 会将其写入 <code>~/.hermes/config.yaml</code> 的 <code>model</code> 部分。<strong>此操作仅对新会话生效</strong> — 已打开的聊天标签页将继续使用启动时的模型。如需在当前聊天中热切换，请在聊天内使用 <code>/model</code> 斜杠命令。</p>
+<h2>设置辅助模型</h2>
+<p>点击 <strong>Show auxiliary</strong> 展开 11 个任务槽位：</p>
+<img src="images/auxiliary-expanded.png" alt="辅助面板展开状态" style="max-width:100%;border-radius:8px;border:1px solid #e5e7eb;">
+<p>每个辅助任务默认为 <code>auto</code>，即 Hermes 对该任务也使用主模型。当某个边缘任务需要更便宜或更快的模型时，可单独覆盖该槽位。</p>
+<h3>常见覆盖模式</h3>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>何时覆盖</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Title Gen（标题生成）</strong></td>
+<td>几乎总是。$0.10/M 的 flash 模型生成会话标题的效果与 Opus 相当。默认配置在 OpenRouter 上将此项设为 <code>google/gemini-3-flash-preview</code>。</td>
+</tr>
+<tr>
+<td><strong>Vision（视觉）</strong></td>
+<td>当主模型是不支持视觉的编程模型时（如 Kimi、DeepSeek）。将其指向 <code>google/gemini-2.5-flash</code> 或 <code>gpt-4o-mini</code>。</td>
+</tr>
+<tr>
+<td><strong>Compression（压缩）</strong></td>
+<td>当你在用 Opus/M2.7 的推理 token 来摘要上下文时。快速聊天模型以 1/50 的成本即可完成此工作。</td>
+</tr>
+<tr>
+<td><strong>Approval（审批）</strong></td>
+<td>用于 <code>approval_mode: smart</code> — 由快速/廉价模型（haiku、flash、gpt-5-mini）决定是否自动批准低风险命令。此处使用昂贵模型是浪费。</td>
+</tr>
+<tr>
+<td><strong>Web Extract（网页提取）</strong></td>
+<td>当你大量使用 <code>web_extract</code> 时。逻辑同压缩 — 摘要任务不需要推理能力。</td>
+</tr>
+<tr>
+<td><strong>Skills Hub（技能中心）</strong></td>
+<td><code>hermes skills search</code> 使用此槽位。通常保持 <code>auto</code> 即可。</td>
+</tr>
+<tr>
+<td><strong>MCP</strong></td>
+<td>MCP 工具路由。通常保持 <code>auto</code> 即可。</td>
+</tr>
+</tbody>
+</table>
+<h3>单任务覆盖</h3>
+<p>点击任意辅助行上的 <strong>Change</strong>，打开相同的选择器，操作方式相同 — 选择提供商和模型，点击 Switch。该行将从 <code>auto (use main model)</code> 更新为 <code>provider · model</code>。</p>
+<h3>全部重置为 auto</h3>
+<p>如果调整过度想重新开始，点击辅助区域顶部的 <strong>Reset all to auto</strong>。所有槽位将恢复使用主模型。</p>
+<h2>&quot;Use as&quot; 快捷方式</h2>
+<p>页面上每张模型卡片都有 <strong>Use as</strong> 下拉菜单。这是快捷路径 — 从分析数据中选择一个模型，点击 <strong>Use as</strong>，一键将其分配到主槽位或任意辅助任务：</p>
+<img src="images/use-as-dropdown.png" alt="Use as 下拉菜单" style="max-width:100%;border-radius:8px;border:1px solid #e5e7eb;">
+<p>下拉菜单包含：</p>
+<ul>
+<li><strong>Main model</strong> — 与点击主行上的 Change 效果相同。</li>
+<li><strong>All auxiliary tasks</strong> — 将此模型分配给全部 11 个辅助槽位。适合将所有边缘任务统一切换到廉价 flash 模型的场景。</li>
+<li><strong>单项任务选项</strong> — Vision、Web Extract、Compression 等。每项任务当前分配的模型标记为 <code>current</code>。</li>
+</ul>
+<p>当模型卡片当前已分配到某个槽位时，会显示 <code>main</code> 或 <code>aux · &lt;task&gt;</code> 标签，方便一眼看出历史模型的使用情况。</p>
+<h2>写入 <code>config.yaml</code> 的内容</h2>
+<p>通过仪表板保存时，Hermes 写入 <code>~/.hermes/config.yaml</code>：</p>
+<p><strong>主模型：</strong></p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+model:
+  provider: openrouter
+  default: anthropic/claude-opus-4.7
+  base_url: ''        # cleared on provider switch
+  api_mode: chat_completions
+</div>
+<p><strong>辅助覆盖示例（视觉任务使用 gemini-flash）：</strong></p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+auxiliary:
+  vision:
+    provider: openrouter
+    model: google/gemini-2.5-flash
+    base_url: ''
+    api_key: ''
+    timeout: 120
+    extra_body: {}
+    download_timeout: 30
+</div>
+<p><strong>辅助任务处于 auto（默认）：</strong></p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+auxiliary:
+  compression:
+    provider: auto
+    model: ''
+    base_url: ''
+    # ... other fields unchanged
+</div>
+<p><code>provider: auto</code> 加 <code>model: ''</code> 表示 Hermes 对该任务使用主模型。</p>
+<h2>何时生效？</h2>
+<ul>
+<li><strong>CLI</strong>（<code>hermes chat</code>）：下次执行 <code>hermes chat</code> 时生效。</li>
+<li><strong>Gateway</strong>（Telegram、Discord、Slack 等）：下一个<em>新</em>会话生效。现有会话保持原有模型。如需强制所有会话使用新配置，重启 gateway（<code>hermes gateway restart</code>）。</li>
+<li><strong>仪表板聊天标签页</strong>（<code>/chat</code>）：下一个新 PTY 生效。当前打开的聊天保持原有模型 — 在聊天内使用 <code>/model</code> 进行热切换。</li>
+</ul>
+<p>更改不会使运行中会话的 prompt 缓存失效。这是有意为之：在会话内切换主模型需要重置缓存（系统 prompt 包含模型特定内容），该操作保留给聊天内的显式 <code>/model</code> 斜杠命令。</p>
+<h2>故障排查</h2>
+<h3>选择器中显示&quot;No authenticated providers&quot;</h3>
+<p>Hermes 仅列出具有有效凭据的提供商。检查侧边栏中的 <strong>Keys</strong> — 应存在以下之一：API key、成功的 OAuth 或自定义端点 URL。若所需提供商不在列表中，运行 <code>hermes setup</code> 进行配置，或前往 <strong>Keys</strong> 添加环境变量。</p>
+<h3>主模型在运行中的聊天里未发生变化</h3>
+<p>符合预期。仪表板写入 <code>config.yaml</code>，新会话读取该文件。当前打开的聊天是一个活跃的 agent 进程 — 它保持启动时的模型。在聊天内使用 <code>/model &lt;name&gt;</code> 对该会话进行热切换。</p>
+<h3>辅助覆盖&quot;未生效&quot;</h3>
+<p>检查以下三点：</p>
+<ol>
+<li><strong>是否启动了新会话？</strong> 现有聊天不会重新读取配置。</li>
+<li><strong><code>provider</code> 是否设置为非 <code>auto</code> 的值？</strong> 若字段显示 <code>auto</code>，该任务仍在使用主模型。点击 <strong>Change</strong> 选择实际的提供商。</li>
+<li><strong>提供商是否已认证？</strong> 若将 <code>minimax</code> 分配给某任务但没有 MiniMax API key，该任务将回退到 openrouter 默认值，并在 <code>agent.log</code> 中记录警告。</li>
+</ol>
+<h3>我选择了模型，但 Hermes 切换了提供商</h3>
+<p>在 OpenRouter（或任何聚合器）上，裸模型名称会优先在聚合器内解析。因此 OpenRouter 上的 <code>claude-sonnet-4</code> 会解析为 <code>anthropic/claude-sonnet-4.6</code>，保持在你的 OpenRouter 认证下。但若在原生 Anthropic 认证下输入 <code>claude-sonnet-4</code>，则会保持为 <code>claude-sonnet-4-6</code>。若出现意外的提供商切换，请确认当前提供商是否符合预期 — 选择器始终在对话框顶部显示当前主模型。</p>
+<h2>其他方法 {#alternative-methods}</h2>
+<h3>CLI 斜杠命令</h3>
+<p>在任意 <code>hermes chat</code> 会话内：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/model gpt-5.4 --provider openrouter             # 仅当前会话
+/model gpt-5.4 --provider openrouter --global    # 同时持久化到 config.yaml
+</div>
+<p><code>--global</code> 与仪表板 <strong>Change</strong> 按钮效果相同，并额外在当前会话内原地切换模型。</p>
+<h3>自定义别名</h3>
+<p>为常用模型定义短名称，然后在 CLI 或任意消息平台中使用 <code>/model &lt;alias&gt;</code>：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ~/.hermes/config.yaml
+model_aliases:
+  fav:
+    model: claude-sonnet-4.6
+    provider: anthropic
+  grok:
+    model: grok-4
+    provider: x-ai
+</div>
+<p>或通过 shell 命令（简写形式，<code>provider/model</code>）：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes config set model.aliases.fav anthropic/claude-opus-4.6
+hermes config set model.aliases.grok x-ai/grok-4
+</div>
+<p>然后在聊天中使用 <code>/model fav</code> 或 <code>/model grok</code>。用户别名会覆盖内置短名称（<code>sonnet</code>、<code>kimi</code>、<code>opus</code> 等）。完整参考请见<a href="/reference/slash-commands#custom-model-aliases">自定义模型别名</a>。</p>
+<h3><code>hermes model</code> 子命令</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes model            # 交互式提供商 + 模型选择器（切换默认值的标准方式）
+</div>
+<p><code>hermes model</code> 引导你选择提供商、完成认证（OAuth 流程会打开浏览器；API key 提供商会提示输入密钥），然后从该提供商的精选目录中选择具体模型。选择结果写入 <code>~/.hermes/config.yaml</code> 的 <code>model.provider</code> 和 <code>model.model</code> 字段。</p>
+<p>如需在不启动选择器的情况下列出提供商/模型，请使用仪表板或下方的 REST 端点。查看 CLI 当前实际使用的配置：<code>hermes config get model</code> 和 <code>hermes status</code>。</p>
+<h3>直接编辑配置文件</h3>
+<p>编辑 <code>~/.hermes/config.yaml</code> 后重启相关服务。完整 schema 请见<a href="./configuration.html">配置参考</a>。</p>
+<h3>REST API</h3>
+<p>仪表板使用以下三个端点，可用于脚本化操作：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 列出已认证的提供商及精选模型列表
+curl -H "X-Hermes-Session-Token: $TOKEN" http://localhost:PORT/api/model/options
+
+# 读取当前主模型及辅助任务分配
+curl -H "X-Hermes-Session-Token: $TOKEN" http://localhost:PORT/api/model/auxiliary
+
+# 设置主模型
+curl -X POST -H "Content-Type: application/json" -H "X-Hermes-Session-Token: $TOKEN" \
+  -d '{"scope":"main","provider":"openrouter","model":"anthropic/claude-opus-4.7"}' \
+  http://localhost:PORT/api/model/set
+
+# 覆盖单个辅助任务
+curl -X POST -H "Content-Type: application/json" -H "X-Hermes-Session-Token: $TOKEN" \
+  -d '{"scope":"auxiliary","task":"vision","provider":"openrouter","model":"google/gemini-2.5-flash"}' \
+  http://localhost:PORT/api/model/set
+
+# 将一个模型分配给所有辅助任务
+curl -X POST -H "Content-Type: application/json" -H "X-Hermes-Session-Token: $TOKEN" \
+  -d '{"scope":"auxiliary","task":"","provider":"openrouter","model":"google/gemini-2.5-flash"}' \
+  http://localhost:PORT/api/model/set
+
+# 将所有辅助任务重置为 auto
+curl -X POST -H "Content-Type: application/json" -H "X-Hermes-Session-Token: $TOKEN" \
+  -d '{"scope":"auxiliary","task":"__reset__","provider":"","model":""}' \
+  http://localhost:PORT/api/model/set
+</div>
+<p>session token 在启动时注入仪表板 HTML，每次服务器重启后轮换。如需对运行中的仪表板编写脚本，可从浏览器开发者工具中获取（<code>window.__HERMES_SESSION_TOKEN__</code>）。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,315 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokemon Player — Play Pokemon via headless emulator + RAM reads - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 命令</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & Skills</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">docs</a> / <a href="/hermes-docs/user-guide/">user-guide</a> / <a href="/hermes-docs/user-guide/skills/">skills</a> / <a href="/hermes-docs/user-guide/skills/bundled/">bundled</a> / <a href="/hermes-docs/user-guide/skills/bundled/gaming/">gaming</a> / Pokemon Player — Play Pokemon 通过 headless emulator + RAM reads</div><p>{/<em> 本页面由 website/scripts/generate-skill-docs.py 从技能的 SKILL.md 自动生成。请编辑源 SKILL.md，而非本页面。 </em>/}</p>
+<h1>Pokemon Player</h1>
+<p>Play Pokemon via headless emulator + RAM reads.</p>
+<h2>技能元数据</h2>
+<table><thead><tr><th>---</th><th>---</th></tr></thead><tbody>
+<tr><td>来源</td><td>内置（默认安装）</td></tr>
+<tr><td>路径</td><td><code>skills/gaming/pokemon-player</code></td></tr>
+<tr><td>平台</td><td>linux, macos, windows</td></tr>
+</tbody></table>
+<h2>参考：完整 SKILL.md</h2>
+<p>:::info</p>
+<p>以下是 Hermes 在此技能被触发时加载的完整技能定义。这是技能激活时代理所看到的指令。</p>
+<p>:::</p>
+<h1>Pokemon Player</h1>
+<p>Play Pokemon games via headless emulation using the <code>pokemon-agent</code> package.</p>
+<h2>何时使用</h2>
+<p>- User says "play pokemon", "start pokemon", "pokemon game"</p>
+<p>- User asks about Pokemon Red, Blue, Yellow, FireRed, etc.</p>
+<p>- User wants to watch an AI play Pokemon</p>
+<p>- User references a ROM file (.gb, .gbc, .gba)</p>
+<h2>Startup Procedure</h2>
+<h3>1. First-time setup (clone, venv, install)</h3>
+<p>The repo is NousResearch/pokemon-agent on GitHub. Clone it, then</p>
+<p>set up a Python 3.10+ virtual environment. Use uv (preferred for speed)</p>
+<p>to create the venv and install the package in editable mode with the</p>
+<p>pyboy extra. If uv is not available, fall back to python3 -m venv + pip.</p>
+<p>On this machine it is already set up at /home/teknium/pokemon-agent</p>
+<p>with a venv ready — just cd there and source .venv/bin/activate.</p>
+<p>You also need a ROM file. Ask the user for theirs. On this machine</p>
+<p>one exists at roms/pokemon_red.gb inside that directory.</p>
+<p>NEVER download or provide ROM files — always ask the user.</p>
+<h3>2. Start the game server</h3>
+<p>From inside the pokemon-agent directory with the venv activated, run</p>
+<p>pokemon-agent serve with --rom pointing to the ROM and --port 9876.</p>
+<p>Run it in the background with &.</p>
+<p>To resume from a saved game, add --load-state with the save name.</p>
+<p>Wait 4 seconds for startup, then verify with GET /health.</p>
+<h3>3. Set up live dashboard for user to watch</h3>
+<p>Use an SSH reverse tunnel via localhost.run so the user can view</p>
+<p>the dashboard in their browser. Connect with ssh, forwarding local</p>
+<p>port 9876 to remote port 80 on nokey@localhost.run. Redirect output</p>
+<p>to a log file, wait 10 seconds, then grep the log for the .lhr.life</p>
+<p>URL. Give the user the URL with /dashboard/ appended.</p>
+<p>The tunnel URL changes each time — give the user the new one if restarted.</p>
+<h2>Save and Load</h2>
+<h3>When to save</h3>
+<p>- Every 15-20 turns of gameplay</p>
+<p>- ALWAYS before gym battles, rival encounters, or risky fights</p>
+<p>- Before entering a new town or dungeon</p>
+<p>- Before any action you are unsure about</p>
+<h3>How to save</h3>
+<p>POST /save with a descriptive name. Good examples:</p>
+<p>before_brock, route1_start, mt_moon_entrance, got_cut</p>
+<h3>How to load</h3>
+<p>POST /load with the save name.</p>
+<h3>List available saves</h3>
+<p>GET /saves returns all saved states.</p>
+<h3>Loading on server startup</h3>
+<p>Use --load-state flag when starting the server to auto-load a save.</p>
+<p>This is faster than loading via the API after startup.</p>
+<h2>The Gameplay Loop</h2>
+<h3>Step 1: OBSERVE — check state AND take a screenshot</h3>
+<p>GET /state for position, HP, battle, dialog.</p>
+<p>GET /screenshot and save to /tmp/pokemon.png, then use vision_analyze.</p>
+<p>Always do BOTH — RAM state gives numbers, vision gives spatial awareness.</p>
+<h3>Step 2: ORIENT</h3>
+<p>- Dialog/text on screen → advance it</p>
+<p>- In battle → fight or run</p>
+<p>- Party hurt → head to Pokemon Center</p>
+<p>- Near objective → navigate carefully</p>
+<h3>Step 3: DECIDE</h3>
+<p>Priority: dialog > battle > heal > story objective > training > explore</p>
+<h3>Step 4: ACT — move 2-4 steps max, then re-check</h3>
+<p>POST /action with a SHORT action list (2-4 actions, not 10-15).</p>
+<h3>Step 5: VERIFY — screenshot after every move sequence</h3>
+<p>Take a screenshot and use vision_analyze to confirm you moved where</p>
+<p>intended. This is the MOST IMPORTANT step. Without vision you WILL get lost.</p>
+<h3>Step 6: RECORD progress to memory with PKM: prefix</h3>
+<h3>Step 7: SAVE periodically</h3>
+<h2>Action Reference</h2>
+<p>- press_a — confirm, talk, select</p>
+<p>- press_b — cancel, close menu</p>
+<p>- press_start — open game menu</p>
+<p>- walk_up/down/left/right — move one tile</p>
+<p>- hold_b_N — hold B for N frames (use for speeding through text)</p>
+<p>- wait_60 — wait about 1 second (60 frames)</p>
+<p>- a_until_dialog_end — press A repeatedly until dialog clears</p>
+<h2>Critical 技巧 from Experience</h2>
+<h3>USE VISION CONSTANTLY</h3>
+<p>- Take a screenshot every 2-4 movement steps</p>
+<p>- The RAM state tells you position and HP but NOT what is around you</p>
+<p>- Ledges, fences, signs, building doors, NPCs — only visible via screenshot</p>
+<p>- Ask the vision model specific questions: "what is one tile north of me?"</p>
+<p>- When stuck, always screenshot before trying random directions</p>
+<h3>Warp Transitions Need Extra Wait Time</h3>
+<p>When walking through a door or stairs, the screen fades to black during</p>
+<p>the map transition. You MUST wait for it to complete. Add 2-3 wait_60</p>
+<p>actions after any door/stair warp. Without waiting, the position reads</p>
+<p>as stale and you will think you are still in the old map.</p>
+<h3>Building Exit Trap</h3>
+<p>When you exit a building, you appear directly IN FRONT of the door.</p>
+<p>If you walk north, you go right back inside. ALWAYS sidestep first</p>
+<p>by walking left or right 2 tiles, then proceed in your intended direction.</p>
+<h3>Dialog Handling</h3>
+<p>Gen 1 text scrolls slowly letter-by-letter. To speed through dialog,</p>
+<p>hold B for 120 frames then press A. Repeat as needed. Holding B makes</p>
+<p>text display at max speed. Then press A to advance to the next line.</p>
+<p>The a_until_dialog_end action checks the RAM dialog flag, but this flag</p>
+<p>does not catch ALL text states. If dialog seems stuck, use the manual</p>
+<p>hold_b + press_a pattern instead and verify via screenshot.</p>
+<h3>Ledges Are One-Way</h3>
+<p>Ledges (small cliff edges) can only be jumped DOWN (south), never climbed</p>
+<p>UP (north). If blocked by a ledge going north, you must go left or right</p>
+<p>to find the gap around it. Use vision to identify which direction the</p>
+<p>gap is. Ask the vision model explicitly.</p>
+<h3>Navigation Strategy</h3>
+<p>- Move 2-4 steps at a time, then screenshot to check position</p>
+<p>- When entering a new area, screenshot immediately to orient</p>
+<p>- Ask the vision model "which direction to [destination]?"</p>
+<p>- If stuck for 3+ attempts, screenshot and re-evaluate completely</p>
+<p>- Do not spam 10-15 movements — you will overshoot or get stuck</p>
+<h3>Running from Wild Battles</h3>
+<p>On the battle menu, RUN is bottom-right. To reach it from the default</p>
+<p>cursor position (FIGHT, top-left): press down then right to move cursor</p>
+<p>to RUN, then press A. Wrap with hold_b to speed through text/animations.</p>
+<h3>Battling (FIGHT)</h3>
+<p>On the battle menu FIGHT is top-left (default cursor position).</p>
+<p>Press A to enter move selection, A again to use the first move.</p>
+<p>Then hold B to speed through attack animations and text.</p>
+<h2>Battle Strategy</h2>
+<h3>Decision Tree</h3>
+<p>1. Want to catch? → Weaken then throw Poke Ball</p>
+<p>2. Wild you don't need? → RUN</p>
+<p>3. Type advantage? → Use super-effective move</p>
+<p>4. No advantage? → Use strongest STAB move</p>
+<p>5. Low HP? → Switch or use Potion</p>
+<h3>Gen 1 Type Chart (key matchups)</h3>
+<p>- Water beats Fire, Ground, Rock</p>
+<p>- Fire beats Grass, Bug, Ice</p>
+<p>- Grass beats Water, Ground, Rock</p>
+<p>- Electric beats Water, Flying</p>
+<p>- Ground beats Fire, Electric, Rock, Poison</p>
+<p>- Psychic beats Fighting, Poison (dominant in Gen 1!)</p>
+<h3>Gen 1 Quirks</h3>
+<p>- Special stat = both offense AND defense for special moves</p>
+<p>- Psychic type is overpowered (Ghost moves bugged)</p>
+<p>- Critical hits based on Speed stat</p>
+<p>- Wrap/Bind prevent opponent from acting</p>
+<p>- Focus Energy bug: REDUCES crit rate instead of raising it</p>
+<h2>Memory Conventions</h2>
+<table><thead><tr><th>Prefix</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+<tr><td>PKM:OBJECTIVE</td><td>Current goal</td><td>Get Parcel from Viridian Mart</td></tr>
+<tr><td>PKM:MAP</td><td>Navigation knowledge</td><td>Viridian: mart is northeast</td></tr>
+<tr><td>PKM:STRATEGY</td><td>Battle/team plans</td><td>Need Grass type before Misty</td></tr>
+<tr><td>PKM:PROGRESS</td><td>Milestone tracker</td><td>Beat rival, heading to Viridian</td></tr>
+<tr><td>PKM:STUCK</td><td>Stuck situations</td><td>Ledge at y=28 go right to bypass</td></tr>
+<tr><td>PKM:TEAM</td><td>Team notes</td><td>Squirtle Lv6, Tackle + Tail Whip</td></tr>
+</tbody></table>
+<h2>Progression Milestones</h2>
+<p>- Choose starter</p>
+<p>- Deliver Parcel from Viridian Mart, receive Pokedex</p>
+<p>- Boulder Badge — Brock (Rock) → use Water/Grass</p>
+<p>- Cascade Badge — Misty (Water) → use Grass/Electric</p>
+<p>- Thunder Badge — Lt. Surge (Electric) → use Ground</p>
+<p>- Rainbow Badge — Erika (Grass) → use Fire/Ice/Flying</p>
+<p>- Soul Badge — Koga (Poison) → use Ground/Psychic</p>
+<p>- Marsh Badge — Sabrina (Psychic) → hardest gym</p>
+<p>- Volcano Badge — Blaine (Fire) → use Water/Ground</p>
+<p>- Earth Badge — Giovanni (Ground) → use Water/Grass/Ice</p>
+<p>- Elite Four → Champion!</p>
+<h2>Stopping Play</h2>
+<p>1. Save the game with a descriptive name via POST /save</p>
+<p>2. Update memory with PKM:PROGRESS</p>
+<p>3. Tell user: "Game saved as [name]! Say 'play pokemon' to resume."</p>
+<p>4. Kill the server and tunnel background processes</p>
+<h2>Pitfalls</h2>
+<p>- NEVER download or provide ROM files</p>
+<p>- Do NOT send more than 4-5 actions without checking vision</p>
+<p>- Always sidestep after exiting buildings before going north</p>
+<p>- Always add wait_60 x2-3 after door/stair warps</p>
+<p>- Dialog detection via RAM is unreliable — verify with screenshots</p>
+<p>- Save BEFORE risky encounters</p>
+<p>- The tunnel URL changes each time you restart it</p>  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

@@ -1,0 +1,329 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Domain Intel — 使用 Python 标准库进行被动域名侦察 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Domain Intel — 使用 Python 标准库进行被动域名侦察</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Domain Intel</h1>
+<p>使用 Python 标准库进行被动域名侦察。支持子域名发现、SSL 证书检查、WHOIS 查询、DNS 记录、域名可用性检测以及批量多域名分析。无需 API 密钥。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/research/domain-intel</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/research/domain-intel</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>Domain Intelligence — 被动 OSINT</h1>
+<p>仅使用 Python 标准库进行被动域名侦察。
+<strong>零依赖。零 API 密钥。支持 Linux、macOS 和 Windows。</strong></p>
+<h2>辅助脚本</h2>
+<p>此 skill 包含 <code>scripts/domain_intel.py</code> — 一个涵盖所有域名情报操作的完整 CLI 工具。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 通过证书透明度日志发现子域名
+python3 SKILL_DIR/scripts/domain_intel.py subdomains example.com
+<h1>SSL 证书检查（有效期、加密套件、SAN、颁发者）</h1>
+<p>python3 SKILL_DIR/scripts/domain_intel.py ssl example.com</p>
+<h1>WHOIS 查询（注册商、日期、名称服务器 — 支持 100+ 顶级域名）</h1>
+<p>python3 SKILL_DIR/scripts/domain_intel.py whois example.com</p>
+<h1>DNS 记录（A、AAAA、MX、NS、TXT、CNAME）</h1>
+<p>python3 SKILL_DIR/scripts/domain_intel.py dns example.com</p>
+<h1>域名可用性检测（被动方式：DNS + WHOIS + SSL 信号）</h1>
+<p>python3 SKILL_DIR/scripts/domain_intel.py available coolstartup.io</p>
+<h1>批量分析 — 并行对多个域名执行多项检查</h1>
+<p>python3 SKILL_DIR/scripts/domain_intel.py bulk example.com github.com google.com
+python3 SKILL_DIR/scripts/domain_intel.py bulk example.com github.com --checks ssl,dns</p>
+</div>
+<p><code>SKILL_DIR</code> 为包含此 SKILL.md 文件的目录。所有输出均为结构化 JSON。</p>
+<h2>可用命令</h2>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能说明</th>
+<th>数据来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>subdomains</code></td>
+<td>从证书日志中发现子域名</td>
+<td>crt.sh（HTTPS）</td>
+</tr>
+<tr>
+<td><code>ssl</code></td>
+<td>检查 TLS 证书详情</td>
+<td>直接 TCP:443 连接目标</td>
+</tr>
+<tr>
+<td><code>whois</code></td>
+<td>注册信息、注册商、日期</td>
+<td>WHOIS 服务器（TCP:43）</td>
+</tr>
+<tr>
+<td><code>dns</code></td>
+<td>A、AAAA、MX、NS、TXT、CNAME 记录</td>
+<td>系统 DNS + Google DoH</td>
+</tr>
+<tr>
+<td><code>available</code></td>
+<td>检查域名是否已注册</td>
+<td>DNS + WHOIS + SSL 信号</td>
+</tr>
+<tr>
+<td><code>bulk</code></td>
+<td>对多个域名执行多项检查</td>
+<td>以上所有来源</td>
+</tr>
+</tbody>
+</table>
+<h2>何时使用此 skill 而非内置工具</h2>
+<ul>
+<li><strong>使用此 skill</strong> 处理基础设施相关问题：子域名、SSL 证书、WHOIS、DNS 记录、可用性检测</li>
+<li><strong>使用 <code>web_search</code></strong> 进行关于某个域名或公司的通用研究</li>
+<li><strong>使用 <code>web_extract</code></strong> 获取网页的实际内容</li>
+<li><strong>使用 <code>terminal</code> 配合 <code>curl -I</code></strong> 进行简单的&quot;URL 是否可达&quot;检查</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>更合适的工具</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&quot;example.com 是做什么的？&quot;</td>
+<td><code>web_extract</code></td>
+<td>获取页面内容，而非 DNS/WHOIS 数据</td>
+</tr>
+<tr>
+<td>&quot;查找某公司的信息&quot;</td>
+<td><code>web_search</code></td>
+<td>通用研究，非域名专项</td>
+</tr>
+<tr>
+<td>&quot;这个网站安全吗？&quot;</td>
+<td><code>web_search</code></td>
+<td>信誉检查需要 Web 上下文</td>
+</tr>
+<tr>
+<td>&quot;检查某 URL 是否可达&quot;</td>
+<td><code>terminal</code> 配合 <code>curl -I</code></td>
+<td>简单 HTTP 检查</td>
+</tr>
+<tr>
+<td>&quot;查找 X 的子域名&quot;</td>
+<td><strong>此 skill</strong></td>
+<td>唯一的被动来源</td>
+</tr>
+<tr>
+<td>&quot;SSL 证书何时到期？&quot;</td>
+<td><strong>此 skill</strong></td>
+<td>内置工具无法检查 TLS</td>
+</tr>
+<tr>
+<td>&quot;谁注册了这个域名？&quot;</td>
+<td><strong>此 skill</strong></td>
+<td>WHOIS 数据不在 Web 搜索结果中</td>
+</tr>
+<tr>
+<td>&quot;coolstartup.io 可以注册吗？&quot;</td>
+<td><strong>此 skill</strong></td>
+<td>通过 DNS+WHOIS+SSL 进行被动可用性检测</td>
+</tr>
+</tbody>
+</table>
+<h2>平台兼容性</h2>
+<p>纯 Python 标准库（<code>socket</code>、<code>ssl</code>、<code>urllib</code>、<code>json</code>、<code>concurrent.futures</code>）。
+无需任何依赖，在 Linux、macOS 和 Windows 上表现完全一致。</p>
+<ul>
+<li><strong>crt.sh 查询</strong> 使用 HTTPS（443 端口） — 在大多数防火墙后均可正常工作</li>
+<li><strong>WHOIS 查询</strong> 使用 TCP 43 端口 — 在限制性网络中可能被封锁</li>
+<li><strong>DNS 查询</strong> 使用 Google DoH（HTTPS）解析 MX/NS/TXT — 对防火墙友好</li>
+<li><strong>SSL 检查</strong> 连接目标的 443 端口 — 唯一的&quot;主动&quot;操作</li>
+</ul>
+<h2>数据来源</h2>
+<p>所有查询均为<strong>被动</strong>方式 — 不进行端口扫描，不进行漏洞测试：</p>
+<ul>
+<li><strong>crt.sh</strong> — 证书透明度日志（子域名发现，仅 HTTPS）</li>
+<li><strong>WHOIS 服务器</strong> — 直接 TCP 连接 100+ 权威 TLD 注册机构</li>
+<li><strong>Google DNS-over-HTTPS</strong> — MX、NS、TXT、CNAME 解析（对防火墙友好）</li>
+<li><strong>系统 DNS</strong> — A/AAAA 记录解析</li>
+<li><strong>SSL 检查</strong> 是唯一的&quot;主动&quot;操作（TCP 连接目标:443）</li>
+</ul>
+<h2>注意事项</h2>
+<ul>
+<li>WHOIS 查询使用 TCP 43 端口 — 在限制性网络中可能被封锁</li>
+<li>部分 WHOIS 服务器会隐去注册人信息（GDPR 合规） — 请告知用户</li>
+<li>对于非常热门的域名（拥有数千张证书），crt.sh 可能响应较慢 — 请设置合理预期</li>
+<li>可用性检测基于启发式方法（3 个被动信号） — 并非像注册商 API 那样权威</li>
+</ul>
+<hr />
+<p><em>由 <a href="https://github.com/FurkanL0">@FurkanL0</a> 贡献</em></p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

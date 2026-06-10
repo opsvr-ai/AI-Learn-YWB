@@ -1,0 +1,477 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>优化注意力 Flash - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / 优化注意力 Flash</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>优化注意力 Flash</h1>
+<p>通过 Flash Attention 优化 Transformer 注意力机制，实现 2-4 倍加速和 10-20 倍内存减少。适用于以下场景：使用长序列（&gt;512 token）训练/运行 Transformer、遇到注意力相关的 GPU 内存问题，或需要更快的推理速度。支持 PyTorch 原生 SDPA、flash-attn 库、H100 FP8 以及滑动窗口注意力。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/mlops/flash-attention</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/mlops/flash-attention</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Orchestra Research</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>依赖项</td>
+<td><code>flash-attn</code>, <code>torch</code>, <code>transformers</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Optimization</code>, <code>Flash Attention</code>, <code>Attention Optimization</code>, <code>Memory Efficiency</code>, <code>Speed Optimization</code>, <code>Long Context</code>, <code>PyTorch</code>, <code>SDPA</code>, <code>H100</code>, <code>FP8</code>, <code>Transformers</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发该 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>Flash Attention - 快速内存高效注意力</h1>
+<h2>快速开始</h2>
+<p>Flash Attention 通过 IO 感知分块（IO-aware tiling）和重计算（recomputation）技术，为 Transformer 注意力提供 2-4 倍加速和 10-20 倍内存减少。</p>
+<p><strong>PyTorch 原生方式（最简单，PyTorch 2.2+）</strong>：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import torch
+import torch.nn.functional as F
+<p>q = torch.randn(2, 8, 512, 64, device='cuda', dtype=torch.float16)  # [batch, heads, seq, dim]
+k = torch.randn(2, 8, 512, 64, device='cuda', dtype=torch.float16)
+v = torch.randn(2, 8, 512, 64, device='cuda', dtype=torch.float16)</p>
+<h1>如果可用，自动使用 Flash Attention</h1>
+<p>out = F.scaled_dot_product_attention(q, k, v)</p>
+</div>
+<p><strong>flash-attn 库（功能更多）</strong>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install flash-attn --no-build-isolation
+</div>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from flash_attn import flash_attn_func
+<h1>q, k, v: [batch, seqlen, nheads, headdim]</h1>
+<p>out = flash_attn_func(q, k, v, dropout_p=0.0, causal=True)</p>
+</div>
+<h2>常见工作流</h2>
+<h3>工作流 1：在现有 PyTorch 模型中启用</h3>
+<p>复制此检查清单：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Flash Attention 集成：
+- [ ] 步骤 1：检查 PyTorch 版本（≥2.2）
+- [ ] 步骤 2：启用 Flash Attention 后端
+- [ ] 步骤 3：通过性能分析验证加速效果
+- [ ] 步骤 4：测试精度与基线一致
+</div>
+<p><strong>步骤 1：检查 PyTorch 版本</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python -c "import torch; print(torch.__version__)"
+# 应为 ≥2.2.0
+</div>
+<p>如果 &amp;lt;2.2，请升级：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install --upgrade torch
+</div>
+<p><strong>步骤 2：启用 Flash Attention 后端</strong></p>
+<p>替换标准注意力：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 之前（标准注意力）
+attn_weights = torch.softmax(q @ k.transpose(-2, -1) / math.sqrt(d_k), dim=-1)
+out = attn_weights @ v
+<h1>之后（Flash Attention）</h1>
+<p>import torch.nn.functional as F
+out = F.scaled_dot_product_attention(q, k, v, attn_mask=mask)</p>
+</div>
+<p>强制使用 Flash Attention 后端：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+with torch.backends.cuda.sdp_kernel(
+    enable_flash=True,
+    enable_math=False,
+    enable_mem_efficient=False
+):
+    out = F.scaled_dot_product_attention(q, k, v)
+</div>
+<p><strong>步骤 3：通过性能分析验证加速效果</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import torch.utils.benchmark as benchmark
+<p>def test_attention(use_flash):
+q, k, v = [torch.randn(2, 8, 2048, 64, device='cuda', dtype=torch.float16) for _ in range(3)]</p>
+<pre><code>if use_flash:
+    with torch.backends.cuda.sdp_kernel(enable_flash=True):
+        return F.scaled_dot_product_attention(q, k, v)
+else:
+    attn = (q @ k.transpose(-2, -1) / 8.0).softmax(dim=-1)
+    return attn @ v
+</code></pre>
+<h1>基准测试</h1>
+<p>t_flash = benchmark.Timer(stmt='test_attention(True)', globals=globals())
+t_standard = benchmark.Timer(stmt='test_attention(False)', globals=globals())</p>
+<p>print(f&quot;Flash: {t_flash.timeit(100).mean:.3f}s&quot;)
+print(f&quot;Standard: {t_standard.timeit(100).mean:.3f}s&quot;)</p>
+</div>
+<p>预期效果：序列长度 &gt;512 token 时有 2-4 倍加速。</p>
+<p><strong>步骤 4：测试精度与基线一致</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 比较输出
+q, k, v = [torch.randn(1, 8, 512, 64, device='cuda', dtype=torch.float16) for _ in range(3)]
+<h1>Flash Attention</h1>
+<p>out_flash = F.scaled_dot_product_attention(q, k, v)</p>
+<h1>标准注意力</h1>
+<p>attn_weights = torch.softmax(q @ k.transpose(-2, -1) / 8.0, dim=-1)
+out_standard = attn_weights @ v</p>
+<h1>检查差异</h1>
+<p>diff = (out_flash - out_standard).abs().max()
+print(f&quot;Max difference: {diff:.6f}&quot;)</p>
+<h1>float16 下应 &amp;lt;1e-3</h1>
+</div>
+<h3>工作流 2：使用 flash-attn 库实现高级功能</h3>
+<p>适用于多查询注意力（multi-query attention）、滑动窗口或 H100 FP8。</p>
+<p>复制此检查清单：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+flash-attn 库安装：
+- [ ] 步骤 1：安装 flash-attn 库
+- [ ] 步骤 2：修改注意力代码
+- [ ] 步骤 3：启用高级功能
+- [ ] 步骤 4：基准测试性能
+</div>
+<p><strong>步骤 1：安装 flash-attn 库</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# NVIDIA GPU（CUDA 12.0+）
+pip install flash-attn --no-build-isolation
+<h1>验证安装</h1>
+<p>python -c &quot;from flash_attn import flash_attn_func; print('Success')&quot;</p>
+</div>
+<p><strong>步骤 2：修改注意力代码</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from flash_attn import flash_attn_func
+<h1>输入：[batch_size, seq_len, num_heads, head_dim]</h1>
+<h1>如需要，从 [batch, heads, seq, dim] 转置</h1>
+<p>q = q.transpose(1, 2)  # [batch, seq, heads, dim]
+k = k.transpose(1, 2)
+v = v.transpose(1, 2)</p>
+<p>out = flash_attn_func(
+q, k, v,
+dropout_p=0.1,
+causal=True,  # 用于自回归模型
+window_size=(-1, -1),  # 无滑动窗口
+softmax_scale=None  # 自动缩放
+)</p>
+<p>out = out.transpose(1, 2)  # 转回 [batch, heads, seq, dim]</p>
+</div>
+<p><strong>步骤 3：启用高级功能</strong></p>
+<p>多查询注意力（跨 head 共享 K/V）：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from flash_attn import flash_attn_func
+<h1>q: [batch, seq, num_q_heads, dim]</h1>
+<h1>k, v: [batch, seq, num_kv_heads, dim]  # 更少的 KV head</h1>
+<p>out = flash_attn_func(q, k, v)  # 自动处理 MQA</p>
+</div>
+<p>滑动窗口注意力（局部注意力）：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 仅关注前后 256 个 token 的窗口
+out = flash_attn_func(
+    q, k, v,
+    window_size=(256, 256),  # (左, 右) 窗口
+    causal=True
+)
+</div>
+<p><strong>步骤 4：基准测试性能</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import torch
+from flash_attn import flash_attn_func
+import time
+<p>q, k, v = [torch.randn(4, 4096, 32, 64, device='cuda', dtype=torch.float16) for _ in range(3)]</p>
+<h1>预热</h1>
+<p>for _ in range(10):
+_ = flash_attn_func(q, k, v)</p>
+<h1>基准测试</h1>
+<p>torch.cuda.synchronize()
+start = time.time()
+for _ in range(100):
+out = flash_attn_func(q, k, v)
+torch.cuda.synchronize()
+end = time.time()</p>
+<p>print(f&quot;Time per iteration: {(end-start)/100*1000:.2f}ms&quot;)
+print(f&quot;Memory allocated: {torch.cuda.max_memory_allocated()/1e9:.2f}GB&quot;)</p>
+</div>
+<h3>工作流 3：H100 FP8 优化（FlashAttention-3）</h3>
+<p>在 H100 GPU 上获得最大性能。</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+FP8 设置：
+- [ ] 步骤 1：确认 H100 GPU 可用
+- [ ] 步骤 2：安装支持 FP8 的 flash-attn
+- [ ] 步骤 3：将输入转换为 FP8
+- [ ] 步骤 4：使用 FP8 注意力运行
+</div>
+<p><strong>步骤 1：确认 H100 GPU</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+nvidia-smi --query-gpu=name --format=csv
+# 应显示 "H100" 或 "H800"
+</div>
+<p><strong>步骤 2：安装支持 FP8 的 flash-attn</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install flash-attn --no-build-isolation
+# H100 的 FP8 支持已包含在内
+</div>
+<p><strong>步骤 3：将输入转换为 FP8</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import torch
+<p>q = torch.randn(2, 4096, 32, 64, device='cuda', dtype=torch.float16)
+k = torch.randn(2, 4096, 32, 64, device='cuda', dtype=torch.float16)
+v = torch.randn(2, 4096, 32, 64, device='cuda', dtype=torch.float16)</p>
+<h1>转换为 float8_e4m3（FP8）</h1>
+<p>q_fp8 = q.to(torch.float8_e4m3fn)
+k_fp8 = k.to(torch.float8_e4m3fn)
+v_fp8 = v.to(torch.float8_e4m3fn)</p>
+</div>
+<p><strong>步骤 4：使用 FP8 注意力运行</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from flash_attn import flash_attn_func
+<h1>FlashAttention-3 在 H100 上自动使用 FP8 内核</h1>
+<p>out = flash_attn_func(q_fp8, k_fp8, v_fp8)</p>
+<h1>结果：约 1.2 PFLOPS，比 FP16 快 1.5-2 倍</h1>
+</div>
+<h2>何时使用与替代方案</h2>
+<p><strong>使用 Flash Attention 的场景：</strong></p>
+<ul>
+<li>使用 &gt;512 token 的序列训练 Transformer</li>
+<li>使用长上下文（&gt;2K token）进行推理</li>
+<li>GPU 内存受限（标准注意力 OOM）</li>
+<li>需要 2-4 倍加速且不损失精度</li>
+<li>使用 PyTorch 2.2+ 或可安装 flash-attn</li>
+</ul>
+<p><strong>改用替代方案的场景：</strong></p>
+<ul>
+<li><strong>标准注意力</strong>：序列 &amp;lt;256 token（开销不值得）</li>
+<li><strong>xFormers</strong>：需要更多注意力变体（不仅仅是速度）</li>
+<li><strong>内存高效注意力</strong>：CPU 推理（Flash Attention 需要 GPU）</li>
+</ul>
+<h2>常见问题</h2>
+<p><strong>问题：ImportError: cannot import flash_attn</strong></p>
+<p>使用 no-build-isolation 标志安装：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install flash-attn --no-build-isolation
+</div>
+<p>或先安装 CUDA toolkit：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+conda install cuda -c nvidia
+pip install flash-attn --no-build-isolation
+</div>
+<p><strong>问题：速度低于预期（无加速效果）</strong></p>
+<p>Flash Attention 的收益随序列长度增加而提升：</p>
+<ul>
+<li>&amp;lt;512 token：加速极小（10-20%）</li>
+<li>512-2K token：2-3 倍加速</li>
+<li>
+<blockquote>
+<p>2K token：3-4 倍加速</p>
+</blockquote>
+</li>
+</ul>
+<p>请确认序列长度是否足够。</p>
+<p><strong>问题：RuntimeError: CUDA error</strong></p>
+<p>验证 GPU 是否支持 Flash Attention：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import torch
+print(torch.cuda.get_device_capability())
+# 应为 ≥(7, 5)，即 Turing 及以上
+</div>
+<p>Flash Attention 要求：</p>
+<ul>
+<li>Ampere（A100、A10）：✅ 完全支持</li>
+<li>Turing（T4）：✅ 支持</li>
+<li>Volta（V100）：❌ 不支持</li>
+</ul>
+<p><strong>问题：精度下降</strong></p>
+<p>检查 dtype 是否为 float16 或 bfloat16（而非 float32）：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+q = q.to(torch.float16)  # 或 torch.bfloat16
+</div>
+<p>Flash Attention 使用 float16/bfloat16 以提升速度，不支持 float32。</p>
+<h2>高级主题</h2>
+<p><strong>与 HuggingFace Transformers 集成</strong>：参见 <a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/flash-attention/references/transformers-integration.html">references/transformers-integration.md</a>，了解如何在 BERT、GPT、Llama 模型中启用 Flash Attention。</p>
+<p><strong>性能基准测试</strong>：参见 <a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/flash-attention/references/benchmarks.html">references/benchmarks.md</a>，查看跨 GPU 和序列长度的详细速度与内存对比。</p>
+<h2>硬件要求</h2>
+<ul>
+<li><strong>GPU</strong>：NVIDIA Ampere 及以上（A100、A10、A30）或 AMD MI200 及以上</li>
+<li><strong>显存</strong>：与标准注意力相同（Flash Attention 不增加内存占用）</li>
+<li><strong>CUDA</strong>：12.0+（最低 11.8）</li>
+<li><strong>PyTorch</strong>：2.2+ 以获得原生支持</li>
+</ul>
+<p><strong>不支持</strong>：V100（Volta）、CPU 推理</p>
+<h2>资源</h2>
+<ul>
+<li>论文：&quot;FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness&quot;（NeurIPS 2022）</li>
+<li>论文：&quot;FlashAttention-2: Faster Attention with Better Parallelism and Work Partitioning&quot;（ICLR 2024）</li>
+<li>博客：https://tridao.me/blog/2024/flash3/</li>
+<li>GitHub：https://github.com/Dao-AILab/flash-attention</li>
+<li>PyTorch 文档：https://pytorch.org/docs/stable/generated/torch.nn.functional.scaled_dot_product_attention.html</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

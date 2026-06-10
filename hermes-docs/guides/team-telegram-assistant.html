@@ -1,0 +1,540 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>教程：团队 Telegram 助手 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html" class="active">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 实用指南 / 教程：团队 Telegram 助手</div><p>本教程将引导你搭建一个由 Hermes Agent 驱动的 Telegram 机器人，供多名团队成员使用。完成后，你的团队将拥有一个共享 AI 助手，可以向它发消息寻求代码、研究、系统管理等方面的帮助——并通过按用户授权保障安全。</p>
+<h2>我们要构建什么</h2>
+<p>一个 Telegram 机器人，具备以下能力：</p>
+<ul>
+<li><strong>任何已授权的团队成员</strong>都可以私信寻求帮助——代码审查、研究、Shell 命令、调试</li>
+<li><strong>运行在你的服务器上</strong>，拥有完整工具访问权限——终端、文件编辑、网络搜索、代码执行</li>
+<li><strong>按用户会话隔离</strong>——每个人拥有独立的对话上下文</li>
+<li><strong>默认安全</strong>——只有经过审批的用户才能交互，支持两种授权方式</li>
+<li><strong>定时任务</strong>——每日站会、健康检查和提醒推送到团队频道</li>
+</ul>
+<hr />
+<h2>前提条件</h2>
+<p>开始前，请确保你已具备：</p>
+<ul>
+<li><strong>已在服务器或 VPS 上安装 Hermes Agent</strong>（不是你的笔记本——机器人需要持续运行）。如尚未安装，请参阅<a href="/getting-started/installation">安装指南</a>。</li>
+<li><strong>一个 Telegram 账号</strong>（机器人所有者）</li>
+<li><strong>已配置 LLM 提供商</strong>——至少在 <code>~/.hermes/.env</code> 中配置了 OpenAI、Anthropic 或其他受支持提供商的 API 密钥</li>
+</ul>
+<div class="tip"><strong>💡 提示</strong>
+一台 $5/月的 VPS 足以运行 gateway（网关）。Hermes 本身很轻量——花钱的是 LLM API 调用，而那些调用发生在远端。
+</div>
+<hr />
+<h2>第一步：创建 Telegram 机器人</h2>
+<p>每个 Telegram 机器人都从 <strong>@BotFather</strong> 开始——这是 Telegram 官方用于创建机器人的机器人。</p>
+<ol>
+<li>
+<p><strong>打开 Telegram</strong>，搜索 <code>@BotFather</code>，或访问 <a href="https://t.me/BotFather">t.me/BotFather</a></p>
+</li>
+<li>
+<p><strong>发送 <code>/newbot</code></strong>——BotFather 会询问两件事：</p>
+<ul>
+<li><strong>显示名称</strong>——用户看到的名字（例如 <code>Team Hermes Assistant</code>）</li>
+<li><strong>用户名</strong>——必须以 <code>bot</code> 结尾（例如 <code>myteam_hermes_bot</code>）</li>
+</ul>
+</li>
+<li>
+<p><strong>复制机器人 token</strong>——BotFather 会回复类似内容：</p>
+</li>
+</ol>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+   Use this token to access the HTTP API:
+   7123456789:AAH1bGciOiJSUzI1NiIsInR5cCI6Ikp...
+</div>
+<p>保存此 token——下一步会用到。</p>
+<ol start="4">
+<li><strong>设置描述</strong>（可选，但推荐）：</li>
+</ol>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+   /setdescription
+</div>
+<p>选择你的机器人，然后输入类似内容：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+   Team AI assistant powered by Hermes Agent. DM me for help with code, research, debugging, and more.
+</div>
+<ol start="5">
+<li><strong>设置机器人命令</strong>（可选——为用户提供命令菜单）：</li>
+</ol>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+   /setcommands
+</div>
+<p>选择你的机器人，然后粘贴：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+   new - Start a fresh conversation
+   model - Show or change the AI model
+   status - Show session info
+   help - Show available commands
+   stop - Stop the current task
+</div>
+<div class="tip warning"><strong>⚠️ 警告</strong>
+请妥善保管你的机器人 token。任何持有该 token 的人都可以控制机器人。如果泄露，请在 BotFather 中使用 <code>/revoke</code> 生成新 token。
+</div>
+<hr />
+<h2>第二步：配置 Gateway</h2>
+<p>你有两种选择：交互式设置向导（推荐）或手动配置。</p>
+<h3>方式 A：交互式设置（推荐）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway setup
+</div>
+<p>通过方向键选择完成所有配置。选择 <strong>Telegram</strong>，粘贴你的机器人 token，并在提示时输入你的用户 ID。</p>
+<h3>方式 B：手动配置</h3>
+<p>在 <code>~/.hermes/.env</code> 中添加以下内容：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Telegram bot token from BotFather
+TELEGRAM_BOT_TOKEN=7123456789:AAH1bGciOiJSUzI1NiIsInR5cCI6Ikp...
+
+# Your Telegram user ID (numeric)
+TELEGRAM_ALLOWED_USERS=123456789
+</div>
+<h3>查找你的用户 ID</h3>
+<p>你的 Telegram 用户 ID 是一个数字值（不是你的用户名）。查找方式：</p>
+<ol>
+<li>在 Telegram 上给 <a href="https://t.me/userinfobot">@userinfobot</a> 发消息</li>
+<li>它会立即回复你的数字用户 ID</li>
+<li>将该数字填入 <code>TELEGRAM_ALLOWED_USERS</code></li>
+</ol>
+<div class="tip"><strong>ℹ️ 信息</strong>
+Telegram 用户 ID 是永久性数字，例如 <code>123456789</code>。它与可以更改的 <code>@username</code> 不同。白名单中请始终使用数字 ID。
+</div>
+<hr />
+<h2>第三步：启动 Gateway</h2>
+<h3>快速测试</h3>
+<p>先在前台运行 gateway，确认一切正常：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway
+</div>
+<p>你应该看到类似输出：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+[Gateway] Starting Hermes Gateway...
+[Gateway] Telegram adapter connected
+[Gateway] Cron scheduler started (tick every 60s)
+</div>
+<p>打开 Telegram，找到你的机器人，发送一条消息。如果它回复了，说明一切正常。按 <code>Ctrl+C</code> 停止。</p>
+<h3>生产环境：安装为服务</h3>
+<p>若要持久部署并在重启后自动恢复：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway install
+sudo hermes gateway install --system   # 仅 Linux：开机启动的系统服务
+</div>
+<p>这会创建一个后台服务：Linux 上默认为用户级 <strong>systemd</strong> 服务，macOS 上为 <strong>launchd</strong> 服务，传入 <code>--system</code> 则创建开机启动的 Linux 系统服务。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Linux——管理默认用户服务
+hermes gateway start
+hermes gateway stop
+hermes gateway status
+
+# 查看实时日志
+journalctl --user -u hermes-gateway -f
+
+# SSH 退出后保持运行
+sudo loginctl enable-linger $USER
+
+# Linux 服务器——显式系统服务命令
+sudo hermes gateway start --system
+sudo hermes gateway status --system
+journalctl -u hermes-gateway -f
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# macOS——管理服务
+hermes gateway start
+hermes gateway stop
+tail -f ~/.hermes/logs/gateway.log
+</div>
+<div class="tip"><strong>💡 macOS PATH</strong>
+launchd plist 在安装时捕获你的 Shell PATH，以便 gateway 子进程能找到 Node.js 和 ffmpeg 等工具。如果之后安装了新工具，请重新运行 <code>hermes gateway install</code> 以更新 plist。
+</div>
+<h3>验证运行状态</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway status
+</div>
+<p>然后在 Telegram 上向你的机器人发送测试消息。几秒内应收到回复。</p>
+<hr />
+<h2>第四步：设置团队访问权限</h2>
+<p>现在让你的队友获得访问权限。有两种方式。</p>
+<h3>方式 A：静态白名单</h3>
+<p>收集每位团队成员的 Telegram 用户 ID（让他们给 <a href="https://t.me/userinfobot">@userinfobot</a> 发消息），然后以逗号分隔的列表形式添加：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 在 ~/.hermes/.env 中
+TELEGRAM_ALLOWED_USERS=123456789,987654321,555555555
+</div>
+<p>修改后重启 gateway：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway stop &amp;&amp; hermes gateway start
+</div>
+<h3>方式 B：私信配对（推荐用于团队）</h3>
+<p>私信配对更灵活——无需提前收集用户 ID。工作流程如下：</p>
+<ol>
+<li><strong>队友私信机器人</strong>——由于不在白名单中，机器人会回复一次性配对码：</li>
+</ol>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+   🔐 Pairing code: XKGH5N7P
+   Send this code to the bot owner for approval.
+</div>
+<ol start="2">
+<li>
+<p><strong>队友将配对码发给你</strong>（通过任何渠道——Slack、邮件或当面）</p>
+</li>
+<li>
+<p><strong>你在服务器上审批</strong>：</p>
+</li>
+</ol>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+   hermes pairing approve telegram XKGH5N7P
+</div>
+<ol start="4">
+<li><strong>他们即可使用</strong>——机器人立即开始响应他们的消息</li>
+</ol>
+<p><strong>管理已配对用户：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 查看所有待审批和已审批用户
+hermes pairing list
+
+# 撤销某人的访问权限
+hermes pairing revoke telegram 987654321
+
+# 清除已过期的待审批码
+hermes pairing clear-pending
+</div>
+<div class="tip"><strong>💡 提示</strong>
+私信配对非常适合团队使用，因为添加新用户时无需重启 gateway。审批立即生效。
+</div>
+<h3>安全注意事项</h3>
+<ul>
+<li><strong>切勿在拥有终端访问权限的机器人上设置 <code>GATEWAY_ALLOW_ALL_USERS=true</code></strong>——任何找到你机器人的人都可能在你的服务器上执行命令</li>
+<li>配对码在 <strong>1 小时</strong>后过期，并使用密码学随机数生成</li>
+<li>速率限制防止暴力破解：每用户每 10 分钟 1 次请求，每平台最多 3 个待审批码</li>
+<li>5 次审批失败后，该平台进入 1 小时锁定状态</li>
+<li>所有配对数据以 <code>chmod 0600</code> 权限存储</li>
+</ul>
+<hr />
+<h2>第五步：配置机器人</h2>
+<h3>设置主频道</h3>
+<p><strong>主频道</strong>是机器人投递 cron 任务结果和主动消息的地方。没有主频道，定时任务将无处发送输出。</p>
+<p><strong>方式 1：</strong> 在机器人所在的任意 Telegram 群组或聊天中使用 <code>/sethome</code> 命令。</p>
+<p><strong>方式 2：</strong> 在 <code>~/.hermes/.env</code> 中手动设置：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+TELEGRAM_HOME_CHANNEL=-1001234567890
+TELEGRAM_HOME_CHANNEL_NAME="Team Updates"
+</div>
+<p>要查找频道 ID，可将 <a href="https://t.me/userinfobot">@userinfobot</a> 添加到群组——它会报告该群组的聊天 ID。</p>
+<h3>配置工具进度显示</h3>
+<p>控制机器人在使用工具时显示的详细程度。在 <code>~/.hermes/config.yaml</code> 中：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+display:
+  tool_progress: new    # off | new | all | verbose
+</div>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>显示内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>off</code></td>
+<td>仅显示干净的回复——无工具活动</td>
+</tr>
+<tr>
+<td><code>new</code></td>
+<td>每次新工具调用的简短状态（推荐用于消息场景）</td>
+</tr>
+<tr>
+<td><code>all</code></td>
+<td>每次工具调用及其详情</td>
+</tr>
+<tr>
+<td><code>verbose</code></td>
+<td>完整工具输出，包括命令结果</td>
+</tr>
+</tbody>
+</table>
+<p>用户也可以在聊天中使用 <code>/verbose</code> 命令按会话更改此设置。</p>
+<h3>使用 SOUL.md 设置个性</h3>
+<p>通过编辑 <code>~/.hermes/SOUL.md</code> 自定义机器人的沟通方式：</p>
+<p>完整指南请参阅<a href="/guides/use-soul-with-hermes">在 Hermes 中使用 SOUL.md</a>。</p>
+<div class="code-block"><span class="code-lang">markdown</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Soul
+You are a helpful team assistant. Be concise and technical.
+Use code blocks for any code. Skip pleasantries — the team
+values directness. When debugging, always ask for error logs
+before guessing at solutions.
+</div>
+<h3>添加项目上下文</h3>
+<p>如果你的团队在特定项目上工作，可以创建上下文文件，让机器人了解你们的技术栈：</p>
+<div class="code-block"><span class="code-lang">markdown</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+&lt;!-- ~/.hermes/AGENTS.md --&gt;
+# Team Context
+- We use Python 3.12 with FastAPI and SQLAlchemy
+- Frontend is React with TypeScript
+- CI/CD runs on GitHub Actions
+- Production deploys to AWS ECS
+- Always suggest writing tests for new code
+</div>
+<div class="tip"><strong>ℹ️ 信息</strong>
+上下文文件会注入到每个会话的系统 prompt（提示词）中。请保持简洁——每个字符都会占用你的 token 预算。
+</div>
+<hr />
+<h2>第六步：设置定时任务</h2>
+<p>gateway 运行后，你可以安排定期任务，将结果投递到团队频道。</p>
+<h3>每日站会摘要</h3>
+<p>在 Telegram 上给机器人发消息：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Every weekday at 9am, check the GitHub repository at
+github.com/myorg/myproject for:
+1. Pull requests opened/merged in the last 24 hours
+2. Issues created or closed
+3. Any CI/CD failures on the main branch
+Format as a brief standup-style summary.
+</div>
+<p>Agent 会自动创建一个 cron 任务，并将结果投递到你提问的聊天（或主频道）。</p>
+<h3>服务器健康检查</h3>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Every 6 hours, check disk usage with 'df -h', memory with 'free -h',
+and Docker container status with 'docker ps'. Report anything unusual —
+partitions above 80%, containers that have restarted, or high memory usage.
+</div>
+<h3>管理定时任务</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 通过 CLI
+hermes cron list          # 查看所有定时任务
+hermes cron status        # 检查调度器是否运行
+
+# 通过 Telegram 聊天
+/cron list                # 查看任务
+/cron remove &lt;job_id&gt;     # 删除任务
+</div>
+<div class="tip warning"><strong>⚠️ 警告</strong>
+Cron 任务的 prompt 在完全全新的会话中运行，不保留任何先前对话的记忆。请确保每个 prompt 包含 agent 所需的<strong>全部</strong>上下文——文件路径、URL、服务器地址以及清晰的指令。
+</div>
+<hr />
+<h2>生产环境建议</h2>
+<h3>使用 Docker 保障安全</h3>
+<p>在共享团队机器人上，使用 Docker 作为终端后端，让 agent 命令在容器中运行，而非直接在宿主机上运行：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 在 ~/.hermes/.env 中
+TERMINAL_BACKEND=docker
+TERMINAL_DOCKER_IMAGE=nikolaik/python-nodejs:python3.11-nodejs20
+</div>
+<p>或在 <code>~/.hermes/config.yaml</code> 中：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+terminal:
+  backend: docker
+  container_cpu: 1
+  container_memory: 5120
+  container_persistent: true
+</div>
+<p>这样即使有人要求机器人执行破坏性操作，你的宿主系统也受到保护。</p>
+<h3>监控 Gateway</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 检查 gateway 是否运行
+hermes gateway status
+
+# 查看实时日志（Linux）
+journalctl --user -u hermes-gateway -f
+
+# 查看实时日志（macOS）
+tail -f ~/.hermes/logs/gateway.log
+</div>
+<h3>保持 Hermes 更新</h3>
+<p>在 Telegram 中向机器人发送 <code>/update</code>——它会拉取最新版本并重启。或在服务器上执行：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes update
+hermes gateway stop &amp;&amp; hermes gateway start
+</div>
+<h3>日志位置</h3>
+<table>
+<thead>
+<tr>
+<th>内容</th>
+<th>位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gateway 日志</td>
+<td><code>journalctl --user -u hermes-gateway</code>（Linux）或 <code>~/.hermes/logs/gateway.log</code>（macOS）</td>
+</tr>
+<tr>
+<td>Cron 任务输出</td>
+<td><code>~/.hermes/cron/output/{job_id}/{timestamp}.md</code></td>
+</tr>
+<tr>
+<td>Cron 任务定义</td>
+<td><code>~/.hermes/cron/jobs.json</code></td>
+</tr>
+<tr>
+<td>配对数据</td>
+<td><code>~/.hermes/pairing/</code></td>
+</tr>
+<tr>
+<td>会话历史</td>
+<td><code>~/.hermes/sessions/</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>进一步探索</h2>
+<p>你已经拥有一个可用的团队 Telegram 助手。以下是一些后续步骤：</p>
+<ul>
+<li><strong><a href="/user-guide/security">安全指南</a></strong>——深入了解授权、容器隔离和命令审批</li>
+<li><strong><a href="/user-guide/messaging">消息 Gateway</a></strong>——gateway 架构、会话管理和聊天命令的完整参考</li>
+<li><strong><a href="/user-guide/messaging/telegram">Telegram 设置</a></strong>——平台专属详情，包括语音消息和 TTS</li>
+<li><strong><a href="/user-guide/features/cron">定时任务</a></strong>——高级 cron 调度，含投递选项和 cron 表达式</li>
+<li><strong><a href="/user-guide/features/context-files">上下文文件</a></strong>——用于项目知识的 AGENTS.md、SOUL.md 和 .cursorrules</li>
+<li><strong><a href="/user-guide/features/personality">个性设置</a></strong>——内置个性预设和自定义角色定义</li>
+<li><strong>添加更多平台</strong>——同一 gateway 可同时运行 <a href="/user-guide/messaging/discord">Discord</a>、<a href="/user-guide/messaging/slack">Slack</a> 和 <a href="/user-guide/messaging/whatsapp">WhatsApp</a></li>
+</ul>
+<hr />
+<p><em>有问题或遇到问题？请在 GitHub 上提 issue——欢迎贡献。</em></p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

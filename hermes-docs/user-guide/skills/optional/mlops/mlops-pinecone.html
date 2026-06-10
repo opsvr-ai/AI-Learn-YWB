@@ -1,0 +1,513 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pinecone — 面向生产级 AI 应用的托管向量数据库 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Pinecone — 面向生产级 AI 应用的托管向量数据库</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Pinecone</h1>
+<p>面向生产级 AI 应用的托管向量数据库。全托管、自动扩缩容，支持混合搜索（稠密 + 稀疏向量）、元数据过滤和命名空间。低延迟（&amp;lt;100ms p95）。适用于生产级 RAG、推荐系统或大规模语义搜索。最适合 serverless（无服务器）托管基础设施。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/mlops/pinecone</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/mlops/pinecone</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Orchestra Research</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>依赖</td>
+<td><code>pinecone-client</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>RAG</code>, <code>Pinecone</code>, <code>Vector Database</code>, <code>Managed Service</code>, <code>Serverless</code>, <code>Hybrid Search</code>, <code>Production</code>, <code>Auto-Scaling</code>, <code>Low Latency</code>, <code>Recommendations</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 skill 激活时 agent 所看到的指令内容。
+</div>
+<h1>Pinecone - 托管向量数据库</h1>
+<p>面向生产级 AI 应用的向量数据库。</p>
+<h2>何时使用 Pinecone</h2>
+<p><strong>适用场景：</strong></p>
+<ul>
+<li>需要托管的 serverless 向量数据库</li>
+<li>生产级 RAG 应用</li>
+<li>需要自动扩缩容</li>
+<li>对低延迟有严格要求（&amp;lt;100ms）</li>
+<li>不想自行管理基础设施</li>
+<li>需要混合搜索（稠密 + 稀疏向量）</li>
+</ul>
+<p><strong>指标</strong>：</p>
+<ul>
+<li>全托管 SaaS</li>
+<li>自动扩缩容至数十亿向量</li>
+<li><strong>p95 延迟 &amp;lt;100ms</strong></li>
+<li>99.9% 正常运行时间 SLA</li>
+</ul>
+<p><strong>改用其他方案的场景</strong>：</p>
+<ul>
+<li><strong>Chroma</strong>：自托管、开源</li>
+<li><strong>FAISS</strong>：离线、纯相似度搜索</li>
+<li><strong>Weaviate</strong>：自托管、功能更丰富</li>
+</ul>
+<h2>快速开始</h2>
+<h3>安装</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install pinecone-client
+</div>
+<h3>基本用法</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from pinecone import Pinecone, ServerlessSpec
+<h1>Initialize</h1>
+<p>pc = Pinecone(api_key=&quot;your-api-key&quot;)</p>
+<h1>Create index</h1>
+<p>pc.create_index(
+name=&quot;my-index&quot;,
+dimension=1536,  # Must match embedding dimension
+metric=&quot;cosine&quot;,  # or &quot;euclidean&quot;, &quot;dotproduct&quot;
+spec=ServerlessSpec(cloud=&quot;aws&quot;, region=&quot;us-east-1&quot;)
+)</p>
+<h1>Connect to index</h1>
+<p>index = pc.Index(&quot;my-index&quot;)</p>
+<h1>Upsert vectors</h1>
+<p>index.upsert(vectors=[
+{&quot;id&quot;: &quot;vec1&quot;, &quot;values&quot;: [0.1, 0.2, ...], &quot;metadata&quot;: {&quot;category&quot;: &quot;A&quot;}},
+{&quot;id&quot;: &quot;vec2&quot;, &quot;values&quot;: [0.3, 0.4, ...], &quot;metadata&quot;: {&quot;category&quot;: &quot;B&quot;}}
+])</p>
+<h1>Query</h1>
+<p>results = index.query(
+vector=[0.1, 0.2, ...],
+top_k=5,
+include_metadata=True
+)</p>
+<p>print(results[&quot;matches&quot;])</p>
+</div>
+<h2>核心操作</h2>
+<h3>创建索引</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Serverless (recommended)
+pc.create_index(
+    name="my-index",
+    dimension=1536,
+    metric="cosine",
+    spec=ServerlessSpec(
+        cloud="aws",         # or "gcp", "azure"
+        region="us-east-1"
+    )
+)
+<h1>Pod-based (for consistent performance)</h1>
+<p>from pinecone import PodSpec</p>
+<p>pc.create_index(
+name=&quot;my-index&quot;,
+dimension=1536,
+metric=&quot;cosine&quot;,
+spec=PodSpec(
+environment=&quot;us-east1-gcp&quot;,
+pod_type=&quot;p1.x1&quot;
+)
+)</p>
+</div>
+<h3>插入向量（Upsert）</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Single upsert
+index.upsert(vectors=[
+    {
+        "id": "doc1",
+        "values": [0.1, 0.2, ...],  # 1536 dimensions
+        "metadata": {
+            "text": "Document content",
+            "category": "tutorial",
+            "timestamp": "2025-01-01"
+        }
+    }
+])
+<h1>Batch upsert (recommended)</h1>
+<p>vectors = [
+{&quot;id&quot;: f&quot;vec{i}&quot;, &quot;values&quot;: embedding, &quot;metadata&quot;: metadata}
+for i, (embedding, metadata) in enumerate(zip(embeddings, metadatas))
+]</p>
+<p>index.upsert(vectors=vectors, batch_size=100)</p>
+</div>
+<h3>查询向量</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Basic query
+results = index.query(
+    vector=[0.1, 0.2, ...],
+    top_k=10,
+    include_metadata=True,
+    include_values=False
+)
+<h1>With metadata filtering</h1>
+<p>results = index.query(
+vector=[0.1, 0.2, ...],
+top_k=5,
+filter={&quot;category&quot;: {&quot;$eq&quot;: &quot;tutorial&quot;}}
+)</p>
+<h1>Namespace query</h1>
+<p>results = index.query(
+vector=[0.1, 0.2, ...],
+top_k=5,
+namespace=&quot;production&quot;
+)</p>
+<h1>Access results</h1>
+<p>for match in results[&quot;matches&quot;]:
+print(f&quot;ID: {match['id']}&quot;)
+print(f&quot;Score: {match['score']}&quot;)
+print(f&quot;Metadata: {match['metadata']}&quot;)</p>
+</div>
+<h3>元数据过滤</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Exact match
+filter = {"category": "tutorial"}
+<h1>Comparison</h1>
+<p>filter = {&quot;price&quot;: {&quot;$gte&quot;: 100}}  # $gt, $gte, $lt, $lte, $ne</p>
+<h1>Logical operators</h1>
+<p>filter = {
+&quot;$and&quot;: [
+{&quot;category&quot;: &quot;tutorial&quot;},
+{&quot;difficulty&quot;: {&quot;$lte&quot;: 3}}
+]
+}  # Also: $or</p>
+<h1>In operator</h1>
+<p>filter = {&quot;tags&quot;: {&quot;$in&quot;: [&quot;python&quot;, &quot;ml&quot;]}}</p>
+</div>
+<h2>命名空间</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Partition data by namespace
+index.upsert(
+    vectors=[{"id": "vec1", "values": [...]}],
+    namespace="user-123"
+)
+<h1>Query specific namespace</h1>
+<p>results = index.query(
+vector=[...],
+namespace=&quot;user-123&quot;,
+top_k=5
+)</p>
+<h1>List namespaces</h1>
+<p>stats = index.describe_index_stats()
+print(stats['namespaces'])</p>
+</div>
+<h2>混合搜索（稠密 + 稀疏向量）</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Upsert with sparse vectors
+index.upsert(vectors=[
+    {
+        "id": "doc1",
+        "values": [0.1, 0.2, ...],  # Dense vector
+        "sparse_values": {
+            "indices": [10, 45, 123],  # Token IDs
+            "values": [0.5, 0.3, 0.8]   # TF-IDF scores
+        },
+        "metadata": {"text": "..."}
+    }
+])
+<h1>Hybrid query</h1>
+<p>results = index.query(
+vector=[0.1, 0.2, ...],
+sparse_vector={
+&quot;indices&quot;: [10, 45],
+&quot;values&quot;: [0.5, 0.3]
+},
+top_k=5,
+alpha=0.5  # 0=sparse, 1=dense, 0.5=hybrid
+)</p>
+</div>
+<h2>LangChain 集成</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from langchain_pinecone import PineconeVectorStore
+from langchain_openai import OpenAIEmbeddings
+<h1>Create vector store</h1>
+<p>vectorstore = PineconeVectorStore.from_documents(
+documents=docs,
+embedding=OpenAIEmbeddings(),
+index_name=&quot;my-index&quot;
+)</p>
+<h1>Query</h1>
+<p>results = vectorstore.similarity_search(&quot;query&quot;, k=5)</p>
+<h1>With metadata filter</h1>
+<p>results = vectorstore.similarity_search(
+&quot;query&quot;,
+k=5,
+filter={&quot;category&quot;: &quot;tutorial&quot;}
+)</p>
+<h1>As retriever</h1>
+<p>retriever = vectorstore.as_retriever(search_kwargs={&quot;k&quot;: 10})</p>
+</div>
+<h2>LlamaIndex 集成</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from llama_index.vector_stores.pinecone import PineconeVectorStore
+<h1>Connect to Pinecone</h1>
+<p>pc = Pinecone(api_key=&quot;your-key&quot;)
+pinecone_index = pc.Index(&quot;my-index&quot;)</p>
+<h1>Create vector store</h1>
+<p>vector_store = PineconeVectorStore(pinecone_index=pinecone_index)</p>
+<h1>Use in LlamaIndex</h1>
+<p>from llama_index.core import StorageContext, VectorStoreIndex</p>
+<p>storage_context = StorageContext.from_defaults(vector_store=vector_store)
+index = VectorStoreIndex.from_documents(documents, storage_context=storage_context)</p>
+</div>
+<h2>索引管理</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# List indices
+indexes = pc.list_indexes()
+<h1>Describe index</h1>
+<p>index_info = pc.describe_index(&quot;my-index&quot;)
+print(index_info)</p>
+<h1>Get index stats</h1>
+<p>stats = index.describe_index_stats()
+print(f&quot;Total vectors: {stats['total_vector_count']}&quot;)
+print(f&quot;Namespaces: {stats['namespaces']}&quot;)</p>
+<h1>Delete index</h1>
+<p>pc.delete_index(&quot;my-index&quot;)</p>
+</div>
+<h2>删除向量</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Delete by ID
+index.delete(ids=["vec1", "vec2"])
+<h1>Delete by filter</h1>
+<p>index.delete(filter={&quot;category&quot;: &quot;old&quot;})</p>
+<h1>Delete all in namespace</h1>
+<p>index.delete(delete_all=True, namespace=&quot;test&quot;)</p>
+<h1>Delete entire index</h1>
+<p>index.delete(delete_all=True)</p>
+</div>
+<h2>最佳实践</h2>
+<ol>
+<li><strong>使用 serverless</strong> — 自动扩缩容，成本效益高</li>
+<li><strong>批量 upsert</strong> — 效率更高（每批 100-200 条）</li>
+<li><strong>添加元数据</strong> — 启用过滤功能</li>
+<li><strong>使用命名空间</strong> — 按用户/租户隔离数据</li>
+<li><strong>监控用量</strong> — 查看 Pinecone 控制台</li>
+<li><strong>优化过滤器</strong> — 对频繁过滤的字段建立索引</li>
+<li><strong>用免费套餐测试</strong> — 1 个索引，10 万向量免费</li>
+<li><strong>使用混合搜索</strong> — 质量更优</li>
+<li><strong>设置合适的维度</strong> — 与 embedding 模型匹配</li>
+<li><strong>定期备份</strong> — 导出重要数据</li>
+</ol>
+<h2>性能</h2>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>延迟</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Upsert</td>
+<td>~50-100ms</td>
+<td>每批次</td>
+</tr>
+<tr>
+<td>查询（p50）</td>
+<td>~50ms</td>
+<td>取决于索引大小</td>
+</tr>
+<tr>
+<td>查询（p95）</td>
+<td>~100ms</td>
+<td>SLA 目标</td>
+</tr>
+<tr>
+<td>元数据过滤</td>
+<td>~+10-20ms</td>
+<td>额外开销</td>
+</tr>
+</tbody>
+</table>
+<h2>定价（截至 2025 年）</h2>
+<p><strong>Serverless</strong>：</p>
+<ul>
+<li>每百万读取单元 $0.096</li>
+<li>每百万写入单元 $0.06</li>
+<li>每 GB 存储/月 $0.06</li>
+</ul>
+<p><strong>免费套餐</strong>：</p>
+<ul>
+<li>1 个 serverless 索引</li>
+<li>10 万向量（1536 维）</li>
+<li>非常适合原型开发</li>
+</ul>
+<h2>资源</h2>
+<ul>
+<li><strong>官网</strong>：https://www.pinecone.io</li>
+<li><strong>文档</strong>：https://docs.pinecone.io</li>
+<li><strong>控制台</strong>：https://app.pinecone.io</li>
+<li><strong>定价</strong>：https://www.pinecone.io/pricing</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

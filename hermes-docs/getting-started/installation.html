@@ -1,0 +1,340 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>安装 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html" class="active">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / Getting Started / 安装</div><p>使用一行安装命令，两分钟内即可启动并运行 Hermes Agent。</p>
+<h2>快速安装</h2>
+<h3>一行安装命令（Linux / macOS / WSL2）</h3>
+<p>基于 git 的安装方式，跟踪 <code>main</code> 分支，可立即获取最新变更：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
+</div>
+<h3>Windows（原生，PowerShell）</h3>
+<p>原生 Windows 无需 WSL 即可运行 Hermes——CLI、gateway、TUI 和工具均可原生运行。（原生安装与 WSL2 安装可干净共存；唯一仅限 WSL2 的功能见下方功能说明。）遇到 bug 请<a href="https://github.com/NousResearch/hermes-agent/issues">提交 issue</a>。</p>
+<p>打开 PowerShell 并运行：</p>
+<div class="code-block"><span class="code-lang">powershell</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+iex (irm https://hermes-agent.nousresearch.com/install.ps1)
+</div>
+<p>安装程序处理<strong>一切</strong>：<code>uv</code>、Python 3.11、Node.js 22、<code>ripgrep</code>、<code>ffmpeg</code>，<strong>以及一个便携式 Git Bash</strong>（PortableGit——一个自包含的 Git-for-Windows 发行版，附带 <code>bash.exe</code> 和 Hermes 用于 shell 命令的完整 POSIX 工具链；在 32 位 Windows 上安装程序会回退到 MinGit，后者缺少 bash，终端工具和 agent 浏览器功能将被禁用）。它将仓库克隆到 <code>%LOCALAPPDATA%\hermes\hermes-agent</code>，创建虚拟环境，并将 <code>hermes</code> 添加到<strong>用户 PATH</strong>。安装完成后请重启终端（或打开新的 PowerShell 窗口）以使 PATH 生效。</p>
+<p><strong>Git 的处理方式：</strong></p>
+<ol>
+<li>如果 <code>git</code> 已在你的 PATH 中，安装程序将使用现有安装。</li>
+<li>否则，它会下载便携式 <strong>PortableGit</strong>（约 50MB，来自官方 <code>git-for-windows</code> GitHub 发布页）并解压到 <code>%LOCALAPPDATA%\hermes\git</code>。无需管理员权限，完全隔离——不会干扰任何系统 Git 安装，无论其状态如何。（在 32 位 Windows 上会回退到 MinGit，因为 PortableGit 仅提供 64 位和 ARM64 资产；依赖 bash 的 Hermes 功能在 32 位主机上无法使用。）</li>
+</ol>
+<p><strong>为什么不使用 winget？</strong> 早期设计通过 <code>winget install Git.Git</code> 自动安装 Git，但当系统 Git 安装处于部分损坏状态时，winget 会严重失败（而这恰恰是用户最需要安装程序正常工作的时候）。便携式 Git 方案绕过了 winget、Windows 安装程序注册表以及任何现有系统 Git。如果 Hermes 的 Git 安装本身出现问题，执行 <code>Remove-Item %LOCALAPPDATA%\hermes\git</code> 并重新运行安装程序即可——对系统无影响，无需卸载操作。</p>
+<p>安装程序还会将 <code>HERMES_GIT_BASH_PATH</code> 设置为找到的 <code>bash.exe</code> 路径，以便 Hermes 在新 shell 中确定性地解析它。</p>
+<p>如果你偏好 WSL2，上方的 Linux 安装程序可在其中运行；原生安装和 WSL 安装可以共存而不冲突（原生数据位于 <code>%LOCALAPPDATA%\hermes</code>，WSL 数据位于 <code>~/.hermes</code>）。</p>
+<p><strong>桌面安装程序（替代方案）：</strong> 也提供一个轻量 GUI 安装程序——下载 Hermes Desktop，运行 <code>.exe</code>，首次启动时它会在后台调用 <code>install.ps1</code> 来配置 Python（通过 <code>uv</code>）、Node、PortableGit 及其余依赖。桌面应用和 PowerShell 安装的 CLI 共享相同的安装目录和数据目录，可以单独或同时使用。详见 <a href="../user-guide/windows-native#desktop-installer-alternative">Windows（原生）指南</a>。</p>
+<h3>Android / Termux</h3>
+<p>Hermes 现在也提供 Termux 感知的安装路径：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
+</div>
+<p>安装程序会自动检测 Termux 并切换到经过测试的 Android 流程：</p>
+<ul>
+<li>使用 Termux <code>pkg</code> 安装系统依赖（<code>git</code>、<code>python</code>、<code>nodejs</code>、<code>ripgrep</code>、<code>ffmpeg</code>、构建工具）</li>
+<li>使用 <code>python -m venv</code> 创建虚拟环境</li>
+<li>自动导出 <code>ANDROID_API_LEVEL</code> 以用于 Android wheel 构建</li>
+<li>优先使用较宽泛的 <code>.[termux-all]</code> extra，若首次编译失败则回退到较小的 <code>.[termux]</code> extra（最终回退到基础安装）</li>
+<li>默认跳过未经测试的浏览器 / WhatsApp 引导</li>
+</ul>
+<p>如需完整的显式步骤，请参阅专门的 <a href="./termux.html">Termux 指南</a>。</p>
+<div class="tip"><strong>📝 Windows 功能对等性</strong>
+<p>除基于浏览器的 dashboard 聊天终端外，其余功能均可在 Windows 上原生运行：</p>
+<ul>
+<li><strong>CLI（<code>hermes chat</code>、<code>hermes setup</code>、<code>hermes gateway</code> 等）</strong> — 原生，使用默认终端</li>
+<li><strong>Gateway（Telegram、Discord、Slack 等）</strong> — 原生，作为后台 PowerShell 进程运行</li>
+<li><strong>Cron 调度器</strong> — 原生</li>
+<li><strong>浏览器工具</strong> — 原生（通过 Node.js 使用 Chromium）</li>
+<li><strong>MCP 服务器</strong> — 原生（stdio 和 HTTP 传输均支持）</li>
+<li><strong>Dashboard <code>/chat</code> 终端面板</strong> — <strong>仅限 WSL2</strong>（使用 POSIX PTY（伪终端），原生 Windows 无等效实现）。Dashboard 的其余部分（会话、任务、指标）可原生运行——仅嵌入式 PTY 终端标签页受限。</li>
+</ul>
+<p>如果遇到编码相关的 bug 并希望回退到旧版 cp1252 stdio 路径（用于问题定位），请在环境中设置 <code>HERMES_DISABLE_WINDOWS_UTF8=1</code>。</p>
+
+</div>
+<h3>安装程序做了什么</h3>
+<p>安装程序自动处理一切——所有依赖（Python、Node.js、ripgrep、ffmpeg）、仓库克隆、虚拟环境、全局 <code>hermes</code> 命令配置以及 LLM 提供商配置。完成后即可开始聊天。</p>
+<h4>安装目录结构</h4>
+<p>安装程序的存放位置取决于你是以普通用户还是 root 身份安装：</p>
+<table>
+<thead>
+<tr>
+<th>安装方式</th>
+<th>代码位置</th>
+<th><code>hermes</code> 二进制</th>
+<th>数据目录</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pip install</td>
+<td>Python site-packages</td>
+<td><code>~/.local/bin/hermes</code>（console_scripts）</td>
+<td><code>~/.hermes/</code></td>
+</tr>
+<tr>
+<td>用户级（git 安装程序）</td>
+<td><code>~/.hermes/hermes-agent/</code></td>
+<td><code>~/.local/bin/hermes</code>（符号链接）</td>
+<td><code>~/.hermes/</code></td>
+</tr>
+<tr>
+<td>Root 模式（<code>sudo curl … | sudo bash</code>）</td>
+<td><code>/usr/local/lib/hermes-agent/</code></td>
+<td><code>/usr/local/bin/hermes</code></td>
+<td><code>/root/.hermes/</code>（或 <code>$HERMES_HOME</code>）</td>
+</tr>
+</tbody>
+</table>
+<p>Root 模式的 <strong>FHS 布局</strong>（<code>/usr/local/lib/…</code>、<code>/usr/local/bin/hermes</code>）与其他系统级开发工具在 Linux 上的安装位置一致。适用于共享机器部署场景，一次系统安装可服务所有用户。每个用户的个人配置（认证、技能、会话）仍位于各自的 <code>~/.hermes/</code> 或显式指定的 <code>HERMES_HOME</code> 下。</p>
+<h3>安装后</h3>
+<p>重新加载 shell 并开始聊天：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+source ~/.bashrc   # 或：source ~/.zshrc
+hermes             # 开始聊天！
+</div>
+<p>如需稍后重新配置单项设置，使用以下专用命令：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes model          # 选择 LLM 提供商和模型
+hermes tools          # 配置启用的工具
+hermes gateway setup  # 配置消息平台
+hermes config set     # 设置单个配置项
+hermes setup          # 或运行完整的设置向导一次性配置所有内容
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes setup --portal
+</div>
+<div class="tip"><strong>💡 最快路径：Nous Portal</strong>
+<p>一个订阅涵盖 300+ 个模型以及 <a href="/user-guide/features/tool-gateway">Tool Gateway</a>（网络搜索、图像生成、TTS、云端浏览器）。无需逐一管理各工具的密钥：</p>
+<p>该命令一次性完成登录、设置 Nous 为提供商并开启 Tool Gateway。</p>
+
+</div>
+<hr />
+<h2>前置条件</h2>
+<p><strong>pip install：</strong> 除 Python 3.11+ 外无其他前置条件，其余均自动处理。</p>
+<p><strong>Git 安装程序：</strong> 唯一的前置条件是 <strong>Git</strong>。安装程序自动处理其余一切：</p>
+<ul>
+<li><strong>uv</strong>（快速 Python 包管理器）</li>
+<li><strong>Python 3.11</strong>（通过 uv，无需 sudo）</li>
+<li><strong>Node.js v22</strong>（用于浏览器自动化和 WhatsApp 桥接）</li>
+<li><strong>ripgrep</strong>（快速文件搜索）</li>
+<li><strong>ffmpeg</strong>（TTS 的音频格式转换）</li>
+</ul>
+<div class="tip"><strong>ℹ️ 信息</strong>
+你<strong>无需</strong>手动安装 Python、Node.js、ripgrep 或 ffmpeg。安装程序会检测缺失的依赖并自动安装。只需确保 <code>git</code> 可用（<code>git --version</code>）。
+</div>
+<div class="tip"><strong>💡 Nix 用户</strong>
+如果你使用 Nix（在 NixOS、macOS 或 Linux 上），有专门的配置路径，包含 Nix flake、声明式 NixOS 模块和可选容器模式。请参阅 <strong><a href="./nix-setup.html">Nix &amp; NixOS 配置</a></strong> 指南。
+</div>
+<hr />
+<h2>手动 / 开发者安装</h2>
+<p>如果你想克隆仓库并从源码安装——用于贡献代码、从特定分支运行或完全控制虚拟环境——请参阅贡献指南中的<a href="../developer-guide/contributing.html#development-setup">开发环境配置</a>章节。</p>
+<hr />
+<h2>非 Sudo / 系统服务用户安装</h2>
+<p>支持以专用非特权用户身份运行 Hermes（例如 <code>hermes</code> systemd 服务账户，或任何没有 <code>sudo</code> 权限的用户）。安装路径中真正需要 root 权限的只有 Playwright 的 <code>--with-deps</code> 步骤，该步骤通过 <code>apt</code> 安装 Chromium 所需的共享库（<code>libnss3</code>、<code>libxkbcommon</code> 等）。安装程序会检测 sudo 是否可用，并在不可用时优雅降级——它会将 Chromium 二进制安装到服务用户自己的 Playwright 缓存中，并打印管理员需要单独运行的确切命令。</p>
+<p><strong>推荐的分步方式（Debian/Ubuntu）：</strong></p>
+<ol>
+<li><strong>一次性操作，以具有 sudo 权限的管理员用户身份</strong>，安装 Chromium 所需的系统库：</li>
+</ol>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+   sudo npx playwright install-deps chromium
+</div>
+<p>（可在任意位置运行——<code>npx</code> 会自动获取 Playwright。）</p>
+<ol start="2">
+<li><strong>以非特权服务用户身份</strong>，运行常规安装程序。它会检测到缺少 sudo，跳过 <code>--with-deps</code>，并将 Chromium 安装到用户本地的 Playwright 缓存中：</li>
+</ol>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+   curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
+</div>
+<p>如果想完全跳过 Playwright 步骤——例如在无头环境中运行且不需要浏览器自动化——传入 <code>--skip-browser</code>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+   curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash -s -- --skip-browser
+</div>
+<ol start="3">
+<li><strong>使 <code>hermes</code> 对服务用户的 shell 可用。</strong> 安装程序将启动器写入 <code>~/.local/bin/hermes</code>。系统服务账户通常具有不包含 <code>~/.local/bin</code> 的最小 PATH。可以将其添加到用户环境，或将启动器符号链接到系统位置：</li>
+</ol>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+   # 方案 A — 添加到服务用户的 profile
+   echo 'export PATH="$HOME/.local/bin:$PATH"' &gt;&gt; ~/.bashrc
+
+   # 方案 B — 系统级符号链接（以管理员身份运行）
+   sudo ln -s /home/hermes/.hermes/hermes-agent/venv/bin/hermes /usr/local/bin/hermes
+</div>
+<ol start="4">
+<li><strong>验证：</strong> <code>hermes doctor</code> 现在应能正常运行。如果出现 <code>ModuleNotFoundError: No module named 'dotenv'</code>，说明你在用系统 Python 调用仓库源码中的 <code>hermes</code> 文件（<code>~/.hermes/hermes-agent/hermes</code>），而非 venv 启动器（<code>~/.hermes/hermes-agent/venv/bin/hermes</code>）——请修正步骤 3。</li>
+</ol>
+<p>同样的方式适用于 Arch（安装程序使用 pacman，具有相同的 sudo 检测逻辑）、Fedora/RHEL 和 openSUSE——这些发行版完全不支持 <code>--with-deps</code>，因此管理员始终需要单独安装系统库。安装程序会打印相应的 <code>dnf</code>/<code>zypper</code> 命令。</p>
+<hr />
+<h2>故障排查</h2>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>hermes: command not found</code></td>
+<td>重新加载 shell（<code>source ~/.bashrc</code>）或检查 PATH</td>
+</tr>
+<tr>
+<td><code>API key not set</code></td>
+<td>运行 <code>hermes model</code> 配置提供商，或 <code>hermes config set OPENROUTER_API_KEY your_key</code></td>
+</tr>
+<tr>
+<td>更新后配置丢失</td>
+<td>运行 <code>hermes config check</code>，然后运行 <code>hermes config migrate</code></td>
+</tr>
+</tbody>
+</table>
+<p>如需更多诊断信息，运行 <code>hermes doctor</code>——它会告诉你确切缺少什么以及如何修复。</p>
+<h2>安装方式自动检测</h2>
+<p>Hermes 会自动检测安装方式（<code>pip</code>、git 安装程序、Homebrew 或 NixOS），<code>hermes update</code> 会打印对应路径的更新命令。无需设置任何环境变量——检测基于安装目录结构（Python site-packages、<code>~/.hermes/hermes-agent/</code>、Homebrew 前缀或 Nix store 路径）。<code>hermes doctor</code> 也会在其环境摘要中显示检测到的安装方式。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

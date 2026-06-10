@@ -1,0 +1,1258 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>扩展 Dashboard - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / 扩展 Dashboard</div><p>Hermes Web Dashboard（<code>hermes dashboard</code>）在设计上支持换肤和扩展，无需 fork 代码库。对外暴露三个层次：</p>
+<ol>
+<li><strong>主题（Themes）</strong> — YAML 文件，用于重绘 dashboard 的调色板、字体排版、布局以及各组件的外观。将文件放入 <code>~/.hermes/dashboard-themes/</code>，即可在主题切换器中看到它。</li>
+<li><strong>UI 插件（UI plugins）</strong> — 一个包含 <code>manifest.json</code> 和 JavaScript bundle 的目录，可注册标签页、替换内置页面、通过页面级插槽增强内置页面，或向命名 shell 插槽注入组件。</li>
+<li><strong>后端插件（Backend plugins）</strong> — 插件目录内的 Python 文件，暴露一个 FastAPI <code>router</code>；路由挂载在 <code>/api/plugins/&lt;name&gt;/</code> 下，由插件的 UI 调用。</li>
+</ol>
+<p>三者均为<strong>运行时即插即用</strong>：无需克隆仓库、无需 <code>npm run build</code>、无需修改 dashboard 源码。本页是三者的权威参考文档。</p>
+<p>如果只是想使用 dashboard，请参阅 <a href="./web-dashboard">Web Dashboard</a>。如果想为终端 CLI（而非 Web Dashboard）换肤，请参阅 <a href="./skins">Skins &amp; Themes</a> —— CLI 皮肤系统与 dashboard 主题无关。</p>
+<div class="tip"><strong>📝 各部分如何组合</strong>
+主题和插件相互独立，但可协同工作。主题可以单独使用（仅一个 YAML 文件）。插件也可以单独使用（仅一个标签页）。两者结合可构建带有自定义 HUD 的完整视觉换肤方案——内置的 <code>strike-freedom-cockpit</code> 演示正是如此。参见<a href="#combined-theme--plugin-demo">主题 + 插件组合演示</a>。
+</div>
+<hr />
+<h2>目录</h2>
+<ul>
+<li><a href="#themes">主题</a>
+<ul>
+<li><a href="#quick-start--your-first-theme">快速上手——你的第一个主题</a></li>
+<li><a href="#palette-typography-layout">调色板、字体排版、布局</a></li>
+<li><a href="#layout-variants">布局变体</a></li>
+<li><a href="#theme-assets-images-as-css-vars">主题资源（图片作为 CSS 变量）</a></li>
+<li><a href="#component-chrome-overrides">组件外观覆盖</a></li>
+<li><a href="#color-overrides">颜色覆盖</a></li>
+<li><a href="#raw-customcss">原始 <code>customCSS</code></a></li>
+<li><a href="#built-in-themes">内置主题</a></li>
+<li><a href="#full-theme-yaml-reference">完整主题 YAML 参考</a></li>
+</ul>
+</li>
+<li><a href="#plugins">插件</a>
+<ul>
+<li><a href="#quick-start--your-first-plugin">快速上手——你的第一个插件</a></li>
+<li><a href="#directory-layout">目录结构</a></li>
+<li><a href="#manifest-reference">Manifest 参考</a></li>
+<li><a href="#the-plugin-sdk">Plugin SDK</a></li>
+<li><a href="#shell-slots">Shell 插槽</a></li>
+<li><a href="#replacing-built-in-pages-taboverride">替换内置页面（<code>tab.override</code>）</a></li>
+<li><a href="#augmenting-built-in-pages-page-scoped-slots">增强内置页面（页面级插槽）</a></li>
+<li><a href="#slot-only-plugins-tabhidden">仅插槽插件（<code>tab.hidden</code>）</a></li>
+<li><a href="#backend-api-routes">后端 API 路由</a></li>
+<li><a href="#custom-css-per-plugin">插件自定义 CSS</a></li>
+<li><a href="#plugin-discovery--reload">插件发现与重载</a></li>
+</ul>
+</li>
+<li><a href="#combined-theme--plugin-demo">主题 + 插件组合演示</a></li>
+<li><a href="#api-reference">API 参考</a></li>
+<li><a href="#troubleshooting">故障排查</a></li>
+</ul>
+<hr />
+<h2>主题</h2>
+<p>主题是存储在 <code>~/.hermes/dashboard-themes/</code> 中的 YAML 文件。文件名无关紧要（系统使用主题的 <code>name:</code> 字段），但惯例是 <code>&lt;name&gt;.yaml</code>。所有字段均为可选——缺失的键会回退到内置的 <code>default</code> 主题，因此一个主题可以只包含一个颜色。</p>
+<h3>快速上手——你的第一个主题</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mkdir -p ~/.hermes/dashboard-themes
+</div>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ~/.hermes/dashboard-themes/neon.yaml
+name: neon
+label: Neon
+description: Pure magenta on black
+
+palette:
+  background: "#000000"
+  midground: "#ff00ff"
+</div>
+<p>刷新 dashboard。点击顶栏的调色板图标，选择 <strong>Neon</strong>。背景变为黑色，文字和强调色变为洋红色，所有派生颜色（card、border、muted、ring 等）均通过 CSS 的 <code>color-mix()</code> 从这两个颜色自动计算得出。</p>
+<p>这就是全部入门流程：一个文件，两个颜色。以下内容均为可选的进阶配置。</p>
+<h3>调色板、字体排版、布局</h3>
+<p>这三个块是主题的核心。每个块相互独立——覆盖其中一个，其余保持不变。</p>
+<h4>调色板（3 层）</h4>
+<p>调色板由三层颜色加一个暖光晕（warm-glow）颜色和一个噪点颗粒倍增器组成。Dashboard 的设计系统级联通过 CSS <code>color-mix()</code> 从这三层颜色派生出所有兼容 shadcn 的 token（card、popover、muted、border、primary、destructive、ring 等）。覆盖三个颜色即可级联影响整个 UI。</p>
+<table>
+<thead>
+<tr>
+<th>键</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>palette.background</code></td>
+<td>最深的画布颜色——通常接近黑色。驱动页面背景和卡片填充。</td>
+</tr>
+<tr>
+<td><code>palette.midground</code></td>
+<td>主要文字和强调色。大多数 UI 外观读取此值（前景文字、按钮轮廓、焦点环）。</td>
+</tr>
+<tr>
+<td><code>palette.foreground</code></td>
+<td>顶层高亮色。默认主题将其设为 alpha 为 0 的白色（不可见）；需要顶层亮色强调的主题可提高其 alpha 值。</td>
+</tr>
+<tr>
+<td><code>palette.warmGlow</code></td>
+<td><code>rgba(...)</code> 字符串，用作 <code>&lt;Backdrop /&gt;</code> 的晕光颜色。</td>
+</tr>
+<tr>
+<td><code>palette.noiseOpacity</code></td>
+<td>0–1.2 的颗粒叠加层倍增器。越低越柔和，越高越粗粝。</td>
+</tr>
+</tbody>
+</table>
+<p>每层接受 <code>{hex: &quot;#RRGGBB&quot;, alpha: 0.0–1.0}</code> 或裸十六进制字符串（alpha 默认为 1.0）。</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+palette:
+  background:
+    hex: "#05091a"
+    alpha: 1.0
+  midground: "#d8f0ff"          # bare hex, alpha = 1.0
+  foreground:
+    hex: "#ffffff"
+    alpha: 0                    # invisible top layer
+  warmGlow: "rgba(255, 199, 55, 0.24)"
+  noiseOpacity: 0.7
+</div>
+<h4>字体排版</h4>
+<table>
+<thead>
+<tr>
+<th>键</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fontSans</code></td>
+<td>string</td>
+<td>正文的 CSS font-family 栈（应用于 <code>html</code>、<code>body</code>）。</td>
+</tr>
+<tr>
+<td><code>fontMono</code></td>
+<td>string</td>
+<td>代码块、<code>&lt;code&gt;</code>、<code>.font-mono</code> 工具类的 CSS font-family 栈。</td>
+</tr>
+<tr>
+<td><code>fontDisplay</code></td>
+<td>string</td>
+<td>可选的标题/展示字体栈。回退到 <code>fontSans</code>。</td>
+</tr>
+<tr>
+<td><code>fontUrl</code></td>
+<td>string</td>
+<td>可选的外部样式表 URL。在主题切换时以 <code>&lt;link rel=&quot;stylesheet&quot;&gt;</code> 注入 <code>&lt;head&gt;</code>。相同 URL 不会重复注入。支持 Google Fonts、Bunny Fonts、自托管 <code>@font-face</code> 样式表——任何可链接的资源均可。</td>
+</tr>
+<tr>
+<td><code>baseSize</code></td>
+<td>string</td>
+<td>根字体大小——控制 rem 比例。例如 <code>&quot;14px&quot;</code>、<code>&quot;16px&quot;</code>。</td>
+</tr>
+<tr>
+<td><code>lineHeight</code></td>
+<td>string</td>
+<td>默认行高。例如 <code>&quot;1.5&quot;</code>、<code>&quot;1.65&quot;</code>。</td>
+</tr>
+<tr>
+<td><code>letterSpacing</code></td>
+<td>string</td>
+<td>默认字间距。例如 <code>&quot;0&quot;</code>、<code>&quot;0.01em&quot;</code>、<code>&quot;-0.01em&quot;</code>。</td>
+</tr>
+</tbody>
+</table>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+typography:
+  fontSans: '"Orbitron", "Eurostile", "Impact", sans-serif'
+  fontMono: '"Share Tech Mono", ui-monospace, monospace'
+  fontDisplay: '"Orbitron", "Eurostile", sans-serif'
+  fontUrl: "https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&amp;family=Share+Tech+Mono&amp;display=swap"
+  baseSize: "14px"
+  lineHeight: "1.5"
+  letterSpacing: "0.04em"
+</div>
+<h4>布局</h4>
+<table>
+<thead>
+<tr>
+<th>键</th>
+<th>值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>radius</code></td>
+<td>任意 CSS 长度（<code>&quot;0&quot;</code>、<code>&quot;0.25rem&quot;</code>、<code>&quot;0.5rem&quot;</code>、<code>&quot;1rem&quot;</code> 等）</td>
+<td>圆角 token。映射到 <code>--radius</code> 并级联到 <code>--radius-sm/md/lg/xl</code>——所有圆角元素同步变化。</td>
+</tr>
+<tr>
+<td><code>density</code></td>
+<td><code>compact</code> | <code>comfortable</code> | <code>spacious</code></td>
+<td>间距倍增器，以 <code>--spacing-mul</code> CSS 变量形式应用。<code>compact = 0.85×</code>，<code>comfortable = 1.0×</code>（默认），<code>spacious = 1.2×</code>。缩放 Tailwind 的基础间距，因此 padding、gap 和 space-between 工具类均按比例调整。</td>
+</tr>
+</tbody>
+</table>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+layout:
+  radius: "0"
+  density: compact
+</div>
+<h3>布局变体</h3>
+<p><code>layoutVariant</code> 选择整体 shell 布局。缺省时默认为 <code>&quot;standard&quot;</code>。</p>
+<table>
+<thead>
+<tr>
+<th>变体</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>standard</code></td>
+<td>单列，最大宽度 1600px（默认）。</td>
+</tr>
+<tr>
+<td><code>cockpit</code></td>
+<td>左侧边栏轨道（260px）+ 主内容区。由插件通过 <code>sidebar</code> 插槽填充——参见 <a href="#shell-slots">Shell 插槽</a>。没有插件时轨道显示占位符。</td>
+</tr>
+<tr>
+<td><code>tiled</code></td>
+<td>取消最大宽度限制，页面可使用完整视口宽度。</td>
+</tr>
+</tbody>
+</table>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+layoutVariant: cockpit
+</div>
+<p>当前变体通过 <code>document.documentElement.dataset.layoutVariant</code> 暴露，因此 <code>customCSS</code> 中的原始 CSS 可通过 <code>:root[data-layout-variant=&quot;cockpit&quot;] ...</code> 定向匹配。</p>
+<h3>主题资源（图片作为 CSS 变量）</h3>
+<p>随主题附带图片 URL。每个命名插槽会成为一个 CSS 变量（<code>--theme-asset-&lt;name&gt;</code>），内置 shell 和任何插件均可读取。<code>bg</code> 插槽自动接入 backdrop；其他插槽面向插件开放。</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+assets:
+  bg: "https://example.com/hero-bg.jpg"           # auto-wired into &lt;Backdrop /&gt;
+  hero: "/my-images/strike-freedom.png"           # for plugin sidebars
+  crest: "/my-images/crest.svg"                   # for header-left plugins
+  logo: "/my-images/logo.png"
+  sidebar: "/my-images/rail.png"
+  header: "/my-images/header-art.png"
+  custom:
+    scanLines: "/my-images/scanlines.png"         # → --theme-asset-custom-scanLines
+</div>
+<p>值接受：</p>
+<ul>
+<li>裸 URL——自动包装为 <code>url(...)</code>。</li>
+<li>已包装的 <code>url(...)</code>、<code>linear-gradient(...)</code>、<code>radial-gradient(...)</code> 表达式——直接使用。</li>
+<li><code>&quot;none&quot;</code> ——明确禁用。</li>
+</ul>
+<p>每个资源还会以 <code>--theme-asset-&lt;name&gt;-raw</code>（未包装的 URL）形式输出，以便插件需要将其传给 <code>&lt;img src&gt;</code> 而非 <code>background-image</code> 时使用。</p>
+<p>插件通过普通 CSS 或 JS 读取这些变量：</p>
+<div class="code-block"><span class="code-lang">javascript</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+// In a plugin slot
+const hero = getComputedStyle(document.documentElement)
+  .getPropertyValue("--theme-asset-hero").trim();
+</div>
+<h3>组件外观覆盖</h3>
+<p><code>componentStyles</code> 可在不编写 CSS 选择器的情况下重新设置各 shell 组件的样式。每个桶（bucket）的条目会成为 CSS 变量（<code>--component-&lt;bucket&gt;-&lt;kebab-property&gt;</code>），shell 的共享组件会读取这些变量。因此 <code>card:</code> 的覆盖应用于所有 <code>&lt;Card&gt;</code>，<code>header:</code> 应用于应用栏，以此类推。</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+componentStyles:
+  card:
+    clipPath: "polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px)"
+    background: "linear-gradient(180deg, rgba(10, 22, 52, 0.85), rgba(5, 9, 26, 0.92))"
+    boxShadow: "inset 0 0 0 1px rgba(64, 200, 255, 0.28)"
+  header:
+    background: "linear-gradient(180deg, rgba(16, 32, 72, 0.95), rgba(5, 9, 26, 0.9))"
+  tab:
+    clipPath: "polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%)"
+  sidebar: {}
+  backdrop: {}
+  footer: {}
+  progress: {}
+  badge: {}
+  page: {}
+</div>
+<p>支持的桶：<code>card</code>、<code>header</code>、<code>footer</code>、<code>sidebar</code>、<code>tab</code>、<code>progress</code>、<code>badge</code>、<code>backdrop</code>、<code>page</code>。</p>
+<p>属性名使用 camelCase（<code>clipPath</code>），输出为 kebab-case（<code>clip-path</code>）。值为纯 CSS 字符串——CSS 接受的任何内容均可（<code>clip-path</code>、<code>border-image</code>、<code>background</code>、<code>box-shadow</code>、<code>animation</code> 等）。</p>
+<h3>颜色覆盖</h3>
+<p>大多数主题不需要此功能——3 层调色板已派生出所有 shadcn token。当你需要派生无法产生的特定强调色时（例如柔和主题的更柔和的破坏性红色，或品牌专属的成功绿色），才使用 <code>colorOverrides</code>。</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+colorOverrides:
+  primary: "#ffce3a"
+  primaryForeground: "#05091a"
+  accent: "#3fd3ff"
+  ring: "#3fd3ff"
+  destructive: "#ff3a5e"
+  border: "rgba(64, 200, 255, 0.28)"
+</div>
+<p>支持的键：<code>card</code>、<code>cardForeground</code>、<code>popover</code>、<code>popoverForeground</code>、<code>primary</code>、<code>primaryForeground</code>、<code>secondary</code>、<code>secondaryForeground</code>、<code>muted</code>、<code>mutedForeground</code>、<code>accent</code>、<code>accentForeground</code>、<code>destructive</code>、<code>destructiveForeground</code>、<code>success</code>、<code>warning</code>、<code>border</code>、<code>input</code>、<code>ring</code>。</p>
+<p>每个键与 <code>--color-&lt;kebab&gt;</code> CSS 变量一一对应（例如 <code>primaryForeground</code> → <code>--color-primary-foreground</code>）。此处设置的任何键仅对当前激活主题生效，切换到其他主题时覆盖会被清除。</p>
+<h3>原始 <code>customCSS</code></h3>
+<p>对于 <code>componentStyles</code> 无法表达的选择器级外观——伪元素、动画、媒体查询、主题范围内的覆盖——可将原始 CSS 写入 <code>customCSS</code>：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+customCSS: |
+  /* Scanline overlay — only visible when cockpit variant is active. */
+  :root[data-layout-variant="cockpit"] body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 100;
+    background: repeating-linear-gradient(to bottom,
+      transparent 0px, transparent 2px,
+      rgba(64, 200, 255, 0.035) 3px, rgba(64, 200, 255, 0.035) 4px);
+    mix-blend-mode: screen;
+  }
+</div>
+<p>CSS 在主题应用时以单个带作用域的 <code>&lt;style data-hermes-theme-css&gt;</code> 标签注入，主题切换时清除。<strong>每个主题上限为 32 KiB。</strong></p>
+<h3>内置主题</h3>
+<p>每个内置主题都有自己的调色板、字体排版和布局——切换时产生的变化不仅限于颜色。</p>
+<table>
+<thead>
+<tr>
+<th>主题</th>
+<th>调色板</th>
+<th>字体排版</th>
+<th>布局</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Hermes Teal</strong>（<code>default</code>）</td>
+<td>深青色 + 奶油色</td>
+<td>系统字体栈，15px</td>
+<td>0.5rem 圆角，comfortable</td>
+</tr>
+<tr>
+<td><strong>Hermes Teal (Large)</strong>（<code>default-large</code>）</td>
+<td>同 default</td>
+<td>系统字体栈，18px，行高 1.65</td>
+<td>0.5rem 圆角，spacious</td>
+</tr>
+<tr>
+<td><strong>Midnight</strong>（<code>midnight</code>）</td>
+<td>深蓝紫色</td>
+<td>Inter + JetBrains Mono，14px</td>
+<td>0.75rem 圆角，comfortable</td>
+</tr>
+<tr>
+<td><strong>Ember</strong>（<code>ember</code>）</td>
+<td>暖深红 + 古铜色</td>
+<td>Spectral（衬线）+ IBM Plex Mono，15px</td>
+<td>0.25rem 圆角，comfortable</td>
+</tr>
+<tr>
+<td><strong>Mono</strong>（<code>mono</code>）</td>
+<td>灰度</td>
+<td>IBM Plex Sans + IBM Plex Mono，13px</td>
+<td>0 圆角，compact</td>
+</tr>
+<tr>
+<td><strong>Cyberpunk</strong>（<code>cyberpunk</code>）</td>
+<td>黑底霓虹绿</td>
+<td>Share Tech Mono 全局，14px</td>
+<td>0 圆角，compact</td>
+</tr>
+<tr>
+<td><strong>Rosé</strong>（<code>rose</code>）</td>
+<td>粉色 + 象牙色</td>
+<td>Fraunces（衬线）+ DM Mono，16px</td>
+<td>1rem 圆角，spacious</td>
+</tr>
+</tbody>
+</table>
+<p>引用 Google Fonts 的主题（除 Hermes Teal 外均如此）会按需加载样式表——首次切换时会向 <code>&lt;head&gt;</code> 注入一个 <code>&lt;link&gt;</code> 标签。</p>
+<h3>完整主题 YAML 参考</h3>
+<p>所有配置项汇总在一个文件中——复制后删除不需要的部分：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ~/.hermes/dashboard-themes/ocean.yaml
+name: ocean
+label: Ocean Deep
+description: Deep sea blues with coral accents
+
+# 3-layer palette (accepts {hex, alpha} or bare hex)
+palette:
+  background:
+    hex: "#0a1628"
+    alpha: 1.0
+  midground:
+    hex: "#a8d0ff"
+    alpha: 1.0
+  foreground:
+    hex: "#ffffff"
+    alpha: 0.0
+  warmGlow: "rgba(255, 107, 107, 0.35)"
+  noiseOpacity: 0.7
+
+typography:
+  fontSans: "Poppins, system-ui, sans-serif"
+  fontMono: "Fira Code, ui-monospace, monospace"
+  fontDisplay: "Poppins, system-ui, sans-serif"   # optional
+  fontUrl: "https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&amp;family=Fira+Code:wght@400;500&amp;display=swap"
+  baseSize: "15px"
+  lineHeight: "1.6"
+  letterSpacing: "-0.003em"
+
+layout:
+  radius: "0.75rem"
+  density: comfortable
+
+layoutVariant: standard        # standard | cockpit | tiled
+
+assets:
+  bg: "https://example.com/ocean-bg.jpg"
+  hero: "/my-images/kraken.png"
+  crest: "/my-images/anchor.svg"
+  logo: "/my-images/logo.png"
+  custom:
+    pattern: "/my-images/waves.svg"
+
+componentStyles:
+  card:
+    boxShadow: "inset 0 0 0 1px rgba(168, 208, 255, 0.18)"
+  header:
+    background: "linear-gradient(180deg, rgba(10, 22, 40, 0.95), rgba(5, 9, 26, 0.9))"
+
+colorOverrides:
+  destructive: "#ff6b6b"
+  ring: "#ff6b6b"
+
+customCSS: |
+  /* Any additional selector-level tweaks */
+</div>
+<p>创建文件后刷新 dashboard。通过顶栏的调色板图标实时切换主题。选择结果会持久化到 <code>config.yaml</code> 的 <code>dashboard.theme</code> 下，并在重载时恢复。</p>
+<hr />
+<h2>插件</h2>
+<p>Dashboard 插件是一个包含 <code>manifest.json</code>、预构建 JS bundle，以及可选的 CSS 文件和带 FastAPI 路由的 Python 文件的目录。插件与其他 Hermes 插件一起存放在 <code>~/.hermes/plugins/&lt;name&gt;/</code>——dashboard 扩展是该插件目录内的 <code>dashboard/</code> 子文件夹，因此一个插件可以从单次安装中同时扩展 CLI/gateway 和 dashboard。</p>
+<p>插件不打包 React 或 UI 组件，而是使用暴露在 <code>window.__HERMES_PLUGIN_SDK__</code> 上的 <strong>Plugin SDK</strong>。这使插件 bundle 保持极小体积（通常只有几 KB），并避免版本冲突。</p>
+<h3>快速上手——你的第一个插件</h3>
+<p>创建目录结构：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mkdir -p ~/.hermes/plugins/my-plugin/dashboard/dist
+</div>
+<p>编写 manifest：</p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+// ~/.hermes/plugins/my-plugin/dashboard/manifest.json
+{
+  "name": "my-plugin",
+  "label": "My Plugin",
+  "icon": "Sparkles",
+  "version": "1.0.0",
+  "tab": {
+    "path": "/my-plugin",
+    "position": "after:skills"
+  },
+  "entry": "dist/index.js"
+}
+</div>
+<p>编写 JS bundle（普通 IIFE——无需构建步骤）：</p>
+<div class="code-block"><span class="code-lang">javascript</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+// ~/.hermes/plugins/my-plugin/dashboard/dist/index.js
+(function () {
+  "use strict";
+
+  const SDK = window.__HERMES_PLUGIN_SDK__;
+  const { React } = SDK;
+  const { Card, CardHeader, CardTitle, CardContent } = SDK.components;
+
+  function MyPage() {
+    return React.createElement(Card, null,
+      React.createElement(CardHeader, null,
+        React.createElement(CardTitle, null, "My Plugin"),
+      ),
+      React.createElement(CardContent, null,
+        React.createElement("p", { className: "text-sm text-muted-foreground" },
+          "Hello from my custom dashboard tab.",
+        ),
+      ),
+    );
+  }
+
+  window.__HERMES_PLUGINS__.register("my-plugin", MyPage);
+})();
+</div>
+<p>刷新 dashboard——你的标签页出现在导航栏中，位于 <strong>Skills</strong> 之后。</p>
+<div class="tip"><strong>💡 跳过 React.createElement</strong>
+如果你偏好 JSX，可使用任意打包工具（esbuild、Vite、rollup），将 React 设为外部依赖并输出 IIFE 格式。唯一的硬性要求是最终文件是可通过 <code>&lt;script&gt;</code> 加载的单个 JS 文件。React 永远不会被打包进去；它来自 <code>SDK.React</code>。
+</div>
+<h3>目录结构</h3>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+~/.hermes/plugins/my-plugin/
+├── plugin.yaml              # optional — existing CLI/gateway plugin manifest
+├── __init__.py              # optional — existing CLI/gateway hooks
+└── dashboard/               # dashboard extension
+    ├── manifest.json        # required — tab config, icon, entry point
+    ├── dist/
+    │   ├── index.js         # required — pre-built JS bundle (IIFE)
+    │   └── style.css        # optional — custom CSS
+    └── plugin_api.py        # optional — backend API routes (FastAPI)
+</div>
+<p>单个插件目录可承载三个正交扩展：</p>
+<ul>
+<li><code>plugin.yaml</code> + <code>__init__.py</code> — CLI/gateway 插件（<a href="./plugins">参见插件页面</a>）。</li>
+<li><code>dashboard/manifest.json</code> + <code>dashboard/dist/index.js</code> — dashboard UI 插件。</li>
+<li><code>dashboard/plugin_api.py</code> — dashboard 后端路由。</li>
+</ul>
+<p>三者均非必须；按需包含所需层次即可。</p>
+<h3>Manifest 参考</h3>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{
+  "name": "my-plugin",
+  "label": "My Plugin",
+  "description": "What this plugin does",
+  "icon": "Sparkles",
+  "version": "1.0.0",
+  "tab": {
+    "path": "/my-plugin",
+    "position": "after:skills",
+    "override": "/",
+    "hidden": false
+  },
+  "slots": ["sidebar", "header-left"],
+  "entry": "dist/index.js",
+  "css": "dist/style.css",
+  "api": "plugin_api.py"
+}
+</div>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>必填</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>是</td>
+<td>唯一插件标识符。小写，可用连字符。用于 URL 和注册。</td>
+</tr>
+<tr>
+<td><code>label</code></td>
+<td>是</td>
+<td>导航标签页中显示的名称。</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>否</td>
+<td>简短描述（显示在 dashboard 管理界面）。</td>
+</tr>
+<tr>
+<td><code>icon</code></td>
+<td>否</td>
+<td>Lucide 图标名称。默认为 <code>Puzzle</code>。未知名称回退到 <code>Puzzle</code>。</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td>否</td>
+<td>Semver 字符串。默认为 <code>0.0.0</code>。</td>
+</tr>
+<tr>
+<td><code>tab.path</code></td>
+<td>是</td>
+<td>标签页的 URL 路径（例如 <code>/my-plugin</code>）。</td>
+</tr>
+<tr>
+<td><code>tab.position</code></td>
+<td>否</td>
+<td>标签页插入位置。<code>&quot;end&quot;</code>（默认）、<code>&quot;after:&lt;path&gt;&quot;</code> 或 <code>&quot;before:&lt;path&gt;&quot;</code>——冒号后的值是目标标签页的<strong>路径段</strong>（无前导斜杠）。例如：<code>&quot;after:skills&quot;</code>、<code>&quot;before:config&quot;</code>。</td>
+</tr>
+<tr>
+<td><code>tab.override</code></td>
+<td>否</td>
+<td>设置为内置路由路径（<code>&quot;/&quot;</code>、<code>&quot;/sessions&quot;</code>、<code>&quot;/config&quot;</code> 等）以<strong>替换</strong>该页面，而非添加新标签页。参见<a href="#replacing-built-in-pages-taboverride">替换内置页面</a>。</td>
+</tr>
+<tr>
+<td><code>tab.hidden</code></td>
+<td>否</td>
+<td>为 true 时，注册组件和所有插槽，但不向导航添加标签页。用于仅插槽插件。参见<a href="#slot-only-plugins-tabhidden">仅插槽插件</a>。</td>
+</tr>
+<tr>
+<td><code>slots</code></td>
+<td>否</td>
+<td>此插件填充的命名 shell 插槽。<strong>仅作文档说明</strong>——实际注册通过 JS bundle 中的 <code>registerSlot()</code> 完成。在此列出插槽可使发现界面更具信息量。</td>
+</tr>
+<tr>
+<td><code>entry</code></td>
+<td>是</td>
+<td>相对于 <code>dashboard/</code> 的 JS bundle 路径。默认为 <code>dist/index.js</code>。</td>
+</tr>
+<tr>
+<td><code>css</code></td>
+<td>否</td>
+<td>以 <code>&lt;link&gt;</code> 标签注入的 CSS 文件路径。</td>
+</tr>
+<tr>
+<td><code>api</code></td>
+<td>否</td>
+<td>包含 FastAPI 路由的 Python 文件路径。挂载在 <code>/api/plugins/&lt;name&gt;/</code>。</td>
+</tr>
+</tbody>
+</table>
+<h4>可用图标</h4>
+<p>插件使用 Lucide 图标名称。Dashboard 按名称映射——未知名称静默回退到 <code>Puzzle</code>。</p>
+<p>当前已映射：<code>Activity</code>、<code>BarChart3</code>、<code>Clock</code>、<code>Code</code>、<code>Database</code>、<code>Eye</code>、<code>FileText</code>、<code>Globe</code>、<code>Heart</code>、<code>KeyRound</code>、<code>MessageSquare</code>、<code>Package</code>、<code>Puzzle</code>、<code>Settings</code>、<code>Shield</code>、<code>Sparkles</code>、<code>Star</code>、<code>Terminal</code>、<code>Wrench</code>、<code>Zap</code>。</p>
+<p>需要其他图标？向 <code>web/src/App.tsx</code> 的 <code>ICON_MAP</code> 提交 PR——纯增量修改。</p>
+<h3>Plugin SDK</h3>
+<p>插件所需的一切均在 <code>window.__HERMES_PLUGIN_SDK__</code> 上。插件不应直接导入 React。</p>
+<div class="code-block"><span class="code-lang">javascript</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+const SDK = window.__HERMES_PLUGIN_SDK__;
+
+// React + hooks
+SDK.React                    // the React instance
+SDK.hooks.useState
+SDK.hooks.useEffect
+SDK.hooks.useCallback
+SDK.hooks.useMemo
+SDK.hooks.useRef
+SDK.hooks.useContext
+SDK.hooks.createContext
+
+// UI components (shadcn/ui primitives)
+SDK.components.Card
+SDK.components.CardHeader
+SDK.components.CardTitle
+SDK.components.CardContent
+SDK.components.Badge
+SDK.components.Button
+SDK.components.Input
+SDK.components.Label
+SDK.components.Select
+SDK.components.SelectOption
+SDK.components.Separator
+SDK.components.Tabs
+SDK.components.TabsList
+SDK.components.TabsTrigger
+SDK.components.PluginSlot    // render a named slot (useful for nested plugin UIs)
+
+// Hermes API client + raw fetcher
+SDK.api                      // typed client — getStatus, getSessions, getConfig, ...
+SDK.fetchJSON                // raw fetch for custom endpoints (plugin-registered routes)
+
+// Utilities
+SDK.utils.cn                 // Tailwind class merger (clsx + twMerge)
+SDK.utils.timeAgo            // "5m ago" from unix timestamp
+SDK.utils.isoTimeAgo         // "5m ago" from ISO string
+
+// Hooks
+SDK.useI18n                  // i18n hook for multi-language plugins
+</div>
+<h4>调用插件的后端</h4>
+<div class="code-block"><span class="code-lang">javascript</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+SDK.fetchJSON("/api/plugins/my-plugin/data")
+  .then((data) =&gt; console.log(data))
+  .catch((err) =&gt; console.error("API call failed:", err));
+</div>
+<p><code>fetchJSON</code> 会自动注入会话认证 token，将错误作为异常抛出，并自动解析 JSON。</p>
+<h4>调用内置 Hermes 端点</h4>
+<div class="code-block"><span class="code-lang">javascript</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+// Agent status
+SDK.api.getStatus().then((s) =&gt; console.log("Version:", s.version));
+
+// Recent sessions
+SDK.api.getSessions(10).then((resp) =&gt; console.log(resp.sessions.length));
+</div>
+<p>完整列表参见 <a href="./web-dashboard#rest-api">Web Dashboard → REST API</a>。</p>
+<h3>Shell 插槽</h3>
+<p>插槽（slot）允许插件向应用 shell 的命名位置注入组件——cockpit 侧边栏、顶栏、底栏、覆盖层——而无需占用整个标签页。多个插件可以填充同一个插槽；它们按注册顺序堆叠渲染。</p>
+<p>在插件 bundle 内部注册：</p>
+<div class="code-block"><span class="code-lang">javascript</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+window.__HERMES_PLUGINS__.registerSlot("my-plugin", "sidebar", MySidebar);
+window.__HERMES_PLUGINS__.registerSlot("my-plugin", "header-left", MyCrest);
+</div>
+<h4>插槽目录</h4>
+<p><strong>Shell 全局插槽</strong>（在应用外壳的任意位置渲染）：</p>
+<table>
+<thead>
+<tr>
+<th>插槽</th>
+<th>位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>backdrop</code></td>
+<td><code>&lt;Backdrop /&gt;</code> 层叠栈内，噪点层之上。</td>
+</tr>
+<tr>
+<td><code>header-left</code></td>
+<td>顶栏 Hermes 品牌之前。</td>
+</tr>
+<tr>
+<td><code>header-right</code></td>
+<td>顶栏主题/语言切换器之前。</td>
+</tr>
+<tr>
+<td><code>header-banner</code></td>
+<td>导航栏下方的全宽条带。</td>
+</tr>
+<tr>
+<td><code>sidebar</code></td>
+<td>Cockpit 侧边栏轨道——<strong>仅在 <code>layoutVariant === &quot;cockpit&quot;</code> 时渲染</strong>。</td>
+</tr>
+<tr>
+<td><code>pre-main</code></td>
+<td>路由出口之上（<code>&lt;main&gt;</code> 内部）。</td>
+</tr>
+<tr>
+<td><code>post-main</code></td>
+<td>路由出口之下（<code>&lt;main&gt;</code> 内部）。</td>
+</tr>
+<tr>
+<td><code>footer-left</code></td>
+<td>底栏单元格内容（替换默认内容）。</td>
+</tr>
+<tr>
+<td><code>footer-right</code></td>
+<td>底栏单元格内容（替换默认内容）。</td>
+</tr>
+<tr>
+<td><code>overlay</code></td>
+<td>位于所有内容之上的固定定位层。适用于 <code>customCSS</code> 无法单独实现的外观效果（扫描线、晕影等）。</td>
+</tr>
+</tbody>
+</table>
+<p><strong>页面级插槽</strong>（仅在指定内置页面上渲染——用于向现有页面注入小部件、卡片或工具栏，而无需覆盖整个路由）：</p>
+<table>
+<thead>
+<tr>
+<th>插槽</th>
+<th>渲染位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sessions:top</code> / <code>sessions:bottom</code></td>
+<td><code>/sessions</code> 页面顶部 / 底部。</td>
+</tr>
+<tr>
+<td><code>analytics:top</code> / <code>analytics:bottom</code></td>
+<td><code>/analytics</code> 页面顶部 / 底部。</td>
+</tr>
+<tr>
+<td><code>logs:top</code> / <code>logs:bottom</code></td>
+<td><code>/logs</code> 顶部（过滤工具栏之上）/ 底部（日志查看器之下）。</td>
+</tr>
+<tr>
+<td><code>cron:top</code> / <code>cron:bottom</code></td>
+<td><code>/cron</code> 页面顶部 / 底部。</td>
+</tr>
+<tr>
+<td><code>skills:top</code> / <code>skills:bottom</code></td>
+<td><code>/skills</code> 页面顶部 / 底部。</td>
+</tr>
+<tr>
+<td><code>config:top</code> / <code>config:bottom</code></td>
+<td><code>/config</code> 页面顶部 / 底部。</td>
+</tr>
+<tr>
+<td><code>env:top</code> / <code>env:bottom</code></td>
+<td><code>/env</code>（Keys）页面顶部 / 底部。</td>
+</tr>
+<tr>
+<td><code>docs:top</code> / <code>docs:bottom</code></td>
+<td><code>/docs</code> 顶部（iframe 之上）/ 底部。</td>
+</tr>
+<tr>
+<td><code>chat:top</code> / <code>chat:bottom</code></td>
+<td><code>/chat</code> 顶部 / 底部（仅在启用嵌入式聊天时有效）。</td>
+</tr>
+</tbody>
+</table>
+<p>示例——向 Sessions 页面顶部添加横幅卡片：</p>
+<div class="code-block"><span class="code-lang">javascript</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+function PinnedSessionsBanner() {
+  return React.createElement(Card, null,
+    React.createElement(CardContent, { className: "py-2 text-xs" },
+      "Pinned note injected by my-plugin"),
+  );
+}
+
+window.__HERMES_PLUGINS__.registerSlot("my-plugin", "sessions:top", PinnedSessionsBanner);
+</div>
+<p>如果插件只增强现有页面而不需要独立的侧边栏标签页，可将页面级插槽与 <code>tab.hidden: true</code> 结合使用。</p>
+<p>Shell 只为上述插槽渲染 <code>&lt;PluginSlot name=&quot;...&quot; /&gt;</code>。注册表接受额外的名称用于嵌套插件 UI——插件可通过 <code>SDK.components.PluginSlot</code> 暴露自己的插槽。</p>
+<h4>重复注册与 HMR</h4>
+<p>如果同一个 <code>(plugin, slot)</code> 对被注册两次，后一次调用会替换前一次——这与 React HMR 期望插件重新挂载时的行为一致。</p>
+<h3>替换内置页面（<code>tab.override</code>）</h3>
+<p>将 <code>tab.override</code> 设置为内置路由路径，可使插件组件替换该页面，而非添加新标签页。适用于主题希望自定义首页（<code>/</code>）但保留 dashboard 其余部分的场景。</p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{
+  "name": "my-home",
+  "label": "Home",
+  "tab": {
+    "path": "/my-home",
+    "override": "/",
+    "position": "end"
+  },
+  "entry": "dist/index.js"
+}
+</div>
+<p>设置 <code>override</code> 后：</p>
+<ul>
+<li>路由器中 <code>/</code> 处的原始页面组件被移除。</li>
+<li>你的插件改为在 <code>/</code> 处渲染。</li>
+<li>不会为 <code>tab.path</code> 添加导航标签页（覆盖本身才是目的）。</li>
+</ul>
+<p>每个路径只能有一个插件进行覆盖。如果两个插件声明相同的覆盖路径，第一个生效，第二个被忽略并在开发模式下输出警告。</p>
+<p>如果只需要向现有页面添加卡片或工具栏而不完全接管它，请改用<a href="#augmenting-built-in-pages-page-scoped-slots">页面级插槽</a>。</p>
+<h3>增强内置页面（页面级插槽）</h3>
+<p>通过 <code>tab.override</code> 完全替换页面代价较重——你的插件现在拥有整个页面，包括我们未来对其的所有更新。大多数情况下，你只是想向现有页面添加横幅、卡片或工具栏。这正是<strong>页面级插槽</strong>的用途。</p>
+<p>每个内置页面都在其内容区域的顶部和底部暴露 <code>&lt;page&gt;:top</code> 和 <code>&lt;page&gt;:bottom</code> 插槽。你的插件通过调用 <code>registerSlot()</code> 填充其中一个——内置页面正常工作，你的组件在其旁边渲染。</p>
+<p>可用插槽：<code>sessions:*</code>、<code>analytics:*</code>、<code>logs:*</code>、<code>cron:*</code>、<code>skills:*</code>、<code>config:*</code>、<code>env:*</code>、<code>docs:*</code>、<code>chat:*</code>（每个均有 <code>:top</code> 和 <code>:bottom</code>）。完整目录参见 <a href="#slot-catalogue">Shell 插槽 → 插槽目录</a>。</p>
+<p>最简示例——在 Sessions 页面顶部固定一个横幅：</p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+// ~/.hermes/plugins/session-notes/dashboard/manifest.json
+{
+  "name": "session-notes",
+  "label": "Session Notes",
+  "tab": { "path": "/session-notes", "hidden": true },
+  "slots": ["sessions:top"],
+  "entry": "dist/index.js"
+}
+</div>
+<div class="code-block"><span class="code-lang">javascript</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+// ~/.hermes/plugins/session-notes/dashboard/dist/index.js
+(function () {
+  const SDK = window.__HERMES_PLUGIN_SDK__;
+  const { React } = SDK;
+  const { Card, CardContent } = SDK.components;
+
+  function Banner() {
+    return React.createElement(Card, null,
+      React.createElement(CardContent, { className: "py-2 text-xs" },
+        "Remember to label important sessions before archiving."),
+    );
+  }
+
+  // Placeholder for the hidden tab.
+  window.__HERMES_PLUGINS__.register("session-notes", function () { return null; });
+
+  // The real work.
+  window.__HERMES_PLUGINS__.registerSlot("session-notes", "sessions:top", Banner);
+})();
+</div>
+<p>要点：</p>
+<ul>
+<li><code>tab.hidden: true</code> 使插件不出现在侧边栏——它没有独立页面。</li>
+<li>manifest 中的 <code>slots</code> 字段仅作文档说明。实际绑定通过 JS bundle 中的 <code>registerSlot()</code> 完成。</li>
+<li>多个插件可以声明同一个页面级插槽。它们按注册顺序堆叠渲染。</li>
+<li>无插件注册时零开销：内置页面与之前完全相同地渲染。</li>
+</ul>
+<p>参考插件（<a href="https://github.com/NousResearch/hermes-example-plugins/tree/main/example-dashboard"><code>hermes-example-plugins</code></a> 中的 <code>example-dashboard</code>）提供了一个向 <code>sessions:top</code> 注入横幅的实时演示——安装它可端到端了解该模式。</p>
+<h3>仅插槽插件（<code>tab.hidden</code>）</h3>
+<p>当 <code>tab.hidden: true</code> 时，插件注册其组件（用于直接 URL 访问）和所有插槽，但不向导航添加标签页。适用于仅用于注入插槽的插件——顶栏徽标、侧边栏 HUD、覆盖层。</p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{
+  "name": "header-crest",
+  "label": "Header Crest",
+  "tab": {
+    "path": "/header-crest",
+    "position": "end",
+    "hidden": true
+  },
+  "slots": ["header-left"],
+  "entry": "dist/index.js"
+}
+</div>
+<p>Bundle 仍需调用带占位符组件的 <code>register()</code>（以防有人直接访问该 URL），然后调用 <code>registerSlot()</code> 完成实际工作。</p>
+<h3>后端 API 路由</h3>
+<p>插件可通过在 manifest 中设置 <code>api</code> 来注册 FastAPI 路由。创建文件并导出 <code>router</code>：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# ~/.hermes/plugins/my-plugin/dashboard/plugin_api.py
+from fastapi import APIRouter
+
+router = APIRouter()
+
+@router.get("/data")
+async def get_data():
+    return {"items": ["one", "two", "three"]}
+
+@router.post("/action")
+async def do_action(body: dict):
+    return {"ok": True, "received": body}
+</div>
+<p>路由挂载在 <code>/api/plugins/&lt;name&gt;/</code> 下，因此上述路由变为：</p>
+<ul>
+<li><code>GET  /api/plugins/my-plugin/data</code></li>
+<li><code>POST /api/plugins/my-plugin/action</code></li>
+</ul>
+<p>插件 API 路由绕过会话 token 认证，因为 dashboard 服务器默认绑定到 localhost。<strong>如果运行不受信任的插件，请勿使用 <code>--host 0.0.0.0</code> 将 dashboard 暴露在公共接口上</strong>——其路由也会变得可访问。</p>
+<h4>访问 Hermes 内部模块</h4>
+<p>后端路由在 dashboard 进程内运行，因此可以直接从 hermes-agent 代码库导入：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from fastapi import APIRouter
+from hermes_state import SessionDB
+from hermes_cli.config import load_config
+
+router = APIRouter()
+
+@router.get("/session-count")
+async def session_count():
+    db = SessionDB()
+    try:
+        count = len(db.list_sessions(limit=9999))
+        return {"count": count}
+    finally:
+        db.close()
+
+@router.get("/config-snapshot")
+async def config_snapshot():
+    cfg = load_config()
+    return {"model": cfg.get("model", {})}
+</div>
+<h3>插件自定义 CSS</h3>
+<p>如果插件需要超出 Tailwind 类和内联 <code>style=</code> 的样式，可添加 CSS 文件并在 manifest 中引用：</p>
+<div class="code-block"><span class="code-lang">json</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{
+  "css": "dist/style.css"
+}
+</div>
+<p>文件在插件加载时以 <code>&lt;link&gt;</code> 标签注入。使用特定类名以避免与 dashboard 样式冲突，并引用 dashboard 的 CSS 变量以保持主题感知：</p>
+<div class="code-block"><span class="code-lang">css</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/* dist/style.css */
+.my-plugin-chart {
+  border: 1px solid var(--color-border);
+  background: var(--color-card);
+  color: var(--color-card-foreground);
+  padding: 1rem;
+}
+.my-plugin-chart:hover {
+  border-color: var(--color-ring);
+}
+</div>
+<p>Dashboard 将每个 shadcn token 暴露为 <code>--color-*</code>，以及主题额外变量（<code>--theme-asset-*</code>、<code>--component-&lt;bucket&gt;-*</code>、<code>--radius</code>、<code>--spacing-mul</code>）。引用这些变量后，你的插件会随激活主题自动换肤。</p>
+<h3>插件发现与重载</h3>
+<p>Dashboard 扫描三个目录中的 <code>dashboard/manifest.json</code>：</p>
+<table>
+<thead>
+<tr>
+<th>优先级</th>
+<th>目录</th>
+<th>来源标签</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1（冲突时优先）</td>
+<td><code>~/.hermes/plugins/&lt;name&gt;/dashboard/</code></td>
+<td><code>user</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>&lt;repo&gt;/plugins/memory/&lt;name&gt;/dashboard/</code></td>
+<td><code>bundled</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>&lt;repo&gt;/plugins/&lt;name&gt;/dashboard/</code></td>
+<td><code>bundled</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>./.hermes/plugins/&lt;name&gt;/dashboard/</code></td>
+<td><code>project</code>——仅在设置 <code>HERMES_ENABLE_PROJECT_PLUGINS</code> 时生效</td>
+</tr>
+</tbody>
+</table>
+<p>发现结果在每个 dashboard 进程中缓存。添加新插件后，可以：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Force a rescan without restart
+curl http://127.0.0.1:9119/api/dashboard/plugins/rescan
+</div>
+<p>……或重启 <code>hermes dashboard</code>。</p>
+<h4>插件加载生命周期</h4>
+<ol>
+<li>Dashboard 加载。<code>main.tsx</code> 在 <code>window.__HERMES_PLUGIN_SDK__</code> 上暴露 SDK，在 <code>window.__HERMES_PLUGINS__</code> 上暴露注册表。</li>
+<li><code>App.tsx</code> 调用 <code>usePlugins()</code> → 获取 <code>GET /api/dashboard/plugins</code>。</li>
+<li>对于每个 manifest：注入 CSS <code>&lt;link&gt;</code>（如已声明），然后通过 <code>&lt;script&gt;</code> 标签加载 JS bundle。</li>
+<li>插件的 IIFE 运行并调用 <code>window.__HERMES_PLUGINS__.register(name, Component)</code>——以及可选的 <code>.registerSlot(name, slot, Component)</code> 用于每个插槽。</li>
+<li>Dashboard 将注册的组件与 manifest 对应，将标签页添加到导航（除非 <code>hidden</code>），并将组件挂载为路由。</li>
+</ol>
+<p>插件在脚本加载后最多有 <strong>2 秒</strong>时间调用 <code>register()</code>。超时后 dashboard 停止等待并完成初始渲染。如果插件之后才注册，它仍会出现——导航是响应式的。</p>
+<p>如果插件脚本加载失败（404、语法错误、IIFE 执行期间抛出异常），dashboard 会向浏览器控制台输出警告并继续运行。</p>
+<hr />
+<h2>主题 + 插件组合演示</h2>
+<p><a href="https://github.com/NousResearch/hermes-example-plugins/tree/main/strike-freedom-cockpit"><code>strike-freedom-cockpit</code></a> 插件（伴随仓库 <code>hermes-example-plugins</code>）是一个完整的换肤演示。它将主题 YAML 与仅插槽插件配对，在不 fork dashboard 的情况下生成驾驶舱风格的 HUD。</p>
+<p><strong>演示内容：</strong></p>
+<ul>
+<li>完整主题，使用调色板、字体排版、<code>fontUrl</code>、<code>layoutVariant: cockpit</code>、<code>assets</code>、<code>componentStyles</code>（切角卡片、渐变背景）、<code>colorOverrides</code> 和 <code>customCSS</code>（扫描线叠加）。</li>
+<li>仅插槽插件（<code>tab.hidden: true</code>），注册到三个插槽：
+<ul>
+<li><code>sidebar</code> — 带有由 <code>SDK.api.getStatus()</code> 驱动的实时遥测条的 MS-STATUS 面板。</li>
+<li><code>header-left</code> — 从激活主题读取 <code>--theme-asset-crest</code> 的派系徽标。</li>
+<li><code>footer-right</code> — 替换默认组织行的自定义标语。</li>
+</ul>
+</li>
+<li>插件通过 CSS 变量读取主题提供的图片，因此切换主题可在不修改插件代码的情况下更换英雄图/徽标。</li>
+</ul>
+<p><strong>安装：</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+git clone https://github.com/NousResearch/hermes-example-plugins.git
+
+# Theme
+cp hermes-example-plugins/strike-freedom-cockpit/theme/strike-freedom.yaml \
+   ~/.hermes/dashboard-themes/
+
+# Plugin
+cp -r hermes-example-plugins/strike-freedom-cockpit ~/.hermes/plugins/
+</div>
+<p>打开 dashboard，从主题切换器中选择 <strong>Strike Freedom</strong>。驾驶舱侧边栏出现，徽标显示在顶栏，标语替换底栏。切换回 <strong>Hermes Teal</strong>，插件仍然安装但不可见（<code>sidebar</code> 插槽仅在 <code>cockpit</code> 布局变体下渲染）。</p>
+<p>阅读插件源码（伴随仓库中的 <code>strike-freedom-cockpit/dashboard/dist/index.js</code>），了解它如何读取 CSS 变量、防范不支持插槽的旧版 dashboard，以及如何从单个 bundle 注册三个插槽。</p>
+<hr />
+<h2>API 参考</h2>
+<h3>主题端点</h3>
+<table>
+<thead>
+<tr>
+<th>端点</th>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/api/dashboard/themes</code></td>
+<td>GET</td>
+<td>列出可用主题及当前激活名称。内置主题返回 <code>{name, label, description}</code>；用户主题还包含带有完整规范化主题对象的 <code>definition</code> 字段。</td>
+</tr>
+<tr>
+<td><code>/api/dashboard/theme</code></td>
+<td>PUT</td>
+<td>设置激活主题。请求体：<code>{&quot;name&quot;: &quot;midnight&quot;}</code>。持久化到 <code>config.yaml</code> 的 <code>dashboard.theme</code> 下。</td>
+</tr>
+</tbody>
+</table>
+<h3>插件端点</h3>
+<table>
+<thead>
+<tr>
+<th>端点</th>
+<th>方法</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/api/dashboard/plugins</code></td>
+<td>GET</td>
+<td>列出已发现的插件（含 manifest，去除内部字段）。</td>
+</tr>
+<tr>
+<td><code>/api/dashboard/plugins/rescan</code></td>
+<td>GET</td>
+<td>强制重新扫描插件目录，无需重启。</td>
+</tr>
+<tr>
+<td><code>/dashboard-plugins/&lt;name&gt;/&lt;path&gt;</code></td>
+<td>GET</td>
+<td>从插件的 <code>dashboard/</code> 目录提供静态资源。路径遍历已被阻止。</td>
+</tr>
+<tr>
+<td><code>/api/plugins/&lt;name&gt;/*</code></td>
+<td>*</td>
+<td>插件注册的后端路由。</td>
+</tr>
+</tbody>
+</table>
+<h3><code>window</code> 上的 SDK</h3>
+<table>
+<thead>
+<tr>
+<th>全局变量</th>
+<th>类型</th>
+<th>提供方</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>window.__HERMES_PLUGIN_SDK__</code></td>
+<td>object</td>
+<td><code>registry.ts</code> — React、hooks、UI 组件、API 客户端、工具函数。</td>
+</tr>
+<tr>
+<td><code>window.__HERMES_PLUGINS__.register(name, Component)</code></td>
+<td>function</td>
+<td>注册插件的主组件。</td>
+</tr>
+<tr>
+<td><code>window.__HERMES_PLUGINS__.registerSlot(name, slot, Component)</code></td>
+<td>function</td>
+<td>注册到命名 shell 插槽。</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>故障排查</h2>
+<p><strong>我的主题没有出现在选择器中。</strong>
+检查文件是否在 <code>~/.hermes/dashboard-themes/</code> 中且以 <code>.yaml</code> 或 <code>.yml</code> 结尾。刷新页面。运行 <code>curl http://127.0.0.1:9119/api/dashboard/themes</code>——你的主题应出现在响应中。如果 YAML 有解析错误，dashboard 会记录到 <code>~/.hermes/logs/</code> 下的 <code>errors.log</code>。</p>
+<p><strong>我的插件标签页没有显示。</strong></p>
+<ol>
+<li>检查 manifest 是否在 <code>~/.hermes/plugins/&lt;name&gt;/dashboard/manifest.json</code>（注意 <code>dashboard/</code> 子目录）。</li>
+<li>运行 <code>curl http://127.0.0.1:9119/api/dashboard/plugins/rescan</code> 强制重新发现。</li>
+<li>打开浏览器开发工具 → Network——确认 <code>manifest.json</code>、<code>index.js</code> 和任何 CSS 均无 404 加载成功。</li>
+<li>打开浏览器开发工具 → Console——查找 IIFE 执行期间的错误或 <code>window.__HERMES_PLUGINS__ is undefined</code>（表示 SDK 未初始化，通常是更早的 React 渲染崩溃导致）。</li>
+<li>验证你的 bundle 以与 <code>manifest.json:name</code> <strong>相同的名称</strong>调用 <code>window.__HERMES_PLUGINS__.register(...)</code>。</li>
+</ol>
+<p><strong>插槽注册的组件没有渲染。</strong>
+<code>sidebar</code> 插槽仅在激活主题设置了 <code>layoutVariant: cockpit</code> 时渲染。其他插槽始终渲染。如果你注册到某个插槽但没有命中，在 <code>registerSlot</code> 内添加 <code>console.log</code> 以确认插件 bundle 是否已运行。</p>
+<p><strong>插件后端路由返回 404。</strong></p>
+<ol>
+<li>确认 manifest 中有 <code>&quot;api&quot;: &quot;plugin_api.py&quot;</code> 且指向 <code>dashboard/</code> 内的现有文件。</li>
+<li>重启 <code>hermes dashboard</code>——插件 API 路由在启动时挂载一次，<strong>不会</strong>在重新扫描时挂载。</li>
+<li>检查 <code>plugin_api.py</code> 是否导出了模块级的 <code>router = APIRouter()</code>。其他导出名称不会被识别。</li>
+<li>查看 <code>~/.hermes/logs/errors.log</code> 中的 <code>Failed to load plugin &lt;name&gt; API routes</code>——导入错误会记录在那里。</li>
+</ol>
+<p><strong>切换主题后我的颜色覆盖丢失了。</strong>
+<code>colorOverrides</code> 的作用域限于激活主题，切换主题时会被清除——这是设计行为。如果你希望覆盖持久化，请将其写入主题的 YAML，而非实时切换器。</p>
+<p><strong>主题 customCSS 被截断了。</strong>
+<code>customCSS</code> 块每个主题上限为 32 KiB。可将大型样式表拆分到多个主题中，或改用通过 <code>css</code> 字段注入完整样式表的插件（无大小限制）。</p>
+<p><strong>我想在 PyPI 上发布插件。</strong>
+Dashboard 插件通过目录结构安装，而非 pip 入口点。目前最简洁的分发方式是用户克隆到 <code>~/.hermes/plugins/</code> 的 git 仓库。基于 pip 的 dashboard 插件安装器目前尚未实现。</p>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

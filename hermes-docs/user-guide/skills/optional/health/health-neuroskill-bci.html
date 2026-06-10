@@ -1,0 +1,659 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neuroskill Bci - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Neuroskill Bci</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Neuroskill Bci</h1>
+<p>连接到运行中的 NeuroSkill 实例，将用户的实时认知与情绪状态（专注度、放松度、情绪、认知负荷、困倦度、心率、HRV、睡眠分期及 40+ 项衍生 EXG 评分）融入响应中。需要 BCI 可穿戴设备（Muse 2/S 或 OpenBCI）以及在本地运行的 NeuroSkill 桌面应用。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/health/neuroskill-bci</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/health/neuroskill-bci</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Hermes Agent + Nous Research</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>BCI</code>, <code>neurofeedback</code>, <code>health</code>, <code>focus</code>, <code>EEG</code>, <code>cognitive-state</code>, <code>biometrics</code>, <code>neuroskill</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>NeuroSkill BCI 集成</h1>
+<p>将 Hermes 连接到运行中的 <a href="https://neuroskill.com/">NeuroSkill</a> 实例，从 BCI 可穿戴设备读取实时脑部与身体指标。用于提供具有认知感知能力的响应、建议干预措施，并随时间追踪心理表现。</p>
+<blockquote>
+<p><strong>⚠️ 仅供研究使用</strong> — NeuroSkill 是一款开源研究工具。它<strong>不是</strong>医疗设备，<strong>未</strong>经 FDA、CE 或任何监管机构批准。切勿将这些指标用于临床诊断或治疗。</p>
+</blockquote>
+<p>完整指标参考见 <code>references/metrics.md</code>，干预协议见 <code>references/protocols.md</code>，WebSocket/HTTP API 见 <code>references/api.md</code>。</p>
+<hr />
+<h2>前提条件</h2>
+<ul>
+<li>已安装 <strong>Node.js 20+</strong>（<code>node --version</code>）</li>
+<li><strong>NeuroSkill 桌面应用</strong>正在运行，且已连接 BCI 设备</li>
+<li><strong>BCI 硬件</strong>：Muse 2、Muse S 或 OpenBCI（通过 BLE 连接的 4 通道 EEG + PPG + IMU）</li>
+<li><code>npx neuroskill status</code> 无错误返回数据</li>
+</ul>
+<h3>验证设置</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+node --version                    # Must be 20+
+npx neuroskill status             # Full system snapshot
+npx neuroskill status --json      # Machine-parseable JSON
+</div>
+<p>如果 <code>npx neuroskill status</code> 返回错误，请告知用户：</p>
+<ul>
+<li>确保 NeuroSkill 桌面应用已打开</li>
+<li>确保 BCI 设备已开机并通过蓝牙连接</li>
+<li>检查信号质量 — NeuroSkill 中显示绿色指示（每个电极 ≥0.7）</li>
+<li>如提示 <code>command not found</code>，请安装 Node.js 20+</li>
+</ul>
+<hr />
+<h2>CLI 参考：<code>npx neuroskill &lt;command&gt;</code></h2>
+<p>所有命令均支持 <code>--json</code>（原始 JSON，适合管道传输）和 <code>--full</code>（人类可读摘要 + JSON）。</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>status</code></td>
+<td>完整系统快照：设备、评分、频段、比率、睡眠、历史记录</td>
+</tr>
+<tr>
+<td><code>session [N]</code></td>
+<td>单次会话详情，含前半段/后半段趋势（0=最近一次）</td>
+</tr>
+<tr>
+<td><code>sessions</code></td>
+<td>列出所有日期的所有已记录会话</td>
+</tr>
+<tr>
+<td><code>search</code></td>
+<td>基于 ANN 的神经相似历史时刻搜索</td>
+</tr>
+<tr>
+<td><code>compare</code></td>
+<td>A/B 会话对比，含指标差值与趋势分析</td>
+</tr>
+<tr>
+<td><code>sleep [N]</code></td>
+<td>睡眠分期分类（Wake/N1/N2/N3/REM）及分析</td>
+</tr>
+<tr>
+<td><code>label &quot;text&quot;</code></td>
+<td>在当前时刻创建带时间戳的注释</td>
+</tr>
+<tr>
+<td><code>search-labels &quot;query&quot;</code></td>
+<td>对历史标签进行语义向量搜索</td>
+</tr>
+<tr>
+<td><code>interactive &quot;query&quot;</code></td>
+<td>跨模态 4 层图搜索（文本 → EXG → 标签）</td>
+</tr>
+<tr>
+<td><code>listen</code></td>
+<td>实时事件流（默认 5 秒，可通过 <code>--seconds N</code> 设置）</td>
+</tr>
+<tr>
+<td><code>umap</code></td>
+<td>会话嵌入的 3D UMAP 投影</td>
+</tr>
+<tr>
+<td><code>calibrate</code></td>
+<td>打开校准窗口并启动配置文件</td>
+</tr>
+<tr>
+<td><code>timer</code></td>
+<td>启动专注计时器（Pomodoro/深度工作/短时专注预设）</td>
+</tr>
+<tr>
+<td><code>notify &quot;title&quot; &quot;body&quot;</code></td>
+<td>通过 NeuroSkill 应用发送系统通知</td>
+</tr>
+<tr>
+<td><code>raw '{json}'</code></td>
+<td>原始 JSON 直通至服务器</td>
+</tr>
+</tbody>
+</table>
+<h3>全局标志</h3>
+<table>
+<thead>
+<tr>
+<th>标志</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--json</code></td>
+<td>原始 JSON 输出（无 ANSI，适合管道传输）</td>
+</tr>
+<tr>
+<td><code>--full</code></td>
+<td>人类可读摘要 + 彩色 JSON</td>
+</tr>
+<tr>
+<td><code>--port &lt;N&gt;</code></td>
+<td>覆盖服务器端口（默认：自动发现，通常为 8375）</td>
+</tr>
+<tr>
+<td><code>--ws</code></td>
+<td>强制使用 WebSocket 传输</td>
+</tr>
+<tr>
+<td><code>--http</code></td>
+<td>强制使用 HTTP 传输</td>
+</tr>
+<tr>
+<td><code>--k &lt;N&gt;</code></td>
+<td>最近邻数量（search、search-labels）</td>
+</tr>
+<tr>
+<td><code>--seconds &lt;N&gt;</code></td>
+<td>listen 持续时长（默认：5）</td>
+</tr>
+<tr>
+<td><code>--trends</code></td>
+<td>显示每会话指标趋势（sessions）</td>
+</tr>
+<tr>
+<td><code>--dot</code></td>
+<td>Graphviz DOT 输出（interactive）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>1. 检查当前状态</h2>
+<h3>获取实时指标</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+npx neuroskill status --json
+</div>
+<p><strong>始终使用 <code>--json</code></strong> 以确保可靠解析。默认输出为带颜色的人类可读文本。</p>
+<h3>响应中的关键字段</h3>
+<p><code>scores</code> 对象包含所有实时指标（除特别说明外，均为 0–1 范围）：</p>
+<div class="code-block"><span class="code-lang">jsonc</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+{
+  "scores": {
+    "focus": 0.70,           // β / (α + θ) — 持续注意力
+    "relaxation": 0.40,      // α / (β + θ) — 平静清醒状态
+    "engagement": 0.60,      // 主动心理投入
+    "meditation": 0.52,      // alpha + 静止 + HRV 相干性
+    "mood": 0.55,            // 由 FAA、TAR、BAR 综合计算
+    "cognitive_load": 0.33,  // 额叶 θ / 颞叶 α · f(FAA, TBR)
+    "drowsiness": 0.10,      // TAR + TBR + 频谱质心下降
+    "hr": 68.2,              // 心率（bpm，来自 PPG）
+    "snr": 14.3,             // 信噪比（dB）
+    "stillness": 0.88,       // 0–1；1 = 完全静止
+    "faa": 0.042,            // 额叶 Alpha 不对称性（正值 = 趋近动机）
+    "tar": 0.56,             // Theta/Alpha 比率
+    "bar": 0.53,             // Beta/Alpha 比率
+    "tbr": 1.06,             // Theta/Beta 比率（ADHD 代理指标）
+    "apf": 10.1,             // Alpha 峰值频率（Hz）
+    "coherence": 0.614,      // 半球间相干性
+    "bands": {
+      "rel_delta": 0.28, "rel_theta": 0.18,
+      "rel_alpha": 0.32, "rel_beta": 0.17, "rel_gamma": 0.05
+    }
+  }
+}
+</div>
+<p>还包括：<code>device</code>（状态、电量、固件）、<code>signal_quality</code>（每电极 0–1）、<code>session</code>（时长、epoch 数）、<code>embeddings</code>、<code>labels</code>、<code>sleep</code> 摘要及 <code>history</code>。</p>
+<h3>解读输出</h3>
+<p>解析 JSON 并将指标转化为自然语言。切勿单独报告原始数字 — 始终赋予其含义：</p>
+<p><strong>应该这样做：</strong></p>
+<blockquote>
+<p>&quot;您目前的专注度相当不错，达到 0.70 — 这已进入心流状态区间。心率稳定在 68 bpm，FAA 为正值，表明趋近动机良好。现在是处理复杂任务的好时机。&quot;</p>
+</blockquote>
+<p><strong>不应该这样做：</strong></p>
+<blockquote>
+<p>&quot;专注度：0.70，放松度：0.40，心率：68&quot;</p>
+</blockquote>
+<p>关键解读阈值（完整指南见 <code>references/metrics.md</code>）：</p>
+<ul>
+<li><strong>专注度 &gt; 0.70</strong> → 心流状态区间，注意保护</li>
+<li><strong>专注度 &amp;lt; 0.40</strong> → 建议休息或执行协议</li>
+<li><strong>困倦度 &gt; 0.60</strong> → 疲劳警告，存在微睡眠风险</li>
+<li><strong>放松度 &amp;lt; 0.30</strong> → 需要压力干预</li>
+<li><strong>认知负荷 &gt; 0.70 持续</strong> → 建议思维倾倒或休息</li>
+<li><strong>TBR &gt; 1.5</strong> → theta 主导，执行控制减弱</li>
+<li><strong>FAA &amp;lt; 0</strong> → 回避/负面情绪 — 考虑 FAA 再平衡</li>
+<li><strong>SNR &amp;lt; 3 dB</strong> → 信号不可靠，建议重新定位电极</li>
+</ul>
+<hr />
+<h2>2. 会话分析</h2>
+<h3>单次会话详情</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+npx neuroskill session --json         # most recent session
+npx neuroskill session 1 --json       # previous session
+npx neuroskill session 0 --json | jq '{focus: .metrics.focus, trend: .trends.focus}'
+</div>
+<p>返回完整指标及<strong>前半段与后半段趋势</strong>（<code>&quot;up&quot;</code>、<code>&quot;down&quot;</code>、<code>&quot;flat&quot;</code>）。用于描述会话的演变过程：</p>
+<blockquote>
+<p>&quot;您的专注度从 0.64 开始，到结束时上升至 0.76 — 呈明显上升趋势。认知负荷从 0.38 降至 0.28，表明随着您逐渐进入状态，任务变得更加自动化。&quot;</p>
+</blockquote>
+<h3>列出所有会话</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+npx neuroskill sessions --json
+npx neuroskill sessions --trends      # show per-session metric trends
+</div>
+<hr />
+<h2>3. 历史搜索</h2>
+<h3>神经相似性搜索</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+npx neuroskill search --json                    # auto: last session, k=5
+npx neuroskill search --k 10 --json             # 10 nearest neighbors
+npx neuroskill search --start &lt;UTC&gt; --end &lt;UTC&gt; --json
+</div>
+<p>使用基于 128 维 ZUNA 嵌入的 HNSW 近似最近邻搜索，在历史记录中查找神经状态相似的时刻。返回距离统计、时间分布（一天中的小时）及最匹配的日期。</p>
+<p>在用户提问以下问题时使用：</p>
+<ul>
+<li>&quot;我上次处于这种状态是什么时候？&quot;</li>
+<li>&quot;找出我最佳的专注会话&quot;</li>
+<li>&quot;我通常在下午什么时候状态下滑？&quot;</li>
+</ul>
+<h3>语义标签搜索</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+npx neuroskill search-labels "deep focus" --k 10 --json
+npx neuroskill search-labels "stress" --json | jq '[.results[].EXG_metrics.tbr]'
+</div>
+<p>使用向量嵌入（Xenova/bge-small-en-v1.5）搜索标签文本。返回匹配标签及其标注时刻的关联 EXG 指标。</p>
+<h3>跨模态图搜索</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+npx neuroskill interactive "deep focus" --json
+npx neuroskill interactive "deep focus" --dot | dot -Tsvg &gt; graph.svg
+</div>
+<p>4 层图：查询 → 文本标签 → EXG 点 → 附近标签。使用 <code>--k-text</code>、<code>--k-EXG</code>、<code>--reach &lt;minutes&gt;</code> 进行调整。</p>
+<hr />
+<h2>4. 会话对比</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+npx neuroskill compare --json                   # auto: last 2 sessions
+npx neuroskill compare --a-start &lt;UTC&gt; --a-end &lt;UTC&gt; --b-start &lt;UTC&gt; --b-end &lt;UTC&gt; --json
+</div>
+<p>返回约 50 项指标的差值，包含绝对变化量、百分比变化及方向。还包括 <code>insights.improved[]</code> 和 <code>insights.declined[]</code> 数组、两次会话的睡眠分期及 UMAP 任务 ID。</p>
+<p>解读对比时需结合上下文 — 强调趋势而非单纯数字：</p>
+<blockquote>
+<p>&quot;昨天您有两个强专注时段（上午 10 点和下午 2 点）。今天从上午 11 点左右开始了一个仍在持续的专注时段。您今天的整体投入度更高，但压力峰值更多 — 压力指数上升了 15%，FAA 更频繁地出现负值。&quot;</p>
+</blockquote>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Sort metrics by improvement percentage
+npx neuroskill compare --json | jq '.insights.deltas | to_entries | sort_by(.value.pct) | reverse'
+</div>
+<hr />
+<h2>5. 睡眠数据</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+npx neuroskill sleep --json                     # last 24 hours
+npx neuroskill sleep 0 --json                   # most recent sleep session
+npx neuroskill sleep --start &lt;UTC&gt; --end &lt;UTC&gt; --json
+</div>
+<p>返回逐 epoch 的睡眠分期（5 秒窗口）及分析：</p>
+<ul>
+<li><strong>分期代码</strong>：0=清醒，1=N1，2=N2，3=N3（深睡），4=REM</li>
+<li><strong>分析</strong>：efficiency_pct、onset_latency_min、rem_latency_min、bout 计数</li>
+<li><strong>健康目标</strong>：N3 占 15–25%，REM 占 20–25%，效率 &gt;85%，入睡潜伏期 &amp;lt;20 分钟</li>
+</ul>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+npx neuroskill sleep --json | jq '.summary | {n3: .n3_epochs, rem: .rem_epochs}'
+npx neuroskill sleep --json | jq '.analysis.efficiency_pct'
+</div>
+<p>当用户提及睡眠、疲倦或恢复时使用此命令。</p>
+<hr />
+<h2>6. 标注时刻</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+npx neuroskill label "breakthrough"
+npx neuroskill label "studying algorithms"
+npx neuroskill label "post-meditation"
+npx neuroskill label --json "focus block start"   # returns label_id
+</div>
+<p>在以下情况下自动标注时刻：</p>
+<ul>
+<li>用户报告突破或洞见</li>
+<li>用户开始新的任务类型（例如&quot;切换到代码审查&quot;）</li>
+<li>用户完成重要协议</li>
+<li>用户要求标记当前时刻</li>
+<li>发生显著的状态转变（进入/离开心流）</li>
+</ul>
+<p>标签存储在数据库中，并通过 <code>search-labels</code> 和 <code>interactive</code> 命令建立索引以供后续检索。</p>
+<hr />
+<h2>7. 实时流式传输</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+npx neuroskill listen --seconds 30 --json
+npx neuroskill listen --seconds 5 --json | jq '[.[] | select(.event == "scores")]'
+</div>
+<p>在指定时长内流式传输实时 WebSocket 事件（EXG、PPG、IMU、评分、标签）。需要 WebSocket 连接（<code>--http</code> 模式下不可用）。</p>
+<p>适用于持续监控场景，或在协议执行期间实时观察指标变化。</p>
+<hr />
+<h2>8. UMAP 可视化</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+npx neuroskill umap --json                      # auto: last 2 sessions
+npx neuroskill umap --a-start &lt;UTC&gt; --a-end &lt;UTC&gt; --b-start &lt;UTC&gt; --b-end &lt;UTC&gt; --json
+</div>
+<p>对 ZUNA 嵌入进行 GPU 加速的 3D UMAP 投影。<code>separation_score</code> 表示两次会话在神经层面的差异程度：</p>
+<ul>
+<li><strong>&gt; 1.5</strong> → 会话在神经层面存在显著差异（不同脑状态）</li>
+<li><strong>&amp;lt; 0.5</strong> → 两次会话的脑状态相似</li>
+</ul>
+<hr />
+<h2>9. 主动状态感知</h2>
+<h3>会话开始检查</h3>
+<p>在会话开始时，如果用户提到正在佩戴设备或询问自身状态，可选择性地执行状态检查：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+npx neuroskill status --json
+</div>
+<p>注入简短的状态摘要：</p>
+<blockquote>
+<p>&quot;快速检查：专注度正在上升至 0.62，放松度良好为 0.55，FAA 为正值 — 趋近动机已激活。看起来是个不错的开始。&quot;</p>
+</blockquote>
+<h3>何时主动提及状态</h3>
+<p><strong>仅在以下情况下</strong>提及认知状态：</p>
+<ul>
+<li>用户明确询问（&quot;我状态怎么样？&quot;、&quot;检查一下我的专注度&quot;）</li>
+<li>用户反映难以集中注意力、感到压力或疲劳</li>
+<li>超过关键阈值（困倦度 &gt; 0.70，专注度 &amp;lt; 0.30 持续）</li>
+<li>用户即将进行认知要求较高的任务并询问准备情况</li>
+</ul>
+<p><strong>切勿</strong>打断心流状态来报告指标。如果专注度 &gt; 0.75，请保护该会话 — 沉默是正确的响应。</p>
+<hr />
+<h2>10. 建议协议</h2>
+<p>当指标表明有需要时，从 <code>references/protocols.md</code> 中建议相应协议。始终在开始前征得同意 — 切勿打断心流状态：</p>
+<blockquote>
+<p>&quot;您的专注度在过去 15 分钟持续下降，TBR 已超过 1.5 — 这是 theta 主导和心理疲劳的迹象。需要我带您做一个 Theta-Beta 神经反馈锚定练习吗？这是一个 90 秒的练习，通过有节奏的计数和呼吸来抑制 theta 并提升 beta。&quot;</p>
+</blockquote>
+<p>关键触发条件：</p>
+<ul>
+<li><strong>专注度 &amp;lt; 0.40，TBR &gt; 1.5</strong> → Theta-Beta 神经反馈锚定或箱式呼吸</li>
+<li><strong>放松度 &amp;lt; 0.30，stress_index 高</strong> → 心脏相干性或 4-7-8 呼吸法</li>
+<li><strong>认知负荷 &gt; 0.70 持续</strong> → 认知负荷卸载（思维倾倒）</li>
+<li><strong>困倦度 &gt; 0.60</strong> → 超日节律重置或清醒重置</li>
+<li><strong>FAA &amp;lt; 0（负值）</strong> → FAA 再平衡</li>
+<li><strong>心流状态（专注度 &gt; 0.75，投入度 &gt; 0.70）</strong> → 切勿打断</li>
+<li><strong>高静止度 + headache_index</strong> → 颈部放松序列</li>
+<li><strong>低 RMSSD（&amp;lt; 25ms）</strong> → 迷走神经调节</li>
+</ul>
+<hr />
+<h2>11. 附加工具</h2>
+<h3>专注计时器</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+npx neuroskill timer --json
+</div>
+启动专注计时器窗口，提供 Pomodoro（25/5）、深度工作（50/10）或短时专注（15/5）预设。
+<h3>校准</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+npx neuroskill calibrate
+npx neuroskill calibrate --profile "Eyes Open"
+</div>
+打开校准窗口。适用于信号质量较差或用户希望建立个性化基线时。
+<h3>系统通知</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+npx neuroskill notify "Break Time" "Your focus has been declining for 20 minutes"
+</div>
+<h3>原始 JSON 直通</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+npx neuroskill raw '{"command":"status"}' --json
+</div>
+用于尚未映射到 CLI 子命令的任何服务器命令。
+<hr />
+<h2>错误处理</h2>
+<table>
+<thead>
+<tr>
+<th>错误</th>
+<th>可能原因</th>
+<th>解决方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>npx neuroskill status</code> 挂起</td>
+<td>NeuroSkill 应用未运行</td>
+<td>打开 NeuroSkill 桌面应用</td>
+</tr>
+<tr>
+<td><code>device.state: &quot;disconnected&quot;</code></td>
+<td>BCI 设备未连接</td>
+<td>检查蓝牙及设备电量</td>
+</tr>
+<tr>
+<td>所有评分返回 0</td>
+<td>电极接触不良</td>
+<td>重新定位头带，润湿电极</td>
+</tr>
+<tr>
+<td><code>signal_quality</code> 值 &amp;lt; 0.7</td>
+<td>电极松动</td>
+<td>调整佩戴位置，清洁电极触点</td>
+</tr>
+<tr>
+<td>SNR &amp;lt; 3 dB</td>
+<td>信号噪声过大</td>
+<td>减少头部移动，检查环境干扰</td>
+</tr>
+<tr>
+<td><code>command not found: npx</code></td>
+<td>未安装 Node.js</td>
+<td>安装 Node.js 20+</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>交互示例</h2>
+<p><strong>&quot;我现在状态怎么样？&quot;</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+npx neuroskill status --json
+</div>
+→ 自然地解读评分，提及专注度、放松度、情绪及任何值得关注的比率（FAA、TBR）。仅在指标表明有需要时才建议采取行动。
+<p><strong>&quot;我无法集中注意力&quot;</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+npx neuroskill status --json
+</div>
+→ 检查指标是否印证（高 theta、低 beta、TBR 上升、困倦度高）。
+→ 如果得到印证，从 `references/protocols.md` 中建议适当的协议。
+→ 如果指标看起来正常，问题可能是动机层面而非神经层面。
+<p><strong>&quot;对比我今天和昨天的专注度&quot;</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+npx neuroskill compare --json
+</div>
+→ 解读趋势而非单纯数字。提及哪些方面有所改善、哪些有所下降，以及可能的原因。
+<p><strong>&quot;我上次处于心流状态是什么时候？&quot;</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+npx neuroskill search-labels "flow" --json
+npx neuroskill search --json
+</div>
+→ 报告时间戳、关联指标及用户当时正在做的事情（来自标签）。
+<p><strong>&quot;我睡得怎么样？&quot;</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+npx neuroskill sleep --json
+</div>
+→ 报告睡眠结构（N3%、REM%、效率），与健康目标对比，并指出任何问题（清醒 epoch 过多、REM 不足）。
+<p><strong>&quot;标记这个时刻 — 我刚有了一个突破&quot;</strong></p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+npx neuroskill label "breakthrough"
+</div>
+→ 确认标签已保存。可选择性地记录当前指标以留存该状态的记忆。
+<hr />
+<h2>参考资料</h2>
+<ul>
+<li><a href="https://arxiv.org/abs/2603.03212">NeuroSkill 论文 — arXiv:2603.03212</a>（Kosmyna &amp; Hauptmann，MIT Media Lab）</li>
+<li><a href="https://github.com/NeuroSkill-com/skill">NeuroSkill 桌面应用</a>（GPLv3）</li>
+<li><a href="https://github.com/NeuroSkill-com/neuroloop">NeuroLoop CLI 伴侣</a>（GPLv3）</li>
+<li><a href="https://www.media.mit.edu/projects/neuroskill/overview/">MIT Media Lab 项目</a></li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

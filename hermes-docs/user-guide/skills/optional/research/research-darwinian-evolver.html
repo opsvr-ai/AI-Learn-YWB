@@ -1,0 +1,380 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Darwinian Evolver — 使用 Imbue 的进化循环来优化 prompt/正则/SQL/代码 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Darwinian Evolver — 使用 Imbue 的进化循环来优化 prompt/正则/SQL/代码</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Darwinian Evolver</h1>
+<p>使用 Imbue 的进化循环来优化 prompt（提示词）/正则/SQL/代码。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/research/darwinian-evolver</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/research/darwinian-evolver</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>0.1.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Bihruze (Asahi0x), Hermes Agent</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>evolution</code>, <code>optimization</code>, <code>prompt-engineering</code>, <code>research</code></td>
+</tr>
+<tr>
+<td>相关 skill</td>
+<td><a href="/user-guide/skills/bundled/research/research-arxiv"><code>arxiv</code></a>, <a href="/user-guide/skills/bundled/data-science/data-science-jupyter-live-kernel"><code>jupyter-live-kernel</code></a></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 skill 激活时 agent 所看到的指令内容。
+</div>
+<h1>Darwinian Evolver</h1>
+<p>运行 Imbue 的 <a href="https://github.com/imbue-ai/darwinian_evolver">darwinian_evolver</a> —— 一个
+由 LLM 驱动的进化搜索循环 —— 用于针对适应度函数优化 <strong>prompt、正则表达式、SQL 查询
+或小型代码片段</strong>。</p>
+<p>状态：对上游工具的轻量封装。该 skill 负责安装工具，引导 agent 编写 <code>Problem</code> 定义
+（organism + evaluator + mutator），并通过上游 CLI 或一个小型自定义 Python 驱动脚本来运行循环。</p>
+<p><strong>许可证：</strong> 上游工具采用 <strong>AGPL-3.0</strong> 授权。该 skill 仅通过上游 CLI 或 <code>subprocess</code>/<code>uv run</code>
+调用来调用它（纯聚合方式）。<strong>不得</strong>将上游类导入 Hermes 本身。</p>
+<h2>使用时机</h2>
+<ul>
+<li>用户说&quot;优化这个 prompt&quot;、&quot;为 X 进化一个正则&quot;、&quot;自动改进这段代码/SQL&quot;、&quot;搜索更好的指令&quot;。</li>
+<li>你有一个评分器（精确匹配、正则通过率、单元测试、LLM 评判、运行时指标）以及一个起始候选（organism）。如果没有评分器，请先定义一个 —— 这才是难点所在。</li>
+<li>成本可接受：一次典型运行需要 50–500 次 LLM 调用。使用 gpt-4o-mini 只需几美分；使用 Claude Sonnet 可能需要几美元。</li>
+</ul>
+<p><strong>不适用</strong>的情况：</p>
+<ul>
+<li>优化目标可微分（请使用梯度下降 / DSPy）。</li>
+<li>只需尝试 2–3 个变体 —— 直接手写即可。</li>
+<li>适应度信号纯粹主观，没有可量化的标准。</li>
+</ul>
+<h2>前置条件</h2>
+<ul>
+<li>Python ≥3.11</li>
+<li><code>git</code>、<code>uv</code>（或 <code>pip</code>）</li>
+<li>以下之一：<code>OPENROUTER_API_KEY</code>、<code>ANTHROPIC_API_KEY</code> 或 <code>OPENAI_API_KEY</code></li>
+</ul>
+<p>该 skill 附带一个小型 <code>parrot_openrouter.py</code> 驱动脚本，通过 OpenAI SDK 使用 <code>OPENROUTER_API_KEY</code>，
+因此 OpenRouter 上的任何模型均可使用。上游 CLI 本身硬编码了 Anthropic，需要 <code>ANTHROPIC_API_KEY</code>。</p>
+<h2>安装（一次性）</h2>
+<p>通过 <code>terminal</code> 工具运行：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mkdir -p ~/.hermes/cache/darwinian-evolver &amp;&amp; cd ~/.hermes/cache/darwinian-evolver
+[ -d darwinian_evolver ] || git clone --depth 1 https://github.com/imbue-ai/darwinian_evolver.git
+cd darwinian_evolver &amp;&amp; uv sync
+</div>
+<p>验证：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cd ~/.hermes/cache/darwinian-evolver/darwinian_evolver \
+  &amp;&amp; uv run darwinian_evolver --help | head -5
+</div>
+<h2>快速开始 —— 内置 Parrot 示例</h2>
+<p>小型冒烟测试（需要 <code>ANTHROPIC_API_KEY</code>）：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cd ~/.hermes/cache/darwinian-evolver/darwinian_evolver
+uv run darwinian_evolver parrot \
+  --num_iterations 2 \
+  --num_parents_per_iteration 2 \
+  --mutator_concurrency 2 --evaluator_concurrency 2 \
+  --output_dir /tmp/parrot_demo
+</div>
+<p>输出：</p>
+<ul>
+<li><code>/tmp/parrot_demo/snapshots/iteration_N.pkl</code> —— 每次迭代的 pickle 序列化种群</li>
+<li><code>/tmp/parrot_demo/&lt;jsonl&gt;</code> —— 每次迭代的 JSON 日志（路径在结束时打印）</li>
+</ul>
+<p>在浏览器中打开 <code>~/.hermes/cache/darwinian-evolver/darwinian_evolver/darwinian_evolver/lineage_visualizer.html</code>
+并加载 JSON 日志，即可查看进化树。</p>
+<h2>快速开始 —— OpenRouter 驱动（无需 Anthropic Key）</h2>
+<p>该 skill 附带 <code>scripts/parrot_openrouter.py</code> —— 同样的 parrot 问题，但 LLM 调用通过
+OpenRouter 进行，因此任何提供商均可使用。</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# From wherever the skill is installed:
+SKILL_DIR=~/.hermes/skills/research/darwinian-evolver
+DE_DIR=~/.hermes/cache/darwinian-evolver/darwinian_evolver
+<p>cd &quot;$DE_DIR&quot; &amp;amp;&amp;amp; \
+EVOLVER_MODEL='openai/gpt-4o-mini' \
+uv run --with openai python &quot;$SKILL_DIR/scripts/parrot_openrouter.py&quot; \
+--num_iterations 3 --num_parents_per_iteration 2 \
+--output_dir /tmp/parrot_or</p>
+</div>
+<p>使用 <code>scripts/show_snapshot.py</code> 查看结果：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+uv run --with openai python "$SKILL_DIR/scripts/show_snapshot.py" \
+  /tmp/parrot_or/snapshots/iteration_3.pkl
+</div>
+<p>预期输出：7 个按分数排名的进化 prompt 模板，最佳结果约在 0.6–0.8 之间（初始种子 <code>Say {{ phrase }}</code> 得分为 0.000）。</p>
+<h2>定义自定义问题</h2>
+<p>该 skill 附带 <code>templates/custom_problem_template.py</code> —— 复制、编辑、运行。
+你必须定义三样东西：</p>
+<ol>
+<li>
+<p><strong><code>Organism</code></strong> —— 一个 Pydantic <code>BaseModel</code> 子类，持有被进化的制品（<code>prompt_template: str</code>、<code>regex_pattern: str</code>、<code>sql_query: str</code>、<code>code_block: str</code> 等）。添加一个 <code>run(*args)</code> 方法来执行它。</p>
+</li>
+<li>
+<p><strong><code>Evaluator</code></strong> —— <code>.evaluate(organism) -&gt; EvaluationResult(score=..., trainable_failure_cases=[...], holdout_failure_cases=[...], is_viable=True)</code>。</p>
+<ul>
+<li><strong><code>score</code></strong> 在 <code>[0, 1]</code> 范围内，越高越好。</li>
+<li><strong><code>trainable_failure_cases</code></strong> —— mutator 所看到的内容。包含足够的上下文（输入、期望值、实际值），以便 LLM 进行诊断。</li>
+<li><strong><code>holdout_failure_cases</code></strong> —— 对 mutator 隐藏。用于检测过拟合。</li>
+<li><strong><code>is_viable=True</code></strong>，除非 organism 完全损坏（抛出异常、返回 None 等）。得分为 0 的可行 organism 是可以的 —— 它只是在父代选择中权重较低。</li>
+</ul>
+</li>
+<li>
+<p><strong><code>Mutator</code></strong> —— <code>.mutate(organism, failure_cases, learning_log_entries) -&gt; list[Organism]</code>。
+通常做法：构建一个包含当前 organism + 失败案例 + 修复请求的 LLM prompt；解析 LLM 的响应；返回一个新的 <code>Organism</code>。解析失败时返回 <code>[]</code> —— 循环会处理这种情况。</p>
+</li>
+</ol>
+<p>然后编写一个驱动脚本，将 <code>Problem(initial_organism, evaluator, [mutators])</code> 接入
+<code>EvolveProblemLoop</code>，并在 <code>loop.run(num_iterations=N)</code> 上迭代 —— 附带的
+<code>scripts/parrot_openrouter.py</code> 是参考实现。</p>
+<h2>实际影响较大的超参数</h2>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>默认值</th>
+<th>何时调整</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--num_iterations</code></td>
+<td>5</td>
+<td>一旦信任 evaluator，调高至 10–20</td>
+</tr>
+<tr>
+<td><code>--num_parents_per_iteration</code></td>
+<td>4</td>
+<td>降至 2 以进行低成本探索</td>
+</tr>
+<tr>
+<td><code>--mutator_concurrency</code></td>
+<td>10</td>
+<td>降至 2–4 以避免速率限制</td>
+</tr>
+<tr>
+<td><code>--evaluator_concurrency</code></td>
+<td>10</td>
+<td>同上；evaluator 也会调用 LLM</td>
+</tr>
+<tr>
+<td><code>--batch_size</code></td>
+<td>1</td>
+<td>一旦 mutator 能处理多个失败案例，调高至 3–5</td>
+</tr>
+<tr>
+<td><code>--verify_mutations</code></td>
+<td>关闭</td>
+<td>一旦 mutator 浪费严重时开启（据 Imbue，后续运行可节省 &gt;10× 成本）</td>
+</tr>
+<tr>
+<td><code>--midpoint_score</code></td>
+<td><code>p75</code></td>
+<td>除非分数聚集，否则保持不变</td>
+</tr>
+<tr>
+<td><code>--sharpness</code></td>
+<td>10</td>
+<td>保持不变</td>
+</tr>
+</tbody>
+</table>
+<h2>常见陷阱</h2>
+<ol>
+<li><strong><code>Initial organism must be viable</code></strong> —— 即使种子得分为 0，也要在 <code>EvaluationResult</code> 中设置 <code>is_viable=True</code>。循环拒绝不可行的 organism，因为这意味着循环没有任何可进化的起点。</li>
+<li><strong>提供商内容过滤会中断运行。</strong> 基于 Azure 的 OpenRouter 模型会以 HTTP 400 拒绝&quot;ignore previous instructions&quot;等短语。将 LLM 调用包裹在 <code>try/except</code> 中，并返回 <code>f&quot;&lt;LLM_ERROR: {e}&gt;&quot;</code> —— evolver 会将该 organism 评分为 0 并继续。</li>
+<li><strong><code>loop.run()</code> 是一个生成器</strong> —— 调用它不会执行任何操作，直到你对其迭代。使用 <code>for snap in loop.run(num_iterations=N):</code>。</li>
+<li><strong>快照是嵌套 pickle。</strong> <code>iteration_N.pkl</code> 包含一个带有 <code>population_snapshot</code>（更多 pickle 字节）的字典。要反序列化，必须让 <code>Organism</code> 类在与 pickle 时相同的点分路径下可导入。</li>
+<li><strong>并发默认值较激进。</strong> 10/10 会在大多数提供商上触发速率限制。从 2/2 开始。</li>
+<li><strong>CLI 硬编码为 Anthropic。</strong> <code>uv run darwinian_evolver &lt;problem&gt;</code> 会查找 <code>ANTHROPIC_API_KEY</code> 并使用 Claude Sonnet。要使用其他提供商，请编写类似 <code>parrot_openrouter.py</code> 的驱动脚本。</li>
+<li><strong>AGPL 协议。</strong> 永远不要在 Hermes 核心中使用 <code>from darwinian_evolver import ...</code>。<code>~/.hermes/skills/...</code> 下的自定义驱动脚本属于用户侧，没有问题。</li>
+<li><strong>没有 PyPI 包。</strong> <code>pip install darwinian-evolver</code> 会安装错误的东西。始终从 GitHub 仓库安装。</li>
+</ol>
+<h2>验证</h2>
+<p>安装完成并运行一次 parrot 后，以下命令退出码为 0 即表示验证通过：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+DE_DIR=~/.hermes/cache/darwinian-evolver/darwinian_evolver
+ls "$DE_DIR/darwinian_evolver/lineage_visualizer.html" &gt;/dev/null &amp;&amp; \
+cd "$DE_DIR" &amp;&amp; uv run darwinian_evolver --help &gt;/dev/null &amp;&amp; \
+echo "darwinian-evolver: OK"
+</div>
+<h2>参考资料</h2>
+<ul>
+<li><a href="https://imbue.com/research/2026-02-27-darwinian-evolver/">Imbue 研究文章</a></li>
+<li><a href="https://imbue.com/research/2026-02-27-arc-agi-2-evolution/">ARC-AGI-2 结果</a></li>
+<li><a href="https://github.com/imbue-ai/darwinian_evolver">imbue-ai/darwinian_evolver</a>（AGPL-3.0）</li>
+<li><a href="https://arxiv.org/abs/2505.22954">Darwin Gödel Machines</a></li>
+<li><a href="https://arxiv.org/abs/2309.16797">PromptBreeder</a></li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

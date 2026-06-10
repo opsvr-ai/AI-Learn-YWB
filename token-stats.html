@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Token 消耗统计 — AI赋能日常工作</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <style>
+    /* ============================================
+       Token 统计页面专属样式
+       ============================================ */
+    .stats-page { max-width: var(--max-width); margin: 0 auto; padding: 32px 24px 60px; }
+    .stats-page .page-title { font-size: 1.6rem; font-weight: 800; color: var(--gray-900); margin-bottom: 4px; display: flex; align-items: center; gap: 10px; }
+    .stats-page .page-subtitle { font-size: 0.9rem; color: var(--gray-500); margin-bottom: 28px; }
+    .stats-page .page-subtitle .source { font-size: 0.78rem; color: var(--gray-400); margin-left: 6px; }
+    .overview-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
+    .overview-card { background: #fff; border-radius: var(--radius-lg); padding: 20px 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--gray-200); text-align: center; transition: all 0.2s; }
+    .overview-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+    .overview-card .num { font-size: 1.5rem; font-weight: 700; color: var(--gray-900); }
+    .overview-card .label { font-size: 0.78rem; color: var(--gray-400); margin-top: 4px; }
+    .overview-card.highlight { border: 2px solid var(--blue-400); background: var(--blue-50); }
+    .overview-card.highlight .num { color: var(--blue-700); }
+    .overview-card.highlight .label { color: var(--blue-600); font-weight: 600; }
+    .overview-card .num-icon { font-size: 1.1rem; margin-bottom: 6px; }
+    .my-card { background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%); border-radius: var(--radius-lg); padding: 24px 28px; margin-bottom: 28px; color: #fff; position: relative; overflow: hidden; }
+    .my-card::before { content: ''; position: absolute; top: -50%; right: -20%; width: 300px; height: 300px; border-radius: 50%; background: rgba(255,255,255,0.04); pointer-events: none; }
+    .my-card h2 { font-size: 1.15rem; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; position: relative; z-index: 1; }
+    .my-card .my-meta { font-size: 0.85rem; opacity: 0.8; margin-bottom: 10px; position: relative; z-index: 1; }
+    .my-card .my-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; position: relative; z-index: 1; }
+    .my-card .my-stat { text-align: center; }
+    .my-card .my-stat .num { font-size: 1.4rem; font-weight: 700; }
+    .my-card .my-stat .label { font-size: 0.75rem; opacity: 0.75; margin-top: 2px; }
+    .my-card.guest { background: linear-gradient(135deg, #374151 0%, #4b5563 100%); }
+    .my-card.not-found { background: linear-gradient(135deg, #78350f 0%, #92400e 100%); }
+    .my-card .rank-badge { display: inline-block; background: rgba(255,255,255,0.15); padding: 2px 12px; border-radius: 99px; font-size: 0.85rem; font-weight: 600; }
+    .section-card { background: #fff; border-radius: var(--radius-lg); padding: 22px 24px; margin-bottom: 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--gray-200); }
+    .section-card h3 { font-size: 1.05rem; font-weight: 700; color: var(--gray-900); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .section-card h3 .hint { font-size: 0.82rem; font-weight: 400; color: var(--gray-400); margin-left: 4px; }
+    .bar-row { display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 8px 8px; border-radius: var(--radius-sm); transition: background 0.15s; }
+    .bar-row:hover { background: var(--gray-50); }
+    .bar-row .bar-label { width: 130px; font-size: 0.85rem; font-weight: 600; text-align: right; flex-shrink: 0; color: var(--gray-700); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .bar-row .bar-track { flex: 1; background: var(--gray-200); border-radius: 5px; height: 24px; overflow: hidden; }
+    .bar-row .bar-fill { height: 100%; border-radius: 5px; background: linear-gradient(90deg, var(--blue-400), var(--blue-600)); display: flex; align-items: center; padding-left: 10px; font-size: 0.75rem; font-weight: 600; color: #fff; white-space: nowrap; min-width: 20px; transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
+    .bar-row .bar-val { width: 90px; font-size: 0.82rem; color: var(--gray-500); flex-shrink: 0; text-align: right; }
+    .center-detail { display: none; margin: 0 24px 14px 60px; background: var(--gray-50); border: 1px solid var(--gray-100); border-radius: var(--radius); padding: 16px 20px; }
+    .center-detail.open { display: block; }
+    .center-detail h4 { font-size: 0.9rem; font-weight: 700; color: var(--gray-800); margin-bottom: 10px; }
+    .center-detail table { width: 100%; font-size: 0.85rem; border-collapse: collapse; }
+    .center-detail th { background: var(--gray-100); padding: 7px 10px; text-align: left; font-weight: 600; color: var(--gray-600); font-size: 0.78rem; }
+    .center-detail td { padding: 7px 10px; border-bottom: 1px solid var(--gray-100); color: var(--gray-700); }
+    .center-detail .zero-tag { color: var(--gray-400); font-size: 0.82rem; }
+    .ranking-table { width: 100%; font-size: 0.88rem; border-collapse: collapse; }
+    .ranking-table th { background: var(--gray-50); padding: 10px 14px; text-align: left; font-weight: 700; color: var(--gray-700); font-size: 0.8rem; border-bottom: 2px solid var(--gray-200); }
+    .ranking-table td { padding: 10px 14px; border-bottom: 1px solid var(--gray-100); color: var(--gray-700); }
+    .ranking-table tbody tr { transition: background 0.15s; }
+    .ranking-table tbody tr:hover { background: var(--blue-50); }
+    .ranking-table .me-row { background: #fffbeb !important; border-left: 4px solid #f59e0b; }
+    .ranking-table .me-row td:first-child { font-weight: 700; color: #d97706; }
+    .rank-medal { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; font-size: 1.1rem; }
+    .rank-num { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; font-size: 0.82rem; font-weight: 700; color: #fff; }
+    .rank-num.gold { background: linear-gradient(135deg, #f59e0b, #d97706); }
+    .rank-num.silver { background: linear-gradient(135deg, #9ca3af, #6b7280); }
+    .rank-num.bronze { background: linear-gradient(135deg, #cd7f32, #a0522d); }
+    .skeleton { background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-200) 50%, var(--gray-100) 75%); background-size: 200% 100%; animation: skeleton-shimmer 1.5s ease-in-out infinite; border-radius: var(--radius-sm); }
+    .skeleton-card { height: 80px; border-radius: var(--radius-lg); }
+    .skeleton-bar { height: 28px; margin: 8px 0; border-radius: 5px; }
+    .skeleton-row { height: 38px; margin: 4px 0; border-radius: 4px; }
+    .skeleton-my { height: 130px; border-radius: var(--radius-lg); margin-bottom: 28px; }
+    @keyframes skeleton-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+    .empty-state { text-align: center; padding: 48px 20px; color: var(--gray-400); }
+    .empty-state .empty-icon { font-size: 2.5rem; margin-bottom: 12px; opacity: 0.5; }
+    .empty-state p { font-size: 0.95rem; }
+    @media (max-width: 768px) {
+      .overview-cards { grid-template-columns: repeat(2, 1fr); }
+      .my-card .my-grid { grid-template-columns: repeat(2, 1fr); }
+      .bar-row .bar-label { width: 80px; font-size: 0.8rem; }
+      .bar-row .bar-val { width: 70px; }
+      .center-detail { margin-left: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main class="stats-page page">
+  <h1 class="page-title">📊 Token 消耗统计</h1>
+  <p class="page-subtitle">生产运维部 AI 使用情况统计看板 <span class="source" id="data-source"></span></p>
+
+  <div id="my-card"><div class="skeleton-my skeleton"></div></div>
+  <div class="overview-cards" id="cards">
+    <div class="skeleton skeleton-card"></div>
+    <div class="skeleton skeleton-card"></div>
+    <div class="skeleton skeleton-card"></div>
+    <div class="skeleton skeleton-card"></div>
+  </div>
+  <div class="section-card">
+    <h3>🏘 中心排行 <span class="hint">（点击展开详情）</span></h3>
+    <div id="center-bars">
+      <div class="skeleton skeleton-bar"></div>
+      <div class="skeleton skeleton-bar" style="width:85%"></div>
+      <div class="skeleton skeleton-bar" style="width:65%"></div>
+    </div>
+  </div>
+  <div class="section-card">
+    <h3>📊 小组排名 <span class="hint">全部小组 Token 用量排行</span></h3>
+    <div id="group-bars">
+      <div class="skeleton skeleton-row"></div>
+      <div class="skeleton skeleton-row"></div>
+      <div class="skeleton skeleton-row" style="width:90%"></div>
+      <div class="skeleton skeleton-row" style="width:80%"></div>
+    </div>
+  </div>
+  <div class="section-card">
+    <h3>🏆 个人排行榜 <span class="hint">Top 20</span></h3>
+    <table class="ranking-table" id="ranking-table">
+      <thead>
+        <tr><th style="width:50px;">排名</th><th>姓名</th><th style="width:100px;">域账号</th><th style="width:100px;">中心</th><th style="width:100px;">小组</th><th style="width:120px;">总 Token</th></tr>
+      </thead>
+      <tbody id="ranking-body">
+        <tr><td colspan="6"><div class="skeleton skeleton-row" style="width:100%"></div></td></tr>
+        <tr><td colspan="6"><div class="skeleton skeleton-row" style="width:95%"></div></td></tr>
+        <tr><td colspan="6"><div class="skeleton skeleton-row" style="width:90%"></div></td></tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+
+<footer class="footer"><div class="container"><p>Copyright &copy; 生产运维部，内部学习资料</p></div></footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">↑</button>
+
+<script src="js/main.js"></script>
+<script>
+/* ============================================
+   Token 统计页面交互脚本 — 安全重构版
+   ============================================ */
+'use strict';
+
+(function() {
+
+  const REQUEST_TIMEOUT = 15000; // 15s
+  const account = (window.getUserName ? window.getUserName() : '') || '';
+
+  /* ============================================
+     安全工具函数
+     ============================================ */
+
+  /** 对 innerHTML 上下文进行 HTML 转义 */
+  function esc(str) {
+    if (str == null) return '';
+    var d = document.createElement('div');
+    d.appendChild(document.createTextNode(String(str)));
+    return d.innerHTML;
+  }
+
+  /** 对 HTML 属性上下文进行转义（同时处理引号和特殊字符） */
+  function escAttr(str) {
+    if (str == null) return '';
+    return String(str).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  /** 格式化数字 */
+  function fmt(n) {
+    if (n == null || isNaN(n)) return '0';
+    if (n >= 1e8) return (n / 1e8).toFixed(2) + ' 亿';
+    if (n >= 1e4) return (n / 1e4).toFixed(0) + ' 万';
+    return n.toLocaleString();
+  }
+
+  /** 安全 JSON 解析，失败返回 null */
+  function safeJson(text) {
+    try { return JSON.parse(text); } catch { return null; }
+  }
+
+  /* ============================================
+     API 层
+     ============================================ */
+
+  /** 带超时的 fetch，降级到 XHR */
+  function apiFetch(method, url) {
+    var controller = new AbortController();
+    var timer = setTimeout(function() { controller.abort(); }, REQUEST_TIMEOUT);
+    return fetch(url, { method: method, signal: controller.signal })
+      .then(function(r) { clearTimeout(timer); return r; })
+      .catch(function() {
+        clearTimeout(timer);
+        // XHR fallback
+        return new Promise(function(resolve) {
+          var xhr = new XMLHttpRequest();
+          var timedOut = false;
+          var xtimer = setTimeout(function() { timedOut = true; xhr.abort(); }, REQUEST_TIMEOUT);
+          xhr.open(method, url, true);
+          xhr.onload = function() {
+            clearTimeout(xtimer);
+            if (timedOut) { resolve({ ok: false }); return; }
+            resolve({
+              ok: xhr.status >= 200 && xhr.status < 300,
+              json: function() { var j = safeJson(xhr.responseText); return j != null ? Promise.resolve(j) : Promise.reject(); }
+            });
+          };
+          xhr.onerror = function() { clearTimeout(xtimer); resolve({ ok: false }); };
+          xhr.send();
+        });
+      });
+  }
+
+  /** 通用 API 请求 */
+  function api(view, params) {
+    var qs = 'view=' + encodeURIComponent(view);
+    if (params) {
+      for (var k in params) {
+        if (Object.prototype.hasOwnProperty.call(params, k)) {
+          qs += '&' + encodeURIComponent(k) + '=' + encodeURIComponent(String(params[k]));
+        }
+      }
+    }
+    return apiFetch('GET', '/api/token-stats?' + qs)
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .catch(function() { return null; });
+  }
+
+  /* ============================================
+     状态共享
+     ============================================ */
+  var myInfoCache = null;        // renderMyCard 写入，renderGroups 读取
+  var myInfoPromise = null;     // 防重复请求
+
+  /** 单例获取我的信息 */
+  function getMyInfo() {
+    if (!account) return Promise.resolve(null);
+    if (myInfoCache) return Promise.resolve(myInfoCache);
+    if (myInfoPromise) return myInfoPromise;
+    myInfoPromise = api('my', { account: account }).then(function(d) {
+      myInfoCache = (d && d.ok) ? d : null;
+      return myInfoCache;
+    }).catch(function() { return null; });
+    return myInfoPromise;
+  }
+
+  /* ============================================
+     渲染函数
+     ============================================ */
+
+  /** 概览卡片 */
+  async function renderOverview() {
+    var d = await api('overview');
+    if (!d || !d.ok) {
+      document.getElementById('cards').innerHTML =
+        '<div class="empty-state"><div class="empty-icon">📡</div><p>无法连接统计服务，请刷新重试</p></div>';
+      return;
+    }
+    document.getElementById('data-source').textContent = '（' + esc(d.source || '') + ' · ' + esc(d.month || '') + '）';
+    var stats = [
+      { icon: '🔤', num: fmt(d.total_all), label: '总消耗 Token', highlight: false },
+      { icon: '👤', num: (d.active_users || 0) + ' / ' + (d.total_users || 0), label: '活跃 / 总人数', highlight: true },
+      { icon: '🎯', num: (d.coverage || 0) + '%', label: '使用覆盖率', highlight: false },
+      { icon: '📈', num: fmt(Math.round(d.total_all / Math.max(d.total_users || 1, 1))), label: '人均 Token', highlight: false },
+    ];
+    document.getElementById('cards').innerHTML = stats.map(function(c) {
+      return '<div class="overview-card' + (c.highlight ? ' highlight' : '') + '">' +
+        '<div class="num-icon">' + c.icon + '</div>' +
+        '<div class="num">' + c.num + '</div>' +
+        '<div class="label">' + c.label + '</div></div>';
+    }).join('');
+    renderCenterBars(d.centers);
+  }
+
+  /** 我的用量 */
+  async function renderMyCard() {
+    if (!account) {
+      document.getElementById('my-card').innerHTML =
+        '<div class="my-card guest"><h2>👤 我的用量</h2>' +
+        '<p style="opacity:.7;margin:0;">请在导航栏右上角输入域账号，即可查看您的个人 Token 消耗统计</p></div>';
+      return;
+    }
+    var d = await getMyInfo();
+    var el = document.getElementById('my-card');
+    if (!d) {
+      el.innerHTML = '<div class="my-card not-found"><h2>👤 我的用量</h2>' +
+        '<p style="opacity:.7;margin:0;">未找到账号 <strong>' + esc(account) + '</strong> 的记录，请确认域账号是否正确</p></div>';
+      return;
+    }
+    var rankHtml = d.has_usage
+      ? '部门 <span class="rank-badge">第 ' + esc(d.rank) + ' 名</span> 超过 ' + esc(d.percentile) + '% 同事'
+      : '本月暂无使用记录';
+    el.innerHTML =
+      '<div class="my-card"><h2>👤 ' + esc(d.name || d.account) + '（' + esc(d.account) + '）</h2>' +
+      '<div class="my-meta">' + esc(d.center || '—') + ' / ' + esc(d.group || '—') + ' &nbsp;|&nbsp; ' + rankHtml + '</div>' +
+      '<div class="my-grid">' +
+        '<div class="my-stat"><div class="num">' + fmt(d.total_tokens) + '</div><div class="label">总 Token</div></div>' +
+        '<div class="my-stat"><div class="num">' + fmt(d.input_tokens) + '</div><div class="label">输入 Token</div></div>' +
+        '<div class="my-stat"><div class="num">' + fmt(d.output_tokens) + '</div><div class="label">输出 Token</div></div>' +
+        '<div class="my-stat"><div class="num">' + (d.request_count || 0).toLocaleString() + '</div><div class="label">请求次数</div></div>' +
+      '</div></div>';
+  }
+
+  /** 中心柱状图（使用 data-* + addEventListener，无 onclick） */
+  function renderCenterBars(centers) {
+    var container = document.getElementById('center-bars');
+    if (!centers || !centers.length) {
+      container.innerHTML = '<div class="empty-state"><div class="empty-icon">🏘</div><p>暂无中心数据</p></div>';
+      return;
+    }
+    var maxT = 0;
+    for (var ci = 0; ci < centers.length; ci++) {
+      if (centers[ci].total_tokens > maxT) maxT = centers[ci].total_tokens;
+    }
+    var html = '';
+    for (var ci = 0; ci < centers.length; ci++) {
+      var c = centers[ci];
+      var w = maxT > 0 ? (c.total_tokens / maxT * 100) : 0;
+      var safeName = escAttr(c.name);
+      html += '<div class="bar-row" data-center="' + safeName + '">' +
+        '<span class="bar-label" title="' + safeName + '">' + esc(c.name) + '</span>' +
+        '<span class="bar-track"><span class="bar-fill" style="width:' + w.toFixed(1) + '%">' +
+          (w > 15 ? fmt(c.total_tokens) : '') +
+        '</span></span>' +
+        '<span class="bar-val">' + fmt(c.total_tokens) + '</span></div>' +
+      '<div class="center-detail"></div>';
+    }
+    container.innerHTML = html;
+    // 用委托事件代替 onclick
+    container.addEventListener('click', function(e) {
+      var row = e.target.closest('.bar-row');
+      if (!row) return;
+      toggleCenter(row);
+    });
+  }
+
+  /** 切换中心展开（用 data-center 替代 onclick 参数传递） */
+  function toggleCenter(row) {
+    var name = row.getAttribute('data-center');
+    var detail = row.nextElementSibling;
+    if (!detail || !detail.classList.contains('center-detail')) return;
+    if (detail.classList.contains('open')) {
+      detail.classList.remove('open');
+      return;
+    }
+    detail.classList.add('open');
+    if (detail.innerHTML.trim()) return;
+    detail.innerHTML = '<p style="padding:12px;text-align:center;color:var(--gray-400);">加载中...</p>';
+    api('center', { name: name }).then(function(d) {
+      var c = (d && d.ok) ? d.center : null;
+      if (!c) {
+        detail.innerHTML = '<p style="padding:12px;text-align:center;color:var(--gray-400);">数据加载失败</p>';
+        return;
+      }
+      var gHtml = '';
+      if (c.groups) {
+        for (var gi = 0; gi < c.groups.length; gi++) {
+          var g = c.groups[gi];
+          var usersHtml = '';
+          if (g.users && g.users.length) {
+            var shown = g.users.slice(0, 5);
+            for (var ui = 0; ui < shown.length; ui++) {
+              if (ui > 0) usersHtml += '、';
+              usersHtml += esc(shown[ui].name);
+              if (!shown[ui].has_usage) usersHtml += ' <span class="zero-tag">(0)</span>';
+            }
+            if (g.users.length > 5) usersHtml += ' 等' + g.users.length + '人';
+          } else {
+            usersHtml = '—';
+          }
+          gHtml += '<tr><td><strong>' + esc(g.name) + '</strong></td>' +
+            '<td>' + fmt(g.total_tokens) + '</td>' +
+            '<td>' + (g.active_count || 0) + ' / ' + (g.user_count || 0) + '</td>' +
+            '<td style="font-size:0.82rem;">' + usersHtml + '</td></tr>';
+        }
+      }
+      detail.innerHTML = '<h4>' + esc(c.name) + ' — 小组详情</h4>' +
+        '<table><thead><tr><th>小组</th><th>总 Token</th><th>人数（活跃/总）</th><th>成员情况</th></tr></thead><tbody>' +
+        gHtml + '</tbody></table>';
+    }).catch(function() {
+      detail.innerHTML = '<p style="padding:12px;text-align:center;color:var(--gray-400);">数据加载失败</p>';
+    });
+  }
+
+  /** 小组排名 */
+  async function renderGroups() {
+    var d = await api('groups');
+    var container = document.getElementById('group-bars');
+    if (!d || !d.ok || !d.groups || !d.groups.length) {
+      container.innerHTML = '<div class="empty-state"><p>' +
+        (!d ? '数据加载失败，请刷新重试' : '暂无小组数据') + '</p></div>';
+      return;
+    }
+    // 复用 getMyInfo 的缓存
+    var myInfo = await getMyInfo();
+    var html = '<table class="ranking-table"><thead><tr>' +
+      '<th style="width:50px;">排名</th><th>小组</th><th style="width:100px;">所属中心</th>' +
+      '<th style="width:70px;">活跃</th><th style="width:120px;">总 Token</th></tr></thead><tbody>';
+    for (var gi = 0; gi < d.groups.length; gi++) {
+      var g = d.groups[gi];
+      var rank = gi + 1;
+      var medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
+      var meClass = (myInfo && myInfo.group === g.name && myInfo.center === g.center) ? ' me-row' : '';
+      html += '<tr class="' + meClass + '">' +
+        '<td>' + (medal || rank) + '</td>' +
+        '<td><strong>' + esc(g.name) + '</strong></td>' +
+        '<td>' + esc(g.center || '—') + '</td>' +
+        '<td>' + (g.active_count || 0) + ' / ' + (g.user_count || 0) + '</td>' +
+        '<td><strong>' + fmt(g.total_tokens) + '</strong></td></tr>';
+    }
+    html += '</tbody></table>';
+    container.innerHTML = html;
+  }
+
+  /** 个人排行榜 */
+  async function renderRankings() {
+    var params = { top: 20 };
+    if (account) params.account = account;
+    var d = await api('rankings', params);
+    var body = document.getElementById('ranking-body');
+    if (!d || !d.ok || !d.rankings || !d.rankings.length) {
+      body.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">🏆</div><p>暂无排行数据</p></div></td></tr>';
+      return;
+    }
+    var html = '';
+    for (var ri = 0; ri < d.rankings.length; ri++) {
+      var r = d.rankings[ri];
+      var medal = r.rank === 1 ? '🥇' : r.rank === 2 ? '🥈' : r.rank === 3 ? '🥉' : '';
+      var rankHtml = medal
+        ? '<span class="rank-medal">' + medal + '</span>'
+        : '<span class="rank-num">' + r.rank + '</span>';
+      var meClass = (account && r.account === account) ? ' me-row' : '';
+      html += '<tr class="' + meClass + '">' +
+        '<td>' + rankHtml + '</td>' +
+        '<td>' + esc(r.name || '—') + '</td>' +
+        '<td>' + esc(r.account) + '</td>' +
+        '<td>' + esc(r.center || '—') + '</td>' +
+        '<td>' + esc(r.group || '—') + '</td>' +
+        '<td><strong>' + fmt(r.total_tokens) + '</strong></td></tr>';
+    }
+    if (d.my_rank !== undefined && d.my_rank > 20 && account) {
+      html += '<tr class="me-row">' +
+        '<td>' + d.my_rank + '</td>' +
+        '<td><em>我</em></td><td>' + esc(account) + '</td>' +
+        '<td>—</td><td>—</td>' +
+        '<td><strong>' + fmt(d.my_total) + '</strong></td></tr>';
+    }
+    body.innerHTML = html;
+  }
+
+  /* ============================================
+     初始化
+     ============================================ */
+  renderOverview();
+  renderMyCard();
+  renderGroups();
+  renderRankings();
+
+})();
+</script>
+</body>
+</html>

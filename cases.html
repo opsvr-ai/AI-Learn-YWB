@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>案例分享 — AI赋能日常工作</title>
+<link rel="stylesheet" href="css/style.css"><link rel="icon" type="image/svg+xml" href="favicon.svg">
+<style>
+.community-page { max-width: 1000px; margin: 0 auto; padding: 32px 24px 60px; }
+.community-page .page-title { font-size: 1.6rem; font-weight: 800; color: var(--gray-900); margin-bottom: 4px; display: flex; align-items: center; gap: 10px; }
+.community-page .page-subtitle { font-size: 0.9rem; color: var(--gray-500); margin-bottom: 24px; }
+.cat-tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 20px; }
+.cat-tab { padding: 6px 16px; border-radius: 99px; font-size: 0.85rem; font-weight: 500; border: 1px solid var(--gray-200); background: #fff; color: var(--gray-600); cursor: pointer; transition: all 0.2s; }
+.cat-tab:hover { border-color: var(--blue-300); color: var(--blue-700); background: var(--blue-50); }
+.cat-tab.active { background: var(--blue-600); color: #fff; border-color: var(--blue-600); }
+.community-toolbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+.community-toolbar .sort-group { display: flex; gap: 2px; background: var(--gray-100); padding: 3px; border-radius: var(--radius); }
+.community-toolbar .sort-btn { padding: 6px 14px; border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 500; border: none; background: transparent; color: var(--gray-600); cursor: pointer; transition: all 0.2s; }
+.community-toolbar .sort-btn.active { background: #fff; color: var(--blue-700); font-weight: 600; box-shadow: var(--shadow-sm); }
+.case-card { display: flex; gap: 16px; background: #fff; border-radius: var(--radius-lg); padding: 18px 22px; margin-bottom: 14px; box-shadow: var(--shadow-sm); border: 1px solid var(--gray-200); cursor: pointer; transition: all 0.2s; }
+.case-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.case-card .card-icon { width: 44px; height: 44px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+.case-card .card-body { flex: 1; min-width: 0; }
+.case-card .card-title { font-size: 1rem; font-weight: 700; color: var(--gray-900); margin-bottom: 4px; }
+.case-card .card-desc { font-size: 0.85rem; color: var(--gray-500); line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.case-card .card-meta { font-size: 0.78rem; color: var(--gray-400); margin-top: 6px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.case-card .card-meta .file-tag { background: var(--blue-50); color: var(--blue-600); padding: 1px 8px; border-radius: 4px; font-size: 0.72rem; font-weight: 600; }
+.case-card .card-actions { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+.case-card .like-btn { background: none; border: 1px solid var(--gray-200); border-radius: 99px; padding: 4px 14px; cursor: pointer; font-size: 0.82rem; color: var(--gray-500); transition: all 0.15s; display: flex; align-items: center; gap: 4px; }
+.case-card .like-btn:hover { background: #fef2f2; border-color: #fca5a5; color: #ef4444; }
+.case-card .like-btn.liked { background: #fef2f2; border-color: #fca5a5; color: #ef4444; }
+.case-card .view-btn { font-size: 0.82rem; color: var(--blue-600); font-weight: 500; }
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 200; justify-content: center; align-items: flex-start; padding-top: 60px; }
+.modal-overlay.show { display: flex; }
+.modal-box { background: #fff; border-radius: var(--radius-lg); padding: 28px 30px; width: 560px; max-width: 90vw; box-shadow: 0 8px 32px rgba(0,0,0,0.15); max-height: 85vh; overflow-y: auto; }
+.modal-box h3 { font-size: 1.1rem; margin-bottom: 16px; }
+.modal-box label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--gray-700); margin-bottom: 4px; margin-top: 12px; }
+.modal-box input, .modal-box textarea { width: 100%; border: 1px solid var(--gray-300); border-radius: var(--radius); padding: 8px 12px; font-size: 0.9rem; margin-bottom: 6px; box-sizing: border-box; }
+.modal-box textarea { min-height: 80px; resize: vertical; }
+.modal-box .btn-row { display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px; }
+.detail-preview { background: #fff; border-radius: var(--radius-lg); padding: 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--gray-100); margin-bottom: 20px; }
+.detail-preview iframe { width: 100%; height: 500px; border: 1px solid var(--gray-200); border-radius: var(--radius); }
+.detail-preview img { max-width: 100%; border-radius: var(--radius); }
+.skeleton { background: linear-gradient(90deg, var(--gray-100) 25%, var(--gray-200) 50%, var(--gray-100) 75%); background-size: 200% 100%; animation: skeleton-shimmer 1.5s ease-in-out infinite; border-radius: var(--radius-sm); }
+.skeleton-card { height: 100px; border-radius: var(--radius-lg); margin-bottom: 14px; }
+@keyframes skeleton-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+.empty-state { text-align: center; padding: 60px 20px; color: var(--gray-400); }
+.empty-state .empty-icon { font-size: 3rem; margin-bottom: 12px; opacity: 0.4; }
+.empty-state p { font-size: 0.95rem; }
+</style></head><body>
+
+<nav class="nav"><div class="nav-inner">
+<a href="index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+<ul class="nav-links"><li><a href="index.html">首页</a></li>
+<li class="has-submenu"><span class="nav-label">🎓 AI学习</span><ul class="nav-submenu">
+<li><a href="hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+<li><a href="claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+<li class="menu-divider"></li>
+<li><a href="ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+<li><a href="hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+<li><a href="api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+</ul></li>
+<li><a href="token-stats.html">📊 Token统计</a></li>
+<li class="has-submenu"><span class="nav-label">💬 社区</span><ul class="nav-submenu">
+<li><a href="cases.html" class="active"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+<li><a href="feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+</ul></li>
+</ul>
+<div class="nav-right"><div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div><div class="checkin-wrapper"><span id="checkin-area" class="checkin-area">---</span><button class="checkin-btn" onclick="doCheckin(this)">打卡</button></div></div>
+</div></nav>
+
+<main class="community-page page">
+<h1 class="page-title">📘 案例分享</h1>
+<p class="page-subtitle">分享你的 AI 使用案例，让更多人受益</p>
+
+<div class="cat-tabs" id="cat-tabs">
+<button class="cat-tab active" data-cat="">全部</button>
+<button class="cat-tab" data-cat="办公自动化">📄 办公自动化</button>
+<button class="cat-tab" data-cat="代码开发">💻 代码开发</button>
+<button class="cat-tab" data-cat="数据分析">📊 数据分析</button>
+<button class="cat-tab" data-cat="内容创作">✍️ 内容创作</button>
+<button class="cat-tab" data-cat="运维实践">⚙️ 运维实践</button>
+</div>
+
+<div class="community-toolbar">
+<button class="btn btn-primary btn-sm" onclick="openUpload()">➕ 发布案例</button>
+<div class="sort-group">
+<button class="sort-btn active" data-sort="latest" onclick="switchSort(this)">最新</button>
+<button class="sort-btn" data-sort="hot" onclick="switchSort(this)">最热</button>
+</div>
+</div>
+
+<div id="case-list">
+<div class="skeleton skeleton-card"></div>
+<div class="skeleton skeleton-card" style="width:95%"></div>
+<div class="skeleton skeleton-card" style="width:90%"></div>
+</div>
+</main>
+
+<!-- 上传弹窗 -->
+<div class="modal-overlay" id="upload-modal">
+<div class="modal-box">
+<h3>📝 发布案例</h3>
+<label>案例标题 *</label><input type="text" id="case-title" placeholder="例如：用 Hermes 自动生成周报">
+<label>分类</label><select id="case-cat" style="width:100%;border:1px solid var(--gray-300);border-radius:var(--radius);padding:8px 12px;font-size:0.9rem;">
+<option value="办公自动化">📄 办公自动化</option>
+<option value="代码开发">💻 代码开发</option>
+<option value="数据分析">📊 数据分析</option>
+<option value="内容创作">✍️ 内容创作</option>
+<option value="运维实践">⚙️ 运维实践</option>
+</select>
+<label>描述</label><textarea id="case-desc" placeholder="简要描述你如何使用 AI 完成这个任务... (Ctrl+V 可直接粘贴截图)"></textarea><div id=case-img-preview class=img-preview></div><span style=font-size:.75rem;color:var(--gray-400);margin-top:2px>Ctrl+V 可直接粘贴截图</span>
+<label>附件文件（可选）</label><input type="file" id="case-file" accept=".html,.docx,.xlsx,.jpg,.jpeg,.png,.gif">
+<div class="btn-row">
+<button class="btn btn-outline btn-sm" onclick="closeUpload()">取消</button>
+<button class="btn btn-primary btn-sm" onclick="submitCase()">发布</button>
+</div>
+</div>
+</div>
+
+<!-- 详情弹窗 -->
+<div class="modal-overlay" id="detail-modal">
+<div class="modal-box" style="width:700px;" id="detail-body"></div>
+</div>
+
+<footer class="footer"><div class="container"><p>Copyright &copy; 生产运维部，内部学习资料</p></div></footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">↑</button>
+<script src="js/cases-upload.js"></script><script src="js/main.js"></script>
+<script>
+(function(){
+'use strict';
+window.esc=function(s){if(s==null)return '';var d=document.createElement('div');d.appendChild(document.createTextNode(String(s)));return d.innerHTML;}
+window.escAttr=function(s){if(s==null)return '';return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+var account='';try{account=((window.getUserName?window.getUserName():null)||'').toLowerCase()}catch(e){}
+var sort='latest',category='',listData=[];
+var catIcons={'办公自动化':'📄','代码开发':'💻','数据分析':'📊','内容创作':'✍️','运维实践':'⚙️'};
+var catColors={'办公自动化':'var(--blue-50);color:var(--blue-600)','代码开发':'var(--purple-50);color:var(--purple-600)','数据分析':'var(--green-50);color:var(--green-600)','内容创作':'var(--orange-50);color:var(--orange-600)','运维实践':'var(--gray-100);color:var(--gray-600)'};
+function getCatIcon(c){return catIcons[c]||'📌'}
+function getCatStyle(c){return catColors[c]||'var(--gray-50);color:var(--gray-600)'}
+function apiFetch(m,u){var a=new AbortController();var t=setTimeout(function(){a.abort()},15000);return fetch(m,{method:u,signal:a.signal}).then(function(r){clearTimeout(t);return r}).catch(function(){clearTimeout(t);return new Promise(function(r){var x=new XMLHttpRequest();x.open(m,u,true);x.onload=function(){r({ok:x.status>=200&&x.status<300,json:function(){try{return Promise.resolve(JSON.parse(x.responseText))}catch(e){return Promise.reject()}}})};x.onerror=function(){r({ok:false})};x.send()})})}
+function req(v,p){var q='view='+encodeURIComponent(v);for(var k in p){if(Object.prototype.hasOwnProperty.call(p,k))q+='&'+encodeURIComponent(k)+'='+encodeURIComponent(String(p[k]))}return apiFetch('GET','/api/cases?'+q).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
+function reqPost(m,b){var a=new AbortController();setTimeout(function(){a.abort()},15000);return fetch(m,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b),signal:a.signal}).then(function(r){return r.ok?r.json():null}).catch(function(){return null})}
+document.getElementById('cat-tabs').addEventListener('click',function(e){var btn=e.target.closest('.cat-tab');if(!btn)return;document.querySelectorAll('.cat-tab').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');category=btn.getAttribute('data-cat')||'';loadList()});
+window.switchSort=function(btn){document.querySelectorAll('.sort-btn').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');sort=btn.getAttribute('data-sort');loadList()};
+async function loadList(){document.getElementById('case-list').innerHTML='<div class="skeleton skeleton-card"></div><div class="skeleton skeleton-card" style="width:95%"></div><div class="skeleton skeleton-card" style="width:90%"></div>';var d=await req(sort,category?{category:category}:{});if(!Array.isArray(d)){document.getElementById('case-list').innerHTML='<div class="empty-state"><div class="empty-icon">📡</div><p>加载失败，请刷新重试</p></div>';return}listData=d;var html='';if(!d.length){html='<div class="empty-state"><div class="empty-icon">📝</div><p>暂无案例'+(category?'（'+category+'）':'')+'，快来发布第一条吧！</p></div>';document.getElementById('case-list').innerHTML=html;return}for(var i=0;i<d.length;i++){var c=d[i];var ct=c.category||'';html+='<div class="case-card" onclick="showDetail('+c.id+')"><div class="card-icon" style="background:'+getCatStyle(ct)+'">'+getCatIcon(ct)+'</div><div class="card-body"><div class="card-title">'+esc(c.title)+'</div><div class="card-desc">'+esc((c.description||'').substring(0,200))+'</div><div class="card-meta"><span>👤 '+esc(c.author_name||c.author)+'</span><span>📅 '+(c.created_at||'')+'</span>'+(c.file_type?'<span class="file-tag">.'+esc(c.file_type)+'</span>':'')+'</div><div class="card-actions"><button class="like-btn'+(c.has_liked?' liked':'')+'" onclick="event.stopPropagation();likeCase('+c.id+',this)"><span class="like-heart">❤</span> <span class="like-count">'+c.likes+'</span></button><span class="view-btn">查看详情 →</span></div></div></div>'}document.getElementById('case-list').innerHTML=html;}
+window.likeCase=async function(cid,btn){var fp='';try{fp=localStorage.getItem('ai_train_fp')||''}catch(e){}var d=await reqPost('/api/cases/like',{case_id:cid,fingerprint:fp});if(d&&d.ok){btn.classList.add('liked');btn.querySelector('.like-count').textContent=d.likes}};
+window.showDetail=async function(id){var d=await req('detail',{id:id});if(!d||d.error)return;var ct=d.category||'';var html='<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;"><div class="card-icon" style="background:'+getCatStyle(ct)+'">'+getCatIcon(ct)+'</div><div><h3 style="margin:0;">'+esc(d.title)+'</h3><p style="margin:4px 0 0;color:var(--gray-400);font-size:0.8rem;">👤 '+esc(d.author_name||d.author)+' · 📅 '+(d.created_at||'')+'</p></div></div>';if(d.description)html+='<div style="color:var(--gray-700);line-height:1.7;font-size:0.95rem;">'+esc(d.description).replace(/\n/g,'<br>')+'</div>';if(d.file_path&&d.file_type){var url='uploads/'+encodeURIComponent(d.file_path);if(d.file_type==='html')html+='<div class="detail-preview"><iframe src="'+escAttr(url)+'"></iframe></div>';else if(['jpg','jpeg','png','gif'].indexOf(d.file_type)>=0)html+='<div class="detail-preview"><img src="'+escAttr(url)+'" alt="" loading="lazy"></div>';else html+='<p style="margin-top:12px;"><a href="'+escAttr(url)+'" download class="btn btn-outline btn-sm">📥 下载附件 (.'+esc(d.file_type)+')</a></p>'}html+='<div class="btn-row"><button class="btn btn-primary btn-sm" onclick="document.getElementById(\'detail-modal\').classList.remove(\'show\')">关闭</button></div>';html+=renderCaseDetail({title:d.title,author:d.author_name||d.author,date:d.created_at,desc:d.description,images:d.images,filePath:d.file_path,fileType:d.file_type,catIcon:getCatIcon(d.category||''),catStyle:'background:'+getCatStyle(d.category||'')});html+='<div class="btn-row"><button class="btn btn-primary btn-sm" onclick="document.getElementById(''detail-modal'').classList.remove(''show'')">关闭</button></div>';document.getElementById('detail-body').innerHTML=html;document.getElementById('detail-modal').classList.add('show')};
+window.openUpload=function(){var a='';try{a=((window.getUserName?window.getUserName():null)||'').toLowerCase()}catch(e){}if(!a){alert('请先在导航栏输入域账号');return}caseImages=[];var pe=document.getElementById('case-img-preview');if(pe)pe.innerHTML='';document.getElementById('upload-modal').classList.add('show')};
+window.closeUpload=function(){document.getElementById('upload-modal').classList.remove('show')};
+window.submitCase=function(){var t=document.getElementById('case-title').value.trim();if(!t){alert('请输入标题');return}var fd=new FormData();fd.append('title',t);fd.append('category',document.getElementById('case-cat').value);fd.append('description',document.getElementById('case-desc').value.trim());var a='';try{a=((window.getUserName?window.getUserName():null)||'').toLowerCase()}catch(e){}fd.append('author',a);fd.append('author_name',a);var f=document.getElementById('case-file').files[0];if(f)fd.append('file',f);fd.append('images',caseImages.join(','));var x=new XMLHttpRequest();x.open('POST','/api/cases');x.onload=function(){closeUpload();loadList()};x.send(fd)};
+document.getElementById('detail-modal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('show')});
+document.getElementById('upload-modal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('show')});
+loadList();
+})();
+</script>
+</body></html>

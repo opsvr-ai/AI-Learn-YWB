@@ -1,0 +1,401 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Native Mcp — MCP client: connect servers, register tools (stdio/HTTP) - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 命令</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & Skills</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">docs</a> / <a href="/hermes-docs/user-guide/">user-guide</a> / <a href="/hermes-docs/user-guide/skills/">skills</a> / <a href="/hermes-docs/user-guide/skills/bundled/">bundled</a> / <a href="/hermes-docs/user-guide/skills/bundled/mcp/">mcp</a> / Native Mcp — MCP client: connect servers, register tools (stdio/HTTP)</div><p>{/<em> 本页面由 website/scripts/generate-skill-docs.py 从技能的 SKILL.md 自动生成。请编辑源 SKILL.md，而非本页面。 </em>/}</p>
+<h1>Native Mcp</h1>
+<p>MCP client: connect servers, register tools (stdio/HTTP).</p>
+<h2>技能元数据</h2>
+<table><thead><tr><th>---</th><th>---</th></tr></thead><tbody>
+<tr><td>来源</td><td>内置（默认安装）</td></tr>
+<tr><td>路径</td><td><code>skills/mcp/native-mcp</code></td></tr>
+<tr><td>版本</td><td><code>1.0.0</code></td></tr>
+<tr><td>作者</td><td>Hermes Agent</td></tr>
+<tr><td>许可证</td><td>MIT</td></tr>
+<tr><td>平台</td><td>linux, macos, windows</td></tr>
+<tr><td>标签</td><td><code>MCP</code>, <code>Tools</code>, <code>Integrations</code></td></tr>
+<tr><td>相关技能</td><td><a href="/hermes-docs/user-guide/skills/optional/mcp/mcp-mcporter"><code>mcporter</code></a></td></tr>
+</tbody></table>
+<h2>参考：完整 SKILL.md</h2>
+<p>:::info</p>
+<p>以下是 Hermes 在此技能被触发时加载的完整技能定义。这是技能激活时代理所看到的指令。</p>
+<p>:::</p>
+<h1>Native MCP Client</h1>
+<p>Hermes Agent has a built-in MCP client that connects to MCP servers at startup, discovers their tools, and makes them available as first-class tools the agent can call directly. No bridge CLI needed -- tools from MCP servers appear alongside built-in tools like <code>terminal</code>, <code>read_file</code>, etc.</p>
+<h2>何时使用</h2>
+<p>Use this whenever you want to:</p>
+<p>- Connect to MCP servers and use their tools from within Hermes Agent</p>
+<p>- Add external capabilities (filesystem access, GitHub, databases, APIs) via MCP</p>
+<p>- Run local stdio-based MCP servers (npx, uvx, or any command)</p>
+<p>- Connect to remote HTTP/StreamableHTTP MCP servers</p>
+<p>- Have MCP tools auto-discovered and available in every conversation</p>
+<p>For ad-hoc, one-off MCP tool calls from the terminal without configuring anything, see the <code>mcporter</code> skill instead.</p>
+<h2>前提条件</h2>
+<p>- <strong>mcp Python package</strong> -- optional dependency; install with <code>pip install mcp</code>. If not installed, MCP support is silently disabled.</p>
+<p>- <strong>Node.js</strong> -- required for <code>npx</code>-based MCP servers (most community servers)</p>
+<p>- <strong>uv</strong> -- required for <code>uvx</code>-based MCP servers (Python-based servers)</p>
+<p>Install the MCP SDK:</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install mcp
+# or, if using uv:
+uv pip install mcp
+</div>
+<h2>Quick Start</h2>
+<p>Add MCP servers to <code>~/.hermes/config.yaml</code> under the <code>mcp_servers</code> key:</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mcp_servers:
+  time:
+    command: "uvx"
+    args: ["mcp-server-time"]
+</div>
+<p>Restart Hermes Agent. On startup it will:</p>
+<p>1. Connect to the server</p>
+<p>2. Discover available tools</p>
+<p>3. Register them with the prefix <code>mcp_time_*</code></p>
+<p>4. Inject them into all platform toolsets</p>
+<p>You can then use the tools naturally -- just ask the agent to get the current time.</p>
+<h2>配置 Reference</h2>
+<p>Each entry under <code>mcp_servers</code> is a server name mapped to its config. There are two transport types: <strong>stdio</strong> (command-based) and <strong>HTTP</strong> (url-based).</p>
+<h3>Stdio Transport (command + args)</h3>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mcp_servers:
+  server_name:
+    command: "npx"             # (required) executable to run
+    args: ["-y", "pkg-name"]   # (optional) command arguments, default: []
+    env:                       # (optional) environment variables for the subprocess
+      SOME_API_KEY: "value"
+    timeout: 120               # (optional) per-tool-call timeout in seconds, default: 120
+    connect_timeout: 60        # (optional) initial connection timeout in seconds, default: 60
+</div>
+<h3>HTTP Transport (url)</h3>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mcp_servers:
+  server_name:
+    url: "https://my-server.example.com/mcp"   # (required) server URL
+    headers:                                     # (optional) HTTP headers
+      Authorization: "Bearer sk-..."
+    timeout: 180               # (optional) per-tool-call timeout in seconds, default: 120
+    connect_timeout: 60        # (optional) initial connection timeout in seconds, default: 60
+</div>
+<h3>All Config 选项</h3>
+<table><thead><tr><th>Option</th><th>Type</th><th>默认</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>command</code></td><td>string</td><td>--</td><td>Executable to run (stdio transport, required)</td></tr>
+<tr><td><code>args</code></td><td>list</td><td><code>[]</code></td><td>参数 passed to the command</td></tr>
+<tr><td><code>env</code></td><td>dict</td><td><code>{}</code></td><td>Extra environment variables for the subprocess</td></tr>
+<tr><td><code>url</code></td><td>string</td><td>--</td><td>Server URL (HTTP transport, required)</td></tr>
+<tr><td><code>headers</code></td><td>dict</td><td><code>{}</code></td><td>HTTP headers sent with every request</td></tr>
+<tr><td><code>timeout</code></td><td>int</td><td><code>120</code></td><td>Per-tool-call timeout in seconds</td></tr>
+<tr><td><code>connect_timeout</code></td><td>int</td><td><code>60</code></td><td>Timeout for initial connection and discovery</td></tr>
+</tbody></table>
+<p>Note: A server config must have either <code>command</code> (stdio) or <code>url</code> (HTTP), not both.</p>
+<h2>How It Works</h2>
+<h3>Startup Discovery</h3>
+<p>When Hermes Agent starts, <code>discover_mcp_tools()</code> is called during tool initialization:</p>
+<p>1. Reads <code>mcp_servers</code> from <code>~/.hermes/config.yaml</code></p>
+<p>2. For each server, spawns a connection in a dedicated background event loop</p>
+<p>3. Initializes the MCP session and calls <code>list_tools()</code> to discover available tools</p>
+<p>4. Registers each tool in the Hermes tool registry</p>
+<h3>Tool Naming Convention</h3>
+<p>MCP tools are registered with the naming pattern:</p>
+<div class="code-block"><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mcp_{server_name}_{tool_name}
+</div>
+<p>Hyphens and dots in names are replaced with underscores for LLM API compatibility.</p>
+<p>示例:</p>
+<p>- Server <code>filesystem</code>, tool <code>read_file</code> → <code>mcp_filesystem_read_file</code></p>
+<p>- Server <code>github</code>, tool <code>list-issues</code> → <code>mcp_github_list_issues</code></p>
+<p>- Server <code>my-api</code>, tool <code>fetch.data</code> → <code>mcp_my_api_fetch_data</code></p>
+<h3>Auto-Injection</h3>
+<p>After discovery, MCP tools are automatically injected into all <code>hermes-*</code> platform toolsets (CLI, Discord, Telegram, etc.). This means MCP tools are available in every conversation without any additional configuration.</p>
+<h3>Connection Lifecycle</h3>
+<p>- Each server runs as a long-lived asyncio Task in a background daemon thread</p>
+<p>- Connections persist for the lifetime of the agent process</p>
+<p>- If a connection drops, automatic reconnection with exponential backoff kicks in (up to 5 retries, max 60s backoff)</p>
+<p>- On agent shutdown, all connections are gracefully closed</p>
+<h3>Idempotency</h3>
+<p><code>discover_mcp_tools()</code> is idempotent -- calling it multiple times only connects to servers that aren't already connected. Failed servers are retried on subsequent calls.</p>
+<h2>Transport Types</h2>
+<h3>Stdio Transport</h3>
+<p>The most common transport. Hermes launches the MCP server as a subprocess and communicates over stdin/stdout.</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mcp_servers:
+  filesystem:
+    command: "npx"
+    args: ["-y", "@modelcontextprotocol/server-filesystem", "/home/user/projects"]
+</div>
+<p>The subprocess inherits a <strong>filtered</strong> environment (see 安全 section below) plus any variables you specify in <code>env</code>.</p>
+<h3>HTTP / StreamableHTTP Transport</h3>
+<p>For remote or shared MCP servers. Requires the <code>mcp</code> package to include HTTP client support (<code>mcp.client.streamable_http</code>).</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mcp_servers:
+  remote_api:
+    url: "https://mcp.example.com/mcp"
+    headers:
+      Authorization: "Bearer sk-..."
+</div>
+<p>If HTTP support is not available in your installed <code>mcp</code> version, the server will fail with an ImportError and other servers will continue normally.</p>
+<h2>安全</h2>
+<h3>Environment Variable Filtering</h3>
+<p>For stdio servers, Hermes does NOT pass your full shell environment to MCP subprocesses. Only safe baseline variables are inherited:</p>
+<p>- <code>PATH</code>, <code>HOME</code>, <code>USER</code>, <code>LANG</code>, <code>LC_ALL</code>, <code>TERM</code>, <code>SHELL</code>, <code>TMPDIR</code></p>
+<p>- Any <code>XDG_*</code> variables</p>
+<p>All other environment variables (API keys, tokens, secrets) are excluded unless you explicitly add them via the <code>env</code> config key. This prevents accidental credential leakage to untrusted MCP servers.</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mcp_servers:
+  github:
+    command: "npx"
+    args: ["-y", "@modelcontextprotocol/server-github"]
+    env:
+      # Only this token is passed to the subprocess
+      GITHUB_PERSONAL_ACCESS_TOKEN: "ghp_..."
+</div>
+<h3>Credential Stripping in Error Messages</h3>
+<p>If an MCP tool call fails, any credential-like patterns in the error message are automatically redacted before being shown to the LLM. This covers:</p>
+<p>- GitHub PATs (<code>ghp_...</code>)</p>
+<p>- OpenAI-style keys (<code>sk-...</code>)</p>
+<p>- Bearer tokens</p>
+<p>- Generic <code>token=</code>, <code>key=</code>, <code>API_KEY=</code>, <code>password=</code>, <code>secret=</code> patterns</p>
+<h2>故障排除</h2>
+<h3>"MCP SDK not available -- skipping MCP tool discovery"</h3>
+<p>The <code>mcp</code> Python package is not installed. Install it:</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install mcp
+</div>
+<h3>"No MCP servers configured"</h3>
+<p>No <code>mcp_servers</code> key in <code>~/.hermes/config.yaml</code>, or it's empty. Add at least one server.</p>
+<h3>"Failed to connect to MCP server 'X'"</h3>
+<p>Common causes:</p>
+<p>- <strong>Command not found</strong>: The <code>command</code> binary isn't on PATH. Ensure <code>npx</code>, <code>uvx</code>, or the relevant command is installed.</p>
+<p>- <strong>Package not found</strong>: For npx servers, the npm package may not exist or may need <code>-y</code> in args to auto-install.</p>
+<p>- <strong>Timeout</strong>: The server took too long to start. Increase <code>connect_timeout</code>.</p>
+<p>- <strong>Port conflict</strong>: For HTTP servers, the URL may be unreachable.</p>
+<h3>"MCP server 'X' requires HTTP transport but mcp.client.streamable_http is not available"</h3>
+<p>Your <code>mcp</code> package version doesn't include HTTP client support. Upgrade:</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install --upgrade mcp
+</div>
+<h3>Tools not appearing</h3>
+<p>- Check that the server is listed under <code>mcp_servers</code> (not <code>mcp</code> or <code>servers</code>)</p>
+<p>- Ensure the YAML indentation is correct</p>
+<p>- Look at Hermes Agent startup logs for connection messages</p>
+<p>- Tool names are prefixed with <code>mcp_{server}_{tool}</code> -- look for that pattern</p>
+<h3>Connection keeps dropping</h3>
+<p>The client retries up to 5 times with exponential backoff (1s, 2s, 4s, 8s, 16s, capped at 60s). If the server is fundamentally unreachable, it gives up after 5 attempts. Check the server process and network connectivity.</p>
+<h2>示例</h2>
+<h3>Time Server (uvx)</h3>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mcp_servers:
+  time:
+    command: "uvx"
+    args: ["mcp-server-time"]
+</div>
+<p>Registers tools like <code>mcp_time_get_current_time</code>.</p>
+<h3>Filesystem Server (npx)</h3>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mcp_servers:
+  filesystem:
+    command: "npx"
+    args: ["-y", "@modelcontextprotocol/server-filesystem", "/home/user/documents"]
+    timeout: 30
+</div>
+<p>Registers tools like <code>mcp_filesystem_read_file</code>, <code>mcp_filesystem_write_file</code>, <code>mcp_filesystem_list_directory</code>.</p>
+<h3>GitHub Server with Authentication</h3>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mcp_servers:
+  github:
+    command: "npx"
+    args: ["-y", "@modelcontextprotocol/server-github"]
+    env:
+      GITHUB_PERSONAL_ACCESS_TOKEN: "ghp_xxxxxxxxxxxxxxxxxxxx"
+    timeout: 60
+</div>
+<p>Registers tools like <code>mcp_github_list_issues</code>, <code>mcp_github_create_pull_request</code>, etc.</p>
+<h3>Remote HTTP Server</h3>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mcp_servers:
+  company_api:
+    url: "https://mcp.mycompany.com/v1/mcp"
+    headers:
+      Authorization: "Bearer sk-xxxxxxxxxxxxxxxxxxxx"
+      X-Team-Id: "engineering"
+    timeout: 180
+    connect_timeout: 30
+</div>
+<h3>Multiple Servers</h3>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mcp_servers:
+  time:
+    command: "uvx"
+    args: ["mcp-server-time"]
+
+  filesystem:
+    command: "npx"
+    args: ["-y", "@modelcontextprotocol/server-filesystem", "/tmp"]
+
+  github:
+    command: "npx"
+    args: ["-y", "@modelcontextprotocol/server-github"]
+    env:
+      GITHUB_PERSONAL_ACCESS_TOKEN: "ghp_xxxxxxxxxxxxxxxxxxxx"
+
+  company_api:
+    url: "https://mcp.internal.company.com/mcp"
+    headers:
+      Authorization: "Bearer sk-xxxxxxxxxxxxxxxxxxxx"
+    timeout: 300
+</div>
+<p>All tools from all servers are registered and available simultaneously. Each server's tools are prefixed with its name to avoid collisions.</p>
+<h2>Sampling (Server-Initiated LLM Requests)</h2>
+<p>Hermes supports MCP's <code>sampling/createMessage</code> capability — MCP servers can request LLM completions through the agent during tool execution. This enables agent-in-the-loop workflows (data analysis, content generation, decision-making).</p>
+<p>Sampling is <strong>enabled by default</strong>. Configure per server:</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+mcp_servers:
+  my_server:
+    command: "npx"
+    args: ["-y", "my-mcp-server"]
+    sampling:
+      enabled: true           # default: true
+      model: "gemini-3-flash" # model override (optional)
+      max_tokens_cap: 4096    # max tokens per request
+      timeout: 30             # LLM call timeout (seconds)
+      max_rpm: 10             # max requests per minute
+      allowed_models: []      # model whitelist (empty = all)
+      max_tool_rounds: 5      # tool loop limit (0 = disable)
+      log_level: "info"       # audit verbosity
+</div>
+<p>Servers can also include <code>tools</code> in sampling requests for multi-turn tool-augmented workflows. The <code>max_tool_rounds</code> config prevents infinite tool loops. Per-server audit metrics (requests, errors, tokens, tool use count) are tracked via <code>get_mcp_status()</code>.</p>
+<p>Disable sampling for untrusted servers with <code>sampling: { enabled: false }</code>.</p>
+<h2>备注</h2>
+<p>- MCP tools are called synchronously from the agent's perspective but run asynchronously on a dedicated background event loop</p>
+<p>- Tool results are returned as JSON with either <code>{"result": "..."}</code> or <code>{"error": "..."}</code></p>
+<p>- The native MCP client is independent of <code>mcporter</code> -- you can use both simultaneously</p>
+<p>- Server connections are persistent and shared across all conversations in the same agent process</p>
+<p>- Adding or removing servers requires restarting the agent (no hot-reload currently)</p>  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

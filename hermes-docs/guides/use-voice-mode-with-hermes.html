@@ -1,0 +1,547 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>在 Hermes 中使用语音模式 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html" class="active">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 实用指南 / 在 Hermes 中使用语音模式</div><p>本指南是<a href="/user-guide/features/voice-mode">语音模式功能参考</a>的实用配套文档。</p>
+<p>功能页面介绍语音模式能做什么，本指南则说明如何真正用好它。</p>
+<h2>语音模式适合哪些场景</h2>
+<p>语音模式在以下情况特别有用：</p>
+<ul>
+<li>需要免手持的 CLI 工作流</li>
+<li>希望在 Telegram 或 Discord 中获得语音回复</li>
+<li>希望 Hermes 加入 Discord 语音频道进行实时对话</li>
+<li>边走动边快速记录想法、调试问题或来回交流，而不是打字</li>
+</ul>
+<h2>选择你的语音模式方案</h2>
+<p>Hermes 中实际上有三种不同的语音体验。</p>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>最适合</th>
+<th>平台</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>交互式麦克风循环</td>
+<td>编码或研究时的个人免手持使用</td>
+<td>CLI</td>
+</tr>
+<tr>
+<td>聊天中的语音回复</td>
+<td>在正常消息旁附带语音回复</td>
+<td>Telegram、Discord</td>
+</tr>
+<tr>
+<td>实时语音频道机器人</td>
+<td>在语音频道中进行群组或个人实时对话</td>
+<td>Discord 语音频道</td>
+</tr>
+</tbody>
+</table>
+<p>推荐路径：</p>
+<ol>
+<li>先让文本模式正常工作</li>
+<li>再启用语音回复</li>
+<li>最后如需完整体验，再切换到 Discord 语音频道</li>
+</ol>
+<h2>第一步：确保普通 Hermes 先正常运行</h2>
+<p>在接触语音模式之前，请确认：</p>
+<ul>
+<li>Hermes 能正常启动</li>
+<li>已配置好 provider（提供商）</li>
+<li>Agent 能正常回答文本 prompt（提示词）</li>
+</ul>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes
+</div>
+<p>问一个简单的问题：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+What tools do you have available?
+</div>
+<p>如果文本模式还不稳定，请先修复它。</p>
+<h2>第二步：安装所需的额外依赖</h2>
+<h3>CLI 麦克风 + 播放</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install "hermes-agent[voice]"
+</div>
+<h3>消息平台</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install "hermes-agent[messaging]"
+</div>
+<h3>高级 ElevenLabs TTS</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install "hermes-agent[tts-premium]"
+</div>
+<h3>本地 NeuTTS（可选）</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python -m pip install -U neutts[all]
+</div>
+<h3>全部安装</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install "hermes-agent[all]"
+</div>
+<h2>第三步：安装系统依赖</h2>
+<h3>macOS</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+brew install portaudio ffmpeg opus
+brew install espeak-ng
+</div>
+<h3>Ubuntu / Debian</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+sudo apt install portaudio19-dev ffmpeg libopus0
+sudo apt install espeak-ng
+</div>
+<p>各依赖的作用：</p>
+<ul>
+<li><code>portaudio</code> → CLI 语音模式的麦克风输入与播放</li>
+<li><code>ffmpeg</code> → TTS 和消息传递的音频转换</li>
+<li><code>opus</code> → Discord 语音编解码器支持</li>
+<li><code>espeak-ng</code> → NeuTTS 的 phonemizer 后端</li>
+</ul>
+<h2>第四步：选择 STT 和 TTS 提供商</h2>
+<p>Hermes 同时支持本地和云端语音处理方案。</p>
+<h3>最简单 / 最低成本的方案</h3>
+<p>使用本地 STT 和免费的 Edge TTS：</p>
+<ul>
+<li>STT provider：<code>local</code></li>
+<li>TTS provider：<code>edge</code></li>
+</ul>
+<p>这通常是最好的起点。</p>
+<h3>环境变量文件示例</h3>
+<p>添加到 <code>~/.hermes/.env</code>：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 云端 STT 选项（本地无需密钥）
+GROQ_API_KEY=***
+VOICE_TOOLS_OPENAI_KEY=***
+
+# 高级 TTS（可选）
+ELEVENLABS_API_KEY=***
+</div>
+<h3>Provider 推荐</h3>
+<h4>语音转文字（STT）</h4>
+<ul>
+<li><code>local</code> → 隐私保护和零成本使用的最佳默认选项</li>
+<li><code>groq</code> → 极快的云端转录</li>
+<li><code>openai</code> → 良好的付费备选</li>
+</ul>
+<h4>文字转语音（TTS）</h4>
+<ul>
+<li><code>edge</code> → 免费，对大多数用户已足够</li>
+<li><code>neutts</code> → 免费的本地/设备端 TTS</li>
+<li><code>elevenlabs</code> → 最佳质量</li>
+<li><code>openai</code> → 良好的中间选项</li>
+<li><code>mistral</code> → 多语言，原生 Opus</li>
+</ul>
+<h3>如果使用 <code>hermes setup</code></h3>
+<p>如果你在设置向导中选择了 NeuTTS，Hermes 会检查 <code>neutts</code> 是否已安装。如果缺失，向导会告知你 NeuTTS 需要 Python 包 <code>neutts</code> 和系统包 <code>espeak-ng</code>，并提供自动安装，使用平台包管理器安装 <code>espeak-ng</code>，然后运行：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+python -m pip install -U neutts[all]
+</div>
+<p>如果跳过安装或安装失败，向导会回退到 Edge TTS。</p>
+<h2>第五步：推荐配置</h2>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+voice:
+  record_key: "ctrl+b"
+  max_recording_seconds: 120
+  auto_tts: false
+  beep_enabled: true
+  silence_threshold: 200
+  silence_duration: 3.0
+
+stt:
+  provider: "local"
+  local:
+    model: "base"
+
+tts:
+  provider: "edge"
+  edge:
+    voice: "en-US-AriaNeural"
+</div>
+<p>这是适合大多数人的保守默认配置。</p>
+<p>如果想改用本地 TTS，将 <code>tts</code> 块替换为：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+tts:
+  provider: "neutts"
+  neutts:
+    ref_audio: ''
+    ref_text: ''
+    model: neuphonic/neutts-air-q4-gguf
+    device: cpu
+</div>
+<h2>使用场景一：CLI 语音模式</h2>
+<h2>开启方式</h2>
+<p>启动 Hermes：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes
+</div>
+<p>在 CLI 内执行：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/voice on
+</div>
+<h3>录音流程</h3>
+<p>默认按键：</p>
+<ul>
+<li><code>Ctrl+B</code></li>
+</ul>
+<p>工作流程：</p>
+<ol>
+<li>按下 <code>Ctrl+B</code></li>
+<li>说话</li>
+<li>等待静音检测自动停止录音</li>
+<li>Hermes 转录并回复</li>
+<li>如果开启了 TTS，它会朗读答案</li>
+<li>循环可自动重启以持续使用</li>
+</ol>
+<h3>常用命令</h3>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/voice
+/voice on
+/voice off
+/voice tts
+/voice status
+</div>
+<h3>推荐的 CLI 工作流</h3>
+<h4>随走随调试</h4>
+<p>说：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+I keep getting a docker permission error. Help me debug it.
+</div>
+<p>然后继续免手持操作：</p>
+<ul>
+<li>&quot;再读一遍最后的错误&quot;</li>
+<li>&quot;用更简单的语言解释根本原因&quot;</li>
+<li>&quot;现在给我精确的修复方案&quot;</li>
+</ul>
+<h4>研究 / 头脑风暴</h4>
+<p>非常适合：</p>
+<ul>
+<li>边走动边思考</li>
+<li>口述半成形的想法</li>
+<li>让 Hermes 实时整理你的思路</li>
+</ul>
+<h4>无障碍 / 少打字场景</h4>
+<p>如果打字不方便，语音模式是保持完整 Hermes 工作流的最快方式之一。</p>
+<h2>调整 CLI 行为</h2>
+<h3>静音阈值</h3>
+<p>如果 Hermes 开始/停止过于激进，调整：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+voice:
+  silence_threshold: 250
+</div>
+<p>阈值越高 = 灵敏度越低。</p>
+<h3>静音时长</h3>
+<p>如果你在句子之间经常停顿，增大该值：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+voice:
+  silence_duration: 4.0
+</div>
+<h3>录音按键</h3>
+<p>如果 <code>Ctrl+B</code> 与你的终端或 tmux 习惯冲突：</p>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+voice:
+  record_key: "ctrl+space"
+</div>
+<h2>使用场景二：Telegram 或 Discord 中的语音回复</h2>
+<p>此模式比完整语音频道更简单。</p>
+<p>Hermes 仍作为普通聊天机器人运行，但可以朗读回复。</p>
+<h3>启动 gateway</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes gateway
+</div>
+<h3>开启语音回复</h3>
+<p>在 Telegram 或 Discord 中：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/voice on
+</div>
+<p>或</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/voice tts
+</div>
+<h3>模式说明</h3>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>off</code></td>
+<td>仅文本</td>
+</tr>
+<tr>
+<td><code>voice_only</code></td>
+<td>仅当用户发送语音时才朗读</td>
+</tr>
+<tr>
+<td><code>all</code></td>
+<td>朗读每条回复</td>
+</tr>
+</tbody>
+</table>
+<h3>何时使用哪种模式</h3>
+<ul>
+<li><code>/voice on</code>：仅对语音来源的消息给出语音回复</li>
+<li><code>/voice tts</code>：始终作为完整语音助手运行</li>
+</ul>
+<h3>推荐的消息平台工作流</h3>
+<h4>手机上的 Telegram 助手</h4>
+<p>适用于：</p>
+<ul>
+<li>离开电脑时</li>
+<li>发送语音备忘并获取快速语音回复</li>
+<li>希望 Hermes 充当便携式研究或运维助手</li>
+</ul>
+<h4>Discord 私信中的语音输出</h4>
+<p>适用于希望私密交互、避免服务器频道 @mention 行为的场景。</p>
+<h2>使用场景三：Discord 语音频道</h2>
+<p>这是最高级的模式。</p>
+<p>Hermes 加入 Discord 语音频道（VC），监听用户语音，转录后运行正常的 agent 流水线，并将回复朗读回频道。</p>
+<h2>所需的 Discord 权限</h2>
+<p>除了普通文本机器人设置外，请确保机器人拥有：</p>
+<ul>
+<li>Connect（连接）</li>
+<li>Speak（发言）</li>
+<li>最好还有 Use Voice Activity（使用语音活动）</li>
+</ul>
+<p>同时在开发者门户中启用特权 intent（意图）：</p>
+<ul>
+<li>Presence Intent</li>
+<li>Server Members Intent</li>
+<li>Message Content Intent</li>
+</ul>
+<h2>加入与离开</h2>
+<p>在机器人所在的 Discord 文本频道中：</p>
+<div class="code-block"><span class="code-lang">text</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+/voice join
+/voice leave
+/voice status
+</div>
+<h3>加入后的行为</h3>
+<ul>
+<li>用户在语音频道中说话</li>
+<li>Hermes 检测语音边界</li>
+<li>转录内容发布到关联的文本频道</li>
+<li>Hermes 以文字和音频形式回复</li>
+<li>文本频道为执行 <code>/voice join</code> 的那个频道</li>
+</ul>
+<h3>Discord 语音频道使用最佳实践</h3>
+<ul>
+<li>严格限制 <code>DISCORD_ALLOWED_USERS</code></li>
+<li>先使用专用的机器人/测试频道</li>
+<li>在尝试语音频道模式之前，先确认 STT 和 TTS 在普通文本聊天语音模式下正常工作</li>
+</ul>
+<h2>语音质量建议</h2>
+<h3>最佳质量方案</h3>
+<ul>
+<li>STT：本地 <code>large-v3</code> 或 Groq <code>whisper-large-v3</code></li>
+<li>TTS：ElevenLabs</li>
+</ul>
+<h3>最佳速度 / 便利性方案</h3>
+<ul>
+<li>STT：本地 <code>base</code> 或 Groq</li>
+<li>TTS：Edge</li>
+</ul>
+<h3>最佳零成本方案</h3>
+<ul>
+<li>STT：本地</li>
+<li>TTS：Edge</li>
+</ul>
+<h2>常见故障模式</h2>
+<h3>&quot;No audio device found&quot;</h3>
+<p>安装 <code>portaudio</code>。</p>
+<h3>&quot;机器人加入但听不到声音&quot;</h3>
+<p>检查：</p>
+<ul>
+<li>你的 Discord 用户 ID 是否在 <code>DISCORD_ALLOWED_USERS</code> 中</li>
+<li>你是否处于静音状态</li>
+<li>特权 intent 是否已启用</li>
+<li>机器人是否拥有 Connect/Speak 权限</li>
+</ul>
+<h3>&quot;能转录但不说话&quot;</h3>
+<p>检查：</p>
+<ul>
+<li>TTS provider 配置</li>
+<li>ElevenLabs 或 OpenAI 的 API 密钥 / 配额</li>
+<li>Edge 转换路径的 <code>ffmpeg</code> 安装情况</li>
+</ul>
+<h3>&quot;Whisper 输出乱码&quot;</h3>
+<p>尝试：</p>
+<ul>
+<li>更安静的环境</li>
+<li>提高 <code>silence_threshold</code></li>
+<li>更换 STT provider/模型</li>
+<li>更短、更清晰的表达</li>
+</ul>
+<h3>&quot;在私信中正常但在服务器频道中不工作&quot;</h3>
+<p>这通常是 mention（提及）策略问题。</p>
+<p>默认情况下，除非另行配置，机器人在 Discord 服务器文本频道中需要被 <code>@mention</code> 才会响应。</p>
+<h2>建议的第一周方案</h2>
+<p>如果你想走最短的成功路径：</p>
+<ol>
+<li>让文本 Hermes 正常工作</li>
+<li>安装 <code>hermes-agent[voice]</code></li>
+<li>使用本地 STT + Edge TTS 的 CLI 语音模式</li>
+<li>然后在 Telegram 或 Discord 中启用 <code>/voice on</code></li>
+<li>只有在此之后，再尝试 Discord 语音频道模式</li>
+</ol>
+<p>这种递进方式可以将调试范围控制到最小。</p>
+<h2>下一步阅读</h2>
+<ul>
+<li><a href="/user-guide/features/voice-mode">语音模式功能参考</a></li>
+<li><a href="/user-guide/messaging">消息 Gateway</a></li>
+<li><a href="/user-guide/messaging/discord">Discord 设置</a></li>
+<li><a href="/user-guide/messaging/telegram">Telegram 设置</a></li>
+<li><a href="/user-guide/configuration">配置</a></li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

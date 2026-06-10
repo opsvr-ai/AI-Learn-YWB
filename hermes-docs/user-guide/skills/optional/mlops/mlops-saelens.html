@@ -1,0 +1,649 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>稀疏自编码器训练 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / 稀疏自编码器训练</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>稀疏自编码器训练</h1>
+<p>提供使用 SAELens 训练和分析稀疏自编码器（SAE）的指导，将神经网络激活分解为可解释特征。适用于发现可解释特征、分析叠加现象，或研究语言模型中的单义性表示。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/mlops/saelens</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/mlops/saelens</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Orchestra Research</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>依赖</td>
+<td><code>sae-lens&gt;=6.0.0</code>, <code>transformer-lens&gt;=2.0.0</code>, <code>torch&gt;=2.0.0</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Sparse Autoencoders</code>, <code>SAE</code>, <code>Mechanistic Interpretability</code>, <code>Feature Discovery</code>, <code>Superposition</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发该 skill 时加载的完整 skill 定义。这是 agent 在 skill 激活时所看到的指令内容。
+</div>
+<h1>SAELens：用于机制可解释性的稀疏自编码器</h1>
+<p>SAELens 是训练和分析稀疏自编码器（SAE）的主要库。SAE 是一种将多义性神经网络激活分解为稀疏、可解释特征的技术，基于 Anthropic 在单义性方面的开创性研究。</p>
+<p><strong>GitHub</strong>：<a href="https://github.com/jbloomAus/SAELens">jbloomAus/SAELens</a>（1,100+ stars）</p>
+<h2>问题背景：多义性与叠加（Superposition）</h2>
+<p>神经网络中的单个神经元是<strong>多义性</strong>的——它们在多种语义不同的上下文中激活。这是因为模型使用<strong>叠加</strong>（superposition）来表示比神经元数量更多的特征，从而使可解释性变得困难。</p>
+<p><strong>SAE 的解决方案</strong>：将密集激活分解为稀疏的单义性特征——对于任意给定输入，通常只有少量特征激活，且每个特征对应一个可解释的概念。</p>
+<h2>何时使用 SAELens</h2>
+<p><strong>在以下情况下使用 SAELens：</strong></p>
+<ul>
+<li>发现模型激活中的可解释特征</li>
+<li>理解模型学到了哪些概念</li>
+<li>研究叠加现象和特征几何结构</li>
+<li>执行基于特征的引导（steering）或消融（ablation）</li>
+<li>分析安全相关特征（欺骗、偏见、有害内容）</li>
+</ul>
+<p><strong>在以下情况下考虑替代方案：</strong></p>
+<ul>
+<li>需要基础激活分析 → 直接使用 <strong>TransformerLens</strong></li>
+<li>需要因果干预实验 → 使用 <strong>pyvene</strong> 或 <strong>TransformerLens</strong></li>
+<li>需要生产环境引导 → 考虑直接激活工程</li>
+</ul>
+<h2>安装</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install sae-lens
+</div>
+<p>要求：Python 3.10+，transformer-lens&gt;=2.0.0</p>
+<h2>核心概念</h2>
+<h3>SAE 学到了什么</h3>
+<p>SAE 通过稀疏瓶颈重建模型激活：</p>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+Input Activation → Encoder → Sparse Features → Decoder → Reconstructed Activation
+    (d_model)       ↓        (d_sae &gt;&gt; d_model)    ↓         (d_model)
+                 sparsity                      reconstruction
+                 penalty                          loss
+</div>
+<p><strong>损失函数</strong>：<code>MSE(original, reconstructed) + L1_coefficient × L1(features)</code></p>
+<h3>关键验证（Anthropic 研究）</h3>
+<p>在《Towards Monosemanticity》中，人工评估者发现 <strong>70% 的 SAE 特征具有真正的可解释性</strong>。发现的特征包括：</p>
+<ul>
+<li>DNA 序列、法律语言、HTTP 请求</li>
+<li>希伯来文本、营养声明、代码语法</li>
+<li>情感、命名实体、语法结构</li>
+</ul>
+<h2>工作流 1：加载和分析预训练 SAE</h2>
+<h3>步骤说明</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from transformer_lens import HookedTransformer
+from sae_lens import SAE
+<h1>1. 加载模型和预训练 SAE</h1>
+<p>model = HookedTransformer.from_pretrained(&quot;gpt2-small&quot;, device=&quot;cuda&quot;)
+sae, cfg_dict, sparsity = SAE.from_pretrained(
+release=&quot;gpt2-small-res-jb&quot;,
+sae_id=&quot;blocks.8.hook_resid_pre&quot;,
+device=&quot;cuda&quot;
+)</p>
+<h1>2. 获取模型激活</h1>
+<p>tokens = model.to_tokens(&quot;The capital of France is Paris&quot;)
+_, cache = model.run_with_cache(tokens)
+activations = cache[&quot;resid_pre&quot;, 8]  # [batch, pos, d_model]</p>
+<h1>3. 编码为 SAE 特征</h1>
+<p>sae_features = sae.encode(activations)  # [batch, pos, d_sae]
+print(f&quot;Active features: {(sae_features &amp;gt; 0).sum()}&quot;)</p>
+<h1>4. 找出每个位置的顶部特征</h1>
+<p>for pos in range(tokens.shape[1]):
+top_features = sae_features[0, pos].topk(5)
+token = model.to_str_tokens(tokens[0, pos:pos+1])[0]
+print(f&quot;Token '{token}': features {top_features.indices.tolist()}&quot;)</p>
+<h1>5. 重建激活</h1>
+<p>reconstructed = sae.decode(sae_features)
+reconstruction_error = (activations - reconstructed).norm()</p>
+</div>
+<h3>可用预训练 SAE</h3>
+<table>
+<thead>
+<tr>
+<th>Release</th>
+<th>模型</th>
+<th>层</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gpt2-small-res-jb</code></td>
+<td>GPT-2 Small</td>
+<td>多个残差流</td>
+</tr>
+<tr>
+<td><code>gemma-2b-res</code></td>
+<td>Gemma 2B</td>
+<td>残差流</td>
+</tr>
+<tr>
+<td>HuggingFace 上的各类 SAE</td>
+<td>搜索标签 <code>saelens</code></td>
+<td>各种</td>
+</tr>
+</tbody>
+</table>
+<h3>检查清单</h3>
+<ul>
+<li>[ ] 使用 TransformerLens 加载模型</li>
+<li>[ ] 为目标层加载匹配的 SAE</li>
+<li>[ ] 将激活编码为稀疏特征</li>
+<li>[ ] 识别每个 token 的顶部激活特征</li>
+<li>[ ] 验证重建质量</li>
+</ul>
+<h2>工作流 2：训练自定义 SAE</h2>
+<h3>步骤说明</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from sae_lens import SAE, LanguageModelSAERunnerConfig, SAETrainingRunner
+<h1>1. 配置训练</h1>
+<p>cfg = LanguageModelSAERunnerConfig(
+# 模型
+model_name=&quot;gpt2-small&quot;,
+hook_name=&quot;blocks.8.hook_resid_pre&quot;,
+hook_layer=8,
+d_in=768,  # 模型维度</p>
+<pre><code># SAE 架构
+architecture=&quot;standard&quot;,  # 或 &quot;gated&quot;、&quot;topk&quot;
+d_sae=768 * 8,  # 扩展因子为 8
+activation_fn=&quot;relu&quot;,
+
+# 训练
+lr=4e-4,
+l1_coefficient=8e-5,  # 稀疏性惩罚
+l1_warm_up_steps=1000,
+train_batch_size_tokens=4096,
+training_tokens=100_000_000,
+
+# 数据
+dataset_path=&quot;monology/pile-uncopyrighted&quot;,
+context_size=128,
+
+# 日志
+log_to_wandb=True,
+wandb_project=&quot;sae-training&quot;,
+
+# 检查点
+checkpoint_path=&quot;checkpoints&quot;,
+n_checkpoints=5,
+</code></pre>
+<p>)</p>
+<h1>2. 训练</h1>
+<p>trainer = SAETrainingRunner(cfg)
+sae = trainer.run()</p>
+<h1>3. 评估</h1>
+<p>print(f&quot;L0 (avg active features): {trainer.metrics['l0']}&quot;)
+print(f&quot;CE Loss Recovered: {trainer.metrics['ce_loss_score']}&quot;)</p>
+</div>
+<h3>关键超参数</h3>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>典型值</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>d_sae</code></td>
+<td>4–16× d_model</td>
+<td>特征更多，容量更大</td>
+</tr>
+<tr>
+<td><code>l1_coefficient</code></td>
+<td>5e-5 到 1e-4</td>
+<td>越高 = 越稀疏，精度越低</td>
+</tr>
+<tr>
+<td><code>lr</code></td>
+<td>1e-4 到 1e-3</td>
+<td>标准优化器学习率</td>
+</tr>
+<tr>
+<td><code>l1_warm_up_steps</code></td>
+<td>500–2000</td>
+<td>防止特征早期死亡</td>
+</tr>
+</tbody>
+</table>
+<h3>评估指标</h3>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>目标值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>L0</strong></td>
+<td>50–200</td>
+<td>每个 token 的平均激活特征数</td>
+</tr>
+<tr>
+<td><strong>CE Loss Score</strong></td>
+<td>80–95%</td>
+<td>相对原始模型恢复的交叉熵</td>
+</tr>
+<tr>
+<td><strong>Dead Features</strong></td>
+<td>&amp;lt;5%</td>
+<td>从不激活的特征比例</td>
+</tr>
+<tr>
+<td><strong>Explained Variance</strong></td>
+<td>&gt;90%</td>
+<td>重建质量</td>
+</tr>
+</tbody>
+</table>
+<h3>检查清单</h3>
+<ul>
+<li>[ ] 选择目标层和 hook 点</li>
+<li>[ ] 设置扩展因子（d_sae = 4–16× d_model）</li>
+<li>[ ] 调整 L1 系数以获得期望的稀疏度</li>
+<li>[ ] 启用 L1 预热以防止特征死亡</li>
+<li>[ ] 训练期间监控指标（W&amp;B）</li>
+<li>[ ] 验证 L0 和 CE loss 恢复情况</li>
+<li>[ ] 检查死亡特征比例</li>
+</ul>
+<h2>工作流 3：特征分析与引导</h2>
+<h3>分析单个特征</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+from transformer_lens import HookedTransformer
+from sae_lens import SAE
+import torch
+<p>model = HookedTransformer.from_pretrained(&quot;gpt2-small&quot;, device=&quot;cuda&quot;)
+sae, _, _ = SAE.from_pretrained(
+release=&quot;gpt2-small-res-jb&quot;,
+sae_id=&quot;blocks.8.hook_resid_pre&quot;,
+device=&quot;cuda&quot;
+)</p>
+<h1>找出激活特定特征的内容</h1>
+<p>feature_idx = 1234
+test_texts = [
+&quot;The scientist conducted an experiment&quot;,
+&quot;I love chocolate cake&quot;,
+&quot;The code compiles successfully&quot;,
+&quot;Paris is beautiful in spring&quot;,
+]</p>
+<p>for text in test_texts:
+tokens = model.to_tokens(text)
+_, cache = model.run_with_cache(tokens)
+features = sae.encode(cache[&quot;resid_pre&quot;, 8])
+activation = features[0, :, feature_idx].max().item()
+print(f&quot;{activation:.3f}: {text}&quot;)</p>
+</div>
+<h3>特征引导（Feature Steering）</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+def steer_with_feature(model, sae, prompt, feature_idx, strength=5.0):
+    """将 SAE 特征方向添加到残差流。"""
+    tokens = model.to_tokens(prompt)
+<pre><code># 从解码器获取特征方向
+feature_direction = sae.W_dec[feature_idx]  # [d_model]
+
+def steering_hook(activation, hook):
+    # 在所有位置添加缩放后的特征方向
+    activation += strength * feature_direction
+    return activation
+
+# 带引导的生成
+output = model.generate(
+    tokens,
+    max_new_tokens=50,
+    fwd_hooks=[(&quot;blocks.8.hook_resid_pre&quot;, steering_hook)]
+)
+return model.to_string(output[0])
+</code></pre>
+</div>
+<h3>特征归因（Feature Attribution）</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 哪些特征对特定输出影响最大？
+tokens = model.to_tokens("The capital of France is")
+_, cache = model.run_with_cache(tokens)
+<h1>获取最后位置的特征</h1>
+<p>features = sae.encode(cache[&quot;resid_pre&quot;, 8])[0, -1]  # [d_sae]</p>
+<h1>计算每个特征的 logit 归因</h1>
+<h1>特征贡献 = 特征激活 × 解码器权重 × 反嵌入</h1>
+<p>W_dec = sae.W_dec  # [d_sae, d_model]
+W_U = model.W_U    # [d_model, vocab]</p>
+<h1>对 &quot;Paris&quot; logit 的贡献</h1>
+<p>paris_token = model.to_single_token(&quot; Paris&quot;)
+feature_contributions = features * (W_dec @ W_U[:, paris_token])</p>
+<p>top_features = feature_contributions.topk(10)
+print(&quot;Top features for 'Paris' prediction:&quot;)
+for idx, val in zip(top_features.indices, top_features.values):
+print(f&quot;  Feature {idx.item()}: {val.item():.3f}&quot;)</p>
+</div>
+<h2>常见问题与解决方案</h2>
+<h3>问题：死亡特征比例过高</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 错误：无预热，特征早期死亡
+cfg = LanguageModelSAERunnerConfig(
+    l1_coefficient=1e-4,
+    l1_warm_up_steps=0,  # 不推荐！
+)
+<h1>正确：预热 L1 惩罚</h1>
+<p>cfg = LanguageModelSAERunnerConfig(
+l1_coefficient=8e-5,
+l1_warm_up_steps=1000,  # 逐步增加
+use_ghost_grads=True,   # 复活死亡特征
+)</p>
+</div>
+<h3>问题：重建效果差（CE 恢复率低）</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 降低稀疏性惩罚
+cfg = LanguageModelSAERunnerConfig(
+    l1_coefficient=5e-5,  # 越低 = 重建越好
+    d_sae=768 * 16,       # 更大容量
+)
+</div>
+<h3>问题：特征不可解释</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 提高稀疏性（更高的 L1）
+cfg = LanguageModelSAERunnerConfig(
+    l1_coefficient=1e-4,  # 越高 = 越稀疏，可解释性越强
+)
+# 或使用 TopK 架构
+cfg = LanguageModelSAERunnerConfig(
+    architecture="topk",
+    activation_fn_kwargs={"k": 50},  # 恰好 50 个激活特征
+)
+</div>
+<h3>问题：训练时内存错误</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cfg = LanguageModelSAERunnerConfig(
+    train_batch_size_tokens=2048,  # 减小批次大小
+    store_batch_size_prompts=4,    # 缓冲区中更少的 prompt
+    n_batches_in_buffer=8,         # 更小的激活缓冲区
+)
+</div>
+<h2>与 Neuronpedia 集成</h2>
+<p>在 <a href="https://neuronpedia.org">neuronpedia.org</a> 浏览预训练 SAE 特征：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 特征通过 SAE ID 索引
+# 示例：gpt2-small 第 8 层特征 1234
+# → neuronpedia.org/gpt2-small/8-res-jb/1234
+</div>
+<h2>关键类参考</h2>
+<table>
+<thead>
+<tr>
+<th>类</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SAE</code></td>
+<td>稀疏自编码器模型</td>
+</tr>
+<tr>
+<td><code>LanguageModelSAERunnerConfig</code></td>
+<td>训练配置</td>
+</tr>
+<tr>
+<td><code>SAETrainingRunner</code></td>
+<td>训练循环管理器</td>
+</tr>
+<tr>
+<td><code>ActivationsStore</code></td>
+<td>激活收集与批处理</td>
+</tr>
+<tr>
+<td><code>HookedSAETransformer</code></td>
+<td>TransformerLens + SAE 集成</td>
+</tr>
+</tbody>
+</table>
+<h2>参考文档</h2>
+<p>详细的 API 文档、教程和高级用法，请参阅 <code>references/</code> 文件夹：</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/saelens/references/README.html">references/README.md</a></td>
+<td>概述与快速入门指南</td>
+</tr>
+<tr>
+<td><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/saelens/references/api.html">references/api.md</a></td>
+<td>SAE、TrainingSAE、配置的完整 API 参考</td>
+</tr>
+<tr>
+<td><a href="https://github.com/NousResearch/hermes-agent/blob/main/optional-skills/mlops/saelens/references/tutorials.html">references/tutorials.md</a></td>
+<td>训练、分析、引导的分步教程</td>
+</tr>
+</tbody>
+</table>
+<h2>外部资源</h2>
+<h3>教程</h3>
+<ul>
+<li><a href="https://github.com/jbloomAus/SAELens/blob/main/tutorials/basic_loading_and_analysing.ipynb">基础加载与分析</a></li>
+<li><a href="https://github.com/jbloomAus/SAELens/blob/main/tutorials/training_a_sparse_autoencoder.ipynb">训练稀疏自编码器</a></li>
+<li><a href="https://www.lesswrong.com/posts/LnHowHgmrMbWtpkxx/intro-to-superposition-and-sparse-autoencoders-colab">ARENA SAE 课程</a></li>
+</ul>
+<h3>论文</h3>
+<ul>
+<li><a href="https://transformer-circuits.pub/2023/monosemantic-features">Towards Monosemanticity</a> — Anthropic（2023）</li>
+<li><a href="https://transformer-circuits.pub/2024/scaling-monosemanticity/">Scaling Monosemanticity</a> — Anthropic（2024）</li>
+<li><a href="https://arxiv.org/abs/2309.08600">Sparse Autoencoders Find Highly Interpretable Features</a> — Cunningham et al.（ICLR 2024）</li>
+</ul>
+<h3>官方文档</h3>
+<ul>
+<li><a href="https://jbloomaus.github.io/SAELens/">SAELens 文档</a></li>
+<li><a href="https://neuronpedia.org">Neuronpedia</a> — 特征浏览器</li>
+</ul>
+<h2>SAE 架构</h2>
+<table>
+<thead>
+<tr>
+<th>架构</th>
+<th>描述</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Standard</strong></td>
+<td>ReLU + L1 惩罚</td>
+<td>通用</td>
+</tr>
+<tr>
+<td><strong>Gated</strong></td>
+<td>学习门控机制</td>
+<td>更好的稀疏性控制</td>
+</tr>
+<tr>
+<td><strong>TopK</strong></td>
+<td>恰好 K 个激活特征</td>
+<td>一致的稀疏性</td>
+</tr>
+</tbody>
+</table>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# TopK SAE（恰好 50 个特征激活）
+cfg = LanguageModelSAERunnerConfig(
+    architecture="topk",
+    activation_fn="topk",
+    activation_fn_kwargs={"k": 50},
+)
+</div>
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

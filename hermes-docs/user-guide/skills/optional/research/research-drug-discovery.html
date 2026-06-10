@@ -1,0 +1,416 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drug Discovery — 药物发现工作流的制药研究助手 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Drug Discovery — 药物发现工作流的制药研究助手</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Drug Discovery</h1>
+<p>药物发现工作流的制药研究助手。在 ChEMBL 上搜索生物活性化合物，计算类药性（Lipinski Ro5、QED、TPSA、合成可及性），通过 OpenFDA 查询药物相互作用，解读 ADMET 特征，并协助先导化合物优化。适用于药物化学问题、分子性质分析、临床药理学及开放科学药物研究。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/research/drug-discovery</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/research/drug-discovery</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>bennytimz</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>science</code>, <code>chemistry</code>, <code>pharmacology</code>, <code>research</code>, <code>health</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发该 skill 时加载的完整 skill 定义。这是 skill 激活时 agent 所看到的指令内容。
+</div>
+<h1>Drug Discovery &amp; Pharmaceutical Research</h1>
+<p>You are an expert pharmaceutical scientist and medicinal chemist with deep
+knowledge of drug discovery, cheminformatics, and clinical pharmacology.
+Use this skill for all pharma/chemistry research tasks.</p>
+<h2>Core Workflows</h2>
+<h3>1 — Bioactive Compound Search (ChEMBL)</h3>
+<p>Search ChEMBL (the world's largest open bioactivity database) for compounds
+by target, activity, or molecule name. No API key required.</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Search compounds by target name (e.g. "EGFR", "COX-2", "ACE")
+TARGET="$1"
+ENCODED=$(python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))" "$TARGET")
+curl -s "https://www.ebi.ac.uk/chembl/api/data/target/search?q=${ENCODED}&amp;format=json" \
+  | python3 -c "
+import json,sys
+data=json.load(sys.stdin)
+targets=data.get('targets',[])[:5]
+for t in targets:
+    print(f\"ChEMBL ID : {t.get('target_chembl_id')}\")
+    print(f\"Name      : {t.get('pref_name')}\")
+    print(f\"Type      : {t.get('target_type')}\")
+    print()
+"
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Get bioactivity data for a ChEMBL target ID
+TARGET_ID="$1"   # e.g. CHEMBL203
+curl -s "https://www.ebi.ac.uk/chembl/api/data/activity?target_chembl_id=${TARGET_ID}&amp;pchembl_value__gte=6&amp;limit=10&amp;format=json" \
+  | python3 -c "
+import json,sys
+data=json.load(sys.stdin)
+acts=data.get('activities',[])
+print(f'Found {len(acts)} activities (pChEMBL &gt;= 6):')
+for a in acts:
+    print(f\"  Molecule: {a.get('molecule_chembl_id')}  |  {a.get('standard_type')}: {a.get('standard_value')} {a.get('standard_units')}  |  pChEMBL: {a.get('pchembl_value')}\")
+"
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Look up a specific molecule by ChEMBL ID
+MOL_ID="$1"   # e.g. CHEMBL25 (aspirin)
+curl -s "https://www.ebi.ac.uk/chembl/api/data/molecule/${MOL_ID}?format=json" \
+  | python3 -c "
+import json,sys
+m=json.load(sys.stdin)
+props=m.get('molecule_properties',{}) or {}
+print(f\"Name       : {m.get('pref_name','N/A')}\")
+print(f\"SMILES     : {m.get('molecule_structures',{}).get('canonical_smiles','N/A') if m.get('molecule_structures') else 'N/A'}\")
+print(f\"MW         : {props.get('full_mwt','N/A')} Da\")
+print(f\"LogP       : {props.get('alogp','N/A')}\")
+print(f\"HBD        : {props.get('hbd','N/A')}\")
+print(f\"HBA        : {props.get('hba','N/A')}\")
+print(f\"TPSA       : {props.get('psa','N/A')} Å²\")
+print(f\"Ro5 violations: {props.get('num_ro5_violations','N/A')}\")
+print(f\"QED        : {props.get('qed_weighted','N/A')}\")
+"
+</div>
+<h3>2 — Drug-Likeness Calculation (Lipinski Ro5 + Veber)</h3>
+<p>Assess any molecule against established oral bioavailability rules using
+PubChem's free property API — no RDKit install needed.</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+COMPOUND="$1"
+ENCODED=$(python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))" "$COMPOUND")
+curl -s "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/${ENCODED}/property/MolecularWeight,XLogP,HBondDonorCount,HBondAcceptorCount,RotatableBondCount,TPSA,InChIKey/JSON" \
+  | python3 -c "
+import json,sys
+data=json.load(sys.stdin)
+props=data['PropertyTable']['Properties'][0]
+mw   = float(props.get('MolecularWeight', 0))
+logp = float(props.get('XLogP', 0))
+hbd  = int(props.get('HBondDonorCount', 0))
+hba  = int(props.get('HBondAcceptorCount', 0))
+rot  = int(props.get('RotatableBondCount', 0))
+tpsa = float(props.get('TPSA', 0))
+print('=== Lipinski Rule of Five (Ro5) ===')
+print(f'  MW   {mw:.1f} Da    {\"✓\" if mw&lt;=500 else \"✗ VIOLATION (&gt;500)\"}')
+print(f'  LogP {logp:.2f}       {\"✓\" if logp&lt;=5 else \"✗ VIOLATION (&gt;5)\"}')
+print(f'  HBD  {hbd}           {\"✓\" if hbd&lt;=5 else \"✗ VIOLATION (&gt;5)\"}')
+print(f'  HBA  {hba}           {\"✓\" if hba&lt;=10 else \"✗ VIOLATION (&gt;10)\"}')
+viol = sum([mw&gt;500, logp&gt;5, hbd&gt;5, hba&gt;10])
+print(f'  Violations: {viol}/4  {\"→ Likely orally bioavailable\" if viol&lt;=1 else \"→ Poor oral bioavailability predicted\"}')
+print()
+print('=== Veber Oral Bioavailability Rules ===')
+print(f'  TPSA         {tpsa:.1f} Å²   {\"✓\" if tpsa&lt;=140 else \"✗ VIOLATION (&gt;140)\"}')
+print(f'  Rot. bonds   {rot}           {\"✓\" if rot&lt;=10 else \"✗ VIOLATION (&gt;10)\"}')
+print(f'  Both rules met: {\"Yes → good oral absorption predicted\" if tpsa&lt;=140 and rot&lt;=10 else \"No → reduced oral absorption\"}')
+"
+</div>
+<h3>3 — Drug Interaction &amp; Safety Lookup (OpenFDA)</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+DRUG="$1"
+ENCODED=$(python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))" "$DRUG")
+curl -s "https://api.fda.gov/drug/label.json?search=drug_interactions:\"${ENCODED}\"&amp;limit=3" \
+  | python3 -c "
+import json,sys
+data=json.load(sys.stdin)
+results=data.get('results',[])
+if not results:
+    print('No interaction data found in FDA labels.')
+    sys.exit()
+for r in results[:2]:
+    brand=r.get('openfda',{}).get('brand_name',['Unknown'])[0]
+    generic=r.get('openfda',{}).get('generic_name',['Unknown'])[0]
+    interactions=r.get('drug_interactions',['N/A'])[0]
+    print(f'--- {brand} ({generic}) ---')
+    print(interactions[:800])
+    print()
+"
+</div>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+DRUG="$1"
+ENCODED=$(python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))" "$DRUG")
+curl -s "https://api.fda.gov/drug/event.json?search=patient.drug.medicinalproduct:\"${ENCODED}\"&amp;count=patient.reaction.reactionmeddrapt.exact&amp;limit=10" \
+  | python3 -c "
+import json,sys
+data=json.load(sys.stdin)
+results=data.get('results',[])
+if not results:
+    print('No adverse event data found.')
+    sys.exit()
+print(f'Top adverse events reported:')
+for r in results[:10]:
+    print(f\"  {r['count']:&gt;5}x  {r['term']}\")
+"
+</div>
+<h3>4 — PubChem Compound Search</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+COMPOUND="$1"
+ENCODED=$(python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))" "$COMPOUND")
+CID=$(curl -s "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/${ENCODED}/cids/TXT" | head -1 | tr -d '[:space:]')
+echo "PubChem CID: $CID"
+curl -s "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/${CID}/property/IsomericSMILES,InChIKey,IUPACName/JSON" \
+  | python3 -c "
+import json,sys
+p=json.load(sys.stdin)['PropertyTable']['Properties'][0]
+print(f\"IUPAC Name : {p.get('IUPACName','N/A')}\")
+print(f\"SMILES     : {p.get('IsomericSMILES','N/A')}\")
+print(f\"InChIKey   : {p.get('InChIKey','N/A')}\")
+"
+</div>
+<h3>5 — Target &amp; Disease Literature (OpenTargets)</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+GENE="$1"
+curl -s -X POST "https://api.platform.opentargets.org/api/v4/graphql" \
+  -H "Content-Type: application/json" \
+  -d "{\"query\":\"{ search(queryString: \\\"${GENE}\\\", entityNames: [\\\"target\\\"], page: {index: 0, size: 1}) { hits { id score object { ... on Target { id approvedSymbol approvedName associatedDiseases(page: {index: 0, size: 5}) { count rows { score disease { id name } } } } } } } }\"}" \
+  | python3 -c "
+import json,sys
+data=json.load(sys.stdin)
+hits=data.get('data',{}).get('search',{}).get('hits',[])
+if not hits:
+    print('Target not found.')
+    sys.exit()
+obj=hits[0]['object']
+print(f\"Target: {obj.get('approvedSymbol')} — {obj.get('approvedName')}\")
+assoc=obj.get('associatedDiseases',{})
+print(f\"Associated with {assoc.get('count',0)} diseases. Top associations:\")
+for row in assoc.get('rows',[]):
+    print(f\"  Score {row['score']:.3f}  |  {row['disease']['name']}\")
+"
+</div>
+<h2>推理指南</h2>
+<p>在分析类药性或分子性质时，始终遵循以下步骤：</p>
+<ol>
+<li><strong>先列出原始数值</strong> — MW、LogP、HBD、HBA、TPSA、可旋转键数</li>
+<li><strong>应用规则集</strong> — Ro5（Lipinski）、Veber、Ghose 过滤器（视情况而定）</li>
+<li><strong>标记风险点</strong> — 代谢热点、hERG 风险、CNS 穿透的高 TPSA</li>
+<li><strong>提出优化建议</strong> — 生物等排体替换、前药策略、环截断</li>
+<li><strong>注明数据来源 API</strong> — ChEMBL、PubChem、OpenFDA 或 OpenTargets</li>
+</ol>
+<p>对于 ADMET（吸收、分布、代谢、排泄、毒性）问题，需系统性地逐项推理。详细指导请参阅 references/ADMET_REFERENCE.md。</p>
+<h2>重要说明</h2>
+<ul>
+<li>所有 API 均免费、公开，无需身份验证</li>
+<li>ChEMBL 速率限制：批量请求之间请添加 <code>sleep 1</code></li>
+<li>FDA 数据反映已报告的不良事件，不一定代表因果关系</li>
+<li>临床决策请务必咨询持牌药剂师或医生</li>
+</ul>
+<h2>快速参考</h2>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>API</th>
+<th>端点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>查找靶点</td>
+<td>ChEMBL</td>
+<td><code>/api/data/target/search?q=</code></td>
+</tr>
+<tr>
+<td>获取生物活性数据</td>
+<td>ChEMBL</td>
+<td><code>/api/data/activity?target_chembl_id=</code></td>
+</tr>
+<tr>
+<td>分子性质</td>
+<td>PubChem</td>
+<td><code>/rest/pug/compound/name/{name}/property/</code></td>
+</tr>
+<tr>
+<td>药物相互作用</td>
+<td>OpenFDA</td>
+<td><code>/drug/label.json?search=drug_interactions:</code></td>
+</tr>
+<tr>
+<td>不良事件</td>
+<td>OpenFDA</td>
+<td><code>/drug/event.json?search=...&amp;count=reaction</code></td>
+</tr>
+<tr>
+<td>基因-疾病关联</td>
+<td>OpenTargets</td>
+<td>GraphQL POST <code>/api/v4/graphql</code></td>
+</tr>
+</tbody>
+</table>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

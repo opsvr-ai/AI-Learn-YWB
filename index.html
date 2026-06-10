@@ -1,0 +1,190 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI赋能日常工作 — 培训材料</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <span class="icon">AI</span>
+      运维部AI学习平台
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">&#128172;</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">&#9000;</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">&#128218;</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">&#128214;</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">&#128273;</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">&#128214;</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">&#128172;</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">&#128202;</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">2026 内部培训</div>
+      <h1><span>AI赋能</span>日常工作</h1>
+      <p>从智能助手到代码协作，全面了解如何利用公司AI平台提升日常工作效率，让AI成为你的超级搭档。</p>
+      <div class="hero-actions">
+        <a href="hermes.html" class="btn btn-primary btn-lg">Hermes-Agent 智能助手</a>
+        <a href="claude.html" class="btn btn-outline btn-lg">Claude Code 开发工具</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 为什么 AI 赋能 -->
+  <section class="section">
+    <div class="container">
+      <span class="section-label">Why AI</span>
+      <h2 class="section-title">为什么用 AI 赋能日常工作？</h2>
+      <p class="section-desc">AI不仅仅是技术趋势，更是实际的生产力工具。选择正确的工具，让重复劳动自动化，把时间留给创造性工作。</p>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-icon blue">&#9881;</div>
+          <h3>自动化重复任务</h3>
+          <p>文档撰写、邮件回复、数据处理等重复性工作交给AI处理，释放你的时间精力。</p>
+        </div>
+        <div class="card">
+          <div class="card-icon green">&#9733;</div>
+          <h3>提升工作质量</h3>
+          <p>AI辅助检查、校对和优化，减少人为疏漏，让交付成果更加完善和专业。</p>
+        </div>
+        <div class="card">
+          <div class="card-icon purple">&#9883;</div>
+          <h3>加速学习成长</h3>
+          <p>遇到陌生领域快速获得指导，AI可以帮助理解复杂概念、查找资料和给出建议。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 两大工具对比 -->
+  <section class="section section-gray">
+    <div class="container">
+      <span class="section-label">Tools</span>
+      <h2 class="section-title">两大核心工具</h2>
+      <p class="section-desc">我们为你准备了两款AI工具，分别对应日常办公和开发工作场景。</p>
+
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th style="width:18%">对比维度</th>
+            <th style="width:41%">Hermes-Agent</th>
+            <th style="width:41%">Claude Code</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>定位</td>
+            <td>日常办公智能助手</td>
+            <td>开发者AI协作工具</td>
+          </tr>
+          <tr>
+            <td>使用方式</td>
+            <td>Web 对话界面 / 企业内部平台</td>
+            <td>终端命令行 / IDE 集成</td>
+          </tr>
+          <tr>
+            <td>目标用户</td>
+            <td>全员适用（产品、运营、管理等）</td>
+            <td>开发工程师</td>
+          </tr>
+          <tr>
+            <td>核心能力</td>
+            <td>文档处理、信息检索、数据分析、知识问答</td>
+            <td>代码生成、Bug修复、代码审查、重构优化</td>
+          </tr>
+          <tr>
+            <td>典型场景</td>
+            <td>写周报、整理会议纪要、翻译文档、数据分析</td>
+            <td>写功能模块、排查Bug、Review代码、写单测</td>
+          </tr>
+          <tr>
+            <td>接入方式</td>
+            <td>申请API Key后通过平台使用</td>
+            <td>申请API Key后在终端配置使用</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="text-center mt-4">
+        <a href="api-key.html" class="btn btn-primary">查看 API Key 申请流程</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 快速开始 -->
+  <section class="section">
+    <div class="container">
+      <span class="section-label">Quick Start</span>
+      <h2 class="section-title">三步快速开始</h2>
+      <p class="section-desc">无论使用哪个工具，整体流程都简洁清晰。</p>
+
+      <ol class="steps">
+        <li>
+          <h4>申请 API Key</h4>
+          <p>通过公司内网平台申请模型API Key，这是使用所有AI服务的通行证。</p>
+          <a href="api-key.html" class="btn btn-sm btn-outline mt-2">查看申请流程</a>
+        </li>
+        <li>
+          <h4>选择适合你的工具</h4>
+          <p>日常办公场景使用 Hermes-Agent，开发编码场景使用 Claude Code，各取所需。</p>
+        </li>
+        <li>
+          <h4>开始高效工作</h4>
+          <p>熟悉工具的基本用法，从简单任务开始，逐步发掘AI的更多可能性。</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+</main>
+
+<div class="troubleshooting-bar" style="background:var(--blue-50);border-top:1px solid var(--blue-200);border-bottom:1px solid var(--blue-200);padding:20px 0;text-align:center;">
+  <div class="container">
+    <p style="margin:0;font-size:0.95rem;color:var(--gray-700);"><strong>&#128161; 遇到问题？</strong> AI 技术支持请联系：<strong>李龙（lilong）</strong>、<strong>司佳宇（sijy）</strong>。申请 API Key、配置工具或使用过程中遇到任何问题，欢迎随时沟通。也可在部门群内交流使用经验。</p>
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+
+<script src="js/main.js"></script>
+</body>
+</html>

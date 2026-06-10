@@ -1,0 +1,343 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Desktop App - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html" class="active">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Desktop App</div><p>Hermes Desktop 是一款围绕<strong>同一个</strong> Agent 构建的原生桌面应用——使用与 CLI 和 Gateway 相同的配置、API Key、会话、Skills 和记忆系统。它不是一个独立产品或简化克隆；它使用相同的 Hermes Agent 核心和设置，通过现代且精心设计的 UI 驱动。如果你已经在终端中使用过 <code>hermes</code>，你在那里配置的一切在这里立即可用，在这里做的任何操作也会同步到终端。</p>
+<p>支持 <strong>macOS、Windows 和 Linux</strong>。</p>
+<div class="tip"><strong>💡 各个界面的区别</strong>
+<p>Hermes 有多个前端界面，都连接同一个 Agent：</p>
+<ul>
+<li><strong>Desktop App</strong>（本页）—— 原生桌面应用，提供专为聊天、配置和管理设计的 UI。</li>
+<li><strong>CLI</strong>（<code>hermes</code>）和 <strong><a href="./tui.html">TUI</a></strong>（<code>hermes --tui</code>）—— 终端界面。</li>
+<li><strong><a href="./features/web-dashboard.html">Web Dashboard</a></strong>（<code>hermes dashboard</code>）—— 浏览器管理面板；其可选的<strong>聊天</strong>选项卡通过伪终端嵌入 TUI。</li>
+</ul>
+<p>根据场景选择即可。它们共享状态，因此可以在一个界面开始会话，在另一个界面继续。</p>
+
+</div>
+<h2>安装</h2>
+<p>请参考 <a href="../getting-started/installation.html">Hermes Desktop 安装指南</a>。</p>
+<p>如果你已经安装了 Hermes，直接运行：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes desktop
+</div>
+<p>这会使用你当前的配置、Key、会话和 Skills。</p>
+<h2>应用功能</h2>
+<p>桌面应用采用聊天优先的窗口布局，左侧为导航栏。支持管理多个并发的 Agent 对话、配置消息提供商、创建制品、浏览项目文件夹结构，以及在多个项目间切换。</p>
+<h3>聊天</h3>
+<p>应用的核心功能，提供：</p>
+<ul>
+<li><strong>流式响应</strong>，实时显示工具活动状态和结构化工具调用摘要。</li>
+<li><strong>完整的对话历史</strong>，与所有其他 Hermes 界面共享——在桌面端开始的会话可在 CLI/TUI 中继续，反之亦然。</li>
+<li><strong>拖放文件</strong>到聊天区域，附加到你的下一条消息中。</li>
+<li><strong>右侧预览栏</strong>——可并排渲染网页、文件和工具输出，同时继续聊天。</li>
+<li><strong>历史记录与队列编辑</strong>——在空白输入框中按上下方向键可回顾并复用之前的提示，已排队等待发送的消息也可编辑。</li>
+</ul>
+<h4>状态栏</h4>
+<p>聊天窗口底部的状态栏显示实时会话状态，无需打开设置即可快速操作：</p>
+<ul>
+<li><strong>内联模型选择器</strong>——直接从状态栏切换当前会话的模型。</li>
+<li><strong>会话级 YOLO 开关</strong>——仅针对当前会话开启或关闭 YOLO（与 TUI 一致）。YOLO 会跳过危险命令的审批提示，请确保你了解其作用——参见<a href="./security.html#yolo-mode">安全 → YOLO 模式</a>。</li>
+</ul>
+<h3>文件浏览器</h3>
+<p>无需离开应用即可浏览和预览工作目录——方便随时查看 Agent 读写和编辑文件的过程。使用 <code>hermes desktop --cwd &lt;path&gt;</code>（或 <code>HERMES_DESKTOP_CWD</code> 环境变量）设置初始项目目录。</p>
+<h3>语音</h3>
+<p>与 Hermes 对话并收听回复，与<a href="./features/voice-mode.html">语音模式</a>功能相同。macOS 上系统会提示一次麦克风权限。</p>
+<h3>设置与首次引导</h3>
+<p>通过真实的 UI 界面管理提供商、模型、工具和凭据，无需编辑 YAML。首次运行的引导流程可在数秒内让你发出第一条消息。设置面板涵盖提供商/Key、模型选择、工具集配置、MCP 服务器、Gateway 和会话管理。</p>
+<ul>
+<li><strong>提供商设置面板</strong>——管理推理提供商的专属界面，提供账户/API-Key 的 UX，用于登录和存储每个提供商的凭据。</li>
+<li><strong>所有提供商和模型均可见</strong>——GUI 显示完整的提供商列表和 <code>hermes model</code> 能够识别的所有模型，与 CLI 看到的是同一目录，而非精选子集。</li>
+<li><strong>xAI Grok OAuth</strong>——Grok 是启动器中一等公民的 OAuth 提供商；通过浏览器流程登录，与其他 OAuth 提供商一致。</li>
+<li><strong>从 GUI 安装工具后端</strong>——直接在应用内运行工具后端的安装步骤，无需切换到终端。</li>
+<li><strong>辅助模型警告</strong>——如果将主模型切换到新提供商，而辅助任务（标题、摘要等）仍绑定到其他提供商时，应用会发出警告，避免无意中跨两个提供商分割工作。</li>
+</ul>
+<h3>管理面板</h3>
+<p>应用还提供了更广泛的 Hermes 管理功能，无需切换到终端：</p>
+<ul>
+<li><strong>Skills</strong>——浏览、安装和管理 <a href="./features/skills.html">Skills</a>。</li>
+<li><strong>Cron</strong>——查看和管理<a href="../reference/cli-commands.html#hermes-cron">定时任务</a>。</li>
+<li><strong>Profiles</strong>——切换 <a href="./profiles.html">Hermes 配置文件</a>（隔离的配置/Skills/会话）。</li>
+<li><strong>Messaging</strong>——设置 Gateway 通道。</li>
+<li><strong>Agents 和 Command Center</strong>——多 Agent 工作流的管理界面。</li>
+</ul>
+<h3>快捷键与导航</h3>
+<ul>
+<li><strong>命令面板</strong>——按 <strong>Cmd+K</strong>（Windows/Linux 为 Ctrl+K）快速跳转到操作和导航。</li>
+<li><strong>可自定义快捷键</strong>——设置中的快捷键面板允许你重新映射应用的所有键盘快捷键。</li>
+<li><strong>自定义缩放</strong>——以半档步长缩放界面，更精细地控制文字大小。</li>
+<li><strong>UI 语言切换</strong>——在应用内切换界面语言，包括简体中文。</li>
+</ul>
+<h3>会话与配置文件</h3>
+<ul>
+<li><strong>会话列表改进</strong>——重新设计的会话列表，支持归档和会话维护，保持列表整洁。</li>
+<li><strong>按 ID 搜索会话</strong>——直接通过 ID 查找特定会话。</li>
+<li><strong>多配置文件并行会话</strong>——同时运行多个<a href="./profiles.html">配置文件</a>下的会话，通过跨配置文件的 <code>@session</code> 链接引用其他配置文件中的会话。</li>
+</ul>
+<h2>更新</h2>
+<p>应用会在后台检查更新，有可用更新时提供一键更新。</p>
+<p>手动<a href="https://hermes-agent.nousresearch.com/docs/getting-started/updating">更新流程</a> 同样适用于 GUI。</p>
+<h2>卸载</h2>
+<p>打开 <strong>设置 → 关于 → 危险区域</strong>，选择卸载范围：</p>
+<ul>
+<li><strong>仅卸载聊天 GUI</strong>——删除桌面应用及其数据；Hermes Agent、你的配置和聊天记录保留。（等同于 <code>hermes uninstall --gui</code>）</li>
+<li><strong>卸载 GUI + Agent，保留数据</strong>——删除应用和 Agent，但保留配置、聊天记录和密钥，便于将来重新安装。（等同于 <code>hermes uninstall</code>）</li>
+<li><strong>卸载全部</strong>——删除应用、Agent 和所有用户数据。（等同于 <code>hermes uninstall --full</code>）</li>
+</ul>
+<p>应用会自动关闭以完成清理（清理在退出后执行，以便删除正在运行的应用包本身及其 venv）。当本地未安装 Agent 时（例如仅 GUI 的&quot;精简版&quot;客户端连接到远程后端），删除 Agent 的选项会自动隐藏。</p>
+<p>你也可以从终端执行相同操作：<code>hermes uninstall --gui</code> 仅删除 GUI，或 <code>hermes uninstall</code> / <code>hermes uninstall --full</code> 同时删除 Agent。</p>
+<h2>CLI 参考：<code>hermes desktop</code></h2>
+<p>通过 CLI 启动只需运行 <code>hermes desktop</code>。默认会安装工作区 Node 依赖，构建当前操作系统的解包版 Electron 应用，然后启动构建好的制品。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--skip-build</code></td>
+<td>跳过 npm install/package，直接从 <code>apps/desktop/release</code> 启动已有的解包应用</td>
+</tr>
+<tr>
+<td><code>--force-build</code></td>
+<td>即使内容戳匹配也强制完整重建</td>
+</tr>
+<tr>
+<td><code>--build-only</code></td>
+<td>构建桌面应用但不启动（用于 <code>hermes update</code>）</td>
+</tr>
+<tr>
+<td><code>--source</code></td>
+<td>通过 <code>electron .</code> 从 <code>apps/desktop/dist</code> 启动而非打包版应用</td>
+</tr>
+<tr>
+<td><code>--cwd PATH</code></td>
+<td>桌面聊天会话的初始项目目录（设置 <code>HERMES_DESKTOP_CWD</code>）</td>
+</tr>
+<tr>
+<td><code>--hermes-root PATH</code></td>
+<td>覆盖应用使用的 Hermes 源码根目录（设置 <code>HERMES_DESKTOP_HERMES_ROOT</code>）</td>
+</tr>
+<tr>
+<td><code>--ignore-existing</code></td>
+<td>强制应用在后台解析期间忽略已在 <code>PATH</code> 上的 <code>hermes</code> CLI</td>
+</tr>
+<tr>
+<td><code>--fake-boot</code></td>
+<td>启用确定性启动延迟，用于验证启动 UI</td>
+</tr>
+</tbody>
+</table>
+<h2>工作原理</h2>
+<p>打包的应用仅包含 Electron 外壳。首次启动时，它将 Hermes Agent 运行时安装到 <code>HERMES_HOME</code>（<code>~/.hermes</code>，Windows 上为 <code>%LOCALAPPDATA%\hermes</code>）——<strong>与 CLI 安装使用相同的目录结构</strong>，这也是两者可互换的原因。React 渲染器通过标准 Gateway API 与 <code>hermes dashboard</code> 后端通信，复用 Agent 而非重新实现。安装、后端解析和自更新逻辑位于 Electron 主进程中。</p>
+<h2>连接到远程后端</h2>
+<p>默认情况下，应用启动并管理自己的<strong>本地</strong>后端。你也可以将其指向运行在其他机器上的 Hermes 后端——例如 VPS、家庭服务器或 Tailscale 后的 Mini。</p>
+<p>远程后端是一个运行的 <code>hermes dashboard</code> 进程。桌面应用需要连接到这个服务器。</p>
+<h3>在后端（远程机器）上</h3>
+<p>设置用户名和密码，然后在可达地址上启动 Dashboard：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 1. 设置 Dashboard 登录凭据
+cat &gt;&gt; ~/.hermes/.env &lt;&lt;'EOF'
+HERMES_DASHBOARD_BASIC_AUTH_USERNAME=admin
+HERMES_DASHBOARD_BASIC_AUTH_PASSWORD=choose-a-strong-password
+HERMES_DASHBOARD_BASIC_AUTH_SECRET=$(openssl rand -base64 32)
+EOF
+chmod 600 ~/.hermes/.env
+
+# 2. 启动 Dashboard 绑定到可达地址
+hermes dashboard --no-open --host 0.0.0.0 --port 9119
+</div>
+<h3>在应用中</h3>
+<p><strong>设置 → Gateway → Remote gateway：</strong></p>
+<ol>
+<li><strong>Remote URL</strong>——<code>http://&lt;backend-host&gt;:9119</code></li>
+<li><strong>Sign in</strong>——应用自动检测后端使用的认证方式并显示对应的登录按钮</li>
+<li><strong>Save and reconnect</strong>——切换到远程后端</li>
+</ol>
+<p>详见完整的<a href="./features/web-dashboard.html#connecting-hermes-desktop-to-a-remote-backend">远程后端连接文档</a>。</p>
+<h2>故障排查</h2>
+<p>启动日志位于 <code>HERMES_HOME/logs/desktop.log</code>（包含后端输出和 Python 回溯），应用启动失败时请先检查这里。你也可以从 CLI 实时查看：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+hermes logs gui -f
+</div>
+<p>常见重置操作：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# 强制重新首次启动设置（macOS/Linux）
+rm "$HOME/.hermes/hermes-agent/.hermes-bootstrap-complete"
+
+# 重建损坏的 Python venv（macOS/Linux）
+rm -rf "$HOME/.hermes/hermes-agent/venv"
+
+# 重置卡住的 macOS 麦克风权限
+tccutil reset Microphone com.nousresearch.hermes
+</div>
+<h2>从源码构建</h2>
+<p>如果想在应用本身上进行开发，从仓库根目录安装工作区依赖，然后在 <code>apps/desktop</code> 中启动开发服务器：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+npm install          # 从仓库根目录
+cd apps/desktop
+npm run dev          # Vite renderer + Electron
+</div>
+<p>构建安装包：</p>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+npm run dist:mac     # DMG + zip
+npm run dist:win     # NSIS + MSI
+npm run dist:linux   # AppImage + deb + rpm
+npm run pack         # release/ 下的解包应用（无需安装程序）
+</div>
+<h2>参见</h2>
+<ul>
+<li><a href="./cli.html">CLI 指南</a> —— 终端界面</li>
+<li><a href="./tui.html">TUI</a> —— 现代终端 UI</li>
+<li><a href="./features/web-dashboard.html">Web Dashboard</a> —— 浏览器管理面板</li>
+<li><a href="./configuration.html">配置</a> —— 桌面应用读写配置</li>
+<li><a href="./windows-native.html">Windows（原生）</a> —— Windows 原生安装路径</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

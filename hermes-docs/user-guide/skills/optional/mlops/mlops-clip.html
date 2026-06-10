@@ -1,0 +1,445 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clip — OpenAI 连接视觉与语言的模型 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">代理模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/checkpoints-and-rollback.html">检查点与回滚</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 用户指南 / Clip — OpenAI 连接视觉与语言的模型</div><p>{/* This page is auto-generated from the skill's SKILL.md by website/scripts/generate-skill-docs.py. Edit the source SKILL.md, not this page. */}</p>
+<h1>Clip</h1>
+<p>OpenAI 连接视觉与语言的模型。支持零样本图像分类、图文匹配和跨模态检索。在 4 亿图文对上训练而成。可用于图像搜索、内容审核或视觉语言任务，无需微调。最适合通用图像理解场景。</p>
+<h2>Skill 元数据</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>来源</td>
+<td>可选 — 通过 <code>hermes skills install official/mlops/clip</code> 安装</td>
+</tr>
+<tr>
+<td>路径</td>
+<td><code>optional-skills/mlops/clip</code></td>
+</tr>
+<tr>
+<td>版本</td>
+<td><code>1.0.0</code></td>
+</tr>
+<tr>
+<td>作者</td>
+<td>Orchestra Research</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>MIT</td>
+</tr>
+<tr>
+<td>依赖项</td>
+<td><code>transformers</code>, <code>torch</code>, <code>pillow</code></td>
+</tr>
+<tr>
+<td>平台</td>
+<td>linux, macos, windows</td>
+</tr>
+<tr>
+<td>标签</td>
+<td><code>Multimodal</code>, <code>CLIP</code>, <code>Vision-Language</code>, <code>Zero-Shot</code>, <code>Image Classification</code>, <code>OpenAI</code>, <code>Image Search</code>, <code>Cross-Modal Retrieval</code>, <code>Content Moderation</code></td>
+</tr>
+</tbody>
+</table>
+<h2>参考：完整 SKILL.md</h2>
+<div class="tip"><strong>ℹ️ 信息</strong>
+以下是 Hermes 在触发此 skill 时加载的完整 skill 定义。这是 skill 激活时 agent 所看到的指令内容。
+</div>
+<h1>CLIP - 对比语言图像预训练（Contrastive Language-Image Pre-Training）</h1>
+<p>OpenAI 推出的能够通过自然语言理解图像的模型。</p>
+<h2>何时使用 CLIP</h2>
+<p><strong>适用场景：</strong></p>
+<ul>
+<li>零样本图像分类（无需训练数据）</li>
+<li>图文相似度/匹配</li>
+<li>语义图像搜索</li>
+<li>内容审核（检测 NSFW、暴力内容）</li>
+<li>视觉问答</li>
+<li>跨模态检索（图像→文本、文本→图像）</li>
+</ul>
+<p><strong>指标</strong>：</p>
+<ul>
+<li><strong>GitHub 25,300+ 星</strong></li>
+<li>在 4 亿图文对上训练</li>
+<li>零样本下在 ImageNet 上与 ResNet-50 持平</li>
+<li>MIT 许可证</li>
+</ul>
+<p><strong>以下情况请使用替代方案</strong>：</p>
+<ul>
+<li><strong>BLIP-2</strong>：更好的图像描述生成</li>
+<li><strong>LLaVA</strong>：视觉语言对话</li>
+<li><strong>Segment Anything</strong>：图像分割</li>
+</ul>
+<h2>快速开始</h2>
+<h3>安装</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pip install git+https://github.com/openai/CLIP.git
+pip install torch torchvision ftfy regex tqdm
+</div>
+<h3>零样本分类</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import torch
+import clip
+from PIL import Image
+<h1>Load model</h1>
+<p>device = &quot;cuda&quot; if torch.cuda.is_available() else &quot;cpu&quot;
+model, preprocess = clip.load(&quot;ViT-B/32&quot;, device=device)</p>
+<h1>Load image</h1>
+<p>image = preprocess(Image.open(&quot;photo.jpg&quot;)).unsqueeze(0).to(device)</p>
+<h1>Define possible labels</h1>
+<p>text = clip.tokenize([&quot;a dog&quot;, &quot;a cat&quot;, &quot;a bird&quot;, &quot;a car&quot;]).to(device)</p>
+<h1>Compute similarity</h1>
+<p>with torch.no_grad():
+image_features = model.encode_image(image)
+text_features = model.encode_text(text)</p>
+<pre><code># Cosine similarity
+logits_per_image, logits_per_text = model(image, text)
+probs = logits_per_image.softmax(dim=-1).cpu().numpy()
+</code></pre>
+<h1>Print results</h1>
+<p>labels = [&quot;a dog&quot;, &quot;a cat&quot;, &quot;a bird&quot;, &quot;a car&quot;]
+for label, prob in zip(labels, probs[0]):
+print(f&quot;{label}: {prob:.2%}&quot;)</p>
+</div>
+<h2>可用模型</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Models (sorted by size)
+models = [
+    "RN50",           # ResNet-50
+    "RN101",          # ResNet-101
+    "ViT-B/32",       # Vision Transformer (recommended)
+    "ViT-B/16",       # Better quality, slower
+    "ViT-L/14",       # Best quality, slowest
+]
+<p>model, preprocess = clip.load(&quot;ViT-B/32&quot;)</p>
+</div>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>参数量</th>
+<th>速度</th>
+<th>质量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RN50</td>
+<td>102M</td>
+<td>快</td>
+<td>良好</td>
+</tr>
+<tr>
+<td>ViT-B/32</td>
+<td>151M</td>
+<td>中等</td>
+<td>更好</td>
+</tr>
+<tr>
+<td>ViT-L/14</td>
+<td>428M</td>
+<td>慢</td>
+<td>最佳</td>
+</tr>
+</tbody>
+</table>
+<h2>图文相似度</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Compute embeddings
+image_features = model.encode_image(image)
+text_features = model.encode_text(text)
+<h1>Normalize</h1>
+<p>image_features /= image_features.norm(dim=-1, keepdim=True)
+text_features /= text_features.norm(dim=-1, keepdim=True)</p>
+<h1>Cosine similarity</h1>
+<p>similarity = (image_features @ text_features.T).item()
+print(f&quot;Similarity: {similarity:.4f}&quot;)</p>
+</div>
+<h2>语义图像搜索</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Index images
+image_paths = ["img1.jpg", "img2.jpg", "img3.jpg"]
+image_embeddings = []
+<p>for img_path in image_paths:
+image = preprocess(Image.open(img_path)).unsqueeze(0).to(device)
+with torch.no_grad():
+embedding = model.encode_image(image)
+embedding /= embedding.norm(dim=-1, keepdim=True)
+image_embeddings.append(embedding)</p>
+<p>image_embeddings = torch.cat(image_embeddings)</p>
+<h1>Search with text query</h1>
+<p>query = &quot;a sunset over the ocean&quot;
+text_input = clip.tokenize([query]).to(device)
+with torch.no_grad():
+text_embedding = model.encode_text(text_input)
+text_embedding /= text_embedding.norm(dim=-1, keepdim=True)</p>
+<h1>Find most similar images</h1>
+<p>similarities = (text_embedding @ image_embeddings.T).squeeze(0)
+top_k = similarities.topk(3)</p>
+<p>for idx, score in zip(top_k.indices, top_k.values):
+print(f&quot;{image_paths[idx]}: {score:.3f}&quot;)</p>
+</div>
+<h2>内容审核</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Define categories
+categories = [
+    "safe for work",
+    "not safe for work",
+    "violent content",
+    "graphic content"
+]
+<p>text = clip.tokenize(categories).to(device)</p>
+<h1>Check image</h1>
+<p>with torch.no_grad():
+logits_per_image, _ = model(image, text)
+probs = logits_per_image.softmax(dim=-1)</p>
+<h1>Get classification</h1>
+<p>max_idx = probs.argmax().item()
+max_prob = probs[0, max_idx].item()</p>
+<p>print(f&quot;Category: {categories[max_idx]} ({max_prob:.2%})&quot;)</p>
+</div>
+<h2>批量处理</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Process multiple images
+images = [preprocess(Image.open(f"img{i}.jpg")) for i in range(10)]
+images = torch.stack(images).to(device)
+<p>with torch.no_grad():
+image_features = model.encode_image(images)
+image_features /= image_features.norm(dim=-1, keepdim=True)</p>
+<h1>Batch text</h1>
+<p>texts = [&quot;a dog&quot;, &quot;a cat&quot;, &quot;a bird&quot;]
+text_tokens = clip.tokenize(texts).to(device)</p>
+<p>with torch.no_grad():
+text_features = model.encode_text(text_tokens)
+text_features /= text_features.norm(dim=-1, keepdim=True)</p>
+<h1>Similarity matrix (10 images × 3 texts)</h1>
+<p>similarities = image_features @ text_features.T
+print(similarities.shape)  # (10, 3)</p>
+</div>
+<h2>与向量数据库集成</h2>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# Store CLIP embeddings in Chroma/FAISS
+import chromadb
+<p>client = chromadb.Client()
+collection = client.create_collection(&quot;image_embeddings&quot;)</p>
+<h1>Add image embeddings</h1>
+<p>for img_path, embedding in zip(image_paths, image_embeddings):
+collection.add(
+embeddings=[embedding.cpu().numpy().tolist()],
+metadatas=[{&quot;path&quot;: img_path}],
+ids=[img_path]
+)</p>
+<h1>Query with text</h1>
+<p>query = &quot;a sunset&quot;
+text_embedding = model.encode_text(clip.tokenize([query]))
+results = collection.query(
+query_embeddings=[text_embedding.cpu().numpy().tolist()],
+n_results=5
+)</p>
+</div>
+<h2>最佳实践</h2>
+<ol>
+<li><strong>大多数场景使用 ViT-B/32</strong> — 性能与速度均衡</li>
+<li><strong>归一化 embedding（嵌入向量）</strong> — 余弦相似度计算必须归一化</li>
+<li><strong>批量处理</strong> — 效率更高</li>
+<li><strong>缓存 embedding</strong> — 重新计算代价较高</li>
+<li><strong>使用描述性标签</strong> — 零样本性能更好</li>
+<li><strong>推荐使用 GPU</strong> — 速度提升 10–50 倍</li>
+<li><strong>预处理图像</strong> — 使用提供的 preprocess 函数</li>
+</ol>
+<h2>性能</h2>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>CPU</th>
+<th>GPU (V100)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>图像编码</td>
+<td>~200ms</td>
+<td>~20ms</td>
+</tr>
+<tr>
+<td>文本编码</td>
+<td>~50ms</td>
+<td>~5ms</td>
+</tr>
+<tr>
+<td>相似度计算</td>
+<td>&amp;lt;1ms</td>
+<td>&amp;lt;1ms</td>
+</tr>
+</tbody>
+</table>
+<h2>局限性</h2>
+<ol>
+<li><strong>不适合细粒度任务</strong> — 最适合宽泛类别</li>
+<li><strong>需要描述性文本</strong> — 模糊标签效果差</li>
+<li><strong>网络数据偏差</strong> — 可能存在数据集偏差</li>
+<li><strong>无边界框</strong> — 仅处理整张图像</li>
+<li><strong>空间理解有限</strong> — 位置/计数能力较弱</li>
+</ol>
+<h2>资源</h2>
+<ul>
+<li><strong>GitHub</strong>: https://github.com/openai/CLIP ⭐ 25,300+</li>
+<li><strong>论文</strong>: https://arxiv.org/abs/2103.00020</li>
+<li><strong>Colab</strong>: https://colab.research.google.com/github/openai/clip/</li>
+<li><strong>许可证</strong>: MIT</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

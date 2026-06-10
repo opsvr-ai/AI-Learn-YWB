@@ -1,0 +1,310 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pixel Art — Pixel art w/ era palettes (NES, Game Boy, PICO-8) - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 命令</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & Skills</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+    </ul>
+  </li>
+
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">docs</a> / <a href="/hermes-docs/user-guide/">user-guide</a> / <a href="/hermes-docs/user-guide/skills/">skills</a> / <a href="/hermes-docs/user-guide/skills/bundled/">bundled</a> / <a href="/hermes-docs/user-guide/skills/bundled/creative/">creative</a> / Pixel Art — Pixel art w/ era palettes (NES, Game Boy, PICO-8)</div><p>{/<em> 本页面由 website/scripts/generate-skill-docs.py 从技能的 SKILL.md 自动生成。请编辑源 SKILL.md，而非本页面。 </em>/}</p>
+<h1>Pixel Art</h1>
+<p>Pixel art w/ era palettes (NES, Game Boy, PICO-8).</p>
+<h2>技能元数据</h2>
+<table><thead><tr><th>---</th><th>---</th></tr></thead><tbody>
+<tr><td>来源</td><td>内置（默认安装）</td></tr>
+<tr><td>路径</td><td><code>skills/creative/pixel-art</code></td></tr>
+<tr><td>版本</td><td><code>2.0.0</code></td></tr>
+<tr><td>作者</td><td>dodo-reach</td></tr>
+<tr><td>许可证</td><td>MIT</td></tr>
+<tr><td>平台</td><td>linux, macos, windows</td></tr>
+<tr><td>标签</td><td><code>creative</code>, <code>pixel-art</code>, <code>arcade</code>, <code>snes</code>, <code>nes</code>, <code>gameboy</code>, <code>retro</code>, <code>image</code>, <code>video</code></td></tr>
+</tbody></table>
+<h2>参考：完整 SKILL.md</h2>
+<p>:::info</p>
+<p>以下是 Hermes 在此技能被触发时加载的完整技能定义。这是技能激活时代理所看到的指令。</p>
+<p>:::</p>
+<h1>Pixel Art</h1>
+<p>Convert any image into retro pixel art, then optionally animate it into a short</p>
+<p>MP4 or GIF with era-appropriate effects (rain, fireflies, snow, embers).</p>
+<p>Two scripts ship with this skill:</p>
+<p>- <code>scripts/pixel_art.py</code> — photo → pixel-art PNG (Floyd-Steinberg dithering)</p>
+<p>- <code>scripts/pixel_art_video.py</code> — pixel-art PNG → animated MP4 (+ optional GIF)</p>
+<p>Each is importable or runnable directly. Presets snap to hardware palettes</p>
+<p>when you want era-accurate colors (NES, Game Boy, PICO-8, etc.), or use</p>
+<p>adaptive N-color quantization for arcade/SNES-style looks.</p>
+<h2>何时使用</h2>
+<p>- User wants retro pixel art from a source image</p>
+<p>- User asks for NES / Game Boy / PICO-8 / C64 / arcade / SNES styling</p>
+<p>- User wants a short looping animation (rain scene, night sky, snow, etc.)</p>
+<p>- Posters, album covers, social posts, sprites, characters, avatars</p>
+<h2>Workflow</h2>
+<p>Before generating, confirm the style with the user. Different presets produce</p>
+<p>very different outputs and regenerating is costly.</p>
+<h3>Step 1 — Offer a style</h3>
+<p>Call <code>clarify</code> with 4 representative presets. Pick the set based on what the</p>
+<p>user asked for — don't just dump all 14.</p>
+<p>默认 menu when the user's intent is unclear:</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+clarify(
+    question="Which pixel-art style do you want?",
+    choices=[
+        "arcade — bold, chunky 80s cabinet feel (16 colors, 8px)",
+        "nes — Nintendo 8-bit hardware palette (54 colors, 8px)",
+        "gameboy — 4-shade green Game Boy DMG",
+        "snes — cleaner 16-bit look (32 colors, 4px)",
+    ],
+)
+</div>
+<p>When the user already named an era (e.g. "80s arcade", "Gameboy"), skip</p>
+<p><code>clarify</code> and use the matching preset directly.</p>
+<h3>Step 2 — Offer animation (optional)</h3>
+<p>If the user asked for a video/GIF, or the output might benefit from motion,</p>
+<p>ask which scene:</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+clarify(
+    question="Want to animate it? Pick a scene or skip.",
+    choices=[
+        "night — stars + fireflies + leaves",
+        "urban — rain + neon pulse",
+        "snow — falling snowflakes",
+        "skip — just the image",
+    ],
+)
+</div>
+<p>Do NOT call <code>clarify</code> more than twice in a row. One for style, one for scene if</p>
+<p>animation is on the table. If the user explicitly asked for a specific style</p>
+<p>and scene in their message, skip <code>clarify</code> entirely.</p>
+<h3>Step 3 — Generate</h3>
+<p>Run <code>pixel_art()</code> first; if animation was requested, chain into</p>
+<p><code>pixel_art_video()</code> on the result.</p>
+<h2>Preset Catalog</h2>
+<table><thead><tr><th>Preset</th><th>Era</th><th>Palette</th><th>Block</th><th>Best for</th></tr></thead><tbody>
+<tr><td><code>arcade</code></td><td>80s arcade</td><td>adaptive 16</td><td>8px</td><td>Bold posters, hero art</td></tr>
+<tr><td><code>snes</code></td><td>16-bit</td><td>adaptive 32</td><td>4px</td><td>Characters, detailed scenes</td></tr>
+<tr><td><code>nes</code></td><td>8-bit</td><td>NES (54)</td><td>8px</td><td>True NES look</td></tr>
+<tr><td><code>gameboy</code></td><td>DMG handheld</td><td>4 green shades</td><td>8px</td><td>Monochrome Game Boy</td></tr>
+<tr><td><code>gameboy_pocket</code></td><td>Pocket handheld</td><td>4 grey shades</td><td>8px</td><td>Mono GB Pocket</td></tr>
+<tr><td><code>pico8</code></td><td>PICO-8</td><td>16 fixed</td><td>6px</td><td>Fantasy-console look</td></tr>
+<tr><td><code>c64</code></td><td>Commodore 64</td><td>16 fixed</td><td>8px</td><td>8-bit home computer</td></tr>
+<tr><td><code>apple2</code></td><td>Apple II hi-res</td><td>6 fixed</td><td>10px</td><td>Extreme retro, 6 colors</td></tr>
+<tr><td><code>teletext</code></td><td>BBC Teletext</td><td>8 pure</td><td>10px</td><td>Chunky primary colors</td></tr>
+<tr><td><code>mspaint</code></td><td>Windows MS Paint</td><td>24 fixed</td><td>8px</td><td>Nostalgic desktop</td></tr>
+<tr><td><code>mono_green</code></td><td>CRT phosphor</td><td>2 green</td><td>6px</td><td>Terminal/CRT aesthetic</td></tr>
+<tr><td><code>mono_amber</code></td><td>CRT amber</td><td>2 amber</td><td>6px</td><td>Amber monitor look</td></tr>
+<tr><td><code>neon</code></td><td>Cyberpunk</td><td>10 neons</td><td>6px</td><td>Vaporwave/cyber</td></tr>
+<tr><td><code>pastel</code></td><td>Soft pastel</td><td>10 pastels</td><td>6px</td><td>Kawaii / gentle</td></tr>
+</tbody></table>
+<p>Named palettes live in <code>scripts/palettes.py</code> (see <code>references/palettes.md</code> for</p>
+<p>the complete list — 28 named palettes total). Any preset can be overridden:</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+pixel_art("in.png", "out.png", preset="snes", palette="PICO_8", block=6)
+</div>
+<h2>Scene Catalog (for video)</h2>
+<table><thead><tr><th>Scene</th><th>Effects</th></tr></thead><tbody>
+<tr><td><code>night</code></td><td>Twinkling stars + fireflies + drifting leaves</td></tr>
+<tr><td><code>dusk</code></td><td>Fireflies + sparkles</td></tr>
+<tr><td><code>tavern</code></td><td>Dust motes + warm sparkles</td></tr>
+<tr><td><code>indoor</code></td><td>Dust motes</td></tr>
+<tr><td><code>urban</code></td><td>Rain + neon pulse</td></tr>
+<tr><td><code>nature</code></td><td>Leaves + fireflies</td></tr>
+<tr><td><code>magic</code></td><td>Sparkles + fireflies</td></tr>
+<tr><td><code>storm</code></td><td>Rain + lightning</td></tr>
+<tr><td><code>underwater</code></td><td>Bubbles + light sparkles</td></tr>
+<tr><td><code>fire</code></td><td>Embers + sparkles</td></tr>
+<tr><td><code>snow</code></td><td>Snowflakes + sparkles</td></tr>
+<tr><td><code>desert</code></td><td>Heat shimmer + dust</td></tr>
+</tbody></table>
+<h2>Invocation Patterns</h2>
+<h3>Python (import)</h3>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+import sys
+sys.path.insert(0, "/home/teknium/.hermes/skills/creative/pixel-art/scripts")
+from pixel_art import pixel_art
+from pixel_art_video import pixel_art_video
+
+# 1. Convert to pixel art
+pixel_art("/path/to/photo.jpg", "/tmp/pixel.png", preset="nes")
+
+# 2. Animate (optional)
+pixel_art_video(
+    "/tmp/pixel.png",
+    "/tmp/pixel.mp4",
+    scene="night",
+    duration=6,
+    fps=15,
+    seed=42,
+    export_gif=True,
+)
+</div>
+<h3>CLI</h3>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+cd /home/teknium/.hermes/skills/creative/pixel-art/scripts
+
+python pixel_art.py in.jpg out.png --preset gameboy
+python pixel_art.py in.jpg out.png --preset snes --palette PICO_8 --block 6
+
+python pixel_art_video.py out.png out.mp4 --scene night --duration 6 --gif
+</div>
+<h2>Pipeline Rationale</h2>
+<p><strong>Pixel conversion:</strong></p>
+<p>1. Boost contrast/color/sharpness (stronger for smaller palettes)</p>
+<p>2. Posterize to simplify tonal regions before quantization</p>
+<p>3. Downscale by <code>block</code> with <code>Image.NEAREST</code> (hard pixels, no interpolation)</p>
+<p>4. Quantize with Floyd-Steinberg dithering — against either an adaptive</p>
+<p>   N-color palette OR a named hardware palette</p>
+<p>5. Upscale back with <code>Image.NEAREST</code></p>
+<p>Quantizing AFTER downscale keeps dithering aligned with the final pixel grid.</p>
+<p>Quantizing before would waste error-diffusion on detail that disappears.</p>
+<p><strong>Video overlay:</strong></p>
+<p>- Copies the base frame each tick (static background)</p>
+<p>- Overlays stateless-per-frame particle draws (one function per effect)</p>
+<p>- Encodes via ffmpeg <code>libx264 -pix_fmt yuv420p -crf 18</code></p>
+<p>- 可选 GIF via <code>palettegen</code> + <code>paletteuse</code></p>
+<h2>Dependencies</h2>
+<p>- Python 3.9+</p>
+<p>- Pillow (<code>pip install Pillow</code>)</p>
+<p>- ffmpeg on PATH (only needed for video — Hermes installs package this)</p>
+<h2>Pitfalls</h2>
+<p>- Pallet keys are case-sensitive (<code>"NES"</code>, <code>"PICO_8"</code>, <code>"GAMEBOY_ORIGINAL"</code>).</p>
+<p>- Very small sources (&lt;100px wide) collapse under 8-10px blocks. Upscale the</p>
+<p>  source first if it's tiny.</p>
+<p>- Fractional <code>block</code> or <code>palette</code> will break quantization — keep them positive ints.</p>
+<p>- Animation particle counts are tuned for ~640x480 canvases. On very large</p>
+<p>  images you may want a second pass with a different seed for density.</p>
+<p>- <code>mono_green</code> / <code>mono_amber</code> force <code>color=0.0</code> (desaturate). If you override</p>
+<p>  and keep chroma, the 2-color palette can produce stripes on smooth regions.</p>
+<p>- <code>clarify</code> loop: call it at most twice per turn (style, then scene). Don't</p>
+<p>  pepper the user with more picks.</p>
+<h2>Verification</h2>
+<p>- PNG is created at the output path</p>
+<p>- Clear square pixel blocks visible at the preset's block size</p>
+<p>- Color count matches preset (eyeball the image or run <code>Image.open(p).getcolors()</code>)</p>
+<p>- Video is a valid MP4 (<code>ffprobe</code> can open it) with non-zero size</p>
+<h2>Attribution</h2>
+<p>Named hardware palettes and the procedural animation loops in <code>pixel_art_video.py</code></p>
+<p>are ported from <a href="https://github.com/Synero/pixel-art-studio">pixel-art-studio</a></p>
+<p>(MIT). See <code>ATTRIBUTION.md</code> in this skill directory for details.</p>  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>

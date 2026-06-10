@@ -1,0 +1,445 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>图像生成 Provider 插件 - Hermes 官方文档</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/hermes-docs.css">
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/index.html" class="nav-logo"><span class="icon">AI</span>运维部AI学习平台</a>
+    <ul class="nav-links">
+      <li><a href="/index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="/hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">💬</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="/claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">⌨</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="/ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">📖</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="/hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">📘</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="/api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">🔑</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="/token-stats.html">📊 Token统计</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="/cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">📘</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="/feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">💬</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">📊</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+<main class="docs-page">
+  <aside class="docs-sidebar" id="sidebar">
+    <div class="sidebar-search">
+      <input type="text" id="sidebar-search-input" placeholder="搜索文档..." oninput="filterSidebar()">
+    </div>
+    <nav class="sidebar-nav" id="sidebar-nav">
+<ul class="sidebar-menu">
+  <li class="sidebar-top"><a href="/hermes-docs/index.html">文档首页</a></li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">Getting Started</span>
+    <ul>
+      <li><a href="/hermes-docs/getting-started/quickstart.html">快速入门</a></li>
+      <li><a href="/hermes-docs/getting-started/installation.html">安装指南</a></li>
+      <li><a href="/hermes-docs/getting-started/termux.html">Android (Termux)</a></li>
+      <li><a href="/hermes-docs/getting-started/nix-setup.html">Nix 设置</a></li>
+      <li><a href="/hermes-docs/getting-started/updating.html">更新</a></li>
+      <li><a href="/hermes-docs/getting-started/learning-path.html">学习路径</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">用户指南</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/cli.html">CLI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/tui.html">TUI 界面</a></li>
+      <li><a href="/hermes-docs/user-guide/desktop.html">Desktop 应用</a></li>
+      <li><a href="/hermes-docs/user-guide/windows-native.html">Windows 原生</a></li>
+      <li><a href="/hermes-docs/user-guide/configuration.html">配置</a></li>
+      <li><a href="/hermes-docs/user-guide/configuring-models.html">模型配置</a></li>
+      <li><a href="/hermes-docs/user-guide/sessions.html">会话管理</a></li>
+      <li><a href="/hermes-docs/user-guide/profiles.html">配置文件</a></li>
+      <li><a href="/hermes-docs/user-guide/profile-distributions.html">配置文件分发</a></li>
+      <li><a href="/hermes-docs/user-guide/git-worktrees.html">Git Worktrees</a></li>
+      <li><a href="/hermes-docs/user-guide/docker.html">Docker</a></li>
+      <li><a href="/hermes-docs/user-guide/security.html">安全</a></li>
+      <li><a href="/hermes-docs/user-guide/messaging/index.html">消息网关</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">核心功能</span>
+    <ul>
+      <li><a href="/hermes-docs/user-guide/features/overview.html">功能概览</a></li>
+      <li><a href="/hermes-docs/user-guide/features/tools.html">工具 & 工具集</a></li>
+      <li><a href="/hermes-docs/user-guide/features/skills.html">Skills 系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/memory.html">记忆系统</a></li>
+      <li><a href="/hermes-docs/user-guide/features/mcp.html">MCP 集成</a></li>
+      <li><a href="/hermes-docs/user-guide/features/browser.html">浏览器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/voice-mode.html">语音模式</a></li>
+      <li><a href="/hermes-docs/user-guide/features/cron.html">定时任务</a></li>
+      <li><a href="/hermes-docs/user-guide/features/web-search.html">网络搜索</a></li>
+      <li><a href="/hermes-docs/user-guide/features/hooks.html">Hook</a></li>
+      <li><a href="/hermes-docs/user-guide/features/plugins.html">插件</a></li>
+      <li><a href="/hermes-docs/user-guide/features/delegation.html">子智能体委派</a></li>
+      <li><a href="/hermes-docs/user-guide/features/kanban.html">Kanban</a></li>
+      <li><a href="/hermes-docs/user-guide/features/code-execution.html">代码执行</a></li>
+      <li><a href="/hermes-docs/user-guide/features/computer-use.html">计算机使用</a></li>
+      <li><a href="/hermes-docs/user-guide/features/batch-processing.html">批量处理</a></li>
+      <li><a href="/hermes-docs/user-guide/features/api-server.html">API 服务器</a></li>
+      <li><a href="/hermes-docs/user-guide/features/image-generation.html">图片生成</a></li>
+      <li><a href="/hermes-docs/user-guide/secrets/index.html">秘密管理</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">实用指南</span>
+    <ul>
+      <li><a href="/hermes-docs/guides/use-mcp-with-hermes.html">使用 MCP</a></li>
+      <li><a href="/hermes-docs/guides/use-soul-with-hermes.html">使用 Soul/人格</a></li>
+      <li><a href="/hermes-docs/guides/use-voice-mode-with-hermes.html">使用语音模式</a></li>
+      <li><a href="/hermes-docs/guides/work-with-skills.html">使用 Skills</a></li>
+      <li><a href="/hermes-docs/guides/team-telegram-assistant.html">Telegram 助手</a></li>
+      <li><a href="/hermes-docs/guides/daily-briefing-bot.html">每日简报机器人</a></li>
+      <li><a href="/hermes-docs/guides/github-pr-review-agent.html">GitHub PR Review</a></li>
+      <li><a href="/hermes-docs/guides/automation-templates.html">自动化模板</a></li>
+      <li><a href="/hermes-docs/guides/automate-with-cron.html">用 Cron 自动化</a></li>
+      <li><a href="/hermes-docs/guides/delegation-patterns.html">委托模式</a></li>
+      <li><a href="/hermes-docs/guides/tips.html">提示技巧</a></li>
+      <li><a href="/hermes-docs/guides/build-a-hermes-plugin.html">构建 Hermes 插件</a></li>
+      <li><a href="/hermes-docs/reference/mcp-config-reference.html">MCP 配置</a></li>
+    </ul>
+  </li>
+  <li class="sidebar-category"><span class="sidebar-cat-title">参考文档</span>
+    <ul>
+      <li><a href="/hermes-docs/reference/cli-commands.html">CLI 命令参考</a></li>
+      <li><a href="/hermes-docs/reference/environment-variables.html">环境变量</a></li>
+      <li><a href="/hermes-docs/reference/skills-catalog.html">Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/optional-skills-catalog.html">可选 Skills 目录</a></li>
+      <li><a href="/hermes-docs/reference/tools-reference.html">工具参考</a></li>
+      <li><a href="/hermes-docs/reference/toolsets-reference.html">工具集参考</a></li>
+      <li><a href="/hermes-docs/reference/slash-commands.html">斜杠命令</a></li>
+      <li><a href="/hermes-docs/reference/profile-commands.html">配置文件命令</a></li>
+      <li><a href="/hermes-docs/reference/model-catalog.html">模型目录</a></li>
+      <li><a href="/hermes-docs/reference/faq.html">FAQ</a></li>
+    </ul>
+  </li>
+</ul>
+    </nav>
+  </aside>
+  <button id="sidebar-toggle" class="sidebar-toggle" title="切换侧边栏">&#9776;</button>
+  <article class="docs-content">
+    <div class="docs-breadcrumb"><a href="/hermes-docs/index.html">文档</a> / 开发者指南 / 图像生成 Provider 插件</div><p>图像生成 provider 插件注册一个后端，用于处理所有 <code>image_generate</code> 工具调用——DALL·E、gpt-image、Grok、Flux、Imagen、Stable Diffusion、fal、Replicate、本地 ComfyUI 装置，任何后端均可。内置 provider（OpenAI、OpenAI-Codex、xAI）均以插件形式提供。你可以通过在 <code>plugins/image_gen/&lt;name&gt;/</code> 目录下放置一个目录来添加新的 provider，或覆盖内置 provider。</p>
+<div class="tip"><strong>💡 提示</strong>
+图像生成是 Hermes 支持的多种<strong>后端插件</strong>之一。其他插件（各有更专用的 ABC）包括：<a href="/developer-guide/memory-provider-plugin">Memory Provider 插件</a>、<a href="/developer-guide/context-engine-plugin">Context Engine 插件</a> 和 <a href="/developer-guide/model-provider-plugin">Model Provider 插件</a>。通用工具/hook/CLI 插件请参阅 <a href="/guides/build-a-hermes-plugin">构建 Hermes 插件</a>。
+</div>
+<h2>发现机制</h2>
+<p>Hermes 在三个位置扫描图像生成后端：</p>
+<ol>
+<li><strong>内置</strong> — <code>&lt;repo&gt;/plugins/image_gen/&lt;name&gt;/</code>（以 <code>kind: backend</code> 自动加载，始终可用）</li>
+<li><strong>用户</strong> — <code>~/.hermes/plugins/image_gen/&lt;name&gt;/</code>（通过 <code>plugins.enabled</code> 选择启用）</li>
+<li><strong>Pip</strong> — 声明了 <code>hermes_agent.plugins</code> 入口点的包</li>
+</ol>
+<p>每个插件的 <code>register(ctx)</code> 函数调用 <code>ctx.register_image_gen_provider(...)</code> — 将其注册到 <code>agent/image_gen_registry.py</code> 中的注册表。活跃 provider 由 <code>config.yaml</code> 中的 <code>image_gen.provider</code> 指定；<code>hermes tools</code> 会引导用户完成选择。</p>
+<p><code>image_generate</code> 工具包装器向注册表请求活跃 provider 并分发调用。若未注册任何 provider，工具会显示一条有用的错误信息，指引用户使用 <code>hermes tools</code>。</p>
+<h2>目录结构</h2>
+<div class="code-block"><span class="code-lang"></span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+plugins/image_gen/my-backend/
+├── __init__.py      # ImageGenProvider 子类 + register()
+└── plugin.yaml      # 包含 kind: backend 的清单文件
+</div>
+<p>内置插件到此即完整。位于 <code>~/.hermes/plugins/image_gen/&lt;name&gt;/</code> 的用户插件需要在 <code>config.yaml</code> 的 <code>plugins.enabled</code> 中添加（或运行 <code>hermes plugins enable &lt;name&gt;</code>）。</p>
+<h2>ImageGenProvider ABC</h2>
+<p>继承 <code>agent.image_gen_provider.ImageGenProvider</code>。唯一必须实现的成员是 <code>name</code> 属性和 <code>generate()</code> 方法——其他所有成员均有合理的默认值：</p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# plugins/image_gen/my-backend/__init__.py
+from typing import Any, Dict, List, Optional
+import os
+
+from agent.image_gen_provider import (
+    DEFAULT_ASPECT_RATIO,
+    ImageGenProvider,
+    error_response,
+    resolve_aspect_ratio,
+    save_b64_image,
+    success_response,
+)
+
+
+class MyBackendImageGenProvider(ImageGenProvider):
+    @property
+    def name(self) -&gt; str:
+        # Stable id used in image_gen.provider config. Lowercase, no spaces.
+        return "my-backend"
+
+    @property
+    def display_name(self) -&gt; str:
+        # Human label shown in `hermes tools`. Defaults to name.title() if omitted.
+        return "My Backend"
+
+    def is_available(self) -&gt; bool:
+        # Return False if credentials or deps are missing.
+        # The tool's availability gate calls this before dispatch.
+        if not os.environ.get("MY_BACKEND_API_KEY"):
+            return False
+        try:
+            import my_backend_sdk  # noqa: F401
+        except ImportError:
+            return False
+        return True
+
+    def list_models(self) -&gt; List[Dict[str, Any]]:
+        # Catalog shown in `hermes tools` model picker.
+        return [
+            {
+                "id": "my-model-fast",
+                "display": "My Model (Fast)",
+                "speed": "~5s",
+                "strengths": "Quick iteration",
+                "price": "$0.01/image",
+            },
+            {
+                "id": "my-model-hq",
+                "display": "My Model (HQ)",
+                "speed": "~30s",
+                "strengths": "Highest fidelity",
+                "price": "$0.04/image",
+            },
+        ]
+
+    def default_model(self) -&gt; Optional[str]:
+        return "my-model-fast"
+
+    def get_setup_schema(self) -&gt; Dict[str, Any]:
+        # Metadata for the `hermes tools` picker — keys to prompt for at setup.
+        return {
+            "name": "My Backend",
+            "badge": "paid",        # optional; shown as a short tag in the picker
+            "tag": "One-line description shown under the name",
+            "env_vars": [
+                {
+                    "key": "MY_BACKEND_API_KEY",
+                    "prompt": "My Backend API key",
+                    "url": "https://my-backend.example.com/api-keys",
+                },
+            ],
+        }
+
+    def generate(
+        self,
+        prompt: str,
+        aspect_ratio: str = DEFAULT_ASPECT_RATIO,
+        **kwargs: Any,
+    ) -&gt; Dict[str, Any]:
+        prompt = (prompt or "").strip()
+        aspect_ratio = resolve_aspect_ratio(aspect_ratio)
+
+        if not prompt:
+            return error_response(
+                error="Prompt is required",
+                error_type="invalid_input",
+                provider=self.name,
+                prompt="",
+                aspect_ratio=aspect_ratio,
+            )
+
+        # Model selection precedence: env var → config → default. The helper
+        # _resolve_model() in the built-in openai plugin is a good reference.
+        model_id = kwargs.get("model") or self.default_model() or "my-model-fast"
+
+        try:
+            import my_backend_sdk
+            client = my_backend_sdk.Client(api_key=os.environ["MY_BACKEND_API_KEY"])
+            result = client.generate(
+                prompt=prompt,
+                model=model_id,
+                aspect_ratio=aspect_ratio,
+            )
+
+            # Two shapes supported:
+            #   - URL string: return it as `image`
+            #   - base64 data: save under $HERMES_HOME/cache/images/ via save_b64_image()
+            if result.get("image_b64"):
+                path = save_b64_image(
+                    result["image_b64"],
+                    prefix=self.name,
+                    extension="png",
+                )
+                image = str(path)
+            else:
+                image = result["image_url"]
+
+            return success_response(
+                image=image,
+                model=model_id,
+                prompt=prompt,
+                aspect_ratio=aspect_ratio,
+                provider=self.name,
+            )
+        except Exception as exc:
+            return error_response(
+                error=str(exc),
+                error_type=type(exc).__name__,
+                provider=self.name,
+                model=model_id,
+                prompt=prompt,
+                aspect_ratio=aspect_ratio,
+            )
+
+
+def register(ctx) -&gt; None:
+    """Plugin entry point — called once at load time."""
+    ctx.register_image_gen_provider(MyBackendImageGenProvider())
+</div>
+<h2>plugin.yaml</h2>
+<div class="code-block"><span class="code-lang">yaml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+name: my-backend
+version: 1.0.0
+description: My image backend — text-to-image via My Backend SDK
+author: Your Name
+kind: backend
+requires_env:
+  - MY_BACKEND_API_KEY
+</div>
+<p><code>kind: backend</code> 决定插件被路由到图像生成注册路径。<code>requires_env</code> 在 <code>hermes plugins install</code> 期间会提示用户输入。</p>
+<h2>ABC 参考</h2>
+<p>完整契约位于 <code>agent/image_gen_provider.py</code>。通常需要覆盖的方法：</p>
+<table>
+<thead>
+<tr>
+<th>成员</th>
+<th>必须</th>
+<th>默认值</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>✅</td>
+<td>—</td>
+<td>在 <code>image_gen.provider</code> 配置中使用的稳定 id</td>
+</tr>
+<tr>
+<td><code>display_name</code></td>
+<td>—</td>
+<td><code>name.title()</code></td>
+<td>在 <code>hermes tools</code> 中显示的标签</td>
+</tr>
+<tr>
+<td><code>is_available()</code></td>
+<td>—</td>
+<td><code>True</code></td>
+<td>缺少凭据/依赖时的拦截门控</td>
+</tr>
+<tr>
+<td><code>list_models()</code></td>
+<td>—</td>
+<td><code>[]</code></td>
+<td><code>hermes tools</code> 模型选择器的目录</td>
+</tr>
+<tr>
+<td><code>default_model()</code></td>
+<td>—</td>
+<td><code>list_models()</code> 的第一项</td>
+<td>未配置模型时的回退</td>
+</tr>
+<tr>
+<td><code>get_setup_schema()</code></td>
+<td>—</td>
+<td>最小值</td>
+<td>选择器元数据 + 环境变量提示</td>
+</tr>
+<tr>
+<td><code>generate(prompt, aspect_ratio, **kwargs)</code></td>
+<td>✅</td>
+<td>—</td>
+<td>实际调用</td>
+</tr>
+</tbody>
+</table>
+<h2>响应格式</h2>
+<p><code>generate()</code> 必须返回通过 <code>success_response()</code> 或 <code>error_response()</code> 构建的字典。两者均位于 <code>agent/image_gen_provider.py</code>。</p>
+<p><strong>成功：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+success_response(
+    image=&lt;url-or-absolute-path&gt;,
+    model=&lt;model-id&gt;,
+    prompt=&lt;echoed-prompt&gt;,
+    aspect_ratio="landscape" | "square" | "portrait",
+    provider=&lt;your-provider-name&gt;,
+    extra={...},  # optional backend-specific fields
+)
+</div>
+<p><strong>错误：</strong></p>
+<div class="code-block"><span class="code-lang">python</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+error_response(
+    error="human-readable message",
+    error_type="provider_error" | "invalid_input" | "&lt;exception class name&gt;",
+    provider=&lt;your-provider-name&gt;,
+    model=&lt;model-id&gt;,
+    prompt=&lt;prompt&gt;,
+    aspect_ratio=&lt;resolved aspect&gt;,
+)
+</div>
+<p>工具包装器将字典 JSON 序列化后传给 LLM。错误以工具结果的形式呈现；LLM 决定如何向用户解释。</p>
+<h2>处理 base64 与 URL 输出</h2>
+<p>部分后端返回图像 URL（fal、Replicate）；其他后端返回 base64 载荷（OpenAI gpt-image-2）。对于 base64 情况，使用 <code>save_b64_image()</code> — 它将文件写入 <code>$HERMES_HOME/cache/images/&lt;prefix&gt;_&lt;timestamp&gt;_&lt;uuid&gt;.&lt;ext&gt;</code> 并返回绝对 <code>Path</code>。将该路径（转为 <code>str</code>）作为 <code>image=</code> 传入 <code>success_response()</code>。Gateway 投递（Telegram 图片气泡、Discord 附件）同时识别 URL 和绝对路径。</p>
+<h2>用户覆盖</h2>
+<p>在 <code>~/.hermes/plugins/image_gen/&lt;name&gt;/</code> 放置一个用户插件，使其 <code>name</code> 属性与某个内置插件相同，并通过 <code>hermes plugins enable &lt;name&gt;</code> 启用——注册表采用后写入优先策略，你的版本将替换内置版本。适用于将 <code>openai</code> 插件指向私有代理，或替换自定义模型目录等场景。</p>
+<h2>测试</h2>
+<div class="code-block"><span class="code-lang">bash</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+export HERMES_HOME=/tmp/hermes-imggen-test
+mkdir -p $HERMES_HOME/plugins/image_gen/my-backend
+# …copy __init__.py + plugin.yaml into that dir…
+
+export MY_BACKEND_API_KEY=your-test-key
+hermes plugins enable my-backend
+
+# Pick it as the active provider
+echo "image_gen:" &gt;&gt; $HERMES_HOME/config.yaml
+echo "  provider: my-backend" &gt;&gt; $HERMES_HOME/config.yaml
+
+# Exercise it
+hermes -z "Generate an image of a corgi in a spacesuit"
+</div>
+<p>或交互式操作：<code>hermes tools</code> → &quot;Image Generation&quot; → 选择 <code>my-backend</code> → 根据提示输入 API key。</p>
+<h2>参考实现</h2>
+<ul>
+<li><strong><code>plugins/image_gen/openai/__init__.py</code></strong> — gpt-image-2 以低/中/高三个档位作为三个虚拟模型 ID，共享同一 API 模型并使用不同的 <code>quality</code> 参数。适合参考单一后端下的分层模型设计 + config.yaml 优先级链。</li>
+<li><strong><code>plugins/image_gen/xai/__init__.py</code></strong> — 通过 xAI 的 Grok Imagine。不同的响应结构（URL 输出，目录更简单）。</li>
+<li><strong><code>plugins/image_gen/openai-codex/__init__.py</code></strong> — Codex 风格的 Responses API 变体，复用 OpenAI SDK 并使用不同的路由基础 URL。</li>
+</ul>
+<h2>通过 pip 分发</h2>
+<div class="code-block"><span class="code-lang">toml</span><button class="copy-btn" onclick="copyDocCode(this)">copy</button>
+# pyproject.toml
+[project.entry-points."hermes_agent.plugins"]
+my-backend-imggen = "my_backend_imggen_package"
+</div>
+<p><code>my_backend_imggen_package</code> 必须暴露一个顶层 <code>register</code> 函数。完整配置请参阅通用插件指南中的 <a href="/guides/build-a-hermes-plugin#distribute-via-pip">通过 pip 分发</a>。</p>
+<h2>相关页面</h2>
+<ul>
+<li><a href="/user-guide/features/image-generation">图像生成</a> — 面向用户的功能文档</li>
+<li><a href="/user-guide/features/plugins">插件概览</a> — 所有插件类型一览</li>
+<li><a href="/guides/build-a-hermes-plugin">构建 Hermes 插件</a> — 通用工具/hook/斜杠命令指南</li>
+</ul>
+
+  </article>
+</main>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+<script src="/js/main.js"></script>
+<script src="/js/hermes-docs.js"></script>
+</body>
+</html>
