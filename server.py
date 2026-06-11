@@ -388,6 +388,9 @@ def _fetch_db_token_data(month):
     print(f"[Token统计] 开始查询 ai_gateway: month={month}, time_bucket [{start_ts}, {end_ts})", flush=True)
     try:
         conn = pymysql.connect(**AIGW_DB_CONFIG)
+        # 绕过 MySQL 服务端 max_execution_time 限制（超时毫秒数）
+        conn.cursor().execute("SET SESSION max_execution_time = 600000")
+        conn.commit()
         t0 = time.time()
         cursor = conn.cursor()  # 默认 buffered cursor，一次性传输聚合结果（比 SSCursor 快得多）
         cursor.execute("""
