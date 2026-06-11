@@ -3,6 +3,9 @@
 __pycache__/
 *.pyc
 
+# Token 统计磁盘缓存（运行时生成）
+token_cache.json
+
 # 安装包
 packages/
 
