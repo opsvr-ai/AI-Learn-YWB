@@ -316,8 +316,9 @@ AIGW_DB_CONFIG = {
     'password': 'pP1<zW1+',
     'database': 'ai_gateway',
     'charset': 'utf8mb4',
-    'connect_timeout': 5,
-    'read_timeout': 120
+    'connect_timeout': 10,
+    'read_timeout': 300,
+    'write_timeout': 300
 }
 
 TOKEN_CACHE_TTL = 300  # 缓存 5 分钟
@@ -387,7 +388,8 @@ def _fetch_db_token_data(month):
     print(f"[Token统计] 开始查询 ai_gateway: month={month}, time_bucket [{start_ts}, {end_ts})", flush=True)
     try:
         conn = pymysql.connect(**AIGW_DB_CONFIG)
-        cursor = conn.cursor(pymysql.cursors.SSCursor)  # 服务端流式游标，避免大量数据卡内存
+        t0 = time.time()
+        cursor = conn.cursor()  # 默认 buffered cursor，一次性传输聚合结果（比 SSCursor 快得多）
         cursor.execute("""
             SELECT ai_consumer,
                    COALESCE(SUM(input_tokens), 0) as input_tokens,
@@ -397,11 +399,12 @@ def _fetch_db_token_data(month):
             WHERE time_bucket >= %s AND time_bucket < %s
             GROUP BY ai_consumer
         """, (start_ts, end_ts))
-        print(f"[Token统计] SQL 执行完成，开始读取结果...", flush=True)
+        elapsed = time.time() - t0
+        print(f"[Token统计] SQL 执行完成，耗时 {elapsed:.1f}s，开始读取结果...", flush=True)
 
         consumers = {}
         row_count = 0
-        for ai_consumer, inp, out, req in cursor:
+        for ai_consumer, inp, out, req in cursor.fetchall():
             row_count += 1
             username = _extract_username(ai_consumer)
             if username not in consumers:
@@ -409,8 +412,6 @@ def _fetch_db_token_data(month):
             consumers[username]["input_tokens"] += inp
             consumers[username]["output_tokens"] += out
             consumers[username]["request_count"] += req
-            if row_count % 10000 == 0:
-                print(f"[Token统计] 已读取 {row_count} 行...", flush=True)
 
         cursor.close()
         conn.close()
