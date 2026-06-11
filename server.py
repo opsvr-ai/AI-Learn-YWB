@@ -16,6 +16,7 @@ import http.server
 import sqlite3
 import json
 import os
+import socket
 import threading
 import time
 import traceback
@@ -317,9 +318,24 @@ AIGW_DB_CONFIG = {
     'database': 'ai_gateway',
     'charset': 'utf8mb4',
     'connect_timeout': 10,
-    'read_timeout': 300,
-    'write_timeout': 300
+    'read_timeout': 60
 }
+
+def _db_connect():
+    """连接 MySQL 并启用 TCP keepalive 防止防火墙断连"""
+    conn = pymysql.connect(**AIGW_DB_CONFIG)
+    sock = conn.socket
+    if sock:
+        sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
+        if hasattr(socket, 'TCP_KEEPIDLE'):
+            sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPIDLE, 30)
+        if hasattr(socket, 'TCP_KEEPINTVL'):
+            sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPINTVL, 10)
+        if hasattr(socket, 'TCP_KEEPCNT'):
+            sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPCNT, 5)
+    conn.cursor().execute("SET SESSION wait_timeout = 600")
+    conn.commit()
+    return conn
 
 TOKEN_CACHE_TTL = 300  # 缓存 5 分钟
 
@@ -387,7 +403,7 @@ def _fetch_db_token_data(month):
 
     print(f"[Token统计] 开始查询 ai_gateway: month={month}, time_bucket [{start_ts}, {end_ts})", flush=True)
     try:
-        conn = pymysql.connect(**AIGW_DB_CONFIG)
+        conn = _db_connect()
         t0 = time.time()
         cursor = conn.cursor()  # 默认 buffered cursor，一次性传输聚合结果（比 SSCursor 快得多）
         cursor.execute("""
