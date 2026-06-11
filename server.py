@@ -321,408 +321,227 @@ AIGW_DB_CONFIG = {
     'write_timeout': 900,
 }
 
-TOKEN_CACHE_TTL = 300  # 缓存 5 分钟
-
-_token_cache_lock = threading.Lock()
-_token_cache = {"data": None, "ts": 0, "source": ""}
+# ── Token 统计缓存（磁盘持久化，24h 有效） ──
+TOKEN_CACHE_FILE = os.path.join(ROOT, 'token_cache.json')
+TOKEN_CACHE_TTL  = 86400  # 24 小时
+_cache_lock = threading.Lock()
+_refreshing = False
 
 
 # ── 人员组织结构加载 ──
 def _load_org_structure():
-    """从 ywb-users.csv 加载中心→小组→(姓名,账号) 组织树"""
-    org = {}
-    acc_lookup = {}
-
+    org, acc_lookup = {}, {}
     csv_path = os.path.join(ROOT, 'ywb-users.csv')
     if not os.path.exists(csv_path):
         print(f"[Token统计] ywb-users.csv 不存在: {csv_path}")
         return org, acc_lookup
-
     try:
         import csv
         with open(csv_path, 'r', encoding='utf-8-sig') as f:
-            reader = csv.reader(f)
-            header = next(reader, None)  # 跳过表头
+            reader = csv.reader(f); next(reader, None)
             for row in reader:
-                if len(row) < 6:
-                    continue
-                name    = (row[1] or '').strip()
-                account = (row[2] or '').strip()
-                center  = (row[3] or '').strip()
-                group   = (row[4] or '').strip()
-                if not account:
-                    continue
-                org.setdefault(center, {})
-                org[center].setdefault(group, [])
-                org[center][group].append((name, account))
-                acc_lookup[account] = {"name": name, "center": center, "group": group}
-        print(f"[Token统计] ywb-users.csv 加载完成: {len(org)} 个中心, {len(acc_lookup)} 人")
-        return org, acc_lookup
-    except Exception as e:
-        print(f"[Token统计] ywb-users.csv 加载失败: {e}")
-        return org, acc_lookup
-
+                if len(row) < 6: continue
+                n, a, c, g = (row[1] or '').strip(), (row[2] or '').strip(), (row[3] or '').strip(), (row[4] or '').strip()
+                if not a: continue
+                org.setdefault(c, {}); org[c].setdefault(g, []); org[c][g].append((n, a))
+                acc_lookup[a] = {"name": n, "center": c, "group": g}
+        print(f"[Token统计] ywb-users.csv: {len(org)} 中心 {len(acc_lookup)} 人")
+    except Exception as e: print(f"[Token统计] ywb-users.csv 加载失败: {e}")
+    return org, acc_lookup
 
 _org_tree, _org_account_map = _load_org_structure()
 
-
-def _extract_username(ai_consumer):
-    """从 ai_consumer 中提取用户名（前缀匹配）"""
-    if '_' in ai_consumer:
-        return ai_consumer.split('_')[0]
-    return ai_consumer
+def _extract_username(c): return c.split('_')[0] if '_' in c else c
 
 
-def _fetch_db_token_data(month):
-    """从 ai_gateway 聚合查询指定月份的 Token 数据"""
-    if not _HAS_PYMYSQL:
-        print("[Token统计] pymysql 未安装，跳过 DB 查询，走兜底")
-        return None
-    y, m = map(int, month.split('-'))
-    start_ts = f"{y:04d}-{m:02d}-01 00:00:00"
-    if m == 12:
-        end_ts = f"{y+1:04d}-01-01 00:00:00"
-    else:
-        end_ts = f"{y:04d}-{m+1:02d}-01 00:00:00"
-
-    print(f"[Token统计] 开始查询 ai_gateway: month={month}, time_bucket [{start_ts}, {end_ts})", flush=True)
+def _fetch_aggregated(month):
+    if not _HAS_PYMYSQL: return None
+    y, m = map(int, month.split('-')); start, end = f"{y}-{m:02d}-01 00:00:00", f"{y+(m//12)}-{(m%12)+1:02d}-01 00:00:00"
+    print(f"[Token统计] 后台查询 {month}", flush=True)
     try:
-        # 1) 建立连接
-        conn = pymysql.connect(**AIGW_DB_CONFIG)
-        print(f"[Token统计] TCP连接已建立: {AIGW_DB_CONFIG['host']}:{AIGW_DB_CONFIG['port']}", flush=True)
-
-        # 2) 读取服务端关键变量（方便定位超时配置）
-        cur = conn.cursor()
-        cur.execute("SELECT @@max_execution_time, @@wait_timeout, @@net_read_timeout, @@net_write_timeout")
-        row = cur.fetchone()
-        print(f"[Token统计] 服务端: max_execution_time={row[0]}ms, wait_timeout={row[1]}s, net_read/write={row[2]}/{row[3]}s", flush=True)
-
-        # 3) 设置会话超时（绕过全局限制，保障长时间聚合）
-        cur.execute("""
-            SET SESSION max_execution_time = 600000,
-                SESSION net_read_timeout = 600,
-                SESSION net_write_timeout = 600
-        """)
-        conn.commit()
-        print(f"[Token统计] 已设置 SESSION max_execution_time=600s, net_read/write_timeout=600s", flush=True)
-
-        # 4) 预估表大小（判断数据量级）
-        cur.execute("""
-            SELECT COUNT(*) FROM ai_metrics
-            WHERE time_bucket >= %s AND time_bucket < %s
-        """, (start_ts, end_ts))
-        estimate = cur.fetchone()[0]
-        cur.close()
-        print(f"[Token统计] 时间范围内共 {estimate} 行原始数据", flush=True)
-
-        # 5) 执行聚合查询（SSCursor 流式，避免 buf 全量加载）
+        conn = pymysql.connect(**AIGW_DB_CONFIG); cur = conn.cursor()
+        cur.execute("SET SESSION max_execution_time=600000, net_read_timeout=900, net_write_timeout=900"); conn.commit()
         t0 = time.time()
-        cursor = conn.cursor(pymysql.cursors.SSCursor)
-        cursor.execute("""
-            SELECT ai_consumer,
-                   COALESCE(SUM(input_tokens), 0) as input_tokens,
-                   COALESCE(SUM(output_tokens), 0) as output_tokens,
-                   COALESCE(SUM(request_count), 0) as request_count
-            FROM ai_metrics
-            WHERE time_bucket >= %s AND time_bucket < %s
-            GROUP BY ai_consumer
-        """, (start_ts, end_ts))
-        elapsed = time.time() - t0
-        print(f"[Token统计] SQL 执行完成，耗时 {elapsed:.1f}s，开始游标读取...", flush=True)
-
-        # 6) 流式读取结果
+        cur.execute("SELECT ai_consumer, COALESCE(SUM(input_tokens),0), COALESCE(SUM(output_tokens),0), COALESCE(SUM(request_count),0) FROM ai_metrics WHERE time_bucket>=%s AND time_bucket<%s GROUP BY ai_consumer", (start, end))
+        rows = cur.fetchall()
         consumers = {}
-        row_count = 0
-        t1 = time.time()
-        for ai_consumer, inp, out, req in cursor:
-            row_count += 1
-            if row_count % 5000 == 0:
-                print(f"[Token统计] 游标已读取 {row_count} 行，耗时 {(time.time()-t1):.0f}s...", flush=True)
-            username = _extract_username(ai_consumer)
-            if username not in consumers:
-                consumers[username] = {"input_tokens": 0, "output_tokens": 0, "request_count": 0}
-            consumers[username]["input_tokens"] += inp
-            consumers[username]["output_tokens"] += out
-            consumers[username]["request_count"] += req
-        fetch_elapsed = time.time() - t1
-
-        cursor.close()
-        conn.close()
-        print(f"[Token统计] DB 查询成功: {row_count} 条聚合记录, {len(consumers)} 个去重用户 (游标读取耗时 {fetch_elapsed:.1f}s)", flush=True)
+        for c, inp, out, req in rows:
+            u = _extract_username(c)
+            d = consumers.setdefault(u, {"input_tokens": 0, "output_tokens": 0, "request_count": 0})
+            d["input_tokens"] += inp; d["output_tokens"] += out; d["request_count"] += req
+        cur.close(); conn.close()
+        print(f"[Token统计] 聚合完成: {len(rows)} 条 -> {len(consumers)} 用户, {time.time()-t0:.1f}s", flush=True)
         return consumers
     except Exception as e:
-        print(f"[Token统计] DB 查询失败: {e}", flush=True)
-        traceback.print_exc()
-        return None
+        print(f"[Token统计] 聚合失败: {e}", flush=True); traceback.print_exc(); return None
 
 
-def _load_json_fallback():
-    """从本地 report_data.json 加载作为兜底数据"""
-    json_path = os.path.join(ROOT, 'report_data.json')
-    if not os.path.exists(json_path):
-        print(f"[Token统计] report_data.json 不存在: {json_path}")
-        return None
+def _build_result(consumers, month):
+    flat = []
+    for a, info in _org_account_map.items():
+        u = consumers.get(a, {"input_tokens": 0, "output_tokens": 0, "request_count": 0})
+        t = u["input_tokens"] + u["output_tokens"]
+        flat.append({"account": a, "name": info["name"], "center": info["center"], "group": info["group"],
+                      "input_tokens": u["input_tokens"], "output_tokens": u["output_tokens"],
+                      "request_count": u["request_count"], "total_tokens": t, "has_usage": t > 0})
+    if not flat: return None
+    flat.sort(key=lambda x: x["total_tokens"], reverse=True)
+    return _package(month, "db", flat)
+
+
+def _build_from_json_fallback(month):
+    jp = os.path.join(ROOT, 'report_data.json')
+    if not os.path.exists(jp): return None
+    with open(jp, 'r', encoding='utf-8') as f: fb = json.load(f)
+    flat = []
+    for cn, cd in fb.get("centers", {}).items():
+        for gn, gd in cd.get("groups", {}).items():
+            for u in gd.get("users", []):
+                un = u.get("username", "");
+                if not un or un == "合计": continue
+                t = u.get("total_tokens", 0)
+                flat.append({"account": un, "name": u.get("name", ""), "center": cn, "group": gn,
+                              "input_tokens": u.get("input_tokens", 0), "output_tokens": u.get("output_tokens", 0),
+                              "request_count": u.get("request_count", 0), "total_tokens": t, "has_usage": t > 0})
+    if not flat: return None
+    flat.sort(key=lambda x: x["total_tokens"], reverse=True)
+    return _package(month, "json", flat)
+
+
+def _package(month, source, flat):
+    active = [u for u in flat if u["has_usage"]]
+    cs = {}
+    for u in flat:
+        c, g = u["center"] or "其他", u["group"] or ""
+        ct = cs.setdefault(c, {"t":0,"uc":0,"ac":0,"g":{}})
+        ct["t"] += u["total_tokens"]; ct["uc"] += 1
+        if u["has_usage"]: ct["ac"] += 1
+        gt = ct["g"].setdefault(g, {"t":0,"uc":0,"ac":0})
+        gt["t"] += u["total_tokens"]; gt["uc"] += 1
+        if u["has_usage"]: gt["ac"] += 1
+    idx = {}
+    for i, u in enumerate(sorted(active, key=lambda x: x["total_tokens"], reverse=True)):
+        idx[u["account"]] = {"name": u["name"], "rank": i+1, "center": u["center"], "group": u["group"],
+                             "total_tokens": u["total_tokens"], "input_tokens": u["input_tokens"],
+                             "output_tokens": u["output_tokens"], "request_count": u["request_count"], "has_usage": True}
+    for u in flat:
+        if not u["has_usage"]:
+            idx[u["account"]] = {"name": u["name"], "rank": -1, "center": u["center"], "group": u["group"],
+                                 "total_tokens": 0, "input_tokens": 0, "output_tokens": 0, "request_count": 0, "has_usage": False}
+    return {"month": month, "source": source, "total_users": len(flat), "active_users": len(active),
+            "total_all": sum(u["total_tokens"] for u in flat),
+            "total_input": sum(u["input_tokens"] for u in flat), "total_output": sum(u["output_tokens"] for u in flat),
+            "centers": [{"name": c, "total_tokens": s["t"], "user_count": s["uc"], "active_count": s["ac"],
+                          "groups": [{"name": g, "total_tokens": gs["t"], "user_count": gs["uc"], "active_count": gs["ac"],
+                                       "users": [u for u in flat if (u["center"] or "其他") == c and (u["group"] or "") == g]}
+                                      for g, gs in sorted(s["g"].items(), key=lambda x: x[1]["t"], reverse=True)]}
+                         for c, s in sorted(cs.items(), key=lambda x: x[1]["t"], reverse=True)],
+            "rankings": [{"rank": i+1, "account": u["account"], "name": u["name"], "center": u["center"],
+                           "group": u["group"], "total_tokens": u["total_tokens"], "input_tokens": u["input_tokens"],
+                           "output_tokens": u["output_tokens"], "request_count": u["request_count"]} for i, u in enumerate(active)],
+            "_user_index": idx}
+
+
+def _disk_cache_valid(month):
+    if not os.path.exists(TOKEN_CACHE_FILE): return False
     try:
-        with open(json_path, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-        print(f"[Token统计] report_data.json 加载成功: centers={len(data.get('centers',{}))}")
-        return data
-    except Exception as e:
-        print(f"[Token统计] report_data.json 解析失败: {e}")
-        return None
+        with open(TOKEN_CACHE_FILE, 'r', encoding='utf-8') as f: d = json.load(f)
+        return d.get("month") == month and (time.time() - d.get("ts", 0)) < TOKEN_CACHE_TTL
+    except: return False
 
+def _load_disk_cache():
+    with open(TOKEN_CACHE_FILE, 'r', encoding='utf-8') as f: return json.load(f).get("data")
 
-def _build_token_result(month):
-    """构建标准化的 Token 统计结果"""
-    print(f"[Token统计] _build_token_result() month={month}, org_users={len(_org_account_map)}", flush=True)
+def _save_disk_cache(data):
+    with open(TOKEN_CACHE_FILE, 'w', encoding='utf-8') as f:
+        json.dump({"ts": time.time(), "month": data["month"], "data": data}, f, ensure_ascii=False)
 
-    # 尝试查库
-    db_data = _fetch_db_token_data(month)
-    source = "db"
-
-    if db_data is not None:
-        print(f"[Token统计] 使用 DB 数据构建，匹配组织树...", flush=True)
-        # 用 DB 数据 + 组织树构建结果
-        matched = 0
-        flat_users = []
-        for account, info in _org_account_map.items():
-            usage = db_data.get(account, {"input_tokens": 0, "output_tokens": 0, "request_count": 0})
-            total = usage["input_tokens"] + usage["output_tokens"]
-            if total > 0:
-                matched += 1
-            flat_users.append({
-                "account": account,
-                "name": info["name"],
-                "center": info["center"],
-                "group": info["group"],
-                "input_tokens": usage["input_tokens"],
-                "output_tokens": usage["output_tokens"],
-                "request_count": usage["request_count"],
-                "total_tokens": total,
-                "has_usage": total > 0
-            })
-        print(f"[Token统计] 组织树匹配完成: {len(flat_users)} 人, 有用量 {matched} 人", flush=True)
-    else:
-        # 兜底：从 report_data.json 构建
-        print(f"[Token统计] DB 数据不可用，尝试 JSON 兜底...")
-        fallback = _load_json_fallback()
-        if fallback is None:
-            print(f"[Token统计] JSON 兜底也不可用，返回 None")
-            return None
-        source = "json"
-        flat_users = []
-        acc_index = {}
-        for cname, cdata in fallback.get("centers", {}).items():
-            for gname, gdata in cdata.get("groups", {}).items():
-                for u in gdata.get("users", []):
-                    username = u.get("username", "")
-                    if not username or username == "合计":
-                        continue
-                    total = u.get("total_tokens", 0)
-                    flat_users.append({
-                        "account": username,
-                        "name": u.get("name", ""),
-                        "center": cname,
-                        "group": gname,
-                        "input_tokens": u.get("input_tokens", 0),
-                        "output_tokens": u.get("output_tokens", 0),
-                        "request_count": u.get("request_count", 0),
-                        "total_tokens": total,
-                        "has_usage": total > 0
-                    })
-        print(f"[Token统计] JSON 兜底构建完成: {len(flat_users)} 人")
-
-    if not flat_users:
-        return None
-
-    # 排序
-    flat_users.sort(key=lambda x: x["total_tokens"], reverse=True)
-
-    # 统计
-    total_users = len(flat_users)
-    active_users = [u for u in flat_users if u["has_usage"]]
-    active_count = len(active_users)
-    total_all = sum(u["total_tokens"] for u in flat_users)
-    total_input = sum(u["input_tokens"] for u in flat_users)
-    total_output = sum(u["output_tokens"] for u in flat_users)
-
-    # 中心统计
-    center_stats = {}
-    for u in flat_users:
-        c = u["center"] or "其他"
-        if c not in center_stats:
-            center_stats[c] = {"total_tokens": 0, "user_count": 0, "active_count": 0, "groups": {}}
-        center_stats[c]["total_tokens"] += u["total_tokens"]
-        center_stats[c]["user_count"] += 1
-        if u["has_usage"]:
-            center_stats[c]["active_count"] += 1
-        g = u["group"] or ""
-        if g not in center_stats[c]["groups"]:
-            center_stats[c]["groups"][g] = {"total_tokens": 0, "user_count": 0, "active_count": 0}
-        center_stats[c]["groups"][g]["total_tokens"] += u["total_tokens"]
-        center_stats[c]["groups"][g]["user_count"] += 1
-        if u["has_usage"]:
-            center_stats[c]["groups"][g]["active_count"] += 1
-
-    return {
-        "month": month,
-        "source": source,
-        "total_users": total_users,
-        "active_users": active_count,
-        "total_all": total_all,
-        "total_input": total_input,
-        "total_output": total_output,
-        "centers": [{
-            "name": c,
-            "total_tokens": s["total_tokens"],
-            "user_count": s["user_count"],
-            "active_count": s["active_count"],
-            "groups": [{
-                "name": g,
-                "total_tokens": gs["total_tokens"],
-                "user_count": gs["user_count"],
-                "active_count": gs["active_count"],
-                "users": [u for u in flat_users if (u["center"] or "其他") == c and (u["group"] or "") == g]
-            } for g, gs in sorted(s["groups"].items(), key=lambda x: x[1]["total_tokens"], reverse=True)]
-        } for c, s in sorted(center_stats.items(), key=lambda x: x[1]["total_tokens"], reverse=True)],
-        "rankings": [{
-            "rank": i + 1,
-            "account": u["account"],
-            "name": u["name"],
-            "center": u["center"],
-            "group": u["group"],
-            "total_tokens": u["total_tokens"],
-            "input_tokens": u["input_tokens"],
-            "output_tokens": u["output_tokens"],
-            "request_count": u["request_count"]
-        } for i, u in enumerate(active_users)],
-        "_user_index": {u["account"]: {
-            "name": u["name"],
-            "rank": active_users.index(u) + 1 if u in active_users else -1,
-            "center": u["center"], "group": u["group"],
-            "total_tokens": u["total_tokens"], "input_tokens": u["input_tokens"],
-            "output_tokens": u["output_tokens"], "request_count": u["request_count"],
-            "has_usage": u["has_usage"]
-        } for u in flat_users}
-    }
+def _bg_refresh(month):
+    global _refreshing
+    with _cache_lock:
+        if _refreshing: return
+        _refreshing = True
+    try:
+        consumers = _fetch_aggregated(month)
+        if consumers is None: return
+        data = _build_result(consumers, month)
+        if data:
+            _save_disk_cache(data)
+            print(f"[Token统计] 磁盘缓存已更新: {data['month']} source=db users={data['total_users']}", flush=True)
+    finally:
+        with _cache_lock: _refreshing = False
 
 
 def get_token_stats(view, params):
-    """Token 统计 API 数据获取"""
     month = params.get("month", [date.today().strftime("%Y-%m")])[0]
-    cache_key = f"{month}"
+    if _disk_cache_valid(month):
+        data = _load_disk_cache()
+        print(f"[Token统计] 磁盘缓存命中 {month}", flush=True)
+        return _serve_view(view, data, params)
+    if os.path.exists(TOKEN_CACHE_FILE):
+        try:
+            with open(TOKEN_CACHE_FILE, 'r', encoding='utf-8') as f: stale = json.load(f).get("data")
+        except: stale = None
+        threading.Thread(target=_bg_refresh, args=(month,), daemon=True).start()
+        if stale:
+            print(f"[Token统计] 缓存过期，返回旧数据 + 后台刷新", flush=True)
+            return _serve_view(view, stale, params)
+    print(f"[Token统计] 无缓存，JSON 兜底 + 后台刷新", flush=True)
+    data = _build_from_json_fallback(month)
+    if data is None: return {"ok": False, "error": "数据不可用"}
+    _save_disk_cache(data)
+    threading.Thread(target=_bg_refresh, args=(month,), daemon=True).start()
+    return _serve_view(view, data, params)
 
-    # 检查缓存
-    with _token_cache_lock:
-        now = time.time()
-        if _token_cache["data"] is not None and _token_cache["ts"] > now - TOKEN_CACHE_TTL and _token_cache.get("key") == cache_key:
-            data = _token_cache["data"]
-            print(f"[Token统计] API view={view} 命中缓存 source={data.get('source','?')}", flush=True)
-        else:
-            print(f"[Token统计] API view={view} 缓存失效，重新构建 month={month}...", flush=True)
-            data = _build_token_result(month)
-            if data is None:
-                print(f"[Token统计] API view={view} 数据构建失败", flush=True)
-                return {"ok": False, "error": "数据不可用，请确认数据库连接或 report_data.json 已就绪"}
-            _token_cache["data"] = data
-            _token_cache["ts"] = now
-            _token_cache["key"] = cache_key
-            _token_cache["source"] = data["source"]
-            print(f"[Token统计] 缓存已更新 source={data['source']}, users={data['total_users']}, active={data['active_users']}", flush=True)
 
+def _serve_view(view, data, params):
     if view == "overview":
-        return {
-            "ok": True,
-            "month": data["month"],
-            "source": data["source"],
-            "total_users": data["total_users"],
-            "active_users": data["active_users"],
-            "total_all": data["total_all"],
-            "total_input": data["total_input"],
-            "total_output": data["total_output"],
-            "coverage": round(data["active_users"] / max(data["total_users"], 1) * 100, 1),
-            "centers": [{"name": c["name"], "total_tokens": c["total_tokens"], "user_count": c["user_count"], "active_count": c["active_count"]} for c in data["centers"]]
-        }
-
+        return {"ok": True, "month": data["month"], "source": data["source"],
+                "total_users": data["total_users"], "active_users": data["active_users"],
+                "total_all": data["total_all"], "total_input": data["total_input"], "total_output": data["total_output"],
+                "coverage": round(data["active_users"] / max(data["total_users"], 1) * 100, 1),
+                "centers": [{"name": c["name"], "total_tokens": c["total_tokens"], "user_count": c["user_count"], "active_count": c["active_count"]} for c in data["centers"]]}
     if view == "my":
-        account = params.get("account", [""])[0]
-        idx = data.get("_user_index", {}).get(account)
-        if not idx:
-            return {"ok": False, "error": f"未找到账号 {account}"}
-        total_ranked = len(data["rankings"])
-        return {
-            "ok": True,
-            "month": data["month"],
-            "source": data["source"],
-            "account": account,
-            "name": idx["name"],
-            "center": idx["center"],
-            "group": idx["group"],
-            "total_tokens": idx["total_tokens"],
-            "input_tokens": idx["input_tokens"],
-            "output_tokens": idx["output_tokens"],
-            "request_count": idx["request_count"],
-            "has_usage": idx["has_usage"],
-            "rank": idx["rank"] if idx["has_usage"] else -1,
-            "total_ranked": total_ranked,
-            "percentile": round((1 - idx["rank"] / max(total_ranked, 1)) * 100, 1) if idx["has_usage"] and idx["rank"] > 0 else 0,
-            "total_users": data["total_users"]
-        }
-
+        idx = data.get("_user_index", {}).get(params.get("account", [""])[0])
+        if not idx: return {"ok": False, "error": f"未找到账号 {params.get('account', [''])[0]}"}
+        tr = len(data["rankings"])
+        return {"ok": True, "month": data["month"], "source": data["source"], "account": params.get("account", [""])[0],
+                "name": idx["name"], "center": idx["center"], "group": idx["group"],
+                "total_tokens": idx["total_tokens"], "input_tokens": idx["input_tokens"], "output_tokens": idx["output_tokens"],
+                "request_count": idx["request_count"], "has_usage": idx["has_usage"],
+                "rank": idx["rank"] if idx["has_usage"] else -1, "total_ranked": tr,
+                "percentile": round((1 - idx["rank"] / max(tr, 1)) * 100, 1) if idx["has_usage"] and idx["rank"] > 0 else 0,
+                "total_users": data["total_users"]}
     if view == "centers":
-        return {
-            "ok": True,
-            "month": data["month"],
-            "source": data["source"],
-            "centers": [{"name": c["name"], "total_tokens": c["total_tokens"], "user_count": c["user_count"], "active_count": c["active_count"]} for c in data["centers"]],
-            "max_tokens": max((c["total_tokens"] for c in data["centers"]), default=1)
-        }
-
+        return {"ok": True, "month": data["month"], "source": data["source"],
+                "centers": [{"name": c["name"], "total_tokens": c["total_tokens"], "user_count": c["user_count"], "active_count": c["active_count"]} for c in data["centers"]],
+                "max_tokens": max((c["total_tokens"] for c in data["centers"]), default=1)}
     if view == "center":
-        name = params.get("name", [""])[0]
-        found = next((c for c in data["centers"] if c["name"] == name), None)
-        if not found:
-            return {"ok": False, "error": f"未找到中心 {name}"}
-        return {
-            "ok": True,
-            "center": found,
-            "max_tokens": max((g["total_tokens"] for g in found["groups"]), default=1)
-        }
-
+        found = next((c for c in data["centers"] if c["name"] == params.get("name", [""])[0]), None)
+        if not found: return {"ok": False, "error": f"未找到中心 {params.get('name', [''])[0]}"}
+        return {"ok": True, "center": found, "max_tokens": max((g["total_tokens"] for g in found["groups"]), default=1)}
     if view == "rankings":
         top = int(params.get("top", [20])[0])
-        account = params.get("account", [None])[0]
         rankings = data["rankings"][:top]
-        result = {"ok": True, "month": data["month"], "source": data["source"], "rankings": rankings, "max_tokens": max((r["total_tokens"] for r in rankings), default=1)}
+        result = {"ok": True, "month": data["month"], "source": data["source"], "rankings": rankings,
+                  "max_tokens": max((r["total_tokens"] for r in rankings), default=1)}
+        account = params.get("account", [None])[0]
         if account:
             idx = data.get("_user_index", {}).get(account)
-            if idx:
-                result["my_rank"] = idx["rank"] if idx["has_usage"] else -1
-                result["my_total"] = idx["total_tokens"]
+            if idx: result["my_rank"] = idx["rank"] if idx["has_usage"] else -1; result["my_total"] = idx["total_tokens"]
         return result
-
     if view == "groups":
-        all_groups = []
+        ag = []
         for c in data["centers"]:
             for g in c.get("groups", []):
                 if g["name"] and g["user_count"] > 0:
-                    all_groups.append({
-                        "name": g["name"],
-                        "center": c["name"],
-                        "total_tokens": g["total_tokens"],
-                        "user_count": g["user_count"],
-                        "active_count": g["active_count"]
-                    })
-        all_groups.sort(key=lambda x: x["total_tokens"], reverse=True)
-        return {
-            "ok": True,
-            "month": data["month"],
-            "source": data["source"],
-            "groups": all_groups,
-            "max_tokens": max((g["total_tokens"] for g in all_groups), default=1)
-        }
-
+                    ag.append({"name": g["name"], "center": c["name"], "total_tokens": g["total_tokens"],
+                               "user_count": g["user_count"], "active_count": g["active_count"]})
+        ag.sort(key=lambda x: x["total_tokens"], reverse=True)
+        return {"ok": True, "month": data["month"], "source": data["source"], "groups": ag,
+                "max_tokens": max((g["total_tokens"] for g in ag), default=1)}
     return {"ok": False, "error": f"未知视图: {view}"}
+
 
 
 # ═══════════════════════════════════════════════════════════
