@@ -5,6 +5,8 @@ __pycache__/
 
 # Token 统计磁盘缓存（运行时生成）
 token_cache.json
+data/daily/
+data/monthly/
 
 # 安装包
 packages/

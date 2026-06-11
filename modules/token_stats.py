@@ -1,124 +1,168 @@
-"""Token 统计 — 磁盘缓存 + 后台刷新 + API 视图"""
-import json, os, threading, time, traceback, calendar
-from concurrent.futures import ThreadPoolExecutor, as_completed
+"""Token 统计 — data/ 日文件缓存 + 月度聚合 + 差量拉取"""
+import json, os, threading, time, calendar
 from datetime import date
-import modules.db as db
 
-ROOT = None
+ROOT, DATA_DIR, DAILY_DIR, MONTHLY_DIR = None, None, None, None
 AIGW_DB_CONFIG = {
     'host': '7.22.1.162', 'port': 3306, 'user': 'llmdbappusr',
     'password': 'pP1<zW1+', 'database': 'ai_gateway', 'charset': 'utf8mb4',
     'connect_timeout': 10, 'read_timeout': 300, 'write_timeout': 300,
 }
-
-def _has_pymysql():
-    try: import pymysql; return True
-    except: return False
-
-CACHE_FILE = None; _cache_lock = threading.Lock()
 _org_account_map = {}
+_sync_lock = threading.Lock()
+_syncing = set()  # 正在同步的月份
+
+
+# ═══════════════ 初始化 ═══════════════
 
 def init(root):
-    global ROOT, CACHE_FILE
-    ROOT = root; CACHE_FILE = os.path.join(ROOT, 'token_cache.json')
+    global ROOT, DATA_DIR, DAILY_DIR, MONTHLY_DIR
+    ROOT = root
+    DATA_DIR = os.path.join(ROOT, 'data');       os.makedirs(DATA_DIR, exist_ok=True)
+    DAILY_DIR = os.path.join(DATA_DIR, 'daily');  os.makedirs(DAILY_DIR, exist_ok=True)
+    MONTHLY_DIR = os.path.join(DATA_DIR, 'monthly'); os.makedirs(MONTHLY_DIR, exist_ok=True)
     _load_org()
-    # 清理旧格式缓存（单月格式），强制触发后台 DB 刷新
-    _migrate_cache_format()
-
-def _migrate_cache_format():
-    """清理旧格式缓存文件"""
-    if not CACHE_FILE or not os.path.exists(CACHE_FILE): return
-    try:
-        with open(CACHE_FILE, 'r', encoding='utf-8') as f: d = json.load(f)
-        if isinstance(d, dict) and "ts" in d and "data" in d:
-            # 旧单月格式 → 删除，触发全量重建
-            os.remove(CACHE_FILE)
-            print("[Token] 已清理旧格式缓存，下次访问将触发 DB 刷新")
-    except: pass
 
 def _load_org():
     global _org_account_map
-    org = {}
     csv_path = os.path.join(ROOT, 'ywb-users.csv')
     if not os.path.exists(csv_path): return
     try:
         import csv
         with open(csv_path, 'r', encoding='utf-8-sig') as f:
             for row in csv.reader(f):
-                if row[0] == '序号': continue
-                if len(row) < 6: continue
+                if row[0] == '序号' or len(row) < 6: continue
                 n, a, c, g = (row[1] or '').strip(), (row[2] or '').strip(), (row[3] or '').strip(), (row[4] or '').strip()
                 if not a: continue
                 _org_account_map[a] = {"name": n, "center": c, "group": g}
         print(f"[Token] ywb-users.csv: {len(_org_account_map)} 人")
     except Exception as e: print(f"[Token] CSV 加载失败: {e}")
 
+
+# ═══════════════ 天文件 ═══════════════
+
+def _daily_path(day_str):       return os.path.join(DAILY_DIR, f'{day_str}.json')
+
+def _daily_exists(day_str):     return os.path.exists(_daily_path(day_str))
+
+def _daily_read(day_str):
+    with open(_daily_path(day_str), 'r', encoding='utf-8') as f: return json.load(f)
+
+def _daily_write(day_str, data):
+    with open(_daily_path(day_str), 'w', encoding='utf-8') as f: json.dump(data, f, ensure_ascii=False)
+
+
+# ═══════════════ 月文件 ═══════════════
+
+def _monthly_path(month):       return os.path.join(MONTHLY_DIR, f'{month}.json')
+
+def _monthly_read(month):
+    with open(_monthly_path(month), 'r', encoding='utf-8') as f: return json.load(f)
+
+def _monthly_write(month, data):
+    with open(_monthly_path(month), 'w', encoding='utf-8') as f: json.dump(data, f, ensure_ascii=False)
+
+
+# ═══════════════ DB 拉取（单天） ═══════════════
+
 def _extract_username(c): return c.split('_')[0] if '_' in c else c
 
 def _fetch_one_day(day_start, day_end):
-    """查询单天明细，最多重试 3 次，每次独立连接"""
     import pymysql
     for attempt in range(3):
         try:
-            conn = pymysql.connect(**AIGW_DB_CONFIG)
-            cur = conn.cursor()
+            conn = pymysql.connect(**AIGW_DB_CONFIG); cur = conn.cursor()
             cur.execute("SELECT ai_consumer, input_tokens, output_tokens, request_count FROM ai_metrics WHERE time_bucket>=%s AND time_bucket<%s", (day_start, day_end))
-            rows = cur.fetchall()
-            cur.close(); conn.close()
+            rows = cur.fetchall(); cur.close(); conn.close()
             return rows
         except Exception as e:
-            if attempt < 2:
-                print(f"[Token] 单天查询重试 {attempt+1}/3 {day_start}: {e}", flush=True)
-                time.sleep(2)
-            else:
-                print(f"[Token] 单天查询最终失败 {day_start}: {e}", flush=True)
+            if attempt < 2: time.sleep(2)
+            else: print(f"[Token] 单天查询失败 {day_start}: {e}", flush=True)
     return []
 
-def _fetch(month):
-    """分天并发查询 + Python 端聚合"""
-    if not _has_pymysql():
-        print("[Token] pymysql 未安装，跳过 DB 查询", flush=True)
-        return None
-    y, m = map(int, month.split('-'))
-    days = calendar.monthrange(y, m)[1]
-    print(f"[Token] 后台分天查询 {month} (共 {days} 天, 3 线程并发)", flush=True)
-    t0 = time.time()
-    consumers = {}
-    total_rows = 0
-    try:
-        with ThreadPoolExecutor(max_workers=3) as pool:
-            futures = {}
-            for d in range(1, days + 1):
-                ds = f"{y}-{m:02d}-{d:02d} 00:00:00"
-                de = f"{y}-{m:02d}-{d+1:02d} 00:00:00" if d < days else f"{y+(m//12)}-{(m%12)+1:02d}-01 00:00:00"
-                futures[pool.submit(_fetch_one_day, ds, de)] = d
-            for future in as_completed(futures):
-                day = futures[future]
-                try:
-                    rows = future.result()
-                except Exception as e:
-                    print(f"[Token] day {day:2d} 线程异常: {e}", flush=True); traceback.print_exc()
-                    rows = []
-                day_rows = len(rows)
-                total_rows += day_rows
-                if day_rows == 0:
-                    print(f"[Token] day {day:2d}   0 行（该天无数据）", flush=True)
-                    continue
-                for c, inp, out, req in rows:
-                    u = _extract_username(c)
-                    dct = consumers.setdefault(u, {"input_tokens": 0, "output_tokens": 0, "request_count": 0})
-                    dct["input_tokens"] += inp or 0
-                    dct["output_tokens"] += out or 0
-                    dct["request_count"] += req or 0
-                print(f"[Token] day {day:2d} ✓ {day_rows:>8} 行, 累计 {total_rows:>9} 行, {len(consumers)} 用户", flush=True)
-        elapsed = time.time() - t0
-        print(f"[Token] 分天聚合完成: {total_rows} 行 -> {len(consumers)} 用户, {elapsed:.1f}s", flush=True)
-        return consumers if consumers else None
-    except Exception as e:
-        print(f"[Token] 分天查询整体失败: {e}", flush=True); traceback.print_exc()
-        return None
 
-def _build(consumers, month):
+# ═══════════════ 差量同步 ═══════════════
+
+def _days_of_month(month):
+    y, m = map(int, month.split('-')); return calendar.monthrange(y, m)[1]
+
+def _day_range(y, m, d, days):
+    ds = f"{y}-{m:02d}-{d:02d} 00:00:00"
+    if d < days: de = f"{y}-{m:02d}-{d+1:02d} 00:00:00"
+    else: de = f"{y+(m//12)}-{(m%12)+1:02d}-01 00:00:00"
+    return ds, de
+
+def _missing_days(month):
+    """返回某月所有尚未拉取的天的列表"""
+    y, m = map(int, month.split('-')); days = _days_of_month(month)
+    today = date.today().strftime('%Y-%m-%d')
+    missing = []
+    for d in range(1, days + 1):
+        day_str = f"{y}-{m:02d}-{d:02d}"
+        if day_str > today: break
+        if not _daily_exists(day_str):
+            missing.append(d)
+    return missing
+
+def _sync_month(month):
+    """后台线程：拉取某月份所有缺失的天，完成后聚合写入月度文件"""
+    with _sync_lock:
+        if month in _syncing: return
+        _syncing.add(month)
+
+    try:
+        missing = _missing_days(month)
+        if not missing:
+            print(f"[Token] {month} 所有天已缓存，无需拉取", flush=True)
+            _build_monthly_from_daily(month)
+            return
+
+        y, m = map(int, month.split('-')); total_days = _days_of_month(month)
+        print(f"[Token] 开始同步 {month}：需拉取 {len(missing)}/{total_days} 天", flush=True)
+        success = 0
+        for d in missing:
+            ds, de = _day_range(y, m, d, total_days)
+            day_str = f"{y}-{m:02d}-{d:02d}"
+            rows = _fetch_one_day(ds, de)
+            if rows is None:
+                print(f"[Token] {day_str} 拉取失败（连接问题），跳过", flush=True)
+                continue
+            users = {}
+            for c, inp, out, req in rows:
+                u = _extract_username(c)
+                ud = users.setdefault(u, {"input_tokens": 0, "output_tokens": 0, "request_count": 0})
+                ud["input_tokens"]  += inp or 0
+                ud["output_tokens"] += out or 0
+                ud["request_count"] += req or 0
+            _daily_write(day_str, {"day": day_str, "users": users})
+            success += 1
+            dt_rows = len(rows); dt_users = len(users)
+            print(f"[Token] {day_str} ✓ {dt_rows:>7} 行 → {dt_users} 用户  进度 {success}/{len(missing)}", flush=True)
+        print(f"[Token] {month} 同步完成：{success}/{len(missing)} 天成功", flush=True)
+        _build_monthly_from_daily(month)
+    except Exception as e:
+        import traceback; print(f"[Token] {month} 同步异常: {e}", flush=True); traceback.print_exc()
+    finally:
+        with _sync_lock: _syncing.discard(month)
+
+
+def _build_monthly_from_daily(month):
+    """从已缓存的日文件聚合出完整月度结果"""
+    y, m = map(int, month.split('-')); total_days = _days_of_month(month)
+    consumers = {}
+    for d in range(1, total_days + 1):
+        day_str = f"{y}-{m:02d}-{d:02d}"
+        if not _daily_exists(day_str): continue
+        day_data = _daily_read(day_str)
+        for u, stats in day_data.get("users", {}).items():
+            c = consumers.setdefault(u, {"input_tokens": 0, "output_tokens": 0, "request_count": 0})
+            c["input_tokens"]  += stats["input_tokens"]
+            c["output_tokens"] += stats["output_tokens"]
+            c["request_count"] += stats["request_count"]
+    if not consumers:
+        print(f"[Token] {month} 无任何天数据，月度结果为空", flush=True)
+        return
+
     flat = []
     for a, info in _org_account_map.items():
         u = consumers.get(a, {"input_tokens": 0, "output_tokens": 0, "request_count": 0})
@@ -126,27 +170,15 @@ def _build(consumers, month):
         flat.append({"account": a, "name": info["name"], "center": info["center"], "group": info["group"],
                       "input_tokens": u["input_tokens"], "output_tokens": u["output_tokens"],
                       "request_count": u["request_count"], "total_tokens": t, "has_usage": t > 0})
-    if not flat: return None
+    if not flat: return
     flat.sort(key=lambda x: x["total_tokens"], reverse=True)
-    return _package(month, "db", flat)
+    active = [u for u in flat if u["has_usage"]]
+    packaged = _package(month, "db", flat)
+    _monthly_write(month, packaged)
+    print(f"[Token] 月度聚合完成: {month} source=db users={packaged['total_users']} active={packaged['active_users']}", flush=True)
 
-def _build_json_fallback(month):
-    jp = os.path.join(ROOT, 'report_data.json')
-    if not os.path.exists(jp): return None
-    with open(jp, 'r', encoding='utf-8') as f: fb = json.load(f)
-    flat = []
-    for cn, cd in fb.get("centers", {}).items():
-        for gn, gd in cd.get("groups", {}).items():
-            for u in gd.get("users", []):
-                un = u.get("username", "")
-                if not un or un == "合计": continue
-                t = u.get("total_tokens", 0)
-                flat.append({"account": un, "name": u.get("name", ""), "center": cn, "group": gn,
-                              "input_tokens": u.get("input_tokens", 0), "output_tokens": u.get("output_tokens", 0),
-                              "request_count": u.get("request_count", 0), "total_tokens": t, "has_usage": t > 0})
-    if not flat: return None
-    flat.sort(key=lambda x: x["total_tokens"], reverse=True)
-    return _package(month, "json", flat)
+
+# ═══════════════ 数据打包 ═══════════════
 
 def _package(month, source, flat):
     active = [u for u in flat if u["has_usage"]]; cs = {}
@@ -181,89 +213,61 @@ def _package(month, source, flat):
                            "output_tokens": u["output_tokens"], "request_count": u["request_count"]} for i, u in enumerate(active)],
             "_user_index": idx}
 
-def _cache_get(month):
-    if not CACHE_FILE or not os.path.exists(CACHE_FILE): return None
-    try:
-        with open(CACHE_FILE, 'r', encoding='utf-8') as f: d = json.load(f)
-        slot = d.get(month) if isinstance(d, dict) else None
-        if slot:
-            src = slot.get("data", {}).get("source", "")
-            ttl = 3600 if src == "json" else 86400  # JSON兜底 1h 过期，DB 数据 24h
-            if (time.time() - slot.get("ts", 0)) < ttl:
-                return slot.get("data")
-        if isinstance(d, dict) and not slot:
-            if d.get("month") == month and (time.time() - d.get("ts", 0)) < 86400:
-                return d.get("data")
-        return None
-    except: return None
 
-def _get_stale(month):
-    """返回过期的旧数据（任意月份），用于stale-while-revalidate"""
-    if not CACHE_FILE or not os.path.exists(CACHE_FILE): return None
-    try:
-        with open(CACHE_FILE, 'r', encoding='utf-8') as f: d = json.load(f)
-        if isinstance(d, dict) and "ts" in d and "data" in d:
-            return d.get("data")  # 旧格式
-        return None
-    except: return None
+# ═══════════════ VIP 层（从 report_data.json） ═══════════════
 
-def _cache_put(data):
-    month = data["month"]
-    all_cache = {}
-    if CACHE_FILE and os.path.exists(CACHE_FILE):
-        try:
-            with open(CACHE_FILE, 'r', encoding='utf-8') as f: all_cache = json.load(f)
-        except: all_cache = {}
-    # 兼容旧格式 → 转新格式
-    if not isinstance(all_cache, dict) or ("ts" in all_cache and "data" in all_cache):
-        all_cache = {}
-    all_cache[month] = {"ts": time.time(), "data": data}
-    # 只保留最近 3 个月
-    keys = sorted(all_cache.keys(), reverse=True)[:3]
-    trimmed = {k: all_cache[k] for k in keys}
-    with open(CACHE_FILE, 'w', encoding='utf-8') as f:
-        json.dump(trimmed, f, ensure_ascii=False)
+def _build_fallback(month):
+    """report_data.json 兜底（跨月份都返回同一份静态数据，标注 source=json）"""
+    jp = os.path.join(ROOT, 'report_data.json')
+    if not os.path.exists(jp): return None
+    with open(jp, 'r', encoding='utf-8') as f: fb = json.load(f)
+    flat = []
+    for cn, cd in fb.get("centers", {}).items():
+        for gn, gd in cd.get("groups", {}).items():
+            for u in gd.get("users", []):
+                un = u.get("username", "")
+                if not un or un == "合计": continue
+                t = u.get("total_tokens", 0)
+                flat.append({"account": un, "name": u.get("name", ""), "center": cn, "group": gn,
+                              "input_tokens": u.get("input_tokens", 0), "output_tokens": u.get("output_tokens", 0),
+                              "request_count": u.get("request_count", 0), "total_tokens": t, "has_usage": t > 0})
+    if not flat: return None
+    flat.sort(key=lambda x: x["total_tokens"], reverse=True)
+    return _package(month, "json", flat)
 
-def _bg_refresh(month):
-    """后台线程刷新磁盘缓存"""
-    print(f"[Token] 后台刷新线程启动: month={month}", flush=True)
-    try:
-        consumers = _fetch(month)
-        if consumers is None:
-            print(f"[Token] 后台刷新: _fetch 返回 None（DB不可达或无pymysql）", flush=True)
-            return
-        data = _build(consumers, month)
-        if data:
-            _cache_put(data)
-            print(f"[Token] 磁盘缓存已更新: {data['month']} source=db users={data['total_users']}", flush=True)
-        else:
-            print(f"[Token] 后台刷新: _build 返回 None", flush=True)
-    except Exception as e:
-        print(f"[Token] 后台刷新异常: {e}", flush=True); traceback.print_exc()
+
+# ═══════════════ API 入口 ═══════════════
 
 def get(view, params):
     month = params.get("month", [date.today().strftime("%Y-%m")])[0]
+    mp = _monthly_path(month)
 
-    # 1) 精准命中
-    data = _cache_get(month)
-    if data:
-        print(f"[Token] 磁盘缓存命中 {month}", flush=True)
+    # 1) 月文件已存在 → 直接返回
+    if os.path.exists(mp):
+        data = _monthly_read(month)
+        print(f"[Token] 月度缓存命中 {month} source={data.get('source','?')}", flush=True)
         return _serve(view, data, params)
 
-    # 2) stale-while-revalidate：返回旧月数据（如果存在）+ 后台刷新
-    stale = _get_stale(month)
-    threading.Thread(target=_bg_refresh, args=(month,), daemon=True).start()
-    if stale:
-        print(f"[Token] 缓存过期，返回旧数据 + 后台刷新 {month}", flush=True)
-        return _serve(view, stale, params)
+    # 2) 所有天文件都存在 → 直接聚合出月度结果（不查DB）
+    missing = _missing_days(month)
+    if not missing:
+        print(f"[Token] {month} 所有天已缓存，内存聚合中...", flush=True)
+        _build_monthly_from_daily(month)
+        if os.path.exists(mp):
+            return _serve(view, _monthly_read(month), params)
+        print(f"[Token] {month} 聚合失败，降级 JSON 兜底", flush=True)
 
-    # 3) JSON 兜底
-    print(f"[Token] 无缓存 {month}，JSON 兜底 + 后台刷新", flush=True)
-    data = _build_json_fallback(month)
+    # 3) 后台启动差量拉取（不阻塞当前请求）
+    if missing:
+        threading.Thread(target=_sync_month, args=(month,), daemon=True).start()
+
+    # 4) 当前请求用 JSON 兜底返回
+    data = _build_fallback(month)
     if data is None:
         return {"ok": False, "error": "数据不可用"}
-    _cache_put(data)
+    print(f"[Token] JSON 兜底 {month}（后台拉取 {len(missing)} 天中...）", flush=True)
     return _serve(view, data, params)
+
 
 def _serve(view, data, params):
     a = params.get("account", [None])[0]
