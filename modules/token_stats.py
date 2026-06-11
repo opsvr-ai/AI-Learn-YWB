@@ -8,7 +8,7 @@ ROOT = None
 AIGW_DB_CONFIG = {
     'host': '7.22.1.162', 'port': 3306, 'user': 'llmdbappusr',
     'password': 'pP1<zW1+', 'database': 'ai_gateway', 'charset': 'utf8mb4',
-    'connect_timeout': 10, 'read_timeout': 120, 'write_timeout': 120,
+    'connect_timeout': 10, 'read_timeout': 300, 'write_timeout': 300,
 }
 
 def _has_pymysql():
@@ -56,18 +56,23 @@ def _load_org():
 def _extract_username(c): return c.split('_')[0] if '_' in c else c
 
 def _fetch_one_day(day_start, day_end):
-    """查询单天明细（无聚合），异常时返回 []"""
+    """查询单天明细，最多重试 3 次，每次独立连接"""
     import pymysql
-    try:
-        conn = pymysql.connect(**AIGW_DB_CONFIG)
-        cur = conn.cursor()
-        cur.execute("SELECT ai_consumer, input_tokens, output_tokens, request_count FROM ai_metrics WHERE time_bucket>=%s AND time_bucket<%s", (day_start, day_end))
-        rows = cur.fetchall()
-        cur.close(); conn.close()
-        return rows
-    except Exception as e:
-        print(f"[Token] 单天查询失败 {day_start}: {e}", flush=True)
-        return []
+    for attempt in range(3):
+        try:
+            conn = pymysql.connect(**AIGW_DB_CONFIG)
+            cur = conn.cursor()
+            cur.execute("SELECT ai_consumer, input_tokens, output_tokens, request_count FROM ai_metrics WHERE time_bucket>=%s AND time_bucket<%s", (day_start, day_end))
+            rows = cur.fetchall()
+            cur.close(); conn.close()
+            return rows
+        except Exception as e:
+            if attempt < 2:
+                print(f"[Token] 单天查询重试 {attempt+1}/3 {day_start}: {e}", flush=True)
+                time.sleep(2)
+            else:
+                print(f"[Token] 单天查询最终失败 {day_start}: {e}", flush=True)
+    return []
 
 def _fetch(month):
     """分天并发查询 + Python 端聚合"""
@@ -76,12 +81,12 @@ def _fetch(month):
         return None
     y, m = map(int, month.split('-'))
     days = calendar.monthrange(y, m)[1]
-    print(f"[Token] 后台分天查询 {month} (共 {days} 天, 7 线程并发)", flush=True)
+    print(f"[Token] 后台分天查询 {month} (共 {days} 天, 3 线程并发)", flush=True)
     t0 = time.time()
     consumers = {}
     total_rows = 0
     try:
-        with ThreadPoolExecutor(max_workers=7) as pool:
+        with ThreadPoolExecutor(max_workers=3) as pool:
             futures = {}
             for d in range(1, days + 1):
                 ds = f"{y}-{m:02d}-{d:02d} 00:00:00"
@@ -96,6 +101,9 @@ def _fetch(month):
                     rows = []
                 day_rows = len(rows)
                 total_rows += day_rows
+                if day_rows == 0:
+                    print(f"[Token] day {day:2d}   0 行（该天无数据）", flush=True)
+                    continue
                 for c, inp, out, req in rows:
                     u = _extract_username(c)
                     dct = consumers.setdefault(u, {"input_tokens": 0, "output_tokens": 0, "request_count": 0})
