@@ -1,5 +1,6 @@
 """Token 统计 — 磁盘缓存 + 后台刷新 + API 视图"""
-import json, os, threading, time, traceback
+import json, os, threading, time, traceback, calendar
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date
 import modules.db as db
 
@@ -7,7 +8,7 @@ ROOT = None
 AIGW_DB_CONFIG = {
     'host': '7.22.1.162', 'port': 3306, 'user': 'llmdbappusr',
     'password': 'pP1<zW1+', 'database': 'ai_gateway', 'charset': 'utf8mb4',
-    'connect_timeout': 10, 'read_timeout': 900, 'write_timeout': 900,
+    'connect_timeout': 10, 'read_timeout': 120, 'write_timeout': 120,
 }
 try: import pymysql; _HAS_PYMYSQL = True
 except ImportError: _HAS_PYMYSQL = False
@@ -39,26 +40,53 @@ def _load_org():
 
 def _extract_username(c): return c.split('_')[0] if '_' in c else c
 
-def _fetch(month):
-    if not _HAS_PYMYSQL: return None
-    y, m = map(int, month.split('-')); start, end = f"{y}-{m:02d}-01 00:00:00", f"{y+(m//12)}-{(m%12)+1:02d}-01 00:00:00"
-    print(f"[Token] 后台查询 {month}", flush=True)
+def _fetch_one_day(day_start, day_end):
+    """查询单天明细（无聚合），异常时返回 []，由外层处理"""
     try:
-        conn = pymysql.connect(**AIGW_DB_CONFIG); cur = conn.cursor()
-        cur.execute("SET SESSION max_execution_time=600000, net_read_timeout=900, net_write_timeout=900"); conn.commit()
-        t0 = time.time()
-        cur.execute("SELECT ai_consumer, COALESCE(SUM(input_tokens),0), COALESCE(SUM(output_tokens),0), COALESCE(SUM(request_count),0) FROM ai_metrics WHERE time_bucket>=%s AND time_bucket<%s GROUP BY ai_consumer", (start, end))
+        conn = pymysql.connect(**AIGW_DB_CONFIG)
+        cur = conn.cursor()
+        cur.execute("SELECT ai_consumer, input_tokens, output_tokens, request_count FROM ai_metrics WHERE time_bucket>=%s AND time_bucket<%s", (day_start, day_end))
         rows = cur.fetchall()
-        consumers = {}
-        for c, inp, out, req in rows:
-            u = _extract_username(c)
-            d = consumers.setdefault(u, {"input_tokens": 0, "output_tokens": 0, "request_count": 0})
-            d["input_tokens"] += inp; d["output_tokens"] += out; d["request_count"] += req
         cur.close(); conn.close()
-        print(f"[Token] 聚合: {len(rows)} -> {len(consumers)} 用户, {time.time()-t0:.1f}s", flush=True)
-        return consumers
+        return rows
     except Exception as e:
-        print(f"[Token] 聚合失败: {e}", flush=True); traceback.print_exc(); return None
+        print(f"[Token] 单天查询失败 {day_start}: {e}", flush=True)
+        return []
+
+def _fetch(month):
+    """分天并发查询 + Python 端聚合：避免全月 GROUP BY 超时被 MySQL kill"""
+    if not _HAS_PYMYSQL: return None
+    y, m = map(int, month.split('-'))
+    days = calendar.monthrange(y, m)[1]
+    print(f"[Token] 后台分天查询 {month} (共 {days} 天, 7 线程并发)", flush=True)
+    t0 = time.time()
+    consumers = {}
+    total_rows = 0
+    with ThreadPoolExecutor(max_workers=7) as pool:
+        futures = {}
+        for d in range(1, days + 1):
+            ds = f"{y}-{m:02d}-{d:02d} 00:00:00"
+            de = f"{y}-{m:02d}-{d+1:02d} 00:00:00" if d < days else f"{y+(m//12)}-{(m%12)+1:02d}-01 00:00:00"
+            futures[pool.submit(_fetch_one_day, ds, de)] = d
+        for future in as_completed(futures):
+            day = futures[future]
+            try:
+                rows = future.result()
+            except Exception as e:
+                print(f"[Token] day {day:2d} 线程异常: {e}", flush=True)
+                rows = []
+            day_rows = len(rows)
+            total_rows += day_rows
+            for c, inp, out, req in rows:
+                u = _extract_username(c)
+                dct = consumers.setdefault(u, {"input_tokens": 0, "output_tokens": 0, "request_count": 0})
+                dct["input_tokens"] += inp or 0
+                dct["output_tokens"] += out or 0
+                dct["request_count"] += req or 0
+            print(f"[Token] day {day:2d} ✓ {day_rows:>8} 行, 累计 {total_rows:>9} 行, {len(consumers)} 用户", flush=True)
+    elapsed = time.time() - t0
+    print(f"[Token] 分天聚合完成: {total_rows} 行 -> {len(consumers)} 用户, {elapsed:.1f}s", flush=True)
+    return consumers if consumers else None
 
 def _build(consumers, month):
     flat = []
