@@ -131,9 +131,9 @@
   <p class="page-subtitle">生产运维部 AI 使用情况统计看板 <span class="source" id="data-source"></span></p>
 
   <div class="month-bar">
-    <select id="month-select" onchange="window._tsRefresh &amp;&amp; window._tsRefresh()">
+    <select id="month-select" onchange="window._tsRefresh && window._tsRefresh()">
     </select>
-    <button class="refresh-btn" onclick="window._tsRefresh &amp;&amp; window._tsRefresh(true)" title="强制刷新">🔄 刷新</button>
+    <button class="refresh-btn" onclick="window._tsRefresh && window._tsRefresh(true)" title="强制刷新">🔄 刷新</button>
     <span class="cache-tag" id="cache-tag"></span>
   </div>
 
@@ -520,18 +520,24 @@
       .catch(function() { return null; });
   }
 
-  // 暴露给 HTML onclick
-  var _refreshing = false;
+  // 暴露给 HTML onchange
   window._tsRefresh = function(force) {
-    if (_refreshing) return;
-    currentMonth = getMonth();
-    clearCache();
-    if (force) { myInfoCache = null; myInfoPromise = null; }
-    renderAll();
+    var newMonth = getMonth();
+    var url = new URL(window.location.href);
+    url.searchParams.set('month', newMonth);
+    window.location.href = url.toString();
   };
 
-  function clearCache() {
-    myInfoCache = null; myInfoPromise = null;
+  // 从 URL 读取初始月份
+  var urlParams = new URLSearchParams(window.location.search);
+  var urlMonth = urlParams.get('month');
+  if (urlMonth && /^\d{4}-\d{2}$/.test(urlMonth)) {
+    currentMonth = urlMonth;
+    // 设置下拉框选中值
+    var opts = sel.options;
+    for (var i = 0; i < opts.length; i++) {
+      if (opts[i].value === urlMonth) { opts[i].selected = true; break; }
+    }
   }
 
   /* ============================================
