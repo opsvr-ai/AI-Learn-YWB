@@ -317,8 +317,8 @@ AIGW_DB_CONFIG = {
     'database': 'ai_gateway',
     'charset': 'utf8mb4',
     'connect_timeout': 10,
-    'read_timeout': 300,
-    'write_timeout': 300,
+    'read_timeout': 900,
+    'write_timeout': 900,
 }
 
 TOKEN_CACHE_TTL = 300  # 缓存 5 分钟
@@ -393,14 +393,18 @@ def _fetch_db_token_data(month):
 
         # 2) 读取服务端关键变量（方便定位超时配置）
         cur = conn.cursor()
-        cur.execute("SELECT @@max_execution_time, @@wait_timeout, @@interactive_timeout")
+        cur.execute("SELECT @@max_execution_time, @@wait_timeout, @@net_read_timeout, @@net_write_timeout")
         row = cur.fetchone()
-        print(f"[Token统计] 服务端: max_execution_time={row[0]}ms, wait_timeout={row[1]}s, interactive_timeout={row[2]}s", flush=True)
+        print(f"[Token统计] 服务端: max_execution_time={row[0]}ms, wait_timeout={row[1]}s, net_read/write={row[2]}/{row[3]}s", flush=True)
 
-        # 3) 设置会话超时（绕过全局限制）
-        cur.execute("SET SESSION max_execution_time = 600000")
+        # 3) 设置会话超时（绕过全局限制，保障长时间聚合）
+        cur.execute("""
+            SET SESSION max_execution_time = 600000,
+                SESSION net_read_timeout = 600,
+                SESSION net_write_timeout = 600
+        """)
         conn.commit()
-        print(f"[Token统计] 已设置 SESSION max_execution_time = 600000ms", flush=True)
+        print(f"[Token统计] 已设置 SESSION max_execution_time=600s, net_read/write_timeout=600s", flush=True)
 
         # 4) 预估表大小（判断数据量级）
         cur.execute("""
@@ -408,12 +412,12 @@ def _fetch_db_token_data(month):
             WHERE time_bucket >= %s AND time_bucket < %s
         """, (start_ts, end_ts))
         estimate = cur.fetchone()[0]
+        cur.close()
         print(f"[Token统计] 时间范围内共 {estimate} 行原始数据", flush=True)
 
-        # 5) 执行聚合查询
+        # 5) 执行聚合查询（SSCursor 流式，避免 buf 全量加载）
         t0 = time.time()
-        cur.close()
-        cursor = conn.cursor()
+        cursor = conn.cursor(pymysql.cursors.SSCursor)
         cursor.execute("""
             SELECT ai_consumer,
                    COALESCE(SUM(input_tokens), 0) as input_tokens,
@@ -424,14 +428,16 @@ def _fetch_db_token_data(month):
             GROUP BY ai_consumer
         """, (start_ts, end_ts))
         elapsed = time.time() - t0
-        print(f"[Token统计] SQL 执行完成，耗时 {elapsed:.1f}s，开始读取结果...", flush=True)
+        print(f"[Token统计] SQL 执行完成，耗时 {elapsed:.1f}s，开始游标读取...", flush=True)
 
-        # 6) 读取结果
+        # 6) 流式读取结果
         consumers = {}
         row_count = 0
         t1 = time.time()
-        for ai_consumer, inp, out, req in cursor.fetchall():
+        for ai_consumer, inp, out, req in cursor:
             row_count += 1
+            if row_count % 5000 == 0:
+                print(f"[Token统计] 游标已读取 {row_count} 行，耗时 {(time.time()-t1):.0f}s...", flush=True)
             username = _extract_username(ai_consumer)
             if username not in consumers:
                 consumers[username] = {"input_tokens": 0, "output_tokens": 0, "request_count": 0}
@@ -442,7 +448,7 @@ def _fetch_db_token_data(month):
 
         cursor.close()
         conn.close()
-        print(f"[Token统计] DB 查询成功: {row_count} 条聚合记录, {len(consumers)} 个去重用户 (fetch耗时 {fetch_elapsed:.1f}s)", flush=True)
+        print(f"[Token统计] DB 查询成功: {row_count} 条聚合记录, {len(consumers)} 个去重用户 (游标读取耗时 {fetch_elapsed:.1f}s)", flush=True)
         return consumers
     except Exception as e:
         print(f"[Token统计] DB 查询失败: {e}", flush=True)
