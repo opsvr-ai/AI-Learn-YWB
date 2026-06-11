@@ -254,21 +254,6 @@
       });
   }
 
-  /** 通用 API 请求 */
-  function api(view, params) {
-    var qs = 'view=' + encodeURIComponent(view);
-    if (params) {
-      for (var k in params) {
-        if (Object.prototype.hasOwnProperty.call(params, k)) {
-          qs += '&' + encodeURIComponent(k) + '=' + encodeURIComponent(String(params[k]));
-        }
-      }
-    }
-    return apiFetch('GET', '/api/token-stats?' + qs)
-      .then(function(r) { return r.ok ? r.json() : null; })
-      .catch(function() { return null; });
-  }
-
   /* ============================================
      状态共享
      ============================================ */

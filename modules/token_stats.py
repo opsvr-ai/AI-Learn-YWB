@@ -123,19 +123,46 @@ def _package(month, source, flat):
                            "output_tokens": u["output_tokens"], "request_count": u["request_count"]} for i, u in enumerate(active)],
             "_user_index": idx}
 
-def _cache_valid(month):
-    if not CACHE_FILE or not os.path.exists(CACHE_FILE): return False
+def _cache_get(month):
+    if not CACHE_FILE or not os.path.exists(CACHE_FILE): return None
     try:
         with open(CACHE_FILE, 'r', encoding='utf-8') as f: d = json.load(f)
-        return d.get("month") == month and (time.time() - d.get("ts", 0)) < 86400
-    except: return False
+        slot = d.get(month) if isinstance(d, dict) else None
+        if slot and (time.time() - slot.get("ts", 0)) < 86400:
+            return slot.get("data")
+        if isinstance(d, dict) and not slot:
+            # 旧格式兼容：单月缓存
+            if d.get("month") == month and (time.time() - d.get("ts", 0)) < 86400:
+                return d.get("data")
+        return None  # 过期或不存在
+    except: return None
 
-def _load_cache():
-    with open(CACHE_FILE, 'r', encoding='utf-8') as f: return json.load(f).get("data")
+def _get_stale(month):
+    """返回过期的旧数据（任意月份），用于stale-while-revalidate"""
+    if not CACHE_FILE or not os.path.exists(CACHE_FILE): return None
+    try:
+        with open(CACHE_FILE, 'r', encoding='utf-8') as f: d = json.load(f)
+        if isinstance(d, dict) and "ts" in d and "data" in d:
+            return d.get("data")  # 旧格式
+        return None
+    except: return None
 
-def _save_cache(data):
+def _cache_put(data):
+    month = data["month"]
+    all_cache = {}
+    if CACHE_FILE and os.path.exists(CACHE_FILE):
+        try:
+            with open(CACHE_FILE, 'r', encoding='utf-8') as f: all_cache = json.load(f)
+        except: all_cache = {}
+    # 兼容旧格式 → 转新格式
+    if not isinstance(all_cache, dict) or ("ts" in all_cache and "data" in all_cache):
+        all_cache = {}
+    all_cache[month] = {"ts": time.time(), "data": data}
+    # 只保留最近 3 个月
+    keys = sorted(all_cache.keys(), reverse=True)[:3]
+    trimmed = {k: all_cache[k] for k in keys}
     with open(CACHE_FILE, 'w', encoding='utf-8') as f:
-        json.dump({"ts": time.time(), "month": data["month"], "data": data}, f, ensure_ascii=False)
+        json.dump(trimmed, f, ensure_ascii=False)
 
 def _bg_refresh(month):
     global _refreshing
@@ -147,26 +174,33 @@ def _bg_refresh(month):
         if consumers is None: return
         data = _build(consumers, month)
         if data:
-            _save_cache(data)
+            _cache_put(data)
             print(f"[Token] 磁盘缓存已更新: {data['month']} source=db users={data['total_users']}", flush=True)
     finally:
         with _cache_lock: _refreshing = False
 
 def get(view, params):
     month = params.get("month", [date.today().strftime("%Y-%m")])[0]
-    if _cache_valid(month):
-        data = _load_cache()
+
+    # 1) 精准命中
+    data = _cache_get(month)
+    if data:
+        print(f"[Token] 磁盘缓存命中 {month}", flush=True)
         return _serve(view, data, params)
-    if CACHE_FILE and os.path.exists(CACHE_FILE):
-        try:
-            with open(CACHE_FILE, 'r', encoding='utf-8') as f: stale = json.load(f).get("data")
-        except: stale = None
-        threading.Thread(target=_bg_refresh, args=(month,), daemon=True).start()
-        if stale: return _serve(view, stale, params)
-    data = _build_json_fallback(month)
-    if data is None: return {"ok": False, "error": "数据不可用"}
-    _save_cache(data)
+
+    # 2) stale-while-revalidate：返回旧月数据（如果存在）+ 后台刷新
+    stale = _get_stale(month)
     threading.Thread(target=_bg_refresh, args=(month,), daemon=True).start()
+    if stale:
+        print(f"[Token] 缓存过期，返回旧数据 + 后台刷新 {month}", flush=True)
+        return _serve(view, stale, params)
+
+    # 3) JSON 兜底
+    print(f"[Token] 无缓存 {month}，JSON 兜底 + 后台刷新", flush=True)
+    data = _build_json_fallback(month)
+    if data is None:
+        return {"ok": False, "error": "数据不可用"}
+    _cache_put(data)
     return _serve(view, data, params)
 
 def _serve(view, data, params):
