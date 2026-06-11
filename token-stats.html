@@ -14,6 +14,15 @@
     .stats-page .page-title { font-size: 1.6rem; font-weight: 800; color: var(--gray-900); margin-bottom: 4px; display: flex; align-items: center; gap: 10px; }
     .stats-page .page-subtitle { font-size: 0.9rem; color: var(--gray-500); margin-bottom: 28px; }
     .stats-page .page-subtitle .source { font-size: 0.78rem; color: var(--gray-400); margin-left: 6px; }
+    .month-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; }
+    .month-bar select { padding: 6px 28px 6px 12px; border: 1px solid var(--gray-300); border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 600; color: var(--gray-700); background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%239ca3af'/%3E%3C/svg%3E") no-repeat right 10px center; appearance: none; cursor: pointer; }
+    .month-bar select:focus { outline: none; border-color: var(--blue-400); box-shadow: 0 0 0 2px var(--blue-100); }
+    .month-bar .refresh-btn { padding: 6px 14px; border: 1px solid var(--gray-300); border-radius: var(--radius-sm); background: #fff; font-size: 0.85rem; color: var(--gray-600); cursor: pointer; white-space: nowrap; }
+    .month-bar .refresh-btn:hover { background: var(--gray-50); color: var(--gray-800); }
+    .month-bar .cache-tag { font-size: 0.75rem; color: var(--gray-400); white-space: nowrap; }
+    .month-bar .cache-tag.live { background: #d4edda; color: #155724; padding: 2px 8px; border-radius: 99px; font-weight: 600; }
+    .month-bar .cache-tag.stale { background: #fff3cd; color: #856404; padding: 2px 8px; border-radius: 99px; font-weight: 600; }
+    .month-bar .cache-tag.fallback { background: #f8d7da; color: #721c24; padding: 2px 8px; border-radius: 99px; font-weight: 600; }
     .overview-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
     .overview-card { background: #fff; border-radius: var(--radius-lg); padding: 20px 16px; box-shadow: var(--shadow-sm); border: 1px solid var(--gray-200); text-align: center; transition: all 0.2s; }
     .overview-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
@@ -120,6 +129,13 @@
 <main class="stats-page page">
   <h1 class="page-title">📊 Token 消耗统计</h1>
   <p class="page-subtitle">生产运维部 AI 使用情况统计看板 <span class="source" id="data-source"></span></p>
+
+  <div class="month-bar">
+    <select id="month-select" onchange="window._tsRefresh &amp;&amp; window._tsRefresh()">
+    </select>
+    <button class="refresh-btn" onclick="window._tsRefresh &amp;&amp; window._tsRefresh(true)" title="强制刷新">🔄 刷新</button>
+    <span class="cache-tag" id="cache-tag"></span>
+  </div>
 
   <div id="my-card"><div class="skeleton-my skeleton"></div></div>
   <div class="overview-cards" id="cards">
@@ -284,6 +300,7 @@
       return;
     }
     document.getElementById('data-source').textContent = '（' + esc(d.source || '') + ' · ' + esc(d.month || '') + '）';
+    setCacheTag(d.source || '');
     var stats = [
       { icon: '🔤', num: fmt(d.total_all), label: '总消耗 Token', highlight: false },
       { icon: '👤', num: (d.active_users || 0) + ' / ' + (d.total_users || 0), label: '活跃 / 总人数', highlight: true },
@@ -476,12 +493,73 @@
   }
 
   /* ============================================
+     月份选择 + 刷新
+     ============================================ */
+  var sel = document.getElementById('month-select');
+  var now = new Date();
+  var currentMonth = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+
+  // 生成最近 12 个月下拉
+  for (var i = 0; i < 12; i++) {
+    var d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    var val = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+    var label = d.getFullYear() + '年' + (d.getMonth() + 1) + '月';
+    var opt = document.createElement('option');
+    opt.value = val; opt.textContent = label;
+    if (val === currentMonth) opt.selected = true;
+    sel.appendChild(opt);
+  }
+
+  function setCacheTag(source) {
+    var tag = document.getElementById('cache-tag');
+    if (source === 'db') { tag.textContent = '实时数据'; tag.className = 'cache-tag live'; }
+    else if (source === 'json') { tag.textContent = '本地缓存'; tag.className = 'cache-tag fallback'; }
+    else { tag.textContent = '缓存过期·后台刷新'; tag.className = 'cache-tag stale'; }
+  }
+
+  function getMonth() { return sel ? sel.value : currentMonth; }
+
+  /* ============================================
+     API 层 — 自动附加 month 参数
+     ============================================ */
+  function api(view, params) {
+    var extra = params || {};
+    extra.month = getMonth();
+    var qs = 'view=' + encodeURIComponent(view);
+    for (var k in extra) {
+      if (Object.prototype.hasOwnProperty.call(extra, k))
+        qs += '&' + encodeURIComponent(k) + '=' + encodeURIComponent(String(extra[k]));
+    }
+    return apiFetch('GET', '/api/token-stats?' + qs)
+      .then(function(r) { return r.ok ? r.json() : null; })
+      .catch(function() { return null; });
+  }
+
+  // 暴露给 HTML onclick
+  var _refreshing = false;
+  window._tsRefresh = function(force) {
+    if (_refreshing) return;
+    currentMonth = getMonth();
+    clearCache();
+    if (force) { myInfoCache = null; myInfoPromise = null; }
+    renderAll();
+  };
+
+  function clearCache() {
+    myInfoCache = null; myInfoPromise = null;
+  }
+
+  /* ============================================
      初始化
      ============================================ */
-  renderOverview();
-  renderMyCard();
-  renderGroups();
-  renderRankings();
+  function renderAll() {
+    renderOverview();
+    renderMyCard();
+    renderGroups();
+    renderRankings();
+  }
+
+  renderAll();
 
 })();
 </script>
