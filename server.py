@@ -18,11 +18,12 @@ import json
 import os
 import threading
 import time
+import traceback
 import uuid
 import urllib.parse
 from datetime import date
 
-PORT = 8080
+PORT = 9010
 ROOT = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(ROOT, '.visit_stats.db')
 UPLOAD_DIR = os.path.join(ROOT, 'uploads')
@@ -314,7 +315,9 @@ AIGW_DB_CONFIG = {
     'user': 'llmdbappusr',
     'password': 'pP1<zW1+',
     'database': 'ai_gateway',
-    'charset': 'utf8mb4'
+    'charset': 'utf8mb4',
+    'connect_timeout': 5,
+    'read_timeout': 120
 }
 
 TOKEN_CACHE_TTL = 300  # 缓存 5 分钟
@@ -381,10 +384,10 @@ def _fetch_db_token_data(month):
     else:
         end_ts = f"{y:04d}-{m+1:02d}-01 00:00:00"
 
-    print(f"[Token统计] 开始查询 ai_gateway: month={month}, time_bucket [{start_ts}, {end_ts})")
+    print(f"[Token统计] 开始查询 ai_gateway: month={month}, time_bucket [{start_ts}, {end_ts})", flush=True)
     try:
         conn = pymysql.connect(**AIGW_DB_CONFIG)
-        cursor = conn.cursor()
+        cursor = conn.cursor(pymysql.cursors.SSCursor)  # 服务端流式游标，避免大量数据卡内存
         cursor.execute("""
             SELECT ai_consumer,
                    COALESCE(SUM(input_tokens), 0) as input_tokens,
@@ -394,10 +397,11 @@ def _fetch_db_token_data(month):
             WHERE time_bucket >= %s AND time_bucket < %s
             GROUP BY ai_consumer
         """, (start_ts, end_ts))
+        print(f"[Token统计] SQL 执行完成，开始读取结果...", flush=True)
 
         consumers = {}
         row_count = 0
-        for ai_consumer, inp, out, req in cursor.fetchall():
+        for ai_consumer, inp, out, req in cursor:
             row_count += 1
             username = _extract_username(ai_consumer)
             if username not in consumers:
@@ -405,13 +409,16 @@ def _fetch_db_token_data(month):
             consumers[username]["input_tokens"] += inp
             consumers[username]["output_tokens"] += out
             consumers[username]["request_count"] += req
+            if row_count % 10000 == 0:
+                print(f"[Token统计] 已读取 {row_count} 行...", flush=True)
 
         cursor.close()
         conn.close()
-        print(f"[Token统计] DB 查询成功: {row_count} 条 ai_consumer 聚合记录, {len(consumers)} 个去重用户")
+        print(f"[Token统计] DB 查询成功: {row_count} 条记录, {len(consumers)} 个去重用户", flush=True)
         return consumers
     except Exception as e:
-        print(f"[Token统计] DB 查询失败: {e}")
+        print(f"[Token统计] DB 查询失败: {e}", flush=True)
+        traceback.print_exc()
         return None
 
 
@@ -433,14 +440,14 @@ def _load_json_fallback():
 
 def _build_token_result(month):
     """构建标准化的 Token 统计结果"""
-    print(f"[Token统计] _build_token_result() month={month}, org_users={len(_org_account_map)}")
+    print(f"[Token统计] _build_token_result() month={month}, org_users={len(_org_account_map)}", flush=True)
 
     # 尝试查库
     db_data = _fetch_db_token_data(month)
     source = "db"
 
     if db_data is not None:
-        print(f"[Token统计] 使用 DB 数据构建，匹配组织树...")
+        print(f"[Token统计] 使用 DB 数据构建，匹配组织树...", flush=True)
         # 用 DB 数据 + 组织树构建结果
         matched = 0
         flat_users = []
@@ -460,7 +467,7 @@ def _build_token_result(month):
                 "total_tokens": total,
                 "has_usage": total > 0
             })
-        print(f"[Token统计] 组织树匹配完成: {len(flat_users)} 人, 有用量 {matched} 人")
+        print(f"[Token统计] 组织树匹配完成: {len(flat_users)} 人, 有用量 {matched} 人", flush=True)
     else:
         # 兜底：从 report_data.json 构建
         print(f"[Token统计] DB 数据不可用，尝试 JSON 兜底...")
@@ -576,18 +583,18 @@ def get_token_stats(view, params):
         now = time.time()
         if _token_cache["data"] is not None and _token_cache["ts"] > now - TOKEN_CACHE_TTL and _token_cache.get("key") == cache_key:
             data = _token_cache["data"]
-            print(f"[Token统计] API view={view} 命中缓存 source={data.get('source','?')}")
+            print(f"[Token统计] API view={view} 命中缓存 source={data.get('source','?')}", flush=True)
         else:
-            print(f"[Token统计] API view={view} 缓存失效，重新构建 month={month}...")
+            print(f"[Token统计] API view={view} 缓存失效，重新构建 month={month}...", flush=True)
             data = _build_token_result(month)
             if data is None:
-                print(f"[Token统计] API view={view} 数据构建失败")
+                print(f"[Token统计] API view={view} 数据构建失败", flush=True)
                 return {"ok": False, "error": "数据不可用，请确认数据库连接或 report_data.json 已就绪"}
             _token_cache["data"] = data
             _token_cache["ts"] = now
             _token_cache["key"] = cache_key
             _token_cache["source"] = data["source"]
-            print(f"[Token统计] 缓存已更新 source={data['source']}, users={data['total_users']}, active={data['active_users']}")
+            print(f"[Token统计] 缓存已更新 source={data['source']}, users={data['total_users']}, active={data['active_users']}", flush=True)
 
     if view == "overview":
         return {
