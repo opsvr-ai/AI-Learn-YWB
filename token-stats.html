@@ -66,15 +66,6 @@
     .ranking-table tbody tr:hover { background: var(--blue-50); }
     .ranking-table .me-row { background: #fffbeb !important; border-left: 4px solid #f59e0b; }
     .ranking-table .me-row td:first-child { font-weight: 700; color: #d97706; }
-    .top-user-card { background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%); border-radius: var(--radius-lg); padding: 18px 22px; margin-bottom: 16px; color: #fff; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
-    .top-user-card .tc-medal { font-size: 1.8rem; }
-    .top-user-card .tc-info { flex: 1; min-width: 180px; }
-    .top-user-card .tc-name { font-size: 1.1rem; font-weight: 700; }
-    .top-user-card .tc-meta { font-size: 0.78rem; opacity: 0.8; margin-top: 2px; }
-    .top-user-card .tc-stats { display: flex; gap: 20px; flex-wrap: wrap; }
-    .top-user-card .tc-stat { text-align: center; }
-    .top-user-card .tc-stat .num { font-size: 1.1rem; font-weight: 700; }
-    .top-user-card .tc-stat .label { font-size: 0.7rem; opacity: 0.7; }
     .rank-medal { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; font-size: 1.1rem; }
     .rank-num { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; font-size: 0.82rem; font-weight: 700; color: #fff; }
     .rank-num.gold { background: linear-gradient(135deg, #f59e0b, #d97706); }
@@ -172,7 +163,6 @@
   </div>
   <div class="section-card">
     <h3>🏆 个人排行榜 <span class="hint">Top 20</span></h3>
-    <div id="top-user-card" style="display:none;"></div>
     <table class="ranking-table" id="ranking-table">
       <thead>
         <tr><th style="width:50px;">排名</th><th>姓名</th><th style="width:100px;">域账号</th><th style="width:100px;">中心</th><th style="width:100px;">小组</th><th style="width:120px;">总 Token</th></tr>
@@ -457,31 +447,14 @@
     if (account) params.account = account;
     var d = await api('rankings', params);
     var body = document.getElementById('ranking-body');
-    var card = document.getElementById('top-user-card');
     if (!d || !d.ok || !d.rankings || !d.rankings.length) {
-      card.style.display = 'none';
       body.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="empty-icon">🏆</div><p>暂无排行数据</p></div></td></tr>';
       return;
     }
-    // 第一名摘出来展示为蓝色卡片
-    var top1 = d.rankings[0];
-    card.innerHTML = '<span class="tc-medal">🏆</span>' +
-      '<div class="tc-info">' +
-        '<div class="tc-name">' + esc(top1.name || '—') + '（' + esc(top1.account) + '）</div>' +
-        '<div class="tc-meta">' + esc(top1.center || '—') + ' / ' + esc(top1.group || '—') + '</div>' +
-      '</div>' +
-      '<div class="tc-stats">' +
-        '<div class="tc-stat"><div class="num">' + fmt(top1.total_tokens) + '</div><div class="label">总 Token</div></div>' +
-        '<div class="tc-stat"><div class="num">' + fmt(top1.input_tokens) + '</div><div class="label">输入 Token</div></div>' +
-        '<div class="tc-stat"><div class="num">' + fmt(top1.output_tokens) + '</div><div class="label">输出 Token</div></div>' +
-        '<div class="tc-stat"><div class="num">' + (top1.request_count || 0).toLocaleString() + '</div><div class="label">请求次数</div></div>' +
-      '</div>';
-    card.style.display = 'flex';
-    // 表格从第2名开始
     var html = '';
-    for (var ri = 1; ri < d.rankings.length; ri++) {
+    for (var ri = 0; ri < d.rankings.length; ri++) {
       var r = d.rankings[ri];
-      var medal = r.rank === 2 ? '🥈' : r.rank === 3 ? '🥉' : '';
+      var medal = r.rank === 1 ? '🥇' : r.rank === 2 ? '🥈' : r.rank === 3 ? '🥉' : '';
       var rankHtml = medal
         ? '<span class="rank-medal">' + medal + '</span>'
         : '<span class="rank-num">' + r.rank + '</span>';
