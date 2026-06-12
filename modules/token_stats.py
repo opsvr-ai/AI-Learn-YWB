@@ -3,11 +3,36 @@ import json, os, calendar, threading, time
 from datetime import date
 
 ROOT, DAILY_DIR, MONTHLY_DIR = None, None, None
-AIGW_DB_CONFIG = {
-    'host': '7.22.1.162', 'port': 3306, 'user': 'llmdbappusr',
-    'password': 'pP1<zW1+', 'database': 'ai_gateway', 'charset': 'utf8mb4',
-    'connect_timeout': 10, 'read_timeout': 300, 'write_timeout': 300,
-}
+
+def _load_env():
+    """从 .env 文件加载数据库配置，缺失时使用内置默认值"""
+    cfg = {
+        'host': '127.0.0.1', 'port': 3306, 'user': 'root',
+        'password': '', 'database': 'ai_gateway', 'charset': 'utf8mb4',
+        'connect_timeout': 10, 'read_timeout': 300, 'write_timeout': 300,
+    }
+    env_path = os.path.join(ROOT, '.env') if ROOT else '.env'
+    if os.path.exists(env_path):
+        try:
+            for line in open(env_path, encoding='utf-8'):
+                line = line.strip()
+                if not line or line.startswith('#'): continue
+                if '=' in line:
+                    k, v = line.split('=', 1)
+                    k = k.strip(); v = v.strip().strip('"').strip("'")
+                    if k == 'DB_HOST':             cfg['host'] = v
+                    elif k == 'DB_PORT':           cfg['port'] = int(v)
+                    elif k == 'DB_USER':           cfg['user'] = v
+                    elif k == 'DB_PASSWORD':       cfg['password'] = v
+                    elif k == 'DB_NAME':           cfg['database'] = v
+                    elif k == 'DB_CHARSET':        cfg['charset'] = v
+                    elif k == 'DB_CONNECT_TIMEOUT': cfg['connect_timeout'] = int(v)
+                    elif k == 'DB_READ_TIMEOUT':    cfg['read_timeout'] = int(v)
+                    elif k == 'DB_WRITE_TIMEOUT':   cfg['write_timeout'] = int(v)
+        except Exception as e: print(f"[Token] .env 读取失败: {e}，使用默认配置")
+    return cfg
+
+AIGW_DB_CONFIG = None
 _org_accounts = []      # 部门所有域账号列表
 _org_map = {}            # 域账号 → {name, center, group}
 _sync_lock = threading.Lock()
@@ -15,8 +40,9 @@ _syncing = set()
 
 
 def init(root):
-    global ROOT, DAILY_DIR, MONTHLY_DIR
+    global ROOT, DAILY_DIR, MONTHLY_DIR, AIGW_DB_CONFIG
     ROOT = root
+    AIGW_DB_CONFIG = _load_env()
     DAILY_DIR = os.path.join(ROOT, 'data', 'daily');  os.makedirs(DAILY_DIR, exist_ok=True)
     MONTHLY_DIR = os.path.join(ROOT, 'data', 'monthly'); os.makedirs(MONTHLY_DIR, exist_ok=True)
     _load_org()
