@@ -285,7 +285,7 @@
     // 获取当前用户信息用于高亮
     var myInfo = account ? await api('my', { account: account }) : null;
     var html = '<table class="ranking-table"><thead><tr>' +
-      '<th style="width:60px;">排名</th><th style="width:auto;">小组</th><th style="width:110px;">所属中心</th>' +
+      '<th style="width:60px;">排名</th><th style="width:140px;">小组</th><th style="width:110px;">所属中心</th>' +
       '<th style="width:80px;">活跃</th><th style="width:130px;">总 Token</th></tr></thead><tbody>';
     for (var gi = 0; gi < d.groups.length; gi++) {
       var g = d.groups[gi];
@@ -396,7 +396,7 @@
     // 获取当前用户信息用于高亮
     var myInfo = account ? await api('my', { account: account }) : null;
     var html = '<table class="ranking-table"><thead><tr>' +
-      '<th style="width:60px;">排名</th><th style="width:auto;">小组</th><th style="width:110px;">所属中心</th>' +
+      '<th style="width:60px;">排名</th><th style="width:140px;">小组</th><th style="width:110px;">所属中心</th>' +
       '<th style="width:80px;">活跃</th><th style="width:130px;">总 Token</th></tr></thead><tbody>';
     for (var gi = 0; gi < d.groups.length; gi++) {
       var g = d.groups[gi];
