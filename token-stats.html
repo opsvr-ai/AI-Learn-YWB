@@ -151,7 +151,7 @@
     <h3>🏆 个人排行榜 <span class="hint">Top 20</span></h3>
     <table class="ranking-table" id="ranking-table">
       <thead>
-        <tr><th style="width:58px;">排名</th><th>姓名</th><th style="width:90px;">域账号</th><th style="width:100px;">中心</th><th style="width:100px;">小组</th><th style="width:120px;">总 Token</th></tr>
+        <tr><th style="width:60px;">排名</th><th style="width:80px;">姓名</th><th style="width:120px;">域账号</th><th style="width:120px;">中心</th><th style="width:120px;">小组</th><th style="width:130px;">总 Token</th></tr>
       </thead>
       <tbody id="ranking-body">
         <tr><td colspan="6"><div class="skeleton skeleton-row" style="width:100%"></div></td></tr>
@@ -285,8 +285,8 @@
     // 获取当前用户信息用于高亮
     var myInfo = account ? await api('my', { account: account }) : null;
     var html = '<table class="ranking-table"><thead><tr>' +
-      '<th style="width:58px;">排名</th><th>小组</th><th style="width:90px;">所属中心</th>' +
-      '<th style="width:70px;">活跃</th><th style="width:120px;">总 Token</th></tr></thead><tbody>';
+      '<th style="width:60px;">排名</th><th style="width:auto;">小组</th><th style="width:110px;">所属中心</th>' +
+      '<th style="width:80px;">活跃</th><th style="width:130px;">总 Token</th></tr></thead><tbody>';
     for (var gi = 0; gi < d.groups.length; gi++) {
       var g = d.groups[gi];
       var rank = gi + 1;
@@ -396,8 +396,8 @@
     // 获取当前用户信息用于高亮
     var myInfo = account ? await api('my', { account: account }) : null;
     var html = '<table class="ranking-table"><thead><tr>' +
-      '<th style="width:58px;">排名</th><th>小组</th><th style="width:90px;">所属中心</th>' +
-      '<th style="width:70px;">活跃</th><th style="width:120px;">总 Token</th></tr></thead><tbody>';
+      '<th style="width:60px;">排名</th><th style="width:auto;">小组</th><th style="width:110px;">所属中心</th>' +
+      '<th style="width:80px;">活跃</th><th style="width:130px;">总 Token</th></tr></thead><tbody>';
     for (var gi = 0; gi < d.groups.length; gi++) {
       var g = d.groups[gi];
       var rank = gi + 1;
