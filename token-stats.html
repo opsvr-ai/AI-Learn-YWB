@@ -17,6 +17,8 @@
     .month-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; }
     .month-bar select { padding: 6px 28px 6px 12px; border: 1px solid var(--gray-300); border-radius: var(--radius-sm); font-size: 0.85rem; font-weight: 600; color: var(--gray-700); background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%239ca3af'/%3E%3C/svg%3E") no-repeat right 10px center; appearance: none; cursor: pointer; }
     .month-bar select:focus { outline: none; border-color: var(--blue-400); box-shadow: 0 0 0 2px var(--blue-100); }
+    .month-bar .date-input { padding: 6px 10px; border: 1px solid var(--gray-300); border-radius: var(--radius-sm); font-size: 0.85rem; color: var(--gray-700); }
+    .month-bar .date-input:focus { outline: none; border-color: var(--blue-400); box-shadow: 0 0 0 2px var(--blue-100); }
     .month-bar .refresh-btn { padding: 6px 14px; border: 1px solid var(--gray-300); border-radius: var(--radius-sm); background: #fff; font-size: 0.85rem; color: var(--gray-600); cursor: pointer; white-space: nowrap; }
     .month-bar .refresh-btn:hover { background: var(--gray-50); color: var(--gray-800); }
     .month-bar .cache-tag { font-size: 0.75rem; color: var(--gray-400); white-space: nowrap; }
@@ -118,8 +120,11 @@
   <p class="page-subtitle">生产运维部 AI 使用情况统计看板 <span class="source" id="data-source"></span></p>
 
   <div class="month-bar">
-    <select id="month-select" onchange="window._tsRefresh && window._tsRefresh()">
+    <select id="month-select" onchange="selectMonth()">
     </select>
+    <input type="date" id="date-start" class="date-input" onchange="onDateChange()">
+    <span style="color:var(--gray-400);margin:0 2px;">—</span>
+    <input type="date" id="date-end" class="date-input" onchange="onDateChange()">
     <button class="refresh-btn" onclick="window._tsRefresh && window._tsRefresh(true)" title="强制刷新">🔄 刷新</button>
     <span class="cache-tag" id="cache-tag"></span>
   </div>
@@ -475,14 +480,41 @@
     else { tag.textContent = '缓存过期·后台刷新'; tag.className = 'cache-tag stale'; }
   }
 
-  function getMonth() { return sel ? sel.value : currentMonth; }
+  var dateStart = document.getElementById('date-start');
+  var dateEnd   = document.getElementById('date-end');
+  // 默认当月 1 日 → 当月最后一天
+  var nowDate = new Date();
+  dateStart.value = new Date(nowDate.getFullYear(), nowDate.getMonth(), 1).toISOString().split('T')[0];
+  dateEnd.value   = new Date(nowDate.getFullYear(), nowDate.getMonth() + 1, 0).toISOString().split('T')[0];
+
+  // 月份下拉切换 → 自动填充日期范围
+  window.selectMonth = function() {
+    var v = sel.value; // "2026-06"
+    var parts = v.split('-');
+    var y = parseInt(parts[0]), m = parseInt(parts[1]);
+    dateStart.value = new Date(y, m - 1, 1).toISOString().split('T')[0];
+    dateEnd.value   = new Date(y, m, 0).toISOString().split('T')[0];
+    window._tsRefresh();
+  };
+
+  // 日期变动 → 刷新
+  window.onDateChange = function() {
+    window._tsRefresh();
+  };
 
   /* ============================================
-     API 层 — 自动附加 month 参数
+     API 层 — 自动附加 start / end 参数
      ============================================ */
+  function getRange() {
+    return { start: dateStart.value, end: dateEnd.value };
+  }
+
   function api(view, params) {
     var extra = params || {};
-    extra.month = getMonth();
+    var r = getRange();
+    extra.start = r.start; extra.end = r.end;
+    // 同时发送 month 供后端缓存键使用
+    extra.month = r.start.substring(0, 7);
     var qs = 'view=' + encodeURIComponent(view);
     for (var k in extra) {
       if (Object.prototype.hasOwnProperty.call(extra, k))
@@ -493,12 +525,9 @@
       .catch(function() { return null; });
   }
 
-  // 暴露给 HTML onchange
+  // 刷新按钮
   window._tsRefresh = function(force) {
-    var newMonth = getMonth();
-    var url = new URL(window.location.href);
-    url.searchParams.set('month', newMonth);
-    window.location.href = url.toString();
+    renderAll();
   };
 
   // 从 URL 读取初始月份

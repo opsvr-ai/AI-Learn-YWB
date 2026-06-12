@@ -1,6 +1,6 @@
 """Token 统计 — 基于 ai_metrics_daily 按人日聚合查询（参照 ywb_token_usage.py）"""
 import json, os, calendar, threading, time
-from datetime import date
+from datetime import date, datetime, timedelta
 
 ROOT, DAILY_DIR, MONTHLY_DIR = None, None, None
 
@@ -257,12 +257,62 @@ def _build_fallback(month):
     return _package(month,"json",flat)
 
 
+def _build_from_range(start_date, end_date, month_label):
+    """从日文件聚合指定日期范围内的数据，返回打包结果"""
+    consumers = {}
+    d = start_date
+    while d <= end_date:
+        ds = d.strftime('%Y-%m-%d')
+        if _daily_exists(ds):
+            for acc, stats in _daily_read(ds).get("users", {}).items():
+                c = consumers.setdefault(acc, {"input_tokens":0,"output_tokens":0,"request_count":0})
+                c["input_tokens"]  += stats["input_tokens"]
+                c["output_tokens"] += stats["output_tokens"]
+                c["request_count"] += stats["request_count"]
+        d += timedelta(days=1)
+    if not consumers: return None
+    flat = []
+    for acc, info in _org_map.items():
+        u = consumers.get(acc, {"input_tokens":0,"output_tokens":0,"request_count":0})
+        t = u["input_tokens"] + u["output_tokens"]
+        flat.append({"account":acc,"name":info["name"],"center":info["center"],"group":info["group"],
+                      "input_tokens":u["input_tokens"],"output_tokens":u["output_tokens"],
+                      "request_count":u["request_count"],"total_tokens":t,"has_usage":t>0})
+    flat.sort(key=lambda x: x["total_tokens"], reverse=True)
+    return _package(month_label, "db", flat)
+
+
 # ═══════════════ API ═══════════════
 
 def get(view, params):
+    start = params.get("start", [None])[0]
+    end   = params.get("end",   [None])[0]
     month = params.get("month", [date.today().strftime("%Y-%m")])[0]
-    mp = _monthly_path(month)
 
+    # 日期范围模式：从日文件聚合
+    if start and end:
+        ds, de = datetime.strptime(start, '%Y-%m-%d'), datetime.strptime(end, '%Y-%m-%d')
+        label = f"{start}~{end}"
+        data = _build_from_range(ds, de, label)
+        if data:
+            print(f"[Token] 日期范围聚合: {label} source=db", flush=True)
+            return _serve(view, data, params)
+        # 缺失的日文件 → 后台同步 + JSON兜底
+        missing = []
+        dd = ds
+        while dd <= de:
+            dstr = dd.strftime('%Y-%m-%d')
+            if not _daily_exists(dstr): missing.append(dstr)
+            dd += timedelta(days=1)
+        if missing:
+            threading.Thread(target=_sync_month_single_query, args=(month,), daemon=True).start()
+        data = _build_fallback(month)
+        if data is None: return {"ok":False,"error":"数据不可用"}
+        print(f"[Token] 日期范围 {label} JSON兜底 + 后台同步", flush=True)
+        return _serve(view, data, params)
+
+    # 月度模式（兼容旧行为）
+    mp = _monthly_path(month)
     if os.path.exists(mp):
         data = _monthly_read(month)
         print(f"[Token] 月度缓存命中 {month} source={data.get('source','?')}", flush=True)
