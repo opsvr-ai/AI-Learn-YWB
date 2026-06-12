@@ -32,17 +32,6 @@
     .overview-card.highlight .num { color: var(--blue-700); }
     .overview-card.highlight .label { color: var(--blue-600); font-weight: 600; }
     .overview-card .num-icon { font-size: 1.1rem; margin-bottom: 6px; }
-    .my-card { background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%); border-radius: var(--radius-lg); padding: 24px 28px; margin-bottom: 28px; color: #fff; position: relative; overflow: hidden; }
-    .my-card::before { content: ''; position: absolute; top: -50%; right: -20%; width: 300px; height: 300px; border-radius: 50%; background: rgba(255,255,255,0.04); pointer-events: none; }
-    .my-card h2 { font-size: 1.15rem; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; position: relative; z-index: 1; }
-    .my-card .my-meta { font-size: 0.85rem; opacity: 0.8; margin-bottom: 10px; position: relative; z-index: 1; }
-    .my-card .my-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; position: relative; z-index: 1; }
-    .my-card .my-stat { text-align: center; }
-    .my-card .my-stat .num { font-size: 1.4rem; font-weight: 700; }
-    .my-card .my-stat .label { font-size: 0.75rem; opacity: 0.75; margin-top: 2px; }
-    .my-card.guest { background: linear-gradient(135deg, #374151 0%, #4b5563 100%); }
-    .my-card.not-found { background: linear-gradient(135deg, #78350f 0%, #92400e 100%); }
-    .my-card .rank-badge { display: inline-block; background: rgba(255,255,255,0.15); padding: 2px 12px; border-radius: 99px; font-size: 0.85rem; font-weight: 600; }
     .section-card { background: #fff; border-radius: var(--radius-lg); padding: 22px 24px; margin-bottom: 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--gray-200); }
     .section-card h3 { font-size: 1.05rem; font-weight: 700; color: var(--gray-900); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
     .section-card h3 .hint { font-size: 0.82rem; font-weight: 400; color: var(--gray-400); margin-left: 4px; }
@@ -75,14 +64,12 @@
     .skeleton-card { height: 80px; border-radius: var(--radius-lg); }
     .skeleton-bar { height: 28px; margin: 8px 0; border-radius: 5px; }
     .skeleton-row { height: 38px; margin: 4px 0; border-radius: 4px; }
-    .skeleton-my { height: 130px; border-radius: var(--radius-lg); margin-bottom: 28px; }
     @keyframes skeleton-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
     .empty-state { text-align: center; padding: 48px 20px; color: var(--gray-400); }
     .empty-state .empty-icon { font-size: 2.5rem; margin-bottom: 12px; opacity: 0.5; }
     .empty-state p { font-size: 0.95rem; }
     @media (max-width: 768px) {
       .overview-cards { grid-template-columns: repeat(2, 1fr); }
-      .my-card .my-grid { grid-template-columns: repeat(2, 1fr); }
       .bar-row .bar-label { width: 80px; font-size: 0.8rem; }
       .bar-row .bar-val { width: 70px; }
       .center-detail { margin-left: 20px; }
@@ -137,7 +124,6 @@
     <span class="cache-tag" id="cache-tag"></span>
   </div>
 
-  <div id="my-card"><div class="skeleton-my skeleton"></div></div>
   <div class="overview-cards" id="cards">
     <div class="skeleton skeleton-card"></div>
     <div class="skeleton skeleton-card"></div>
@@ -257,20 +243,6 @@
   /* ============================================
      状态共享
      ============================================ */
-  var myInfoCache = null;        // renderMyCard 写入，renderGroups 读取
-  var myInfoPromise = null;     // 防重复请求
-
-  /** 单例获取我的信息 */
-  function getMyInfo() {
-    if (!account) return Promise.resolve(null);
-    if (myInfoCache) return Promise.resolve(myInfoCache);
-    if (myInfoPromise) return myInfoPromise;
-    myInfoPromise = api('my', { account: account }).then(function(d) {
-      myInfoCache = (d && d.ok) ? d : null;
-      return myInfoCache;
-    }).catch(function() { return null; });
-    return myInfoPromise;
-  }
 
   /* ============================================
      渲染函数
@@ -302,32 +274,33 @@
   }
 
   /** 我的用量 */
-  async function renderMyCard() {
-    if (!account) {
-      document.getElementById('my-card').innerHTML =
-        '<div class="my-card guest"><h2>👤 我的用量</h2>' +
-        '<p style="opacity:.7;margin:0;">请在导航栏右上角输入域账号，即可查看您的个人 Token 消耗统计</p></div>';
+  /** 小组排名 */
+  async function renderGroups() {
+    var d = await api('groups');
+    var container = document.getElementById('group-bars');
+    if (!d || !d.ok || !d.groups || !d.groups.length) {
+      container.innerHTML = '<div class="empty-state"><div class="empty-icon">📊</div><p>暂无小组数据</p></div>';
       return;
     }
-    var d = await getMyInfo();
-    var el = document.getElementById('my-card');
-    if (!d) {
-      el.innerHTML = '<div class="my-card not-found"><h2>👤 我的用量</h2>' +
-        '<p style="opacity:.7;margin:0;">未找到账号 <strong>' + esc(account) + '</strong> 的记录，请确认域账号是否正确</p></div>';
-      return;
+    // 获取当前用户信息用于高亮
+    var myInfo = account ? await api('my', { account: account }) : null;
+    var html = '<table class="ranking-table"><thead><tr>' +
+      '<th style="width:50px;">排名</th><th>小组</th><th style="width:100px;">所属中心</th>' +
+      '<th style="width:70px;">活跃</th><th style="width:120px;">总 Token</th></tr></thead><tbody>';
+    for (var gi = 0; gi < d.groups.length; gi++) {
+      var g = d.groups[gi];
+      var rank = gi + 1;
+      var medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '';
+      var meClass = (myInfo && myInfo.ok && myInfo.group === g.name && myInfo.center === g.center) ? ' me-row' : '';
+      html += '<tr class="' + meClass + '">' +
+        '<td>' + (medal || rank) + '</td>' +
+        '<td><strong>' + esc(g.name) + '</strong></td>' +
+        '<td>' + esc(g.center || '—') + '</td>' +
+        '<td>' + (g.active_count || 0) + ' / ' + (g.user_count || 0) + '</td>' +
+        '<td><strong>' + fmt(g.total_tokens) + '</strong></td></tr>';
     }
-    var rankHtml = d.has_usage
-      ? '部门 <span class="rank-badge">第 ' + esc(d.rank) + ' 名</span> 超过 ' + esc(d.percentile) + '% 同事'
-      : '本月暂无使用记录';
-    el.innerHTML =
-      '<div class="my-card"><h2>👤 ' + esc(d.name || d.account) + '（' + esc(d.account) + '）</h2>' +
-      '<div class="my-meta">' + esc(d.center || '—') + ' / ' + esc(d.group || '—') + ' &nbsp;|&nbsp; ' + rankHtml + '</div>' +
-      '<div class="my-grid">' +
-        '<div class="my-stat"><div class="num">' + fmt(d.total_tokens) + '</div><div class="label">总 Token</div></div>' +
-        '<div class="my-stat"><div class="num">' + fmt(d.input_tokens) + '</div><div class="label">输入 Token</div></div>' +
-        '<div class="my-stat"><div class="num">' + fmt(d.output_tokens) + '</div><div class="label">输出 Token</div></div>' +
-        '<div class="my-stat"><div class="num">' + (d.request_count || 0).toLocaleString() + '</div><div class="label">请求次数</div></div>' +
-      '</div></div>';
+    html += '</tbody></table>';
+    container.innerHTML = html;
   }
 
   /** 中心柱状图（使用 data-* + addEventListener，无 onclick） */
@@ -420,8 +393,8 @@
         (!d ? '数据加载失败，请刷新重试' : '暂无小组数据') + '</p></div>';
       return;
     }
-    // 复用 getMyInfo 的缓存
-    var myInfo = await getMyInfo();
+    // 获取当前用户信息用于高亮
+    var myInfo = account ? await api('my', { account: account }) : null;
     var html = '<table class="ranking-table"><thead><tr>' +
       '<th style="width:50px;">排名</th><th>小组</th><th style="width:100px;">所属中心</th>' +
       '<th style="width:70px;">活跃</th><th style="width:120px;">总 Token</th></tr></thead><tbody>';
@@ -545,7 +518,6 @@
      ============================================ */
   function renderAll() {
     renderOverview();
-    renderMyCard();
     renderGroups();
     renderRankings();
   }
