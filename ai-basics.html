@@ -80,7 +80,7 @@
 
       <div class="highlight-box mt-3">
         <h3>本页内容导航</h3>
-        <p>从基础到前沿，七个模块层层递进：<strong>LLM基础 → 模型接入配置 → Prompt工程 → Function Call → MCP → Agent → A2A/Skills</strong>。每个模块都可以独立阅读，建议按顺序学习以获得完整的知识体系。</p>
+        <p>从基础到前沿，十个模块层层递进：<strong>LLM基础 → 模型接入配置 → Prompt工程 → Function Call → MCP → Agent → A2A/Skills → Context工程 → Harness工程 → Loop工程</strong>。每个模块都可以独立阅读，建议按顺序学习以获得完整的知识体系。</p>
       </div>
     </div>
   </section>
@@ -1320,6 +1320,490 @@
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- 模块：Context Engineering（上下文工程） -->
+<section class="section section-gray">
+  <div class="container">
+    <span class="section-label">Context Engineering</span>
+    <h2 class="section-title">上下文工程（Context Engineering）</h2>
+    <p class="section-desc">如果说 Prompt 决定了模型"怎么想"，那么 Context 决定了模型"知道什么"。上下文工程是 Prompt 工程的自然延伸——从写好一句话到管好整个信息环境。</p>
+
+    <div class="accordion">
+
+      <div class="accordion-item">
+        <button class="accordion-trigger">为什么 Context 比 Prompt 更重要？ <span class="arrow">&#9654;</span></button>
+        <div class="accordion-content">
+          <div class="grid-2" style="margin-top:12px;">
+            <div>
+              <p><strong>Prompt Engineering 的局限</strong>：写一条好的提示词可以让模型输出更好的回答，但它解决不了根本问题——模型不知道项目背景、不记得上次对话、不了解你的数据库结构。随着模型越来越强，提示词技巧的边际收益在递减。</p>
+              <p style="margin-top:16px;"><strong>Context Engineering 的答案</strong>：不是琢磨"怎么说"，而是管理"让模型看到什么"。在正确的时间把正确的信息放进上下文窗口——不多不少——比任何提示词技巧都更重要。</p>
+              <p style="margin-top:16px;font-weight:600;color:var(--blue-600);">Anthropic 官方态度："上下文工程比提示词工程更重要。"</p>
+            </div>
+            <div class="card">
+              <div class="card-icon blue">&#128270;</div>
+              <h4>Andrej Karpathy 的定义</h4>
+              <p style="font-style:italic;">"上下文工程是一门精妙的艺术与科学——用刚好正确的信息填满上下文窗口，为下一步推理做准备。"</p>
+              <p style="margin-top:12px;font-size:0.9rem;color:var(--gray-500);">把上下文窗口想象成一张<strong>黄金桌面</strong>——空间有限却极其珍贵。桌上放什么、不放什么，直接决定了模型的工作质量。放太多无关信息等于在桌上堆满杂物。</p>
+            </div>
+          </div>
+
+          <div class="highlight-box mt-3">
+            <h3>Prompt Engineering ⊂ Context Engineering</h3>
+            <p>提示词工程是上下文工程的一个<strong>子集</strong>。上下文工程涵盖的远不止提示词：RAG 检索、记忆系统、MCP 工具接入、知识图谱、上下文压缩、渐进式披露……提示词只是"指令层"，上下文工程管理的是"信息层"。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-trigger">上下文工程的核心组件 <span class="arrow">&#9654;</span></button>
+        <div class="accordion-content">
+          <p>上下文工程统一了以前分散的多种 AI 技术，形成一个整体：</p>
+
+          <div class="grid-3" style="margin-top:20px;">
+            <div class="card">
+              <div class="card-icon blue">&#128196;</div>
+              <h4>RAG（检索增强生成）</h4>
+              <p>从向量数据库、知识图谱、文档中动态检索相关知识，补齐模型训练数据之外的信息。让模型能回答"我们公司上周的销售额"而非只能回答通用知识。</p>
+            </div>
+            <div class="card">
+              <div class="card-icon green">&#129504;</div>
+              <h4>记忆系统</h4>
+              <p>短期记忆（当前对话上下文）+ 长期记忆（跨会话持久化）。Claude Code 的 CLAUDE.md 和 Memory 机制就是典型的长期记忆实现。</p>
+            </div>
+            <div class="card">
+              <div class="card-icon purple">&#128268;</div>
+              <h4>MCP + 工具接入</h4>
+              <p>通过标准化协议动态接入外部工具和数据源。MCP Server 暴露的信息成为模型实时上下文的一部分——不需要提前"喂"进去。</p>
+            </div>
+            <div class="card">
+              <div class="card-icon orange">&#128270;</div>
+              <h4>知识图谱</h4>
+              <p>基于关系结构检索，超越纯语义相似度搜索。适用于需要精确关系推理的场景——比如"这个 API 被哪些服务调用"。</p>
+            </div>
+            <div class="card">
+              <div class="card-icon blue">&#128202;</div>
+              <h4>上下文压缩</h4>
+              <p>用 /compact 或摘要技术压缩长对话，保留关键信息、丢弃冗余细节。防止上下文窗口溢出导致模型"失忆"。</p>
+            </div>
+            <div class="card">
+              <div class="card-icon green">&#128737;</div>
+              <h4>Guardrails（护栏）</h4>
+              <p>访问控制、安全策略、可追溯性。确保不该进上下文的信息（如密钥、用户隐私数据）不会泄露给模型。</p>
+            </div>
+          </div>
+
+          <div class="tip mt-3">
+            <strong>&#128161; 你已经在用上下文工程了</strong>
+            每次在 Claude Code 中写 CLAUDE.md、使用 Memory 功能、配置 MCP Server、用 /compact 压缩上下文——这些都是上下文工程的实践。区别在于，现在你可以有意识地从"上下文管理"的角度去优化这些操作，而不是零散地使用它们。
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-trigger">上下文工程的四个阶段 <span class="arrow">&#9654;</span></button>
+        <div class="accordion-content">
+          <p>一次完整的上下文工程流程遵循"写入 → 选择 → 压缩 → 隔离"四步：</p>
+
+          <ol class="steps">
+            <li><h4>写入（Write）</h4><p>Agent 在执行过程中持续将信息写入共享记忆/存储。例如：分析结果、发现的 Bug、修改过的文件列表。这是"信息的积累"阶段。</p></li>
+            <li><h4>选择（Select）</h4><p>面对新的子任务时，从记忆中选出最相关的信息。不是把所有历史都塞进去——而是精选最相关的那几条。RAG 检索、语义搜索都在这个阶段发挥关键作用。</p></li>
+            <li><h4>压缩（Compress）</h4><p>将选中的上下文压缩到 Token 预算内。长文档摘要、冗余去重、关键信息提取——在有限的窗口里放入最大密度的有效信息。</p></li>
+            <li><h4>隔离（Isolate）</h4><p>将最终精选的上下文子集传递给推理 Agent。这一步确保不同任务之间的上下文不互相污染——就像给每个子任务一个干净的桌面。</p></li>
+          </ol>
+
+          <div class="tip mt-3">
+            <strong>&#128161; 类比</strong>
+            上下文工程的四阶段就像一个<strong>高效的行政秘书</strong>：持续记录（Write）→ 需要时找出相关文件（Select）→ 提炼要点（Compress）→ 把摘要放在老板桌上，旧文件归档（Isolate）。老板每次只需要看桌上那一小叠纸，就能做出正确决策。
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- 模块：Harness Engineering（驾驭工程） -->
+<section class="section">
+  <div class="container">
+    <span class="section-label">Harness Engineering</span>
+    <h2 class="section-title">驾驭工程（Harness Engineering）</h2>
+    <p class="section-desc">如果说 Context Engineering 管理的是"Agent 知道什么"，Harness Engineering 管理的则是"Agent 能做什么、不能做什么"。它是 Agent 的操作系统——约束、工具、反馈回路和状态管理的总和。</p>
+
+    <div class="accordion">
+
+      <div class="accordion-item">
+        <button class="accordion-trigger">核心公式：Agent = Model + Harness <span class="arrow">&#9654;</span></button>
+        <div class="accordion-content">
+          <div class="highlight-box">
+            <h3>Harness Engineering 的定义</h3>
+            <p style="font-size:1.1rem;text-align:center;margin:12px 0;"><strong>Agent = Model（大脑）+ Harness（外骨骼）</strong></p>
+            <p>Harness 是围绕 AI 模型构建的结构性外层系统——包括约束规则、工具链、验证门、状态管理和反馈回路——使模型能够在真实环境中<strong>可靠、可控、可规模化</strong>地自主执行任务。</p>
+          </div>
+
+          <div class="grid-2" style="margin-top:24px;">
+            <div class="card">
+              <div class="card-icon orange">&#128170;</div>
+              <h4>Mitchell Hashimoto 的操作性定义</h4>
+              <p style="font-style:italic;color:var(--gray-600);">"每当 Agent 犯错，你就花时间设计一个解决方案，使同类错误永不复现。"</p>
+              <p style="margin-top:8px;font-size:0.9rem;color:var(--gray-500);">这不是让模型更聪明——而是<strong>构建让模型的智能变得可用、可靠的基础设施</strong>。每次犯错都是改进 Harness 的机会。</p>
+            </div>
+            <div class="card">
+              <div class="card-icon purple">&#127919;</div>
+              <h4>OpenAI 的实践口号</h4>
+              <p style="font-style:italic;color:var(--gray-600);">"Humans steer. Agents execute."</p>
+              <p style="margin-top:8px;font-size:0.9rem;color:var(--gray-500);">人类掌舵，Agent 执行。人不一定要在每一步的回路中，但必须在<strong>设计回路</strong>中——定义规则、设置门禁、审查结果。人的角色从"操作者"变为"规则制定者"。</p>
+            </div>
+          </div>
+
+          <div style="max-width:640px;margin:1.5rem auto;background:var(--gray-50);border-radius:12px;padding:20px 24px;">
+            <svg viewBox="0 0 640 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;">
+              <defs>
+                <linearGradient id="h-g1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#1d4ed8"/></linearGradient>
+                <linearGradient id="h-g2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#6d28d9"/></linearGradient>
+                <linearGradient id="h-g3" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#059669"/><stop offset="100%" stop-color="#047857"/></linearGradient>
+                <linearGradient id="h-g4" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#ea580c"/><stop offset="100%" stop-color="#c2410c"/></linearGradient>
+                <linearGradient id="h-g5" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#7c3aed"/></linearGradient>
+                <linearGradient id="h-g6" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#0891b2"/><stop offset="100%" stop-color="#0e7490"/></linearGradient>
+              </defs>
+              <!-- Model -->
+              <rect x="20" y="30" width="100" height="60" rx="10" fill="url(#h-g1)" opacity="0.15"/>
+              <rect x="20" y="30" width="100" height="60" rx="10" fill="none" stroke="#2563eb" stroke-width="2"/>
+              <text x="70" y="66" text-anchor="middle" font-size="15" font-weight="800" fill="#1e40af">Model</text>
+              <text x="350" y="66" text-anchor="middle" font-size="28" fill="#2563eb">+</text>
+              <!-- Harness box -->
+              <rect x="400" y="16" width="220" height="88" rx="12" fill="url(#h-g2)" opacity="0.1"/>
+              <rect x="400" y="16" width="220" height="88" rx="12" fill="none" stroke="#7c3aed" stroke-width="2.5" stroke-dasharray="8,3"/>
+              <text x="510" y="42" text-anchor="middle" font-size="16" font-weight="900" fill="#6d28d9">Harness</text>
+              <text x="510" y="60" text-anchor="middle" font-size="10" fill="#8b5cf6">约束 + 工具 + 验证门</text>
+              <text x="510" y="76" text-anchor="middle" font-size="10" fill="#8b5cf6">状态管理 + 反馈回路</text>
+              <text x="510" y="92" text-anchor="middle" font-size="10" fill="#8b5cf6">文件系统 + 沙箱 + MCP</text>
+              <!-- Equals and Agent -->
+              <text x="310" y="66" text-anchor="middle" font-size="28" fill="#059669">=</text>
+              <rect x="130" y="30" width="160" height="60" rx="10" fill="url(#h-g3)" opacity="0.15"/>
+              <rect x="130" y="30" width="160" height="60" rx="10" fill="none" stroke="#059669" stroke-width="2.5"/>
+              <text x="210" y="66" text-anchor="middle" font-size="15" font-weight="900" fill="#047857">可靠Agent</text>
+            </svg>
+            <p style="text-align:center;font-size:0.8rem;color:var(--gray-400);margin-top:6px;">图：模型本身不会犯错管理——Harness 提供了规则、约束和验证，让它变得可靠</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-trigger">Harness 的六大核心组件 <span class="arrow">&#9654;</span></button>
+        <div class="accordion-content">
+          <div class="grid-3" style="margin-top:16px;">
+            <div class="card"><div class="card-icon blue">&#128451;</div><h4>1. 文件系统</h4><p>工作空间、中间结果存储、版本追踪。Agent 操作的真实"车间"——所有产出都落在这里，状态也保存在这里。代码仓库是唯一真相来源。</p></div>
+            <div class="card"><div class="card-icon green">&#9000;</div><h4>2. Bash + 沙箱</h4><p>代码执行与自我验证能力，安全隔离环境。Agent 写完代码后可以立即运行测试——<strong>自我验证是 Harness 最核心的反馈机制</strong>。</p></div>
+            <div class="card"><div class="card-icon purple">&#129504;</div><h4>3. 记忆系统</h4><p>长期记忆与跨会话状态持久化。Agent 会在每次会话间遗忘一切——CLAUDE.md、Memory、AGENTS.md 就是 Harness 提供的"外置硬盘"。</p></div>
+            <div class="card"><div class="card-icon orange">&#127760;</div><h4>4. Web Search + MCP</h4><p>突破知识截止日期，连接外部工具与数据源。MCP 是 Harness 的"插件系统"——给 Agent 装上什么工具，它就能做什么事。</p></div>
+            <div class="card"><div class="card-icon blue">&#128270;</div><h4>5. 上下文工程</h4><p>渐进式披露、Token 优化、对抗上下文腐化。上下文工程是 Harness 中的信息管理子系统。</p></div>
+            <div class="card"><div class="card-icon green">&#128260;</div><h4>6. 编排 + Hooks</h4><p>多 Agent 协同，关键节点确定性检查。Hooks 在关键时刻介入——"提交前必须通过测试"就是在 Harness 层面编码的规则。</p></div>
+          </div>
+
+          <div class="tip mt-3">
+            <strong>&#128161; Vercel 的关键发现</strong>
+            工具不是越多越好——Vercel 团队实践发现，移除 80% 的工具后 Agent 表现反而提升。关键不是工具数量，而是<strong>在正确时机给出正确工具</strong>。工具太多会污染上下文，让 Agent 分心。
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-trigger">Harness 的三层操作体系 <span class="arrow">&#9654;</span></button>
+        <div class="accordion-content">
+          <p>OpenAI 在实战中总结出一套三层操作体系，被业界广泛引用：</p>
+
+          <div class="grid-3" style="margin-top:20px;">
+            <div class="card">
+              <div class="card-icon blue">&#128220;</div>
+              <h4>① 上下文工程层</h4>
+              <ul style="padding-left:18px;color:var(--gray-600);font-size:0.9rem;line-height:1.8;">
+                <li>用<strong>索引地图</strong>（AGENTS.md ~100行）替代千页说明书</li>
+                <li><strong>渐进式披露</strong>：Agent 按需查找结构化 <code>docs/</code> 目录</li>
+                <li>运行时数据接入：Agent 可直查日志、指标、操作浏览器</li>
+              </ul>
+            </div>
+            <div class="card">
+              <div class="card-icon orange">&#128274;</div>
+              <h4>② 架构约束层</h4>
+              <ul style="padding-left:18px;color:var(--gray-600);font-size:0.9rem;line-height:1.8;">
+                <li>自定义 Linter <strong>物理阻止</strong> Agent 触碰不该触碰的代码</li>
+                <li>严格的依赖方向验证、文件大小限制（如 350 行）</li>
+                <li>Lint 错误信息中<strong>嵌入修复指令</strong>，Agent 能自主修复</li>
+              </ul>
+            </div>
+            <div class="card">
+              <div class="card-icon green">&#128260;</div>
+              <h4>③ 反馈回路与验证层</h4>
+              <ul style="padding-left:18px;color:var(--gray-600);font-size:0.9rem;line-height:1.8;">
+                <li><strong>自我验证</strong>：必须跑通测试才能标记任务完成</li>
+                <li><strong>循环检测</strong>：追踪同一文件被反复编辑次数，超阈值介入</li>
+                <li><strong>垃圾回收 Agent</strong>：定期扫描代码腐化、文档漂移</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="highlight-box mt-3">
+            <h3>OpenAI 里程碑实验</h3>
+            <p>从空仓库出发，Codex Agent 自主生成全部代码、测试、CI 配置和文档——<strong>超过 100 万行代码，~1,500 个 PR，开发时间约为人工的十分之一</strong>。核心理念：人类掌舵（定义约束和验证规则），Agent 执行（写代码、跑测试、修 Bug）。</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- 模块：Loop Engineering（循环工程） -->
+<section class="section section-gray">
+  <div class="container">
+    <span class="section-label">Loop Engineering</span>
+    <h2 class="section-title">循环工程（Loop Engineering）</h2>
+    <p class="section-desc">2026 年 AI 工程领域的顶流范式——你不再手动给 Agent 写提示词，而是设计一套系统，让系统自动去提示和管理 Agent。</p>
+
+    <div class="accordion">
+
+      <div class="accordion-item">
+        <button class="accordion-trigger">范式转变：从"写提示词"到"设计循环" <span class="arrow">&#9654;</span></button>
+        <div class="accordion-content">
+          <div class="highlight-box">
+            <h3>Loop Engineering 的核心思想</h3>
+            <p style="font-size:1.05rem;text-align:center;margin:12px 0;"><strong>你替代的不是 Agent——你替代的是那个给 Agent 写提示词的人（你自己）。<br>你设计的是替你去提示 Agent 的系统。</strong></p>
+          </div>
+
+          <div class="grid-3" style="margin-top:20px;">
+            <div class="card">
+              <div class="card-icon blue">&#128100;</div>
+              <h4>Boris Cherny（Anthropic）</h4>
+              <p style="font-style:italic;color:var(--gray-600);">"我不再给 Claude 写提示词了。我有一堆循环在跑，它们自己提示 Claude、决定下一步做什么。我的工作就是写循环。"</p>
+              <p style="font-size:0.85rem;color:var(--gray-400);margin-top:8px;">Claude Code 负责人，他甚至卸载了自己的 IDE。</p>
+            </div>
+            <div class="card">
+              <div class="card-icon green">&#128260;</div>
+              <h4>Peter Steinberger（OpenAI）</h4>
+              <p style="font-style:italic;color:var(--gray-600);">"别再给编程 Agent 写提示词了，你应该设计循环来提示你的 Agent。"</p>
+              <p style="font-size:0.85rem;color:var(--gray-400);margin-top:8px;">OpenClaw 创始人，引发了整个 Loop 工程讨论。</p>
+            </div>
+            <div class="card">
+              <div class="card-icon orange">&#127919;</div>
+              <h4>Addy Osmani（Google）</h4>
+              <p style="font-style:italic;color:var(--gray-600);">"Loop Engineering 是设计系统去提示 Agent。'循环'是一个递归目标：你定义目标，AI 迭代直到完成。"</p>
+              <p style="font-size:0.85rem;color:var(--gray-400);margin-top:8px;">Google Cloud AI 总监，2026 年正式命名这一范式。</p>
+            </div>
+          </div>
+
+          <div class="tip mt-3">
+            <strong>最简示例——"Ralph Loop"</strong>
+            这一理念的原始形态可以追溯到 2025 年最简单的一个 shell 循环：<code>while :; do cat PROMPT.md | claude-code; done</code>。核心洞察：<strong>Agent 会遗忘，但仓库不会。</strong>每轮循环使用全新的上下文窗口，状态通过文件系统传递，而非对话记忆。
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-trigger">双层循环架构：ReAct（内环）+ Loop（外环） <span class="arrow">&#9654;</span></button>
+        <div class="accordion-content">
+          <p>Loop Engineering 不是替代 ReAct（推理-行动循环），而是在它外面再套一层编排循环。它们是<strong>嵌套关系，不是替代关系</strong>：</p>
+
+          <div style="max-width:640px;margin:1.5rem auto;background:var(--gray-50);border-radius:12px;padding:20px 24px;">
+            <svg viewBox="0 0 640 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;">
+              <defs>
+                <marker id="loop-arr" markerWidth="6" markerHeight="4" refX="6" refY="2" orient="auto"><polygon points="0 0, 6 2, 0 4" fill="#64748b"/></marker>
+              </defs>
+              <!-- Outer Loop -->
+              <rect x="15" y="10" width="610" height="260" rx="18" fill="#f5f3ff" stroke="#7c3aed" stroke-width="3" stroke-dasharray="10,4"/>
+              <text x="320" y="34" text-anchor="middle" font-size="14" font-weight="800" fill="#6d28d9">Outer Loop — Loop Engineering（编排层）</text>
+              <text x="320" y="50" text-anchor="middle" font-size="10" fill="#8b5cf6">目标拆解 → 任务分配 → 结果汇总 → 独立评估 → 再计划 → 继续/退出</text>
+
+              <!-- Inner Loop A -->
+              <rect x="40" y="72" width="250" height="105" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+              <text x="165" y="94" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">Inner Loop A（ReAct 执行层）</text>
+              <circle cx="90" cy="140" r="18" fill="#dbeafe"/><text x="90" y="145" text-anchor="middle" font-size="12" fill="#1e40af">思</text>
+              <text x="118" y="145" font-size="9" fill="#64748b">→</text>
+              <circle cx="145" cy="140" r="18" fill="#d1fae5"/><text x="145" y="145" text-anchor="middle" font-size="12" fill="#047857">行</text>
+              <text x="173" y="145" font-size="9" fill="#64748b">→</text>
+              <circle cx="200" cy="140" r="18" fill="#fef3c7"/><text x="200" y="145" text-anchor="middle" font-size="12" fill="#b45309">观</text>
+              <text x="228" y="145" font-size="9" fill="#64748b">→</text>
+              <circle cx="255" cy="140" r="18" fill="#fce7f3"/><text x="255" y="145" text-anchor="middle" font-size="12" fill="#be185d">思</text>
+              <text x="145" y="170" text-anchor="middle" font-size="10" fill="#94a3b8">循环至任务完成</text>
+
+              <!-- Inner Loop B -->
+              <rect x="330" y="72" width="250" height="105" rx="10" fill="#f0fdf4" stroke="#059669" stroke-width="2"/>
+              <text x="455" y="94" text-anchor="middle" font-size="13" font-weight="700" fill="#047857">Inner Loop B（ReAct 执行层）</text>
+              <circle cx="380" cy="140" r="18" fill="#dbeafe"/><text x="380" y="145" text-anchor="middle" font-size="12" fill="#1e40af">思</text>
+              <text x="408" y="145" font-size="9" fill="#64748b">→</text>
+              <circle cx="435" cy="140" r="18" fill="#d1fae5"/><text x="435" y="145" text-anchor="middle" font-size="12" fill="#047857">行</text>
+              <text x="463" y="145" font-size="9" fill="#64748b">→</text>
+              <circle cx="490" cy="140" r="18" fill="#fef3c7"/><text x="490" y="145" text-anchor="middle" font-size="12" fill="#b45309">观</text>
+              <text x="518" y="145" font-size="9" fill="#64748b">→</text>
+              <circle cx="545" cy="140" r="18" fill="#fce7f3"/><text x="545" y="145" text-anchor="middle" font-size="12" fill="#be185d">思</text>
+              <text x="435" y="170" text-anchor="middle" font-size="10" fill="#94a3b8">循环至任务完成</text>
+
+              <!-- Evaluator -->
+              <rect x="180" y="200" width="280" height="50" rx="8" fill="#fef3c7" stroke="#ea580c" stroke-width="2"/>
+              <text x="320" y="222" text-anchor="middle" font-size="13" font-weight="700" fill="#c2410c">&#128270; 独立评估器（Checker Model）</text>
+              <text x="320" y="240" text-anchor="middle" font-size="10" fill="#f97316">验证可度量条件 → 判定是否完成 → 决定继续或退出</text>
+
+              <!-- Arrows from inner to evaluator -->
+              <line x1="165" y1="180" x2="240" y2="198" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#loop-arr)"/>
+              <line x1="455" y1="180" x2="400" y2="198" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#loop-arr)"/>
+            </svg>
+            <p style="text-align:center;font-size:0.8rem;color:var(--gray-400);margin-top:6px;">图：外环负责编排调度，内环负责具体执行，独立评估器负责质量把关</p>
+          </div>
+
+          <table class="compare-table" style="margin-top:20px;">
+            <thead><tr><th>维度</th><th>ReAct（内环）</th><th>Loop Engineering（外环）</th></tr></thead>
+            <tbody>
+              <tr><td>关注层次</td><td>单次任务的执行过程</td><td>跨任务的编排与调度</td></tr>
+              <tr><td>循环粒度</td><td>细粒度（单步工具调用）</td><td>粗粒度（整个任务周期）</td></tr>
+              <tr><td>状态管理</td><td>依赖上下文窗口内记忆</td><td><strong>状态外置</strong>到文件/数据库</td></tr>
+              <tr><td>停止条件</td><td>模型自己判断"做完了"</td><td><strong>独立评估器</strong>验证可度量条件</td></tr>
+              <tr><td>验证机制</td><td>自我检查（同一模型）</td><td><strong>对抗验证</strong>（不同模型/独立评估器）</td></tr>
+              <tr><td>并行能力</td><td>单 Agent 串行</td><td>多 Agent 并行 + Worktree 隔离</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-trigger">Loop 的六大构建模块 <span class="arrow">&#9654;</span></button>
+        <div class="accordion-content">
+          <p>一个完整的 Loop 需要六样东西。它们层层累积，缺一不可：</p>
+
+          <div class="grid-3" style="margin-top:16px;">
+            <div class="card"><div class="card-icon blue">&#9200;</div><h4>1. Automations（心跳）</h4><p>让 Loop 真正"循环"而非一次性运行。三种触发：<strong>定时</strong>（cron、/loop）、<strong>事件</strong>（hooks、webhook）、<strong>目标</strong>（/goal——跑到条件满足为止）。</p></div>
+            <div class="card"><div class="card-icon green">&#128450;</div><h4>2. Worktrees（并行隔离）</h4><p>Git Worktree 给每个 Agent 独立工作目录和分支，互相不干扰。这是多 Agent 并行安全的物理基础。</p></div>
+            <div class="card"><div class="card-icon purple">&#128218;</div><h4>3. Skills（项目知识固化）</h4><p>将项目规范、代码风格、已知陷阱、构建步骤写入 SKILL.md，Agent 每次读取。没有 Skills，Loop 的每个周期都要从零重新推导项目知识。</p></div>
+            <div class="card"><div class="card-icon orange">&#128268;</div><h4>4. MCP Connectors</h4><p>基于 MCP 协议对接真实工具：读 Issue Tracker、查数据库、发 Slack——让 Agent 不只是"建议"，而是直接操作。</p></div>
+            <div class="card"><div class="card-icon blue">&#128101;</div><h4>5. Sub-agents（写/查分离）</h4><p><strong>最关键的架构设计。</strong>写代码的 Agent 和检查代码的 Agent 必须分开——用不同指令，甚至不同模型。让同一个模型给自己的作业打分太容易放水。</p></div>
+            <div class="card"><div class="card-icon green">&#128451;</div><h4>6. Memory/State（外置状态）</h4><p>Markdown 文件或任务看板，记录"已完成""正在做""待办"。Agent 每次会话都会遗忘，所以<strong>记忆必须存在磁盘上，不在上下文窗口里</strong>。</p></div>
+          </div>
+
+          <div class="highlight-box mt-3">
+            <h3>完整 Loop 实例（Addy Osmani）</h3>
+            <p style="font-size:0.9rem;line-height:1.8;">每天早上定时任务启动 → Triage Skill 读取昨天 CI 失败 + Open Issue + 最近 commits → 写入看板 → 对每个值得处理的问题：开隔离 Worktree → 子 Agent A 起草修复 → 子 Agent B 对照 Skills 审查 → 通过审查的自动开 PR、更新工单 → 搞不定的落入收件箱等人类处理 → 状态文件记录一切 → 明天从今天停下的地方继续。</p>
+            <p style="text-align:center;font-weight:600;color:var(--purple-600);margin-top:8px;">整个过程，人类一个提示词都不用敲。</p>
+          </div>
+
+          <div class="tip warning mt-3">
+            <strong>&#9888; 三种主要陷阱</strong>
+            <ul style="padding-left:18px;color:var(--gray-600);line-height:1.8;margin-top:8px;">
+              <li><strong>偷懒</strong>：50 项任务只做了 20 项就声称"搞定了"</li>
+              <li><strong>自夸</strong>：给自己的输出打高分，评估不可靠</li>
+              <li><strong>漂移</strong>：跑到第 47 轮后，最初的"别做 X"约束悄悄消失</li>
+            </ul>
+            <p style="margin-top:8px;"><strong>解决之道：</strong>制造者与检查者强制分离，是唯一让你敢放心走开的理由。</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- 知识链条总结 -->
+<section class="section">
+  <div class="container">
+    <span class="section-label">Evolution</span>
+    <h2 class="section-title">从 Prompt 到 Loop：AI 交互范式的演进全景</h2>
+    <p class="section-desc">这不是替代关系，而是叠加关系。每一层都建立在之前所有层之上。</p>
+
+    <div style="max-width:100%;overflow-x:auto;margin-top:24px;">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>阶段</th>
+            <th>时间</th>
+            <th>核心问题</th>
+            <th>关键能力</th>
+            <th>AI 自主时长</th>
+            <th>人的角色</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Prompt Engineering</strong></td>
+            <td>2023</td>
+            <td>怎么把话说清楚？</td>
+            <td>角色设定、结构化指令、Few-shot、思维链</td>
+            <td>一问一答</td>
+            <td>提问者</td>
+          </tr>
+          <tr>
+            <td><strong>Context Engineering</strong></td>
+            <td>2024-2025</td>
+            <td>Agent 应该知道什么？</td>
+            <td>RAG、记忆系统、MCP、上下文压缩、知识图谱</td>
+            <td>几十步</td>
+            <td>信息管家</td>
+          </tr>
+          <tr>
+            <td><strong>Harness Engineering</strong></td>
+            <td>2025</td>
+            <td>Agent 在什么环境中做事？</td>
+            <td>文件系统、沙箱、约束门、反馈回路、编排</td>
+            <td>几小时</td>
+            <td>规则制定者</td>
+          </tr>
+          <tr style="background:var(--purple-50);">
+            <td><strong>Loop Engineering</strong></td>
+            <td>2026</td>
+            <td>怎么让系统自动管 Agent？</td>
+            <td>自动化触发、Worktree 并行、Sub-agent、独立评估器</td>
+            <td>数天到数周</td>
+            <td>循环设计者</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="max-width:680px;margin:2rem auto;background:var(--gray-50);border-radius:12px;padding:24px 28px;">
+      <svg viewBox="0 0 680 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;">
+        <defs>
+          <marker id="evo-arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#6366f1"/></marker>
+        </defs>
+        <!-- Layer 1: Prompt -->
+        <rect x="20" y="130" width="140" height="40" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+        <text x="90" y="155" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">Prompt 工程</text>
+        <!-- Layer 2: Context -->
+        <rect x="185" y="95" width="140" height="40" rx="8" fill="#d1fae5" stroke="#059669" stroke-width="2"/>
+        <text x="255" y="120" text-anchor="middle" font-size="13" font-weight="700" fill="#047857">Context 工程</text>
+        <!-- Layer 3: Harness -->
+        <rect x="350" y="60" width="140" height="40" rx="8" fill="#fef3c7" stroke="#ea580c" stroke-width="2"/>
+        <text x="420" y="85" text-anchor="middle" font-size="13" font-weight="700" fill="#c2410c">Harness 工程</text>
+        <!-- Layer 4: Loop -->
+        <rect x="515" y="25" width="140" height="40" rx="8" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+        <text x="585" y="50" text-anchor="middle" font-size="13" font-weight="700" fill="#6d28d9">Loop 工程</text>
+        <!-- Arrows -->
+        <line x1="160" y1="145" x2="183" y2="120" stroke="#6366f1" stroke-width="2" marker-end="url(#evo-arr)"/>
+        <line x1="325" y1="115" x2="348" y2="85" stroke="#6366f1" stroke-width="2" marker-end="url(#evo-arr)"/>
+        <line x1="490" y1="75" x2="513" y2="50" stroke="#6366f1" stroke-width="2" marker-end="url(#evo-arr)"/>
+        <!-- Bottom labels -->
+        <text x="90" y="178" text-anchor="middle" font-size="9" fill="#64748b">把话说清楚</text>
+        <text x="255" y="143" text-anchor="middle" font-size="9" fill="#64748b">让 Agent 看到该看的</text>
+        <text x="420" y="108" text-anchor="middle" font-size="9" fill="#64748b">给 Agent 干活的环境</text>
+        <text x="585" y="73" text-anchor="middle" font-size="9" fill="#64748b">系统自己管 Agent</text>
+      </svg>
+      <p style="text-align:center;font-size:0.8rem;color:var(--gray-400);margin-top:6px;">图：四层叠加——每一层依赖下一层，形成完整的技术栈</p>
+    </div>
+
+    <div class="highlight-box mt-3">
+      <h3>&#128260; 关键理解：叠加，不是替代</h3>
+      <p>提示词工程没有"死"——它砌在每个循环的底层。上下文工程没有"过时"——没有好的上下文管理，Loop 也跑不起来。Harness 工程中的约束和验证，正是 Loop 工程中独立评估器的前置条件。</p>
+      <p style="margin-top:8px;">你日常使用的 <strong>Claude Code</strong> 正处于从 Harness 到 Loop 的过渡阶段——它有 Sub-agent（写查分离）、有 Worktree（并行隔离）、有 /goal（目标循环）、有 CLAUDE.md + Memory（外置状态）。理解这条演进链路，你就理解了 Claude Code 为什么被设计成现在这样——以及它将走向何方。</p>
+    </div>
+
+    <div class="tip mt-3">
+      <strong>&#128161; 实践顺序建议</strong>
+      <ol style="padding-left:20px;color:var(--gray-600);line-height:2;margin-top:4px;">
+        <li><strong>先搭好 Harness（内环），再上 Loop（外环）</strong>——如果 Agent 连一次性任务都做不好，自动化就是在批量生产垃圾</li>
+        <li><strong>完成条件必须是可机器验证的</strong>——"代码更整洁"不是好条件，"lint 无报错且全部测试通过"才是</li>
+        <li><strong>预算必须硬限制</strong>——max_iterations、token_limit、wall_clock 三者缺一不可，防止 Loop 跑飞</li>
+        <li><strong>验证仍然是你的责任</strong>——Loop 喊"完成了"只是一个声明，不是证明</li>
+        <li><strong>注意理解债</strong>——Loop 产出越快，你没读的代码越多，迟早会失控</li>
+      </ol>
+    </div>
+
   </div>
 </section>
 
