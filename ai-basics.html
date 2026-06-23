@@ -243,13 +243,23 @@
 
             <div class="highlight-box mt-3">
               <h3>&#127970; 公司内网的实际情况</h3>
-              <p>公司 AI Gateway 将后端各种模型<strong>统一封装为 OpenAI 兼容接口</strong>。这意味着：无论你实际调用的是 Claude、Qwen 还是 DeepSeek，你只需用一套 OpenAI 格式就都能访问。Gateway 在中间负责"翻译"，将你的 OpenAI 格式请求转成各个模型能理解的格式。</p>
-              <p style="margin-top:8px;">所以你在配置 Hermes-Agent 时选择的是 OpenAI 兼容接口，但实际使用的模型可能是 Claude——这就是 Gateway 的功劳。</p>
+              <p>公司 AI Gateway <strong>同时支持 OpenAI 兼容接口和 Anthropic 原生接口</strong>，根据使用场景选择：</p>
+              <div class="grid-2" style="margin-top:12px;">
+                <div style="background:#fff;border-radius:8px;padding:14px 16px;border:1px solid #e0e7ff;">
+                  <strong style="color:var(--blue-600);">&#128268; OpenAI 兼容接口</strong>
+                  <p style="margin:6px 0 0;font-size:0.9rem;color:var(--gray-600);">适用场景：日常办公聊天、文档处理、通用问答<br>代表工具：<strong>Hermes-Agent</strong></p>
+                </div>
+                <div style="background:#fff;border-radius:8px;padding:14px 16px;border:1px solid #e0e7ff;">
+                  <strong style="color:var(--purple-600);">&#128273; Anthropic 原生接口</strong>
+                  <p style="margin:6px 0 0;font-size:0.9rem;color:var(--gray-600);">适用场景：代码开发、深度推理、复杂编程任务<br>代表工具：<strong>Claude Code</strong></p>
+                </div>
+              </div>
+              <p style="margin-top:12px;">Gateway 在后端统一对接各种模型，前端提供两种接口格式供不同工具选用。你不需要关心 Gateway 内部如何"翻译"——只需根据使用的工具选对接口类型即可。</p>
             </div>
 
             <div class="tip mt-3">
               <strong>一句话记住</strong>
-              日常使用中你基本不需要关心底层是哪种接口——配置工具时会明确告诉你选哪个。但理解"公司网关=OpenAI兼容格式"这一点，能帮你理解为什么配置项里既有"接口地址"又有"模型名"——接口地址指向 Gateway，模型名告诉 Gateway 你想用哪个模型。
+              日常使用中你基本不需要关心底层接口细节——配置工具时会明确告诉你选哪个。记住：<strong>编码开发场景用 Anthropic 接口（Claude Code），日常办公场景用 OpenAI 兼容接口（Hermes-Agent）</strong>。接口地址指向 Gateway，模型名告诉 Gateway 你想用哪个模型。
             </div>
           </div>
         </div>
