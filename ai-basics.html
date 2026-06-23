@@ -80,7 +80,7 @@
 
       <div class="highlight-box mt-3">
         <h3>本页内容导航</h3>
-        <p>从基础到前沿，六个模块层层递进：<strong>LLM基础 → Prompt工程 → Function Call → MCP → Agent → A2A/Skills</strong>。每个模块都可以独立阅读，建议按顺序学习以获得完整的知识体系。</p>
+        <p>从基础到前沿，七个模块层层递进：<strong>LLM基础 → 模型接入配置 → Prompt工程 → Function Call → MCP → Agent → A2A/Skills</strong>。每个模块都可以独立阅读，建议按顺序学习以获得完整的知识体系。</p>
       </div>
     </div>
   </section>
@@ -193,6 +193,275 @@
             <div class="tip mt-3"><strong>如何应对局限？</strong>结合外部工具（Function Call / MCP协议）让模型调用计算器、搜索引擎、数据库来弥补不足；对关键输出进行人工审核；使用RAG（检索增强生成）技术为模型补充实时知识——这些都是我们日常使用AI工具时可以采用的实用策略。</div>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 模块：模型接入配置基础 -->
+  <section class="section section-gray">
+    <div class="container">
+      <span class="section-label">API Config</span>
+      <h2 class="section-title">模型接入配置基础</h2>
+      <p class="section-desc">在使用 Hermes-Agent、Claude Code 或任何 AI 工具之前，你都需要了解几个关键的配置概念：接口类型、Base URL、API Key、模型名。这一节帮你彻底搞懂它们，不再对着配置界面发懵。</p>
+
+      <div class="accordion">
+
+        <!-- 接口类型 -->
+        <div class="accordion-item">
+          <button class="accordion-trigger">API 接口类型：OpenAI 兼容接口 vs Anthropic 原生接口 <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <p>目前主流的 AI 模型接入方式有两种接口标准。简单说，<strong>接口就是"AI 服务的通信协议"</strong>——你的程序按照这个协议发送请求，AI 服务按照这个协议返回结果。了解它们的区别，是配置一切 AI 工具的第一步。</p>
+
+            <div class="grid-2" style="margin-top:20px;">
+              <div class="card">
+                <div class="card-icon green">&#128268;</div>
+                <h4>OpenAI 兼容接口</h4>
+                <p>由 OpenAI 最早定义、后被行业广泛采用的接口格式，已成为<strong>事实上的行业标准</strong>。</p>
+                <p style="margin-top:12px;"><strong>核心特征：</strong></p>
+                <ul style="padding-left:18px;color:var(--gray-600);font-size:0.9rem;line-height:1.8;">
+                  <li>聊天接口路径：<code>/chat/completions</code></li>
+                  <li>认证方式：<code>Authorization: Bearer &lt;API_KEY&gt;</code></li>
+                  <li>大多数国产模型都兼容此格式</li>
+                  <li><strong>Hermes-Agent 使用此接口</strong></li>
+                </ul>
+                <p style="margin-top:12px;font-size:0.9rem;color:var(--gray-500);">类比：就像 USB-A 接口——不是最先进的，但因为用得太广，几乎所有设备都支持。</p>
+              </div>
+              <div class="card">
+                <div class="card-icon purple">&#128273;</div>
+                <h4>Anthropic 原生接口</h4>
+                <p>由 Anthropic 为 Claude 系列模型定制的专有接口，在工具调用和长上下文方面有独特设计。</p>
+                <p style="margin-top:12px;"><strong>核心特征：</strong></p>
+                <ul style="padding-left:18px;color:var(--gray-600);font-size:0.9rem;line-height:1.8;">
+                  <li>认证方式：<code>x-api-key: &lt;API_KEY&gt;</code></li>
+                  <li>使用 Messages API 消息格式</li>
+                  <li>原生支持更丰富的工具调用能力</li>
+                  <li><strong>Claude Code 使用此接口</strong></li>
+                </ul>
+                <p style="margin-top:12px;font-size:0.9rem;color:var(--gray-500);">类比：就像 Apple Lightning 接口——专有标准，但在自家生态内体验最好。</p>
+              </div>
+            </div>
+
+            <div class="highlight-box mt-3">
+              <h3>&#127970; 公司内网的实际情况</h3>
+              <p>公司 AI Gateway 将后端各种模型<strong>统一封装为 OpenAI 兼容接口</strong>。这意味着：无论你实际调用的是 Claude、Qwen 还是 DeepSeek，你只需用一套 OpenAI 格式就都能访问。Gateway 在中间负责"翻译"，将你的 OpenAI 格式请求转成各个模型能理解的格式。</p>
+              <p style="margin-top:8px;">所以你在配置 Hermes-Agent 时选择的是 OpenAI 兼容接口，但实际使用的模型可能是 Claude——这就是 Gateway 的功劳。</p>
+            </div>
+
+            <div class="tip mt-3">
+              <strong>一句话记住</strong>
+              日常使用中你基本不需要关心底层是哪种接口——配置工具时会明确告诉你选哪个。但理解"公司网关=OpenAI兼容格式"这一点，能帮你理解为什么配置项里既有"接口地址"又有"模型名"——接口地址指向 Gateway，模型名告诉 Gateway 你想用哪个模型。
+            </div>
+          </div>
+        </div>
+
+        <!-- Base URL -->
+        <div class="accordion-item">
+          <button class="accordion-trigger">Base URL — 大模型服务的"门牌号" <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <p><strong>Base URL（基础地址）</strong>就是 AI 服务的网络地址。你的程序通过这个地址找到 AI 服务在哪里，就像寄快递需要知道收件地址一样。</p>
+
+            <div class="grid-2" style="margin-top:20px;">
+              <div class="card">
+                <div class="card-icon blue">&#127968;</div>
+                <h4>格式与构成</h4>
+                <p>Base URL 是一个标准的 HTTP 地址，通常由三部分组成：</p>
+                <p style="margin-top:8px;line-height:2;">
+                  <strong>协议 + IP/域名 + 端口</strong><br>
+                  例如：<code style="background:#e5e7eb;padding:2px 6px;border-radius:4px;">http://7.24.28.9:28080/v1</code>
+                </p>
+                <ul style="padding-left:18px;color:var(--gray-600);font-size:0.85rem;line-height:1.8;margin-top:8px;">
+                  <li><code>http://</code> — 通信协议</li>
+                  <li><code>7.24.28.9</code> — 服务器 IP 地址</li>
+                  <li><code>:28080</code> — 端口号（AI 服务监听的"频道"）</li>
+                  <li><code>/v1</code> — API 版本路径（表示使用 v1 版接口）</li>
+                </ul>
+              </div>
+              <div class="card">
+                <div class="card-icon green">&#127760;</div>
+                <h4>常见 Base URL 示例</h4>
+                <table style="width:100%;font-size:0.85rem;border-collapse:collapse;margin-top:8px;">
+                  <tr style="border-bottom:1px solid var(--gray-200);"><td style="padding:8px 4px;font-weight:600;color:var(--gray-700);">服务</td><td style="padding:8px 4px;color:var(--gray-500);">Base URL</td></tr>
+                  <tr style="border-bottom:1px solid var(--gray-200);"><td style="padding:8px 4px;">OpenAI 官方</td><td style="padding:8px 4px;"><code>https://api.openai.com/v1</code></td></tr>
+                  <tr style="border-bottom:1px solid var(--gray-200);"><td style="padding:8px 4px;">Anthropic 官方</td><td style="padding:8px 4px;"><code>https://api.anthropic.com</code></td></tr>
+                  <tr style="border-bottom:1px solid var(--gray-200);"><td style="padding:8px 4px;font-weight:600;color:var(--blue-600);">公司内网 Gateway</td><td style="padding:8px 4px;font-weight:600;color:var(--blue-600);"><code>http://7.24.28.9:28080/v1</code></td></tr>
+                </table>
+                <p style="font-size:0.8rem;color:var(--gray-400);margin-top:8px;">注意：公司内网地址使用的是 HTTP 而非 HTTPS，且 IP 可能随网络调整而变化。</p>
+              </div>
+            </div>
+
+            <div class="tip mt-3">
+              <strong>&#128161; 关键理解</strong>
+              Base URL 是<strong>所有 API 请求的前缀</strong>。比如完整的聊天接口地址就是 <code>Base URL + /chat/completions</code> = <code>http://7.24.28.9:28080/v1/chat/completions</code>。你不需要手动拼接——配置工具时填好 Base URL，工具会自动在后面加上对应的接口路径。
+            </div>
+          </div>
+        </div>
+
+        <!-- API Key -->
+        <div class="accordion-item">
+          <button class="accordion-trigger">API Key — 你的"身份通行证" <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <p><strong>API Key（密钥）</strong>是一串用于验证你身份的字符。就像你的工卡——刷卡才能进门；API Key 就是你访问 AI 服务的"电子工卡"。</p>
+
+            <div class="grid-3" style="margin-top:20px;">
+              <div class="card">
+                <div class="card-icon blue">&#128274;</div>
+                <h4>为什么需要 API Key？</h4>
+                <p>AI 服务不是免费公益项目——每次调用都需要计算资源。API Key 起到三个关键作用：</p>
+                <ul style="padding-left:18px;color:var(--gray-600);font-size:0.9rem;line-height:1.8;margin-top:8px;">
+                  <li><strong>身份验证</strong>——你是谁？</li>
+                  <li><strong>权限控制</strong>——你能用哪些模型？</li>
+                  <li><strong>用量统计</strong>——你用了多少 Token？</li>
+                </ul>
+              </div>
+              <div class="card">
+                <div class="card-icon green">&#128179;</div>
+                <h4>API Key 长什么样？</h4>
+                <p>通常是一串由字母和数字组成的随机字符串，例如：</p>
+                <p style="margin-top:8px;"><code style="background:#e5e7eb;padding:2px 6px;border-radius:4px;word-break:break-all;">sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</code></p>
+                <p style="font-size:0.85rem;color:var(--gray-500);margin-top:8px;">OpenAI 格式的 Key 通常以 <code>sk-</code> 开头（"secret key"的缩写）。公司内网 Gateway 的 Key 由平台统一生成和管理。</p>
+              </div>
+              <div class="card">
+                <div class="card-icon orange">&#128680;</div>
+                <h4>安全注意事项</h4>
+                <ul style="padding-left:18px;color:var(--gray-600);font-size:0.9rem;line-height:1.8;margin-top:8px;">
+                  <li>&#10060; 不要截图发给别人</li>
+                  <li>&#10060; 不要提交到 Git 仓库</li>
+                  <li>&#10060; 不要在即时通讯中明文传输</li>
+                  <li>&#9989; 配置文件用占位符替代后分享</li>
+                  <li>&#9989; 泄露后立即在平台重置</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="highlight-box mt-3">
+              <h3>&#128273; API Key 在请求中怎么用？</h3>
+              <p>你的程序每次向 AI 服务发请求时，都会在 HTTP 请求头中带上 API Key。以 OpenAI 兼容接口为例：</p>
+              <div class="code-block" style="margin-top:12px;">
+                <button class="copy-btn" onclick="copyCode('api-key-example', this)">复制</button>
+                <div id="code-api-key-example">Authorization: Bearer sk-your-api-key-here</div>
+              </div>
+              <p style="margin-top:8px;font-size:0.9rem;color:var(--gray-500);">整个过程对你是透明的——你只需在配置文件中填好 Key，工具会自动处理后续的认证逻辑。</p>
+            </div>
+
+            <div class="tip mt-3">
+              <strong>&#128161; 关键理解</strong>
+              不要把"API Key"和"登录密码"混为一谈。API Key 是<strong>程序间通信</strong>的凭证，不是网页登录用的。你不需要记住它——把它当作一个"配置文件参数"即可。需要申请时，参考 <a href="api-key.html">API Key 申请指南</a>。
+            </div>
+          </div>
+        </div>
+
+        <!-- Model Name -->
+        <div class="accordion-item">
+          <button class="accordion-trigger">Model Name — 指定你想用的"大脑" <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <p><strong>Model Name（模型名称）</strong>告诉 AI 服务你想使用哪个具体的模型来处理你的请求。<strong>同一个 Base URL 下通常有多个模型可用</strong>——就像一座写字楼里有很多家公司，门牌号（Base URL）只能带你到楼门口，公司名（Model Name）才能找到你要去的那一家。</p>
+
+            <div class="grid-2" style="margin-top:20px;">
+              <div class="card">
+                <div class="card-icon blue">&#129504;</div>
+                <h4>模型名的作用</h4>
+                <p>在 API 请求中，模型名是你必须指定的参数之一。Gateway 根据这个参数决定把请求转发给哪个模型引擎。</p>
+                <div class="code-block" style="margin-top:12px;font-size:0.85rem;">
+                  <button class="copy-btn" onclick="copyCode('model-name-json', this)">复制</button>
+                  <div id="code-model-name-json">{
+                    "model": "Qwen3.6-35B-A3B",
+                    "messages": [...]
+                  }</div>
+                </div>
+                <p style="font-size:0.85rem;color:var(--gray-400);margin-top:4px;">每个请求中都需要指定 model 字段</p>
+              </div>
+              <div class="card">
+                <div class="card-icon green">&#128220;</div>
+                <h4>常见模型命名规则</h4>
+                <p>模型名通常包含厂商、版本、参数规模等信息：</p>
+                <table style="width:100%;font-size:0.85rem;border-collapse:collapse;margin-top:8px;">
+                  <tr style="border-bottom:1px solid var(--gray-200);"><td style="padding:6px 4px;"><code>gpt-4o</code></td><td style="padding:6px 4px;color:var(--gray-500);">OpenAI 多模态旗舰</td></tr>
+                  <tr style="border-bottom:1px solid var(--gray-200);"><td style="padding:6px 4px;"><code>claude-sonnet-4-6</code></td><td style="padding:6px 4px;color:var(--gray-500);">Anthropic Claude 4 系列</td></tr>
+                  <tr style="border-bottom:1px solid var(--gray-200);"><td style="padding:6px 4px;"><code>deepseek-v3</code></td><td style="padding:6px 4px;color:var(--gray-500);">DeepSeek 最新版</td></tr>
+                  <tr style="border-bottom:1px solid var(--gray-200);"><td style="padding:6px 4px;font-weight:600;color:var(--blue-600);"><code>Qwen3.6-35B-A3B</code></td><td style="padding:6px 4px;font-weight:600;color:var(--blue-600);">常用办公聊天推荐</td></tr>
+                </table>
+              </div>
+            </div>
+
+            <div class="highlight-box mt-3">
+              <h3>&#128161; 配置时怎么选模型？</h3>
+              <p>如果你是第一次配置 AI 工具，<strong>不需要自己去"挑选"模型</strong>——以下是简单实用的选择指南：</p>
+              <ul style="padding-left:20px;color:var(--gray-600);line-height:2;margin-top:8px;">
+                <li><strong>日常办公聊天</strong>（写邮件、写报告、问答）：推荐 <strong>Qwen3.6-35B-A3B</strong></li>
+                <li><strong>代码开发</strong>（编程、调试、Code Review）：推荐 <strong>Claude 系列</strong></li>
+                <li><strong>中文长文档处理</strong>（翻译、摘要、分析）：推荐 <strong>Qwen 或 DeepSeek 系列</strong></li>
+                <li><strong>不确定选哪个？</strong>直接用平台推荐的默认模型，后续根据效果再调整</li>
+              </ul>
+            </div>
+
+            <div class="tip mt-3">
+              <strong>&#128161; 关键理解</strong>
+              模型名只是一个字符串参数——你不需要下载或安装任何东西。AI 服务端已经部署好了所有模型，你只需要告诉它"我要用哪个"。配置错模型名不会造成安全问题，只是服务端会返回"模型不存在"的错误。如果你换了模型名，同一个问题可能得到完全不同的回答——因为不同的模型有不同的"知识面"和"思维方式"。
+            </div>
+          </div>
+        </div>
+
+        <!-- 总结：四个概念的关系 -->
+        <div class="accordion-item">
+          <button class="accordion-trigger">四者关系总结 —— 一张图看懂 <span class="arrow">&#9654;</span></button>
+          <div class="accordion-content">
+            <p>这四个概念不是孤立的，它们共同构成了"让程序找到并调用 AI 服务"的完整链路。用一个生活类比来串联：</p>
+
+            <div style="max-width:680px;margin:1.5rem auto;background:var(--gray-50);border-radius:12px;padding:20px 24px;">
+              <svg viewBox="0 0 680 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;">
+                <defs>
+                  <marker id="cfg-arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#94a3b8"/></marker>
+                  <filter id="cfg-sh"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.1"/></filter>
+                </defs>
+
+                <!-- Step 1 -->
+                <rect x="20" y="70" width="140" height="90" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="2" filter="url(#cfg-sh)"/>
+                <text x="90" y="100" text-anchor="middle" font-size="28">&#128205;</text>
+                <text x="90" y="126" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">Base URL</text>
+                <text x="90" y="146" text-anchor="middle" font-size="10" fill="#3b82f6">告诉程序"去哪找"</text>
+                <line x1="160" y1="115" x2="198" y2="115" stroke="#2563eb" stroke-width="2" marker-end="url(#cfg-arr)"/>
+
+                <!-- Step 2 -->
+                <rect x="200" y="70" width="140" height="90" rx="10" fill="#f0fdf4" stroke="#059669" stroke-width="2" filter="url(#cfg-sh)"/>
+                <text x="270" y="100" text-anchor="middle" font-size="28">&#128274;</text>
+                <text x="270" y="126" text-anchor="middle" font-size="13" font-weight="700" fill="#047857">API Key</text>
+                <text x="270" y="146" text-anchor="middle" font-size="10" fill="#10b981">告诉服务"你是谁"</text>
+                <line x1="340" y1="115" x2="378" y2="115" stroke="#059669" stroke-width="2" marker-end="url(#cfg-arr)"/>
+
+                <!-- Step 3 -->
+                <rect x="380" y="70" width="140" height="90" rx="10" fill="#fef3c7" stroke="#ea580c" stroke-width="2" filter="url(#cfg-sh)"/>
+                <text x="450" y="100" text-anchor="middle" font-size="28">&#129504;</text>
+                <text x="450" y="126" text-anchor="middle" font-size="13" font-weight="700" fill="#c2410c">Model Name</text>
+                <text x="450" y="146" text-anchor="middle" font-size="10" fill="#f97316">告诉服务"用哪个大脑"</text>
+                <line x1="520" y1="115" x2="558" y2="115" stroke="#ea580c" stroke-width="2" marker-end="url(#cfg-arr)"/>
+
+                <!-- Step 4 -->
+                <rect x="560" y="70" width="100" height="90" rx="10" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2" filter="url(#cfg-sh)"/>
+                <text x="610" y="100" text-anchor="middle" font-size="28">&#9989;</text>
+                <text x="610" y="126" text-anchor="middle" font-size="13" font-weight="700" fill="#6d28d9">开始对话</text>
+                <text x="610" y="146" text-anchor="middle" font-size="10" fill="#8b5cf6">收到回复</text>
+
+                <!-- Life analogy below -->
+                <rect x="20" y="190" width="640" height="70" rx="8" fill="#fff" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="6,3"/>
+                <text x="340" y="215" text-anchor="middle" font-size="13" font-weight="700" fill="#64748b">&#128118; 生活类比</text>
+                <text x="340" y="242" text-anchor="middle" font-size="12" fill="#94a3b8">Base URL = 外卖平台地址 &nbsp;→&nbsp; API Key = 你的会员卡 &nbsp;→&nbsp; Model Name = 你选的餐厅 &nbsp;→&nbsp; 下单等餐 = 发起对话</text>
+              </svg>
+              <p style="text-align:center;font-size:0.8rem;color:var(--gray-400);margin-top:6px;">图：四个配置概念构成"找到服务 → 验证身份 → 选择引擎 → 获得结果"的完整链路</p>
+            </div>
+
+            <div class="highlight-box mt-3">
+              <h3>在 Hermes-Agent 中实践</h3>
+              <p>回顾 Hermes-Agent 的配置流程——<code>hermes setup</code> 命令会让你依次填入三个信息，现在你应该完全理解它们的含义了：</p>
+              <ol style="padding-left:20px;color:var(--gray-600);line-height:2.2;margin-top:8px;">
+                <li><strong>Base URL</strong> → AI Gateway 的地址，如 <code>http://7.24.28.9:28080/v1</code></li>
+                <li><strong>API Key</strong> → 你在平台上申请的密钥，如 <code>sk-xxxx...</code></li>
+                <li><strong>Model Name</strong> → 你想用的模型，如 <code>Qwen3.6-35B-A3B</code></li>
+              </ol>
+              <p style="margin-top:8px;font-size:0.9rem;color:var(--gray-500);">（接口类型不需要你选——Hermes-Agent 默认使用 OpenAI 兼容接口，因为公司 Gateway 封装的正是这种格式。）</p>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
