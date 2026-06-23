@@ -435,44 +435,44 @@ npm --version
 
       <div id="code-claude-cmd" class="code-block">
         <button class="copy-btn" onclick="copyCode('code-claude-cmd', this)">复制</button>
-@echo off
-echo ========================================
-echo   Claude Code 一键安装脚本
-echo ========================================
-echo.
-echo [1/3] 检查 Node.js 环境...
-where node &gt;nul 2&gt;&amp;1 || (echo [错误] 请先安装 Node.js &amp;&amp; goto :end)
-node --version &amp;&amp; npm --version
-echo [2/3] 配置 npm 源并安装 Claude Code...
-npm config set registry http://7.24.4.68:28081/repository/npm/
-npm install -g @anthropic-ai/claude-code@2.1.153
-echo [3/3] 创建配置目录...
-if not exist "%USERPROFILE%\.claude" mkdir "%USERPROFILE%\.claude"
-echo.
-echo ========================================
-echo   安装完成！运行 claude --version 验证
-echo ========================================
+<span class="hl-kw">@echo off</span>
+<span class="hl-kw">echo</span> ========================================
+<span class="hl-kw">echo</span>   Claude Code 一键安装脚本
+<span class="hl-kw">echo</span> ========================================
+<span class="hl-kw">echo</span>.
+<span class="hl-kw">echo</span> <span class="hl-cmt">[1/3]</span> 检查 Node.js 环境...
+<span class="hl-kw">where</span> <span class="hl-cmd">node</span> <span class="hl-op">&gt;nul</span> 2&gt;&amp;1 <span class="hl-op">||</span> (echo [错误] 请先安装 Node.js &amp;&amp; <span class="hl-kw">goto</span> :end)
+<span class="hl-cmd">node</span> --version &amp;&amp; <span class="hl-cmd">npm</span> --version
+<span class="hl-kw">echo</span> <span class="hl-cmt">[2/3]</span> 配置 <span class="hl-cmd">npm</span> 源并安装 Claude Code...
+<span class="hl-cmd">npm</span> <span class="hl-kw">config</span> <span class="hl-kw">set</span> registry <span class="hl-str">http://7.24.4.68:28081/repository/<span</span> class="hl-cmd">npm</span>/
+<span class="hl-cmd">npm</span> install -g @anthropic-ai/claude-code@2.1.153
+<span class="hl-kw">echo</span> <span class="hl-cmt">[3/3]</span> 创建配置目录...
+<span class="hl-kw">if</span> <span class="hl-kw">not</span> <span class="hl-kw">exist</span> "<span class="hl-var">%USERPROFILE%</span>\.claude" <span class="hl-kw">mkdir</span> "<span class="hl-var">%USERPROFILE%</span>\.claude"
+<span class="hl-kw">echo</span>.
+<span class="hl-kw">echo</span> ========================================
+<span class="hl-kw">echo</span>   安装完成！运行 claude --version 验证
+<span class="hl-kw">echo</span> ========================================
 :end
-pause
+<span class="hl-kw">pause</span>
       </div>
 
       <div id="code-claude-ps" class="code-block" style="display:none;">
         <button class="copy-btn" onclick="copyCode('code-claude-ps', this)">复制</button>
-Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "  Claude Code 一键安装脚本" -ForegroundColor Cyan
-Write-Host "========================================" -ForegroundColor Cyan
-Write-Host ""
-Write-Host "[1/3] 检查 Node.js 环境..." -ForegroundColor Yellow
-try { node --version; npm --version } catch { Write-Host "[错误] 请先安装 Node.js" -ForegroundColor Red; exit 1 }
-Write-Host "[2/3] 配置 npm 源并安装 Claude Code..." -ForegroundColor Yellow
-npm config set registry http://7.24.4.68:28081/repository/npm/
-npm install -g @anthropic-ai/claude-code@2.1.153
-Write-Host "[3/3] 创建配置目录..." -ForegroundColor Yellow
-New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.claude" | Out-Null
-Write-Host ""
-Write-Host "========================================" -ForegroundColor Green
-Write-Host "  安装完成！运行 claude --version 验证" -ForegroundColor Green
-Write-Host "========================================" -ForegroundColor Green
+<span class=<span class="hl-str">"hl-cmd"</span>>Write-Host</span> <span class="hl-str">"========================================"</span> <span class=<span class="hl-str">"hl-param"</span>>-ForegroundColor Cyan</span>
+<span class=<span class="hl-str">"hl-cmd"</span>>Write-Host</span> <span class="hl-str">"  Claude Code 一键安装脚本"</span> <span class=<span class="hl-str">"hl-param"</span>>-ForegroundColor Cyan</span>
+<span class=<span class="hl-str">"hl-cmd"</span>>Write-Host</span> <span class="hl-str">"========================================"</span> <span class=<span class="hl-str">"hl-param"</span>>-ForegroundColor Cyan</span>
+<span class=<span class="hl-str">"hl-cmd"</span>>Write-Host</span> <span class="hl-str">""</span>
+<span class=<span class="hl-str">"hl-cmd"</span>>Write-Host</span> <span class="hl-str">"<span class="hl-cmt">[1/3]</span> 检查 Node.js 环境..."</span> <span class=<span class="hl-str">"hl-param"</span>>-ForegroundColor Yellow</span>
+<span class="hl-kw">try</span> { <span class=<span class="hl-str">"hl-cmd"</span>>node</span> --version; <span class=<span class="hl-str">"hl-cmd"</span>>npm</span> --version } <span class="hl-kw">catch</span> { <span class=<span class="hl-str">"hl-cmd"</span>>Write-Host</span> <span class="hl-str">"[错误] 请先安装 Node.js"</span> <span class=<span class="hl-str">"hl-param"</span>>-ForegroundColor Red</span>; <span class="hl-kw">exit</span> 1 }
+<span class=<span class="hl-str">"hl-cmd"</span>>Write-Host</span> <span class="hl-str">"<span class="hl-cmt">[2/3]</span> 配置 <span class="</span>hl-cmd<span class="hl-str">">npm</span> 源并安装 Claude Code..."</span> <span class=<span class="hl-str">"hl-param"</span>>-ForegroundColor Yellow</span>
+<span class=<span class="hl-str">"hl-cmd"</span>>npm</span> <span class="hl-kw">config</span> <span class="hl-kw">set</span> <span class="hl-param">registry</span> <span class="hl-str">http://7.24.4.68:28081/repository/<span</span> class=<span class="hl-str">"hl-cmd"</span>>npm</span>/
+<span class=<span class="hl-str">"hl-cmd"</span>>npm</span> <span class="hl-kw">install</span> -g @anthropic-ai/claude-code@2.1.153
+<span class=<span class="hl-str">"hl-cmd"</span>>Write-Host</span> <span class="hl-str">"<span class="hl-cmt">[3/3]</span> 创建配置目录..."</span> <span class=<span class="hl-str">"hl-param"</span>>-ForegroundColor Yellow</span>
+<span class=<span class="hl-str">"hl-cmd"</span>>New-Item</span> <span class=<span class="hl-str">"hl-param"</span>>-ItemType Directory</span> <span class=<span class="hl-str">"hl-param"</span>>-Force</span> -Path <span class="hl-str">"<span class="hl-var">$env:USERPROFILE</span>\.claude"</span> | <span class=<span class="hl-str">"hl-cmd"</span>>Out-Null</span>
+<span class=<span class="hl-str">"hl-cmd"</span>>Write-Host</span> <span class="hl-str">""</span>
+<span class=<span class="hl-str">"hl-cmd"</span>>Write-Host</span> <span class="hl-str">"========================================"</span> <span class=<span class="hl-str">"hl-param"</span>>-ForegroundColor Green</span>
+<span class=<span class="hl-str">"hl-cmd"</span>>Write-Host</span> <span class="hl-str">"  安装完成！运行 claude --version 验证"</span> <span class=<span class="hl-str">"hl-param"</span>>-ForegroundColor Green</span>
+<span class=<span class="hl-str">"hl-cmd"</span>>Write-Host</span> <span class="hl-str">"========================================"</span> <span class=<span class="hl-str">"hl-param"</span>>-ForegroundColor Green</span>
       </div>
 
       <div class="tip mt-3">

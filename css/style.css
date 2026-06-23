@@ -1079,6 +1079,15 @@ img {
   white-space: pre;
 }
 
+/* Syntax highlighting for code blocks */
+.code-block .hl-kw   { color: #c084fc; font-weight: 600; }  /* keywords: echo, goto, if */
+.code-block .hl-cmd  { color: #60a5fa; font-weight: 600; }  /* commands: pip, npm, Write-Host */
+.code-block .hl-str  { color: #34d399; }                     /* strings, URLs */
+.code-block .hl-param { color: #fbbf24; }                    /* parameters: -ForegroundColor */
+.code-block .hl-var  { color: #38bdf8; }                     /* variables: %VAR%, $env: */
+.code-block .hl-cmt  { color: #94a3b8; font-style: italic; } /* comments, section labels */
+.code-block .hl-op   { color: #f87171; }                     /* operators: &&, ||, | */
+
 .code-block .copy-btn {
   position: absolute;
   top: 10px;
