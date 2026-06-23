@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>今日AI热点 — AI赋能日常工作</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <style>
+    /* ===== AI News Page Specific Styles ===== */
+
+    /* Hero — Intelligence Briefing Cover */
+    .news-hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #1e3a5f 100%);
+      color: #e2e8f0;
+      padding: 48px 0 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .news-hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -80px;
+      width: 320px; height: 320px;
+      border: 1px solid rgba(148,163,184,0.12);
+      border-radius: 50%;
+    }
+    .news-hero::after {
+      content: '';
+      position: absolute;
+      top: 20px; right: 60px;
+      width: 160px; height: 160px;
+      border: 1px solid rgba(148,163,184,0.08);
+      border-radius: 50%;
+    }
+    .news-hero .container { position: relative; z-index: 1; }
+    .news-hero-eyebrow {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+    .news-hero h1 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: #f1f5f9;
+      margin: 0 0 8px;
+      letter-spacing: -0.02em;
+    }
+    .news-hero h1 span {
+      background: linear-gradient(135deg, #60a5fa, #34d399);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .news-hero-date {
+      font-size: 1.05rem;
+      color: #94a3b8;
+      font-weight: 500;
+    }
+    .news-hero-stats {
+      display: flex;
+      gap: 32px;
+      margin-top: 20px;
+    }
+    .news-hero-stat {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+    .news-hero-stat .stat-num {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #f1f5f9;
+    }
+    .news-hero-stat .stat-label {
+      font-size: 0.8rem;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* Category Filter Bar */
+    .filter-bar {
+      background: #fff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 12px 0;
+      position: sticky;
+      top: 60px;
+      z-index: 10;
+    }
+    .filter-inner {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .filter-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-right: 4px;
+    }
+    .filter-chip {
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      border: 1.5px solid #e2e8f0;
+      background: #fff;
+      color: #64748b;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .filter-chip:hover {
+      border-color: #93c5fd;
+      color: #2563eb;
+    }
+    .filter-chip.active {
+      background: #2563eb;
+      color: #fff;
+      border-color: #2563eb;
+    }
+
+    /* Featured Story */
+    .featured-story {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      overflow: hidden;
+      transition: box-shadow 0.2s;
+    }
+    .featured-story:hover {
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    }
+    .featured-story-inner {
+      display: flex;
+      min-height: 180px;
+    }
+    .featured-accent {
+      width: 6px;
+      flex-shrink: 0;
+      background: linear-gradient(180deg, #f59e0b, #ea580c);
+    }
+    .featured-content {
+      padding: 24px 28px;
+      flex: 1;
+    }
+    .featured-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: #fef3c7;
+      color: #b45309;
+      margin-bottom: 12px;
+    }
+    .featured-content h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin: 0 0 10px;
+      line-height: 1.45;
+      color: #0f172a;
+    }
+    .featured-content h2 a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .featured-content h2 a:hover {
+      color: #2563eb;
+    }
+    .featured-content p {
+      color: #64748b;
+      font-size: 0.92rem;
+      line-height: 1.65;
+      margin: 0 0 14px;
+    }
+    .featured-meta {
+      display: flex;
+      gap: 16px;
+      font-size: 0.78rem;
+      color: #94a3b8;
+      align-items: center;
+    }
+    .featured-meta .source-link {
+      color: #2563eb;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .featured-meta .source-link:hover {
+      text-decoration: underline;
+    }
+
+    /* News Grid */
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    /* News Card */
+    .news-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      transition: box-shadow 0.2s, transform 0.15s;
+    }
+    .news-card:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+      transform: translateY(-2px);
+    }
+    .news-card-accent {
+      width: 4px;
+      flex-shrink: 0;
+    }
+    .news-card-accent.hot       { background: #f59e0b; }
+    .news-card-accent.model     { background: #2563eb; }
+    .news-card-accent.industry  { background: #10b981; }
+    .news-card-accent.policy    { background: #7c3aed; }
+    .news-card-accent.research  { background: #0891b2; }
+    .news-card-accent.product   { background: #ea580c; }
+
+    .news-card-body {
+      padding: 16px 18px;
+      flex: 1;
+      min-width: 0;
+    }
+    .news-card-top {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .news-card-tag {
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+    .tag-hot       { background: #fef3c7; color: #b45309; }
+    .tag-model     { background: #dbeafe; color: #1e40af; }
+    .tag-industry  { background: #d1fae5; color: #047857; }
+    .tag-policy    { background: #f3e8ff; color: #6d28d9; }
+    .tag-research  { background: #cffafe; color: #0e7490; }
+    .tag-product   { background: #fff7ed; color: #c2410c; }
+
+    .news-card-time {
+      font-size: 0.72rem;
+      color: #94a3b8;
+      margin-left: auto;
+      white-space: nowrap;
+    }
+    .news-card-body h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin: 0 0 6px;
+      line-height: 1.4;
+      color: #1e293b;
+    }
+    .news-card-body h3 a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .news-card-body h3 a:hover {
+      color: #2563eb;
+    }
+    .news-card-body p {
+      font-size: 0.82rem;
+      color: #64748b;
+      line-height: 1.55;
+      margin: 0 0 10px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .news-card-source {
+      font-size: 0.73rem;
+      color: #94a3b8;
+    }
+    .news-card-source a {
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .news-card-source a:hover {
+      text-decoration: underline;
+    }
+
+    /* Section Toggle — View More */
+    .news-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 18px;
+    }
+    .news-section-header h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin: 0;
+    }
+
+    /* Empty & loading states */
+    .news-empty {
+      text-align: center;
+      padding: 48px 20px;
+      color: #94a3b8;
+    }
+    .news-empty-icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+    }
+
+    /* Pulse dot for live indicator */
+    .pulse-dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      margin-right: 6px;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* Responsive fallback */
+    @media (max-width: 1100px) {
+      .news-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .featured-story-inner {
+        flex-direction: column;
+      }
+      .featured-accent {
+        width: 100%;
+        height: 4px;
+      }
+    }
+    @media (max-width: 720px) {
+      .news-grid {
+        grid-template-columns: 1fr;
+      }
+      .news-hero h1 {
+        font-size: 1.5rem;
+      }
+      .news-hero-stats {
+        gap: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">
+      <span class="icon">AI</span>
+      运维部AI学习平台
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">首页</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">🎓 AI学习</span>
+        <ul class="nav-submenu">
+          <li><a href="hermes.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">&#128172;</span><span class="menu-text"><span class="menu-title">Hermes-Agent</span><span class="menu-desc">对话式AI智能助手</span></span></a></li>
+          <li><a href="claude.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">&#9000;</span><span class="menu-text"><span class="menu-title">Claude Code</span><span class="menu-desc">终端AI编程协作工具</span></span></a></li>
+          <li class="menu-divider"></li>
+          <li><a href="ai-basics.html"><span class="menu-icon" style="background:var(--blue-50);color:var(--blue-600);">&#128218;</span><span class="menu-text"><span class="menu-title">大模型基础</span><span class="menu-desc">AI核心概念与原理</span></span></a></li>
+          <li><a href="hermes-docs/index.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">&#128214;</span><span class="menu-text"><span class="menu-title">Hermes 官方文档</span><span class="menu-desc">详细功能参考手册</span></span></a></li>
+          <li><a href="api-key.html"><span class="menu-icon" style="background:var(--orange-50);color:var(--orange-600);">&#128273;</span><span class="menu-text"><span class="menu-title">API Key 申请</span><span class="menu-desc">内网模型密钥申请指南</span></span></a></li>
+        </ul>
+      </li>
+      <li><a href="token-stats.html">📊 Token统计</a></li>
+      <li><a href="ai-news.html" style="color:var(--blue-600);font-weight:700;">📰 AI热点</a></li>
+      <li class="has-submenu">
+        <span class="nav-label">💬 社区</span>
+        <ul class="nav-submenu">
+          <li><a href="cases.html"><span class="menu-icon" style="background:var(--purple-50);color:var(--purple-600);">&#128214;</span><span class="menu-text"><span class="menu-title">案例分享</span><span class="menu-desc">AI使用案例展示交流</span></span></a></li>
+          <li><a href="feedback.html"><span class="menu-icon" style="background:var(--green-50);color:var(--green-600);">&#128172;</span><span class="menu-text"><span class="menu-title">问题反馈</span><span class="menu-desc">问题求助与经验交流</span></span></a></li>
+        </ul>
+      </li>
+    </ul>
+    <div class="nav-right">
+      <div id="visit-counter" class="visit-counter"><span class="vc-icon">&#128202;</span>---</div>
+      <div class="checkin-wrapper">
+        <span id="checkin-area" class="checkin-area">---</span>
+        <button class="checkin-btn" onclick="doCheckin(this)">打卡</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+
+  <!-- Hero — Intelligence Briefing -->
+  <section class="news-hero">
+    <div class="container">
+      <div class="news-hero-eyebrow">Daily Intelligence Briefing</div>
+      <h1>今日<span>AI</span>热点</h1>
+      <p class="news-hero-date">2026年6月23日 星期二 · 第 23 期</p>
+      <div class="news-hero-stats">
+        <div class="news-hero-stat">
+          <span class="stat-num">12</span>
+          <span class="stat-label">条快讯</span>
+        </div>
+        <div class="news-hero-stat">
+          <span class="stat-num">5</span>
+          <span class="stat-label">个类别</span>
+        </div>
+        <div class="news-hero-stat">
+          <span class="stat-num"><span class="pulse-dot"></span>实时</span>
+          <span class="stat-label">追踪中</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Category Filter Bar -->
+  <div class="filter-bar">
+    <div class="container">
+      <div class="filter-inner">
+        <span class="filter-label">筛选</span>
+        <button class="filter-chip active" data-filter="all">全部</button>
+        <button class="filter-chip" data-filter="hot">🔥 今日头条</button>
+        <button class="filter-chip" data-filter="model">🧠 大模型</button>
+        <button class="filter-chip" data-filter="industry">🏭 产业动态</button>
+        <button class="filter-chip" data-filter="policy">📋 政策监管</button>
+        <button class="filter-chip" data-filter="product">🚀 产品落地</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Featured Story -->
+  <section class="section" style="padding-bottom:20px;">
+    <div class="container">
+      <div class="featured-story">
+        <div class="featured-story-inner">
+          <div class="featured-accent"></div>
+          <div class="featured-content">
+            <span class="featured-badge">&#128293; 头条</span>
+            <h2><a href="https://hub-assets-cache.baai.ac.cn/view/55501" target="_blank" rel="noopener">2026北京智源大会：AI从"预测下一个Token"迈向"预测下一个物理状态"</a></h2>
+            <p>第八届智源大会发布全球首个通用世界基座模型"悟界·Physis-v0.1"，支持50余种复杂物理场景长程推理。Emu3.5登上Nature正刊——中国大模型成果首次亮相Nature。两位图灵奖得主出席，AI产业主线从"训练时代"切换至"推理时代"。</p>
+            <div class="featured-meta">
+              <span>📅 6月12-13日</span>
+              <span>📍 北京中关村</span>
+              <a href="https://hub-assets-cache.baai.ac.cn/view/55501" target="_blank" rel="noopener" class="source-link">智源研究院 →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- News Grid -->
+  <section class="section" style="padding-top:0;">
+    <div class="container">
+      <div class="news-grid" id="newsGrid">
+
+        <!-- Card 1: Hot — Apple WWDC -->
+        <div class="news-card" data-category="hot product">
+          <div class="news-card-accent hot"></div>
+          <div class="news-card-body">
+            <div class="news-card-top">
+              <span class="news-card-tag tag-hot">头条</span>
+              <span class="news-card-tag tag-product">产品</span>
+              <span class="news-card-time">6月9日</span>
+            </div>
+            <h3><a href="https://m.thepaper.cn/newsDetail_forward_33354239" target="_blank" rel="noopener">苹果WWDC：Siri史上最大重构，Apple Intelligence端侧AI规模化落地</a></h3>
+            <p>Apple确认Google和Nvidia为其最强AI模型AFM Cloud Pro提供算力支持。同时微信宣布AI生态开放，联合华为、小米等建立Agent-to-Agent机制。</p>
+            <div class="news-card-source">来源：<a href="https://m.thepaper.cn/newsDetail_forward_33354239" target="_blank" rel="noopener">澎湃新闻</a></div>
+          </div>
+        </div>
+
+        <!-- Card 2: Model — GLM-5.2 -->
+        <div class="news-card" data-category="model">
+          <div class="news-card-accent model"></div>
+          <div class="news-card-body">
+            <div class="news-card-top">
+              <span class="news-card-tag tag-model">大模型</span>
+              <span class="news-card-time">6月13日</span>
+            </div>
+            <h3><a href="http://vip.stock.finance.sina.com.cn/q/go.php/vReport_Show/kind/lastest/rptid/834930900332/index.phtml" target="_blank" rel="noopener">智谱发布GLM-5.2：1M超长上下文 + MIT协议开源</a></h3>
+            <p>同步发布ZCode 3.0智能编码Agent。国产模型再进一步，MIT协议意味着企业可自由商用，大幅降低AI应用门槛。</p>
+            <div class="news-card-source">来源：<a href="http://vip.stock.finance.sina.com.cn/q/go.php/vReport_Show/kind/lastest/rptid/834930900332/index.phtml" target="_blank" rel="noopener">新浪财经</a></div>
+          </div>
+        </div>
+
+        <!-- Card 3: Policy — Five Eyes -->
+        <div class="news-card" data-category="policy hot">
+          <div class="news-card-accent policy"></div>
+          <div class="news-card-body">
+            <div class="news-card-top">
+              <span class="news-card-tag tag-policy">监管</span>
+              <span class="news-card-tag tag-hot">头条</span>
+              <span class="news-card-time">6月23日</span>
+            </div>
+            <h3>五眼联盟发布AI安全紧急警告：AI发展速度超出安全机制</h3>
+            <p>美英澳加新联合声明指出LLM被用于自动化恶意代码生成、Deepfake大规模钓鱼，呼吁从"事后响应"转向"主动防御"。</p>
+            <div class="news-card-source">来源：<a href="https://www.vietnam.vn/en/lien-minh-tinh-bao-quyen-luc-nhat-the-gioi-phat-canh-bao-khan-ve-rui-ro-do-ai" target="_blank" rel="noopener">国际报道</a></div>
+          </div>
+        </div>
+
+        <!-- Card 4: Industry — AI Computing Power -->
+        <div class="news-card" data-category="industry">
+          <div class="news-card-accent industry"></div>
+          <div class="news-card-body">
+            <div class="news-card-top">
+              <span class="news-card-tag tag-industry">产业</span>
+              <span class="news-card-time">6月23日</span>
+            </div>
+            <h3><a href="http://finance.china.com.cn/industry/20260623/6313185.shtml" target="_blank" rel="noopener">AI算力新变局：Agent推理时代CPU需求激增，谁能动英伟达奶酪？</a></h3>
+            <p>Agent AI推理场景CPU:GPU比接近1:1，英特尔服务器CPU业务受益。摩根大通预测2027年定制ASIC出货量将超过英伟达GPU。</p>
+            <div class="news-card-source">来源：<a href="http://finance.china.com.cn/industry/20260623/6313185.shtml" target="_blank" rel="noopener">中国网财经</a></div>
+          </div>
+        </div>
+
+        <!-- Card 5: Industry — Morgan Stanley -->
+        <div class="news-card" data-category="industry">
+          <div class="news-card-accent industry"></div>
+          <div class="news-card-body">
+            <div class="news-card-top">
+              <span class="news-card-tag tag-industry">产业</span>
+              <span class="news-card-time">6月</span>
+            </div>
+            <h3>摩根士丹利：科技巨头2025-2028年将投入3万亿美元扩建AI数据中心</h3>
+            <p>AI驱动的股市上涨将美股推至历史新高，Nvidia自2022年底以来涨幅超1300%。世界模型赋能产业规模预计2035年达10万亿美元。</p>
+            <div class="news-card-source">来源：<a href="https://finance.yahoo.com/markets/stocks/articles/ai-boom-sparks-rally-frenzy-174822550.html" target="_blank" rel="noopener">Yahoo Finance</a></div>
+          </div>
+        </div>
+
+        <!-- Card 6: Model — World Model -->
+        <div class="news-card" data-category="model research">
+          <div class="news-card-accent model"></div>
+          <div class="news-card-body">
+            <div class="news-card-top">
+              <span class="news-card-tag tag-model">大模型</span>
+              <span class="news-card-tag tag-research">研究</span>
+              <span class="news-card-time">6月12日</span>
+            </div>
+            <h3>智源"悟界"全栈体系发布：从语言到物理世界的范式跃迁</h3>
+            <p>FlagOS 2.1适配18家芯片品牌32款AI芯片，支持90%以上主流开源大模型。AREX自主研究智能体面向科学发现场景发布。</p>
+            <div class="news-card-source">来源：<a href="https://www.ccidnet.com/kx/1107763.jhtml" target="_blank" rel="noopener">赛迪网</a></div>
+          </div>
+        </div>
+
+        <!-- Card 7: Product — SpaceX AI -->
+        <div class="news-card" data-category="product industry">
+          <div class="news-card-accent product"></div>
+          <div class="news-card-body">
+            <div class="news-card-top">
+              <span class="news-card-tag tag-product">产品</span>
+              <span class="news-card-time">6月8日</span>
+            </div>
+            <h3>SpaceX首次展示轨道AI数据中心项目"AI1"，同步750亿美元IPO</h3>
+            <p>马斯克公开卫星详细设计和技术规格。SpaceX以750亿美元募资登陆纳斯达克，创全球史上最大IPO纪录。</p>
+            <div class="news-card-source">来源：综合报道</div>
+          </div>
+        </div>
+
+        <!-- Card 8: Policy — China Finance -->
+        <div class="news-card" data-category="policy industry">
+          <div class="news-card-accent policy"></div>
+          <div class="news-card-body">
+            <div class="news-card-top">
+              <span class="news-card-tag tag-policy">监管</span>
+              <span class="news-card-tag tag-industry">产业</span>
+              <span class="news-card-time">6月17日</span>
+            </div>
+            <h3>陆家嘴论坛：证监会扩大科创板标准至AI领域，支持大模型企业上市</h3>
+            <p>上交所发布AI大模型企业上市指引，要求至少一个产品已上线并规模化应用。Token日消费从千亿级增长至百万亿级别。</p>
+            <div class="news-card-source">来源：<a href="https://www.9fzt.com/plate/XBHS.GN_GN500218_1516c884a0babc640f850c59623e1ca3.html" target="_blank" rel="noopener">陆家嘴论坛报道</a></div>
+          </div>
+        </div>
+
+        <!-- Card 9: Research — AI Inbreeding -->
+        <div class="news-card" data-category="research">
+          <div class="news-card-accent research"></div>
+          <div class="news-card-body">
+            <div class="news-card-top">
+              <span class="news-card-tag tag-research">研究</span>
+              <span class="news-card-time">6月22日</span>
+            </div>
+            <h3><a href="https://www.newscientist.com/article/2531050-people-training-new-ai-models-admit-they-just-get-chatbots-to-do-it/" target="_blank" rel="noopener">AI"近亲繁殖"危机：训练新模型的人承认在用聊天机器人代劳</a></h3>
+            <p>New Scientist调查发现，标注人员大量使用ChatGPT等工具完成训练数据生成，可能导致模型质量退化。</p>
+            <div class="news-card-source">来源：<a href="https://www.newscientist.com/article/2531050-people-training-new-ai-models-admit-they-just-get-chatbots-to-do-it/" target="_blank" rel="noopener">New Scientist</a></div>
+          </div>
+        </div>
+
+        <!-- Card 10: Industry — WEF -->
+        <div class="news-card" data-category="industry">
+          <div class="news-card-accent industry"></div>
+          <div class="news-card-body">
+            <div class="news-card-top">
+              <span class="news-card-tag tag-industry">产业</span>
+              <span class="news-card-time">6月</span>
+            </div>
+            <h3><a href="https://www.weforum.org/press/2026/06/new-technology-pioneers-are-building-the-infrastructure-for-the-next-era-of-ai-96a8d3e248/" target="_blank" rel="noopener">世界经济论坛2026技术先锋：100家初创企业布局自主Agent基础设施</a></h3>
+            <p>来自23个国家的100家初创入选，重点方向为AI能源需求和自主Agent系统。Agent AI正取代生成式AI成为主导范式。</p>
+            <div class="news-card-source">来源：<a href="https://www.weforum.org/press/2026/06/new-technology-pioneers-are-building-the-infrastructure-for-the-next-era-of-ai-96a8d3e248/" target="_blank" rel="noopener">WEF</a></div>
+          </div>
+        </div>
+
+        <!-- Card 11: Product — Bezos -->
+        <div class="news-card" data-category="product">
+          <div class="news-card-accent product"></div>
+          <div class="news-card-body">
+            <div class="news-card-top">
+              <span class="news-card-tag tag-product">观点</span>
+              <span class="news-card-time">6月18日</span>
+            </div>
+            <h3>贝索斯乐观表态：AI将导致劳动力短缺，而非让人类变得多余</h3>
+            <p>在VivaTech巴黎大会上，贝索斯反驳AI导致失业的普遍担忧，认为AI创造的岗位将超过其取代的岗位。</p>
+            <div class="news-card-source">来源：<a href="https://azertag.az/en/xeber/ai_will_lead_to_labour_shortages_bezos_says_in_optimistic_talk-4269823" target="_blank" rel="noopener">AZERTAC</a></div>
+          </div>
+        </div>
+
+        <!-- Card 12: Model — Anthropic -->
+        <div class="news-card" data-category="model">
+          <div class="news-card-accent model"></div>
+          <div class="news-card-body">
+            <div class="news-card-top">
+              <span class="news-card-tag tag-model">大模型</span>
+              <span class="news-card-time">6月10日</span>
+            </div>
+            <h3>Anthropic发布Claude Fable 5和Mythos 5，随后因出口管制暂停部分访问</h3>
+            <p>新一代Claude模型在推理和创意任务上表现大幅提升，但受美国政府出口管制指令影响暂停对部分外国用户访问。</p>
+            <div class="news-card-source">来源：综合报道</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- More context: Key trends -->
+  <section class="section section-gray">
+    <div class="container">
+      <h2 class="section-title">本月关键趋势</h2>
+      <div class="grid-3" style="margin-top:16px;">
+        <div class="card">
+          <div class="card-icon blue">&#127760;</div>
+          <h4>从"训练"到"推理"</h4>
+          <p>AI产业主线已从大模型训练转向Agent推理。算力需求从GPU密集变为CPU:GPU接近1:1，定制ASIC芯片崛起。</p>
+        </div>
+        <div class="card">
+          <div class="card-icon purple">&#129504;</div>
+          <h4>世界模型元年</h4>
+          <p>AI从理解语言走向理解物理世界。"预测下一个物理状态"成为新范式，智源悟界Physis-v0.1是标志性里程碑。</p>
+        </div>
+        <div class="card">
+          <div class="card-icon green">&#128200;</div>
+          <h4>资本市场共振</h4>
+          <p>科创板向AI大模型企业敞开大门。Token消费百万亿级规模。摩根士丹利预测2035年世界模型产业达10万亿美元。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="troubleshooting-bar" style="background:var(--blue-50);border-top:1px solid var(--blue-200);border-bottom:1px solid var(--blue-200);padding:20px 0;text-align:center;">
+  <div class="container">
+    <p style="margin:0;font-size:0.95rem;color:var(--gray-700);"><strong>&#128161; 遇到问题？</strong> AI 技术支持请联系：<strong>李龙（lilong）</strong>、<strong>司佳宇（sijy）</strong>。申请 API Key、配置工具或使用过程中遇到任何问题，欢迎随时沟通。也可在部门群内交流使用经验。</p>
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p>Copyright &copy; 生产运维部，内部学习资料</p>
+  </div>
+</footer>
+
+<button id="backToTop" class="back-to-top" title="回到顶部">&#8593;</button>
+
+<script src="js/main.js"></script>
+<script>
+  // Category filter
+  (function() {
+    var chips = document.querySelectorAll('.filter-chip');
+    var cards = document.querySelectorAll('.news-card');
+
+    chips.forEach(function(chip) {
+      chip.addEventListener('click', function() {
+        chips.forEach(function(c) { c.classList.remove('active'); });
+        this.classList.add('active');
+        var filter = this.dataset.filter;
+
+        cards.forEach(function(card) {
+          if (filter === 'all' || card.dataset.category.indexOf(filter) !== -1) {
+            card.style.display = '';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+  })();
+</script>
+</body>
+</html>
