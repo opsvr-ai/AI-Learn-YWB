@@ -585,29 +585,38 @@ window.playDemoVideo = () => {
   var stage = document.createElement('div');
   stage.className = 'present-stage';
 
+  function agendaCard(num, title, desc, color) {
+    return '<div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:16px 18px;text-align:center;min-width:120px;">' +
+      '<span style="display:inline-block;width:32px;height:32px;line-height:32px;border-radius:50%;background:' + color + ';color:#fff;font-size:0.78rem;font-weight:800;margin-bottom:8px;">' + num + '</span>' +
+      '<h4 style="font-size:0.85rem;font-weight:700;color:#e2e8f0;margin:0 0 3px;">' + title + '</h4>' +
+      '<p style="font-size:0.68rem;color:#64748b;margin:0;">' + desc + '</p>' +
+    '</div>';
+  }
+
+  //
   // Welcome slide
   var welcomeSlide = document.createElement('div');
-  welcomeSlide.className = 'present-slide active';
-  welcomeSlide.innerHTML = '<div style="text-align:center;padding:80px 60px 60px;">' +
-    '<div style="font-size:3.5rem;margin-bottom:16px;">👋</div>' +
-    '<h1 style="font-size:2.2rem;font-weight:800;color:#1e293b;margin:0 0 12px;">欢迎参加 AI 赋能日常工作培训</h1>' +
-    '<p style="font-size:1.1rem;color:#64748b;margin:0 0 8px;">感谢各位在百忙之中抽出时间参加本次培训</p>' +
-    '<div style="width:60px;height:4px;background:linear-gradient(90deg,#2563eb,#10b981);margin:24px auto;border-radius:2px;"></div>' +
-    '<div style="background:#eff6ff;border-radius:12px;padding:18px 28px;margin:20px auto;max-width:420px;text-align:left;">' +
-      '<p style="font-size:0.95rem;color:#1e40af;margin:0 0 10px;font-weight:700;">📋 培训议程</p>' +
-      '<p style="font-size:0.88rem;color:#475569;margin:0 0 6px;">🔹 AI工具概述与对比</p>' +
-      '<p style="font-size:0.88rem;color:#475569;margin:0 0 6px;">🔹 Hermes-Agent 使用指南</p>' +
-      '<p style="font-size:0.88rem;color:#475569;margin:0 0 6px;">🔹 Claude Code 开发工具</p>' +
-      '<p style="font-size:0.88rem;color:#475569;margin:0 0 6px;">🔹 大模型基础知识</p>' +
-      '<p style="font-size:0.88rem;color:#475569;margin:0;">🔹 API Key 申请与配置</p>' +
+  welcomeSlide.className = 'present-slide present-welcome active';
+  welcomeSlide.innerHTML = '<div style="background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 50%,#0f172a 100%);min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:64px 48px;position:relative;overflow:hidden;">' +
+    '<div style="position:absolute;top:-80px;right:-60px;width:260px;height:260px;border:1px solid rgba(148,163,184,0.1);border-radius:50%;"></div>' +
+    '<div style="position:absolute;bottom:-40px;left:-40px;width:180px;height:180px;border:1px solid rgba(148,163,184,0.08);border-radius:50%;"></div>' +
+    '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:500px;height:500px;background:radial-gradient(circle,rgba(37,99,235,0.08) 0%,transparent 70%);"></div>' +
+    '<div style="position:relative;z-index:1;text-align:center;">' +
+      '<div style="display:inline-block;padding:5px 16px;border:1px solid rgba(148,163,184,0.2);border-radius:20px;font-size:0.7rem;color:#64748b;text-transform:uppercase;letter-spacing:0.25em;margin-bottom:24px;">TRAINING &bull; 2026</div>' +
+      '<h1 style="font-size:2.6rem;font-weight:800;color:#f1f5f9;margin:0 0 10px;letter-spacing:-0.02em;">AI 赋能日常工作</h1>' +
+      '<p style="font-size:1.1rem;color:#94a3b8;margin:0 0 6px;">人工智能工具培训 &middot; 生产运维部</p>' +
+      '<div style="width:60px;height:3px;background:linear-gradient(90deg,#2563eb,#10b981);margin:28px auto;border-radius:2px;"></div>' +
+      '<div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin:20px 0 32px;">' +
+        agendaCard("01", "平台概述", "工具对比&快速开始", "#2563eb") +
+        agendaCard("02", "Hermes-Agent", "智能助手使用指南", "#10b981") +
+        agendaCard("03", "Claude Code", "编程协作工具", "#7c3aed") +
+        agendaCard("04", "大模型基础", "核心概念与原理", "#f59e0b") +
+        agendaCard("05", "API Key", "申请与配置指南", "#0891b2") +
+      '</div>' +
+      '<p style="font-size:0.8rem;color:#475569;margin:12px 0 0;">按 &rarr; 键 或 点击 &#9654; 开始浏览</p>' +
     '</div>' +
-    '<div style="background:#fef3c7;border:2px solid #f59e0b;border-radius:12px;padding:20px 28px;margin:24px auto;max-width:420px;">' +
-      '<p style="font-size:1rem;color:#b45309;margin:0 0 4px;font-weight:700;">⚠️ 请先完成签到</p>' +
-      '<p style="font-size:0.88rem;color:#92400e;margin:0;">点击页面右上角「打卡」按钮完成签到</p>' +
-    '</div>' +
-    '<p style="font-size:0.82rem;color:#94a3b8;margin:28px 0 0;">按 → 键或点击 ▶ 开始浏览</p>' +
   '</div>';
-  stage.appendChild(welcomeSlide);
+stage.appendChild(welcomeSlide);
 
   sections.forEach(function(sec, i) {
     var slide = document.createElement('div');

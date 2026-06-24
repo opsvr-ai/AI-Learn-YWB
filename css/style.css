@@ -1685,3 +1685,4 @@ body.presenting .present-trigger { display: none !important; }
   .present-slide { padding: 24px 20px; }
   .present-stage { width: 96vw; max-height: 92vh; }
 }
+.present-slide.present-welcome { padding: 0; background: transparent; border-radius: 14px; overflow: hidden; }
