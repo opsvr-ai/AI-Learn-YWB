@@ -585,10 +585,33 @@ window.playDemoVideo = () => {
   var stage = document.createElement('div');
   stage.className = 'present-stage';
 
+  // Welcome slide
+  var welcomeSlide = document.createElement('div');
+  welcomeSlide.className = 'present-slide active';
+  welcomeSlide.innerHTML = '<div style="text-align:center;padding:80px 60px 60px;">' +
+    '<div style="font-size:3.5rem;margin-bottom:16px;">👋</div>' +
+    '<h1 style="font-size:2.2rem;font-weight:800;color:#1e293b;margin:0 0 12px;">欢迎参加 AI 赋能日常工作培训</h1>' +
+    '<p style="font-size:1.1rem;color:#64748b;margin:0 0 8px;">感谢各位在百忙之中抽出时间参加本次培训</p>' +
+    '<div style="width:60px;height:4px;background:linear-gradient(90deg,#2563eb,#10b981);margin:24px auto;border-radius:2px;"></div>' +
+    '<div style="background:#eff6ff;border-radius:12px;padding:18px 28px;margin:20px auto;max-width:420px;text-align:left;">' +
+      '<p style="font-size:0.95rem;color:#1e40af;margin:0 0 10px;font-weight:700;">📋 培训议程</p>' +
+      '<p style="font-size:0.88rem;color:#475569;margin:0 0 6px;">🔹 AI工具概述与对比</p>' +
+      '<p style="font-size:0.88rem;color:#475569;margin:0 0 6px;">🔹 Hermes-Agent 使用指南</p>' +
+      '<p style="font-size:0.88rem;color:#475569;margin:0 0 6px;">🔹 Claude Code 开发工具</p>' +
+      '<p style="font-size:0.88rem;color:#475569;margin:0 0 6px;">🔹 大模型基础知识</p>' +
+      '<p style="font-size:0.88rem;color:#475569;margin:0;">🔹 API Key 申请与配置</p>' +
+    '</div>' +
+    '<div style="background:#fef3c7;border:2px solid #f59e0b;border-radius:12px;padding:20px 28px;margin:24px auto;max-width:420px;">' +
+      '<p style="font-size:1rem;color:#b45309;margin:0 0 4px;font-weight:700;">⚠️ 请先完成签到</p>' +
+      '<p style="font-size:0.88rem;color:#92400e;margin:0;">点击页面右上角「打卡」按钮完成签到</p>' +
+    '</div>' +
+    '<p style="font-size:0.82rem;color:#94a3b8;margin:28px 0 0;">按 → 键或点击 ▶ 开始浏览</p>' +
+  '</div>';
+  stage.appendChild(welcomeSlide);
+
   sections.forEach(function(sec, i) {
     var slide = document.createElement('div');
     slide.className = 'present-slide';
-    if (i === 0) slide.classList.add('active');
     slide.innerHTML = sec.innerHTML;
     stage.appendChild(slide);
   });
@@ -615,7 +638,7 @@ window.playDemoVideo = () => {
   overlay.appendChild(controls);
   document.body.appendChild(overlay);
 
-  var idx = 0, total = sections.length, active = false;
+  var idx = 0, total = sections.length + 1, active = false;
 
   function update() {
     var slides = stage.querySelectorAll('.present-slide');
