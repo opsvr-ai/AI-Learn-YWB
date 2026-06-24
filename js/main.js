@@ -572,3 +572,101 @@ window.playDemoVideo = () => {
   if (!container) return;
   container.innerHTML = '<video controls autoplay playsinline style="width:100%;border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,0.12);outline:none;"><source src="videos/演示视频.mp4" type="video/mp4">您的浏览器不支持视频播放。</video>';
 };
+
+// ============================================
+// 演示模式 (Presentation Mode)
+// ============================================
+(function() {
+  var sections = document.querySelectorAll('section.section, section.section-gray, .page-header');
+  if (sections.length < 2) return;
+
+  var overlay = document.createElement('div');
+  overlay.className = 'present-overlay';
+  var stage = document.createElement('div');
+  stage.className = 'present-stage';
+
+  sections.forEach(function(sec, i) {
+    var slide = document.createElement('div');
+    slide.className = 'present-slide';
+    if (i === 0) slide.classList.add('active');
+    slide.innerHTML = sec.innerHTML;
+    stage.appendChild(slide);
+  });
+  overlay.appendChild(stage);
+
+  var closeBtn = document.createElement('button');
+  closeBtn.className = 'present-close';
+  closeBtn.innerHTML = '&times;';
+  overlay.appendChild(closeBtn);
+
+  var controls = document.createElement('div');
+  controls.className = 'present-controls';
+  var prevBtn = document.createElement('button');
+  prevBtn.className = 'present-ctrl-btn';
+  prevBtn.innerHTML = '&#9664;';
+  var counter = document.createElement('span');
+  counter.className = 'present-counter';
+  var nextBtn = document.createElement('button');
+  nextBtn.className = 'present-ctrl-btn';
+  nextBtn.innerHTML = '&#9654;';
+  controls.appendChild(prevBtn);
+  controls.appendChild(counter);
+  controls.appendChild(nextBtn);
+  overlay.appendChild(controls);
+  document.body.appendChild(overlay);
+
+  var idx = 0, total = sections.length, active = false;
+
+  function update() {
+    var slides = stage.querySelectorAll('.present-slide');
+    slides.forEach(function(s, i) { s.classList.toggle('active', i === idx); });
+    counter.textContent = (idx + 1) + ' / ' + total;
+    prevBtn.disabled = idx === 0;
+    nextBtn.disabled = idx === total - 1;
+    stage.scrollTop = 0;
+  }
+
+  function open() {
+    active = true; idx = 0;
+    overlay.classList.add('active');
+    document.body.classList.add('presenting');
+    update();
+  }
+  function close() {
+    active = false;
+    overlay.classList.remove('active');
+    document.body.classList.remove('presenting');
+  }
+  function next() { if (idx < total - 1) { idx++; update(); } }
+  function prev() { if (idx > 0) { idx--; update(); } }
+
+  closeBtn.addEventListener('click', close);
+  overlay.addEventListener('click', function(e) { if (e.target === overlay) close(); });
+  nextBtn.addEventListener('click', next);
+  prevBtn.addEventListener('click', prev);
+  document.addEventListener('keydown', function(e) {
+    if (!active) return;
+    if (e.key === 'Escape') close();
+    else if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft') prev();
+    else if (e.key === 'Home') { idx = 0; update(); }
+    else if (e.key === 'End') { idx = total - 1; update(); }
+  });
+
+  // Floating trigger
+  var trigger = document.createElement('button');
+  trigger.className = 'present-trigger';
+  trigger.textContent = '🎬 演示模式';
+  trigger.addEventListener('click', open);
+  document.body.appendChild(trigger);
+
+  // Nav trigger
+  var navRight = document.querySelector('.nav-right');
+  if (navRight) {
+    var nb = document.createElement('button');
+    nb.textContent = '🎬 演示';
+    nb.style.cssText = 'background:#2563eb;color:#fff;border:none;padding:4px 12px;border-radius:16px;font-size:0.78rem;font-weight:600;cursor:pointer;margin-right:12px;';
+    nb.addEventListener('click', open);
+    navRight.insertBefore(nb, navRight.firstChild);
+  }
+})();
