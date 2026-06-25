@@ -1,4 +1,4 @@
-# CLAUDE.md
+﻿# CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
@@ -22,7 +22,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 | `ai-basics.html` | 大模型基础知识：LLM基础、Prompt工程、Function Call、MCP、Agent、A2A/Skills |
 | `api-key.html` | API Key申请指南（已对接实际平台流程和截图） |
 | `css/style.css` | 全部样式（CSS变量、导航、卡片、表格、Tab、步骤、折叠、代码块、Lightbox） |
-| `js/main.js` | 公共交互（导航高亮、回到顶部、Tab切换、Accordion、代码复制、CMD/PowerShell Tab切换、图片Lightbox、演示视频播放） |
+| `js/main.js` | 公共交互（导航高亮、回到顶部、Tab切换、Accordion、代码复制、CMD/PowerShell Tab切换、图片Lightbox） |
 
 **重要**：导航栏在每个 HTML 文件中重复。修改导航时需同步更新所有 5 个主页面 + `hermes-docs/` 下的所有页面。
 
@@ -43,8 +43,6 @@ packages/                   # 安装包及配置文件
 ├── node-v24.16.0-win-x64.zip
 ├── node-v24.16.0-linux-x64.tar.xz
 ├── settings.json            # Claude Code 配置模板（Token 已替换为占位符）
-videos/                     # 演示视频
-└── 演示视频.mp4
 tutorials/                  # PDF教程
 ├── hermes-agent-guide.pdf
 ├── claude-code-beginner.pdf
